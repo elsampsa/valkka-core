@@ -1,7 +1,5 @@
 # Valkka - Massive video streaming for linux
 
-test: [link to doxygen docs](https://github.com/elsampsa/valkka-core/blob/master/doc/html/index.html)
-
 ## Synopsis
 The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VSMAs) in Linux environment.  The idea is to be able create VSMA systems with graphical user interfaces (GUIs) using the combination of Python3 and Qt (i.e. PyQt).
 
@@ -47,7 +45,7 @@ See also the list of (latest) features below.
 - Grab one of the following debian packages, and install it with "dpkg -i package_name".
 - Install also the python package and install it with "pip3 install package_name"
 - Download python examples from "valkka-examples" repository
-- Valkka internals are documented with doxygen.  If you are just using the python API, you should read at least the "Library Architecture" section.
+- Check out Valkka cpp [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python API, you should read at least the "Library Architecture" section.
 
 ## Features
 
@@ -108,20 +106,15 @@ Creating the python interface: go to "python/" directory and read there "README.
 
 ### Contribute
 
-Want to modify and develop further Valkka source code?  Your effort is needed.
+Want to modify and develop further Valkka source code?  Your effort is needed.  You should start by reading some of the cpp documentation.
 
-You might want to do some reading first.  Refer to the doxygen documentation.
-
-There are three ways to contribute:
-
-1. Found a bug?  Send a message or a patch to Valkka google group
-2. Want to implement a new feature?  Create your own development branch.  We will merge it once you have ran the tests (refer to "README_TESTS" in your build directory)
-3. Dont agree with the library architecture?  Feel free to fork
+- Found a bug?  Send a message or a patch here or to Valkka google group
+- Want to implement a new feature?  Create your own development branch.  We will merge it once you have ran the tests (refer to "README_TESTS" in your build directory)
 
 ## Resources
-1. Doxygen generated documentation
-2. Google group
-3. The examples repository
+1. Doxygen generated [documentation](https://elsampsa.github.io/valkka-core/)
+2. Google group (coming up in a minute)
+3. The examples repository (coming up in a minute)
 
 ## Authors
 Sampsa Riikonen (core programming)

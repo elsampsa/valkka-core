@@ -1,4 +1,0 @@
-<map id="ValkkaRTSPClient" name="ValkkaRTSPClient">
-<area shape="rect" id="node3" href="$classStreamClientState.html" title="Class to hold per&#45;stream state that we maintain throughout each stream&#39;s lifetime. " alt="" coords="121,5,251,32"/>
-<area shape="rect" id="node4" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="275,5,363,32"/>
-</map>

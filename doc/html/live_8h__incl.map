@@ -1,9 +1,0 @@
-<map id="/home/sampsa/C/valkka/include/live.h" name="/home/sampsa/C/valkka/include/live.h">
-<area shape="rect" id="node2" href="$livedep_8h.html" title="List of common header files. " alt="" coords="1144,95,1219,121"/>
-<area shape="rect" id="node14" href="$frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="2773,95,2846,121"/>
-<area shape="rect" id="node46" href="$logging_8h.html" title="Logging utilities. " alt="" coords="3527,333,3601,360"/>
-<area shape="rect" id="node15" href="$common_8h.html" title="List of common header files. " alt="" coords="2771,333,2853,360"/>
-<area shape="rect" id="node37" href="$sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="2815,259,2879,285"/>
-<area shape="rect" id="node38" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="2358,177,2426,203"/>
-<area shape="rect" id="node43" href="$opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="2738,177,2809,203"/>
-</map>

@@ -1,9 +1,0 @@
-<map id="AVThread::run" name="AVThread::run">
-<area shape="rect" id="node2" href="$classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64" title="Pop a frame from the end of the fifo and return the frame to the reservoir stack. ..." alt="" coords="187,5,302,32"/>
-<area shape="rect" id="node3" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="179,56,310,83"/>
-<area shape="rect" id="node5" href="$classDecoderBase.html#a2ce8ff1e1474b05b893889d0f37133e5" title="Decode in_frame to out_frame. Return true if decoder returned a new frame (into out_frame), otherwise false. " alt="" coords="180,107,309,133"/>
-<area shape="rect" id="node6" href="$classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="187,157,302,184"/>
-<area shape="rect" id="node8" href="$classAVThread.html#a8515dade99fab93b4443e26d2b6400af" title="AVThread::handleSignals" alt="" coords="160,208,329,235"/>
-<area shape="rect" id="node4" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="385,56,481,83"/>
-<area shape="rect" id="node7" href="$classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="377,157,488,184"/>
-</map>

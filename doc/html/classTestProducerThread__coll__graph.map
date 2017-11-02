@@ -1,4 +1,0 @@
-<map id="TestProducerThread" name="TestProducerThread">
-<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="5,5,68,32"/>
-<area shape="rect" id="node3" href="$classFrameFifo.html" title="A thread&#45;safe FrameFifo (first&#45;in&#45;first&#45;out) queue with thread&#45;safe methods for inserting and popping..." alt="" coords="92,5,173,32"/>
-</map>

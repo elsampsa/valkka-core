@@ -1,6 +1,0 @@
-<map id="SDPConnection" name="SDPConnection">
-<area shape="rect" id="node2" href="$classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP). " alt="" coords="121,171,209,197"/>
-<area shape="rect" id="node3" href="$classTimestampFrameFilter.html" title="Corrects erroneous timestamps (while preserving timestamp distances). " alt="" coords="88,81,241,108"/>
-<area shape="rect" id="node4" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="121,5,209,32"/>
-<area shape="rect" id="node5" href="$classSlotFrameFilter.html" title="Sets the frame slot value. " alt="" coords="265,81,376,108"/>
-</map>

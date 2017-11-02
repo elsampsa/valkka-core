@@ -1,9 +1,0 @@
-digraph "Frames_tag"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  rankdir=LR;
-  Node0 [label="Frames_tag",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node1 [label="Queues_tag",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group__queues__tag.html",tooltip="Multiprocessing queues/fifos. "];
-  Node0->Node1 [shape=plaintext, label="FifoFrameFilter", color="orange", dir="none", style="dashed"];
-}
