@@ -1,5 +1,7 @@
 # Valkka - Massive video streaming for linux
 
+test: [link to doxygen docs](https://github.com/elsampsa/valkka-core/blob/master/doc/html/index.html)
+
 ## Synopsis
 The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VSMAs) in Linux environment.  The idea is to be able create VSMA systems with graphical user interfaces (GUIs) using the combination of Python3 and Qt (i.e. PyQt).
 
