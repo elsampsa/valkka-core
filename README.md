@@ -42,7 +42,8 @@ Some key features of the Valkka library are:
 See also the list of (latest) features below.
 
 ## For the impatient
-- Grab one of the following debian packages, and install it with "dpkg -i package_name".
+- Grab one of the following debian packages, and install it with "dpkg -i package_name"
+- (.. packages coming up in a day or two)
 - Install also the python package and install it with "pip3 install package_name"
 - Download python examples from "valkka-examples" repository
 - Check out Valkka cpp [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python API, you should read at least the "Library Architecture" section.
