@@ -1,0 +1,52 @@
+/*
+ * log_test.cpp : Test the loggin utility
+ * 
+ * Copyright 2017 Sampsa Riikonen and Petri Eranko.
+ * 
+ * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
+ * 
+ * This file is part of Valkka library.
+ * 
+ * Valkka is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * Valkka is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
+ * 
+ */
+
+/** 
+ *  @file    log_test.cpp
+ *  @author  Sampsa Riikonen
+ *  @date    2017
+ *  @version 0.1
+ *  
+ *  @brief Test logging utility
+ *
+ */ 
+
+#include "logging.h"
+
+int main(int argc, char** argcv) {
+
+// Logger logger;
+// logger=Logger();
+  
+framelogger.setLevel(LogLevel::normal);  
+framelogger.log(LogLevel::debug) << "kikkelis kokkelis 1" << std::endl;
+
+framelogger.setLevel(LogLevel::debug);
+framelogger.log(LogLevel::debug) << "kikkelis kokkelis 2" << std::endl;
+
+framelogger.setLevel(LogLevel::normal);
+
+}
+
+

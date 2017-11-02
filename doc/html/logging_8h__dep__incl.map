@@ -1,0 +1,21 @@
+<map id="/home/sampsa/C/valkka/include/logging.h" name="/home/sampsa/C/valkka/include/logging.h">
+<area shape="rect" id="node2" href="$live_8h.html" title="Interface to live555. " alt="" coords="89,95,253,136"/>
+<area shape="rect" id="node6" href="$livethread_8cpp.html" title="A live555 multithread. " alt="" coords="5,363,169,404"/>
+<area shape="rect" id="node7" href="$live_8cpp.html" title="Interface to live555. " alt="" coords="89,184,253,225"/>
+<area shape="rect" id="node8" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="465,95,629,136"/>
+<area shape="rect" id="node10" href="$filters_8cpp.html" title="Common frame filters. The FrameFilter base class is defined in frames.h. " alt="" coords="563,273,727,315"/>
+<area shape="rect" id="node11" href="$openglthread_8cpp.html" title="The OpenGL thread for presenting frames and related data structures. " alt="" coords="653,184,817,225"/>
+<area shape="rect" id="node13" href="$avthread_8cpp.html" title="FFmpeg decoding thread. " alt="" coords="824,95,988,136"/>
+<area shape="rect" id="node14" href="$decoders_8cpp.html" title="FFmpeg decoders. " alt="" coords="1012,95,1176,136"/>
+<area shape="rect" id="node15" href="$frames_8cpp.html" title="Basic frame types implementations. " alt="" coords="1200,95,1364,136"/>
+<area shape="rect" id="node16" href="$logging_8cpp.html" title="/home/sampsa/C/valkka\l/src/logging.cpp" alt="" coords="1388,95,1552,136"/>
+<area shape="rect" id="node17" href="$opengl_8cpp.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1576,95,1740,136"/>
+<area shape="rect" id="node18" href="$queues_8cpp.html" title="Lockable safe&#45;queues for frame queueing in multithreading applications. " alt="" coords="1764,95,1928,136"/>
+<area shape="rect" id="node19" href="$shaders_8cpp.html" title="/home/sampsa/C/valkka\l/src/shaders.cpp" alt="" coords="1952,95,2116,136"/>
+<area shape="rect" id="node20" href="$threads_8cpp.html" title="A convenience class for multithreading, similar to Python&#39;s standard library &quot;threading.Thread&quot;. " alt="" coords="2140,95,2304,136"/>
+<area shape="rect" id="node3" href="$livethread_8h.html" title="A live555 thread. " alt="" coords="203,273,367,315"/>
+<area shape="rect" id="node4" href="$chains_8h.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="236,363,400,404"/>
+<area shape="rect" id="node5" href="$chains_8cpp.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="236,452,400,493"/>
+<area shape="rect" id="node9" href="$filters_8h.html" title="filters.h : Common frame filters. The FrameFilter base class is defined in frames.h " alt="" coords="465,184,629,225"/>
+<area shape="rect" id="node12" href="$tools_8cpp.html" title="Auxiliary routines. " alt="" coords="277,184,441,225"/>
+</map>

@@ -123,7 +123,9 @@ There are three ways to contribute:
 
 ## Authors
 Sampsa Riikonen (core programming)
+
 Petri Eranko (financing, testing)
+
 Markus Kaukonen (opengl shader programming)
 
 ## Copyright

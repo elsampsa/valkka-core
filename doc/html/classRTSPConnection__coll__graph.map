@@ -1,0 +1,8 @@
+<map id="RTSPConnection" name="RTSPConnection">
+<area shape="rect" id="node2" href="$classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP). " alt="" coords="186,184,274,211"/>
+<area shape="rect" id="node3" href="$classTimestampFrameFilter.html" title="Corrects erroneous timestamps (while preserving timestamp distances). " alt="" coords="89,95,243,121"/>
+<area shape="rect" id="node4" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="163,5,251,32"/>
+<area shape="rect" id="node5" href="$classSlotFrameFilter.html" title="Sets the frame slot value. " alt="" coords="267,95,377,121"/>
+<area shape="rect" id="node6" href="$classValkkaRTSPClient.html" title="Handles a live555 RTSP connection. " alt="" coords="401,95,533,121"/>
+<area shape="rect" id="node8" href="$classStreamClientState.html" title="Class to hold per&#45;stream state that we maintain throughout each stream&#39;s lifetime. " alt="" coords="512,5,641,32"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="DecoderBase" name="DecoderBase">
+<area shape="rect" id="node2" href="$classDecoder.html" title="Decoder using FFmpeg/libav. " alt="" coords="22,80,93,107"/>
+<area shape="rect" id="node4" href="$classDummyDecoder.html" title="A Dummy decoder. " alt="" coords="116,80,233,107"/>
+<area shape="rect" id="node3" href="$classVideoDecoder.html" title="Video decoder using FFmpeg/libav. " alt="" coords="5,155,109,181"/>
+</map>

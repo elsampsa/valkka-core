@@ -1,0 +1,21 @@
+%module valkka_core
+
+%include <std_string.i>
+
+%{ // this is prepended in the wapper-generated c(pp) file
+#define SWIG_FILE_WITH_INIT
+#include "include/filters.h"
+#include "include/queues.h"
+#include "include/livethread.h"
+#include "include/avthread.h"
+#include "include/openglthread.h"
+%}
+
+// Swig should not try to create a default constructor for the following classes as they're abstract (swig interface file should not have the constructors either):
+%nodefaultctor FrameFilter;
+%nodefaultctor Thread;
+
+// XID types
+%include<X11/X.h>
+
+// next, expose what is necessary

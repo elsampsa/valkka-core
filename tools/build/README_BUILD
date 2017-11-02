@@ -1,0 +1,44 @@
+Welcome to your new build!
+
+Congratulations, you succesfully created this directory, using the "new_build.bash" command.
+
+Start by editing "run_cmake.bash" in order to get a characteristic build, say, debug, verbose, production, etc.
+
+When you're ready, run
+
+./run_cmake.bash
+
+After that, you can do 
+
+make
+
+or 
+
+make VERBOSE=1
+
+If you want to see what's going on.  
+
+To build either the library or just tests, try:
+
+make Valkka
+make tests
+
+When running tests, first set the LD_LIBRARY_PATH with
+
+source test_env.bash
+
+To set up your test streams, edit "set_test_streams.bash" and do
+
+source set_test_streams.bash
+
+After that, you can run tests in the "bin/" directory
+
+To check out the dependencies of your shared library, type
+
+./checkdep.py
+
+.. you can use the output in the main "CMakeLists.txt" file to inform the debian package about dependencies
+
+And if you want to do packages (for a production version), simply run
+
+make package

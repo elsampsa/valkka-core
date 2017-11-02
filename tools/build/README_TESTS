@@ -1,0 +1,67 @@
+
+So, you have hacked new things into Valkka and succesfully compiled it.  Now it is time to do some testing !
+
+
+1) Before running the test executables in the "bin/" directory, run in this directory
+
+source test_env.bash
+
+Now the runtime system finds your version of libValkka.so
+
+
+2) Now it's time to set your rtsp ip cameras for testing via environment variables.  Like this:
+
+export VALKKA_TEST_RTSP_1=rtsp://admin:12345@192.168.0.157
+export VALKKA_TEST_RTSP_2=rtsp://admin:12345@192.168.0.90
+
+You may also set the same camera twice (if it allows for two simultaneous connections.. usually they accept at least four)
+
+For testing streaming defined in an sdp file, do:
+
+export VALKKA_SDP_TEST=/home/your_path/file.sdp
+
+You can also set these in "set_test_streams.bash" and running it with "source set_test_streams.bash"
+
+
+3) Massively parallel streaming tests can be done with just a single camera, with the following trick:
+
+Copy from the "aux/" directory "multicast_to_unicast.bash" and "multicast.sdp" into this directory.
+
+Edit the copied "multicast_to_unicast.bash" according to your rtsp ip camera.  Start the script.  After that, you can try to read "multicast.sdp" as many times as you want, with, say
+
+ffplay multicast.sdp
+
+.. what happens here, is that the linux kernel replicates the stream as many times as needed, according to the multicast protocol.
+
+For multicast tests with Valkka, set:
+
+export VALKKA_TEST_SDP=/path_to_this_directory/multicast.sdp
+
+
+4) When debugging, you should always first set in "run_cmake.bash":
+
+options="-Dvalgrind_gpu_debug=ON -Dno_late_drop_debug=ON -Davthread_verbose=OFF -Ddecode_verbose=OFF -Dload_verbose=OFF -Dpresent_verbose=OFF -Drender_verbose=OFF -Dfifo_verbose=OFF"
+
+.. i.e., with valgrind debugging enabled.
+
+Then run the executables with valgrind.  You won't get any video on-screen (we are not uploading stuff to GPU, because that would drive valgrind crazy), but that's ok.  Check that there are no memory leaks.
+
+When you run into more problems, activate more debugging switches, disable some of them, etc.  Finally, set all switches to OFF again and see that you get video on-screen again.
+
+
+5) Tests programs take two arguments, the first is the "subtest" index (see the test source codes for more details) and the second number is the verbosity
+
+The "master test" is bin/opengl_thread_test, as it features complete pipeline from rtsp stream to OpenGL texture on the screen
+
+After tracking the bugs you generated, without luck, and growing more desperate, go through other, simpler and lower-level tests as well (test source code itself is the best documentation for this).
+
+
+6) Always test your new features systematically with:
+  * At least with two different camera brands
+  * At least two cameras running in parallel (if you are an owner of only a single rtsp cam, connect to it several times)
+  * At least with two different resolutions
+  * Run also massively parallel multicast tests (see above)
+
+
+7) When creating your own test code snippets, use the "test/create.bash" script.  The "test/list.bash" script creates a string you can merge into "CMakeLists.txt"'s test section.
+
