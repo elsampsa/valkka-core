@@ -3,7 +3,7 @@
 ## Synopsis
 The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VSMAs) in Linux environment.  The idea is to be able create VSMA systems with graphical user interfaces (GUIs) using the combination of Python3 and Qt (i.e. PyQt).
 
-Let's take a look at a typical VSMA programming architecture problem:
+Lets take a look at a typical VSMA programming architecture problem:
 - Stream H264 video from an IP camera using the RTSP protocol
 - Branch that stream, and direct it to (1) filesystem and (2) a decoder
 - From the decoder, branch the decoded YUV bitmap to (3-5):
@@ -13,16 +13,18 @@ Let's take a look at a typical VSMA programming architecture problem:
 - The media stream should be decoded once and only once
 - The program should be controllable through python, with graphical interface based on Qt
 
-You might try to tackle this with some available Linux stock media players, but I'll promise, you won't get far..!
+You might try to tackle this with some available Linux stock media players, but I will promise, you wont get far..!
 
 Consider further that in a typical VSMA system you may have up to 60+ (depending on the server hardware) ip cameras plugged into the same server.  Servers should also work as a proxies, re-streaming the ip cameras to other servers.
 
 Using Valkka, you can instantiate threads, and define how media streams are branched and pipelined between those threads.  The underlying threads and mutex-protected queues are hidden from the developer that controls everything using a Python3 API.  The process topology of the example case would look like this:
 
-[LiveThread] |
-             | --> [DecoderThread] -->  | --> [AnalyzerProcess] 
-             |                          |
-             | --> ValkkaFS             | --> [OpenGLThread] -- > X window system
+
+    [LiveThread] |
+                 | --> [DecoderThread] -->  | --> [AnalyzerProcess] 
+                 |                          |
+                 | --> ValkkaFS             | --> [OpenGLThread] -- > X window system
+
              
 Some key features of the Valkka library are:
 - Python API: create process topologies from Python only.  
@@ -40,21 +42,20 @@ Some key features of the Valkka library are:
 See also the list of (latest) features below.
 
 ## For the impatient
-Got exited?  Good!
 - Grab one of the following debian packages, and install it with "dpkg -i package_name".
 - Install also the python package and install it with "pip3 install package_name"
-- Download python (and C++) examples from this repository: [TODO]
-- Valkka internals are documented with doxygen [TODO].  But if you just want to use the python API, the example repository is self-sufficient: there is no need to know about the underlying C++ code
+- Download python examples from "valkka-examples" repository
+- Valkka internals are documented with doxygen.  If you are just using the python API, you should read at least the "Library Architecture" section.
 
 ## Features
 
 ### Current stable version is 0.1.0  
+Version name : "Proof of concept"
 
 ### Latest new features
 - Initial git commit: core system, live streaming to X-window system
 
 ### Features coming ASAP
-- Series of FrameFilters (Gates, timestamp corrector, etc.)
 - Software interpolator filter (yuv => rgb interpolation in the CPU)
 - Shared memory bridge for python inter-process communication
 
@@ -105,15 +106,15 @@ Creating the python interface: go to "python/" directory and read there "README.
 
 ### Contribute
 
-Wan't to modify and develop further Valkka source code?  Your effort is needed.
+Want to modify and develop further Valkka source code?  Your effort is needed.
 
 You might want to do some reading first.  Refer to the doxygen documentation.
 
 There are three ways to contribute:
 
 1. Found a bug?  Send a message or a patch to Valkka google group
-2. Want to implement a new feature?  Create your own development branch.  We'll merge it once you've ran the tests (refer to "README_TESTS" in your build directory)
-3. Don't agree with the library architecture?  Feel free to fork
+2. Want to implement a new feature?  Create your own development branch.  We will merge it once you have ran the tests (refer to "README_TESTS" in your build directory)
+3. Dont agree with the library architecture?  Feel free to fork
 
 ## Resources
 1. Doxygen generated documentation
