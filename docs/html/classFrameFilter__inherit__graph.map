@@ -1,0 +1,14 @@
+<map id="FrameFilter" name="FrameFilter">
+<area shape="rect" id="node2" href="$classBriefInfoFrameFilter.html" title="Dump the beginning of Frame&#39;s payload into stdout in a one&#45;liner. " alt="" coords="167,5,304,32"/>
+<area shape="rect" id="node3" href="$classDummyFrameFilter.html" title="A &quot;hello world&quot; demo class: prints its own name if verbose is set to true. " alt="" coords="168,56,303,83"/>
+<area shape="rect" id="node4" href="$classDumpFrameFilter.html" title="Dumps each received packet to a file: use with care! For debugginh purposes only. ..." alt="" coords="174,107,297,133"/>
+<area shape="rect" id="node5" href="$classFifoFrameFilter.html" title="Passes frames to a multiprocessing fifo. " alt="" coords="180,157,291,184"/>
+<area shape="rect" id="node6" href="$classForkFrameFilter.html" title="Replicates frame flow to two filters Use this frame filter to create frame filter tree structures..." alt="" coords="178,208,293,235"/>
+<area shape="rect" id="node7" href="$classGateFrameFilter.html" title="GateFrameFilter" alt="" coords="177,259,293,285"/>
+<area shape="rect" id="node8" href="$classInfoFrameFilter.html" title="Dump the beginning of Frame&#39;s payload into stdout. " alt="" coords="180,309,291,336"/>
+<area shape="rect" id="node9" href="$classRepeatH264ParsFrameFilter.html" title="For H264, some cameras don&#39;t send sps and pps packets again before every keyframe. " alt="" coords="141,360,329,387"/>
+<area shape="rect" id="node10" href="$classSetSlotFrameFilter.html" title="SetSlotFrameFilter" alt="" coords="170,411,301,437"/>
+<area shape="rect" id="node11" href="$classSlotFrameFilter.html" title="Sets the frame slot value. " alt="" coords="180,461,291,488"/>
+<area shape="rect" id="node12" href="$classTimeIntervalFrameFilter.html" title="TimeIntervalFrameFilter" alt="" coords="155,512,315,539"/>
+<area shape="rect" id="node13" href="$classTimestampFrameFilter.html" title="Corrects erroneous timestamps (while preserving timestamp distances). " alt="" coords="159,563,312,589"/>
+</map>

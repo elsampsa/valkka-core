@@ -1,0 +1,9 @@
+digraph "Queues"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir=LR;
+  Node1 [label="Frames",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group__frames.html",tooltip="Things related to Frames and filters. "];
+  Node0 [label="Queues",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node0->Node1 [shape=plaintext, label="FifoFrameFilter", color="orange", dir="none", style="dashed"];
+}
