@@ -4,7 +4,7 @@
 /*
  * logging.h : Logging utilities
  * 
- * Copyright 2017 Sampsa Riikonen and Petri Eranko.
+ * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

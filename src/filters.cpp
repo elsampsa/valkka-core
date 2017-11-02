@@ -1,7 +1,7 @@
 /*
  * filters.cpp : Common frame filters.  The FrameFilter base class is defined in frames.h
  * 
- * Copyright 2017 Sampsa Riikonen and Petri Eranko.
+ * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

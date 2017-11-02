@@ -1,7 +1,7 @@
 /*
  * opengl_thread_test.cpp : Test OpenGLThread signals and functionality.  Test whole pipeline from LiveThread to OpenGL rendering.
  * 
- * Copyright 2017 Sampsa Riikonen and Petri Eranko.
+ * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

@@ -1,7 +1,7 @@
 /*
  * classes_test.cpp : Run tests on the classes: instatiation, copy-construction, etc.
  * 
- * Copyright 2017 Sampsa Riikonen and Petri Eranko.
+ * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

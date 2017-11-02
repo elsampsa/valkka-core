@@ -1,7 +1,7 @@
 """
 live_thread_test.py : Cloning some of the stuff in "live_thread_test.cpp"
 
-Copyright 2017 Sampsa Riikonen and Petri Eranko.
+Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
 
 Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
 

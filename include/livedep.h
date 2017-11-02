@@ -1,7 +1,7 @@
 /*
  * livedep.h : A list/recompilation of common header files for live555
  * 
- * Copyright 2017 Sampsa Riikonen and Petri Eranko.
+ * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

@@ -1,7 +1,7 @@
 /*
  * shaders.cpp : OpenGL shaders for YUV to RGB interpolation
  * 
- * Copyright 2017 Sampsa Riikonen and Petri Eranko.
+ * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  *          Markus Kaukonen <markus.kaukonen@iki.fi>

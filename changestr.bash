@@ -10,9 +10,11 @@ read -n1 -r -p "Press q to quit, space to continue..." key
 
 if [ "$key" = '' ]; then
   echo "running sed"
-  find include/ -name "*.h" -exec sed -i -r "s/$1/$2/g" {} \;
-  find src/ -name "*.cpp" -exec sed -i -r "s/$1/$2/g" {} \;
-  find test/ -name "*.cpp" -exec sed -i -r "s/$1/$2/g" {} \;
+  find -name "*.h" -exec sed -i -r "s/$1/$2/g" {} \;
+  find -name "*.cpp" -exec sed -i -r "s/$1/$2/g" {} \;
+  find -name "*.py" -exec sed -i -r "s/$1/$2/g" {} \;
+  find -name "template" -exec sed -i -r "s/$1/$2/g" {} \;
+  
 else
   echo
   echo "cancelled"

@@ -1,7 +1,7 @@
 /*
  * live_streaming_test.cpp : Test the whole pipeline from LiveThread to AVThread and to OpenGLThread (without rendering)
  * 
- * Copyright 2017 Sampsa Riikonen and Petri Eranko.
+ * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

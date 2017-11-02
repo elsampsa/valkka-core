@@ -1,7 +1,7 @@
 /*
  * NAME.h :
  * 
- * Copyright 2017 Sampsa Riikonen and Petri Eranko.
+ * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
@@ -29,10 +29,5 @@
  *  @version 0.1
  *  
  *  @brief
- *
- *  @section DESCRIPTION
- *  
- *  Yes, the description
- *
  */ 
 
