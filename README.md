@@ -109,12 +109,12 @@ Creating the python3 interface: go to "python/" directory and read there "README
 
 Want to modify and develop further Valkka source code?  Your effort is needed.  You should start by reading some of the cpp documentation.
 
-- Found a bug?  Send a message or a patch here or to Valkka google group
+- Found a bug?  Send a message or a patch here or to Valkka [google group](https://groups.google.com/forum/#!forum/valkka)
 - Want to implement a new feature?  Create your own development branch.  We will merge it once you have ran the tests (refer to "README_TESTS" in your build directory)
 
 ## Resources
 1. Doxygen generated [documentation](https://elsampsa.github.io/valkka-core/)
-2. Google group (coming up in a minute)
+2. Google [group](https://groups.google.com/forum/#!forum/valkka)
 3. The examples [repository](https://github.com/elsampsa/valkka-examples)
 
 ## Authors
