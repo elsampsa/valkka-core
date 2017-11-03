@@ -256,7 +256,9 @@ SET(CPACK_PACKAGE_VERSION "${VERSION_STRING}")
 
 SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MY_ARCH})
 
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.1-6), libgcc1 (>= 1:3.4.2-12)") 
+# SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.1-6), libgcc1 (>= 1:3.4.2-12)") 
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0)") # ubuntu 16
+
 #
 # objdump -p libValkka.so
 # dpkg -S libc.so.6
@@ -271,7 +273,7 @@ SET(CPACK_DEBIAN_PACKAGE_RECOMMENDS "")
 SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "")
 # SET(CPACK_PACKAGE_INSTALL_DIRECTORY "dir") # don't use
 
-INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib) # install the shared library
+install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib) # install the shared library
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/include" DESTINATION valkka FILES_MATCHING PATTERN "*.h") # install header files
 # The install command: https://cmake.org/cmake/help/v3.0/command/install.html
 
@@ -279,10 +281,31 @@ if(CUSTOM_BUILD) # include header files ..
   # install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION include/valkka FILES_MATCHING PATTERN "*.h")
   # install(DIRECTORY "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include" DESTINATION include/valkka FILES_MATCHING PATTERN "*.hh")
   install(DIRECTORY "${LIVE555_ROOT}/liveMedia/include" DESTINATION valkka/liveMedia FILES_MATCHING PATTERN "*.h*")
-  install(DIRECTORY "${LIVE555_ROOT}/groupsock/include" DESTINATION valkka/liveMedia FILES_MATCHING PATTERN "*.h*")
-  install(DIRECTORY "${LIVE555_ROOT}/BasicUsageEnvironment/include" DESTINATION valkka/liveMedia FILES_MATCHING PATTERN "*.h*")
-  install(DIRECTORY "${LIVE555_ROOT}/UsageEnvironment/include" DESTINATION valkka/liveMedia FILES_MATCHING PATTERN "*.h*")
-  install(DIRECTORY "${FFMPEG_ROOT}" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h")
+  install(DIRECTORY "${LIVE555_ROOT}/groupsock/include" DESTINATION valkka/groupsock FILES_MATCHING PATTERN "*.h*")
+  install(DIRECTORY "${LIVE555_ROOT}/BasicUsageEnvironment/include" DESTINATION valkka/BasicUsageEnvironment FILES_MATCHING PATTERN "*.h*")
+  install(DIRECTORY "${LIVE555_ROOT}/UsageEnvironment/include" DESTINATION valkka/UsageEnvironment FILES_MATCHING PATTERN "*.h*")
+  
+  # include header files if someone want's to use the cpp API.  Must take care thought, that the API user uses the correct header files (i.e. these, instead of some other versions)
+  install(DIRECTORY "${FFMPEG_ROOT}/libavfilter" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h") # don't really need this ..
+  install(DIRECTORY "${FFMPEG_ROOT}/libavformat" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h")
+  install(DIRECTORY "${FFMPEG_ROOT}/libavcodec" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h")
+  install(DIRECTORY "${FFMPEG_ROOT}/libavutil" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h")
+  install(DIRECTORY "${FFMPEG_ROOT}/libswscale" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h")
+  install(DIRECTORY "${FFMPEG_ROOT}/libswresample" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h")
+  
+  # when compiling on my linux box, I use:
+  # -I/home/sampsa/live555/live/UsageEnvironment/include
+  # -I/home/sampsa/ffmpeg/ffmpeg_git_lgpl 
+  #
+  # with cpp api, should use
+  # -I/usr/valkka/include/
+  # -I/usr/valkka/BasicUsageEnvironment/include/
+  # .. etc. for live555
+  # -I/usr/valkka/ffmpeg/
+  #
+  # however, if combined with "-I/usr/include", there might be other versions of the same header files in "/usr/include/" TODO: think about this..
+  #
+  
 endif(CUSTOM_BUILD)
 
 # TODO: how to configure pkg-config when installing this .deb package?

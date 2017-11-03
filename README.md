@@ -1,7 +1,7 @@
 # Valkka - Massive video streaming for linux
 
 ## Synopsis
-The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VSMAs) in Linux environment.  The idea is to be able create VSMA systems with graphical user interfaces (GUIs) using the combination of Python3 and Qt (i.e. PyQt).
+The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VSMAs) in Linux environment.  The idea is to be able create VSMA systems with graphical user interfaces (GUIs) using the combination of python3 and Qt (i.e. PyQt).
 
 Lets take a look at a typical VSMA programming architecture problem:
 - Stream H264 video from an IP camera using the RTSP protocol
@@ -11,13 +11,13 @@ Lets take a look at a typical VSMA programming architecture problem:
   - (4) A Fullscreen X-window on screen 1
   - (5) To a smaller X-window on screen 2
 - The media stream should be decoded once and only once
-- The program should be controllable through python, with graphical interface based on Qt
+- The program should be controllable through python3, with graphical interface based on Qt
 
 You might try to tackle this with some available Linux stock media players, but I will promise, you wont get far..!
 
 Consider further that in a typical VSMA system you may have up to 60+ (depending on the server hardware) ip cameras plugged into the same server.  Servers should also work as a proxies, re-streaming the ip cameras to other servers.
 
-Using Valkka, you can instantiate threads, and define how media streams are branched and pipelined between those threads.  The underlying threads and mutex-protected queues are hidden from the developer that controls everything using a Python3 API.  The process topology of the example case would look like this:
+Using Valkka, you can instantiate threads, and define how media streams are branched and pipelined between those threads.  The underlying threads and mutex-protected queues are hidden from the developer that controls everything using a python3 API.  The process topology of the example case would look like this:
 
 
     [LiveThread] |
@@ -27,7 +27,7 @@ Using Valkka, you can instantiate threads, and define how media streams are bran
 
              
 Some key features of the Valkka library are:
-- Python API: create process topologies from Python only.  
+- Python3 API: create process topologies from python3 only.  
 - Develop sleek graphical interfaces fast with PyQt.  Cool!
 - The library itself runs purely in C++.  No python Global Interpreter Lock (GIL) problems here.
 - Connections to streaming devices (IP cameras, SDP files) are done using the Live555 media streaming library
@@ -42,11 +42,11 @@ Some key features of the Valkka library are:
 See also the list of (latest) features below.
 
 ## For the impatient
-- Grab one of the following debian packages, and install it with "dpkg -i package_name"
-- (.. packages coming up in a day or two)
-- Install also the python package and install it with "pip3 install package_name"
-- Download python examples from "valkka-examples" repository
-- Check out Valkka cpp [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python API, you should read at least the "Library Architecture" section.
+- You need to install two pre-built packages from [here](https://elsampsa.github.io/valkka-core/downloads)
+- Install the debian (.deb) package with "sudo dpkg -i package_name"
+- Install python3 binary package (.whl) with "pip3 install package_name"
+- Download python3 examples from "valkka-examples" [repository](https://github.com/elsampsa/valkka-examples).
+- Check out Valkka cpp [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
 
 ## Features
 
@@ -69,7 +69,7 @@ Version name : "Proof of concept"
 ### Long term goals
 - Interserver communication and stream proxying
 - ValkkaFS filesystem, saving and searching video stream
-- A separate Python3 Onvif module
+- A separate python3 Onvif module
 
 ### Very long term goals
 - A complete VSMA system
@@ -103,7 +103,7 @@ Go to the newly created build directory and there:
   - .. and now you should be able to run the test programs
   - Debian package can be created simply with "make package"
 
-Creating the python interface: go to "python/" directory and read there "README.md"
+Creating the python3 interface: go to "python/" directory and read there "README.md"
 
 ### Contribute
 
@@ -115,7 +115,7 @@ Want to modify and develop further Valkka source code?  Your effort is needed.  
 ## Resources
 1. Doxygen generated [documentation](https://elsampsa.github.io/valkka-core/)
 2. Google group (coming up in a minute)
-3. The examples repository (coming up in a minute)
+3. The examples [repository](https://github.com/elsampsa/valkka-examples)
 
 ## Authors
 Sampsa Riikonen (core programming)
