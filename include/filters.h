@@ -11,7 +11,7 @@
  * This file is part of Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
@@ -20,7 +20,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
  * 
  */
@@ -210,6 +210,42 @@ protected:
 }; // <pyapi>
 
 
-// TODO: YUV2RGBFrameFilter
-
+/** Interpolate from YUV bitmap to RGB
+ * 
+ * - Creates internal, outbound frame with reserved space for AVFrame data
+ * - AVThread writes a Frame with it's av_frame (AVFrame) instance activated, into this FrameFilter
+ * - When first frame arrives here, reserve SwsContext (SwScaleFrameFilter::sws_ctx)
+ * - If incoming frame's dimensions change, re-reserve sws_ctx
+ * 
+ */
+class SwScaleFrameFilter : public FrameFilter {
+  
+public:
+  SwScaleFrameFilter(const char* name, int target_width, int target_height, FrameFilter* next=NULL); ///< Default constructor
+  ~SwScaleFrameFilter(); ///< Default destructor
+  
+protected: // initialized at constructor
+  int            target_width;       ///< target frame width
+  int            target_height;      ///< target frame height
+  Frame          outframe;
+  
+protected:  
+  AVPixelFormat  target_pix_fmt;     ///< target pixel format set by SwScaleFrameFilter::setTargetFmt
+  struct SwsContext *sws_ctx;        ///< FFmpeg scaling context structure
+  
+protected:
+  void go(Frame* frame);
+  
+public:
+  void run(Frame* frame);
+  virtual void setTargetFmt();
+};
+  
 #endif
+
+
+
+
+
+
+

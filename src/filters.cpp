@@ -8,7 +8,7 @@
  * This file is part of Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
@@ -17,7 +17,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
  * 
  */
@@ -203,4 +203,89 @@ TimeIntervalFrameFilter::TimeIntervalFrameFilter(const char* name, int mstimedel
 
 void TimeIntervalFrameFilter::go(Frame* frame) {
 }
+
+
+
+
+SwScaleFrameFilter::SwScaleFrameFilter(const char* name, int target_width, int target_height, FrameFilter* next) : FrameFilter(name,next), target_width(target_width), target_height(target_height), outframe(Frame()), sws_ctx(NULL) {
+  setTargetFmt();
+  outframe.frametype=FrameType::avframe;
+  outframe.av_frame=av_frame_alloc();
+  
+  // output AVFrame alias
+  AVFrame *out_avframe  = outframe.av_frame;
+  
+  out_avframe->width=target_width;
+  out_avframe->height=target_height;
+  
+  int nb;
+  nb =av_image_alloc(out_avframe->data, out_avframe->linesize, out_avframe->width, out_avframe->height, target_pix_fmt, 1);
+  if (nb>0) {
+    decoderlogger.log(LogLevel::debug) << "SwScaleFrameFilter: constructor: reserved " << nb << " bytes for the bitmap" << std::endl;
+  }
+  else {
+    // decoderlogger.log(LogLevel::fatal) << "SwScaleFrameFilter: constructor: FATAL: could not reserve image " << std::endl;
+    std::perror("SwScaleFrameFilter: constructor: FATAL: could not reserve image");
+    exit(2);
+  }
+}
+
+
+SwScaleFrameFilter::~SwScaleFrameFilter() {
+  av_freep(outframe.av_frame->data);
+  av_frame_free(&(outframe.av_frame));
+  if (!sws_ctx) {
+  }
+  else {
+    sws_freeContext(sws_ctx);
+  }
+}
+
+
+void SwScaleFrameFilter::setTargetFmt() {
+  target_pix_fmt=AV_PIX_FMT_RGB24;
+}
+
+
+void SwScaleFrameFilter::run(Frame* frame) { // AVThread calls this ..
+  this->go(frame); // manipulate frame - in this case, scale from yuv to rgb
+  // A bit special FrameFilter class : these steps are done inside method go
+  // if (!this->next) { return; } // call next filter .. if there is any
+  // (this->next)->run(outframe);
+}
+
+
+void SwScaleFrameFilter::go(Frame* frame) { // do the scaling
+  if (frame->frametype==FrameType::avframe) {
+    // input AVFrame aliases
+    AVFrame         *in_avframe   = frame->av_frame;
+    AVCodecContext  *ctx          = frame->av_codec_context;
+    // output AVFrame alias
+    AVFrame         *out_avframe  = outframe.av_frame;
+    
+    if (!sws_ctx) {
+    }
+    /*
+    else { // so, scaling context has been set .. let's see if input dimensions still hold
+      if (in_avframe->width!=sws_ctx->dstW or in_avframe->height!=sws_ctx->dstH) { // dimensions changed - time to reinit
+        sws_freeContext(sws_ctx);
+        sws_ctx=NULL;
+      }
+    }
+    */
+    
+    if (!sws_ctx) { // got frame for the first time
+      sws_ctx =sws_getContext(in_avframe->width, in_avframe->height, ctx->pix_fmt, out_avframe->width, out_avframe->height, target_pix_fmt, SWS_POINT, NULL, NULL, NULL);
+    }
+      
+    sws_scale(sws_ctx, (const uint8_t * const*)in_avframe->data, in_avframe->linesize, 0, in_avframe->height, out_avframe->data, out_avframe->linesize);
+    
+    if (!this->next) { return; } // call next filter .. if there is any
+    (this->next)->run(&outframe);
+  }
+  else {
+    decoderlogger.log(LogLevel::fatal) << "SwScaleFrameFilter: go: FATAL: needs a Frame with frame->frametype = FrameType::avframe " << std::endl;
+  }
+}
+
 

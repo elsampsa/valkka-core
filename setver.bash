@@ -21,3 +21,11 @@ sed -i -r "s/PROJECT_NUMBER(.*)/PROJECT_NUMBER = \"$1.$2.$3\"/g" doc/config
 sed -i -r "s/VERSION_MAJOR(.*);/VERSION_MAJOR = $1;/g" include/sizes.h
 sed -i -r "s/VERSION_MINOR(.*);/VERSION_MINOR = $2;/g" include/sizes.h
 sed -i -r "s/VERSION_PATCH(.*);/VERSION_PATCH = $3;/g" include/sizes.h
+
+echo Dont forget to use ..
+echo
+echo git $1.$2.$3
+echo git push origin --tags
+echo
+echo .. this informs git about the new version number
+echo

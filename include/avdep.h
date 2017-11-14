@@ -11,7 +11,7 @@
  * This file is part of Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
@@ -20,7 +20,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
  * 
  */
@@ -41,7 +41,7 @@ extern "C" { // realizing this took me half a day : https://stackoverflow.com/qu
 #include <libavcodec/avcodec.h>
 // #include <libavcodec/vdpau.h>
 #include <libavformat/avformat.h>
-// #include <libavutil/imgutils.h>
+#include <libavutil/imgutils.h>
 // #include <libavutil/parseutils.h>
 #include <libavutil/log.h>
 #include <libswscale/swscale.h>
