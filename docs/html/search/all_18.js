@@ -12,6 +12,7 @@ var searchData=
   ['_7erendergroup',['~RenderGroup',['../classRenderGroup.html#ae34bcc97bcdb351454a956cdb83c5c94',1,'RenderGroup']]],
   ['_7eshader',['~Shader',['../classShader.html#aff01df87e8a102f270b5b135a295e59d',1,'Shader']]],
   ['_7eslotcontext',['~SlotContext',['../classSlotContext.html#a8bcbfd51a2d82232bda48446a7548d33',1,'SlotContext']]],
+  ['_7eswscaleframefilter',['~SwScaleFrameFilter',['../classSwScaleFrameFilter.html#ab9d35ed18f596ce54d8382cf557c9d46',1,'SwScaleFrameFilter']]],
   ['_7etex',['~TEX',['../classTEX.html#a8d209827809cb72920179b11ab5cc6ff',1,'TEX']]],
   ['_7ethread',['~Thread',['../classThread.html#a37d9edd3a1a776cbc27dedff949c9726',1,'Thread']]],
   ['_7evideodecoder',['~VideoDecoder',['../classVideoDecoder.html#ab9fabfb2ef09d86f65a8a34730ce59b0',1,'VideoDecoder']]],
