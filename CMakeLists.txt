@@ -85,7 +85,7 @@ endif (fifo_verbose)
 # ****************************************************************
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "0") 
-SET(MINOR_VERSION "1") 
+SET(MINOR_VERSION "2") 
 SET(PATCH_VERSION "0") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 

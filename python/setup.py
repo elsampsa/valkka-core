@@ -66,7 +66,7 @@ ext_modules.append(ext)
 setup(
   name = "Valkka",
   # WARNING: the following line is modified by the "setver.bash" script
-  version = "0.1.0", 
+  version = "0.2.0", 
   install_requires = ['docutils>=0.3'],
   packages = find_packages(),
   # scripts = ['say_hello.py'],

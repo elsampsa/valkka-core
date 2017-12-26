@@ -50,15 +50,16 @@ See also the list of (latest) features below.
 
 ## Features
 
-### Current stable version is 0.1.0  
-Version name : "Proof of concept"
-
-### Latest new features
-- Initial git commit: core system, live streaming to X-window system
-
-### Features coming ASAP
+### Current stable version is 0.2.0  
+Version name : "Christmas 2017 project"
 - Software interpolator filter (yuv => rgb interpolation in the CPU)
 - Shared memory bridge for python inter-process communication
+- Python level 2 api
+- Just committed this one : documentation and packages will be updated soon :)
+
+### Older versions
+0.1.0 Version name : "Proof of concept"
+- Initial git commit: core system, live streaming to X-window system
 
 ### Features coming soon
 - Composite "video in video"

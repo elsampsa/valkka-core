@@ -24,7 +24,7 @@ sed -i -r "s/VERSION_PATCH(.*);/VERSION_PATCH = $3;/g" include/sizes.h
 
 echo Dont forget to use ..
 echo
-echo git $1.$2.$3
+echo "git tag -a "$1.$2.$3" -m 'my version "$version"'"
 echo git push origin --tags
 echo
 echo .. this informs git about the new version number
