@@ -425,7 +425,8 @@ public: // API // <pyapi>
    * @param window_id  X window id (corresponding to a created rendering group)
    * @param z          Stacking order of the rendered bitmap
    * 
-   * returns a unique integer id presenting the rendering context
+   * returns a unique integer id presenting the rendering context.
+   * return 0 if the call failed.
    * 
    */
   int newRenderContextCall (SlotNumber slot, Window window_id, unsigned int z);  // <pyapi>

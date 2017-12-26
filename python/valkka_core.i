@@ -1,6 +1,8 @@
 %module valkka_core
-
 %include <std_string.i>
+%include "cpointer.i" // simple pointer types for c(pp).  We use them for pass-by-reference cases
+/* Create some functions for working with "int *" */
+%pointer_functions(int, intp);
 
 %{ // this is prepended in the wapper-generated c(pp) file
 #define SWIG_FILE_WITH_INIT
@@ -9,6 +11,16 @@
 #include "include/livethread.h"
 #include "include/avthread.h"
 #include "include/openglthread.h"
+#include "include/sharedmem.h"
+#include <Python.h>
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+// #define PY_ARRAY_UNIQUE_SYMBOL shmem_array_api
+#include "numpy/ndarraytypes.h"
+#include "numpy/arrayobject.h"
+%}
+
+%init %{
+import_array(); // numpy initialization that should be run only once
 %}
 
 // Swig should not try to create a default constructor for the following classes as they're abstract (swig interface file should not have the constructors either):
@@ -17,6 +29,23 @@
 
 // XID types
 %include<X11/X.h>
+
+%typemap(in) (std::size_t) {
+  $1=PyLong_AsSize_t($input);
+}
+
+
+%inline %{
+
+PyObject* getNumpyShmem(SharedMemRingBuffer* rb, int i) {
+  PyObject* pa;
+  npy_intp dims[1];                                                               
+  dims[0]=((rb->shmems)[i])->n_bytes;
+  pa=PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)(((rb->shmems)[i])->payload));
+  return pa;                                                                       
+}
+
+%}
 
 // next, expose what is necessary
  
@@ -83,7 +112,13 @@ public: // <pyapi>
  
 class TimeIntervalFrameFilter : public FrameFilter { // <pyapi>
 public: // <pyapi>
-  TimeIntervalFrameFilter(const char* name, int mstimedelta, FrameFilter* next=NULL); // <pyapi>
+  TimeIntervalFrameFilter(const char* name, long int mstimedelta, FrameFilter* next=NULL); // <pyapi>
+}; // <pyapi>
+ 
+class SwScaleFrameFilter : public FrameFilter { // <pyapi>
+public: // <pyapi>
+  SwScaleFrameFilter(const char* name, int target_width, int target_height, FrameFilter* next=NULL); ///< Default constructor // <pyapi>
+  ~SwScaleFrameFilter(); ///< Default destructor // <pyapi>
 }; // <pyapi>
  
 class FrameFifo { // <pyapi>
@@ -168,3 +203,19 @@ static const int VERSION_MAJOR = 0; // <pyapi>
 static const int VERSION_MINOR = 1; // <pyapi>
 static const int VERSION_PATCH = 0; // <pyapi>
 typedef unsigned short SlotNumber;   // <pyapi>
+ 
+class SharedMemRingBuffer { // <pyapi>
+public: // <pyapi>
+  SharedMemRingBuffer(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0, bool is_server=false); // <pyapi>
+  ~SharedMemRingBuffer(); // <pyapi>
+public: // <pyapi>
+  int   getValue();       ///< Returns the current index (next to be read) of the shmem buffer // <pyapi>
+  bool  getClientState(); ///< Are the shmem segments available for client? // <pyapi>
+public: // client side routines - call only from the client side // <pyapi>
+  bool clientPull(int &index_out, int &size_out); // <pyapi>
+}; // <pyapi>
+ 
+class SharedMemFrameFilter : public FrameFilter { // <pyapi> 
+public: // <pyapi>
+  SharedMemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0); // <pyapi>
+}; // <pyapi>

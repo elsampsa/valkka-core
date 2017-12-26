@@ -37,10 +37,12 @@
 #include "sizes.h"
 #include "logging.h"
 
+int64_t NANOSEC_PER_SEC = 1000000000;
+
 long int getCurrentMsTimestamp(); ///< Utility function: returns current unix epoch timestamp in milliseconds
 
 long int getMsDiff(timeval tv1, timeval tv2); ///< Utility function: return timedif of two timeval structs in milliseconds
 
 bool slotOk(SlotNumber n_slot); ///< Checks the slot number range
 
-
+void normalize_timespec(struct timespec *ts, time_t sec, int64_t nanosec);

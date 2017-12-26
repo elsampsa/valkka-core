@@ -1,6 +1,8 @@
 %module valkka_core
-
 %include <std_string.i>
+%include "cpointer.i" // simple pointer types for c(pp).  We use them for pass-by-reference cases
+/* Create some functions for working with "int *" */
+%pointer_functions(int, intp);
 
 %{ // this is prepended in the wapper-generated c(pp) file
 #define SWIG_FILE_WITH_INIT
@@ -9,6 +11,16 @@
 #include "include/livethread.h"
 #include "include/avthread.h"
 #include "include/openglthread.h"
+#include "include/sharedmem.h"
+#include <Python.h>
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+// #define PY_ARRAY_UNIQUE_SYMBOL shmem_array_api
+#include "numpy/ndarraytypes.h"
+#include "numpy/arrayobject.h"
+%}
+
+%init %{
+import_array(); // numpy initialization that should be run only once
 %}
 
 // Swig should not try to create a default constructor for the following classes as they're abstract (swig interface file should not have the constructors either):
@@ -17,5 +29,22 @@
 
 // XID types
 %include<X11/X.h>
+
+%typemap(in) (std::size_t) {
+  $1=PyLong_AsSize_t($input);
+}
+
+
+%inline %{
+
+PyObject* getNumpyShmem(SharedMemRingBuffer* rb, int i) {
+  PyObject* pa;
+  npy_intp dims[1];                                                               
+  dims[0]=((rb->shmems)[i])->n_bytes;
+  pa=PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)(((rb->shmems)[i])->payload));
+  return pa;                                                                       
+}
+
+%}
 
 // next, expose what is necessary

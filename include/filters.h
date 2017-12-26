@@ -196,16 +196,28 @@ public: // <pyapi>
 }; // <pyapi>
   
 
+/** Pass frames, but not all of them - only on regular intervals.  This serves for downshifting the fps rate.
+ * Of course, use only for decoded frames.
+ * 
+ * @param name          A name identifying the frame filter
+ * @param mstimedelta   Time interval in milliseconds
+ * @param next          Next filter in chain
+ * 
+ */
 class TimeIntervalFrameFilter : public FrameFilter { // <pyapi>
   
 public: // <pyapi>
-  TimeIntervalFrameFilter(const char* name, int mstimedelta, FrameFilter* next=NULL); // <pyapi>
+  TimeIntervalFrameFilter(const char* name, long int mstimedelta, FrameFilter* next=NULL); // <pyapi>
 
 protected:
-  int mstimedelta;
+  long int mstimedelta; 
+  long int prevmstimestamp;
   
 protected: 
   void go(Frame* frame);
+  
+public:
+  void run(Frame* frame);
     
 }; // <pyapi>
 
@@ -218,11 +230,11 @@ protected:
  * - If incoming frame's dimensions change, re-reserve sws_ctx
  * 
  */
-class SwScaleFrameFilter : public FrameFilter {
+class SwScaleFrameFilter : public FrameFilter { // <pyapi>
   
-public:
-  SwScaleFrameFilter(const char* name, int target_width, int target_height, FrameFilter* next=NULL); ///< Default constructor
-  ~SwScaleFrameFilter(); ///< Default destructor
+public: // <pyapi>
+  SwScaleFrameFilter(const char* name, int target_width, int target_height, FrameFilter* next=NULL); ///< Default constructor // <pyapi>
+  ~SwScaleFrameFilter(); ///< Default destructor // <pyapi>
   
 protected: // initialized at constructor
   int            target_width;       ///< target frame width
@@ -239,7 +251,7 @@ protected:
 public:
   void run(Frame* frame);
   virtual void setTargetFmt();
-};
+}; // <pyapi>
   
 #endif
 

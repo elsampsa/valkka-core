@@ -57,3 +57,22 @@ bool slotOk(SlotNumber n_slot) {
   return true;
 }
 
+
+// normalized_timespec : normalize to nanosec and sec
+void normalize_timespec(struct timespec *ts, time_t sec, int64_t nanosec)
+{
+  while (nanosec >= NANOSEC_PER_SEC) {
+    asm("" : "+rm"(nanosec));
+    nanosec -= NANOSEC_PER_SEC;
+    ++sec;
+  }
+  while (nanosec < 0) {
+    asm("" : "+rm"(nanosec));
+    nanosec += NANOSEC_PER_SEC;
+    --sec;
+  }
+  ts->tv_sec  = sec;
+  ts->tv_nsec = nanosec;
+}
+
+

@@ -1,5 +1,5 @@
 """
-NAME.py :
+test.py : Some api level 2 tests.  Look at valkka-examples git repo for more.
 
 Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
 
@@ -25,19 +25,33 @@ along with Valkka.  If not, see <http://www.gnu.org/licenses/>.
 @date    2017
 @version 0.1
   
-@brief 
+@brief Some api level 2 tests.  Look at valkka-examples git repo for more.
 """
+
+from valkka.api2.threads import LiveThread, OpenGLThread, ShmemClient
+from valkka.api2.chains import ShmemFilterchain
+
 
 
 def test1():
-  st=""" Empty test
+  st="""Empty test
   """
   pre=pre_mod+"test1 :"
   print(pre,st)
-
+  
+  livethread=LiveThread(
+    name="live_thread"
+    )
+  
+  openglthread=OpenGLThread(
+    name    ="mythread",
+    n1440p  =5,
+    verbose =True
+    )
+  
 
 def test2():
-  st=""" Empty test
+  st="""Empty test
   """
   pre=pre_mod+"test2 :"
   print(pre,"st")

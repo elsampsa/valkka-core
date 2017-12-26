@@ -1612,6 +1612,13 @@ int OpenGLThread::newRenderContextCall(SlotNumber slot, Window window_id, unsign
   // there could be a mutex going in with the signal .. and then we wait for that mutex
   
   opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContextCall: return ctx="<< ctx <<std::endl;
+  
+  /* // TODO: check this!
+  if (!ctx.success) {
+    return 0;
+  }
+  */
+  
   return ctx.render_ctx;
 }
   

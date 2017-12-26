@@ -35,7 +35,6 @@
 #include "queues.h"
 #include "livethread.h"
 #include "avthread.h"
-#include "logging.h"
 #include "filters.h"
 #include "logging.h"
 

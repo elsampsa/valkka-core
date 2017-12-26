@@ -64,6 +64,7 @@ ForkFrameFilter::ForkFrameFilter(const char* name, FrameFilter* next, FrameFilte
 }
 
 void ForkFrameFilter::run(Frame* frame) {
+  // std::cout << "ForkFrameFilter: run" << std::endl;
   this->go(frame); // manipulate frame
   if (!this->next) {
     }
@@ -198,13 +199,25 @@ void SetSlotFrameFilter::setSlot(SlotNumber n) {
 }
   
 
-TimeIntervalFrameFilter::TimeIntervalFrameFilter(const char* name, int mstimedelta, FrameFilter* next) : FrameFilter(name,next), mstimedelta(mstimedelta) { // TODO
+TimeIntervalFrameFilter::TimeIntervalFrameFilter(const char* name, long int mstimedelta, FrameFilter* next) : FrameFilter(name,next), mstimedelta(mstimedelta) {
+  prevmstimestamp=0;  
 }
 
-void TimeIntervalFrameFilter::go(Frame* frame) {
+void TimeIntervalFrameFilter::go(Frame* frame) { // this does nothing
 }
 
 
+void TimeIntervalFrameFilter::run(Frame* frame) {
+  // std::cout << std::endl << "TimeIntervalFrameFilter: " << std::endl;
+  if (!this->next) { return; } // calls next filter .. if there is any
+  // std::cout << std::endl << "TimeIntervalFrameFilter: mstimestamps=" << frame->mstimestamp << " " << prevmstimestamp << std::endl;
+  // std::cout << std::endl << "TimeIntervalFrameFilter: delta       =" << (frame->mstimestamp-prevmstimestamp) << std::endl;
+  if ( (frame->mstimestamp-prevmstimestamp)>=mstimedelta ) {
+    // std::cout << std::endl << "TimeIntervalFrameFilter: WRITE" << std::endl;
+    prevmstimestamp=frame->mstimestamp;
+    (this->next)->run(frame);
+  }
+}
 
 
 SwScaleFrameFilter::SwScaleFrameFilter(const char* name, int target_width, int target_height, FrameFilter* next) : FrameFilter(name,next), target_width(target_width), target_height(target_height), outframe(Frame()), sws_ctx(NULL) {
@@ -248,6 +261,7 @@ void SwScaleFrameFilter::setTargetFmt() {
 
 
 void SwScaleFrameFilter::run(Frame* frame) { // AVThread calls this ..
+  // std::cout << "SwScaleFrameFilter: run" << std::endl;
   this->go(frame); // manipulate frame - in this case, scale from yuv to rgb
   // A bit special FrameFilter class : these steps are done inside method go
   // if (!this->next) { return; } // call next filter .. if there is any
@@ -278,9 +292,24 @@ void SwScaleFrameFilter::go(Frame* frame) { // do the scaling
       sws_ctx =sws_getContext(in_avframe->width, in_avframe->height, ctx->pix_fmt, out_avframe->width, out_avframe->height, target_pix_fmt, SWS_POINT, NULL, NULL, NULL);
     }
       
+    // refer to: https://ffmpeg.org/doxygen/trunk/group__libsws.html#gae531c9754c9205d90ad6800015046d74
     sws_scale(sws_ctx, (const uint8_t * const*)in_avframe->data, in_avframe->linesize, 0, in_avframe->height, out_avframe->data, out_avframe->linesize);
     
     if (!this->next) { return; } // call next filter .. if there is any
+    
+    frame->copyMeta(&outframe); // mstimestamp, subsession index, slot, etc.
+    
+    // copy data to the actual payload..
+    // std::cout << "SwScaleFrameFilter: linesizes: " << out_avframe->linesize[0] << " " << out_avframe->linesize[1] << " " << out_avframe->linesize[2] << std::endl; // linesize[0] == width * 3 (for rgb)
+    std::size_t n=out_avframe->linesize[0]*out_avframe->height;
+    outframe.payload.resize(n);
+    memcpy(outframe.payload.data(),out_avframe->data[0], n);
+    
+  
+    //outframe.payload.resize(out_avframe->linesize
+    //outframe->data
+    
+    
     (this->next)->run(&outframe);
   }
   else {

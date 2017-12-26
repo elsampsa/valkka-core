@@ -92,11 +92,11 @@ void AVThread::run() {
       subsession_index=f->subsession_index;
       // info frame    : init decoder
       // regular frame : make a copy
-      if (subsession_index>=decoders.size()) { // subsession_index too big
+      if (subsession_index>=decoders.size()) { // got frame: subsession_index too big
         avthreadlogger.log(LogLevel::fatal) << "AVThread: "<< this->name <<" : run : decoder slot overlow : "<<subsession_index<<"/"<<decoders.size()<< std::endl; // we can only have that many decoder for one stream
         infifo.recycle(f); // return frame to the stack - never forget this!
       }
-      else if (f->frametype==FrameType::setup) { // DECODER INIT
+      else if (f->frametype==FrameType::setup) { // got frame: DECODER INIT
         if (decoders[subsession_index]!=NULL) { // slot is occupied
           avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : decoder reinit " << std::endl;
           delete decoders[subsession_index];
@@ -116,7 +116,7 @@ void AVThread::run() {
             break;
         } // switch
         infifo.recycle(f); // return frame to the stack - never forget this!
-      } // DECODER INIT
+      } // got frame: DECODER INIT
       else if (decoders[subsession_index]==NULL) { // woops, no decoder registered yet..
         avthreadlogger.log(LogLevel::normal) << "AVThread: "<< this->name <<" : run : no decoder registered for stream " << subsession_index << std::endl;
         infifo.recycle(f); // return frame to the stack - never forget this!
@@ -142,6 +142,9 @@ void AVThread::run() {
 #endif
         }
       } // decode
+      else { // some other case .. what that might be?
+        infifo.recycle(f);      // .. return frame to the stack
+      }
       
     } // GOT FRAME
     

@@ -114,6 +114,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 pkg_search_module(X11 REQUIRED x11)
 pkg_search_module(GLEW REQUIRED glew)
 pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the latest ffmpeg
+# pkg_search_module(PYTHON REQUIRED python3)
+# TODO: python3
 
 # compiler flags
 add_compile_options("-std=c++14" "-pthread") #  ${GL_CFLAGS})
@@ -133,7 +135,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC include)
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${VERSION_STRING} SOVERSION ${MAJOR_VERSION})
 
 # [add openGL dependencies]
-target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS}) # ${PYTHON_INCLUDE_DIRS})
 # # target_link_libraries(${PROJECT_NAME} ${GL_LIBS})
 target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES} ${GLEW_LIBRARIES} ${ALSA_LIBRARIES})
 
@@ -163,13 +165,14 @@ if(CUSTOM_BUILD) # [CUSTOM]
   else(USE_SHARED) # custom-compiled static libraries
     message("USING STATICALLY COMPILED LIVE555 AND FFMPEG - GOOD")
     # target_link_libraries(${PROJECT_NAME} "vda") # could this fix the missing "vaUnmapBuffer", etc. crap?
+    target_link_libraries(${PROJECT_NAME} "rt")
     target_link_libraries(${PROJECT_NAME} "-Wl,--allow-multiple-definition" "-Wl,-Bsymbolic" "-Wl,--start-group" "-Wl,--whole-archive")
     target_link_libraries(${PROJECT_NAME} ":libliveMedia.a" ":libgroupsock.a" ":libBasicUsageEnvironment.a" ":libUsageEnvironment.a")
     # target_link_libraries(${PROJECT_NAME} ":libavdevice.a" ":libavfilter.a" ":libavformat.a" ":libavcodec.a" ":libavutil.a" ":libswscale.a" ":libswresample.a")
     target_link_libraries(${PROJECT_NAME} ":libavfilter.a" ":libavformat.a" ":libavcodec.a" ":libavutil.a" ":libswscale.a" ":libswresample.a")
     target_link_libraries(${PROJECT_NAME} "-Wl,--no-whole-archive" "-Wl,--end-group")
     
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND "objcopy" ARGS "-N" "vaUnmapBuffer" $<TARGET_FILE:${PROJECT_NAME}>)
+    # add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND "objcopy" ARGS "-N" "vaUnmapBuffer" $<TARGET_FILE:${PROJECT_NAME}>)
                    
   endif(USE_SHARED)
 
@@ -211,7 +214,11 @@ endif(CUSTOM_BUILD)
 
 # *** test programs ***
 # use the script "test/list.bash" to update this list
-set(TESTNAMES "av_live_thread_test" "av_thread_test" "fifo_test" "frames_test" "live_stream_check_test" "live_streaming_test" "live_thread_test" "log_test" "opengl_test" "opengl_thread_test" "render_test" "threads_test" "classes_test" "swscale_test")
+
+set(TESTNAMES "av_live_thread_test" "av_thread_test" "fifo_test" "frames_test" "live_stream_check_test" "live_streaming_test" "live_thread_test" "log_test" "opengl_test" "opengl_thread_test" "render_test" "threads_test" "classes_test" "shmem_test" "swscale_test")
+# set(TESTNAMES "shmem_test" "swscale_test")
+
+
 add_custom_target(tests) # Note: without 'ALL'
 foreach( testname ${TESTNAMES} )
   add_executable(${testname} "test/${testname}.cpp") # Note: without 'ALL'
@@ -229,6 +236,9 @@ foreach( testname ${TESTNAMES} )
     target_include_directories(${testname} PUBLIC ${LIBAVUTIL_INCLUDE_DIRS})
     target_include_directories(${testname} PUBLIC ${LIBSWSCALE_INCLUDE_DIRS})
   endif(CUSTOM_BUILD)  
+  
+  # target_include_directories(${testname} PUBLIC ${PYTHON_INCLUDE_DIRS})
+  # target_link_libraries(${testname} ${PYTHON_LIBRARIES})
   
   target_link_libraries(${testname} "Valkka.so")
   target_link_libraries(${testname} "-L${CMAKE_CURRENT_BINARY_DIR}/lib")
