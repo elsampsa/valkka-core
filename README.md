@@ -46,7 +46,7 @@ Some key features of the Valkka library are:
 See also the list of (latest) features below.
 
 ## For the impatient
-- You need to install two pre-built packages from [here](https://elsampsa.github.io/valkka-core/downloads)
+- You need to install two pre-built packages from [here](https://www.dropbox.com/sh/cx3uutbavp2cqpa/AAC_uDh-plu0Oo50r_klYPEXa?dl=0)
 - Install the debian (.deb) package with "sudo dpkg -i package_name"
 - Install python3 binary package (.whl) with "pip3 install package_name"
 - Download python3 examples from "valkka-examples" [repository](https://github.com/elsampsa/valkka-examples).
