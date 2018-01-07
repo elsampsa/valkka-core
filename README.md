@@ -47,8 +47,15 @@ See also the list of (latest) features below.
 
 ## For the impatient
 - You need to install two pre-built packages from [here](https://www.dropbox.com/sh/cx3uutbavp2cqpa/AAC_uDh-plu0Oo50r_klYPEXa?dl=0)
-- Install the debian (.deb) package with "sudo dpkg -i package_name"
-- Install python3 binary package (.whl) with "pip3 install package_name"
+- Install the debian (.deb) package with: 
+
+    sudo dpkg -i package_name
+    sudo apt-get -f install
+    
+- Install python3 binary package (.whl) with: 
+
+    pip3 install package_name
+
 - Download python3 examples from "valkka-examples" [repository](https://github.com/elsampsa/valkka-examples).
 - Check out Valkka cpp [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
 
