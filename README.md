@@ -54,7 +54,7 @@ See also the list of (latest) features below.
     
 - Install python3 binary package (.whl) with: 
 
-      pip3 install package_name
+      pip3 install --upgrade package_name
 
 - Download python3 examples from "valkka-examples" [repository](https://github.com/elsampsa/valkka-examples).
 - Check out Valkka cpp [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
@@ -98,6 +98,10 @@ You need (at least):
 
     sudo apt-get install yasm git swig python3-pip cmake libx11-dev libglew-dev libasound2-dev
 
+Install also the following python packages:
+    
+    pip3 install --upgrade ipython numpy 
+    
 ### Compile
 
 You have two options (A, B):
