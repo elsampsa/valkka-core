@@ -34,18 +34,17 @@
 
 // live555 header files
 // for custom installation : copy/link header files to "$valkka/include/ext/", place relevant "*.so" files to "$valkka/lib" (see the ln_live.bash scripts)
-#include "UsageEnvironment/UsageEnvironment.hh"
-#include "BasicUsageEnvironment/BasicUsageEnvironment0.hh"
-#include "BasicUsageEnvironment/BasicUsageEnvironment.hh"
+#include "UsageEnvironment.hh"
+#include "BasicUsageEnvironment0.hh"
+#include "BasicUsageEnvironment.hh"
 
-#include "groupsock/NetAddress.hh"
-#include "groupsock/GroupsockHelper.hh"
+#include "NetAddress.hh"
+#include "GroupsockHelper.hh"
 
-#include "liveMedia/liveMedia.hh"
-#include "liveMedia/Media.hh"
-#include "liveMedia/MediaSession.hh"
-#include "liveMedia/RTSPClient.hh"
-#include "liveMedia/FramedSource.hh"
-#include "liveMedia/H264VideoRTPSource.hh"
-
-#include "liveMedia/RTSPClient.hh" 
+#include "liveMedia.hh"
+#include "Media.hh"
+#include "MediaSession.hh"
+#include "RTSPClient.hh"
+#include "FramedSource.hh"
+#include "H264VideoRTPSource.hh"
+#include "RTSPClient.hh" 
