@@ -92,6 +92,12 @@ A word of warning: if you just want to use the API, no need to go further
 
 However, if you have decided to develop Valkka and build it from source - great!  Here are the instructions:
 
+### Dependencies
+
+You need (at least):
+
+    sudo apt-get install yasm git swig python3-pip cmake libx11-dev libglew-dev libasound2-dev
+
 ### Compile
 
 You have two options (A, B):
