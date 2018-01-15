@@ -120,13 +120,13 @@ void test_2() {
   FifoFrameFilter   gl_in_filter    ("gl_in_filter",gl_fifo);   
   
   FrameFifo         av_fifo         ("av_fifo",10);                 
-  AVThread          avthread        ("avthread",av_fifo,gl_in_filter);  // [av_fifo] -->> (avthread) --> {gl_in_filter}
+  AVThread          avthread        ("avthread",av_fifo,gl_in_filter,-1);  // [av_fifo] -->> (avthread) --> {gl_in_filter}
   
   FifoFrameFilter   av_in_filter    ("av_in_filter",av_fifo);
   // InfoFrameFilter   live_out_filter ("live_out_filter",&av_in_filter);
   // DummyFrameFilter   live_out_filter ("live_out_filter",false,&av_in_filter);
   BriefInfoFrameFilter   live_out_filter ("live_out_filter",&av_in_filter);
-  LiveThread        livethread      ("livethread");
+  LiveThread        livethread      ("livethread",-1);
   // ***********************************
   
   LiveConnectionContext ctx;
