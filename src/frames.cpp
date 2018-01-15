@@ -1,25 +1,25 @@
 /*
  * frames.cpp : Valkka frame type implementations
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
- *  
- * This file is part of Valkka library.
+ * 
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -63,13 +63,49 @@ std::ostream &operator<<(std::ostream &os, PCMUPars const &m) {
 }
 
 
+// eh.. we could do a std::map as well..
+FrameType codec_id_to_frametype(AVCodecID av_codec_id) {
+  switch (av_codec_id) {
+    case AV_CODEC_ID_H264:
+      return FrameType::h264;
+      break;
+    case AV_CODEC_ID_PCM_MULAW:
+      FrameType::pcmu;
+      break;
+    default:
+      FrameType::none;
+      break;
+  }
+}
+
+
+AVCodecID frametype_to_codec_id(FrameType frametype) {
+  switch (frametype) {
+    case FrameType::h264:
+      return AV_CODEC_ID_H264;
+      break;
+    case FrameType::pcmu:
+      return AV_CODEC_ID_PCM_MULAW;
+      break;
+    default:
+      return AV_CODEC_ID_NONE;
+      break;
+  }
+}
+
 
 
 // Frame::Frame() : mstimestamp(0), rel_mstimestamp(0), n_slot(0), frametype(FrameType::none), subsession_index(0), av_frame(NULL), av_codec_context(NULL), yuvpbo(NULL) {
-Frame::Frame() : mstimestamp(0), n_slot(0), frametype(FrameType::none), subsession_index(0), av_frame(NULL), av_codec_context(NULL), yuvpbo(NULL) {
+Frame::Frame() : mstimestamp(0), n_slot(0), frametype(FrameType::none), subsession_index(0), av_frame(NULL), av_codec_context(NULL), yuvpbo(NULL), avpkt(NULL) {
 }
 
+
 Frame::~Frame() {
+  if (!avpkt) {
+  }
+  else {
+    av_free_packet(avpkt);
+  }
 }
 
 
@@ -190,11 +226,55 @@ void Frame::fillPars() {
 }
 
 
+void Frame::useAVPacket(long int pts) {
+  if (!avpkt) {
+    avpkt= new AVPacket();
+    av_init_packet(avpkt);
+  }
+  
+  avpkt->data =payload.data();
+  avpkt->size =payload.size();
+  avpkt->stream_index=subsession_index;
+  
+  if (frametype==FrameType::h264 and h264_pars.slice_type==H264SliceType::sps) { // we assume that frames always come in the following sequence: sps, pps, i, etc.
+    avpkt->flags=AV_PKT_FLAG_KEY;
+  }
+  
+  // std::cout << "Frame : useAVPacket : pts =" << pts << std::endl;
+  
+  if (pts>=0) {
+    avpkt->pts=(int64_t)pts;
+  }
+  else {
+    avpkt->pts=AV_NOPTS_VALUE;
+  }
+  
+  // std::cout << "Frame : useAVPacket : final pts =" << pts << std::endl;
+  
+  avpkt->dts=AV_NOPTS_VALUE; // let muxer set it automagically
+}
+
+
+void Frame::reportMsTime() {
+ std::cout << "Frame : reportMsTime : timediff to current time : " << mstimestamp-getCurrentMsTimestamp() << std::endl; // i.e. positive: in the future, negative: in the past
+}
+
+
+void Frame::fromAVPacket(AVPacket *pkt) {
+  payload.resize(pkt->size);
+  memcpy(payload.data(),pkt->data,pkt->size);
+  // TODO: optimally, this would be done only once - in copy-on-write when writing to fifo, at the thread border
+  subsession_index=pkt->stream_index;
+  // frametype=FrameType::h264; // not here .. avpkt carries no information about the codec
+  mstimestamp=(long int)pkt->pts;
+}
+
+
 FrameFilter::FrameFilter(const char* name, FrameFilter* next) : name(name), next(next) {
 };
 
 FrameFilter::~FrameFilter() {
-}
+};
   
 void FrameFilter::run(Frame* frame) {
   this->go(frame); // manipulate frame

@@ -1479,6 +1479,28 @@ class FifoFrameFilter(FrameFilter):
 FifoFrameFilter_swigregister = _valkka_core.FifoFrameFilter_swigregister
 FifoFrameFilter_swigregister(FifoFrameFilter)
 
+class BlockingFifoFrameFilter(FrameFilter):
+    __swig_setmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, BlockingFifoFrameFilter, name, value)
+    __swig_getmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, BlockingFifoFrameFilter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, framefifo):
+        this = _valkka_core.new_BlockingFifoFrameFilter(name, framefifo)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_BlockingFifoFrameFilter
+    __del__ = lambda self: None
+BlockingFifoFrameFilter_swigregister = _valkka_core.BlockingFifoFrameFilter_swigregister
+BlockingFifoFrameFilter_swigregister(BlockingFifoFrameFilter)
+
 class Thread(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Thread, name, value)
@@ -1734,6 +1756,30 @@ class SharedMemFrameFilter(FrameFilter):
 SharedMemFrameFilter_swigregister = _valkka_core.SharedMemFrameFilter_swigregister
 SharedMemFrameFilter_swigregister(SharedMemFrameFilter)
 
+
+def ffmpeg_av_register_all():
+    return _valkka_core.ffmpeg_av_register_all()
+ffmpeg_av_register_all = _valkka_core.ffmpeg_av_register_all
+
+def ffmpeg_av_log_set_level(level):
+    return _valkka_core.ffmpeg_av_log_set_level(level)
+ffmpeg_av_log_set_level = _valkka_core.ffmpeg_av_log_set_level
+
+def crazy_log_all():
+    return _valkka_core.crazy_log_all()
+crazy_log_all = _valkka_core.crazy_log_all
+
+def debug_log_all():
+    return _valkka_core.debug_log_all()
+debug_log_all = _valkka_core.debug_log_all
+
+def normal_log_all():
+    return _valkka_core.normal_log_all()
+normal_log_all = _valkka_core.normal_log_all
+
+def fatal_log_all():
+    return _valkka_core.fatal_log_all()
+fatal_log_all = _valkka_core.fatal_log_all
 # This file is compatible with both classic and new-style classes.
 
 

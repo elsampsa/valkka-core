@@ -100,18 +100,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;<a class="el" href="frames_8h_source.html">frames.h</a>&gt;</code><br />
 <code>#include &lt;deque&gt;</code><br />
-<code>#include &lt;mutex&gt;</code><br />
-<code>#include &lt;condition_variable&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for queues.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="queues_8h__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2include_2queues_8h" alt=""/></div>
 <map name="_2home_2sampsa_2C_2valkka_2include_2queues_8h" id="_2home_2sampsa_2C_2valkka_2include_2queues_8h">
-<area shape="rect" id="node2" href="frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="847,95,921,121"/>
-<area shape="rect" id="node3" href="common_8h.html" title="List of common header files. " alt="" coords="876,319,959,345"/>
-<area shape="rect" id="node25" href="sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="816,244,880,271"/>
-<area shape="rect" id="node26" href="avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="443,169,511,196"/>
-<area shape="rect" id="node32" href="opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="886,169,957,196"/>
+<area shape="rect" id="node2" href="frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1183,95,1256,121"/>
+<area shape="rect" id="node3" href="common_8h.html" title="List of common header files. " alt="" coords="1070,319,1153,345"/>
+<area shape="rect" id="node29" href="sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1350,244,1414,271"/>
+<area shape="rect" id="node30" href="avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="720,169,788,196"/>
+<area shape="rect" id="node36" href="opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1184,169,1255,196"/>
+<area shape="rect" id="node39" href="tools_8h.html" title="Auxiliary routines. " alt="" coords="1386,169,1447,196"/>
+<area shape="rect" id="node40" href="logging_8h.html" title="Logging utilities. " alt="" coords="2071,319,2146,345"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -119,17 +119,19 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="queues_8h__dep__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2include_2queues_8hdep" alt=""/></div>
 <map name="_2home_2sampsa_2C_2valkka_2include_2queues_8hdep" id="_2home_2sampsa_2C_2valkka_2include_2queues_8hdep">
-<area shape="rect" id="node2" href="threads_8h.html" title="Base class for multithreading. " alt="" coords="253,95,417,136"/>
+<area shape="rect" id="node2" href="threads_8h.html" title="Base class for multithreading. " alt="" coords="347,95,511,136"/>
 <area shape="rect" id="node4" href="chains_8h.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="5,273,169,315"/>
-<area shape="rect" id="node12" href="queues_8cpp.html" title="Lockable safe&#45;queues for frame queueing in multithreading applications. " alt="" coords="441,95,605,136"/>
-<area shape="rect" id="node3" href="avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="441,184,605,225"/>
-<area shape="rect" id="node7" href="livethread_8h.html" title="A live555 thread. " alt="" coords="65,184,229,225"/>
-<area shape="rect" id="node9" href="openglthread_8h.html" title="The OpenGL thread for presenting frames and related data structures. " alt="" coords="629,184,793,225"/>
-<area shape="rect" id="node11" href="threads_8cpp.html" title="A convenience class for multithreading, similar to Python&#39;s standard library &quot;threading.Thread&quot;. " alt="" coords="253,184,417,225"/>
-<area shape="rect" id="node6" href="avthread_8cpp.html" title="FFmpeg decoding thread. " alt="" coords="441,273,605,315"/>
+<area shape="rect" id="node14" href="queues_8cpp.html" title="Lockable safe&#45;queues for frame queueing in multithreading applications. " alt="" coords="535,95,699,136"/>
+<area shape="rect" id="node3" href="avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="65,184,229,225"/>
+<area shape="rect" id="node7" href="livethread_8h.html" title="A live555 thread. " alt="" coords="441,184,605,225"/>
+<area shape="rect" id="node9" href="filethread_8h.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="629,184,793,225"/>
+<area shape="rect" id="node11" href="openglthread_8h.html" title="The OpenGL thread for presenting frames and related data structures. " alt="" coords="817,184,981,225"/>
+<area shape="rect" id="node13" href="threads_8cpp.html" title="A convenience class for multithreading, similar to Python&#39;s standard library &quot;threading.Thread&quot;. " alt="" coords="253,184,417,225"/>
+<area shape="rect" id="node6" href="avthread_8cpp.html" title="FFmpeg decoding thread. " alt="" coords="193,273,357,315"/>
 <area shape="rect" id="node5" href="chains_8cpp.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="5,363,169,404"/>
-<area shape="rect" id="node8" href="livethread_8cpp.html" title="A live555 multithread. " alt="" coords="193,273,357,315"/>
-<area shape="rect" id="node10" href="openglthread_8cpp.html" title="The OpenGL thread for presenting frames and related data structures. " alt="" coords="629,273,793,315"/>
+<area shape="rect" id="node8" href="livethread_8cpp.html" title="A live555 multithread. " alt="" coords="441,273,605,315"/>
+<area shape="rect" id="node10" href="filethread_8cpp.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="629,273,793,315"/>
+<area shape="rect" id="node12" href="openglthread_8cpp.html" title="The OpenGL thread for presenting frames and related data structures. " alt="" coords="817,273,981,315"/>
 </map>
 </div>
 </div>
@@ -143,12 +145,15 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFifoFrameFilter.html">FifoFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Passes frames to a multiprocessing fifo.  <a href="classFifoFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBlockingFifoFrameFilter.html">BlockingFifoFrameFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Passes frames to a multiprocessing fifo.  <a href="classBlockingFifoFrameFilter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Lockable and safe queues for frame queueing in multithreading applications. </p>
 <dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.1.0 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.2.0 </dd></dl>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

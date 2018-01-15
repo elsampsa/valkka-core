@@ -125,13 +125,11 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 virtual <a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a7d9dbc000f3f2e57ff80faeba3cb10df">getFrame</a> ()</td></tr>
 <tr class="memdesc:a7d9dbc000f3f2e57ff80faeba3cb10df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a frame from the stack. <br /></td></tr>
 <tr class="separator:a7d9dbc000f3f2e57ff80faeba3cb10df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a119f2ba86f973cb16ec87bfcf92c1851"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a119f2ba86f973cb16ec87bfcf92c1851"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a119f2ba86f973cb16ec87bfcf92c1851">writeCopy</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
-<tr class="memdesc:a119f2ba86f973cb16ec87bfcf92c1851"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert"). The size of "ftmp" is also checked and set to target_size, if necessary. <br /></td></tr>
-<tr class="separator:a119f2ba86f973cb16ec87bfcf92c1851"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae984545cb5d40a1d0fe8b8e369d9c64"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae984545cb5d40a1d0fe8b8e369d9c64"></a>
-virtual <a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64">read</a> (unsigned short int mstimeout=0)</td></tr>
-<tr class="memdesc:aae984545cb5d40a1d0fe8b8e369d9c64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pop a frame from the end of the fifo and return the frame to the reservoir stack. <br /></td></tr>
+<tr class="memitem:a01765bd79b616a2425ba84d94a15d737"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a01765bd79b616a2425ba84d94a15d737">writeCopy</a> (<a class="el" href="classFrame.html">Frame</a> *f, bool wait=false)</td></tr>
+<tr class="memdesc:a01765bd79b616a2425ba84d94a15d737"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert"). The size of "ftmp" is also checked and set to target_size, if necessary.  <a href="#a01765bd79b616a2425ba84d94a15d737">More...</a><br /></td></tr>
+<tr class="separator:a01765bd79b616a2425ba84d94a15d737"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae984545cb5d40a1d0fe8b8e369d9c64"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64">read</a> (unsigned short int mstimeout=0)</td></tr>
+<tr class="memdesc:aae984545cb5d40a1d0fe8b8e369d9c64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pop a frame from the end of the fifo and return the frame to the reservoir stack.  <a href="#aae984545cb5d40a1d0fe8b8e369d9c64">More...</a><br /></td></tr>
 <tr class="separator:aae984545cb5d40a1d0fe8b8e369d9c64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09f514fe06c5e737cd74691f8b5d9d52"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09f514fe06c5e737cd74691f8b5d9d52"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52">recycle</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
@@ -202,6 +200,10 @@ std::vector&lt; <a class="el" href="classFrame.html">Frame</a> &gt;&#160;</td><t
 unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#ab46357a7162ee6151a01ae1898b88c31">target_size</a> = 0</td></tr>
 <tr class="memdesc:ab46357a7162ee6151a01ae1898b88c31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum frame payload size. <br /></td></tr>
 <tr class="separator:ab46357a7162ee6151a01ae1898b88c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10ac5484703b4a71fd71f0182c8554c6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10ac5484703b4a71fd71f0182c8554c6"></a>
+std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a10ac5484703b4a71fd71f0182c8554c6">ready_condition</a></td></tr>
+<tr class="memdesc:a10ac5484703b4a71fd71f0182c8554c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Event/Flag for FrameFifo::ready_mutex. <br /></td></tr>
+<tr class="separator:a10ac5484703b4a71fd71f0182c8554c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -229,8 +231,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <li>Insert <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a> into the fifo (i.e. into <a class="el" href="classFrameFifo.html#ab306eb3027b1b626b30522a49b833cbb" title="The actual fifo. ">FrameFifo.fifo</a>) from the left</li>
 <li>Another thread takes the frame from the right-side of <a class="el" href="classFrameFifo.html#ab306eb3027b1b626b30522a49b833cbb" title="The actual fifo. ">FrameFifo.fifo</a>, and does something with it (most likely creates a copy) and finally returns ("recycles") it back to <a class="el" href="classFrameFifo.html#ab4b94214b0550056605bc05f28a8d488" title="Reservoir of frames. We could have several reservoirs, i.e. for different frame sizes, etc. ">FrameFifo.stack</a></li>
 </ul>
-<p>These steps are implemented in <a class="el" href="classFrameFifo.html#a119f2ba86f973cb16ec87bfcf92c1851" title="Take a frame &quot;ftmp&quot; from the stack, copy contents of &quot;f&quot; into &quot;ftmp&quot; and insert &quot;ftmp&quot; into the begin...">FrameFifo::writeCopy</a> and <a class="el" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. ">FrameFifo::recycle</a></p>
-<p><a class="el" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. ">FrameFifo::recycle</a> also checks the payload size of the "recycled" frame (this may have been modified by the user) and augments <a class="el" href="classFrameFifo.html#ab46357a7162ee6151a01ae1898b88c31" title="Minimum frame payload size. ">FrameFifo.target_size</a> accordingly. On consecutive calls to <a class="el" href="classFrameFifo.html#a119f2ba86f973cb16ec87bfcf92c1851" title="Take a frame &quot;ftmp&quot; from the stack, copy contents of &quot;f&quot; into &quot;ftmp&quot; and insert &quot;ftmp&quot; into the begin...">FrameFifo::writeCopy</a>, the frames in the stack are conformed to this payload size </p>
+<p>These steps are implemented in <a class="el" href="classFrameFifo.html#a01765bd79b616a2425ba84d94a15d737" title="Take a frame &quot;ftmp&quot; from the stack, copy contents of &quot;f&quot; into &quot;ftmp&quot; and insert &quot;ftmp&quot; into the begin...">FrameFifo::writeCopy</a> and <a class="el" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. ">FrameFifo::recycle</a></p>
+<p><a class="el" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. ">FrameFifo::recycle</a> also checks the payload size of the "recycled" frame (this may have been modified by the user) and augments <a class="el" href="classFrameFifo.html#ab46357a7162ee6151a01ae1898b88c31" title="Minimum frame payload size. ">FrameFifo.target_size</a> accordingly. On consecutive calls to <a class="el" href="classFrameFifo.html#a01765bd79b616a2425ba84d94a15d737" title="Take a frame &quot;ftmp&quot; from the stack, copy contents of &quot;f&quot; into &quot;ftmp&quot; and insert &quot;ftmp&quot; into the begin...">FrameFifo::writeCopy</a>, the frames in the stack are conformed to this payload size </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aa90e09c733c54b7a1c1f9e252599b4c3"></a>
 <div class="memitem">
@@ -290,6 +292,75 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 <p>Void copy-constructor: this class is non-copyable. </p>
 <p>We have a mutex member in this class. Those are non-copyable. Other possibility would be to manage a pointer to the mutex. The "pointerization" can be done at some other level as well (say, using pointers of this object) </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="aae984545cb5d40a1d0fe8b8e369d9c64"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFrame.html">Frame</a> * FrameFifo::read </td>
+          <td>(</td>
+          <td class="paramtype">unsigned short int&#160;</td>
+          <td class="paramname"><em>mstimeout</em> = <code>0</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pop a frame from the end of the fifo and return the frame to the reservoir stack. </p>
+<p>this-&gt;ready_condition.notify_one(); </p>
+
+</div>
+</div>
+<a class="anchor" id="a01765bd79b616a2425ba84d94a15d737"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool FrameFifo::writeCopy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classFrame.html">Frame</a> *&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>wait</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert"). The size of "ftmp" is also checked and set to target_size, if necessary. </p>
+<ul>
+<li></li>
+</ul>
+
+<p>Reimplemented in <a class="el" href="classOpenGLFrameFifo.html#a71356c2eeea511481876d53675855a6c">OpenGLFrameFifo</a>.</p>
 
 </div>
 </div>

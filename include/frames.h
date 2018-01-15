@@ -3,25 +3,25 @@
 /*
  * frames.h : Valkka Frame class declaration, base class FrameFilter for frame filters
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka library. 
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -39,6 +39,7 @@
 #include "sizes.h"
 #include "avdep.h"
 #include "opengl.h"
+#include "tools.h"
 
 /** Various H264 frame types
  * 
@@ -57,8 +58,9 @@ namespace H264SliceType {
  */
 enum class FrameType {
   none,     ///< Uninitialized frame
-  avframe,  ///< All relevant data is behind the Frame::av_frame and Frame::av_codec_context internal pointers
-  yuvframe, ///< All relevant data is behind the Frame::yuvpbo internal pointer
+  avpkt,    ///< Data is in the Frame::avpkt struct (encoded frames)
+  avframe,  ///< Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames)
+  yuvframe, ///< Data is in the Frame::yuvpbo struct (decoded yuv frames - ready for OpenGL upload)
   setup,    ///< This frame contains data obtained from an rtsp setup / sdp file in Frame::pcmu_pars
   h264,     ///< H264 slice. Payload in Frame::payload, additional data in Frame::h264_pars
   pcmu      ///< PCM-ulaw. Payload in Frame::payload, additional data in Frame::pcmu_pars
@@ -92,6 +94,9 @@ struct PCMUPars { ///< Information corresponding to FrameType::pcmu
 };
 std::ostream &operator<<(std::ostream &os, PCMUPars const &m);
 
+
+FrameType codec_id_to_frametype(AVCodecID av_codec_id);
+AVCodecID frametype_to_codec_id(FrameType frametype);
 
 
 /** A universal frame class encapsulating all media formats.
@@ -140,6 +145,8 @@ public:
   std::string dumpPayload();                  ///< returns std::string with beginning of the payload
   std::string dumpAVFrame();                  ///< returns std::string with info about the ffmpeg AVFrame structure
   void fillPars();                            ///< Inspects payload and fills frame parameters (i.e. H264Pars, etc.) 
+  void useAVPacket(long int pts);             ///< "Mirrors" data into the internal AVPacket structure
+  void fromAVPacket(AVPacket *pkt);           ///< Copy data from AVPacket: payload, timestamp, substream index
   
 public: // getters
   long int getMsTimestamp();         ///< Returns the PTS in unix epoch milliseconds
@@ -167,6 +174,9 @@ public: // public metadata you might want to copy between different frametypes
   unsigned short    subsession_index;             ///< Media subsession index
   SlotNumber        n_slot;                       ///< Slot number identifying the media source
   
+public: // for debugging
+  void reportMsTime();
+  
 public: // payloads, _the_ data (and some FFmpeg metadata as well)
   std::vector<uint8_t> payload;  ///< Raw payload data (use .data() to get the pointer from std::vector) 
   //
@@ -186,6 +196,7 @@ public: // payloads, _the_ data (and some FFmpeg metadata as well)
   AVFrame* av_frame;                ///< This is a pointer to short-lived, temporary storage, used by the FFmpeg decoder (and finally overwritten by it).  The idea is, that the data is copied from here asap, to *_pars structure and to payload.  Just a pointer.  NOT MANAGED by Frame.  Managed by a Decoder instance,
   AVCodecContext* av_codec_context; ///< NOT MANAGED by Frame. Managed by a Decoder instance.
   YUVPBO* yuvpbo;                   ///< NOT MANAGED by Frame. Managed by an OpenGLThread instance. 
+  AVPacket* avpkt;
   
 public: // operator defs here
   friend std::ostream &operator<<(std::ostream &os, Frame const &m) {

@@ -9,7 +9,7 @@ var indexSectionsWithContent =
   6: "flmps",
   7: "adehinopsy",
   8: "dfloqt",
-  9: "cl"
+  9: "clp"
 };
 
 var indexSectionNames =

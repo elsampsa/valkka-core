@@ -149,6 +149,14 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#a36c39451ae692f3c54ff84a6bdaaaf7d">fillPars</a> ()</td></tr>
 <tr class="memdesc:a36c39451ae692f3c54ff84a6bdaaaf7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inspects payload and fills frame parameters (i.e. <a class="el" href="structH264Pars.html">H264Pars</a>, etc.) <br /></td></tr>
 <tr class="separator:a36c39451ae692f3c54ff84a6bdaaaf7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1fb80e5a8d16f3dd1c2493aa22508b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab1fb80e5a8d16f3dd1c2493aa22508b4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#ab1fb80e5a8d16f3dd1c2493aa22508b4">useAVPacket</a> (long int pts)</td></tr>
+<tr class="memdesc:ab1fb80e5a8d16f3dd1c2493aa22508b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Mirrors" data into the internal AVPacket structure <br /></td></tr>
+<tr class="separator:ab1fb80e5a8d16f3dd1c2493aa22508b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2450a1060d6bbd03cd0e85a58f94d52"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac2450a1060d6bbd03cd0e85a58f94d52"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#ac2450a1060d6bbd03cd0e85a58f94d52">fromAVPacket</a> (AVPacket *pkt)</td></tr>
+<tr class="memdesc:ac2450a1060d6bbd03cd0e85a58f94d52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data from AVPacket: payload, timestamp, substream index. <br /></td></tr>
+<tr class="separator:ac2450a1060d6bbd03cd0e85a58f94d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96d2737d6f4e75f09d168d2761ee42b7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a96d2737d6f4e75f09d168d2761ee42b7"></a>
 long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#a96d2737d6f4e75f09d168d2761ee42b7">getMsTimestamp</a> ()</td></tr>
 <tr class="memdesc:a96d2737d6f4e75f09d168d2761ee42b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the PTS in unix epoch milliseconds. <br /></td></tr>
@@ -161,6 +169,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#a596d590b841166a204fe9ba5b9313159">copyMeta</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
 <tr class="memdesc:a596d590b841166a204fe9ba5b9313159"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy public metadata across different frame types (timestamp, subsession_index, pars) to f. <br /></td></tr>
 <tr class="separator:a596d590b841166a204fe9ba5b9313159"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a805617e54298789b0e04e943fae7fee7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a805617e54298789b0e04e943fae7fee7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reportMsTime</b> ()</td></tr>
+<tr class="separator:a805617e54298789b0e04e943fae7fee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -216,6 +227,9 @@ AVCodecContext *&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 <a class="el" href="classYUVPBO.html">YUVPBO</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#a6b86da1e00b483afaf192c75473c055f">yuvpbo</a></td></tr>
 <tr class="memdesc:a6b86da1e00b483afaf192c75473c055f"><td class="mdescLeft">&#160;</td><td class="mdescRight">NOT MANAGED by <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>. Managed by an <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a> instance. <br /></td></tr>
 <tr class="separator:a6b86da1e00b483afaf192c75473c055f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38639ef24664a899a284893859483d7c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38639ef24664a899a284893859483d7c"></a>
+AVPacket *&#160;</td><td class="memItemRight" valign="bottom"><b>avpkt</b></td></tr>
+<tr class="separator:a38639ef24664a899a284893859483d7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>

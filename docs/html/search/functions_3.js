@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['deactivate',['deActivate',['../classSlotContext.html#aae90e75d1537e6f1d4c2568e804df82a',1,'SlotContext']]],
+  ['deactivate',['deActivate',['../classFileFrameFilter.html#a2f235a2732337ee2f18895f10ad86d29',1,'FileFrameFilter::deActivate()'],['../classSlotContext.html#aae90e75d1537e6f1d4c2568e804df82a',1,'SlotContext::deActivate()']]],
   ['decoder',['Decoder',['../classDecoder.html#a9f88699f2882d438530abbfb28597a2c',1,'Decoder']]],
   ['decoderbase',['DecoderBase',['../classDecoderBase.html#a2899fadc3b06a9d3037ae7c2c3565f91',1,'DecoderBase']]],
   ['decodingoffcall',['decodingOffCall',['../classAVThread.html#a6980eb7ce7507b9dffc64627c933fd19',1,'AVThread']]],
@@ -11,7 +11,7 @@ var searchData=
   ['delrendergroup',['delRenderGroup',['../classOpenGLThread.html#af5cc0544e52bd20b8664381490902c61',1,'OpenGLThread']]],
   ['delrendergroupcall',['delRenderGroupCall',['../classOpenGLThread.html#ac05c2be99cdeb614aac854d442995c45',1,'OpenGLThread']]],
   ['delshaders',['delShaders',['../classOpenGLThread.html#a7c421fdb80d8838ee63e5057e881d5d7',1,'OpenGLThread']]],
-  ['deregisterstreamcall',['deregisterStreamCall',['../classLiveThread.html#a828449f7c3974d5be86c6ce5f0314a5e',1,'LiveThread']]],
+  ['deregisterstreamcall',['deregisterStreamCall',['../classLiveThread.html#ad9c33d99f8aa561c67559744b9f3e4b0',1,'LiveThread']]],
   ['dummyframefilter',['DummyFrameFilter',['../classDummyFrameFilter.html#ab0e6cf935f2c79be37770eee6767a673',1,'DummyFrameFilter']]],
   ['dumpavframe',['dumpAVFrame',['../classFrame.html#a62a11ecc89c1ac1e79441dc82feacdc5',1,'Frame']]],
   ['dumpfifo',['dumpFifo',['../classFrameFifo.html#afbff47ed40f017d26d8a905f7decc9e1',1,'FrameFifo']]],

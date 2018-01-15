@@ -367,10 +367,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>dumpFifo</b> ()</td><
 long unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a1ca155ce98922acce2b36b08acddeedc">insertFifo</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
 <tr class="memdesc:a1ca155ce98922acce2b36b08acddeedc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sorted insert: insert a timestamped frame into the fifo. <br /></td></tr>
 <tr class="separator:a1ca155ce98922acce2b36b08acddeedc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3c205644b06c34f4bb44e6cdc7b8e88"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae3c205644b06c34f4bb44e6cdc7b8e88"></a>
-long unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ae3c205644b06c34f4bb44e6cdc7b8e88">handleFifo</a> ()</td></tr>
-<tr class="memdesc:ae3c205644b06c34f4bb44e6cdc7b8e88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation. <br /></td></tr>
+<tr class="memitem:ae3c205644b06c34f4bb44e6cdc7b8e88"><td class="memItemLeft" align="right" valign="top">long unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ae3c205644b06c34f4bb44e6cdc7b8e88">handleFifo</a> ()</td></tr>
+<tr class="memdesc:ae3c205644b06c34f4bb44e6cdc7b8e88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation.  <a href="#ae3c205644b06c34f4bb44e6cdc7b8e88">More...</a><br /></td></tr>
 <tr class="separator:ae3c205644b06c34f4bb44e6cdc7b8e88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e170f5ada3fbf24c05a7fde55313d15"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e170f5ada3fbf24c05a7fde55313d15"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>delRenderContexes</b> ()</td></tr>
+<tr class="separator:a2e170f5ada3fbf24c05a7fde55313d15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:adfeea499c4cc16c4c70eb8449bbee548 inherit pro_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adfeea499c4cc16c4c70eb8449bbee548"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#adfeea499c4cc16c4c70eb8449bbee548">mainRun</a> ()</td></tr>
@@ -697,6 +699,46 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a class="anchor" id="ae3c205644b06c34f4bb44e6cdc7b8e88"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">long unsigned OpenGLThread::handleFifo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation. </p>
+<p>See also <a class="el" href="timing.html">Presention timing and playing</a> </p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph.png" border="0" usemap="#classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph" alt=""/></div>
+<map name="classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph" id="classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph">
+<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="459,56,625,83"/>
+<area shape="rect" id="node3" href="tools_8h.html#a9cec5da1c89d2e3965b8156b366280a1" title="Checks the slot number range. " alt="" coords="291,31,351,57"/>
+<area shape="rect" id="node4" href="classOpenGLThread.html#a02238e35ab2e6cc47f7e013b9bd6d4a5" title="Load PBO to texture in slot n_slot. " alt="" coords="237,81,405,108"/>
+<area shape="rect" id="node5" href="classOpenGLThread.html#a9c52452ac81f91999cf8487d9796a1f0" title="Render all RenderGroup(s) depending on slot n_slot. " alt="" coords="244,132,399,159"/>
+<area shape="rect" id="node6" href="classOpenGLFrameFifo.html#a25e2f26e359bcf532ea7d85efd6231cd" title="Return Frame f back into the stack (relevant stack is chosen automatically) " alt="" coords="232,183,411,209"/>
+</map>
+</div>
+</p>
+
+</div>
+</div>
 <a class="anchor" id="aa1604bd2f368ac82b690713993472dcc"></a>
 <div class="memitem">
 <div class="memproto">
@@ -736,7 +778,7 @@ Here is the call graph for this function:</div>
   </table>
   </dd>
 </dl>
-<p>returns a unique integer id presenting the rendering context </p>
+<p>returns a unique integer id presenting the rendering context. return 0 if the call failed. </p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>

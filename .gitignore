@@ -29,3 +29,8 @@ python/valkka_core.py
 python/valkka_core_wrap.py
 python/valkka/_valkka_core.so
 python/valkka_core_wrap.cpp
+changetext.py
+publish.bash
+toolchain/
+changelic.bash
+changetext

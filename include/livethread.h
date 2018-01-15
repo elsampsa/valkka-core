@@ -3,25 +3,25 @@
 /*
  * livethread.h : A live555 thread
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka library.
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -201,8 +201,8 @@ public:
    *
    */
   struct SignalContext {
-    Signals signal;
-    LiveConnectionContext connection_context;
+    Signals                 signal;
+    LiveConnectionContext   *connection_context;
   };
 
   static void periodicTask(void* cdata); ///< Used to (re)schedule LiveThread methods into the live555 event loop
@@ -239,16 +239,16 @@ protected:
   
 private: // internal
   int  safeGetSlot      (SlotNumber slot, Connection*& con);
-  void registerStream   (LiveConnectionContext connection_ctx);
-  void deregisterStream (LiveConnectionContext connection_ctx);
-  void playStream       (LiveConnectionContext connection_ctx);
-  void stopStream       (LiveConnectionContext connection_ctx);
+  void registerStream   (LiveConnectionContext &connection_ctx);
+  void deregisterStream (LiveConnectionContext &connection_ctx);
+  void playStream       (LiveConnectionContext &connection_ctx);
+  void stopStream       (LiveConnectionContext &connection_ctx);
   
 public: // *** C & Python API *** .. these routines go through the convar/mutex locking                                                // <pyapi>
-  void registerStreamCall   (LiveConnectionContext connection_ctx); ///< API method: registers a stream                                // <pyapi> 
-  void deregisterStreamCall (LiveConnectionContext connection_ctx); ///< API method: de-registers a stream                             // <pyapi>
-  void playStreamCall       (LiveConnectionContext connection_ctx); ///< API method: starts playing the stream and feeding frames      // <pyapi>
-  void stopStreamCall       (LiveConnectionContext connection_ctx); ///< API method: stops playing the stream and feeding frames       // <pyapi>
+  void registerStreamCall   (LiveConnectionContext &connection_ctx); ///< API method: registers a stream                                // <pyapi> 
+  void deregisterStreamCall (LiveConnectionContext &connection_ctx); ///< API method: de-registers a stream                             // <pyapi>
+  void playStreamCall       (LiveConnectionContext &connection_ctx); ///< API method: starts playing the stream and feeding frames      // <pyapi>
+  void stopStreamCall       (LiveConnectionContext &connection_ctx); ///< API method: stops playing the stream and feeding frames       // <pyapi>
   void stopCall();                                                  ///< API method: stops the LiveThread                              // <pyapi>
 }; // <pyapi>
 

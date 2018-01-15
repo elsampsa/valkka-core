@@ -1,0 +1,4 @@
+<map id="SharedMemSegment::SharedMemSegment" name="SharedMemSegment::SharedMemSegment">
+<area shape="rect" id="node2" href="$classSharedMemSegment.html#ab01c29a08c53b75a2ebd1b9722dba7b4" title="Uses shmem_open with write rights. " alt="" coords="247,5,453,32"/>
+<area shape="rect" id="node3" href="$classSharedMemSegment.html#a3c9adc83f380527847e312c969e72ead" title="Uses shmem_open with read&#45;only rights. " alt="" coords="249,56,451,83"/>
+</map>

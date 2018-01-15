@@ -1,25 +1,25 @@
 /*
  * openglthread.cpp : The OpenGL thread for presenting frames and related data structures
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka library.
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -229,7 +229,7 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
 
 
 
-bool OpenGLFrameFifo::writeCopy(Frame* f) {
+bool OpenGLFrameFifo::writeCopy(Frame* f, bool wait) {
   Frame* tmpframe=NULL;
   
   /*
@@ -862,6 +862,7 @@ bool OpenGLThread::delRenderContext(int id) {
     }
   }
   
+  // remove empty render groups from render list
   for(auto it=render_lists.begin(); it!=render_lists.end(); ++it) { // *(it) == std::list
     auto it2=it->begin(); // *(it2) == *RenderGroup
     while(it2 != it->end()) {
@@ -876,6 +877,15 @@ bool OpenGLThread::delRenderContext(int id) {
 
 return removed;
 }
+
+
+void OpenGLThread::delRenderContexes() {
+  // for each render group, empty the render_contexes list
+  for(std::map<Window,RenderGroup>::iterator it=render_groups.begin(); it!=render_groups.end(); ++it) {
+    (it->second).render_contexes.erase((it->second).render_contexes.begin(),(it->second).render_contexes.end());
+  }
+}
+
    
 
 void OpenGLThread::loadTEX(SlotNumber n_slot, YUVPBO* pbo){// Load PBO to texture in slot n_slot
@@ -1009,48 +1019,18 @@ long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
 
 
 long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
-  /* a word about timestamping:
-  
-  absolute timestamp =abs_timestamp
-  current time       =time
-  buffering          =buftime
-  relative timestamp =rel_timestamp =abs_timestamp-mstime+buftime =(abs_timestamp+buftime)-mstime =abs_timestamp-(mstime-buftime) =abs_timestamp-time_delta
-  
-              [fifo]
-  => in                       => out
-  <young                        old>
-  
-  absolute timestamps
-  90  80  70  60  50  40  30  20  10
-
-  relative timestamps ..
-  .. with (abs_timestamp+buftime)=45
-                    |
-  45  35  25  15  05 -15 -25 -35 -35
-  
-  i.e. negative == older, positive == younger
-  
-  * negative frames are late!  "presentation edge" is at 0
-  * increasing buffering time moves the "presentation edge" to the right == less late frames
-  * remember: large buftime will flood the fifo and you'll run out of frames in the stacks
-  * 50-100 milliseconds is a nice buftime value
-  
-  extreme cases:
-  
-  (i)  all negative == all frames too old   (i.e. due)               
-  (ii) all positive == all frames too young (i.e. in the future)
-  */
-  long unsigned mstime_delta;
-  long int      rel_mstimestamp;
-  Frame*        f;
-  bool          present_frame;
+  // Check out the docs for the timestamp naming conventions, etc. in \ref timing
+  long unsigned mstime_delta;         // == delta
+  long int      rel_mstimestamp;      // == trel = t_ - (t-tb) = t_ - delta
+  Frame*        f;                    // f->mstimestamp == t_
+  bool          present_frame; 
     
-  mstime_delta=getCurrentMsTimestamp()-msbuftime;
+  mstime_delta=getCurrentMsTimestamp()-msbuftime; // delta = (t-tb)
   
   auto it=presfifo.rbegin(); // reverse iterator
   while(it!=presfifo.rend()) {// while
     f=*it; // f==pointer to frame
-    rel_mstimestamp=(f->mstimestamp-mstime_delta);
+    rel_mstimestamp=(f->mstimestamp-mstime_delta); // == trel = t_ - delta
 #ifdef PRESENT_VERBOSE
     std::cout<<"OpenGLThread: handleFifo: rel_mstimestamp " << rel_mstimestamp << std::endl;
 #endif
@@ -1108,7 +1088,7 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
   }
   else {
     f=presfifo.back();
-    rel_mstimestamp=f->mstimestamp-mstime_delta;
+    rel_mstimestamp=f->mstimestamp-mstime_delta; // == trel = t_ - delta
     rel_mstimestamp=std::max((long int)0,rel_mstimestamp);
 #ifdef PRESENT_VERBOSE
     std::cout<<"OpenGLThread: handleFifo: next frame: " << *f <<std::endl;
@@ -1140,6 +1120,10 @@ void OpenGLThread::run() {// Main execution loop
   while(loop) {
 #ifdef PRESENT_VERBOSE
     std::cout << "OpenGLThread: "<< this->name <<" : run : timeout = " << timeout << std::endl;
+    // std::cout << "OpenGLThread: "<< this->name <<" : run : dumping fifo " << std::endl;
+    // infifo.dumpFifo();
+    // infifo.reportStacks(); 
+    // std::cout << "OpenGLThread: "<< this->name <<" : run : dumping fifo " << std::endl;
 #endif
     f=infifo.read(timeout);
     if (!f) { // TIMEOUT : either one seconds has passed, or it's about time to present the next frame..
@@ -1197,6 +1181,7 @@ void OpenGLThread::preRun() {// Called before entering the main execution loop, 
 
 
 void OpenGLThread::postRun() {// Called after the main execution loop exits, but before joining the thread
+  delRenderContexes();
   for(std::vector<SlotContext>::iterator it=slots_.begin(); it!=slots_.end(); ++it) {
     it->deActivate(); // deletes textures
   }

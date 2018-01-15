@@ -1,0 +1,12 @@
+<map id="/home/sampsa/C/valkka/src/filethread.cpp" name="/home/sampsa/C/valkka/src/filethread.cpp">
+<area shape="rect" id="node2" href="$filethread_8h.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="2045,95,2132,121"/>
+<area shape="rect" id="node3" href="$frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1724,319,1797,345"/>
+<area shape="rect" id="node40" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1002,393,1063,420"/>
+<area shape="rect" id="node41" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2117,543,2191,569"/>
+<area shape="rect" id="node42" href="$threads_8h.html" title="Base class for multithreading. " alt="" coords="2237,169,2313,196"/>
+<area shape="rect" id="node4" href="$common_8h.html" title="List of common header files. " alt="" coords="1026,543,1109,569"/>
+<area shape="rect" id="node30" href="$sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1001,468,1065,495"/>
+<area shape="rect" id="node31" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1727,393,1795,420"/>
+<area shape="rect" id="node37" href="$opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1145,393,1216,420"/>
+<area shape="rect" id="node43" href="$queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="2237,244,2311,271"/>
+</map>

@@ -100,7 +100,8 @@ class BasicFilterchain:
                                                   ) 
 
     self.av_in_filter    =core.FifoFrameFilter    ("av_in_filter"+self.idst,   self.av_fifo)
-    self.live_out_filter =core.InfoFrameFilter    ("live_out_filter"+self.idst,self.av_in_filter)
+    # self.live_out_filter =core.InfoFrameFilter    ("live_out_filter"+self.idst,self.av_in_filter)
+    
 
 
   def createContext(self):
@@ -110,8 +111,12 @@ class BasicFilterchain:
     self.ctx=core.LiveConnectionContext()
     self.ctx.slot=self.slot                          # slot number identifies the stream source
     self.ctx.connection_type=core.LiveConnectionType_rtsp # this is an rtsp connection
-    self.ctx.address=self.address                    # stream address, i.e. "rtsp://.."
-    self.ctx.framefilter=self.live_out_filter        # where the received frames are written to.  See filterchain (**)
+    self.ctx.address=self.address         
+    # stream address, i.e. "rtsp://.."
+    
+    self.ctx.framefilter=self.av_in_filter
+    # self.ctx.framefilter=self.live_out_filter        # where the received frames are written to.  See filterchain (**)
+    
     # send the information about the stream to LiveThread
     self.livethread.registerStream(self.ctx)
     self.livethread.playStream(self.ctx)

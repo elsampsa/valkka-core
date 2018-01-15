@@ -1,10 +1,12 @@
 <map id="/home/sampsa/C/valkka/include/openglthread.h" name="/home/sampsa/C/valkka/include/openglthread.h">
-<area shape="rect" id="node2" href="$opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="774,319,845,345"/>
-<area shape="rect" id="node25" href="$sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="920,393,984,420"/>
-<area shape="rect" id="node28" href="$threads_8h.html" title="Base class for multithreading. " alt="" coords="947,95,1023,121"/>
-<area shape="rect" id="node40" href="$shaders_8h.html" title="OpenGL shaders for YUV to RGB interpolation. " alt="" coords="670,319,749,345"/>
-<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="876,468,959,495"/>
-<area shape="rect" id="node29" href="$queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="984,169,1059,196"/>
-<area shape="rect" id="node30" href="$frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1226,244,1299,271"/>
-<area shape="rect" id="node31" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1230,319,1298,345"/>
+<area shape="rect" id="node2" href="$opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1006,319,1077,345"/>
+<area shape="rect" id="node29" href="$sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1121,393,1185,420"/>
+<area shape="rect" id="node32" href="$threads_8h.html" title="Base class for multithreading. " alt="" coords="1153,95,1229,121"/>
+<area shape="rect" id="node44" href="$shaders_8h.html" title="OpenGL shaders for YUV to RGB interpolation. " alt="" coords="893,319,971,345"/>
+<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1077,468,1160,495"/>
+<area shape="rect" id="node33" href="$queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="1153,169,1228,196"/>
+<area shape="rect" id="node34" href="$frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1234,244,1307,271"/>
+<area shape="rect" id="node35" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1659,319,1727,345"/>
+<area shape="rect" id="node41" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1208,319,1269,345"/>
+<area shape="rect" id="node42" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2067,468,2141,495"/>
 </map>

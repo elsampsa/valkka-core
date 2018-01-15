@@ -1,0 +1,6 @@
+<map id="SharedMemRingBuffer::SharedMemRingBuffer" name="SharedMemRingBuffer::SharedMemRingBuffer">
+<area shape="rect" id="node2" href="$classSharedMemRingBuffer.html#af3557c3940e78d605c25ad060a5cc8a2" title="Force reset. Semaphore value is set to 0. " alt="" coords="216,5,371,47"/>
+<area shape="rect" id="node4" href="$classSharedMemRingBuffer.html#a156b27e9e115f4c73c0e9992cb115ded" title="Client: call this after handling the ring&#45;buffer overflow. " alt="" coords="216,71,371,112"/>
+<area shape="rect" id="node3" href="$classSharedMemRingBuffer.html#ae750505ebf56872f95072fb1ad14bed7" title="Returns the current index (next to be read) of the shmem buffer // &lt;pyapi&gt; " alt="" coords="419,5,573,47"/>
+<area shape="rect" id="node5" href="$classSharedMemRingBuffer.html#a2d82b75607988d7aae119893483d4488" title="Used by SharedMemoryRingBuffer::flagIsSet() " alt="" coords="419,71,573,112"/>
+</map>

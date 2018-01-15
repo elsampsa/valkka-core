@@ -215,8 +215,10 @@ endif(CUSTOM_BUILD)
 # *** test programs ***
 # use the script "test/list.bash" to update this list
 
-set(TESTNAMES "av_live_thread_test" "av_thread_test" "fifo_test" "frames_test" "live_stream_check_test" "live_streaming_test" "live_thread_test" "log_test" "opengl_test" "opengl_thread_test" "render_test" "threads_test" "classes_test" "shmem_test" "swscale_test")
+set(TESTNAMES "av_live_thread_test" "av_thread_test" "classes_test" "fifo_test" "file_test" "frames_test" "live_stream_check_test" "live_streaming_test" "live_thread_test" "log_test" "opengl_test" "opengl_thread_test" "render_test" "shmem_test" "swscale_test" "threads_test")
+
 # set(TESTNAMES "shmem_test" "swscale_test")
+# set(TESTNAMES "file_test")
 
 
 add_custom_target(tests) # Note: without 'ALL'
