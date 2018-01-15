@@ -115,7 +115,7 @@ void test_2() {
   // (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) --> {FifoFrameFilter:gl_in_gilter} --> 
   // --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   //
-  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); // remember buffering time!
+  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/25,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); // remember buffering time!
   OpenGLFrameFifo&  gl_fifo         =glthread.getFifo();      // get gl_fifo from glthread
   FifoFrameFilter   gl_in_filter    ("gl_in_filter",gl_fifo);   
   
@@ -146,7 +146,8 @@ void test_2() {
   // sleep_for(1s);
   
   std::cout << name << "registering stream" << std::endl;
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 1, &live_out_filter}; // Request livethread to write into filter info
+  // ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 1, &live_out_filter}; // Request livethread to write into filter info
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 1, &av_in_filter}; // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   
   // sleep_for(1s);
@@ -162,7 +163,7 @@ void test_2() {
   sleep_for(1s);
   
   // sleep_for(3s);
-  sleep_for(10s);
+  sleep_for(604800s); //one week
   
   glthread.delRenderContextCall(i);
   glthread.delRenderGroupCall(window_id);
