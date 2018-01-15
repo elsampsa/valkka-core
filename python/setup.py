@@ -3,6 +3,7 @@ import subprocess
 import os
 import copy
 import sys
+import numpy
 
 custom_compilation=True   # using header and .so files that you have provided (including locally compiled libValkka.so)
 # custom_compilation=False  # using system-wide installed header and .so files (including system-wide installed libValkka.so)
@@ -24,6 +25,7 @@ except Exception as e:
 
 include_dirs       =[]
 include_dirs      +=["include"]
+include_dirs      +=[numpy.get_include()]
 
 if (custom_compilation):
   include_dirs    +=custom_live555_include_dirs
