@@ -1,25 +1,25 @@
 /*
  * threads.cpp : Convenience classes for multithreading
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka library.
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -228,4 +228,36 @@ void TestConsumerThread::run() {
     
   }
 }
+
+
+/* TODO: ExampleThread:
+
+void ExampleThread::run() {
+  Frame* f;
+  time_t timer;
+  time_t oldtimer;
+  
+  time(&timer);
+  oldtimer=timer;
+  loop=true;
+  
+  start_mutex.unlock();
+  while(loop) {
+    // Timeouts::examplethread
+    
+    {
+      // do your stuff
+    }
+    
+    time(&timer);
+    
+    if (difftime(timer,oldtimer)>=1) { // time to check the signals..
+      handleSignals();
+      oldtimer=timer;
+    }
+    
+  }
+}
+
+*/
 

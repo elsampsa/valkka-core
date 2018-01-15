@@ -61,14 +61,18 @@ See also the list of (latest) features below.
 
 ## Features
 
-### Current stable version is 0.2.0  
-Version name : "Christmas 2017 project"
+### Current stable version is 0.2.1  
+- License change (to APGL)
+- Added python level 2 api example
+- Miscellaneous fixes
+
+### Older versions
+0.2.0 Version name : "Christmas 2017 project"
 - Software interpolator filter (yuv => rgb interpolation in the CPU)
 - Shared memory bridge for python inter-process communication
 - Python level 2 api
 - Just committed this one : documentation and packages will be updated soon :)
 
-### Older versions
 0.1.0 Version name : "Proof of concept"
 - Initial git commit: core system, live streaming to X-window system
 
@@ -86,7 +90,7 @@ Version name : "Christmas 2017 project"
 ### Very long term goals
 - A complete VSMA system
 
-## Compile, contribute and deploy
+## Compile and deploy
 
 A word of warning: if you just want to use the API, no need to go further
 
@@ -96,7 +100,7 @@ However, if you have decided to develop Valkka and build it from source - great!
 
 You need (at least):
 
-    sudo apt-get install yasm git swig python3-pip cmake libx11-dev libglew-dev libasound2-dev
+    sudo apt-get install yasm git swig python3-pip cmake libx11-dev libglew-dev libasound2-dev pkg-config
 
 Install also the following python packages:
     
@@ -142,15 +146,18 @@ Want to modify and develop further Valkka source code?  Your effort is needed.  
 ## Authors
 Sampsa Riikonen (core programming)
 
+Marco Eranko (testing)
 Petri Eranko (financing, testing)
 
-Markus Kaukonen (opengl shader programming)
+Markus Kaukonen (opengl shader programming, testing)
 
 ## Copyright
-(C) 2017 Valkka Security Ltd. and Sampsa Riikonen
+(C) 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen
 
 ## License
-Lesser General Public License v3 or later
+This software is licensed under the GNU Affero General Public License (AGPL) v3 or later.
+
+If you need a different license arrangement, please contact us.
 
 ## Appendum.  API Teaser
 

@@ -1,25 +1,25 @@
 /*
  * openglthread.h : The OpenGL thread for presenting frames and related data structures
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka library.
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -79,7 +79,7 @@ public: // mutex protected calls .. be carefull when calling mutex protected cal
   Frame* prepareFrame(Frame* frame);                 ///< Create a copy of frames other than FrameType::avframe
   Frame* getFrame(BitmapType bmtype);                ///< Take a frame from a stack by bitmap type (uses OpenGLFrameFifo::getFrame_)
   Frame* prepareAVFrame(Frame* frame);               ///< Chooses a frame from the stack, does GPU uploading for frames of the type FrameType::avframe
-  bool writeCopy(Frame* f);                          ///< Take a frame "ftmp" from a relevant stack, copy contents of "f" into "ftmp" (or do GPU uploading) and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").
+  bool writeCopy(Frame* f, bool wait=false);         ///< Take a frame "ftmp" from a relevant stack, copy contents of "f" into "ftmp" (or do GPU uploading) and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").
   void recycle(Frame* f);                            ///< Return Frame f back into the stack (relevant stack is chosen automatically)
   void reportStacks();                               ///< Show stack usage
   void dumpStack();                                  ///< Dump the frames in the stack
@@ -381,8 +381,15 @@ public: // methods, internal : initializing / closing .. but we might want to te
   
 protected: // internal methods
   void dumpFifo();
-  long unsigned insertFifo(Frame* f); ///< Sorted insert: insert a timestamped frame into the fifo \callgraph
-  long unsigned handleFifo();         ///< Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation \callgraph
+  long unsigned insertFifo(Frame* f);     ///< Sorted insert: insert a timestamped frame into the fifo \callgraph
+  
+  /** Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation \callgraph
+   * 
+   * See also \ref timing
+   * 
+   */
+  long unsigned handleFifo();
+  void delRenderContexes();
   
 public:  // reporting
   void reportSlots();

@@ -3,25 +3,25 @@
 /*
  * queues.h : Lockable and safe queues for multithreading use
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka library.
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -36,8 +36,8 @@
 
 #include <frames.h> 
 #include <deque>
-#include <mutex>
-#include <condition_variable>
+// #include <mutex>
+// #include <condition_variable>
 
 
 /** A thread-safe FrameFifo (first-in-first-out) queue with thread-safe methods for inserting and popping frames in/from the queue.
@@ -102,7 +102,8 @@ public:
   // void write(Frame* f);
   
   virtual Frame* getFrame();                             ///< Take a frame from the stack
-  virtual bool writeCopy(Frame* f);                      ///< Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").  The size of "ftmp" is also checked and set to target_size, if necessary  
+  virtual bool writeCopy(Frame* f, bool wait=false);     ///< Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").  The size of "ftmp" is also checked and set to target_size, if necessary  
+  // virtual bool writeCopy_(Frame* f);                     ///< Like FrameFifo::writeCopy, but waits for the fifo to have free frames
   virtual Frame* read(unsigned short int mstimeout=0);   ///< Pop a frame from the end of the fifo and return the frame to the reservoir stack
   // Frame* readCopy();                                  ///< Pop a frame from the end of the fifo, recycle it into stack and return a copy of the frame ("copy-on-read")
   virtual void recycle(Frame* f);                        ///< Return Frame f back into the stack.  Update target_size if necessary
@@ -110,12 +111,15 @@ public:
   virtual void dumpStack(); ///< Dump the frames in the stack
   virtual void dumpFifo();  ///< Dump frames in the fifo
   
+  // void waitAvailable();
+  
 protected:
   std::mutex mutex;                   ///< The Lock
   std::condition_variable condition;  ///< The Event/Flag
   unsigned long count = 0;            ///< Semaphore counter: number of frames available for the consumer
   std::vector<Frame> reservoir;       ///< Pre-allocated frames are warehoused in this reservoir
   unsigned long target_size = 0;      ///< Minimum frame payload size
+  std::condition_variable ready_condition;  ///< The Event/Flag for FrameFifo::ready_mutex
   
 public:
   // to use deque of objects or pointers, that's the question
@@ -156,5 +160,31 @@ protected:
 protected:
   void go(Frame* frame);
 }; // <pyapi>
+
+
+/** Passes frames to a multiprocessing fifo.
+ * 
+ * Works like FifoFrameFilter, but blocks if the receiving FrameFifo does not have available frames
+ * 
+ * @ingroup filters_tag
+ * @ingroup queues_tag
+ */
+class BlockingFifoFrameFilter : public FrameFilter { // <pyapi>
+  
+public: // <pyapi>
+  BlockingFifoFrameFilter(const char* name, FrameFifo& framefifo); ///< Default constructor // <pyapi>
+  
+protected:
+  FrameFifo& framefifo;
+  
+protected:
+  void go(Frame* frame);
+}; // <pyapi>
+
+
+
+
+
+
 
 #endif

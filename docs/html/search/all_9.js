@@ -19,6 +19,6 @@ var searchData=
   ['logger',['Logger',['../structLogger.html',1,'']]],
   ['logging_2ecpp',['logging.cpp',['../logging_8cpp.html',1,'']]],
   ['logging_2eh',['logging.h',['../logging_8h.html',1,'']]],
-  ['loop',['loop',['../classThread.html#adfc33fd9a806a1d05e325a19d73b2812',1,'Thread']]],
+  ['loop',['loop',['../classFileThread.html#a25d7bab2682e2098ad54e0bfce17c9c1',1,'FileThread::loop()'],['../classThread.html#adfc33fd9a806a1d05e325a19d73b2812',1,'Thread::loop()']]],
   ['library_20architecture',['Library architecture',['../process_chart.html',1,'']]]
 ];

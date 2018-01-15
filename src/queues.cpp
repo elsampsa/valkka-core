@@ -1,25 +1,25 @@
  /*
  * queues.cpp : Lockable "safe-queues" for multithreading use, for frame-queueing
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka library.
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -104,6 +104,8 @@ FrameFifo::FrameFifo(const char* name, unsigned short int n_stack) : name(name),
     stack.push_front(&it); // insert pointers from reservoir into the stack
   }
   */
+  
+  // this->ready_condition.notify_one();
 
 }
 
@@ -132,14 +134,30 @@ Frame* FrameFifo::getFrame() {
 }
 
 
-bool FrameFifo::writeCopy(Frame* f) { // take a frame from the stack, copy contents of f into it and insert the copy into the beginning of the fifo ("copy-on-write")
+bool FrameFifo::writeCopy(Frame* f, bool wait) { // take a frame from the stack, copy contents of f into it and insert the copy into the beginning of the fifo ("copy-on-write")
   Frame* tmpframe;
   std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+
+  ///*
+  if (this->stack.empty()) {
+    if (wait) {
+      queuelogger.log(LogLevel::normal) << "FrameFifo: "<<name<<" writeCopy: waiting for stack frames.  Frame="<<(*f)<<std::endl;
+      this->ready_condition.wait(lk);
+      queuelogger.log(LogLevel::normal) << "FrameFifo: "<<name<<" writeCopy: .. got stack frame.  " << std::endl;
+    }
+    else {
+      queuelogger.log(LogLevel::fatal) << "FrameFifo: "<<name<<" writeCopy: OVERFLOW! No more frames in stack.  Frame="<<(*f)<<std::endl;
+      return false;
+    }
+  }
+  //*/
   
+  /*
   if (this->stack.empty()) {
     queuelogger.log(LogLevel::fatal) << "FrameFifo: "<<name<<" writeCopy: OVERFLOW! No more frames in stack.  Frame="<<(*f)<<std::endl;
     return false;
   }
+  */
   
   tmpframe=this->stack[0]; // take a pointer to frame from the pre-allocated stack
   this->stack.pop_front(); // .. remove that pointer from the stack
@@ -163,11 +181,23 @@ bool FrameFifo::writeCopy(Frame* f) { // take a frame from the stack, copy conte
   return true;
 }
 
+/*
+bool FrameFifo::writeCopy_(Frame* f) {
+  this->writeCopy_(f);
+  if (this->stack.empty()) {
+    // TODO: acquire wait lock.  It's released by recycle.
+  }
+}
+*/
+
+
 // pop a frame from the end of the fifo and return the frame
 Frame* FrameFifo::read(unsigned short int mstimeout) {
   Frame* tmpframe;
   std::cv_status result;
   std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+  
+  /// this->ready_condition.notify_one();
   
 #ifdef FIFO_VERBOSE
   std::cout << "FrameFifo: "<<name<<" read: mstimeout=" << mstimeout << std::endl;
@@ -211,6 +241,8 @@ void FrameFifo::recycle(Frame* f) {
   target_size=std::max(target_size,f->payload.capacity()); // update target_size 
   f->reset();
   stack.push_front(f); 
+  this->ready_condition.notify_one(); // TODO: release wait lock
+  
   /*
   std::cout << "FrameFifo: recycle: dumpStack:" << std::endl;
   dumpStack();
@@ -246,6 +278,15 @@ void FrameFifo::dumpFifo() {
 }
 
 
+/*
+void FrameFifo::waitAvailable() {
+  std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+  std::cout << "FrameFifo : waitAvailable : waiting .." << std::endl;
+  ready_condition.wait(lk);
+  std::cout << "FrameFifo : waitAvailable : .. waited" << std::endl;
+}
+*/
+
 
 FifoFrameFilter::FifoFrameFilter(const char* name, FrameFifo& framefifo) : FrameFilter(name), framefifo(framefifo) {
 };
@@ -253,4 +294,45 @@ FifoFrameFilter::FifoFrameFilter(const char* name, FrameFifo& framefifo) : Frame
 void FifoFrameFilter::go(Frame* frame) {
   framefifo.writeCopy(frame);
 }
+
+
+
+BlockingFifoFrameFilter::BlockingFifoFrameFilter(const char* name, FrameFifo& framefifo) : FrameFilter(name), framefifo(framefifo) {
+};
+
+void BlockingFifoFrameFilter::go(Frame* frame) {
+  std::cout << "BlockingFifoFrameFilter: go" << std::endl;
+  framefifo.writeCopy(frame,true);
+  /*
+  
+  condition variable A: triggered when there are frames in the queue
+  condition variable B: triggered when there are frames available in the stack
+  
+  this->mutex controls locking with "lk"
+  
+  server:
+  framefifo.writeCopy     reserves mutex .. uses condition_variable.notify_one(lk) 
+  
+  
+  server with wait:
+  
+  framefifo.writeCopy
+                          reserve mutex .. observe the state of the fifo .. if no more frames available in the stack, go to a waiting state .. wait for a condition variable B : condition_variable.wait(lk) releases the lock every now then
+    
+  client:
+  framefifo.read          reserves mutex, trigger condition variable B.  Wait for condition variable A.
+  
+  
+  waits for a condition variable.   condition_variable.wait(lk) releases the mutex for an instant .. imagine that it releases it every now and then ..
+  
+  
+  ----
+  
+  server:
+  framefifo.writeCopy    reserves mutex
+  
+
+  */
+}
+
 

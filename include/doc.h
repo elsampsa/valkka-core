@@ -1,25 +1,25 @@
 /*
  * doc.h : Dummy header file for doxygen documentation
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka library. 
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -72,12 +72,25 @@
  * For library architecture, code walkthroughs and explanations, check out the "Related Pages" section
  * 
  * 
- * Copyright and License
- * ---------------------
- * (C) 2017 Valkka Security Ltd. and Sampsa Riikonen <br>
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
- * Valkka is licensed under the Lesser General Public License v3 or later (LGPLv3+) [License text <a href="https://www.gnu.org/licenses/lgpl-3.0.en.html"> here </a>]
+ * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
+ * This file is part of the Valkka library.
+ * 
+ * Valkka is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** @page contributing Contributing
@@ -148,7 +161,7 @@
  * - AVThread, for decoding streams using the FFMpeg library and uploading them to GPU, see \ref decoding_tag
  * - OpenGLThread, that handles direct memory access to GPU and presents the Frames, based on their timestamps, see \ref openglthread_tag
  * 
- * To get an idea how Live555 works, please see \ref live555_page and \ref live.  The livethread produces frames (class Frame), that are passed to mutex-protected fifos (see \ref queues_tag).
+ * To get a rough idea how Live555 works, please see \ref live555_page and \ref live_tag.  The livethread produces frames (class Frame), that are passed to mutex-protected fifos (see \ref queues_tag).
  * 
  * Between the threads, frames are passed through series of "filters" (see \ref filters_tag).  Filters can be used to modify the media packets (say, their timestamps for example) and to produce copying and redirection of the stream.  Valkka library filters should not be confused with Live555 sink/source/filters nor with FFmpeg filters - which are completely different things.
  * 
@@ -454,5 +467,96 @@
  */
 
 
-
+/** @page timing Presention timing and playing
+ * 
+ * Notation convention for handling presentation timestamps (PTS)
+ * 
+ * File streams
+ * ------------
+ * 
+ * The underscore "_" tags "stream time".  Stream timestamps are timestamps on each recorded frame.. they can be far in the past or in the future.
+ * 
+ * The following equation holds:
+ * 
+ * (t_-t_0) = (t-t0)
+ * 
+ * where:
+ * 
+ * Symbol         | Explanation
+ * -------------- | ------------------------------
+ * t_             | the file stream time
+ * t              | the wallclock time
+ * t0_            | file stream reference time
+ * t0             | wallclock reference time
+ * 
+ * 
+ * t0 is measured at the time instant when t0_ is set.  This is done at seek.
+ * 
+ * We define a "reference time":
+ * 
+ * reftime = (t0 - t0_)
+ * 
+ * The we get a frame's wallclock time like this:
+ * 
+ * t = t_ + reftime
+ * 
+ * Where t_ is the frame's timestamp in the stream.  You can think it as we're correcting a recorded frame's timestamp to present time.
+ * 
+ * [ check: t = t_ + reftime <=> t = t_ + t0 - t0_ <=> t - t0 <=> t_ - t0_ ]
+ * 
+ * 
+ * Different actions for file streams:
+ * 
+ * Action     | 
+ * ---------- | ----------------------------------------
+ * register   |
+ * seek       | set reftime, consume frames 'till t==t_
+ * play       | set reftime, keep consuming frames
+ * stop       |
+ * deregister |
+ * 
+ * 
+ * 
+ * Timing for realtime streams 
+ * ---------------------------
+ * 
+ * Symbol         | Explanation
+ * -------------- | ------------------------------
+ * t_             | frame's timestamp
+ * t              | the wallclock time
+ * tb             | buffering time
+ * 
+ * Define "relative timestamp" :
+ * 
+ * trel = t_ - t + tb = t_ - (t-tb) = t_ - delta
+ * 
+ * 
+ *\verbatim
+ *             [fifo]
+ * => in                       => out
+ * [young                        old]
+ * 
+ * absolute timestamps
+ * 90  80  70  60  50  40  30  20  10
+ *
+ * relative timestamps trel:
+ * .. with delta=(t-tb)=45
+ *                   |
+ * 45  35  25  15  05 -15 -25 -35 -35
+ * 
+ * negative values == older frames, positive values == younger frames
+ *\endverbatim
+ * 
+ * - negative frames are late: "presentation edge" is at 0
+ * - increasing buffering time moves the "presentation edge" to the right == less late frames
+ * - remember: large buftime will flood the fifo and you'll run out of frames in the stacks
+ * - 50-100 milliseconds is a nice buftime value
+ * 
+ * extreme cases:
+ * 
+ * - all negative == all frames too old   (i.e. due)               
+ * - all positive == all frames too young (i.e. in the future)
+ *
+ */
+ 
 

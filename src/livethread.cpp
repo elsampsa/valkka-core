@@ -1,25 +1,25 @@
 /*
  * livethread.cpp : A live555 multithread
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka library.
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -293,16 +293,16 @@ void LiveThread::handleSignals() {
         this->eventLoopWatchVariable=1;
         break;
       case Signals::register_stream:
-        this->registerStream(it->connection_context);
+        this->registerStream(*(it->connection_context));
         break;
       case Signals::deregister_stream:
-        this->deregisterStream(it->connection_context);
+        this->deregisterStream(*(it->connection_context));
         break;
       case Signals::play_stream:
-        this->playStream(it->connection_context);
+        this->playStream(*(it->connection_context));
         break;
       case Signals::stop_stream:
-        this->stopStream(it->connection_context);
+        this->stopStream(*(it->connection_context));
         break;
       }
   }
@@ -359,7 +359,7 @@ int LiveThread::safeGetSlot(SlotNumber slot, Connection*& con) { // -1 = out of 
 }
 
 
-void LiveThread::registerStream(LiveConnectionContext connection_ctx) {
+void LiveThread::registerStream(LiveConnectionContext &connection_ctx) {
   Connection* connection;
   livethreadlogger.log(LogLevel::crazy) << "LiveThread: registerStream" << std::endl;
   /*
@@ -410,7 +410,7 @@ void LiveThread::registerStream(LiveConnectionContext connection_ctx) {
 }
 
 
-void LiveThread::deregisterStream(LiveConnectionContext connection_ctx) {
+void LiveThread::deregisterStream(LiveConnectionContext &connection_ctx) {
   Connection* connection;
   livethreadlogger.log(LogLevel::crazy) << "LiveThread: deregisterStream" << std::endl;
   switch (safeGetSlot(connection_ctx.slot,connection)) {
@@ -430,7 +430,7 @@ void LiveThread::deregisterStream(LiveConnectionContext connection_ctx) {
 }
 
 
-void LiveThread::playStream(LiveConnectionContext connection_ctx) {
+void LiveThread::playStream(LiveConnectionContext &connection_ctx) {
   Connection* connection;
   livethreadlogger.log(LogLevel::crazy) << "LiveThread: playStream" << std::endl;  
   switch (safeGetSlot(connection_ctx.slot,connection)) {
@@ -448,7 +448,7 @@ void LiveThread::playStream(LiveConnectionContext connection_ctx) {
 }
 
 
-void LiveThread::stopStream(LiveConnectionContext connection_ctx) {
+void LiveThread::stopStream(LiveConnectionContext &connection_ctx) {
   Connection* connection;
   livethreadlogger.log(LogLevel::crazy) << "LiveThread: stopStream" << std::endl;
   switch (safeGetSlot(connection_ctx.slot,connection)) {
@@ -481,23 +481,23 @@ void LiveThread::periodicTask(void* cdata) {
 
 // *** API ***
 
-void LiveThread::registerStreamCall(LiveConnectionContext connection_ctx) {
-  SignalContext signal_ctx = {Signals::register_stream, connection_ctx};
+void LiveThread::registerStreamCall(LiveConnectionContext &connection_ctx) {
+  SignalContext signal_ctx = {Signals::register_stream, &connection_ctx};
   sendSignal(signal_ctx);
 }
 
-void LiveThread::deregisterStreamCall(LiveConnectionContext connection_ctx) {
-  SignalContext signal_ctx = {Signals::deregister_stream, connection_ctx};
+void LiveThread::deregisterStreamCall(LiveConnectionContext &connection_ctx) {
+  SignalContext signal_ctx = {Signals::deregister_stream, &connection_ctx};
   sendSignal(signal_ctx);
 }
 
-void LiveThread::playStreamCall(LiveConnectionContext connection_ctx) {
-  SignalContext signal_ctx = {Signals::play_stream, connection_ctx};
+void LiveThread::playStreamCall(LiveConnectionContext &connection_ctx) {
+  SignalContext signal_ctx = {Signals::play_stream, &connection_ctx};
   sendSignal(signal_ctx);
 }
 
-void LiveThread::stopStreamCall(LiveConnectionContext connection_ctx) {
-  SignalContext signal_ctx = {Signals::stop_stream, connection_ctx};
+void LiveThread::stopStreamCall(LiveConnectionContext &connection_ctx) {
+  SignalContext signal_ctx = {Signals::stop_stream, &connection_ctx};
   sendSignal(signal_ctx);
 }
 

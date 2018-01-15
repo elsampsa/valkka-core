@@ -100,6 +100,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;cstdlib&gt;</code><br />
 <code>#include &lt;cstring&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
+<code>#include &lt;cstddef&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
@@ -109,6 +110,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;sys/time.h&gt;</code><br />
+<code>#include &lt;time.h&gt;</code><br />
 <code>#include &lt;map&gt;</code><br />
 <code>#include &lt;list&gt;</code><br />
 <code>#include &lt;chrono&gt;</code><br />
@@ -117,6 +119,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;errno.h&gt;</code><br />
 <code>#include &lt;unistd.h&gt;</code><br />
 <code>#include &lt;pthread.h&gt;</code><br />
+<code>#include &lt;mutex&gt;</code><br />
+<code>#include &lt;condition_variable&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for common.h:</div>
 <div class="dyncontent">
@@ -127,33 +131,39 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="common_8h__dep__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2include_2common_8hdep" alt=""/></div>
 <map name="_2home_2sampsa_2C_2valkka_2include_2common_8hdep" id="_2home_2sampsa_2C_2valkka_2include_2common_8hdep">
-<area shape="rect" id="node2" href="sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1036,95,1200,136"/>
-<area shape="rect" id="node7" href="frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="556,273,720,315"/>
-<area shape="rect" id="node23" href="opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="916,184,1080,225"/>
-<area shape="rect" id="node25" href="tools_8h.html" title="Auxiliary routines. " alt="" coords="1275,363,1439,404"/>
-<area shape="rect" id="node27" href="shaders_8h.html" title="OpenGL shaders for YUV to RGB interpolation. " alt="" coords="1421,95,1585,136"/>
-<area shape="rect" id="node3" href="avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="196,541,360,583"/>
-<area shape="rect" id="node12" href="openglthread_8h.html" title="The OpenGL thread for presenting frames and related data structures. " alt="" coords="1164,541,1328,583"/>
-<area shape="rect" id="node13" href="openglthread_8cpp.html" title="The OpenGL thread for presenting frames and related data structures. " alt="" coords="1447,631,1611,672"/>
-<area shape="rect" id="node19" href="live_8cpp.html" title="Interface to live555. " alt="" coords="1036,452,1200,493"/>
-<area shape="rect" id="node4" href="chains_8h.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="488,631,652,672"/>
-<area shape="rect" id="node6" href="avthread_8cpp.html" title="FFmpeg decoding thread. " alt="" coords="196,631,360,672"/>
-<area shape="rect" id="node5" href="chains_8cpp.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="488,720,652,761"/>
-<area shape="rect" id="node8" href="queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="368,363,532,404"/>
-<area shape="rect" id="node16" href="decoders_8h.html" title="FFmpeg decoders. " alt="" coords="25,363,189,404"/>
-<area shape="rect" id="node18" href="live_8h.html" title="Interface to live555. " alt="" coords="796,363,960,404"/>
-<area shape="rect" id="node20" href="filters_8h.html" title="filters.h : Common frame filters. The FrameFilter base class is defined in frames.h " alt="" coords="796,452,960,493"/>
-<area shape="rect" id="node22" href="frames_8cpp.html" title="Basic frame types implementations. " alt="" coords="556,363,720,404"/>
-<area shape="rect" id="node9" href="threads_8h.html" title="Base class for multithreading. " alt="" coords="556,452,720,493"/>
-<area shape="rect" id="node15" href="queues_8cpp.html" title="Lockable safe&#45;queues for frame queueing in multithreading applications. " alt="" coords="316,452,480,493"/>
-<area shape="rect" id="node10" href="livethread_8h.html" title="A live555 thread. " alt="" coords="736,541,900,583"/>
-<area shape="rect" id="node14" href="threads_8cpp.html" title="A convenience class for multithreading, similar to Python&#39;s standard library &quot;threading.Thread&quot;. " alt="" coords="548,541,712,583"/>
-<area shape="rect" id="node11" href="livethread_8cpp.html" title="A live555 multithread. " alt="" coords="736,631,900,672"/>
-<area shape="rect" id="node17" href="decoders_8cpp.html" title="FFmpeg decoders. " alt="" coords="25,452,189,493"/>
-<area shape="rect" id="node21" href="filters_8cpp.html" title="Common frame filters. The FrameFilter base class is defined in frames.h. " alt="" coords="976,541,1140,583"/>
-<area shape="rect" id="node24" href="opengl_8cpp.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="796,273,960,315"/>
-<area shape="rect" id="node26" href="tools_8cpp.html" title="Auxiliary routines. " alt="" coords="1276,452,1440,493"/>
-<area shape="rect" id="node28" href="shaders_8cpp.html" title="/home/sampsa/C/valkka\l/src/shaders.cpp" alt="" coords="1516,184,1680,225"/>
+<area shape="rect" id="node2" href="sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="725,95,889,136"/>
+<area shape="rect" id="node7" href="frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1149,273,1313,315"/>
+<area shape="rect" id="node25" href="sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synced with posix sem..." alt="" coords="2227,452,2391,493"/>
+<area shape="rect" id="node29" href="opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="296,184,460,225"/>
+<area shape="rect" id="node31" href="tools_8h.html" title="Auxiliary routines. " alt="" coords="1508,184,1672,225"/>
+<area shape="rect" id="node33" href="shaders_8h.html" title="OpenGL shaders for YUV to RGB interpolation. " alt="" coords="125,95,289,136"/>
+<area shape="rect" id="node3" href="avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="859,541,1023,583"/>
+<area shape="rect" id="node14" href="openglthread_8h.html" title="The OpenGL thread for presenting frames and related data structures. " alt="" coords="347,541,511,583"/>
+<area shape="rect" id="node15" href="openglthread_8cpp.html" title="The OpenGL thread for presenting frames and related data structures. " alt="" coords="467,631,631,672"/>
+<area shape="rect" id="node21" href="live_8cpp.html" title="Interface to live555. " alt="" coords="1457,452,1621,493"/>
+<area shape="rect" id="node4" href="chains_8h.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="1287,631,1451,672"/>
+<area shape="rect" id="node6" href="avthread_8cpp.html" title="FFmpeg decoding thread. " alt="" coords="859,631,1023,672"/>
+<area shape="rect" id="node5" href="chains_8cpp.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="1287,720,1451,761"/>
+<area shape="rect" id="node8" href="queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="961,363,1125,404"/>
+<area shape="rect" id="node12" href="filethread_8h.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="1799,541,1963,583"/>
+<area shape="rect" id="node18" href="decoders_8h.html" title="FFmpeg decoders. " alt="" coords="773,363,937,404"/>
+<area shape="rect" id="node20" href="live_8h.html" title="Interface to live555. " alt="" coords="1337,363,1501,404"/>
+<area shape="rect" id="node22" href="filters_8h.html" title="filters.h : Common frame filters. The FrameFilter base class is defined in frames.h " alt="" coords="1748,363,1912,404"/>
+<area shape="rect" id="node28" href="frames_8cpp.html" title="Basic frame types implementations. " alt="" coords="1149,363,1313,404"/>
+<area shape="rect" id="node9" href="threads_8h.html" title="Base class for multithreading. " alt="" coords="1167,452,1331,493"/>
+<area shape="rect" id="node17" href="queues_8cpp.html" title="Lockable safe&#45;queues for frame queueing in multithreading applications. " alt="" coords="979,452,1143,493"/>
+<area shape="rect" id="node10" href="livethread_8h.html" title="A live555 thread. " alt="" coords="1407,541,1571,583"/>
+<area shape="rect" id="node16" href="threads_8cpp.html" title="A convenience class for multithreading, similar to Python&#39;s standard library &quot;threading.Thread&quot;. " alt="" coords="1167,541,1331,583"/>
+<area shape="rect" id="node11" href="livethread_8cpp.html" title="A live555 multithread. " alt="" coords="1475,631,1639,672"/>
+<area shape="rect" id="node13" href="filethread_8cpp.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="1799,631,1963,672"/>
+<area shape="rect" id="node19" href="decoders_8cpp.html" title="FFmpeg decoders. " alt="" coords="739,452,903,493"/>
+<area shape="rect" id="node23" href="file_8h.html" title="File input and output to and from matroska files. " alt="" coords="1987,452,2151,493"/>
+<area shape="rect" id="node27" href="filters_8cpp.html" title="Common frame filters. The FrameFilter base class is defined in frames.h. " alt="" coords="1799,452,1963,493"/>
+<area shape="rect" id="node24" href="file_8cpp.html" title="File input and output to and from matroska files. " alt="" coords="1987,541,2151,583"/>
+<area shape="rect" id="node26" href="sharedmem_8cpp.html" title="/home/sampsa/C/valkka\l/src/sharedmem.cpp" alt="" coords="2227,541,2391,583"/>
+<area shape="rect" id="node30" href="opengl_8cpp.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="245,273,409,315"/>
+<area shape="rect" id="node32" href="tools_8cpp.html" title="Auxiliary routines. " alt="" coords="1628,273,1792,315"/>
+<area shape="rect" id="node34" href="shaders_8cpp.html" title="/home/sampsa/C/valkka\l/src/shaders.cpp" alt="" coords="5,184,169,225"/>
 </map>
 </div>
 </div>
@@ -162,7 +172,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="textblock"><p>List of common header files. </p>
 <dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.1.0 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.2.0 </dd></dl>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

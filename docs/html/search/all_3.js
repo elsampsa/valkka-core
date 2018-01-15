@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['deactivate',['deActivate',['../classSlotContext.html#aae90e75d1537e6f1d4c2568e804df82a',1,'SlotContext']]],
+  ['deactivate',['deActivate',['../classFileFrameFilter.html#a2f235a2732337ee2f18895f10ad86d29',1,'FileFrameFilter::deActivate()'],['../classSlotContext.html#aae90e75d1537e6f1d4c2568e804df82a',1,'SlotContext::deActivate()']]],
   ['decoder',['Decoder',['../classDecoder.html',1,'Decoder'],['../classDecoder.html#a9f88699f2882d438530abbfb28597a2c',1,'Decoder::Decoder()']]],
   ['decoderbase',['DecoderBase',['../classDecoderBase.html',1,'DecoderBase'],['../classDecoderBase.html#a2899fadc3b06a9d3037ae7c2c3565f91',1,'DecoderBase::DecoderBase()']]],
   ['decoders',['decoders',['../classAVThread.html#a8979fa7236713ab3a9239c4ca4845896',1,'AVThread']]],
@@ -21,7 +21,7 @@ var searchData=
   ['delrendergroup',['delRenderGroup',['../classOpenGLThread.html#af5cc0544e52bd20b8664381490902c61',1,'OpenGLThread']]],
   ['delrendergroupcall',['delRenderGroupCall',['../classOpenGLThread.html#ac05c2be99cdeb614aac854d442995c45',1,'OpenGLThread']]],
   ['delshaders',['delShaders',['../classOpenGLThread.html#a7c421fdb80d8838ee63e5057e881d5d7',1,'OpenGLThread']]],
-  ['deregisterstreamcall',['deregisterStreamCall',['../classLiveThread.html#a828449f7c3974d5be86c6ce5f0314a5e',1,'LiveThread']]],
+  ['deregisterstreamcall',['deregisterStreamCall',['../classLiveThread.html#ad9c33d99f8aa561c67559744b9f3e4b0',1,'LiveThread']]],
   ['display_5fid',['display_id',['../classRenderGroup.html#a4747ce66c8739d85fb560d720aee9eb7',1,'RenderGroup']]],
   ['doc_2eh',['doc.h',['../doc_8h.html',1,'']]],
   ['doublebuffer_5fflag',['doublebuffer_flag',['../classRenderGroup.html#a5299bce3ce130b4f4e8bad5db4be3637',1,'RenderGroup']]],
@@ -32,5 +32,6 @@ var searchData=
   ['dumpframefilter',['DumpFrameFilter',['../classDumpFrameFilter.html',1,'']]],
   ['dumppayload',['dumpPayload',['../classFrame.html#a13e9ae3eac3e0efcb3684723ff77cf34',1,'Frame']]],
   ['dumpstack',['dumpStack',['../classOpenGLFrameFifo.html#aa10d25b0cd368d44fe40aa31066a6419',1,'OpenGLFrameFifo::dumpStack()'],['../classFrameFifo.html#af6b1aca3db868d937039a9f066e8f0ca',1,'FrameFifo::dumpStack()']]],
-  ['dumpstack_5f',['dumpStack_',['../classOpenGLFrameFifo.html#ae19a3b5eb22c9a857436ae6174083f73',1,'OpenGLFrameFifo']]]
+  ['dumpstack_5f',['dumpStack_',['../classOpenGLFrameFifo.html#ae19a3b5eb22c9a857436ae6174083f73',1,'OpenGLFrameFifo']]],
+  ['duration',['duration',['../structFileContext.html#ace5871e860d5e2d31f138dcc1946350a',1,'FileContext']]]
 ];

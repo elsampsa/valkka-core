@@ -105,12 +105,13 @@ Include dependency graph for frames.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="frames_8cpp__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2src_2frames_8cpp" alt=""/></div>
 <map name="_2home_2sampsa_2C_2valkka_2src_2frames_8cpp" id="_2home_2sampsa_2C_2valkka_2src_2frames_8cpp">
-<area shape="rect" id="node2" href="frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="978,95,1051,121"/>
-<area shape="rect" id="node35" href="logging_8h.html" title="Logging utilities. " alt="" coords="1664,319,1739,345"/>
-<area shape="rect" id="node3" href="common_8h.html" title="List of common header files. " alt="" coords="908,319,991,345"/>
-<area shape="rect" id="node25" href="sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1108,244,1172,271"/>
-<area shape="rect" id="node26" href="avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="483,169,551,196"/>
-<area shape="rect" id="node32" href="opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="979,169,1050,196"/>
+<area shape="rect" id="node2" href="frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1184,95,1257,121"/>
+<area shape="rect" id="node40" href="logging_8h.html" title="Logging utilities. " alt="" coords="2067,319,2142,345"/>
+<area shape="rect" id="node3" href="common_8h.html" title="List of common header files. " alt="" coords="1047,319,1130,345"/>
+<area shape="rect" id="node29" href="sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1057,244,1121,271"/>
+<area shape="rect" id="node30" href="avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1545,169,1613,196"/>
+<area shape="rect" id="node36" href="opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="984,169,1055,196"/>
+<area shape="rect" id="node39" href="tools_8h.html" title="Auxiliary routines. " alt="" coords="1153,169,1214,196"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -131,6 +132,12 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <tr class="memitem:a6a7b953a9f5f6c3eecf9f269a4eb7896"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a7b953a9f5f6c3eecf9f269a4eb7896"></a>
 std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, <a class="el" href="structPCMUPars.html">PCMUPars</a> const &amp;m)</td></tr>
 <tr class="separator:a6a7b953a9f5f6c3eecf9f269a4eb7896"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25f6ec94652fc225d41f74b5f75669a0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a25f6ec94652fc225d41f74b5f75669a0"></a>
+<a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854">FrameType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>codec_id_to_frametype</b> (AVCodecID av_codec_id)</td></tr>
+<tr class="separator:a25f6ec94652fc225d41f74b5f75669a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e9d8e96bac0ef5859f8a0c90ba3810c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e9d8e96bac0ef5859f8a0c90ba3810c"></a>
+AVCodecID&#160;</td><td class="memItemRight" valign="bottom"><b>frametype_to_codec_id</b> (<a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854">FrameType</a> frametype)</td></tr>
+<tr class="separator:a4e9d8e96bac0ef5859f8a0c90ba3810c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Basic frame types implementations. </p>

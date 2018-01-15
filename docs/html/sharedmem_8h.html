@@ -89,11 +89,38 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a>  </div>
   <div class="headertitle">
 <div class="title">sharedmem.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><div class="dynheader">
+
+<p>Posix shared memory segment server/client management, shared memory ring buffer synced with posix semaphores.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="common_8h_source.html">common.h</a>&quot;</code><br />
+<code>#include &lt;sys/shm.h&gt;</code><br />
+<code>#include &lt;sys/mman.h&gt;</code><br />
+<code>#include &lt;sys/stat.h&gt;</code><br />
+<code>#include &lt;fcntl.h&gt;</code><br />
+<code>#include &lt;semaphore.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="filters_8h_source.html">filters.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for sharedmem.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="sharedmem_8h__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2include_2sharedmem_8h" alt=""/></div>
+<map name="_2home_2sampsa_2C_2valkka_2include_2sharedmem_8h" id="_2home_2sampsa_2C_2valkka_2include_2sharedmem_8h">
+<area shape="rect" id="node2" href="common_8h.html" title="List of common header files. " alt="" coords="1035,393,1117,420"/>
+<area shape="rect" id="node33" href="filters_8h.html" title="filters.h : Common frame filters. The FrameFilter base class is defined in frames.h " alt="" coords="939,95,1005,121"/>
+<area shape="rect" id="node34" href="frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1043,169,1117,196"/>
+<area shape="rect" id="node45" href="tools_8h.html" title="Auxiliary routines. " alt="" coords="941,244,1003,271"/>
+<area shape="rect" id="node35" href="sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1009,319,1073,345"/>
+<area shape="rect" id="node36" href="avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1589,244,1657,271"/>
+<area shape="rect" id="node42" href="opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1079,244,1150,271"/>
+<area shape="rect" id="node46" href="logging_8h.html" title="Logging utilities. " alt="" coords="96,393,171,420"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="sharedmem_8h__dep__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2include_2sharedmem_8hdep" alt=""/></div>
@@ -103,10 +130,23 @@ This graph shows which files directly or indirectly include this file:</div>
 </div>
 </div>
 <p><a href="sharedmem_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemSegment.html">SharedMemSegment</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared memory segment with metadata (the segment size)  <a href="classSharedMemSegment.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interprocess shared memory ring buffer synchronized with posix semaphores.  <a href="classSharedMemRingBuffer.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemFrameFilter.html">SharedMemFrameFilter</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
+<div class="textblock"><p>Posix shared memory segment server/client management, shared memory ring buffer synced with posix semaphores. </p>
+<dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.2.0 </dd></dl>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

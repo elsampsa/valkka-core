@@ -190,7 +190,7 @@ AVCodecContext *&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Video decoder using FFmpeg/libav. </p>
-<p>Decode video with FFmpeg, place decoded data to out_frame. <a class="el" href="classDecoderBase.html#a9ec7e71b8896be2b4fc90478abb1c14d" title="Decoded frame appears here. ">VideoDecoder.out_frame</a>'s <a class="el" href="classFrame.html#a6756411f84cc92128275c3785db6d630" title="Type of the frame. ">Frame.frametype</a> is set to <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="All relevant data is behind the Frame::av_frame and Frame::av_codec_context internal pointers...">FrameType::avframe</a>, i.e. the consumer of this frame must immediately copy the data.</p>
+<p>Decode video with FFmpeg, place decoded data to out_frame. <a class="el" href="classDecoderBase.html#a9ec7e71b8896be2b4fc90478abb1c14d" title="Decoded frame appears here. ">VideoDecoder.out_frame</a>'s <a class="el" href="classFrame.html#a6756411f84cc92128275c3785db6d630" title="Type of the frame. ">Frame.frametype</a> is set to <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>, i.e. the consumer of this frame must immediately copy the data.</p>
 <p>See also <a class="el" href="pipeline.html">Code walkthrough: rendering</a> </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a248a23092e61d2dbcf62505750146e29"></a>

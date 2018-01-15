@@ -4,25 +4,25 @@
 /*
  * logging.h : Logging utilities
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka library.
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -39,12 +39,12 @@
 #include <iostream>
 
 
-namespace LogLevel {
-  const static int fatal =-2; // descending priority
-  const static int silent=-1;
-  const static int normal=0;
-  const static int debug =2;
-  const static int crazy =3;
+namespace LogLevel {                                      
+  const static int fatal =-2; // descending priority      
+  const static int silent=-1;                             
+  const static int normal=0;                              
+  const static int debug =2;                              
+  const static int crazy =3;                              
 };
 
 
@@ -146,10 +146,12 @@ extern Logger avthreadlogger;
 extern Logger decoderlogger;
 extern Logger queuelogger;
 extern Logger opengllogger;
+extern Logger filelogger;
+extern Logger filethreadlogger;
 
-extern void crazy_log_all();
-extern void debug_log_all();
-extern void normal_log_all();
-extern void fatal_log_all();
+extern void crazy_log_all();   // <pyapi>
+extern void debug_log_all();   // <pyapi>
+extern void normal_log_all();  // <pyapi>
+extern void fatal_log_all();   // <pyapi>
 
 #endif

@@ -12,6 +12,7 @@
 #include "include/avthread.h"
 #include "include/openglthread.h"
 #include "include/sharedmem.h"
+#include "include/logging.h"
 #include <Python.h>
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 // #define PY_ARRAY_UNIQUE_SYMBOL shmem_array_api
@@ -20,7 +21,8 @@
 %}
 
 %init %{
-import_array(); // numpy initialization that should be run only once
+import_array();            // numpy initialization that should be run only once
+ffmpeg_av_register_all();  // register all avcodecs, muxers, etc.
 %}
 
 // Swig should not try to create a default constructor for the following classes as they're abstract (swig interface file should not have the constructors either):
@@ -132,6 +134,11 @@ public: // <pyapi>
   FifoFrameFilter(const char* name, FrameFifo& framefifo); ///< Default constructor // <pyapi>
 }; // <pyapi>
  
+class BlockingFifoFrameFilter : public FrameFilter { // <pyapi>
+public: // <pyapi>
+  BlockingFifoFrameFilter(const char* name, FrameFifo& framefifo); ///< Default constructor // <pyapi>
+}; // <pyapi>
+ 
 class Thread { // <pyapi>
 public: // <pyapi>
   virtual ~Thread(); // <pyapi>
@@ -159,10 +166,10 @@ public:                                                // <pyapi>
   LiveThread(const char* name, int core_id=-1);        // <pyapi>
   ~LiveThread();                                       // <pyapi>
 public: // *** C & Python API *** .. these routines go through the convar/mutex locking                                                // <pyapi>
-  void registerStreamCall   (LiveConnectionContext connection_ctx); ///< API method: registers a stream                                // <pyapi> 
-  void deregisterStreamCall (LiveConnectionContext connection_ctx); ///< API method: de-registers a stream                             // <pyapi>
-  void playStreamCall       (LiveConnectionContext connection_ctx); ///< API method: starts playing the stream and feeding frames      // <pyapi>
-  void stopStreamCall       (LiveConnectionContext connection_ctx); ///< API method: stops playing the stream and feeding frames       // <pyapi>
+  void registerStreamCall   (LiveConnectionContext &connection_ctx); ///< API method: registers a stream                                // <pyapi> 
+  void deregisterStreamCall (LiveConnectionContext &connection_ctx); ///< API method: de-registers a stream                             // <pyapi>
+  void playStreamCall       (LiveConnectionContext &connection_ctx); ///< API method: starts playing the stream and feeding frames      // <pyapi>
+  void stopStreamCall       (LiveConnectionContext &connection_ctx); ///< API method: stops playing the stream and feeding frames       // <pyapi>
   void stopCall();                                                  ///< API method: stops the LiveThread                              // <pyapi>
 }; // <pyapi>
  
@@ -200,7 +207,7 @@ public: // API // <pyapi>
   bool delRenderContextCall(int id);                           // <pyapi>
 }; // <pyapi>
 static const int VERSION_MAJOR = 0; // <pyapi>
-static const int VERSION_MINOR = 1; // <pyapi>
+static const int VERSION_MINOR = 2; // <pyapi>
 static const int VERSION_PATCH = 0; // <pyapi>
 typedef unsigned short SlotNumber;   // <pyapi>
  
@@ -219,3 +226,9 @@ class SharedMemFrameFilter : public FrameFilter { // <pyapi>
 public: // <pyapi>
   SharedMemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0); // <pyapi>
 }; // <pyapi>
+void ffmpeg_av_register_all(); // <pyapi>
+void ffmpeg_av_log_set_level(unsigned int level); // <pyapi>
+extern void crazy_log_all();   // <pyapi>
+extern void debug_log_all();   // <pyapi>
+extern void normal_log_all();  // <pyapi>
+extern void fatal_log_all();   // <pyapi>

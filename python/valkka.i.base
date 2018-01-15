@@ -12,6 +12,7 @@
 #include "include/avthread.h"
 #include "include/openglthread.h"
 #include "include/sharedmem.h"
+#include "include/logging.h"
 #include <Python.h>
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 // #define PY_ARRAY_UNIQUE_SYMBOL shmem_array_api
@@ -20,7 +21,8 @@
 %}
 
 %init %{
-import_array(); // numpy initialization that should be run only once
+import_array();            // numpy initialization that should be run only once
+ffmpeg_av_register_all();  // register all avcodecs, muxers, etc.
 %}
 
 // Swig should not try to create a default constructor for the following classes as they're abstract (swig interface file should not have the constructors either):

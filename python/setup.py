@@ -44,7 +44,8 @@ if (custom_compilation):
   except Exception as e:
     print("Could not access environment variable LD_LIBRARY_PATH :",str(e))
   else:
-    extra_link_args +=["-L"+ld_path]
+    if (ld_path.strip()!=""):
+      extra_link_args +=["-L"+ld_path]
 else:
   pass
 

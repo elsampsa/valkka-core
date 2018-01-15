@@ -1,25 +1,25 @@
 /*
  * logging.cpp :
  * 
- * Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka library.
+ * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Valkka is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
- * 
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
  */
 
 /** 
@@ -102,6 +102,8 @@ Logger avthreadlogger;
 Logger decoderlogger;
 Logger queuelogger;
 Logger opengllogger;
+Logger filelogger;
+Logger filethreadlogger;
 
 
 void crazy_log_all() {
@@ -114,6 +116,8 @@ void crazy_log_all() {
   decoderlogger       .setLevel(LogLevel::crazy);
   queuelogger         .setLevel(LogLevel::crazy);
   opengllogger        .setLevel(LogLevel::crazy);
+  filelogger          .setLevel(LogLevel::crazy);
+  filethreadlogger    .setLevel(LogLevel::crazy);
 }
 
 
@@ -127,6 +131,8 @@ void debug_log_all() {
   decoderlogger       .setLevel(LogLevel::debug);
   queuelogger         .setLevel(LogLevel::debug);
   opengllogger        .setLevel(LogLevel::debug);
+  filelogger          .setLevel(LogLevel::debug);
+  filethreadlogger    .setLevel(LogLevel::debug);
 }
 
 void normal_log_all() {
@@ -139,6 +145,8 @@ void normal_log_all() {
   decoderlogger       .setLevel(LogLevel::normal);
   queuelogger         .setLevel(LogLevel::normal);
   opengllogger        .setLevel(LogLevel::normal);
+  filelogger          .setLevel(LogLevel::normal);
+  filethreadlogger    .setLevel(LogLevel::normal);
 }
 
 void fatal_log_all() { // only critical / fatal msgs
@@ -151,5 +159,7 @@ void fatal_log_all() { // only critical / fatal msgs
   decoderlogger       .setLevel(LogLevel::fatal);
   queuelogger         .setLevel(LogLevel::fatal);
   opengllogger        .setLevel(LogLevel::fatal);
+  filelogger          .setLevel(LogLevel::fatal);
+  filethreadlogger    .setLevel(LogLevel::fatal);
 }
 
