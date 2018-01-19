@@ -1,5 +1,5 @@
 /*
- * livethread.cpp : A live555 multithread
+ * livethread.cpp : A live555 thread
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -28,11 +28,7 @@
  *  @date    2017
  *  @version 0.1
  *  
- *  @brief A live555 multithread
- *
- *  @section DESCRIPTION
- *  
- *  Yes, the description
+ *  @brief A live555 thread
  *
  */ 
 
@@ -41,6 +37,40 @@
 
 using namespace std::chrono_literals;
 using std::this_thread::sleep_for; 
+
+
+
+LiveFifo::LiveFifo(const char* name, unsigned short int n_stack) : FrameFifo(name, n_stack) {
+}
+  
+LiveFifo::~LiveFifo() {
+}
+  
+
+void LiveFifo::setLiveThread(void *live_thread) { // we need the LiveThread so we can call one of its methods..
+  this->live_thread=live_thread;
+}
+ 
+
+bool LiveFifo::writeCopy(Frame* f, bool wait) {
+  bool do_notify=false;
+  
+  if (isEmpty()) {
+    do_notify=true;
+  }
+  
+  if (FrameFifo::writeCopy(f,wait) and do_notify) {
+    ((LiveThread*)live_thread)->triggerGotFrames();
+  }
+  
+  /*
+  if (FrameFifo::writeCopy(f,wait)) {
+    ((LiveThread*)live_thread)->triggerNextFrame();
+  }
+  */
+}
+
+
 
 
 #define TIMESTAMP_CORRECTOR // keep this always defined
@@ -67,6 +97,58 @@ void Connection::reStartStream() {
 SlotNumber Connection::getSlot() {
   return slot;
 };
+
+
+Outbound::Outbound(UsageEnvironment &env, FrameFifo &fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl) : env(env), fifo(fifo), slot(slot), adr(adr), portnum(portnum), ttl(ttl) {
+  
+}
+  
+Outbound::~Outbound() {
+  
+}
+
+void Outbound::handleFrame(Frame* f) { 
+  int subsession_index;
+  
+  subsession_index=f->subsession_index;
+  // info frame    : init
+  // regular frame : make a copy
+  if ( subsession_index>=streams.size()) { // subsession_index too big
+    livethreadlogger.log(LogLevel::fatal) << "Outbound :"<<adr<<" : handleFrame :  stream slot overlow : "<<subsession_index<<"/"<<streams.size()<< std::endl;
+    fifo.recycle(f); // return frame to the stack - never forget this!
+  }
+  else if (f->frametype==FrameType::setup) { // INIT
+    if (streams[subsession_index]!=NULL) { // slot is occupied
+      livethreadlogger.log(LogLevel::debug) << "Outbound:"<<adr <<" : handleFrame : stream reinit " << std::endl;
+      delete streams[subsession_index];
+      streams[subsession_index]=NULL;
+    }
+    // register a new stream
+    livethreadlogger.log(LogLevel::debug) << "Outbound:"<<adr <<" : handleFrame : registering stream to subsession index " <<subsession_index<< std::endl;
+    switch ( (f->setup_pars).frametype ) { // NEW_CODEC_DEV // when adding new codecs, make changes here: add relevant stream per codec
+      case FrameType::h264:
+        streams[subsession_index]=new H264Stream(env, fifo, adr, portnum, ttl);
+        streams[subsession_index]->startPlaying();
+        // TODO: for rtsp case, some of these are negotiated with the client
+        break;
+      default:
+        //TODO: implement VoidStream
+        // streams[subsession_index]=new VoidStream(env, const char* adr, unsigned short int portnum, const unsigned char ttl=255);
+        break;
+    } // switch
+    fifo.recycle(f); // return frame to the stack - never forget this!
+  } // got frame: DECODER INIT
+  else if (streams[subsession_index]==NULL) { // woops, no decoder registered yet..
+    livethreadlogger.log(LogLevel::normal) << "Outbound:"<<adr <<" : handleFrame : no stream registered for " << subsession_index << std::endl;
+    fifo.recycle(f); // return frame to the stack - never forget this!
+  }
+  else if (f->frametype==FrameType::none) { // void frame, do nothing
+    fifo.recycle(f); // return frame to the stack - never forget this!
+  }
+  else { // send frame
+    streams[subsession_index]->handleFrame(f); // its up to the stream instance to call recycle
+  } // send frame
+}
 
 
 
@@ -227,23 +309,34 @@ void SDPConnection :: stopStream() {
 }
 
 
-
-/*
-void periodicTask0(void* cdata) {
-  livethreadlogger.log(LogLevel::normal) << "LiveThread: periodicTask" << std::endl;
+SDPOutbound::SDPOutbound(UsageEnvironment& env, FrameFifo &fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl) : Outbound(env,fifo,slot,adr,portnum,ttl) {
+  streams.resize(2); // we'll be ready for two media streams
 }
-*/
+
+
+SDPOutbound::~SDPOutbound() {
+}
+
 
 
 // LiveThread::LiveThread(const char* name, SlotNumber n_max_slots) : Thread(name), n_max_slots(n_max_slots) {
-LiveThread::LiveThread(const char* name, int core_id) : Thread(name, core_id) {
+LiveThread::LiveThread(const char* name, unsigned short int n_stack, int core_id) : Thread(name, core_id), infifo(name, n_stack) {
   scheduler = BasicTaskScheduler::createNew();
   env       = BasicUsageEnvironment::createNew(*scheduler);
   eventLoopWatchVariable = 0;
   // this->slots_.resize(n_max_slots,NULL); // Reserve 256 slots!
   this->slots_.resize(I_MAX_SLOTS+1,NULL);
+  this->out_slots_.resize(I_MAX_SLOTS+1,NULL);
   
   scheduler->scheduleDelayedTask(Timeouts::livethread*1000,(TaskFunc*)(LiveThread::periodicTask),(void*)this);
+
+  // testing event triggers..
+  event_trigger_id_hello_world   = env->taskScheduler().createEventTrigger(this->helloWorldEvent);
+  event_trigger_id_frame_arrived = env->taskScheduler().createEventTrigger(this->frameArrivedEvent);
+  event_trigger_id_got_frames    = env->taskScheduler().createEventTrigger(this->gotFramesEvent);
+  
+  infifo.setLiveThread((void*)this);
+  fc=0;
 }
 
 
@@ -292,6 +385,7 @@ void LiveThread::handleSignals() {
         }
         this->eventLoopWatchVariable=1;
         break;
+      // inbound streams
       case Signals::register_stream:
         this->registerStream(*(it->connection_context));
         break;
@@ -301,6 +395,14 @@ void LiveThread::handleSignals() {
       case Signals::play_stream:
         this->playStream(*(it->connection_context));
         break;
+      // outbound streams
+      case Signals::register_outbound:
+        this->registerOutbound(*(it->outbound_context));
+        break;
+      case Signals::deregister_outbound:
+        this->deRegisterOutbound(*(it->outbound_context));
+        break;
+      // thread control
       case Signals::stop_stream:
         this->stopStream(*(it->connection_context));
         break;
@@ -308,7 +410,23 @@ void LiveThread::handleSignals() {
   }
     
   signal_fifo.clear();
+}
 
+
+void LiveThread::handleFrame(Frame *f) { // handle an incoming frame ..
+  int i;
+  int subsession_index;
+  Outbound* outbound;
+  Stream* stream;
+  
+  if (safeGetOutboundSlot(f->n_slot,outbound)>0) { // got frame
+    std::cout << "LiveThread : "<< this->name <<" : handleFrame : accept frame "<<*f << std::endl;
+    outbound->handleFrame(f); // recycling handled deeper in the code
+  } 
+  else {
+    std::cout << "LiveThread : "<< this->name <<" : handleFrame : discard frame "<<*f << std::endl;
+    infifo.recycle(f);
+  }
 }
 
 
@@ -355,29 +473,44 @@ int LiveThread::safeGetSlot(SlotNumber slot, Connection*& con) { // -1 = out of 
     con=connection;
     return 1;
   }
-  
 }
+
+
+int LiveThread::safeGetOutboundSlot(SlotNumber slot, Outbound*& outbound) { // -1 = out of range, 0 = free, 1 = reserved // &* = modify pointer in-place
+  Outbound* out_;
+  livethreadlogger.log(LogLevel::crazy) << "LiveThread: safeGetOutboundSlot" << std::endl;
+  
+  if (slot>I_MAX_SLOTS) {
+    livethreadlogger.log(LogLevel::fatal) << "LiveThread: safeGetOutboundSlot: WARNING! Slot number overfow : increase I_MAX_SLOTS in sizes.h" << std::endl;
+    return -1;
+  }
+  
+  try {
+    out_=this->out_slots_[slot];
+  }
+  catch (std::out_of_range) {
+    livethreadlogger.log(LogLevel::debug) << "LiveThread: safeGetOutboundSlot : slot " << slot << " is out of range! " << std::endl;
+    outbound=NULL;
+    return -1;
+  }
+  if (!out_) {
+    livethreadlogger.log(LogLevel::debug) << "LiveThread: safeGetOutboundSlot : nothing at slot " << slot << std::endl;
+    outbound=NULL;
+    return 0;
+  }
+  else {
+    livethreadlogger.log(LogLevel::debug) << "LiveThread: safeGetOutboundSlot : returning " << slot << std::endl;
+    outbound=out_;
+    return 1;
+  }
+}
+
+
 
 
 void LiveThread::registerStream(LiveConnectionContext &connection_ctx) {
   Connection* connection;
   livethreadlogger.log(LogLevel::crazy) << "LiveThread: registerStream" << std::endl;
-  /*
-  if (connection_ctx.connection_type==LiveConnectionType::rtsp) {
-    livethreadlogger.log(LogLevel::normal) << "LiveThread: registerStream: rtsp" << std::endl;
-    switch (safeGetSlot(connection_ctx.slot,connection)) {
-      case -1: // out of range
-        break;
-      case 0: // slot is free
-        this->slots_[connection_ctx.slot] = new RTSPConnection(*(this->env), connection_ctx.address, connection_ctx.slot, *(connection_ctx.framefilter));
-        livethreadlogger.log(LogLevel::normal) << "LiveThread: registerStream : rtsp stream registered at slot " << connection_ctx.slot << " with ptr " << this->slots_[connection_ctx.slot] << std::endl;
-        break;
-      case 1: // slot is reserved
-        livethreadlogger.log(LogLevel::normal) << "LiveThread: registerStream : slot " << connection_ctx.slot << " is reserved! " << std::endl;
-        break;
-    }
-  }
-  */
   switch (safeGetSlot(connection_ctx.slot,connection)) {
     case -1: // out of range
       break;
@@ -448,6 +581,52 @@ void LiveThread::playStream(LiveConnectionContext &connection_ctx) {
 }
 
 
+void LiveThread::registerOutbound(LiveOutboundContext &outbound_ctx) {
+  Outbound* outbound;
+  switch (safeGetOutboundSlot(outbound_ctx.slot,outbound)) {
+    case -1: // out of range
+      break;
+    case 0: // slot is free
+      switch (outbound_ctx.connection_type) {
+        case LiveConnectionType::rtsp:
+          livethreadlogger.log(LogLevel::fatal) << "Outbound RTSP not implemented!" << std::endl;
+          break;
+          
+        case LiveConnectionType::sdp:
+          this->out_slots_[outbound_ctx.slot] = new SDPOutbound(*env, infifo, outbound_ctx.slot, outbound_ctx.address, outbound_ctx.portnum, outbound_ctx.ttl);
+          livethreadlogger.log(LogLevel::debug) << "LiveThread: "<<name<<" registerOutbound : sdp stream registered at slot "  << outbound_ctx.slot << " with ptr " << this->out_slots_[outbound_ctx.slot] << std::endl;
+          break;
+          
+        default:
+          livethreadlogger.log(LogLevel::normal) << "LiveThread: "<<name<<" registerOutbound : no such LiveConnectionType" << std::endl;
+          break;
+      } // switch outbound_ctx.connection_type
+      break;
+      
+    case 1: // slot is reserved
+      livethreadlogger.log(LogLevel::normal) << "LiveThread: "<<name<<" registerOutbound : slot " << outbound_ctx.slot << " is reserved! " << std::endl;
+      break;
+  }
+}
+
+
+void LiveThread::deRegisterOutbound(LiveOutboundContext &outbound_ctx) {
+  Outbound* outbound;
+  switch (safeGetOutboundSlot(outbound_ctx.slot,outbound)) {
+    case -1: // out of range
+      break;
+    case 0: // slot is free
+      livethreadlogger.log(LogLevel::crazy) << "LiveThread: deregisterOutbound : nothing at slot " << outbound_ctx.slot << std::endl;
+      break;
+    case 1: // slot is reserved
+      livethreadlogger.log(LogLevel::debug) << "LiveThread: deregisterOutbound : de-registering " << outbound_ctx.slot << std::endl;
+      // TODO: what else?
+      delete outbound;
+      this->out_slots_[outbound_ctx.slot]=NULL;
+  }
+}
+
+
 void LiveThread::stopStream(LiveConnectionContext &connection_ctx) {
   Connection* connection;
   livethreadlogger.log(LogLevel::crazy) << "LiveThread: stopStream" << std::endl;
@@ -482,22 +661,34 @@ void LiveThread::periodicTask(void* cdata) {
 // *** API ***
 
 void LiveThread::registerStreamCall(LiveConnectionContext &connection_ctx) {
-  SignalContext signal_ctx = {Signals::register_stream, &connection_ctx};
+  SignalContext signal_ctx = {Signals::register_stream, &connection_ctx, NULL};
   sendSignal(signal_ctx);
 }
 
 void LiveThread::deregisterStreamCall(LiveConnectionContext &connection_ctx) {
-  SignalContext signal_ctx = {Signals::deregister_stream, &connection_ctx};
+  SignalContext signal_ctx = {Signals::deregister_stream, &connection_ctx, NULL};
   sendSignal(signal_ctx);
 }
 
 void LiveThread::playStreamCall(LiveConnectionContext &connection_ctx) {
-  SignalContext signal_ctx = {Signals::play_stream, &connection_ctx};
+  SignalContext signal_ctx = {Signals::play_stream, &connection_ctx, NULL};
   sendSignal(signal_ctx);
 }
 
 void LiveThread::stopStreamCall(LiveConnectionContext &connection_ctx) {
-  SignalContext signal_ctx = {Signals::stop_stream, &connection_ctx};
+  SignalContext signal_ctx = {Signals::stop_stream, &connection_ctx, NULL};
+  sendSignal(signal_ctx);
+}
+
+
+void LiveThread::registerOutboundCall(LiveOutboundContext &outbound_ctx) {
+  SignalContext signal_ctx = {Signals::register_outbound, NULL, &outbound_ctx};
+  sendSignal(signal_ctx);
+}
+
+
+void LiveThread::deRegisterOutboundCall(LiveOutboundContext &outbound_ctx) {
+  SignalContext signal_ctx = {Signals::deregister_outbound, NULL, &outbound_ctx};
   sendSignal(signal_ctx);
 }
 
@@ -512,4 +703,66 @@ void LiveThread::stopCall() {
 }
 
 
+LiveFifo &LiveThread::getFifo() {
+  return infifo;
+}
+
+
+void LiveThread::helloWorldEvent(void* clientData) {
+  // this is the event identified by event_trigger_id_hello_world
+  std::cout << "Hello world from a triggered event!" << std::endl;
+}
+
+
+void LiveThread::frameArrivedEvent(void* clientData) {
+  Frame* f;
+  LiveThread *thread = (LiveThread*)clientData;
+  // this is the event identified by event_trigger_id_frame
+  // std::cout << "LiveThread : frameArrived : New frame has arrived!" << std::endl;
+  f=thread->infifo.read(1); // this should not block..
+  thread->fc+=1;
+  std::cout << "LiveThread: frameArrived: frame count=" << thread->fc << " : " << *f << std::endl;
+  // std::cout << "LiveThread : frameArrived : frame :" << *f << std::endl;
+  thread->infifo.recycle(f);
+}
+
+
+void LiveThread::gotFramesEvent(void* clientData) { // registers a periodic task to the event loop
+  LiveThread *thread = (LiveThread*)clientData;
+  thread->scheduler->scheduleDelayedTask(0,(TaskFunc*)(LiveThread::readFrameFifoTask),(void*)thread); 
+}
+
+
+void LiveThread::readFrameFifoTask(void* clientData) {
+  Frame* f;
+  LiveThread *thread = (LiveThread*)clientData;
+  // this is the event identified by event_trigger_id_frame
+  // std::cout << "LiveThread : frameArrived : New frame has arrived!" << std::endl;
+  f=thread->infifo.read(); // this should not block..
+  thread->fc+=1;
+  std::cout << "LiveThread: readFrameFifoTask: frame count=" << thread->fc << " : " << *f << std::endl;
+  // std::cout << "LiveThread : frameArrived : frame :" << *f << std::endl;
+  
+  thread->handleFrame(f);
+  // thread->infifo.recycle(f); // recycling is handled deeper in the code
+  
+  if (thread->infifo.isEmpty()) { // no more frames for now ..
+  }
+  else {
+    thread->scheduler->scheduleDelayedTask(0,(TaskFunc*)(LiveThread::readFrameFifoTask),(void*)thread); // re-registers itself
+  }
+}
+
+
+void LiveThread::testTrigger() {
+  // http://live-devel.live555.narkive.com/MSFiseCu/problem-with-triggerevent
+  scheduler->triggerEvent(event_trigger_id_hello_world,(void*)(NULL));
+}
+
+
+void LiveThread::triggerGotFrames() {
+  // scheduler->triggerEvent(event_trigger_id_frame_arrived,(void*)(this));
+  scheduler->triggerEvent(event_trigger_id_got_frames,(void*)(this)); 
+}
+  
 

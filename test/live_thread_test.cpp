@@ -308,7 +308,6 @@ void test_6() {
   InfoFrameFilter dummyfilter1("info");
   // BriefInfoFrameFilter dummyfilter1("info");
   
-  
   LiveConnectionContext ctx;
   
   std::cout << "starting live thread" << std::endl;
@@ -324,6 +323,194 @@ void test_6() {
   
   livethread.stopCall();
   
+}
+
+
+void test_7() {
+  const char* name = "@TEST: live_thread_test: test 7: ";
+  std::cout << name <<"** @@Starting and stopping, single rtsp connection.  Testing triggerEvent. **" << std::endl;
+  
+  if (!stream_1) {
+    std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+    exit(2);
+  }
+  std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+  
+  // filtergraph:
+  // (LiveThread:livethread) --> {FrameFilter:dummyfilter)
+  LiveThread livethread("livethread");
+  DummyFrameFilter dummyfilter("dummy");
+  
+  LiveConnectionContext ctx;
+  
+  std::cout << "starting live thread" << std::endl;
+  livethread.startCall();
+  
+  sleep_for(2s);
+  
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter};
+  livethread.registerStreamCall(ctx);
+    
+  livethread.testTrigger();
+  sleep_for(1s);
+  
+  livethread.testTrigger();
+  sleep_for(1s);
+  
+  livethread.testTrigger();
+  sleep_for(1s);
+  
+  // let's try swarming calls..
+  livethread.testTrigger();
+  // the following calls are ignored. ..!
+  livethread.testTrigger();
+  livethread.testTrigger();
+  livethread.testTrigger();
+  livethread.testTrigger();
+  livethread.testTrigger();
+  livethread.testTrigger();
+  livethread.testTrigger();
+  
+  sleep_for(3s);
+  
+  std::cout << "stopping live thread" << std::endl;
+  livethread.stopCall();
+}
+
+
+void test_8() {
+  const char* name = "@TEST: live_thread_test: test 8: ";
+  std::cout << name <<"** @@Sending frames between LiveThreads**" << std::endl;
+  
+  if (!stream_1) {
+    std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+    exit(2);
+  }
+  std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+  
+  // filtergraph:
+  // (LiveThread:livethread) --> {InfoFrameFilter:info_filter) --> {FifoFrameFilter:fifo_filter} --> [LiveFifo:live_fifo] -->> (LiveThread:livethread2) 
+  LiveThread  livethread("livethread");
+  LiveThread  livethread2("livethread",20); // stack size for incoming fifo
+  
+  LiveFifo &live_fifo =livethread2.getFifo();
+  FifoFrameFilter fifo_filter("in_live_filter",live_fifo);
+  // BriefInfoFrameFilter info_filter("info_filter",&fifo_filter);
+  CountFrameFilter info_filter("info_filter",&fifo_filter);
+  
+  LiveConnectionContext ctx;
+  
+  std::cout << "starting live threads" << std::endl;
+  livethread. startCall();
+  livethread2.startCall();
+  
+  sleep_for(1s);
+
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter};
+  livethread.registerStreamCall(ctx);
+  livethread.playStreamCall(ctx);
+  
+  sleep_for(5s);
+  
+  livethread.stopStreamCall(ctx);
+  
+  sleep_for(1s);
+  
+  std::cout << "stopping live thread" << std::endl;
+  livethread. stopCall();
+  livethread2.stopCall();
+}
+
+
+void test_9() {
+  const char* name = "@TEST: live_thread_test: test 9: ";
+  std::cout << name <<"** @@Feeding frames back to LiveThread**" << std::endl;
+  
+  if (!stream_1) {
+    std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+    exit(2);
+  }
+  std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+  
+  // filtergraph:
+  // (LiveThread:livethread) --> {InfoFrameFilter:info_filter) --> {FifoFrameFilter:fifo_filter} --> [LiveFifo:live_fifo] -->> (LiveThread:livethread) 
+  LiveThread  livethread("livethread",20);
+  
+  LiveFifo &live_fifo =livethread.getFifo();
+  
+  FifoFrameFilter fifo_filter("in_live_filter",live_fifo);
+  // BriefInfoFrameFilter info_filter("info_filter",&fifo_filter);
+  CountFrameFilter info_filter("info_filter",&fifo_filter);
+  
+  LiveConnectionContext ctx;
+  
+  std::cout << "starting live threads" << std::endl;
+  livethread. startCall();
+  
+  sleep_for(1s);
+
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter};
+  livethread.registerStreamCall(ctx);
+  livethread.playStreamCall(ctx);
+  
+  sleep_for(5s);
+  
+  livethread.stopStreamCall(ctx);
+  
+  sleep_for(1s);
+  
+  std::cout << "stopping live thread" << std::endl;
+  livethread. stopCall();
+}
+
+
+void test_10() {
+  const char* name = "@TEST: live_thread_test: test 10: ";
+  std::cout << name <<"** @@Sending frames between LiveThreads**" << std::endl;
+  
+  if (!stream_1) {
+    std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+    exit(2);
+  }
+  std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+  
+  // filtergraph:
+  // (LiveThread:livethread) --> {InfoFrameFilter:info_filter) --> {FifoFrameFilter:fifo_filter} --> [LiveFifo:live_fifo] -->> (LiveThread:livethread2) 
+  LiveThread  livethread("livethread");
+  LiveThread  livethread2("livethread2",20); // stack size for incoming fifo
+  
+  LiveFifo &live_fifo =livethread2.getFifo();
+  FifoFrameFilter fifo_filter("in_live_filter",live_fifo);
+  // BriefInfoFrameFilter info_filter("info_filter",&fifo_filter);
+  CountFrameFilter info_filter("info_filter",&fifo_filter);
+  
+  LiveConnectionContext ctx;
+  LiveOutboundContext out_ctx;
+  
+  std::cout << "starting live threads" << std::endl;
+  livethread. startCall();
+  livethread2.startCall();
+  
+  sleep_for(1s);
+
+  out_ctx = (LiveOutboundContext){LiveConnectionType::sdp, std::string("224.1.168.91"),50000,255,2};
+  livethread2.registerOutboundCall(out_ctx);
+  
+  sleep_for(1s);
+  
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter};
+  livethread.registerStreamCall(ctx);
+  livethread.playStreamCall(ctx);
+  
+  sleep_for(120s);
+  
+  livethread.stopStreamCall(ctx);
+  
+  sleep_for(1s);
+  
+  std::cout << "stopping live thread" << std::endl;
+  livethread. stopCall();
+  livethread2.stopCall();
 }
 
 
@@ -374,6 +561,18 @@ int main(int argc, char** argcv) {
         break;
       case(6):
         test_6();
+        break;
+      case(7):
+        test_7();
+        break;
+      case(8):
+        test_8();
+        break;
+      case(9):
+        test_9();
+        break;
+      case(10):
+        test_10();
         break;
       default:
         std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;

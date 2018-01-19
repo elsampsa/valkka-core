@@ -111,6 +111,8 @@ public:
   virtual void dumpStack(); ///< Dump the frames in the stack
   virtual void dumpFifo();  ///< Dump frames in the fifo
   
+  bool isEmpty(); ///< Tell if fifo is empty
+  
   // void waitAvailable();
   
 protected:

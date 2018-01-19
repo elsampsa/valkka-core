@@ -126,6 +126,14 @@ void DumpFrameFilter::go(Frame* frame) { // du -h *.bin | grep "s0"
 }
 
 
+CountFrameFilter::CountFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next), count(0) {
+}
+
+void CountFrameFilter::go(Frame* frame) { // du -h *.bin | grep "s0"
+  count++;
+  std::cout << "CountFrameFilter : got frame " << count << std::endl;
+}
+
 
 TimestampFrameFilter::TimestampFrameFilter(const char* name, FrameFilter* next, long int msdiff_max) : FrameFilter(name,next), msdiff_max(msdiff_max), mstime_delta(0) {
 }

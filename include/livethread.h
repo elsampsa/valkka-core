@@ -37,6 +37,27 @@
 #include "live.h"
 #include "threads.h"
 #include "filters.h"
+#include "queues.h"
+
+
+/** An input queue for LiveThread
+ */
+class LiveFifo : public FrameFifo {                       // <pyapi>
+  
+public:                                                   // <pyapi> 
+  LiveFifo(const char* name, unsigned short int n_stack); // <pyapi>
+  /** Default virtual destructor
+   */
+  ~LiveFifo();                                            // <pyapi>
+  
+protected:
+  void* live_thread;
+  
+public:
+  void setLiveThread(void* live_thread);
+  virtual bool writeCopy(Frame* f, bool wait=false);
+};                                                        // <pyapi>
+
 
 
 /** A base class that unifies all kinds of connections (RTSP and SDP).
@@ -82,6 +103,28 @@ public:
   virtual void stopStream() =0;   ///< Called from within the live555 event loop
   virtual void reStartStream();   ///< Called from within the live555 event loop
   SlotNumber getSlot();           ///< Return the slot number
+};
+
+
+class Outbound { // will leave this quite generic .. don't know at this point how the rtsp server is going to be // analogy: AVThread
+  
+public:
+  Outbound(UsageEnvironment& env, FrameFifo& fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl=255);
+  virtual ~Outbound();
+  
+public:
+  SlotNumber          slot;
+  std::string         adr;
+  unsigned short int  portnum;
+  unsigned char       ttl;
+  
+public:
+  std::vector<Stream*> streams; // typically two 
+  UsageEnvironment     &env;
+  FrameFifo            &fifo; ///< Frames are recycled here
+  
+public:
+  void handleFrame(Frame *f);
 };
 
 
@@ -132,6 +175,17 @@ public:
 };
 
 
+
+class SDPOutbound : public Outbound {
+  
+public: 
+  SDPOutbound(UsageEnvironment &env, FrameFifo &fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl=255);
+  ~SDPOutbound();
+  
+};
+
+
+
 /** LiveThread connection types
  * 
  * This enumeration class identifies different kinds of connections (i.e. rtsp and sdp).  Used by LiveConnectionContext.
@@ -165,6 +219,15 @@ struct LiveConnectionContext { // <pyapi>
 };                             // <pyapi>
 
 
+struct LiveOutboundContext { // <pyapi>
+  LiveConnectionType  connection_type; ///< Identifies the connection type                    // <pyapi>
+  std::string         address;         ///< Stream address                                    // <pyapi>
+  unsigned short int  portnum;         ///< Start port number (for sdp)                       // <pyapi>
+  unsigned char       ttl;             ///< Packet time-to-live                               // <pyapi>
+  SlotNumber          slot;             ///< A unique stream slot that identifies this stream   // <pyapi>
+};                             // <pyapi>
+
+
 /** Live555, running in a separate thread
  * 
  * This class implements a "producer" thread that outputs frames into a FrameFilter (see \ref threading_tag)
@@ -190,11 +253,15 @@ public:
    */
   enum class Signals {
     none,
-    exit,                 
+    exit,
+    // inbound streams
     register_stream,
     deregister_stream,
     play_stream,
-    stop_stream
+    stop_stream,
+    // outbound streams
+    register_outbound,
+    deregister_outbound
   };
   
   /** Identifies the information the signals LiveThread::Signals carry.  Encapsulates a LiveConnectionContext instance.
@@ -203,6 +270,7 @@ public:
   struct SignalContext {
     Signals                 signal;
     LiveConnectionContext   *connection_context;
+    LiveOutboundContext     *outbound_context;
   };
 
   static void periodicTask(void* cdata); ///< Used to (re)schedule LiveThread methods into the live555 event loop
@@ -214,8 +282,8 @@ public:                                                // <pyapi>
    * @param n_max_slots   Maximum number of connections (each Connection instance is placed in a slot)
    * 
    */
-  LiveThread(const char* name, int core_id=-1);        // <pyapi>
-  ~LiveThread();                                       // <pyapi>
+  LiveThread(const char* name, unsigned short int n_stack=0, int core_id=-1);  // <pyapi>
+  ~LiveThread();                                                               // <pyapi>
   
 protected: // redefinitions
   std::deque<SignalContext> signal_fifo;    ///< Redefinition of signal fifo (Thread::signal_fifo is now hidden from usage) 
@@ -225,7 +293,14 @@ protected:
   UsageEnvironment* env;                    ///< Live555 UsageEnvironment identifying the event loop
   char              eventLoopWatchVariable; ///< Modifying this, kills the Live555 event loop
   std::vector<Connection*>   slots_;        ///< A constant sized vector.  Book-keeping of the connections (RTSP or SDP) currently active in the live555 thread.  Organized in "slots".
+  std::vector<Outbound*>     out_slots_;
   // SlotNumber n_max_slots;                   ///< Maximum number of possible slots .. use a global constant (in sizes.h)
+  EventTriggerId    event_trigger_id_hello_world;
+  EventTriggerId    event_trigger_id_frame_arrived;
+  EventTriggerId    event_trigger_id_got_frames;
+  LiveFifo          infifo;
+  int fc; // debugging: incoming frame counter
+  
   
 public: // redefined virtual functions
   void run();
@@ -236,20 +311,45 @@ public: // redefined virtual functions
   
 protected:
   void handleSignals();
+  void handleFrame(Frame* f); ///< Handles frames incoming to live555
   
 private: // internal
-  int  safeGetSlot      (SlotNumber slot, Connection*& con);
+  int  safeGetSlot         (SlotNumber slot, Connection*& con);
+  int  safeGetOutboundSlot (SlotNumber slot, Outbound*& outbound);
+  // inbound streams
   void registerStream   (LiveConnectionContext &connection_ctx);
   void deregisterStream (LiveConnectionContext &connection_ctx);
   void playStream       (LiveConnectionContext &connection_ctx);
+  // outbound streams
+  void registerOutbound    (LiveOutboundContext &outbound_ctx); 
+  void deRegisterOutbound  (LiveOutboundContext &outbound_ctx);
+  // thread control
   void stopStream       (LiveConnectionContext &connection_ctx);
   
-public: // *** C & Python API *** .. these routines go through the convar/mutex locking                                                // <pyapi>
+public: // *** C & Python API *** .. these routines go through the condvar/mutex locking                                                // <pyapi>
+  // inbound streams
   void registerStreamCall   (LiveConnectionContext &connection_ctx); ///< API method: registers a stream                                // <pyapi> 
   void deregisterStreamCall (LiveConnectionContext &connection_ctx); ///< API method: de-registers a stream                             // <pyapi>
   void playStreamCall       (LiveConnectionContext &connection_ctx); ///< API method: starts playing the stream and feeding frames      // <pyapi>
   void stopStreamCall       (LiveConnectionContext &connection_ctx); ///< API method: stops playing the stream and feeding frames       // <pyapi>
-  void stopCall();                                                  ///< API method: stops the LiveThread                              // <pyapi>
+  // outbound streams
+  void registerOutboundCall   (LiveOutboundContext &outbound_ctx);     ///< API method: register outbound stream                        // <pyapi>
+  void deRegisterOutboundCall (LiveOutboundContext &outbound_ctx);
+  // thread control
+  void stopCall();                                                   ///< API method: stops the LiveThread                              // <pyapi>
+  
+  LiveFifo &getFifo();  // <pyapi>
+  
+public: // live555 events and tasks
+  static void helloWorldEvent(void* clientData);   ///< For testing/debugging  
+  static void frameArrivedEvent(void* clientData); ///< For debugging
+  static void gotFramesEvent(void* clientData);    ///< Triggered when an empty fifo gets a frame.  Schedules readFrameFifoTask
+  
+  static void readFrameFifoTask(void* clientData); ///< This task registers itself if there are frames in the fifo
+
+public:  
+  void testTrigger();
+  void triggerGotFrames();
 }; // <pyapi>
 
 #endif

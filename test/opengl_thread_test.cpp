@@ -126,7 +126,7 @@ void test_2() {
   // InfoFrameFilter   live_out_filter ("live_out_filter",&av_in_filter);
   // DummyFrameFilter   live_out_filter ("live_out_filter",false,&av_in_filter);
   BriefInfoFrameFilter   live_out_filter ("live_out_filter",&av_in_filter);
-  LiveThread        livethread      ("livethread",-1);
+  LiveThread        livethread      ("livethread",0,-1); // size of input fifo, thread affinity
   // ***********************************
   
   LiveConnectionContext ctx;

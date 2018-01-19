@@ -181,15 +181,6 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) { // take a frame from the stack,
   return true;
 }
 
-/*
-bool FrameFifo::writeCopy_(Frame* f) {
-  this->writeCopy_(f);
-  if (this->stack.empty()) {
-    // TODO: acquire wait lock.  It's released by recycle.
-  }
-}
-*/
-
 
 // pop a frame from the end of the fifo and return the frame
 Frame* FrameFifo::read(unsigned short int mstimeout) {
@@ -276,6 +267,13 @@ void FrameFifo::dumpFifo() {
   }
   std::cout << "FrameFifo: "<<name<<" <dumpFifo" << std::endl;
 }
+
+
+bool FrameFifo::isEmpty() {
+  std::unique_lock<std::mutex> lk(this->mutex);
+  return this->fifo.empty();
+}
+
 
 
 /*

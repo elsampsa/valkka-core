@@ -29,17 +29,14 @@
  *  @version 0.2.0 
  *  
  *  @brief Interface to live555
- *
- *  @section DESCRIPTION
- *  
- *  This live555 "bridge" is based on the celebrated "testRTSPClient" test program. 
  * 
- *  Acknowledgements: Ross Finlayson for his advices
+ *  Acknowledgements: Ross Finlayson for his advice
  *
  */
 
 #include "livedep.h"
 #include "frames.h"
+#include "queues.h"
 #include "logging.h"
 
 UsageEnvironment& operator<<(UsageEnvironment& env, const RTSPClient& rtspClient);       ///< A function that outputs a string that identifies each stream (for debugging output).
@@ -47,6 +44,80 @@ UsageEnvironment& operator<<(UsageEnvironment& env, const MediaSubsession& subse
 Logger& operator<<(Logger& env, const RTSPClient& rtspClient);                           ///< A function that outputs a string that identifies each stream (for debugging output).
 Logger& operator<<(Logger& env, const MediaSubsession& subsession);                      ///< A function that outputs a string that identifies each subsession (for debugging output).
 void usage(UsageEnvironment& env, char const* progName);
+
+
+
+class BufferSource: public FramedSource {
+
+public:
+  BufferSource(UsageEnvironment &env, FrameFifo &fifo, unsigned preferredFrameSize =0, unsigned playTimePerFrame =0, unsigned offset=0);
+  virtual ~BufferSource();
+  
+private:
+  virtual void doGetNextFrame();
+  
+private:
+  FrameFifo          &fifo;
+  
+  // uint8_t*  fBuffer;
+  // unsigned  fMstimestamp;
+  // unsigned  fBufferSize;
+  
+  // Boolean   fDeleteBufferOnClose;
+  unsigned  fPreferredFrameSize;
+  unsigned  fPlayTimePerFrame;
+  unsigned  offset;
+  // unsigned  fLastPlayTime;
+  // Boolean   fLimitNumBytesToStream;
+  // u_int64_t fNumBytesToStream; // used if "fLimitNumBytesToStream" is True
+  
+public:
+  std::deque<Frame*> internal_fifo;
+  bool      active;
+  
+public:
+  void handleFrame(Frame* f);
+  
+};
+
+
+// encapsulates an outbound stream
+class Stream { // analogy: DecoderBase
+  
+public:
+  Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl=255);
+  virtual ~Stream();
+  
+protected:
+  UsageEnvironment  &env;
+  FrameFifo         &fifo;
+  
+  RTPSink           *sink; // queries frames from terminal
+  RTCPInstance      *rtcp;
+  
+  Groupsock  *rtpGroupsock;
+  Groupsock  *rtcpGroupsock;
+  unsigned char cname[101];
+  
+  BufferSource *buffer_source;
+  FramedSource *terminal; // the final device in the live555 filterchain
+  
+public:
+  void handleFrame(Frame *f);
+  void startPlaying();
+  static void afterPlaying(void* cdata);
+  
+};
+
+
+class H264Stream : public Stream {
+ 
+public:
+  H264Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl=255);
+  ~H264Stream();
+    
+};
+
 
 
 enum class LiveStatus {

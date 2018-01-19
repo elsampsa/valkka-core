@@ -1298,6 +1298,28 @@ class DumpFrameFilter(FrameFilter):
 DumpFrameFilter_swigregister = _valkka_core.DumpFrameFilter_swigregister
 DumpFrameFilter_swigregister(DumpFrameFilter)
 
+class CountFrameFilter(FrameFilter):
+    __swig_setmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CountFrameFilter, name, value)
+    __swig_getmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CountFrameFilter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, next=None):
+        this = _valkka_core.new_CountFrameFilter(name, next)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_CountFrameFilter
+    __del__ = lambda self: None
+CountFrameFilter_swigregister = _valkka_core.CountFrameFilter_swigregister
+CountFrameFilter_swigregister(CountFrameFilter)
+
 class TimestampFrameFilter(FrameFilter):
     __swig_setmethods__ = {}
     for _s in [FrameFilter]:
@@ -1521,6 +1543,28 @@ class Thread(_object):
 Thread_swigregister = _valkka_core.Thread_swigregister
 Thread_swigregister(Thread)
 
+class LiveFifo(FrameFifo):
+    __swig_setmethods__ = {}
+    for _s in [FrameFifo]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LiveFifo, name, value)
+    __swig_getmethods__ = {}
+    for _s in [FrameFifo]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, LiveFifo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, n_stack):
+        this = _valkka_core.new_LiveFifo(name, n_stack)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_LiveFifo
+    __del__ = lambda self: None
+LiveFifo_swigregister = _valkka_core.LiveFifo_swigregister
+LiveFifo_swigregister(LiveFifo)
+
 
 _valkka_core.LiveConnectionType_none_swigconstant(_valkka_core)
 LiveConnectionType_none = _valkka_core.LiveConnectionType_none
@@ -1564,6 +1608,44 @@ class LiveConnectionContext(_object):
 LiveConnectionContext_swigregister = _valkka_core.LiveConnectionContext_swigregister
 LiveConnectionContext_swigregister(LiveConnectionContext)
 
+class LiveOutboundContext(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LiveOutboundContext, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, LiveOutboundContext, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["connection_type"] = _valkka_core.LiveOutboundContext_connection_type_set
+    __swig_getmethods__["connection_type"] = _valkka_core.LiveOutboundContext_connection_type_get
+    if _newclass:
+        connection_type = _swig_property(_valkka_core.LiveOutboundContext_connection_type_get, _valkka_core.LiveOutboundContext_connection_type_set)
+    __swig_setmethods__["address"] = _valkka_core.LiveOutboundContext_address_set
+    __swig_getmethods__["address"] = _valkka_core.LiveOutboundContext_address_get
+    if _newclass:
+        address = _swig_property(_valkka_core.LiveOutboundContext_address_get, _valkka_core.LiveOutboundContext_address_set)
+    __swig_setmethods__["portnum"] = _valkka_core.LiveOutboundContext_portnum_set
+    __swig_getmethods__["portnum"] = _valkka_core.LiveOutboundContext_portnum_get
+    if _newclass:
+        portnum = _swig_property(_valkka_core.LiveOutboundContext_portnum_get, _valkka_core.LiveOutboundContext_portnum_set)
+    __swig_setmethods__["ttl"] = _valkka_core.LiveOutboundContext_ttl_set
+    __swig_getmethods__["ttl"] = _valkka_core.LiveOutboundContext_ttl_get
+    if _newclass:
+        ttl = _swig_property(_valkka_core.LiveOutboundContext_ttl_get, _valkka_core.LiveOutboundContext_ttl_set)
+    __swig_setmethods__["slot"] = _valkka_core.LiveOutboundContext_slot_set
+    __swig_getmethods__["slot"] = _valkka_core.LiveOutboundContext_slot_get
+    if _newclass:
+        slot = _swig_property(_valkka_core.LiveOutboundContext_slot_get, _valkka_core.LiveOutboundContext_slot_set)
+
+    def __init__(self):
+        this = _valkka_core.new_LiveOutboundContext()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_LiveOutboundContext
+    __del__ = lambda self: None
+LiveOutboundContext_swigregister = _valkka_core.LiveOutboundContext_swigregister
+LiveOutboundContext_swigregister(LiveOutboundContext)
+
 class LiveThread(Thread):
     __swig_setmethods__ = {}
     for _s in [Thread]:
@@ -1575,8 +1657,8 @@ class LiveThread(Thread):
     __getattr__ = lambda self, name: _swig_getattr(self, LiveThread, name)
     __repr__ = _swig_repr
 
-    def __init__(self, name, core_id=-1):
-        this = _valkka_core.new_LiveThread(name, core_id)
+    def __init__(self, name, n_stack=0, core_id=-1):
+        this = _valkka_core.new_LiveThread(name, n_stack, core_id)
         try:
             self.this.append(this)
         except Exception:
@@ -1596,8 +1678,14 @@ class LiveThread(Thread):
     def stopStreamCall(self, connection_ctx):
         return _valkka_core.LiveThread_stopStreamCall(self, connection_ctx)
 
+    def registerOutboundCall(self, outbound_ctx):
+        return _valkka_core.LiveThread_registerOutboundCall(self, outbound_ctx)
+
     def stopCall(self):
         return _valkka_core.LiveThread_stopCall(self)
+
+    def getFifo(self):
+        return _valkka_core.LiveThread_getFifo(self)
 LiveThread_swigregister = _valkka_core.LiveThread_swigregister
 LiveThread_swigregister(LiveThread)
 

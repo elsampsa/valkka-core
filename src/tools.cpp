@@ -49,6 +49,14 @@ long int getMsDiff(timeval tv1, timeval tv2) {
 }
 
 
+struct timeval msToTimeval(long int mstimestamp) {
+  struct timeval fPresentationTime;
+  fPresentationTime.tv_sec   =(mstimestamp/1000); // secs
+  fPresentationTime.tv_usec  =(mstimestamp-fPresentationTime.tv_sec*1000)*1000; // microsecs
+  return fPresentationTime;
+}
+
+
 bool slotOk(SlotNumber n_slot) {
   if (n_slot>I_MAX_SLOTS) {
     std::cout << "WARNING! slot overflow with "<<n_slot<<" increase I_MAX_SLOTS in sizes.h"<<std::endl;

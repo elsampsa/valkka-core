@@ -69,6 +69,7 @@ class LiveThread:
   
   parameter_defs={
     "name"      : (str,"live_thread"),
+    "n_stack"   : (int,0), # stack for the incoming frames
     "affinity"  : (int,-1),
     "verbose"   : (bool, False)
     }
@@ -79,7 +80,7 @@ class LiveThread:
     parameterInitCheck(LiveThread.parameter_defs,kwargs,self) # checks kwargs agains parameter_defs, attach ok'd parameters to this object as attributes
     
     # this is the "api-level 1" object.  Just a swig-wrapped cpp instance.
-    self.core=valkka_core.LiveThread(self.name, self.affinity)
+    self.core=valkka_core.LiveThread(self.name, self.n_stack, self.affinity)
     
     self.active=True
     self.core.startCall()

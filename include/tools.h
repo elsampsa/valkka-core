@@ -44,6 +44,8 @@ long int getCurrentMsTimestamp(); ///< Utility function: returns current unix ep
 
 long int getMsDiff(timeval tv1, timeval tv2); ///< Utility function: return timedif of two timeval structs in milliseconds
 
+struct timeval msToTimeval(long int mstimestamp);
+
 bool slotOk(SlotNumber n_slot); ///< Checks the slot number range
 
 void normalize_timespec(struct timespec *ts, time_t sec, int64_t nanosec);

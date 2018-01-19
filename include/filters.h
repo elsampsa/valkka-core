@@ -109,7 +109,7 @@ protected:
 }; // <pyapi>
 
 
-/** Dumps each received packet to a file: use with care!  For debugginh purposes only.
+/** Dumps each received packet to a file: use with care!  For debugging purposes only.
  * @ingroup filters_tag
  */
 class DumpFrameFilter : public FrameFilter { // <pyapi>
@@ -123,6 +123,24 @@ protected:
 protected:
   void go(Frame* frame);
 }; // <pyapi>
+
+
+/** Counts frames passed through this filter
+ * @ingroup filters_tag
+ */
+
+class CountFrameFilter : public FrameFilter { // <pyapi>
+  
+public: // <pyapi>
+  CountFrameFilter(const char* name, FrameFilter* next=NULL); // <pyapi>
+  
+protected:
+  int count;
+  
+protected:
+  void go(Frame* frame);
+}; // <pyapi> 
+
 
 
 /** Corrects erroneous timestamps (while preserving timestamp distances). TODO

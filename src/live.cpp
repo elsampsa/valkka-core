@@ -43,6 +43,195 @@
 
 #define SEND_PARAMETER_SETS // keep this always defined!
 
+
+BufferSource::BufferSource(UsageEnvironment& env, FrameFifo &fifo, unsigned preferredFrameSize, unsigned playTimePerFrame, unsigned offset) : FramedSource(env), fifo(fifo), fPreferredFrameSize(preferredFrameSize), fPlayTimePerFrame(playTimePerFrame), offset(offset), active(true) {
+}
+
+BufferSource::~BufferSource() {
+  for(auto it=internal_fifo.begin(); it!=internal_fifo.end(); ++it) {
+    fifo.recycle(*it);
+  }
+}
+
+
+void BufferSource::handleFrame(Frame* f) {
+  internal_fifo.push_front(f);
+  if (!active) {
+    doGetNextFrame();
+  }
+}
+
+
+void BufferSource::doGetNextFrame() {
+  /* // testing ..
+  std::cout << "doGetNextFrame!\n";
+  return;
+  */
+  
+  /*
+  http://lists.live555.com/pipermail/live-devel/2014-October/018768.html
+  
+  control flow:
+  http://www.live555.com/liveMedia/faq.html#control-flow
+  
+  use of discrete framer:
+  http://lists.live555.com/pipermail/live-devel/2014-September/018686.html
+  http://lists.live555.com/pipermail/live-devel/2011-November/014019.html
+  .. Ross getting annoyed:
+  http://lists.live555.com/pipermail/live-devel/2016-January/019856.html
+  
+  this::doGetNextFrame => FramedSource::afterGetting(this) [resets fIsCurrentlyAwaitingData] => calls "AfterGettingFunc" callback (defined god-knows-where) => .. end up calling 
+  FramedSource::getNextFrame [this tilts if fIsCurrentlyAwaitingData is set]
+  http://lists.live555.com/pipermail/live-devel/2005-August/002995.html
+  
+  */
+  
+  /* // insight from "FramedSource.hh":
+  // The following variables are typically accessed/set by doGetNextFrame()
+  unsigned char* fTo; // in
+  unsigned fMaxSize; // in
+  
+  unsigned fFrameSize; // out
+  unsigned fNumTruncatedBytes; // out
+  struct timeval fPresentationTime; // out
+  unsigned fDurationInMicroseconds; // out
+  */
+  Frame* f;
+  
+  if (internal_fifo.empty()) {
+    active=false; // this method is not re-scheduled anymore .. must be called again.
+    return;
+  }
+  active=true; // this will be re-scheduled
+
+  f=internal_fifo.back(); // take the last element
+  
+  fFrameSize         =(unsigned)f->payload.size()-offset;
+  
+  std::cout << "BufferSource : doGetNextFrame : fMaxSize     " << fMaxSize << std::endl;
+  std::cout << "BufferSource : doGetNextFrame : payload size " << f->payload.size() << std::endl;
+  std::cout << "BufferSource : doGetNextFrame : fFrameSize   " << fFrameSize << std::endl;
+  
+  // memcpy(fTo, f->payload.data(), f->payload.size());
+  memcpy(fTo, f->payload.data()+offset, std::min(fFrameSize,fMaxSize));
+  fNumTruncatedBytes =std::min((unsigned)0,fFrameSize-fMaxSize);
+  // fMaxSize  =f->payload.size();
+  // fNumTruncatedBytes=0;
+  
+  fPresentationTime=msToTimeval(f->mstimestamp); // timestamp to time struct
+  
+  // fDurationInMicroseconds = 0;
+  // fPresentationTime.tv_sec   =(fMstimestamp/1000); // secs
+  // fPresentationTime.tv_usec  =(fMstimestamp-fPresentationTime.tv_sec*1000)*1000; // microsecs
+  // std::cout << "call_afterGetting: " << fPresentationTime.tv_sec << "." << fPresentationTime.tv_usec << " " << fFrameSize << "\n";
+  std::cout << "calling afterGetting\n";
+
+  fifo.recycle(f); // return the frame to the main live555 incoming fifo
+  internal_fifo.pop_back();
+  
+  if (internal_fifo.empty()) {
+    fDurationInMicroseconds = 0; // return immediately here and brake the re-scheduling
+  }
+  else { // approximate when this will be called again
+    fDurationInMicroseconds = 0;
+  }
+  
+  FramedSource::afterGetting(this);
+}
+
+
+Stream::Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl) : env(env), fifo(fifo) {
+  /*
+  UsageEnvironment& env;
+  RTPSink*          sink;
+  RTCPInstance*     rtcp;
+  FramedSource*     source;
+  Groupsock* rtpGroupsock;
+  Groupsock* rtcpGroupsock;
+  unsigned char cname[101];
+
+  BufferSource* buffer_source;
+  */
+  
+  // Create 'groupsocks' for RTP and RTCP:
+  struct in_addr destinationAddress;
+  //destinationAddress.s_addr = chooseRandomIPv4SSMAddress(*env);
+  destinationAddress.s_addr=our_inet_addr(adr.c_str());
+
+  Port rtpPort(portnum);
+  Port rtcpPort(portnum+1);
+
+  // Groupsock rtpGroupsock(this->env, destinationAddress, rtpPort, ttl);
+  this->rtpGroupsock  =new Groupsock(this->env, destinationAddress, rtpPort, ttl);
+  // this->rtpGroupsock->multicastSendOnly();
+  
+  int fd=this->rtpGroupsock->socketNum();
+  // increaseSendBufferTo(this->env,fd,this->nsocket); // TODO
+  
+  this->rtcpGroupsock =new Groupsock(this->env, destinationAddress, rtcpPort, ttl);
+  // this->rtcpGroupsock->multicastSendOnly();
+  // rtpGroupsock.multicastSendOnly(); // we're a SSM source
+  // Groupsock rtcpGroupsock(*env, destinationAddress, rtcpPort, ttl);
+  // rtcpGroupsock.multicastSendOnly(); // we're a SSM source
+
+  // Create a 'H264 Video RTP' sink from the RTP 'groupsock':
+  // OutPacketBuffer::maxSize = 100000;
+  
+  unsigned char CNAME[101];
+  gethostname((char*)CNAME, 100);
+  CNAME[100] = '\0'; // just in case ..
+  memcpy(this->cname,CNAME,101);
+}
+
+
+void Stream::handleFrame(Frame* f) {
+  buffer_source->handleFrame(f); // buffer source recycles the frame when ready
+}
+
+void Stream::startPlaying() {
+  sink->startPlaying(*(terminal), this->afterPlaying, this);
+}
+
+void Stream::afterPlaying(void *cdata) {
+  Stream* stream=(Stream*)cdata;
+  
+  stream->sink->stopPlaying();
+  // Medium::close(stream->buffer_source);
+}
+
+
+Stream::~Stream() {
+  Medium::close(buffer_source);
+  delete rtpGroupsock;
+  delete rtcpGroupsock;
+  delete buffer_source;
+}
+  
+
+  
+H264Stream::H264Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl) : Stream(env,fifo,adr,portnum,ttl) {
+  
+  buffer_source  =new BufferSource(env, fifo, 0, 0, 4); // nalstamp offset: 4
+  
+  // OutPacketBuffer::maxSize = this->npacket; // TODO
+  // http://lists.live555.com/pipermail/live-devel/2013-April/016816.html
+  
+  
+  sink = H264VideoRTPSink::createNew(env,rtpGroupsock, 96);
+  // this->rtcp      = RTCPInstance::createNew(this->env, this->rtcpGroupsock, 500,  this->cname, sink, NULL, True); // saturates the event loop!
+  terminal       =H264VideoStreamDiscreteFramer::createNew(env, buffer_source);
+}
+
+
+H264Stream::~H264Stream() {
+  // delete sink;
+  // delete terminal;
+  Medium::close(sink);
+  Medium::close(terminal);
+}
+
+
+
 // A function that outputs a string that identifies each stream (for debugging output).  Modify this if you wish:
 UsageEnvironment& operator<<(UsageEnvironment& env, const RTSPClient& rtspClient) {
   return env << "[URL:\"" << rtspClient.url() << "\"]: ";

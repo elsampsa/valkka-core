@@ -34,3 +34,4 @@ publish.bash
 toolchain/
 changelic.bash
 changetext
+python/valkka_core.i

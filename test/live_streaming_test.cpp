@@ -284,7 +284,7 @@ void test_5() {
   
   FifoFrameFilter  av_in_filter   ("av_in_filter",av_fifo);
   InfoFrameFilter  live_out_filter("live_out_filter",&av_in_filter);
-  LiveThread       livethread     ("livethread",1); // processor 1 == CPU 2          
+  LiveThread       livethread     ("livethread",0,1); // processor 1 == CPU 2          
   // ******
   
   LiveConnectionContext ctx;
