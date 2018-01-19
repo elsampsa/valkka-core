@@ -82,7 +82,7 @@ Frame* OpenGLFrameFifo::getFrame_(BitmapType bmtype) {
   // std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
   // .. no mutex protecting here!  This is used by writeCopy that is also mutex protected => stall
   Frame* tmpframe;
-  std::deque<Frame*>* tmpstack;
+  std::deque<Frame*>* tmpstack; // alias
   
   switch(bmtype) {
     case (BitmapPars::N720::type): {
@@ -325,7 +325,10 @@ void OpenGLFrameFifo::recycle(Frame* f) {// Return Frame f back into the stack. 
   // f->yuvpbo=NULL; // just in case .. // NOT THIS! the reserved YUVPBO would get lost!
   // std::cout << "1>>>"<<(*tmpstack).size()<<std::endl;
   // (*tmpstack).push_front(f); 
-  tmpstack->push_front(f);
+  
+  // tmpstack->push_front(f); // pop_front/push_front : use stack first in-first out fashion :  TODO: jitter when using this..!
+  tmpstack->push_back(f); // pop_front/push_back : use stack in first in-last out (cyclic) fashion
+  
   // std::cout << "2>>>"<<(*tmpstack).size()<<std::endl;
   // reportStacks_();
 }
@@ -370,6 +373,22 @@ void OpenGLFrameFifo::dumpStack() {
   std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
   dumpStack_();
 }
+
+/*
+void OpenGLFrameFifo::checkOrder() {
+  std::unique_lock<std::mutex> lk(this->mutex);
+  long int mstimestamp=0;
+  std::cout << "paska" << std::endl;
+  for(auto it=fifo.begin(); it!=fifo.end(); ++it) {
+    std::cout << ">>>>" << (*it)->mstimestamp-mstimestamp << std::endl;
+    if ((*it)->mstimestamp>mstimestamp) {
+      std::cout << "OpenGLFrameFifo : checkOrder : Discontinuity in fifo! :" << (*it)->mstimestamp << " <= " << mstimestamp << std::endl;
+    }
+    mstimestamp=(*it)->mstimestamp;
+  }
+}
+*/
+
 
 
 SlotContext::SlotContext() : yuvtex(NULL), shader(NULL), active(false), codec_id(AV_CODEC_ID_NONE) {
@@ -957,9 +976,16 @@ void OpenGLThread::render(SlotNumber n_slot) {// Render all RenderGroup(s) depen
 void OpenGLThread::dumpFifo() {
   long int mstime=getCurrentMsTimestamp();
   long int rel_mstime;
+  long int mstimestamp=9516360576679;
   
   std::cout<<std::endl<<"OpenGLThread: dumpfifo: "<< mstime-msbuftime <<std::endl;
   for(auto it=presfifo.begin(); it!=presfifo.end(); ++it) {
+    
+    if (mstimestamp<((*it)->mstimestamp)) { // next smaller than previous.  Should be: [young (big value) .... old (small value)]
+      std::cout<<"OpenGLThread: dumpfifo: JUMP!" << std::endl;
+    }
+    mstimestamp=(*it)->mstimestamp;
+    
     rel_mstime=(*it)->mstimestamp-(mstime-msbuftime);
     std::cout<<"OpenGLThread: dumpfifo: "<<**it<<" : "<< rel_mstime <<std::endl;
   }

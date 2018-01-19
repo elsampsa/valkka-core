@@ -83,6 +83,7 @@ public: // mutex protected calls .. be carefull when calling mutex protected cal
   void recycle(Frame* f);                            ///< Return Frame f back into the stack (relevant stack is chosen automatically)
   void reportStacks();                               ///< Show stack usage
   void dumpStack();                                  ///< Dump the frames in the stack
+  //void checkOrder();                                 ///< Check that frames are in chronological order (debugging only)
   
 public: // setters
   void debugOn() {debug=true;}

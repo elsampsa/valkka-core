@@ -115,7 +115,17 @@ void test_2() {
   // (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) --> {FifoFrameFilter:gl_in_gilter} --> 
   // --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   //
-  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/25,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); // remember buffering time!
+  
+  // this works fine for a single n1080p cam
+  // OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); 
+  
+  // WARNING: this produces jitter for a single n1080p cam.. why!?
+  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/61,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/2000,/*core_id*/-1); 
+  
+  // no jitter here:
+  // OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/60,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); 
+  
+  // remember buffering time!
   OpenGLFrameFifo&  gl_fifo         =glthread.getFifo();      // get gl_fifo from glthread
   FifoFrameFilter   gl_in_filter    ("gl_in_filter",gl_fifo);   
   
