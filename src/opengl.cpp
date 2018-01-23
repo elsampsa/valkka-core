@@ -36,6 +36,7 @@
  
 #include "opengl.h"
 #include "logging.h"
+#include "tools.h"
 
 // WARNING: these define switches should be off (commented) by default
 // #define VALGRIND_GPU_DEBUG 1 // enable this for valgrind debugging.  Otherwise direct memory access to GPU drives it crazy.
@@ -139,21 +140,21 @@ void releasePBO(GLuint* index, GLubyte* payload) {
 
 void getPBO(GLuint& index, GLsizei size, GLubyte*& payload) { // modify pointer in-place
   // WARNING! load openGL extensions before using this! (i.e., use OpenGLThread.preRun)
-  glGenBuffersARB(1, &index);
-  glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, index);
-  glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB, size, 0, GL_STREAM_DRAW_ARB); // reserve n_payload bytes to index/handle pbo_id
+  glGenBuffers(1, &index);
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, index);
+  glBufferData(GL_PIXEL_UNPACK_BUFFER, size, 0, GL_STREAM_DRAW); // reserve n_payload bytes to index/handle pbo_id
   
-  glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0); // unbind (not mandatory)
-  glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, index); // rebind (not mandatory)
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0); // unbind (not mandatory)
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, index); // rebind (not mandatory)
   
-  payload = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
+  payload = (GLubyte*)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
   
-  glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer ** MANDATORY **
-  glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0); // unbind ** MANDATORY **
+  glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER); // release pointer to mapping buffer ** MANDATORY **
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0); // unbind ** MANDATORY **
 }
 
 void releasePBO(GLuint* index, GLubyte* payload) {
-  glDeleteBuffersARB(1, index);
+  glDeleteBuffers(1, index);
 }
 
 #endif
@@ -225,30 +226,54 @@ void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex) {
   std::cout << "loadYUVTEX: tex      : " << *tex << std::endl;
 #endif
   
+  // std::cout << "loadYUVTEX: tex      : " << *tex << std::endl;
+  
+#ifdef OPENGL_TIMING
+  long int mstime =getCurrentMsTimestamp();
+  long int swaptime;
+#endif
+  
   // y
-  glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, pbo->y_index);
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->y_index);
   glBindTexture(GL_TEXTURE_2D, tex->y_index); // this is the texture we will manipulate
   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, tex->w, tex->h, tex->format, GL_UNSIGNED_BYTE, 0); // copy from pbo to texture 
   // glBindTexture(GL_TEXTURE_2D, 0); 
+  // glFlush();
+  // glFinish();
+  
   // u
-  glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, pbo->u_index);
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->u_index);
   glBindTexture(GL_TEXTURE_2D, tex->u_index); // this is the texture we will manipulate
   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, tex->w/2, tex->h/2, tex->format, GL_UNSIGNED_BYTE, 0); // copy from pbo to texture 
   // glBindTexture(GL_TEXTURE_2D, 0);  
+  // glFlush();
+  // glFinish();
+  
   // v
-  glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, pbo->v_index);
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->v_index);
   glBindTexture(GL_TEXTURE_2D, tex->v_index); // this is the texture we will manipulate
   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, tex->w/2, tex->h/2, tex->format, GL_UNSIGNED_BYTE, 0); // copy from pbo to texture 
   // glBindTexture(GL_TEXTURE_2D, 0); 
+  // glFlush();
+  // glFinish();
   
   // TODO: implement also pipeline going the other way, i.e.: render to texture => texture to PBO => download data from PBO using dma
   //
   // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-14-render-to-texture/
   // https://www.khronos.org/opengl/wiki/Pixel_Buffer_Object
   
-  glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0); // unbind // important!
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0); // unbind // important!
   glBindTexture(GL_TEXTURE_2D, 0); // unbind
   
+  glFlush();
+  glFinish();
+  
+#ifdef OPENGL_TIMING
+  swaptime=mstime; mstime=getCurrentMsTimestamp();
+  if ( (mstime-swaptime) > 2 ) {
+    std::cout << "loadYUVTEX                           timing : " << mstime-swaptime << std::endl;
+  }
+#endif
   
 }
 
@@ -345,7 +370,7 @@ TEX::~TEX() {
   
 YUVTEX::YUVTEX(GLsizei w, GLsizei h) : TEX(w, h), y_index(0), u_index(0), v_index(0) {
   opengllogger.log(LogLevel::crazy) << "YUVTEX: reserving" << std::endl;
-  this->format=GL_RED;
+  this->format=GL_RED; // TODO: is this optimal ..?
   getTEX(this->y_index, this->format, this->w,   this->h);
   getTEX(this->u_index, this->format, this->w/2, this->h/2);
   getTEX(this->v_index, this->format, this->w/2, this->h/2);

@@ -88,18 +88,18 @@ class BasicFilterchain:
     """
     
     self.gl_fifo         =self.openglthread.core.getFifo()
-    self.gl_in_filter    =core.FifoFrameFilter    ("gl_in_filter"+self.idst,self.gl_fifo)
+    self.gl_in_filter    =core.FifoFrameFilter    ("gl_in_filter_"+self.idst,self.gl_fifo)
 
-    self.av_fifo         =core.FrameFifo          ("av_fifo"+self.idst,self.fifolen)        # FrameFifo is 10 frames long.  Payloads in the frames adapt automatically to the streamed data.
+    self.av_fifo         =core.FrameFifo          ("av_fifo_"+self.idst,self.fifolen)        # FrameFifo is 10 frames long.  Payloads in the frames adapt automatically to the streamed data.
 
     # [av_fifo] -->> (avthread) --> {gl_in_filter}
-    self.avthread        =core.AVThread           ("avthread"+self.idst,            # name    
+    self.avthread        =core.AVThread           ("avthread_"+self.idst,            # name    
                                                     self.av_fifo,          # read from
                                                     self.gl_in_filter,     # write to
                                                     self.affinity # thread affinity: -1 = no affinity, n = id of processor where the thread is bound
                                                   ) 
 
-    self.av_in_filter    =core.FifoFrameFilter    ("av_in_filter"+self.idst,   self.av_fifo)
+    self.av_in_filter    =core.FifoFrameFilter    ("av_in_filter_"+self.idst,   self.av_fifo)
     # self.live_out_filter =core.InfoFrameFilter    ("live_out_filter"+self.idst,self.av_in_filter)
     
 

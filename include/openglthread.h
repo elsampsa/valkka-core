@@ -328,6 +328,7 @@ protected: // Variables related to queing and presentation
   unsigned             msbuftime;            ///< Buffering time in milliseconds
   unsigned             future_ms_tolerance;  ///< If frame is this much in the future, it will be discarded.  See OpenGLThread::OpenGLThread for its value (some multiple of OpenGLThread::msbuftime)
   std::list<Frame*>    presfifo;             ///< Double-linked list of buffered frames about to be presented
+  long int             calltime, callswaptime;             ///< Debugging: when handleFifo was last called?
   
 protected: // debugging variables
   bool  debug;
@@ -382,6 +383,8 @@ public: // methods, internal : initializing / closing .. but we might want to te
   
 protected: // internal methods
   void dumpFifo();
+  void resetCallTime();
+  void reportCallTime(unsigned i);        ///< How much time since handleFifo exited
   long unsigned insertFifo(Frame* f);     ///< Sorted insert: insert a timestamped frame into the fifo \callgraph
   
   /** Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation \callgraph

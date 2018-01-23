@@ -82,6 +82,20 @@ if    (fifo_verbose)
   message("FIFO_VERBOSE ENABLED")
 endif (fifo_verbose)
 
+option(timing_verbose "timing_verbose" OFF)
+if    (timing_verbose)
+  add_definitions("-DTIMING_VERBOSE")
+  message("TIMING_VERBOSE ENABLED")
+endif (timing_verbose)
+
+
+option(opengl_timing "opengl_timing" OFF)
+if    (opengl_timing)
+  add_definitions("-DOPENGL_TIMING")
+  message("OPENGL_TIMING ENABLED")
+endif (opengl_timing)
+
+
 # ****************************************************************
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "0") 

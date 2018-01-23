@@ -38,6 +38,7 @@
 
 #include "avthread.h"
 #include "logging.h"
+#include "tools.h"
 
 // WARNING: these define switches should be off (commented) by default
 // #define AVTHREAD_VERBOSE 1
@@ -71,6 +72,7 @@ void AVThread::run() {
   time_t timer;
   time_t oldtimer;
   DecoderBase* decoder; // alias
+  long int dt;
   
   time(&timer);
   oldtimer=timer;
@@ -134,7 +136,17 @@ void AVThread::run() {
 #ifdef AVTHREAD_VERBOSE
           std::cout << "AVThread: "<< this->name <<" : run : decoder num " <<subsession_index<< " got frame " << std::endl;
 #endif
+          
+#ifdef TIMING_VERBOSE
+          dt=(getCurrentMsTimestamp()-decoder->out_frame.mstimestamp);
+          if (dt>100) {
+            std::cout << "AVThread: " << this->name <<" run: timing : decoder sending frame " << dt << " ms late" << std::endl;
+          }
+#endif
+          
+          // if ((getCurrentMsTimestamp()-decoder->out_frame.mstimestamp)<100) {
           outfilter.run(&(decoder->out_frame));
+          // }
         }
         else {
 #ifdef AVTHREAD_VERBOSE

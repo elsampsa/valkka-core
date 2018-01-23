@@ -214,6 +214,7 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
                               frame->av_frame->data[0],
                               frame->av_frame->data[1],
                               frame->av_frame->data[2]); // up to the GPU! :)
+
       return tmpframe;
     } //ALLOWED PIXEL FORMATS
     else {
@@ -231,6 +232,7 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
 
 bool OpenGLFrameFifo::writeCopy(Frame* f, bool wait) {
   Frame* tmpframe=NULL;
+  long int dt;
   
   /*
   if (f->frametype!=FrameType::yuvframe) {
@@ -248,6 +250,13 @@ bool OpenGLFrameFifo::writeCopy(Frame* f, bool wait) {
     // return false;
     tmpframe=prepareFrame(f);
   }
+  
+#ifdef TIMING_VERBOSE
+  dt=(getCurrentMsTimestamp()-tmpframe->mstimestamp);
+  if (dt>100) {
+    std::cout << "OpenGLFrameFifo: writeCopy : timing : inserting frame " << dt << " ms late" << std::endl;
+  }
+#endif
   
   if (!tmpframe) {
     opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: writeCopy: WARNING! could not stage frame "<< *f <<std::endl;
@@ -269,6 +278,10 @@ bool OpenGLFrameFifo::writeCopy(Frame* f, bool wait) {
     
 #ifdef PRESENT_VERBOSE
     std::cout << "OpenGLFrameFifo: writeCopy: count=" << this->count << " frame="<<*tmpframe<<std::endl;
+#endif
+    
+#ifdef FIFO_VERBOSE
+    std::cout << "OpenGLFrameFifo: writeCopy: count=" << this->count <<std::endl;
 #endif
     
     this->condition.notify_one(); // after receiving 
@@ -559,11 +572,42 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
 #ifdef RENDER_VERBOSE
     std::cout << "RenderContext: render: rendering!" << std::endl;
 #endif
+    
+#ifdef OPENGL_TIMING
+    long int mstime = getCurrentMsTimestamp();
+    long int swaptime = mstime;
+#endif
+    
     shader->use(); // use the shader
     this->x_window_attr=x_window_attr;
+    
     bindTextures();
+    
+#ifdef OPENGL_TIMING
+  swaptime=mstime; mstime=getCurrentMsTimestamp();
+  if ( (mstime-swaptime) > 2 ) {
+    std::cout << "RenderContext: render : render timing       : " << mstime-swaptime << std::endl;
+  }
+#endif
+  
     bindVars();
+    
+#ifdef OPENGL_TIMING
+  swaptime=mstime; mstime=getCurrentMsTimestamp();
+  if ( (mstime-swaptime) > 2 ) {
+    std::cout << "RenderContext: render : bindvars timing     : " << mstime-swaptime << std::endl;
+  }
+#endif
+    
     bindVertexArray();
+    
+#ifdef OPENGL_TIMING
+  swaptime=mstime; mstime=getCurrentMsTimestamp();
+  if ( (mstime-swaptime) > 2 ) {
+    std::cout << "RenderContext: render : bindvertexarr timing: " << mstime-swaptime << std::endl;
+  }
+#endif
+    
   }
   else {
 #ifdef RENDER_VERBOSE
@@ -648,9 +692,22 @@ void RenderContext::bindVertexArray() {// Bind the vertex array and draw
   std::cout << "RenderContext: bindVertexArray: VAO= " << VAO << std::endl;
 #endif
   
+#ifdef TIMING_VERBOSE
+  long int dt=getCurrentMsTimestamp();
+#endif
+  
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
+  
+#ifdef TIMING_VERBOSE
+  dt=getCurrentMsTimestamp()-dt;
+  if (dt>10) {
+    std::cout << "RenderContext: bindVertexArray : timing : drawing took " << dt << " ms" <<std::endl;
+  }
+#endif
+  
+  
 #ifdef RENDER_VERBOSE
   std::cout << "RenderContext: bindVertexArray: " << std::endl;
 #endif
@@ -722,22 +779,46 @@ void RenderGroup::render() {
   std::cout << "RenderGroup: render: display, window" <<display_id<<" "<<window_id<<std::endl;
 #endif
   
+  // glFlush();
+  // glFinish();
+  
+#ifdef OPENGL_TIMING
+  long int mstime =getCurrentMsTimestamp();
+  long int swaptime;
+#endif
+  
   if (!glXMakeCurrent(display_id, window_id, glc)) { // choose this x window for manipulation
     opengllogger.log(LogLevel::normal) << "RenderGroup: render: WARNING! could not draw"<<std::endl;
   }
   XGetWindowAttributes(display_id, window_id, &(x_window_attr));
   
+#ifdef OPENGL_TIMING
+  swaptime=mstime; mstime=getCurrentMsTimestamp();
+  if ( (mstime-swaptime) > 2 ) {
+    std::cout << "RenderGroup: render : gxlmakecurrent timing : " << mstime-swaptime << std::endl;
+  }
+#endif
+  
 #ifdef PRESENT_VERBOSE
   std::cout << "RenderGroup: render: window w, h " <<x_window_attr.width<<" "<<x_window_attr.height<<std::endl;
 #endif
   
-  // glFinish();
   glViewport(0, 0, x_window_attr.width, x_window_attr.height);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear the screen and the depth buffer
   
   for(std::list<RenderContext>::iterator it=render_contexes.begin(); it!=render_contexes.end(); ++it) {
     it->render(x_window_attr);
   }
+  
+  // glFinish();
+  
+#ifdef OPENGL_TIMING
+  swaptime=mstime; mstime=getCurrentMsTimestamp();
+  if ( (mstime-swaptime) > 2 ) {
+    std::cout << "RenderGroup: render : render timing         : " << mstime-swaptime << std::endl;
+  }
+#endif
+  
   
   if (doublebuffer_flag) {
 #ifdef PRESENT_VERBOSE
@@ -746,9 +827,19 @@ void RenderGroup::render() {
     glXSwapBuffers(display_id, window_id);
   }
   
+  // glFlush();
+  // glFinish();
+  
+#ifdef OPENGL_TIMING
+  swaptime=mstime; mstime=getCurrentMsTimestamp();
+  if ( (mstime-swaptime) > 2 ) {
+    std::cout << "RenderGroup: render : swap buffer timing    : " << mstime-swaptime << std::endl;
+  }
+#endif
+
   // glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0); // unbind
   // glBindTexture(GL_TEXTURE_2D, 0); // unbind
-  // glFinish();
+  // glFinish(); // TODO: necessary?
   
 #ifdef PRESENT_VERBOSE
   std::cout << "RenderGroup: render: stop rendering!"<<std::endl;
@@ -783,6 +874,8 @@ OpenGLThread::OpenGLThread(const char* name, unsigned short n720p, unsigned shor
   }
   
   future_ms_tolerance=msbuftime*5; // frames this much in the future will be scrapped
+  
+  resetCallTime();
 }
 
 
@@ -978,7 +1071,7 @@ void OpenGLThread::dumpFifo() {
   long int rel_mstime;
   long int mstimestamp=9516360576679;
   
-  std::cout<<std::endl<<"OpenGLThread: dumpfifo: "<< mstime-msbuftime <<std::endl;
+  // std::cout<<std::endl<<"OpenGLThread: dumpfifo: "<< mstime-msbuftime <<std::endl;
   for(auto it=presfifo.begin(); it!=presfifo.end(); ++it) {
     
     if (mstimestamp<((*it)->mstimestamp)) { // next smaller than previous.  Should be: [young (big value) .... old (small value)]
@@ -987,9 +1080,25 @@ void OpenGLThread::dumpFifo() {
     mstimestamp=(*it)->mstimestamp;
     
     rel_mstime=(*it)->mstimestamp-(mstime-msbuftime);
-    std::cout<<"OpenGLThread: dumpfifo: "<<**it<<" : "<< rel_mstime <<std::endl;
+    // std::cout<<"OpenGLThread: dumpfifo: "<<**it<<" : "<< rel_mstime <<std::endl;
+    // std::cout<<"OpenGLThread: dumpfifo: "<< rel_mstime <<std::endl;
+    std::cout<<"OpenGLThread: dumpfifo: "<< rel_mstime << " <" << mstimestamp << "> " << std::endl;
   }
-  std::cout<<"OpenGLThread: dumpfifo: "<<std::endl<<std::endl;
+  std::cout<<"OpenGLThread: dumpfifo: "<<std::endl;
+}
+
+
+void OpenGLThread::resetCallTime() {
+  callswaptime =0;
+  calltime     =getCurrentMsTimestamp();
+  std::cout << "OpenGLThread: resetCallTime  : " << std::endl;
+}
+
+
+void OpenGLThread::reportCallTime(unsigned i) {
+  callswaptime =calltime;
+  calltime     =getCurrentMsTimestamp();
+  std::cout << "OpenGLThread: reportCallTime : ("<<i<<") "<< calltime-callswaptime << std::endl;
 }
 
 
@@ -1050,29 +1159,37 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
   long int      rel_mstimestamp;      // == trel = t_ - (t-tb) = t_ - delta
   Frame*        f;                    // f->mstimestamp == t_
   bool          present_frame; 
-    
-  mstime_delta=getCurrentMsTimestamp()-msbuftime; // delta = (t-tb)
+  long int      mstime;  
+  
+  // mstime_delta=getCurrentMsTimestamp()-msbuftime; // delta = (t-tb)
+  mstime       =getCurrentMsTimestamp();
+  mstime_delta =mstime-msbuftime;
+  
+#ifdef TIMING_VERBOSE
+  resetCallTime();
+#endif
   
   auto it=presfifo.rbegin(); // reverse iterator
+  
   while(it!=presfifo.rend()) {// while
     f=*it; // f==pointer to frame
     rel_mstimestamp=(f->mstimestamp-mstime_delta); // == trel = t_ - delta
-#ifdef PRESENT_VERBOSE
-    std::cout<<"OpenGLThread: handleFifo: rel_mstimestamp " << rel_mstimestamp << std::endl;
-#endif
     if (rel_mstimestamp>0 and rel_mstimestamp<=future_ms_tolerance) {// frames from [inf,0) are left in the fifo
       ++it;
     }
     else {// remove the frame *f from the fifo.  Either scrap or present it
-      ++it; // go one backwards 
+      // 40 20 -20 => found -20
+      ++it; // go one backwards => 20 
       it= std::list<Frame*>::reverse_iterator(presfifo.erase(it.base())); // eh.. it.base() gives the next iterator (in forward sense?).. we'll remove that .. create a new iterator on the modded
-      
+      // it.base : takes -20
+      // erase   : removes -20 .. returns 20
+      // .. create a new reverse iterator from 20
       present_frame=false;
       
 #ifdef NO_LATE_DROP_DEBUG // present also the late frames
       // std::cout << "OpenGLThread: rel_mstimestamp, future_ms_tolerance : " << rel_mstimestamp << " " << future_ms_tolerance << std::endl;
       if (rel_mstimestamp>future_ms_tolerance) { // fifo might get filled up with future frames .. if they're too much in the future, scrap them
-        opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: DISCARDING a frame too far in the future " << *f << std::endl;
+        opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: DISCARDING a frame too far in the future " << rel_mstimestamp << " " << *f << std::endl;
       } 
       else { // .. in all other cases, just present the frame
         present_frame=true;
@@ -1080,10 +1197,11 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
       
 #else
       if (rel_mstimestamp<=-10) {// scrap frames from [-10,-inf)
-        opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: DISCARDING late frame " << *f << std::endl;
+        // opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: DISCARDING late frame " << " " << rel_mstimestamp << " " << *f << std::endl;
+        opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: DISCARDING late frame " << " " << rel_mstimestamp << " <" << f->mstimestamp <<"> " << std::endl;
       }
       else if (rel_mstimestamp>future_ms_tolerance) { // fifo might get filled up with future frames .. if they're too much in the future, scrap them
-        opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: DISCARDING a frame too far in the future " << *f << std::endl;
+        opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: DISCARDING a frame too far in the future " << rel_mstimestamp << " " << *f << std::endl;
       }
       else if (rel_mstimestamp<=0) {// present frames from [0,-10)
         present_frame=true;
@@ -1094,14 +1212,27 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
         if (!slotOk(f->n_slot)) {//slot overflow, do nothing
         }
         else if (f->frametype==FrameType::yuvframe) {// accepted frametype
-#ifdef PRESENT_VERBOSE
-          std::cout<<"OpenGLThread: handleFifo: PRESENTING " << *f << std::endl;
+#if defined(PRESENT_VERBOSE) || defined(TIMING_VERBOSE)
+          // std::cout<<"OpenGLThread: handleFifo: PRESENTING " << *f << std::endl;
+          std::cout<<"OpenGLThread: handleFifo: PRESENTING " << rel_mstimestamp << " <"<< f->mstimestamp <<"> " << std::endl;
+          if (it!=presfifo.rend()) {
+            std::cout<<"OpenGLThread: handleFifo: NEXT       " << (*it)->mstimestamp-mstime_delta << " <"<< (*it)->mstimestamp <<"> " << std::endl;
+          }
 #endif
           activateSlotIf(f->n_slot, (f->yuv_pars).bmtype); // activate if not already active
-          loadTEX(f->n_slot, f->yuvpbo); // f->yuv_pbo [YUVPBO] has already been uploaded to GPU.  Now it is loaded to the textures.
-          render(f->n_slot); // renders all render groups that depend on this slot
-        }
-      }// present frames
+#ifdef TIMING_VERBOSE
+          reportCallTime(0);
+#endif
+          loadTEX(f->n_slot, f->yuvpbo); // f->yuv_pbo [YUVPBO] has already been uploaded to GPU.  Now it is loaded to the textures. // wtf? can take up to 10 ms ..?
+#ifdef TIMING_VERBOSE
+          reportCallTime(1);
+#endif
+          render(f->n_slot); // renders all render groups that depend on this slot // wtf?  7 ms?
+#ifdef TIMING_VERBOSE
+          reportCallTime(2);
+#endif
+        } // accepted frametype
+      }// present frame
       infifo.recycle(f); // codec found or not, frame always recycled
     }// present or scrap
   }// while
@@ -1120,7 +1251,7 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
     std::cout<<"OpenGLThread: handleFifo: next frame: " << *f <<std::endl;
     std::cout<<"OpenGLThread: handleFifo: timeout   : " << rel_mstimestamp <<std::endl;
 #endif
-    return (long unsigned)rel_mstimestamp; // time delay untill the next presentation event..
+    return (long unsigned)rel_mstimestamp; // time delay until the next presentation event..
   }
 }
   
@@ -1151,22 +1282,17 @@ void OpenGLThread::run() {// Main execution loop
     // infifo.reportStacks(); 
     // std::cout << "OpenGLThread: "<< this->name <<" : run : dumping fifo " << std::endl;
 #endif
+    // std::cout << "OpenGLThread: run : read with timeout : " << timeout << std::endl;
     f=infifo.read(timeout);
     if (!f) { // TIMEOUT : either one seconds has passed, or it's about time to present the next frame..
-#ifdef PRESENT_VERBOSE
-      std::cout << "OpenGLThread: "<< this->name <<" : run : timeout expired!" << std::endl;
-#endif
       if (debug) {
       }
       else {
         timeout=std::min(handleFifo(),Timeouts::openglthread); // present/discard frames and return timeout to the last frame.  Recycles frames.  Returns the timeout
-        // std::cout << "OpenGLThread: >>>" << timeout << std::endl;
+        // std::cout << "OpenGLThread: run : no frame : timeout : " << timeout << std::endl;
       }
-    }
+    } // TIMEOUT
     else { // GOT FRAME // remember to apply infifo.recycle
-#ifdef PRESENT_VERBOSE
-      std::cout << "OpenGLThread: "<< this->name <<" : run : got frame "<< *f << std::endl;
-#endif
       if (debug) {
         avthreadlogger.log(LogLevel::normal) << "OpenGLThread: "<< this->name <<" : run : DEBUG MODE! recycling received frame "<< *f << std::endl;
         infifo.recycle(f);
@@ -1179,8 +1305,9 @@ void OpenGLThread::run() {// Main execution loop
           timeout=std::min(handleFifo(),Timeouts::openglthread);
         }
           
-#ifdef PRESENT_VERBOSE
+#if defined(PRESENT_VERBOSE) || defined(TIMING_VERBOSE)
         dumpFifo();
+        std::cout << "OpenGLThread: " << this->name <<" : run : got frame : timeout : " <<timeout<<std::endl<<std::endl;
 #endif
       }
     } // GOT FRAME

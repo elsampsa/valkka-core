@@ -174,7 +174,14 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) { // take a frame from the stack,
   ++(this->count);
   
 #ifdef FIFO_VERBOSE
-  std::cout << "FrameFifo: "<<name<<" writeCopy: count=" << this->count << std::endl;
+  if (count>1) {std::cout << "FrameFifo: "<<name<<" writeCopy: count=" << this->count << std::endl;}
+#endif
+  
+#ifdef TIMING_VERBOSE
+  long int dt=(getCurrentMsTimestamp()-tmpframe->mstimestamp);
+  if (dt>100) {
+    std::cout << "FrameFifo: "<<name<<" writeCopy : timing : inserting frame " << dt << " ms late" << std::endl;
+  }
 #endif
   
   this->condition.notify_one(); // after receiving 
@@ -191,7 +198,7 @@ Frame* FrameFifo::read(unsigned short int mstimeout) {
   /// this->ready_condition.notify_one();
   
 #ifdef FIFO_VERBOSE
-  std::cout << "FrameFifo: "<<name<<" read: mstimeout=" << mstimeout << std::endl;
+  // std::cout << "FrameFifo: "<<name<<"      read: mstimeout=" << mstimeout << std::endl;
 #endif
   
   result=std::cv_status::no_timeout; // default, return no frame
@@ -206,7 +213,7 @@ Frame* FrameFifo::read(unsigned short int mstimeout) {
     }
     else {
 #ifdef FIFO_VERBOSE
-      std::cout << "FrameFifo: "<<name<<" wait with mstimeout=" << mstimeout << std::endl;
+      // std::cout << "FrameFifo: "<<name<<" wait with mstimeout=" << mstimeout << std::endl;
 #endif
       result=this->condition.wait_for(lk,std::chrono::milliseconds(mstimeout));
       break;
@@ -218,7 +225,7 @@ Frame* FrameFifo::read(unsigned short int mstimeout) {
   }
   
 #ifdef FIFO_VERBOSE
-  std::cout << "FrameFifo: "<<name<<" read: count=" << this->count << std::endl;
+  if (count>1) {std::cout << "FrameFifo: "<<name<<"      read: count=" << this->count << std::endl;}
 #endif
   tmpframe=this->fifo[this->count-1]; // take the last element
   this->fifo.pop_back(); // remove the last element
