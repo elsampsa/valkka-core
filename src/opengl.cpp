@@ -42,6 +42,26 @@
 // #define VALGRIND_GPU_DEBUG 1 // enable this for valgrind debugging.  Otherwise direct memory access to GPU drives it crazy.
 // #define LOAD_VERBOSE 1 // shows information on loading YUVPBO and TEX structures
 
+
+/** // ripped off from glxgears.c
+ * Determine whether or not a GLX extension is supported.
+ */
+int is_glx_extension_supported(Display *dpy, const char *query)
+{
+   const int scrnum = DefaultScreen(dpy);
+   const char *glx_extensions = NULL;
+   const size_t len = strlen(query);
+   const char *ptr;
+
+   if (glx_extensions == NULL) {
+    glx_extensions = glXQueryExtensionsString(dpy, scrnum);
+   }
+
+   ptr = strstr(glx_extensions, query);
+   return ((ptr != NULL) && ((ptr[len] == ' ') || (ptr[len] == '\0')));
+}
+
+
 // Auxiliary routine for reading a bitmap file
 int readbytes(const char* fname, char*& buffer) {
   using std::ios;
@@ -160,7 +180,7 @@ void releasePBO(GLuint* index, GLubyte* payload) {
 #endif
 
 
-void getTEX(GLuint& index, GLint format, GLsizei w, GLsizei h) {
+void getTEX(GLuint& index, GLint internal_format, GLint format, GLsizei w, GLsizei h) {
   // for YUV: texture_format=GL_RED;
   glEnable(GL_TEXTURE_2D);
   glGenTextures(1, &index);
@@ -168,7 +188,7 @@ void getTEX(GLuint& index, GLint format, GLsizei w, GLsizei h) {
   glBindTexture(GL_TEXTURE_2D, index);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, 0); // no upload, just reserve 
+  glTexImage2D(GL_TEXTURE_2D, 0, internal_format, w, h, 0, format, GL_UNSIGNED_BYTE, 0); // no upload, just reserve 
   glBindTexture(GL_TEXTURE_2D, 0); // unbind
 }
 
@@ -237,7 +257,7 @@ void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex) {
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->y_index);
   glBindTexture(GL_TEXTURE_2D, tex->y_index); // this is the texture we will manipulate
   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, tex->w, tex->h, tex->format, GL_UNSIGNED_BYTE, 0); // copy from pbo to texture 
-  // glBindTexture(GL_TEXTURE_2D, 0); 
+  glBindTexture(GL_TEXTURE_2D, 0); 
   // glFlush();
   // glFinish();
   
@@ -245,7 +265,7 @@ void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex) {
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->u_index);
   glBindTexture(GL_TEXTURE_2D, tex->u_index); // this is the texture we will manipulate
   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, tex->w/2, tex->h/2, tex->format, GL_UNSIGNED_BYTE, 0); // copy from pbo to texture 
-  // glBindTexture(GL_TEXTURE_2D, 0);  
+  glBindTexture(GL_TEXTURE_2D, 0);  
   // glFlush();
   // glFinish();
   
@@ -253,7 +273,7 @@ void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex) {
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->v_index);
   glBindTexture(GL_TEXTURE_2D, tex->v_index); // this is the texture we will manipulate
   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, tex->w/2, tex->h/2, tex->format, GL_UNSIGNED_BYTE, 0); // copy from pbo to texture 
-  // glBindTexture(GL_TEXTURE_2D, 0); 
+  glBindTexture(GL_TEXTURE_2D, 0); 
   // glFlush();
   // glFinish();
   
@@ -265,8 +285,8 @@ void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex) {
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0); // unbind // important!
   glBindTexture(GL_TEXTURE_2D, 0); // unbind
   
-  glFlush();
-  glFinish();
+  // glFlush();
+  glFinish(); // TODO: debugging
   
 #ifdef OPENGL_TIMING
   swaptime=mstime; mstime=getCurrentMsTimestamp();
@@ -370,10 +390,21 @@ TEX::~TEX() {
   
 YUVTEX::YUVTEX(GLsizei w, GLsizei h) : TEX(w, h), y_index(0), u_index(0), v_index(0) {
   opengllogger.log(LogLevel::crazy) << "YUVTEX: reserving" << std::endl;
-  this->format=GL_RED; // TODO: is this optimal ..?
-  getTEX(this->y_index, this->format, this->w,   this->h);
-  getTEX(this->u_index, this->format, this->w/2, this->h/2);
-  getTEX(this->v_index, this->format, this->w/2, this->h/2);
+  // this->format=GL_RED; // TODO: is this deprecated or what .. ?
+  // this->format=GL_COMPRESSED_RED_RGTC1; // fooling around
+  // this->format=GL_R8; // fooling around
+  // this->format=GL_RGB; // just fooling around ..
+  
+  // this->format             =GL_DEPTH_COMPONENT;
+  // this->internal_format    =GL_R8;
+  
+  this->format             =GL_RED;
+  this->internal_format    =GL_RED;
+  
+  
+  getTEX(this->y_index, this->internal_format, this->format, this->w,   this->h);
+  getTEX(this->u_index, this->internal_format, this->format, this->w/2, this->h/2);
+  getTEX(this->v_index, this->internal_format, this->format, this->w/2, this->h/2);
   opengllogger.log(LogLevel::crazy) << "YUVTEX: reserved " << *this;
   glFinish();
 }

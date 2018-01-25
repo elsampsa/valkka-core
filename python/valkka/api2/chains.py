@@ -52,7 +52,7 @@ class BasicFilterchain:
     "openglthread" : OpenGLThread,
     "address"      : str,
     "slot"         : int,
-    "fifolen"      : (int,10),
+    "fifolen"      : (int,100),
     "affinity"     : (int,-1)
     }
   
@@ -108,9 +108,15 @@ class BasicFilterchain:
     """Creates a LiveConnectionContext and registers it to LiveThread
     """
     # define stream source, how the stream is passed on, etc.
+    
     self.ctx=core.LiveConnectionContext()
     self.ctx.slot=self.slot                          # slot number identifies the stream source
-    self.ctx.connection_type=core.LiveConnectionType_rtsp # this is an rtsp connection
+    
+    if (self.address.find("rtsp://")==0):
+      self.ctx.connection_type=core.LiveConnectionType_rtsp
+    else:
+      self.ctx.connection_type=core.LiveConnectionType_sdp # this is an rtsp connection
+    
     self.ctx.address=self.address         
     # stream address, i.e. "rtsp://.."
     

@@ -44,6 +44,8 @@
 // #define RENDER_VERBOSE 1 // enable this for verbose rendering
 // #define NO_LATE_DROP_DEBUG 1 // don't drop late frame, but present everything in OpenGLThreads fifo.  Useful when debuggin with valgrind (as all frames arrive ~ 200 ms late)
 
+// PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");  // Set the glxSwapInterval to 0, ie.
+
 std::ostream &operator<<(std::ostream &os, OpenGLSignalContext const &m) {
  return os << "<OpenGLSignalContext: slot="<<m.n_slot<<" x_window_id="<<m.x_window_id<<" z="<<m.z<<" render_context="<<m.render_ctx<<" success="<<m.success<<">";
 }
@@ -804,13 +806,13 @@ void RenderGroup::render() {
 #endif
   
   glViewport(0, 0, x_window_attr.width, x_window_attr.height);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear the screen and the depth buffer
+  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear the screen and the depth buffer
   
   for(std::list<RenderContext>::iterator it=render_contexes.begin(); it!=render_contexes.end(); ++it) {
     it->render(x_window_attr);
   }
   
-  // glFinish();
+  glFinish(); // TODO: debugging
   
 #ifdef OPENGL_TIMING
   swaptime=mstime; mstime=getCurrentMsTimestamp();
@@ -875,6 +877,8 @@ OpenGLThread::OpenGLThread(const char* name, unsigned short n720p, unsigned shor
   
   future_ms_tolerance=msbuftime*5; // frames this much in the future will be scrapped
   
+  slot_times.resize(I_MAX_SLOTS+1,0);
+  
   resetCallTime();
 }
 
@@ -905,6 +909,7 @@ bool OpenGLThread::newRenderGroup(Window window_id) {
   if (hasRenderGroup(window_id)) {
     return false;
   }
+  // glXSwapIntervalEXT(display_id, window_id, 0); // segfaults ..
   RenderGroup rg(display_id, glc, window_id, doublebuffer_flag);
   render_groups.insert(std::pair<Window,RenderGroup>(window_id,rg));
   return true;
@@ -1054,6 +1059,19 @@ void OpenGLThread::activateSlotIf(SlotNumber i, BitmapType bmtype) {
  activateSlot(i, bmtype);
 }
 
+
+bool OpenGLThread::slotTimingOk(SlotNumber n_slot, long int mstime) {
+  // std::cout << "slotTimingOk: " << mstime-slot_times[n_slot] << std::endl;
+  
+  if ( (mstime-slot_times[n_slot]<=10) ) { // too little time passed .
+    slot_times[n_slot]=mstime;
+    return false;
+  }
+  else {
+    slot_times[n_slot]=mstime;
+    return true;
+  }
+}
   
 
 void OpenGLThread::render(SlotNumber n_slot) {// Render all RenderGroup(s) depending on slot n_slot
@@ -1162,8 +1180,8 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
   long int      mstime;  
   
   // mstime_delta=getCurrentMsTimestamp()-msbuftime; // delta = (t-tb)
-  mstime       =getCurrentMsTimestamp();
-  mstime_delta =mstime-msbuftime;
+  // mstime       =getCurrentMsTimestamp();
+  // mstime_delta =mstime-msbuftime;
   
 #ifdef TIMING_VERBOSE
   resetCallTime();
@@ -1172,6 +1190,10 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
   auto it=presfifo.rbegin(); // reverse iterator
   
   while(it!=presfifo.rend()) {// while
+    // mstime_delta=getCurrentMsTimestamp()-msbuftime; // delta = (t-tb)
+    mstime       =getCurrentMsTimestamp();
+    mstime_delta =mstime-msbuftime;
+    
     f=*it; // f==pointer to frame
     rel_mstimestamp=(f->mstimestamp-mstime_delta); // == trel = t_ - delta
     if (rel_mstimestamp>0 and rel_mstimestamp<=future_ms_tolerance) {// frames from [inf,0) are left in the fifo
@@ -1219,18 +1241,24 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
             std::cout<<"OpenGLThread: handleFifo: NEXT       " << (*it)->mstimestamp-mstime_delta << " <"<< (*it)->mstimestamp <<"> " << std::endl;
           }
 #endif
-          activateSlotIf(f->n_slot, (f->yuv_pars).bmtype); // activate if not already active
+          // if next frame was give too fast, scrap it
+          if (slotTimingOk(f->n_slot,mstime)) {
+            activateSlotIf(f->n_slot, (f->yuv_pars).bmtype); // activate if not already active
 #ifdef TIMING_VERBOSE
-          reportCallTime(0);
+            reportCallTime(0);
 #endif
-          loadTEX(f->n_slot, f->yuvpbo); // f->yuv_pbo [YUVPBO] has already been uploaded to GPU.  Now it is loaded to the textures. // wtf? can take up to 10 ms ..?
+            loadTEX(f->n_slot, f->yuvpbo); // f->yuv_pbo [YUVPBO] has already been uploaded to GPU.  Now it is loaded to the textures. // wtf? can take up to 10 ms ..?
 #ifdef TIMING_VERBOSE
-          reportCallTime(1);
+            reportCallTime(1);
 #endif
-          render(f->n_slot); // renders all render groups that depend on this slot // wtf?  7 ms?
+            render(f->n_slot); // renders all render groups that depend on this slot // wtf?  7 ms?
 #ifdef TIMING_VERBOSE
-          reportCallTime(2);
+            reportCallTime(2);
 #endif
+          }
+          else {
+            std::cout << "OpenGLThread: handleFifo: feeding frames too fast! dropping.." << std::endl;
+          }
         } // accepted frametype
       }// present frame
       infifo.recycle(f); // codec found or not, frame always recycled
@@ -1245,6 +1273,7 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
   }
   else {
     f=presfifo.back();
+    mstime_delta=getCurrentMsTimestamp()-msbuftime; // delta = (t-tb)
     rel_mstimestamp=f->mstimestamp-mstime_delta; // == trel = t_ - delta
     rel_mstimestamp=std::max((long int)0,rel_mstimestamp);
 #ifdef PRESENT_VERBOSE
@@ -1328,6 +1357,7 @@ void OpenGLThread::run() {// Main execution loop
 void OpenGLThread::preRun() {// Called before entering the main execution loop, but after creating the thread
   initGLX();
   loadExtensions();
+  VSyncOff();
   makeShaders();
   reserveFrames(); // calls glFinish
 }
@@ -1532,6 +1562,11 @@ void OpenGLThread::initGLX() {
   // this->glc=glXCreateNewContext(this->display_id,fbConfigs[0],GLX_RGBA_TYPE,NULL,False); // indirect rendering!
   // printf("ContextManager: glx context handle   =%lu\n",this->glc);
   // XFree(this->fbConfigs);
+  
+  // glXSwapIntervalEXT(0); // we dont have this..
+  // PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");  // Set the glxSwapInterval to 0, ie. disable vsync!  khronos.org/opengl/wiki/Swap_Interval
+  // glXSwapIntervalEXT(display_id, root_id, 0);  // glXSwapIntervalEXT(0); // not here ..
+  
 }
 
 
@@ -1572,6 +1607,45 @@ void OpenGLThread::loadExtensions() {
       opengllogger.log(LogLevel::fatal) << "OpenGLThread: loadExtensions: WARNING: PBO extension not found! :("<<std::endl;
     }
   }
+  
+  // load glx extensions
+  if (is_glx_extension_supported(display_id, "GLX_EXT_swap_control")) {
+      std::cout << "GLX_EXT_swap_control" << std::endl;
+      /*
+      unsigned int tmp = -1;
+      glXQueryDrawable(display_id, drawable, GLX_SWAP_INTERVAL_EXT, &tmp);
+      interval = tmp;
+      */
+  } 
+  else if (is_glx_extension_supported(display_id, "GLX_MESA_swap_control")) {
+    std::cout << "GLX_MESA_swap_control" << std::endl;
+    // PFNGLXGETSWAPINTERVALMESAPROC pglXGetSwapIntervalMESA =
+    this->pglXGetSwapIntervalMESA =
+        (PFNGLXGETSWAPINTERVALMESAPROC)
+        glXGetProcAddressARB((const GLubyte *) "glXGetSwapIntervalMESA");
+        
+    // PFNGLXSWAPINTERVALMESAPROC pglXSwapIntervalMESA =
+    this->pglXSwapIntervalMESA =
+        (PFNGLXSWAPINTERVALMESAPROC)
+        glXGetProcAddressARB((const GLubyte *) "glXSwapIntervalMESA");
+        
+    //interval = (*pglXGetSwapIntervalMESA)();
+  } else if (is_glx_extension_supported(display_id, "GLX_SGI_swap_control")) {
+    std::cout << "GLX_SGI_swap_control" << std::endl;
+    /* The default swap interval with this extension is 1.  Assume that it
+      * is set to the default.
+      *
+      * Many Mesa-based drivers default to 0, but all of these drivers also
+      * export GLX_MESA_swap_control.  In that case, this branch will never
+      * be taken, and the correct result should be reported.
+      */
+    // interval = 1;
+   }
+}
+  
+  
+void OpenGLThread::VSyncOff() {
+  (*pglXSwapIntervalMESA)(0); 
 }
   
 

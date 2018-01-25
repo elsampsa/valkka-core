@@ -6,7 +6,7 @@
 
 # # To see the meaning of these switches, run "showtags.bash" in the "src" directory
 
-options="-Dvalgrind_gpu_debug=OFF -Dno_late_drop_debug=OFF -Davthread_verbose=OFF -Ddecode_verbose=OFF -Dload_verbose=OFF -Dpresent_verbose=OFF -Drender_verbose=OFF -Dfifo_verbose=OFF"
+options="-Dvalgrind_gpu_debug=OFF -Dno_late_drop_debug=OFF -Davthread_verbose=OFF -Ddecode_verbose=OFF -Dload_verbose=OFF -Dpresent_verbose=OFF -Drender_verbose=OFF -Dfifo_verbose=OFF -Dtiming_verbose=OFF -Dopengl_timing=OFF"
 
 # # Choose either one of these:
 build_type="Debug"

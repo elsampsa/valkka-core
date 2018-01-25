@@ -10,14 +10,14 @@ form="udp://"
 # ip="192.168.0.157"
 # # *************************
 # # cam1
-user="admin"
-passwd="nordic12345"
-ip="192.168.0.24"
+# user="admin"
+# passwd="nordic12345"
+# ip="192.168.0.24"
 # # *************************
 # # cam3
-# user="admin"
-# passwd="123456"
-# ip="192.168.0.134"
+user="admin"
+passwd="123456"
+ip="192.168.0.134"
 # # *************************
 
 target="224.1.168.91:50000" # multicast comes from here

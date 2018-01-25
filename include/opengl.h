@@ -39,7 +39,9 @@
 #include "sizes.h"
 #include<GL/glew.h>
 #include<GL/glx.h>
+#include<GL/glxext.h>
 
+int is_glx_extension_supported(Display *dpy, const char *query);
 
 /** GLX parameter groups
  * @ingroup openglthread_tag
@@ -134,7 +136,8 @@ public:
   virtual ~TEX();            ///< Default virtual destructor
   
 public: // format, dimensions
-  GLint    format;    ///< OpenGL internal format
+  GLint    internal_format;    ///< OpenGL internal format - this MUST be optimized!       
+  GLint    format;             ///< OpenGL format of the texture - this MUST be optimized!
   GLsizei  w;         ///< Width of the largest plane (Y)
   GLsizei  h;         ///< Height of the largest plane (Y)
   
@@ -174,7 +177,7 @@ void zeroyuvbytes(int ysize, GLubyte*& Y, GLubyte*& U, GLubyte*& V); ///< Auxili
 void getPBO(GLuint& index, GLsizei size, GLubyte*& payload); ///< Get PBO from the GPU.  There are two versions of this function: other one can be enabled in source for valgrind debugging
 void releasePBO(GLuint* index, GLubyte* payload);
 
-void getTEX(GLuint& index, GLint format, GLsizei w, GLsizei h); ///< Get texture from the GPU
+void getTEX(GLuint& index, GLint internal_format, GLint format, GLsizei w, GLsizei h); ///< Get texture from the GPU
 
 void loadYUVPBO(YUVPBO* pbo, GLsizei size, GLubyte* y, GLubyte* u, GLubyte* v); ///< Load data from pointer addresses to PBOs
 void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex); ///< Load data from PBOs to textures

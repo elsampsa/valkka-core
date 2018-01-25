@@ -323,6 +323,11 @@ protected: // Variables related to X11 and GLX.  Initialized by initGLX.
   std::vector<SlotContext>              slots_;        ///< index => SlotContext mapping (based on vector indices)
   std::map<Window, RenderGroup>         render_groups; ///< window_id => RenderGroup mapping.  RenderGroup objects are warehoused here.
   std::vector<std::list<RenderGroup*>>  render_lists;  ///< Each vector element corresponds to a slot.  Each list inside a vector element has pointers to RenderGroups to be rendered.
+  std::vector<long int>                 slot_times;    ///< Save last time OpenGL was fed with a frame for this slot
+  
+private: // function pointers for glx extensions
+  PFNGLXGETSWAPINTERVALMESAPROC pglXGetSwapIntervalMESA;
+  PFNGLXSWAPINTERVALMESAPROC    pglXSwapIntervalMESA;
   
 protected: // Variables related to queing and presentation
   unsigned             msbuftime;            ///< Buffering time in milliseconds
@@ -358,6 +363,7 @@ public: // API // <pyapi>
 public: // setter methods
   void                activateSlot   (SlotNumber i, BitmapType bmtype);
   void                activateSlotIf (SlotNumber i, BitmapType bmtype); // activate if not already active
+  bool                slotTimingOk   (SlotNumber n_slot, long int mstime);
   void                debugOn()  {debug=true;}
   void                debugOff() {debug=false;}
   
@@ -376,6 +382,7 @@ public: // methods, internal : initializing / closing .. but we might want to te
   void initGLX();          ///< Connect to X11 server, init GLX direct rendering
   void closeGLX();         ///< Close connection to X11
   void loadExtensions();   ///< Load OpenGL extensions using GLEW
+  void VSyncOff();         ///< Turn off vsync for swapbuffers
   void makeShaders();      ///< Compile shaders
   void delShaders();       ///< Delete shader
   void reserveFrames();    ///< Attaches YUVPBO instances with direct GPU memory access to Frame::yuvpbo \callgraph

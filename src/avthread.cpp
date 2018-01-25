@@ -137,16 +137,16 @@ void AVThread::run() {
           std::cout << "AVThread: "<< this->name <<" : run : decoder num " <<subsession_index<< " got frame " << std::endl;
 #endif
           
-#ifdef TIMING_VERBOSE
+#ifdef OPENGL_TIMING
           dt=(getCurrentMsTimestamp()-decoder->out_frame.mstimestamp);
-          if (dt>100) {
+          if (dt>=500) {
             std::cout << "AVThread: " << this->name <<" run: timing : decoder sending frame " << dt << " ms late" << std::endl;
           }
 #endif
           
-          // if ((getCurrentMsTimestamp()-decoder->out_frame.mstimestamp)<100) {
-          outfilter.run(&(decoder->out_frame));
-          // }
+          if ((getCurrentMsTimestamp()-decoder->out_frame.mstimestamp)<500) { // TODO: scrap late frames at this stage .. ? before uploading them to GPU
+            outfilter.run(&(decoder->out_frame));
+          }
         }
         else {
 #ifdef AVTHREAD_VERBOSE
