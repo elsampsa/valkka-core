@@ -805,14 +805,14 @@ void RenderGroup::render() {
   std::cout << "RenderGroup: render: window w, h " <<x_window_attr.width<<" "<<x_window_attr.height<<std::endl;
 #endif
   
+  glFinish(); // TODO: debugging
+  
   glViewport(0, 0, x_window_attr.width, x_window_attr.height);
-  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear the screen and the depth buffer
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear the screen and the depth buffer
   
   for(std::list<RenderContext>::iterator it=render_contexes.begin(); it!=render_contexes.end(); ++it) {
     it->render(x_window_attr);
   }
-  
-  glFinish(); // TODO: debugging
   
 #ifdef OPENGL_TIMING
   swaptime=mstime; mstime=getCurrentMsTimestamp();
