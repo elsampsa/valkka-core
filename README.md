@@ -62,7 +62,7 @@ See also the list of (latest) features below.
 ## Features
 
 ### Current stable version is 0.2.1
-- Full-HD / 25 fps with several cameras streaming allright - but only when using X-windoses created with the library itself (see Resources)
+- Full-HD / 25 fps with several cameras streaming allright - but only when using X-windoses created by the library itself (see Resources/discussion threads)
 - License change (to APGL)
 - Added python level 2 api example
 - Miscellaneous fixes
@@ -141,9 +141,9 @@ Want to modify and develop further Valkka source code?  Your effort is needed.  
 
 ## Resources
 
-1. Discussion threads
+1. Discussion threads:
 
-  -[GLX / OpenGL Rendering](https://www.opengl.org/discussion_boards/showthread.php/200394-glxSwapBuffers-and-glxMakeCurrent-when-streaming-to-multiple-X-windowses)
+  - [GLX / OpenGL Rendering](https://www.opengl.org/discussion_boards/showthread.php/200394-glxSwapBuffers-and-glxMakeCurrent-when-streaming-to-multiple-X-windowses)
 
 2. Doxygen generated [documentation](https://elsampsa.github.io/valkka-core/)
 3. Google [group](https://groups.google.com/forum/#!forum/valkka)
@@ -153,6 +153,7 @@ Want to modify and develop further Valkka source code?  Your effort is needed.  
 Sampsa Riikonen (core programming, opengl shader programming, python programming)
 
 Marco Eranko (testing)
+
 Petri Eranko (financing, testing)
 
 Markus Kaukonen (opengl shader programming, testing)
@@ -160,7 +161,9 @@ Markus Kaukonen (opengl shader programming, testing)
 ## Acknowledgements
 
 Ross Finlayson
+
 Dark Photon
+
 GClements
 
 ## Copyright
