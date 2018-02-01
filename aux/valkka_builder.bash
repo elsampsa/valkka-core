@@ -30,7 +30,9 @@ echo
 mkdir C
 cd C
 mkdir valkka_builds
+# ****** If you have not cloned valkka-core already ********
 git clone https://github.com/elsampsa/valkka-core.git
+# **********************************************************
 cd valkka-core
 git config --global push.default simple
 # If you have not done this:

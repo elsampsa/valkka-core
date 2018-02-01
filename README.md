@@ -119,10 +119,11 @@ Install also the following python packages:
 You have two options (A, B):
 
 A. Using your custom-compiled / home-brewn Live555 and FFmpeg.  This is recommended.
-  - Download and compile Live555 and FFmpeg libraries (should not be under this directory structure, though)
-  - The script "lib/run_config_.bash" will help you to compile a stripped-down version of FFmpeg
+  - Download and compile Live555 and FFmpeg libraries
+  - The script "lib/run_config_3_4_.bash" will help you to compile a stripped-down version of FFmpeg 3.4 libraries
   - Read the comments in "lib/ln_live.bash" and "lib/ln_ffmpeg.bash"
   - Use those scripts to create softlinks to the library files
+  - NEW: script "aux/valkka_builder.bash" has it all (however, you should not launch it before reading/studying it).
 
 B. Using system-wide installed (i.e. with apt-get) shared libraries and header files
   - Just edit your run_cmake.bash accordingly (below)

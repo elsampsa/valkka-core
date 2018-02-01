@@ -21,11 +21,11 @@ Go to directory "ext/" and run there scripts "ln_ffmpeg.bash" and "ln_live.bash"
 
 Run the script "make_links.bash".  Now the setup script can find the valkka header files.
 
-Run the script "make_swig_file.bash".  It extracts required parts from valkka header files to build the python interface.
-
 Before compiling, we must inform the linker where the "libValkka.so" is.  If you are using system-wide (1), linker should find it automatically.  If you're doing custom-compiled, run first "source test_env.bash" in your relevant build directory (it sets the "LD_LIBRARY_PATH" environment variable that we use here also in link time)
 
-Run the "compile3.bash" script.  After this, you should have the files "valkka_core.py" and "_valkka_core.py" in the "valkka/" directory.
+Run the "compile3.bash" script (this also calls the script "make_swig_file.bash" that extracts required parts from valkka header files to build the python interface).
+
+After this, you should have the files "valkka_core.py" and "_valkka_core.py" in the "valkka/" directory.
 
 (between successive "compile3.bash" runs, you might want to run the "clean.bash" script)
 
