@@ -30,7 +30,7 @@ Check out the API teaser in the end of this document.
              
 Some key features of the Valkka library are:
 - Python3 API: create process topologies from python3 only.
-- Develop sleek graphical interfaces fast with PyQt.  Cool!
+- Develop sleek graphical interfaces fast with PyQt.
 - The library itself runs purely in C++.  No python Global Interpreter Lock (GIL) problems here.
 - Connections to streaming devices (IP cameras, SDP files) are done using the Live555 media streaming library
 - Decoding is done with the FFMpeg library
@@ -57,17 +57,24 @@ See also the list of (latest) features below.
       pip3 install --upgrade package_name
 
 - Download python3 examples from "valkka-examples" [repository](https://github.com/elsampsa/valkka-examples).
+- Benchmarking and testing Valkka is done with the api level 2 programs at the "valkka-examples" repository (see that repo for more instructions).
 - Check out Valkka cpp [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
 
 ## Features
 
-### Current stable version is 0.2.1
-- Full-HD / 25 fps with several cameras streaming allright - but only when using X-windoses created by the library itself (see Resources/discussion threads)
+### Current stable version is 0.3.0 (coming online in .. maybe a minute)
+0.3.0 Version name : "It was all about the vblank"
+- Several full-HD cameras now streaming OK
+- Interoperability with python multiprocesses (and from there, with OpenCV)
+- For benchmarking, testing and demos see the "valkka-examples" repository
+
+### Older versions
+
+0.2.1 Version
 - License change (to APGL)
 - Added python level 2 api example
 - Miscellaneous fixes
 
-### Older versions
 0.2.0 Version name : "Christmas 2017 project"
 - Software interpolator filter (yuv => rgb interpolation in the CPU)
 - Shared memory bridge for python inter-process communication
@@ -95,7 +102,7 @@ See also the list of (latest) features below.
 
 A word of warning: if you just want to use the API, no need to go further
 
-However, if you have decided to develop Valkka and build it from source - great!  Here are the instructions:
+However, if you have decided to develop Valkka and build it from source, here are the instructions:
 
 ### Dependencies
 
@@ -192,7 +199,7 @@ Code:
     from valkka.api2.threads import LiveThread, OpenGLThread, ShmemClient
     from valkka.api2.chains import BasicFilterchain, ShmemFilterchain
 
-    address="rtsp://admin:12345@192.168.0.157"
+    address="rtsp://admin:123456@192.168.0.134"
 
     livethread=LiveThread(         # starts live stream services (using live555)
       name   ="live_thread",
@@ -258,10 +265,10 @@ Code:
         data=client.shmem_list[index]
         # print(">>>",data[0:10])
         img=data.reshape((1080//4,1920//4,3))
-        # so, here we just dump the image once more, this time with opencv - but I guess you got the idea
-        cv2.imshow("openCV_window",img)
-        cv2.waitKey(1)
+        cv2.imshow("openCV_window",img); cv2.waitKey(1) # Let's hope your OpenCV high-gui works
       if ( (time.time()-t)>=20 ): break # exit after 20 secs
+      
+    print("bye!")
       
     # that ShmemClient could be instantiated from a forked or even an independent python process, and this would still work as long as you
     # use same name for ShmemClient: name and ShmemFilterchain: shmem_name.  It's named and shared posix memory and semaphores.

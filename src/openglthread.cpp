@@ -888,6 +888,50 @@ OpenGLThread::~OpenGLThread() {// WARNING: deallocations shoud be in postRun, i.
 }
 
 
+unsigned OpenGLThread::getSwapInterval(GLXDrawable drawable) {
+  unsigned i;
+  if (drawable==0) {
+    drawable=root_id;
+  }
+  switch (swap_flavor) {
+    case swap_flavors::ext: {
+      glXQueryDrawable(display_id, drawable, GLX_SWAP_INTERVAL_EXT, &i);
+      break;
+    }
+    case swap_flavors::mesa: {
+      i=(*pglXGetSwapIntervalMESA)();
+      break;
+    }
+    default: {
+      // this should not happen..
+      break;
+    }
+  }
+  return i;
+}
+  
+void OpenGLThread::setSwapInterval(unsigned i, GLXDrawable drawable) {
+  if (drawable==0) {
+    drawable=root_id;
+  }
+  switch (swap_flavor) {
+    case swap_flavors::ext: {
+      // I could load this with glxext.h, but including that creates a crash
+      // glXSwapIntervalEXT(display_id, drawable, i); // this is annoying .. for "GL_EXT_swap_control" we specify a drawable, for the mesa version, we don't..
+      break;
+    }
+    case swap_flavors::mesa: {
+      (*pglXSwapIntervalMESA)(i);
+      break;
+    }
+    default: {
+      // this should not happen..
+      break;
+    }
+  }
+}
+
+
 bool OpenGLThread::hasRenderGroup(Window window_id) {
   auto search = render_groups.find(window_id);
   
@@ -909,7 +953,7 @@ bool OpenGLThread::newRenderGroup(Window window_id) {
   if (hasRenderGroup(window_id)) {
     return false;
   }
-  // glXSwapIntervalEXT(display_id, window_id, 0); // segfaults ..
+  reConfigWindow(window_id);
   RenderGroup rg(display_id, glc, window_id, doublebuffer_flag);
   render_groups.insert(std::pair<Window,RenderGroup>(window_id,rg));
   return true;
@@ -1357,6 +1401,7 @@ void OpenGLThread::run() {// Main execution loop
 void OpenGLThread::preRun() {// Called before entering the main execution loop, but after creating the thread
   initGLX();
   loadExtensions();
+  swap_interval_at_startup=getSwapInterval(); // save the value of vsync
   VSyncOff();
   makeShaders();
   reserveFrames(); // calls glFinish
@@ -1575,6 +1620,11 @@ void OpenGLThread::makeCurrent(Window window_id) {
 }
 
 
+unsigned OpenGLThread::getVsyncAtStartup() {
+  return swap_interval_at_startup;
+}
+
+
 void OpenGLThread::closeGLX() {
   XFree(this->fbConfigs);
   glXDestroyContext(this->display_id, this->glc);
@@ -1609,16 +1659,19 @@ void OpenGLThread::loadExtensions() {
   }
   
   // load glx extensions
+  /*
   if (is_glx_extension_supported(display_id, "GLX_EXT_swap_control")) {
       std::cout << "GLX_EXT_swap_control" << std::endl;
-      /*
-      unsigned int tmp = -1;
-      glXQueryDrawable(display_id, drawable, GLX_SWAP_INTERVAL_EXT, &tmp);
-      interval = tmp;
-      */
-  } 
-  else if (is_glx_extension_supported(display_id, "GLX_MESA_swap_control")) {
+      // typedef void ( *PFNGLXSWAPINTERVALEXTPROC) (Display *dpy, GLXDrawable drawable, int interval);
+      perror("OpenGLThread: loadExtensions: GLX_EXT_swap_control: GXL_MESA_swap_control required!");
+      swap_flavor =swap_flavors::ext;
+  }
+  */
+  if (is_glx_extension_supported(display_id, "GLX_MESA_swap_control")) {
     std::cout << "GLX_MESA_swap_control" << std::endl;
+    // typedef int (*PFNGLXGETSWAPINTERVALMESAPROC)(void);
+    // typedef int (*PFNGLXSWAPINTERVALMESAPROC)(unsigned int interval);
+    
     // PFNGLXGETSWAPINTERVALMESAPROC pglXGetSwapIntervalMESA =
     this->pglXGetSwapIntervalMESA =
         (PFNGLXGETSWAPINTERVALMESAPROC)
@@ -1627,10 +1680,12 @@ void OpenGLThread::loadExtensions() {
     // PFNGLXSWAPINTERVALMESAPROC pglXSwapIntervalMESA =
     this->pglXSwapIntervalMESA =
         (PFNGLXSWAPINTERVALMESAPROC)
-        glXGetProcAddressARB((const GLubyte *) "glXSwapIntervalMESA");
+        glXGetProcAddressARB((const GLubyte *) "glXSwapIntervalMESA"); // actually.. this seems to be in glx.h and not in glxext.h anymore..
         
     //interval = (*pglXGetSwapIntervalMESA)();
-  } else if (is_glx_extension_supported(display_id, "GLX_SGI_swap_control")) {
+    swap_flavor =swap_flavors::mesa;
+  } 
+  else if (is_glx_extension_supported(display_id, "GLX_SGI_swap_control")) {
     std::cout << "GLX_SGI_swap_control" << std::endl;
     /* The default swap interval with this extension is 1.  Assume that it
       * is set to the default.
@@ -1640,12 +1695,22 @@ void OpenGLThread::loadExtensions() {
       * be taken, and the correct result should be reported.
       */
     // interval = 1;
+    
+    // eh.. this is basically useless
+    perror("OpenGLThread: loadExtensions: GLX_SGI_swap_control: there's something wrong with your graphics driver");
+    swap_flavor =swap_flavors::sgi;
    }
+  else {
+    perror("OpenGLThread: loadExtensions: no swap control: there's something wrong with your graphics driver");
+    swap_flavor =swap_flavors::none;
+  }
 }
   
   
 void OpenGLThread::VSyncOff() {
-  (*pglXSwapIntervalMESA)(0); 
+  // (*pglXSwapIntervalMESA)(0); 
+  // glXSwapIntervalMESA(0);
+  setSwapInterval(0);
 }
   
 
@@ -1685,6 +1750,12 @@ Window OpenGLThread::createWindow() {
   XStoreName(this->display_id, win_id, "test window");
 
   return win_id;
+}
+
+
+void OpenGLThread::reConfigWindow(Window &window_id) {
+  // glXSwapIntervalEXT(display_id, window_id, 0); // segfaults ..
+  // XChangeWindowAttributes(display_id, window_id, valuemask, attributes)
 }
 
 

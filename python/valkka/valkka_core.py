@@ -1152,6 +1152,10 @@ MSBFirst = _valkka_core.MSBFirst
 def getNumpyShmem(rb, i):
     return _valkka_core.getNumpyShmem(rb, i)
 getNumpyShmem = _valkka_core.getNumpyShmem
+
+def XInitThreads():
+    return _valkka_core.XInitThreads()
+XInitThreads = _valkka_core.XInitThreads
 class FrameFilter(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, FrameFilter, name, value)
@@ -1770,6 +1774,9 @@ class OpenGLThread(Thread):
 
     def makeCurrent(self, window_id):
         return _valkka_core.OpenGLThread_makeCurrent(self, window_id)
+
+    def getVsyncAtStartup(self):
+        return _valkka_core.OpenGLThread_getVsyncAtStartup(self)
 
     def stopCall(self):
         return _valkka_core.OpenGLThread_stopCall(self)

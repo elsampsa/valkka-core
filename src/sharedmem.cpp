@@ -348,7 +348,7 @@ bool SharedMemRingBuffer::clientPull(int &index_out, int &size_out) {
     index=0;
   }
   // TODO: read data here // what if read/write at the same moment at same cell..?  is locking a better idea ..? nope .. no locking needed!   This is process-safe by architecture..
-  std::cout << "RingBuffer: clientPull: read index "<<index<<std::endl;
+  // std::cout << "RingBuffer: clientPull: read index "<<index<<std::endl;
   
   index_out=index;
   size_out =shmems[index]->getSize();

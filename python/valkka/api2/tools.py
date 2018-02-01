@@ -125,7 +125,7 @@ def objectCheck(definitions, obj):
   return True
     
   
-def parameterInitCheck(definitions, parameters, obj):
+def parameterInitCheck(definitions, parameters, obj, undefined_ok=False):
   """ Checks that parameters are consistent with a definition
   
   :param definitions: Dictionary defining the parameters, their default values, etc.
@@ -151,7 +151,10 @@ def parameterInitCheck(definitions, parameters, obj):
     try:
       definition=definitions.pop(key) 
     except KeyError:
-      raise AttributeError("Unknown parameter "+str(key))
+      if (undefined_ok):
+        continue
+      else:
+        raise AttributeError("Unknown parameter "+str(key))
       
     parameter =parameters[key]
     if (definition.__class__==tuple):   # a tuple defining (parameter_class, default value)

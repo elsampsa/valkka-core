@@ -13,7 +13,7 @@ import cv2
 from valkka.api2.threads import LiveThread, OpenGLThread, ShmemClient
 from valkka.api2.chains import BasicFilterchain, ShmemFilterchain
 
-address="rtsp://admin:12345@192.168.0.157"
+address="rtsp://admin:123456@192.168.0.134"
 
 livethread=LiveThread(         # starts live stream services (using live555)
   name   ="live_thread",
@@ -79,10 +79,10 @@ while True:
     data=client.shmem_list[index]
     # print(">>>",data[0:10])
     img=data.reshape((1080//4,1920//4,3))
-    # so, here we just dump the image once more - but I guess you got the idea
-    cv2.imshow("openCV_window",img)
-    cv2.waitKey(1)
+    cv2.imshow("openCV_window",img); cv2.waitKey(1) # Let's hope your OpenCV high-gui works
   if ( (time.time()-t)>=20 ): break # exit after 20 secs
+  
+print("bye!")
   
 # that ShmemClient could be instantiated from a forked or even an independent python process, and this would still work as long as you
 # use same name for ShmemClient: name and ShmemFilterchain: shmem_name.  It's named and shared posix memory and semaphores.

@@ -247,6 +247,14 @@ struct OpenGLSignalContext {   // used by signals:
 std::ostream &operator<<(std::ostream &os, OpenGLSignalContext const &m);
 
 
+namespace swap_flavors { // this glx extension(?) is a mess..
+  const static unsigned     none =0;
+  const static unsigned     ext  =1;
+  const static unsigned     mesa =2;
+  const static unsigned     sgi  =3;
+}
+
+
 /** This class does a lot of things:
  * - Handles all OpenGL calls.  GLX and OpenGL initializations are done at thread start (i.e., at OpenGLThread::preRun, not at the constructor)
  * - Creates an OpenGLFrameFifo instance (OpenGLThread::infifo) that has direct memory access to the GPU.  It is retrieved by calling OpenGLThread::getFifo (fifo's frames get initialized once OpenGLThread starts running)
@@ -328,6 +336,13 @@ protected: // Variables related to X11 and GLX.  Initialized by initGLX.
 private: // function pointers for glx extensions
   PFNGLXGETSWAPINTERVALMESAPROC pglXGetSwapIntervalMESA;
   PFNGLXSWAPINTERVALMESAPROC    pglXSwapIntervalMESA;
+  
+  
+public: // methods for getting/setting the swap interval .. these choose the correct method to call
+  unsigned                      swap_flavor;
+  unsigned                      swap_interval_at_startup;                             ///< The value of swap interval when this thread was started
+  unsigned                      getSwapInterval(GLXDrawable drawable=0);
+  void                          setSwapInterval(unsigned i, GLXDrawable drawable=0);
   
 protected: // Variables related to queing and presentation
   unsigned             msbuftime;            ///< Buffering time in milliseconds
@@ -416,8 +431,10 @@ public: // testing
   void recycle(Frame* f)             {infifo.recycle(f);} ///< Recycle a frame back to OpenGLFrameFifo
   
 public: // for testing // <pyapi>
-  Window createWindow();   ///< Creates a new X window (for debugging/testing only) // <pyapi>
-  void makeCurrent(const Window window_id);  ///< Set current X windox // <pyapi>
+  Window    createWindow();                       ///< Creates a new X window (for debugging/testing only) // <pyapi>
+  void      makeCurrent(const Window window_id);  ///< Set current X windox                                // <pyapi>
+  unsigned  getVsyncAtStartup();                  ///< What vsync was at startup time?                     // <pyapi> 
+  void      reConfigWindow(Window &window_id);
   
 public: // API // <pyapi>
   /** API call: stops the thread
