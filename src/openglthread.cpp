@@ -1301,7 +1301,7 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
 #endif
           }
           else {
-            std::cout << "OpenGLThread: handleFifo: feeding frames too fast! dropping.." << std::endl;
+            opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: feeding frames too fast! dropping.." << std::endl;
           }
         } // accepted frametype
       }// present frame
@@ -1367,7 +1367,7 @@ void OpenGLThread::run() {// Main execution loop
     } // TIMEOUT
     else { // GOT FRAME // remember to apply infifo.recycle
       if (debug) {
-        avthreadlogger.log(LogLevel::normal) << "OpenGLThread: "<< this->name <<" : run : DEBUG MODE! recycling received frame "<< *f << std::endl;
+        opengllogger.log(LogLevel::normal) << "OpenGLThread: "<< this->name <<" : run : DEBUG MODE! recycling received frame "<< *f << std::endl;
         infifo.recycle(f);
         infifo.reportStacks();
       }
