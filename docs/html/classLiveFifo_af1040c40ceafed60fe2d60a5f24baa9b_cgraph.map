@@ -1,0 +1,4 @@
+<map id="LiveFifo::writeCopy" name="LiveFifo::writeCopy">
+<area shape="rect" id="node2" href="$classFrameFifo.html#a01765bd79b616a2425ba84d94a15d737" title="Take a frame &quot;ftmp&quot; from the stack, copy contents of &quot;f&quot; into &quot;ftmp&quot; and insert &quot;ftmp&quot; into the begin..." alt="" coords="188,5,336,32"/>
+<area shape="rect" id="node3" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="384,5,551,32"/>
+</map>

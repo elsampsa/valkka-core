@@ -1,0 +1,13 @@
+<map id="LiveThread::LiveThread" name="LiveThread::LiveThread">
+<area shape="rect" id="node2" href="$classLiveThread.html#a8b53c829a1a8ec8a004d9e0df3e5e6c8" title="Used to (re)schedule LiveThread methods into the live555 event loop. " alt="" coords="223,5,391,32"/>
+<area shape="rect" id="node3" href="$classLiveThread.html#a0a374111f6c52e81f9d2eb56eddc613b" title="For testing/debugging. " alt="" coords="213,56,402,83"/>
+<area shape="rect" id="node4" href="$classLiveThread.html#a3af76255f7009cc8b0f298844651221e" title="For debugging. " alt="" coords="470,91,638,133"/>
+<area shape="rect" id="node8" href="$classLiveThread.html#a3da513578a82adf0d121e6b134fd6f52" title="Triggered when an empty fifo gets a frame. Schedules readFrameFifoTask. " alt="" coords="212,157,403,184"/>
+<area shape="rect" id="node12" href="$classConnection.html#ae1c3d8e91e7b1c61fe25b6905de703ee" title="Return the slot number. " alt="" coords="485,229,623,256"/>
+<area shape="rect" id="node5" href="$classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64" title="Pop a frame from the end of the fifo and return the frame to the reservoir stack. ..." alt="" coords="733,103,847,129"/>
+<area shape="rect" id="node6" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="923,153,1053,180"/>
+<area shape="rect" id="node7" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="1101,153,1197,180"/>
+<area shape="rect" id="node9" href="$classLiveThread.html#a2e68caeedbc0166262a833003059e147" title="This task registers itself if there are frames in the fifo. " alt="" coords="451,157,657,184"/>
+<area shape="rect" id="node10" href="$classLiveThread.html#a88b224ee73f6c63b4c073eb23351e806" title="Handles frames incoming to live555. " alt="" coords="705,153,875,180"/>
+<area shape="rect" id="node11" href="$classFrameFifo.html#a37e3264d8b8f8a787cd305c79e568645" title="Tell if fifo is empty. " alt="" coords="721,204,859,231"/>
+</map>
