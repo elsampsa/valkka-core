@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.1.0</span>
+   &#160;<span id="projectnumber">0.3.0</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -102,20 +102,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="livedep_8h_source.html">livedep.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="frames_8h_source.html">frames.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="queues_8h_source.html">queues.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="logging_8h_source.html">logging.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for live.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="live_8h__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2include_2live_8h" alt=""/></div>
 <map name="_2home_2sampsa_2C_2valkka_2include_2live_8h" id="_2home_2sampsa_2C_2valkka_2include_2live_8h">
-<area shape="rect" id="node2" href="livedep_8h.html" title="List of common header files. " alt="" coords="973,95,1048,121"/>
-<area shape="rect" id="node14" href="frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1873,95,1946,121"/>
-<area shape="rect" id="node50" href="logging_8h.html" title="Logging utilities. " alt="" coords="2811,319,2885,345"/>
-<area shape="rect" id="node15" href="common_8h.html" title="List of common header files. " alt="" coords="1772,319,1855,345"/>
-<area shape="rect" id="node41" href="sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1851,244,1915,271"/>
-<area shape="rect" id="node42" href="avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="2338,169,2406,196"/>
-<area shape="rect" id="node48" href="opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1801,169,1871,196"/>
-<area shape="rect" id="node49" href="tools_8h.html" title="Auxiliary routines. " alt="" coords="1947,169,2008,196"/>
+<area shape="rect" id="node2" href="livedep_8h.html" title="List of common header files. " alt="" coords="1041,95,1116,121"/>
+<area shape="rect" id="node14" href="frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1749,169,1822,196"/>
+<area shape="rect" id="node48" href="logging_8h.html" title="Logging utilities. " alt="" coords="2488,393,2563,420"/>
+<area shape="rect" id="node49" href="queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="1823,95,1897,121"/>
+<area shape="rect" id="node15" href="common_8h.html" title="List of common header files. " alt="" coords="1572,393,1655,420"/>
+<area shape="rect" id="node41" href="sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1616,319,1680,345"/>
+<area shape="rect" id="node42" href="avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1979,244,2047,271"/>
+<area shape="rect" id="node46" href="opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1574,244,1645,271"/>
+<area shape="rect" id="node47" href="tools_8h.html" title="Auxiliary routines. " alt="" coords="1720,244,1781,271"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -126,7 +128,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <area shape="rect" id="node2" href="livethread_8h.html" title="A live555 thread. " alt="" coords="99,95,263,136"/>
 <area shape="rect" id="node6" href="live_8cpp.html" title="Interface to live555. " alt="" coords="287,95,451,136"/>
 <area shape="rect" id="node3" href="chains_8h.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="5,184,169,225"/>
-<area shape="rect" id="node5" href="livethread_8cpp.html" title="A live555 multithread. " alt="" coords="193,184,357,225"/>
+<area shape="rect" id="node5" href="livethread_8cpp.html" title="A live555 thread. " alt="" coords="193,184,357,225"/>
 <area shape="rect" id="node4" href="chains_8cpp.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="5,273,169,315"/>
 </map>
 </div>
@@ -135,6 +137,12 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html">BufferSource</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStream.html">Stream</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classH264Stream.html">H264Stream</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamClientState.html">StreamClientState</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class to hold per-stream state that we maintain throughout each stream's lifetime.  <a href="classStreamClientState.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,14 +171,14 @@ UsageEnvironment &amp;&#160;</td><td class="memItemRight" valign="bottom"><a cla
 UsageEnvironment &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="live_8h.html#a9bcbe9e342a5519bcaa8d3d5c126d3e6">operator&lt;&lt;</a> (UsageEnvironment &amp;env, const MediaSubsession &amp;subsession)</td></tr>
 <tr class="memdesc:a9bcbe9e342a5519bcaa8d3d5c126d3e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function that outputs a string that identifies each subsession (for debugging output). <br /></td></tr>
 <tr class="separator:a9bcbe9e342a5519bcaa8d3d5c126d3e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab6d15f91bacb0324beb97a1a67ee678"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aab6d15f91bacb0324beb97a1a67ee678"></a>
-<a class="el" href="structLogger.html">Logger</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="live_8h.html#aab6d15f91bacb0324beb97a1a67ee678">operator&lt;&lt;</a> (<a class="el" href="structLogger.html">Logger</a> &amp;env, const RTSPClient &amp;rtspClient)</td></tr>
-<tr class="memdesc:aab6d15f91bacb0324beb97a1a67ee678"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function that outputs a string that identifies each stream (for debugging output). <br /></td></tr>
-<tr class="separator:aab6d15f91bacb0324beb97a1a67ee678"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94f4c39ca05f4364654d8984f8784718"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a94f4c39ca05f4364654d8984f8784718"></a>
-<a class="el" href="structLogger.html">Logger</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="live_8h.html#a94f4c39ca05f4364654d8984f8784718">operator&lt;&lt;</a> (<a class="el" href="structLogger.html">Logger</a> &amp;env, const MediaSubsession &amp;subsession)</td></tr>
-<tr class="memdesc:a94f4c39ca05f4364654d8984f8784718"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function that outputs a string that identifies each subsession (for debugging output). <br /></td></tr>
-<tr class="separator:a94f4c39ca05f4364654d8984f8784718"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c7cb611087bbae9c49718033980d8f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c7cb611087bbae9c49718033980d8f3"></a>
+<a class="el" href="structLogger.html">Logger</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="live_8h.html#a3c7cb611087bbae9c49718033980d8f3">operator&lt;&lt;</a> (<a class="el" href="structLogger.html">Logger</a> &amp;logger, const RTSPClient &amp;rtspClient)</td></tr>
+<tr class="memdesc:a3c7cb611087bbae9c49718033980d8f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function that outputs a string that identifies each stream (for debugging output). <br /></td></tr>
+<tr class="separator:a3c7cb611087bbae9c49718033980d8f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6adc81c606bc2918f0da2bb1d1dc3da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6adc81c606bc2918f0da2bb1d1dc3da"></a>
+<a class="el" href="structLogger.html">Logger</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="live_8h.html#af6adc81c606bc2918f0da2bb1d1dc3da">operator&lt;&lt;</a> (<a class="el" href="structLogger.html">Logger</a> &amp;logger, const MediaSubsession &amp;subsession)</td></tr>
+<tr class="memdesc:af6adc81c606bc2918f0da2bb1d1dc3da"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function that outputs a string that identifies each subsession (for debugging output). <br /></td></tr>
+<tr class="separator:af6adc81c606bc2918f0da2bb1d1dc3da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace7f01639916e10f2236247eb98d1125"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ace7f01639916e10f2236247eb98d1125"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>usage</b> (UsageEnvironment &amp;env, char const *progName)</td></tr>
 <tr class="separator:ace7f01639916e10f2236247eb98d1125"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -179,11 +187,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>usage</b> (UsageEnvir
 <div class="textblock"><p>Interface to live555. </p>
 <dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.2.0</dd></dl>
-<h1><a class="anchor" id="DESCRIPTION"></a>
-DESCRIPTION</h1>
-<p>This live555 "bridge" is based on the celebrated "testRTSPClient" test program.</p>
-<p>Acknowledgements: Ross Finlayson for his advices </p>
+<dl class="section version"><dt>Version</dt><dd>0.3.0</dd></dl>
+<p>Acknowledgements: Ross Finlayson for his advice </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

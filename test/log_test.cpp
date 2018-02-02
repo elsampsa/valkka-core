@@ -26,7 +26,7 @@
  *  @file    log_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.3.0 
  *  
  *  @brief Test logging utility
  *

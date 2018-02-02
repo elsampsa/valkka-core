@@ -26,7 +26,7 @@
  *  @file    doc.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.2.0 
+ *  @version 0.3.0 
  *  
  *  @brief Extra doxygen documentation
  *
@@ -60,9 +60,9 @@
  * 
  * Authors
  * -------
- * Sampsa Riikonen (core programming) <br> 
- * Petri Eränkö (financing, testing) <br>
- * Markus Kaukonen (OpenGL shaders) <br>
+ * Sampsa Riikonen <sampsa.riikonen@iki.fi> (core programming) <br> 
+ * Petri Eränkö <petri.eranko@dasys.fi> (financing, testing) <br>
+ * Markus Kaukonen <markus.kaukonen@iki.fi> (OpenGL shaders) <br>
  * 
  * 
  * Contributing
@@ -71,10 +71,9 @@
  * 
  * For library architecture, code walkthroughs and explanations, check out the "Related Pages" section
  * 
- * 
+ * License
+ * -------
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
- * 
- * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
  * This file is part of the Valkka library.
  * 
@@ -507,13 +506,13 @@
  * 
  * Different actions for file streams:
  * 
- * Action     | 
- * ---------- | ----------------------------------------
- * register   |
+ * Action     | What it does
+ * ---------- | ------------------------------------------
+ * register   | ..
  * seek       | set reftime, consume frames 'till t==t_
  * play       | set reftime, keep consuming frames
- * stop       |
- * deregister |
+ * stop       | ..
+ * deregister | ..
  * 
  * 
  * 

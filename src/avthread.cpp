@@ -26,25 +26,16 @@
  *  @file    avthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
- *  
- *  @brief FFmpeg decoding thread
- *
- *  @section DESCRIPTION
- *  
- *  Yes, the description
- *
+ *  @version 0.3.0 
+ *  @brief   FFmpeg decoding thread
  */ 
 
 #include "avthread.h"
 #include "logging.h"
 #include "tools.h"
 
-// WARNING: these define switches should be off (commented) by default
-// #define AVTHREAD_VERBOSE 1
-
 // AVThread::AVThread(const char* name, FrameFifo* infifo, FrameFilter& outfilter) : Thread(name), infifo(infifo), outfilter(outfilter), is_decoding(false) {
-AVThread::AVThread(const char* name, FrameFifo& infifo, FrameFilter& outfilter, int core_id) : Thread(name, core_id), infifo(infifo), outfilter(outfilter), is_decoding(false) {
+AVThread::AVThread(const char* name, FrameFifo& infifo, FrameFilter& outfilter, int core_id, long int mstimetolerance) : Thread(name, core_id), infifo(infifo), outfilter(outfilter), mstimetolerance(mstimetolerance), is_decoding(false) {
   avthreadlogger.log(LogLevel::debug) << "AVThread : constructor : N_MAX_DECODERS ="<<int(N_MAX_DECODERS)<<std::endl;
   decoders.resize(int(N_MAX_DECODERS),NULL);
 }
@@ -143,8 +134,15 @@ void AVThread::run() {
             std::cout << "AVThread: " << this->name <<" run: timing : decoder sending frame " << dt << " ms late" << std::endl;
           }
 #endif
-          
-          if ((getCurrentMsTimestamp()-decoder->out_frame.mstimestamp)<500) { // TODO: scrap late frames at this stage .. ? before uploading them to GPU
+          if (mstimetolerance>0) { // late frames can be dropped here, before their insertion to OpenGLThreads fifo
+            if ((getCurrentMsTimestamp()-decoder->out_frame.mstimestamp)<=mstimetolerance) {
+              outfilter.run(&(decoder->out_frame));
+            }
+            else {
+              avthreadlogger.log(LogLevel::debug) << "AVThread: not sending late frame " << decoder->out_frame << std::endl;
+            }
+          }
+          else { // no time tolerance defined
             outfilter.run(&(decoder->out_frame));
           }
         }

@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.1.0</span>
+   &#160;<span id="projectnumber">0.3.0</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -85,7 +85,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <div class="textblock"><p>Notation convention for handling presentation timestamps (PTS)</p>
 <h2>File streams </h2>
-<p>The underscore "_" tags "stream time". Stream timestamps are timestamps on each recorded frame.. they can be far in the past or in the future.</p>
+<p>The underscore "_" tags "stream time". <a class="el" href="classStream.html">Stream</a> timestamps are timestamps on each recorded frame.. they can be far in the past or in the future.</p>
 <p>The following equation holds:</p>
 <p>(t_-t_0) = (t-t0)</p>
 <p>where:</p>
@@ -108,7 +108,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>t = t_ + reftime</p>
 <p>Where t_ is the frame's timestamp in the stream. You can think it as we're correcting a recorded frame's timestamp to present time.</p>
 <p>[ check: t = t_ + reftime &lt;=&gt; t = t_ + t0 - t0_ &lt;=&gt; t - t0 &lt;=&gt; t_ - t0_ ]</p>
-<h2>Real time presentation </h2>
+<p>Different actions for file streams:</p>
+<table class="doxtable">
+<tr>
+<th>Action </th><th>What it does  </th></tr>
+<tr>
+<td>register </td><td>.. </td></tr>
+<tr>
+<td>seek </td><td>set reftime, consume frames 'till t==t_ </td></tr>
+<tr>
+<td>play </td><td>set reftime, keep consuming frames </td></tr>
+<tr>
+<td>stop </td><td>.. </td></tr>
+<tr>
+<td>deregister </td><td>.. </td></tr>
+</table>
+<h2>Timing for realtime streams </h2>
 <table class="doxtable">
 <tr>
 <th>Symbol </th><th>Explanation  </th></tr>

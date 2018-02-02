@@ -26,7 +26,7 @@
  *  @file    opengl_thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.3.0 
  *  
  *  @brief Test OpenGLThread signals and functionality. Test whole pipeline from LiveThread to OpenGL rendering
  */ 

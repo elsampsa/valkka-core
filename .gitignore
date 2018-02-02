@@ -35,3 +35,4 @@ toolchain/
 changelic.bash
 changetext
 python/valkka_core.i
+publish_lite.bash

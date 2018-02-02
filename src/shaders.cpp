@@ -27,7 +27,7 @@
  *  @author  Sampsa Riikonen
  *  @author  Markus Kaukonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.3.0 
  *  
  *  @brief 
  *
@@ -245,7 +245,7 @@ void Shader::scale(GLfloat fx, GLfloat fy) {
 
 
 void Shader::use() {
-  opengllogger.log(LogLevel::debug) << "Shader: use: using program index=" << this->program << std::endl;
+  opengllogger.log(LogLevel::crazy) << "Shader: use: using program index=" << this->program << std::endl;
   glUseProgram(this->program);
 }
 

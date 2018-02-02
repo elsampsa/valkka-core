@@ -7,7 +7,7 @@
 <area shape="rect" id="node3" href="$chains_8h.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="193,184,357,225"/>
 <area shape="rect" id="node5" href="$avthread_8cpp.html" title="FFmpeg decoding thread. " alt="" coords="5,184,169,225"/>
 <area shape="rect" id="node4" href="$chains_8cpp.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="193,273,357,315"/>
-<area shape="rect" id="node7" href="$livethread_8cpp.html" title="A live555 multithread. " alt="" coords="381,184,545,225"/>
-<area shape="rect" id="node9" href="$filethread_8cpp.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="569,184,733,225"/>
+<area shape="rect" id="node7" href="$livethread_8cpp.html" title="A live555 thread. " alt="" coords="381,184,545,225"/>
+<area shape="rect" id="node9" href="$filethread_8cpp.html" title="A thread sending frames from files. " alt="" coords="569,184,733,225"/>
 <area shape="rect" id="node11" href="$openglthread_8cpp.html" title="The OpenGL thread for presenting frames and related data structures. " alt="" coords="757,184,921,225"/>
 </map>

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['active',['active',['../classSlotContext.html#a950b167cf90911ed67a8af57730347e9',1,'SlotContext']]],
-  ['address',['address',['../classConnection.html#a485150c403569b7cbe7901a42e66313f',1,'Connection::address()'],['../structLiveConnectionContext.html#a2ccb8cede419858ffee6fd6cf5ca8c81',1,'LiveConnectionContext::address()']]],
+  ['address',['address',['../classConnection.html#a485150c403569b7cbe7901a42e66313f',1,'Connection::address()'],['../structLiveConnectionContext.html#a2ccb8cede419858ffee6fd6cf5ca8c81',1,'LiveConnectionContext::address()'],['../structLiveOutboundContext.html#ac08aac088340671c56ccdadb602744fe',1,'LiveOutboundContext::address()']]],
   ['av_5fcodec',['av_codec',['../classDecoder.html#aa34cd2075f63683f4d4e23bbe4dba80e',1,'Decoder']]],
   ['av_5fcodec_5fcontext',['av_codec_context',['../classDecoder.html#adb05816a72889022605f61c4aa0e5e29',1,'Decoder::av_codec_context()'],['../classFileFrameFilter.html#a75728bfc8a9f0b8f01a303cae98ac08a',1,'FileFrameFilter::av_codec_context()'],['../classFrame.html#aede3f561f1951d6325aa3fa5bf756627',1,'Frame::av_codec_context()']]],
   ['av_5fcodec_5fid',['av_codec_id',['../classDecoder.html#aa10ce40b830273b1358c069433e0898c',1,'Decoder']]],

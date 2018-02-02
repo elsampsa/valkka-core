@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.1.0</span>
+   &#160;<span id="projectnumber">0.3.0</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -224,6 +224,10 @@ std::list&lt; SlotNumber &gt;&#160;</td><td class="memItemRight" valign="bottom"
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a25d7bab2682e2098ad54e0bfce17c9c1">loop</a></td></tr>
 <tr class="memdesc:a25d7bab2682e2098ad54e0bfce17c9c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls the execution of the main loop. <br /></td></tr>
 <tr class="separator:a25d7bab2682e2098ad54e0bfce17c9c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a0735d0aaec1f351696f81314a6d177"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2a0735d0aaec1f351696f81314a6d177"></a>
+std::list&lt; <a class="el" href="classFileStream.html">FileStream</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a2a0735d0aaec1f351696f81314a6d177">streamlist</a></td></tr>
+<tr class="memdesc:a2a0735d0aaec1f351696f81314a6d177"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classFileStream.html" title="Keeping the books for each stream: the reference time (see Presention timing and playing) and the sta...">FileStream</a> s that have frames to be presented are queued here. <br /></td></tr>
+<tr class="separator:a2a0735d0aaec1f351696f81314a6d177"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classThread')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:a2e64f4b9dab400b7b06f2c73da4e465a inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e64f4b9dab400b7b06f2c73da4e465a"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a></td></tr>
@@ -401,6 +405,9 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 </div><div class="memdoc">
 
 <p>Main execution loop is defined here. </p>
+<ul>
+<li></li>
+</ul>
 
 <p>Implements <a class="el" href="classThread.html#aae90dfabab3e1776cf01a26e7ee3a620">Thread</a>.</p>
 
@@ -409,10 +416,10 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph.png" border="0" usemap="#classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph" alt=""/></div>
 <map name="classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph" id="classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph">
-<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="368,5,535,32"/>
-<area shape="rect" id="node3" href="classFileStream.html#aaebe6c70acf2b40684488fd49a54fbda" title="Sends all frames up to current wallclock time. " alt="" coords="163,56,320,83"/>
-<area shape="rect" id="node4" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="394,56,509,83"/>
-<area shape="rect" id="node5" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="583,56,693,83"/>
+<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="169,5,335,32"/>
+<area shape="rect" id="node3" href="classFileStream.html#ac27433b0ecaf682edeaa16983bb2c42f" title="FileStream::pullNextFrame" alt="" coords="163,56,341,83"/>
+<area shape="rect" id="node4" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="389,56,504,83"/>
+<area shape="rect" id="node5" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="552,56,663,83"/>
 </map>
 </div>
 </p>

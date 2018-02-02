@@ -54,6 +54,5 @@ PyObject* getNumpyShmem(SharedMemRingBuffer* rb, int i) {
 
 extern Status XInitThreads(void);
 
-
 // autogenerate from this point on
 

@@ -26,7 +26,7 @@
  *  @file    avdep.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.3.0 
  *  
  *  @brief 
  *
@@ -40,7 +40,7 @@ void ffmpeg_av_register_all() {
  av_register_all();
 }
 
-void ffmpeg_av_log_set_level(unsigned int level) {
+void ffmpeg_av_log_set_level(int level) {
   av_log_set_level(level);
 }
 

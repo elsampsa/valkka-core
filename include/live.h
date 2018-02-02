@@ -26,7 +26,7 @@
  *  @file    live.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.2.0 
+ *  @version 0.3.0 
  *  
  *  @brief Interface to live555
  * 
@@ -41,8 +41,8 @@
 
 UsageEnvironment& operator<<(UsageEnvironment& env, const RTSPClient& rtspClient);       ///< A function that outputs a string that identifies each stream (for debugging output).
 UsageEnvironment& operator<<(UsageEnvironment& env, const MediaSubsession& subsession);  ///< A function that outputs a string that identifies each subsession (for debugging output).
-Logger& operator<<(Logger& env, const RTSPClient& rtspClient);                           ///< A function that outputs a string that identifies each stream (for debugging output).
-Logger& operator<<(Logger& env, const MediaSubsession& subsession);                      ///< A function that outputs a string that identifies each subsession (for debugging output).
+Logger& operator<<(Logger& logger, const RTSPClient& rtspClient);                           ///< A function that outputs a string that identifies each stream (for debugging output).
+Logger& operator<<(Logger& logger, const MediaSubsession& subsession);                      ///< A function that outputs a string that identifies each subsession (for debugging output).
 void usage(UsageEnvironment& env, char const* progName);
 
 

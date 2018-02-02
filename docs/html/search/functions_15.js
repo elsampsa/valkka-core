@@ -7,6 +7,7 @@ var searchData=
   ['_7eframe',['~Frame',['../classFrame.html#abec8c7bccdfc88cb4da137caae9f73d6',1,'Frame']]],
   ['_7eframefifo',['~FrameFifo',['../classFrameFifo.html#aa85de58431db509135505e7956a0715e',1,'FrameFifo']]],
   ['_7eframefilter',['~FrameFilter',['../classFrameFilter.html#af6165af624786f297386e9f3038ac426',1,'FrameFilter']]],
+  ['_7elivefifo',['~LiveFifo',['../classLiveFifo.html#adbbf73f74b5ddd174207eddbac8905a6',1,'LiveFifo']]],
   ['_7eopenglframefifo',['~OpenGLFrameFifo',['../classOpenGLFrameFifo.html#a73b7f37bc6891626677cc96ce5b547c2',1,'OpenGLFrameFifo']]],
   ['_7eopenglthread',['~OpenGLThread',['../classOpenGLThread.html#a2e717cf423eb5e219cbce12615739d53',1,'OpenGLThread']]],
   ['_7erendercontext',['~RenderContext',['../classRenderContext.html#af37b6cf5a4e99e9865a76fcfcbe12ef5',1,'RenderContext']]],

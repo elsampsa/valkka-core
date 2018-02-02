@@ -29,7 +29,7 @@
  *  @file    sizes.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.2.0 
+ *  @version 0.3.0 
  *  
  *  @brief Default payload sizes and other numerical constants
  *
@@ -38,7 +38,7 @@
 #include "common.h"
 
 static const int VERSION_MAJOR = 0; // <pyapi>
-static const int VERSION_MINOR = 2; // <pyapi>
+static const int VERSION_MINOR = 3; // <pyapi>
 static const int VERSION_PATCH = 0; // <pyapi>
 
 

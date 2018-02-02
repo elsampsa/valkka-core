@@ -28,7 +28,7 @@
  *  @file    avthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.2.0 
+ *  @version 0.3.0 
  *  
  *  @brief FFmpeg decoding thread
  *
@@ -80,18 +80,21 @@ public:
 public: // <pyapi>
   /** Default constructor
    * 
-   * @param name      Name of the thread
-   * @param infifo    Incoming frames are consumed from here
-   * @param outfilter Outgoing frames are written here.  Outgoing frames may be of type FrameType::avframe
+   * @param name              Name of the thread
+   * @param infifo            Incoming frames are consumed from here
+   * @param outfilter         Outgoing frames are written here.  Outgoing frames may be of type FrameType::avframe
+   * @param core_id           Bind the decoding thread to cpu number core_id
+   * @param mstimetolerance   Drop frames if they are in milliseconds this much late
    * 
    */
-  AVThread(const char* name, FrameFifo& infifo, FrameFilter& outfilter, int core_id=-1); // <pyapi>
+  AVThread(const char* name, FrameFifo& infifo, FrameFilter& outfilter, int core_id=-1, long int mstimetolerance=0); // <pyapi>
   ~AVThread(); ///< Default destructor // <pyapi>
   
 protected:
-  FrameFifo& infifo;                    ///< Incoming frames are read from here
+  FrameFifo&   infifo;                  ///< Incoming frames are read from here
   FrameFilter& outfilter;               ///< Outgoing, decoded frames are written here
   std::vector<DecoderBase*> decoders;   ///< A vector/list of registered and instantiated decoders
+  long int     mstimetolerance;         ///< Drop frames if they are in milliseconds this much late
   
 protected:
   bool is_decoding; ///< should currently decode or not

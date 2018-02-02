@@ -1,10 +1,11 @@
 <map id="/home/sampsa/C/valkka/include/live.h" name="/home/sampsa/C/valkka/include/live.h">
-<area shape="rect" id="node2" href="$livedep_8h.html" title="List of common header files. " alt="" coords="973,95,1048,121"/>
-<area shape="rect" id="node14" href="$frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1873,95,1946,121"/>
-<area shape="rect" id="node50" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2811,319,2885,345"/>
-<area shape="rect" id="node15" href="$common_8h.html" title="List of common header files. " alt="" coords="1772,319,1855,345"/>
-<area shape="rect" id="node41" href="$sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1851,244,1915,271"/>
-<area shape="rect" id="node42" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="2338,169,2406,196"/>
-<area shape="rect" id="node48" href="$opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1801,169,1871,196"/>
-<area shape="rect" id="node49" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1947,169,2008,196"/>
+<area shape="rect" id="node2" href="$livedep_8h.html" title="List of common header files. " alt="" coords="1041,95,1116,121"/>
+<area shape="rect" id="node14" href="$frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1749,169,1822,196"/>
+<area shape="rect" id="node48" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2488,393,2563,420"/>
+<area shape="rect" id="node49" href="$queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="1823,95,1897,121"/>
+<area shape="rect" id="node15" href="$common_8h.html" title="List of common header files. " alt="" coords="1572,393,1655,420"/>
+<area shape="rect" id="node41" href="$sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1616,319,1680,345"/>
+<area shape="rect" id="node42" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1979,244,2047,271"/>
+<area shape="rect" id="node46" href="$opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1574,244,1645,271"/>
+<area shape="rect" id="node47" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1720,244,1781,271"/>
 </map>

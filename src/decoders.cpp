@@ -26,21 +26,12 @@
  *  @file    decoders.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
- *  
- *  @brief FFmpeg decoders
- *
- *  @section DESCRIPTION
- *  
- *  Yes, the description
- *
+ *  @version 0.3.0 
+ *  @brief   FFmpeg decoders
  */ 
 
 #include "decoders.h"
 #include "logging.h"
-
-// WARNING: these define switches should be off (commented) by default
-// #define DECODE_VERBOSE 1
 
 DecoderBase::DecoderBase() {};
 DecoderBase::~DecoderBase() {};
@@ -130,7 +121,7 @@ bool VideoDecoder::pull() {
 #endif
   
   if (retcode<0) {
-    decoderlogger.log(LogLevel::debug) << "VideoDecoder: decoder error " << retcode << std::endl;
+    decoderlogger.log(LogLevel::crazy) << "VideoDecoder: decoder error " << retcode << std::endl;
     return false;
   }
   /*

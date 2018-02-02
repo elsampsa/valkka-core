@@ -29,7 +29,7 @@
  *  @file    logging.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.2.0 
+ *  @version 0.3.0 
  *  
  *  @brief Logging utilities
  *
@@ -39,13 +39,13 @@
 #include <iostream>
 
 
-namespace LogLevel {                                      
-  const static int fatal =-2; // descending priority      
-  const static int silent=-1;                             
-  const static int normal=0;                              
-  const static int debug =2;                              
-  const static int crazy =3;                              
-};
+namespace LogLevel { ///< Verbosity levels                                                                                    
+  const static int fatal =-2; ///< messages with this log level are printed always                                            
+  const static int silent=-1; ///< messages with this log level are printed, even if the user requested a silent terminal     
+  const static int normal=0;  ///< the default                                                                                
+  const static int debug =2;  ///< report frame drops and other anomalies                                                     
+  const static int crazy =3;  ///< print all you can                                                                          
+}; //                                                                                                                         
 
 
 struct Logger
@@ -63,8 +63,9 @@ struct Logger
   {
     // std::cout << "current_level, log_level=" << current_level << " " << log_level << std::endl;
     // if (current_level<=log_level or current_special_level==special_level) {
-    if (current_level<=log_level) { // current_level is defined at each print .. so, print all messages that have smaller number than the target level
+    if (current_level<=log_level) { // current_level is defined at each print .. so, print all messages that are <= the target level
       std::cout << x;
+      // std::cout << x << " (c:"<<current_level<<"/ l:"<<log_level<<") "; // debugging the debugging.. eh
     }
     return *this;
   }

@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.1.0</span>
+   &#160;<span id="projectnumber">0.3.0</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -130,12 +130,26 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setRefMstime</b> (lon
 <tr class="memitem:a2790fb16762a066b418d1d93653deddf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2790fb16762a066b418d1d93653deddf"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>seek</b> (long int ms_streamtime_)</td></tr>
 <tr class="separator:a2790fb16762a066b418d1d93653deddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1f929f6ac1a57fbb980ef49380dcc17"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1f929f6ac1a57fbb980ef49380dcc17"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> ()</td></tr>
+<tr class="separator:ae1f929f6ac1a57fbb980ef49380dcc17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d6ae46a63ddc7067184ab66df1276d6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d6ae46a63ddc7067184ab66df1276d6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
+<tr class="separator:a2d6ae46a63ddc7067184ab66df1276d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac27433b0ecaf682edeaa16983bb2c42f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#ac27433b0ecaf682edeaa16983bb2c42f">pullNextFrame</a> (long int target_mstimestamp, long int &amp;timeout, bool &amp;reached)</td></tr>
+<tr class="separator:ac27433b0ecaf682edeaa16983bb2c42f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaebe6c70acf2b40684488fd49a54fbda"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#aaebe6c70acf2b40684488fd49a54fbda">pullFrames</a> (long int target_mstimestamp)</td></tr>
 <tr class="memdesc:aaebe6c70acf2b40684488fd49a54fbda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends all frames up to current wallclock time.  <a href="#aaebe6c70acf2b40684488fd49a54fbda">More...</a><br /></td></tr>
 <tr class="separator:aaebe6c70acf2b40684488fd49a54fbda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89ad490f4a89560113e3fbfad6a5a8ef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a89ad490f4a89560113e3fbfad6a5a8ef"></a>
 long int&#160;</td><td class="memItemRight" valign="bottom"><b>getNextTimestamp</b> ()</td></tr>
 <tr class="separator:a89ad490f4a89560113e3fbfad6a5a8ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f3873d9ddc6ccae599f10aca6f8e86a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f3873d9ddc6ccae599f10aca6f8e86a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>playOrSeek</b> ()</td></tr>
+<tr class="separator:a4f3873d9ddc6ccae599f10aca6f8e86a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44e38d72d871403b937eec731e6aa4ec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a44e38d72d871403b937eec731e6aa4ec"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>stopSeek</b> ()</td></tr>
+<tr class="separator:a44e38d72d871403b937eec731e6aa4ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -170,6 +184,10 @@ long int&#160;</td><td class="memItemRight" valign="bottom"><b>reftime</b></td><
 long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a9719400347ea834137c8d4f74b1365fc">frame_mstimestamp_</a></td></tr>
 <tr class="memdesc:a9719400347ea834137c8d4f74b1365fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Millisecond timestamp of the current available frame. Note the convention: _ means that this is in frame time. <br /></td></tr>
 <tr class="separator:a9719400347ea834137c8d4f74b1365fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1ee0aec632c156fe713863a0536a5e6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af1ee0aec632c156fe713863a0536a5e6"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#af1ee0aec632c156fe713863a0536a5e6">stream_mstimestamp_</a></td></tr>
+<tr class="memdesc:af1ee0aec632c156fe713863a0536a5e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Millisecond timestamp: where the stream is currently. -1 means nowhere (must seek first). <br /></td></tr>
+<tr class="separator:af1ee0aec632c156fe713863a0536a5e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5258e5596180e8bf51bc81c3ce73f330"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5258e5596180e8bf51bc81c3ce73f330"></a>
 FileState&#160;</td><td class="memItemRight" valign="bottom"><b>state</b></td></tr>
 <tr class="separator:a5258e5596180e8bf51bc81c3ce73f330"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,6 +236,52 @@ Here is the call graph for this function:</div>
 <area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="211,5,377,32"/>
 <area shape="rect" id="node3" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="237,56,351,83"/>
 <area shape="rect" id="node4" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="425,56,536,83"/>
+</map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="ac27433b0ecaf682edeaa16983bb2c42f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FileStream::pullNextFrame </td>
+          <td>(</td>
+          <td class="paramtype">long int&#160;</td>
+          <td class="paramname"><em>target_mstimestamp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long int &amp;&#160;</td>
+          <td class="paramname"><em>timeout</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &amp;&#160;</td>
+          <td class="paramname"><em>reached</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<ul>
+<li></li>
+</ul>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classFileStream_ac27433b0ecaf682edeaa16983bb2c42f_cgraph.png" border="0" usemap="#classFileStream_ac27433b0ecaf682edeaa16983bb2c42f_cgraph" alt=""/></div>
+<map name="classFileStream_ac27433b0ecaf682edeaa16983bb2c42f_cgraph" id="classFileStream_ac27433b0ecaf682edeaa16983bb2c42f_cgraph">
+<area shape="rect" id="node2" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="232,5,347,32"/>
+<area shape="rect" id="node3" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="395,5,505,32"/>
 </map>
 </div>
 </p>

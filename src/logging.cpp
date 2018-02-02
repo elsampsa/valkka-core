@@ -1,5 +1,5 @@
 /*
- * logging.cpp :
+ * logging.cpp : Logging with various log levels
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -26,14 +26,8 @@
  *  @file    logging.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
- *  
- *  @brief 
- *
- *  @section DESCRIPTION
- *  
- *  Yes, the description
- *
+ *  @version 0.3.0 
+ *  @brief   Logging with various log levels
  */ 
 
 #include "logging.h"
@@ -53,6 +47,7 @@ Logger& Logger::operator<<(const T& x)
 */
 
 void Logger::setLevel(int level) {
+  // std::cout << "Logger: setLevel: setting level to "<<level<<std::endl;
   log_level=level; 
 }
 

@@ -26,7 +26,7 @@
  *  @file    livethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.3.0 
  *  
  *  @brief A live555 thread
  *
@@ -464,7 +464,7 @@ int LiveThread::safeGetSlot(SlotNumber slot, Connection*& con) { // -1 = out of 
     return -1;
   }
   if (!connection) {
-    livethreadlogger.log(LogLevel::debug) << "LiveThread: safeGetSlot : nothing at slot " << slot << std::endl;
+    livethreadlogger.log(LogLevel::crazy) << "LiveThread: safeGetSlot : nothing at slot " << slot << std::endl;
     con=NULL;
     return 0;
   }

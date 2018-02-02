@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.1.0</span>
+   &#160;<span id="projectnumber">0.3.0</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -105,13 +105,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>getSlot</b>() (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>input_context</b> (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>out_frame</b> (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>play</b>() (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>playOrSeek</b>() (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classFileStream.html#aaebe6c70acf2b40684488fd49a54fbda">pullFrames</a>(long int target_mstimestamp)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>reftime</b> (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>seek</b>(long int ms_streamtime_) (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>setRefMstime</b>(long int ms_streamtime_) (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>setupframe</b> (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classFileStream.html#af8fc5af127083812370d74fb062828c3">slot</a></td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>state</b> (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classFileStream.html#ac27433b0ecaf682edeaa16983bb2c42f">pullNextFrame</a>(long int target_mstimestamp, long int &amp;timeout, bool &amp;reached)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>reftime</b> (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>seek</b>(long int ms_streamtime_) (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>setRefMstime</b>(long int ms_streamtime_) (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>setupframe</b> (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classFileStream.html#af8fc5af127083812370d74fb062828c3">slot</a></td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>state</b> (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>stop</b>() (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>stopSeek</b>() (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classFileStream.html#af1ee0aec632c156fe713863a0536a5e6">stream_mstimestamp_</a></td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>~FileStream</b>() (defined in <a class="el" href="classFileStream.html">FileStream</a>)</td><td class="entry"><a class="el" href="classFileStream.html">FileStream</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->

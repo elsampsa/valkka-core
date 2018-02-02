@@ -26,7 +26,7 @@
  *  @file    filethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.2
+ *  @version 0.3.0 
  *  
  *  @brief  A thread sending frames from files
  */ 

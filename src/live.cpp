@@ -26,7 +26,7 @@
  *  @file    live.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.3.0 
  *  
  *  @brief Interface to live555
  *
@@ -244,12 +244,12 @@ UsageEnvironment& operator<<(UsageEnvironment& env, const MediaSubsession& subse
 
 // A function that outputs a string that identifies each stream (for debugging output).  Modify this if you wish:
 Logger& operator<<(Logger& logger, const RTSPClient& rtspClient) {
-  return logger.log(LogLevel::normal) << "[URL:\"" << rtspClient.url() << "\"]: ";
+  return logger.log(logger.current_level) << "[URL:\"" << rtspClient.url() << "\"]: ";
 }
 
 // A function that outputs a string that identifies each subsession (for debugging output).  Modify this if you wish:
 Logger& operator<<(Logger& logger, const MediaSubsession& subsession) {
-  return logger.log(LogLevel::normal) << subsession.mediumName() << "/" << subsession.codecName();
+  return logger.log(logger.current_level) << subsession.mediumName() << "/" << subsession.codecName();
 }
 
 
@@ -283,25 +283,25 @@ void ValkkaRTSPClient::continueAfterDESCRIBE(RTSPClient* rtspClient, int resultC
     StreamClientState& scs = ((ValkkaRTSPClient*)rtspClient)->scs; // alias
 
     if (resultCode != 0) {
-      livelogger.log(LogLevel::normal) << *rtspClient << "Failed to get a SDP description: " << resultString << "\n";
+      livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << "Failed to get a SDP description: " << resultString << "\n";
       delete[] resultString;
       break;
     }
 
     char* const sdpDescription = resultString;
     // livelogger.log(LogLevel::normal) << *rtspClient << "Got a SDP description:\n" << sdpDescription << "\n";
-    livelogger.log(LogLevel::debug) << "Got a SDP description:\n" << sdpDescription << "\n";
+    livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: Got a SDP description:\n" << sdpDescription << "\n";
 
     // Create a media session object from this SDP description:
     scs.session = MediaSession::createNew(env, sdpDescription);
     delete[] sdpDescription; // because we don't need it anymore
     if (scs.session == NULL) {
       // livelogger.log(LogLevel::normal) << *rtspClient << "Failed to create a MediaSession object from the SDP description: " << env.getResultMsg() << "\n";
-      livelogger.log(LogLevel::normal) << "Failed to create a MediaSession object from the SDP description: " << env.getResultMsg() << "\n";
+      livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: Failed to create a MediaSession object from the SDP description: " << env.getResultMsg() << "\n";
       break;
     } else if (!scs.session->hasSubsessions()) {
       // livelogger.log(LogLevel::normal) << *rtspClient << "This session has no media subsessions (i.e., no \"m=\" lines)\n";
-      livelogger.log(LogLevel::normal) << "This session has no media subsessions (i.e., no \"m=\" lines)\n";
+      livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: This session has no media subsessions (i.e., no \"m=\" lines)\n";
       break;
     }
 
@@ -334,10 +334,10 @@ void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
   
   if (scs.subsession != NULL and ok_subsession_type) {
     if (!scs.subsession->initiate()) {
-      livelogger.log(LogLevel::normal) << *rtspClient << "Failed to initiate the \"" << *scs.subsession << "\" subsession: " << env.getResultMsg() << "\n";
+      livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << "Failed to initiate the \"" << *scs.subsession << "\" subsession: " << env.getResultMsg() << "\n";
       setupNextSubsession(rtspClient); // give up on this subsession; go to the next one
     } else {
-      livelogger.log(LogLevel::debug) << *rtspClient << "Initiated the \"" << *scs.subsession << "\" subsession (";
+      livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: " << *rtspClient << " Initiated the \"" << *scs.subsession << "\" subsession (";
       if (scs.subsession->rtcpIsMuxed()) {
         livelogger.log(LogLevel::debug) << "client port " << scs.subsession->clientPortNum();
       } else {
@@ -368,13 +368,12 @@ void ValkkaRTSPClient::continueAfterSETUP(RTSPClient* rtspClient, int resultCode
     FrameFilter& framefilter = ((ValkkaRTSPClient*)rtspClient)->framefilter;
 
     if (resultCode != 0) {
-      // livelogger.log(LogLevel::normal) << *rtspClient << "Failed to set up the \"" << *scs.subsession << "\" subsession: " << resultString << "\n";
-      livelogger.log(LogLevel::normal) << *rtspClient << "Failed to set up the \"" << *scs.subsession << "\" subsession: " << resultString << "\n";
+      livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << "Failed to set up the \"" << *scs.subsession << "\" subsession: " << resultString << "\n";
       break;
     }
 
     // livelogger.log(LogLevel::normal) << *rtspClient << "Set up the \"" << *scs.subsession << "\" subsession (";
-    livelogger.log(LogLevel::debug) << *rtspClient << "Set up the \"" << *scs.subsession << "\" subsession (";
+    livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: " << *rtspClient << "Set up the \"" << *scs.subsession << "\" subsession (";
     if (scs.subsession->rtcpIsMuxed()) {
       // livelogger.log(LogLevel::normal) << "client port " << scs.subsession->clientPortNum();
       livelogger.log(LogLevel::debug) << "client port " << scs.subsession->clientPortNum();
@@ -392,12 +391,12 @@ void ValkkaRTSPClient::continueAfterSETUP(RTSPClient* rtspClient, int resultCode
     scs.subsession->sink = FrameSink::createNew(env, *scs.subsession, framefilter, scs.subsession_index, rtspClient->url());
       // perhaps use your own custom "MediaSink" subclass instead
     if (scs.subsession->sink == NULL) {
-      livelogger.log(LogLevel::normal) << *rtspClient << "Failed to create a data sink for the \"" << *scs.subsession
+      livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << "Failed to create a data sink for the \"" << *scs.subsession
 	  << "\" subsession: " << env.getResultMsg() << "\n";
       break;
     }
 
-    livelogger.log(LogLevel::debug) << *rtspClient << "Created a data sink for the \"" << *scs.subsession << "\" subsession\n";
+    livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: " << *rtspClient << "Created a data sink for the \"" << *scs.subsession << "\" subsession\n";
     scs.subsession->miscPtr = rtspClient; // a hack to let subsession handler functions get the "RTSPClient" from the subsession 
     scs.subsession->sink->startPlaying(*(scs.subsession->readSource()),
 				       subsessionAfterPlaying, scs.subsession);
@@ -422,7 +421,7 @@ void ValkkaRTSPClient::continueAfterPLAY(RTSPClient* rtspClient, int resultCode,
     StreamClientState& scs = ((ValkkaRTSPClient*)rtspClient)->scs; // alias
 
     if (resultCode != 0) {
-      livelogger.log(LogLevel::normal) << *rtspClient << "Failed to start playing session: " << resultString << "\n";
+      livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << " Failed to start playing session: " << resultString << "\n";
       break;
     }
 
@@ -437,7 +436,7 @@ void ValkkaRTSPClient::continueAfterPLAY(RTSPClient* rtspClient, int resultCode,
       scs.streamTimerTask = env.taskScheduler().scheduleDelayedTask(uSecsToDelay, (TaskFunc*)streamTimerHandler, rtspClient);
     }
 
-    livelogger.log(LogLevel::debug) << *rtspClient << "Started playing session";
+    livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: " << *rtspClient << "Started playing session";
     if (scs.duration > 0) {
       livelogger.log(LogLevel::debug) << " (for up to " << scs.duration << " seconds)";
     }
@@ -484,7 +483,7 @@ void ValkkaRTSPClient::subsessionByeHandler(void* clientData) {
   RTSPClient* rtspClient = (RTSPClient*)subsession->miscPtr;
   UsageEnvironment& env = rtspClient->envir(); // alias
 
-  livelogger.log(LogLevel::debug) << *rtspClient << "Received RTCP \"BYE\" on \"" << *subsession << "\" subsession\n";
+  livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: " << *rtspClient << "Received RTCP \"BYE\" on \"" << *subsession << "\" subsession\n";
 
   // Now act as if the subsession had closed:
   subsessionAfterPlaying(subsession);
@@ -748,12 +747,12 @@ void FrameSink::sendParameterSets() {
   struct timeval frametime;
   gettimeofday(&frametime, NULL);
   
-  envir() << "Sending parameter sets!\n";
+  livelogger.log(LogLevel::crazy) << "Sending parameter sets!\n";
   pars=parseSPropParameterSets(fSubsession.fmtp_spropparametersets(),num);
-  envir() << "Found " << num << " parameter sets\n";
+  livelogger.log(LogLevel::crazy) << "Found " << num << " parameter sets\n";
   for(i=0;i<num;i++) {
     if (pars[i].sPropLength>0) {
-      envir() << "Sending parameter set " << i << " " << pars[i].sPropLength << "\n";
+      livelogger.log(LogLevel::crazy) << "Sending parameter set " << i << " " << pars[i].sPropLength << "\n";
       memcpy(fReceiveBuffer, pars[i].sPropBytes, pars[i].sPropLength);
       afterGettingFrame(pars[i].sPropLength, 0, frametime, 0);
     }

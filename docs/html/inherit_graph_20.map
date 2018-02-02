@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classRenderContext.html" title="Encapsulates data for rendering a single bitmap: vertex array object (VAO), vertex buffer object (VBO..." alt="" coords="5,5,116,32"/>
+<area shape="rect" id="node1" href="$classOutbound.html" title="Outbound" alt="" coords="5,5,84,32"/>
+<area shape="rect" id="node2" href="$classSDPOutbound.html" title="SDPOutbound" alt="" coords="132,5,239,32"/>
 </map>

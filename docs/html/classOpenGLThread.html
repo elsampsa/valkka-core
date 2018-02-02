@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.1.0</span>
+   &#160;<span id="projectnumber">0.3.0</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -94,6 +94,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classOpenGLThread-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">OpenGLThread Class Reference<div class="ingroups"><a class="el" href="group__threading__tag.html">Threading_tag</a> &#124; <a class="el" href="group__openglthread__tag.html">Openglthread_tag</a></div></div>  </div>
@@ -163,6 +164,12 @@ Public Member Functions</h2></td></tr>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a2e717cf423eb5e219cbce12615739d53">~OpenGLThread</a> ()</td></tr>
 <tr class="memdesc:a2e717cf423eb5e219cbce12615739d53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:a2e717cf423eb5e219cbce12615739d53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61f0d49162788cd8697ce7dfb2e016e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a61f0d49162788cd8697ce7dfb2e016e3"></a>
+unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>getSwapInterval</b> (GLXDrawable drawable=0)</td></tr>
+<tr class="separator:a61f0d49162788cd8697ce7dfb2e016e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7221fbea03dccb8e264d849d54a5211"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae7221fbea03dccb8e264d849d54a5211"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setSwapInterval</b> (unsigned i, GLXDrawable drawable=0)</td></tr>
+<tr class="separator:ae7221fbea03dccb8e264d849d54a5211"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5387ebea19a971a6b12adfc767eff182"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5387ebea19a971a6b12adfc767eff182"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a5387ebea19a971a6b12adfc767eff182">hasRenderGroup</a> (Window window_id)</td></tr>
 <tr class="memdesc:a5387ebea19a971a6b12adfc767eff182"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if we have render groups. <br /></td></tr>
@@ -214,6 +221,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>activateSlot</b> (Slo
 <tr class="memitem:ae75631de8009aee9fd27c1bcb9d995fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae75631de8009aee9fd27c1bcb9d995fe"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>activateSlotIf</b> (SlotNumber i, BitmapType bmtype)</td></tr>
 <tr class="separator:ae75631de8009aee9fd27c1bcb9d995fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bb68a137ac8a44bd17c847928a6a8a0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3bb68a137ac8a44bd17c847928a6a8a0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>slotTimingOk</b> (SlotNumber n_slot, long int mstime)</td></tr>
+<tr class="separator:a3bb68a137ac8a44bd17c847928a6a8a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82e82dbaec5fa6c62bd7dd79916c485c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a82e82dbaec5fa6c62bd7dd79916c485c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>debugOn</b> ()</td></tr>
 <tr class="separator:a82e82dbaec5fa6c62bd7dd79916c485c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -256,6 +266,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a5fbb85f85279c8910037df79a2d394f0">loadExtensions</a> ()</td></tr>
 <tr class="memdesc:a5fbb85f85279c8910037df79a2d394f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load OpenGL extensions using GLEW. <br /></td></tr>
 <tr class="separator:a5fbb85f85279c8910037df79a2d394f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab01f7e3f4d5ef02e5c9db3db6071cb01"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab01f7e3f4d5ef02e5c9db3db6071cb01"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ab01f7e3f4d5ef02e5c9db3db6071cb01">VSyncOff</a> ()</td></tr>
+<tr class="memdesc:ab01f7e3f4d5ef02e5c9db3db6071cb01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turn off vsync for swapbuffers. <br /></td></tr>
+<tr class="separator:ab01f7e3f4d5ef02e5c9db3db6071cb01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2c27197566dfc1f2fa894342f22d6df"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2c27197566dfc1f2fa894342f22d6df"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#af2c27197566dfc1f2fa894342f22d6df">makeShaders</a> ()</td></tr>
 <tr class="memdesc:af2c27197566dfc1f2fa894342f22d6df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compile shaders. <br /></td></tr>
@@ -306,6 +320,13 @@ Window&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a6337f5a97ff1a71134200565b354d2d7">makeCurrent</a> (const Window window_id)</td></tr>
 <tr class="memdesc:a6337f5a97ff1a71134200565b354d2d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set current X windox // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:a6337f5a97ff1a71134200565b354d2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae82f6394f1e09cc778f4b202ca6ee3dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae82f6394f1e09cc778f4b202ca6ee3dd"></a>
+unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ae82f6394f1e09cc778f4b202ca6ee3dd">getVsyncAtStartup</a> ()</td></tr>
+<tr class="memdesc:ae82f6394f1e09cc778f4b202ca6ee3dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">What vsync was at startup time? // &lt;pyapi&gt; <br /></td></tr>
+<tr class="separator:ae82f6394f1e09cc778f4b202ca6ee3dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60f9e66d016bdc7e26a93f40b5e01322"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60f9e66d016bdc7e26a93f40b5e01322"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reConfigWindow</b> (Window &amp;window_id)</td></tr>
+<tr class="separator:a60f9e66d016bdc7e26a93f40b5e01322"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c556c232d541bb7d5345b7164bc95e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c556c232d541bb7d5345b7164bc95e9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a3c556c232d541bb7d5345b7164bc95e9">stopCall</a> ()</td></tr>
 <tr class="memdesc:a3c556c232d541bb7d5345b7164bc95e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">API call: stops the thread. <br /></td></tr>
@@ -353,6 +374,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:abe8741f63aedddf1d1de9d0ef8ee6a60"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe8741f63aedddf1d1de9d0ef8ee6a60"></a>
+unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>swap_flavor</b></td></tr>
+<tr class="separator:abe8741f63aedddf1d1de9d0ef8ee6a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca297d9511d060dd3f15d3f867f0813a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aca297d9511d060dd3f15d3f867f0813a"></a>
+unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#aca297d9511d060dd3f15d3f867f0813a">swap_interval_at_startup</a></td></tr>
+<tr class="memdesc:aca297d9511d060dd3f15d3f867f0813a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value of swap interval when this thread was started. <br /></td></tr>
+<tr class="separator:aca297d9511d060dd3f15d3f867f0813a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefd1adc6aeb1cc722ad59bcc94b22d4a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aefd1adc6aeb1cc722ad59bcc94b22d4a"></a>
 std::deque&lt; <a class="el" href="structOpenGLThread_1_1SignalContext.html">SignalContext</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#aefd1adc6aeb1cc722ad59bcc94b22d4a">signal_fifo</a></td></tr>
 <tr class="memdesc:aefd1adc6aeb1cc722ad59bcc94b22d4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redefinition of signal fifo. Signal fifo of <a class="el" href="structThread_1_1SignalContext.html" title="Encapsulates data sent by the signal. ">Thread::SignalContext(s)</a> is now hidden. <br /></td></tr>
@@ -363,6 +391,13 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:adbc2543c594d857f6e69f99f85d87335"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adbc2543c594d857f6e69f99f85d87335"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>dumpFifo</b> ()</td></tr>
 <tr class="separator:adbc2543c594d857f6e69f99f85d87335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae90f0a63c4c7182b98224295b7af8595"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae90f0a63c4c7182b98224295b7af8595"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>resetCallTime</b> ()</td></tr>
+<tr class="separator:ae90f0a63c4c7182b98224295b7af8595"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4473e951ddb16921d4119a90594bfc5f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4473e951ddb16921d4119a90594bfc5f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a4473e951ddb16921d4119a90594bfc5f">reportCallTime</a> (unsigned i)</td></tr>
+<tr class="memdesc:a4473e951ddb16921d4119a90594bfc5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much time since handleFifo exited. <br /></td></tr>
+<tr class="separator:a4473e951ddb16921d4119a90594bfc5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ca155ce98922acce2b36b08acddeedc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ca155ce98922acce2b36b08acddeedc"></a>
 long unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a1ca155ce98922acce2b36b08acddeedc">insertFifo</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
 <tr class="memdesc:a1ca155ce98922acce2b36b08acddeedc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sorted insert: insert a timestamped frame into the fifo. <br /></td></tr>
@@ -432,6 +467,10 @@ std::map&lt; Window, <a class="el" href="classRenderGroup.html">RenderGroup</a> 
 std::vector&lt; std::list&lt; <a class="el" href="classRenderGroup.html">RenderGroup</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a643ac63c87b6754a135d5e6f09d41d0e">render_lists</a></td></tr>
 <tr class="memdesc:a643ac63c87b6754a135d5e6f09d41d0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Each vector element corresponds to a slot. Each list inside a vector element has pointers to RenderGroups to be rendered. <br /></td></tr>
 <tr class="separator:a643ac63c87b6754a135d5e6f09d41d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18f06a368d98552334fcb4b6c72a3f24"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a18f06a368d98552334fcb4b6c72a3f24"></a>
+std::vector&lt; long int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a18f06a368d98552334fcb4b6c72a3f24">slot_times</a></td></tr>
+<tr class="memdesc:a18f06a368d98552334fcb4b6c72a3f24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save last time OpenGL was fed with a frame for this slot. <br /></td></tr>
+<tr class="separator:a18f06a368d98552334fcb4b6c72a3f24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd95b01df8ebaf9cae08e13d4ba87cda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd95b01df8ebaf9cae08e13d4ba87cda"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#abd95b01df8ebaf9cae08e13d4ba87cda">msbuftime</a></td></tr>
 <tr class="memdesc:abd95b01df8ebaf9cae08e13d4ba87cda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buffering time in milliseconds. <br /></td></tr>
@@ -444,6 +483,13 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 std::list&lt; <a class="el" href="classFrame.html">Frame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#acf3b9209978de731fc09ee405511b6c8">presfifo</a></td></tr>
 <tr class="memdesc:acf3b9209978de731fc09ee405511b6c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Double-linked list of buffered frames about to be presented. <br /></td></tr>
 <tr class="separator:acf3b9209978de731fc09ee405511b6c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6ea438b36734913e3ab6eebab35b582"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6ea438b36734913e3ab6eebab35b582"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><b>calltime</b></td></tr>
+<tr class="separator:af6ea438b36734913e3ab6eebab35b582"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad24a551f833274b53c53d99183c98c1f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad24a551f833274b53c53d99183c98c1f"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ad24a551f833274b53c53d99183c98c1f">callswaptime</a></td></tr>
+<tr class="memdesc:ad24a551f833274b53c53d99183c98c1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Debugging: when handleFifo was last called? <br /></td></tr>
+<tr class="separator:ad24a551f833274b53c53d99183c98c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a752ee140a4c682d5823e60393b28fa08"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a752ee140a4c682d5823e60393b28fa08"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>debug</b></td></tr>
 <tr class="separator:a752ee140a4c682d5823e60393b28fa08"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -489,6 +535,15 @@ cpu_set_t&#160;</td><td class="memItemRight" valign="bottom"><b>cpuset</b></td><
 <tr class="memitem:a30df147ca2dedd5ce9a1c7e39c5e8ab9 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a30df147ca2dedd5ce9a1c7e39c5e8ab9"></a>
 pthread_t&#160;</td><td class="memItemRight" valign="bottom"><b>internal_thread</b></td></tr>
 <tr class="separator:a30df147ca2dedd5ce9a1c7e39c5e8ab9 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a2fa540ea9840935b914e5e45c1049000"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fa540ea9840935b914e5e45c1049000"></a>
+PFNGLXGETSWAPINTERVALMESAPROC&#160;</td><td class="memItemRight" valign="bottom"><b>pglXGetSwapIntervalMESA</b></td></tr>
+<tr class="separator:a2fa540ea9840935b914e5e45c1049000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36c118574e0dd564fb901ddf1fc1135a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a36c118574e0dd564fb901ddf1fc1135a"></a>
+PFNGLXSWAPINTERVALMESAPROC&#160;</td><td class="memItemRight" valign="bottom"><b>pglXSwapIntervalMESA</b></td></tr>
+<tr class="separator:a36c118574e0dd564fb901ddf1fc1135a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -728,11 +783,12 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph.png" border="0" usemap="#classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph" alt=""/></div>
 <map name="classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph" id="classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph">
-<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="459,56,625,83"/>
-<area shape="rect" id="node3" href="tools_8h.html#a9cec5da1c89d2e3965b8156b366280a1" title="Checks the slot number range. " alt="" coords="291,31,351,57"/>
-<area shape="rect" id="node4" href="classOpenGLThread.html#a02238e35ab2e6cc47f7e013b9bd6d4a5" title="Load PBO to texture in slot n_slot. " alt="" coords="237,81,405,108"/>
-<area shape="rect" id="node5" href="classOpenGLThread.html#a9c52452ac81f91999cf8487d9796a1f0" title="Render all RenderGroup(s) depending on slot n_slot. " alt="" coords="244,132,399,159"/>
-<area shape="rect" id="node6" href="classOpenGLFrameFifo.html#a25e2f26e359bcf532ea7d85efd6231cd" title="Return Frame f back into the stack (relevant stack is chosen automatically) " alt="" coords="232,183,411,209"/>
+<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="483,88,649,114"/>
+<area shape="rect" id="node3" href="tools_8h.html#a9cec5da1c89d2e3965b8156b366280a1" title="Checks the slot number range. " alt="" coords="303,37,363,64"/>
+<area shape="rect" id="node4" href="classOpenGLThread.html#a4473e951ddb16921d4119a90594bfc5f" title="How much time since handleFifo exited. " alt="" coords="232,88,435,114"/>
+<area shape="rect" id="node5" href="classOpenGLThread.html#a02238e35ab2e6cc47f7e013b9bd6d4a5" title="Load PBO to texture in slot n_slot. " alt="" coords="249,138,417,165"/>
+<area shape="rect" id="node6" href="classOpenGLThread.html#a9c52452ac81f91999cf8487d9796a1f0" title="Render all RenderGroup(s) depending on slot n_slot. " alt="" coords="256,189,411,216"/>
+<area shape="rect" id="node7" href="classOpenGLFrameFifo.html#a25e2f26e359bcf532ea7d85efd6231cd" title="Return Frame f back into the stack (relevant stack is chosen automatically) " alt="" coords="244,240,423,266"/>
 </map>
 </div>
 </p>

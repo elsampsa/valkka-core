@@ -26,7 +26,7 @@
  *  @file    opengl.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.3.0 
  *  
  *  @brief X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines
  *
@@ -331,11 +331,11 @@ YUVPBO::YUVPBO(BitmapType bmtype) : bmtype(bmtype) {
 
 
 YUVPBO::~YUVPBO() {
-  opengllogger.log(LogLevel::debug) << "YUVPBO: destructor"<<std::endl;
+  opengllogger.log(LogLevel::crazy) << "YUVPBO: destructor"<<std::endl;
   releasePBO(&y_index, y_payload);
   releasePBO(&u_index, u_payload);
   releasePBO(&v_index, v_payload);
-  opengllogger.log(LogLevel::debug) << "YUVPBO: destructor: bye"<<std::endl;
+  opengllogger.log(LogLevel::crazy) << "YUVPBO: destructor: bye"<<std::endl;
 }
 
 
@@ -344,17 +344,17 @@ void YUVPBO::reserve() {
   
   getPBO(y_index,size,y_payload);
   if (y_payload) {
-    opengllogger.log(LogLevel::debug) << "YUVPBO: reserve: Y: Got databuf pbo_id " <<y_index<< " with adr="<<(long unsigned)(y_payload)<<std::endl;
+    opengllogger.log(LogLevel::crazy) << "YUVPBO: reserve: Y: Got databuf pbo_id " <<y_index<< " with adr="<<(long unsigned)(y_payload)<<std::endl;
   } else {ok=false;}
   
   getPBO(u_index,size/4,u_payload);
   if (u_payload) {
-    opengllogger.log(LogLevel::debug) << "YUVPBO: reserve: U: Got databuf pbo_id " <<u_index<< " with adr="<<(long unsigned)(u_payload)<<std::endl;
+    opengllogger.log(LogLevel::crazy) << "YUVPBO: reserve: U: Got databuf pbo_id " <<u_index<< " with adr="<<(long unsigned)(u_payload)<<std::endl;
   } else {ok=false;}
   
   getPBO(v_index,size/4,v_payload);
   if (v_payload) {
-    opengllogger.log(LogLevel::debug) << "YUVPBO: reserve: V: Got databuf pbo_id " <<v_index<< " with adr="<<(long unsigned)(v_payload)<<std::endl;
+    opengllogger.log(LogLevel::crazy) << "YUVPBO: reserve: V: Got databuf pbo_id " <<v_index<< " with adr="<<(long unsigned)(v_payload)<<std::endl;
   } else {ok=false;}
   
   if (!ok) {

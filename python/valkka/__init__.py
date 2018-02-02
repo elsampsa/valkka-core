@@ -1,29 +1,31 @@
 """
 __init__.py : Valkka python bindings module constructor
 
-Copyright 2017 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
+ * 
+ * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
+ * 
+ * This file is part of the Valkka library.
+ * 
+ * Valkka is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
+ */
 
-Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
-
-This file is part of Valkka library.
-
-Valkka is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Valkka is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with Valkka.  If not, see <http://www.gnu.org/licenses/>. 
-
-@file    NAME.py
+@file    __init__.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.1
+@version 0.3.0 
   
 @brief Valkka python bindings module constructor
 
@@ -44,3 +46,8 @@ from valkka.valkka_core import *
 
 .. and then create here, under the valkka module, some higher level APIs if necessary
 """
+
+from .valkka_core import VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH
+
+__version__=str(VERSION_MAJOR)+"."+str(VERSION_MINOR)+"."+str(VERSION_PATCH)
+

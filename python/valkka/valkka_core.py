@@ -1704,8 +1704,8 @@ class AVThread(Thread):
     __getattr__ = lambda self, name: _swig_getattr(self, AVThread, name)
     __repr__ = _swig_repr
 
-    def __init__(self, name, infifo, outfilter, core_id=-1):
-        this = _valkka_core.new_AVThread(name, infifo, outfilter, core_id)
+    def __init__(self, name, infifo, outfilter, core_id=-1, mstimetolerance=0):
+        this = _valkka_core.new_AVThread(name, infifo, outfilter, core_id, mstimetolerance)
         try:
             self.this.append(this)
         except Exception:

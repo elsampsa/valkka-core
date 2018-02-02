@@ -26,7 +26,7 @@
  *  @file    chains.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.3.0 
  *  
  *  @brief Some ready-made chains with filters, decoders and framefifos
  */ 

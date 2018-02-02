@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.3.0 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -1153,7 +1153,7 @@ void OpenGLThread::dumpFifo() {
 void OpenGLThread::resetCallTime() {
   callswaptime =0;
   calltime     =getCurrentMsTimestamp();
-  std::cout << "OpenGLThread: resetCallTime  : " << std::endl;
+  // std::cout << "OpenGLThread: resetCallTime  : " << std::endl;
 }
 
 
@@ -1668,7 +1668,7 @@ void OpenGLThread::loadExtensions() {
   }
   */
   if (is_glx_extension_supported(display_id, "GLX_MESA_swap_control")) {
-    std::cout << "GLX_MESA_swap_control" << std::endl;
+    // std::cout << "GLX_MESA_swap_control" << std::endl;
     // typedef int (*PFNGLXGETSWAPINTERVALMESAPROC)(void);
     // typedef int (*PFNGLXSWAPINTERVALMESAPROC)(unsigned int interval);
     

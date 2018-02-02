@@ -1,9 +1,9 @@
 <map id="/home/sampsa/C/valkka/include/queues.h" name="/home/sampsa/C/valkka/include/queues.h">
-<area shape="rect" id="node2" href="$frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1183,95,1256,121"/>
-<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1070,319,1153,345"/>
-<area shape="rect" id="node29" href="$sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1350,244,1414,271"/>
-<area shape="rect" id="node30" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="720,169,788,196"/>
-<area shape="rect" id="node36" href="$opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1184,169,1255,196"/>
-<area shape="rect" id="node39" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1386,169,1447,196"/>
-<area shape="rect" id="node40" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2071,319,2146,345"/>
+<area shape="rect" id="node2" href="$frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1161,95,1234,121"/>
+<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1156,319,1239,345"/>
+<area shape="rect" id="node29" href="$sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1165,244,1229,271"/>
+<area shape="rect" id="node30" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="474,169,542,196"/>
+<area shape="rect" id="node36" href="$opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1050,169,1121,196"/>
+<area shape="rect" id="node40" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1235,169,1296,196"/>
+<area shape="rect" id="node41" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2143,319,2217,345"/>
 </map>

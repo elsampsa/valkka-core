@@ -26,7 +26,7 @@
  *  @file    file.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.2
+ *  @version 0.3.0 
  *  
  *  @brief   File input and output to and from matroska files
  */ 

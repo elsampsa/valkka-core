@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.1.0</span>
+   &#160;<span id="projectnumber">0.3.0</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -146,9 +146,9 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1a4b2fdc32329c11feb5cf9c79ef4963"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVThread.html#a1a4b2fdc32329c11feb5cf9c79ef4963">AVThread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;<a class="el" href="classAVThread.html#a6d38520da8f5ce8d0592c95ef84dc36b">infifo</a>, <a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;<a class="el" href="classAVThread.html#aef685bb726dc4d804f06fa8deb5cd007">outfilter</a>, int core_id=-1)</td></tr>
-<tr class="memdesc:a1a4b2fdc32329c11feb5cf9c79ef4963"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a1a4b2fdc32329c11feb5cf9c79ef4963">More...</a><br /></td></tr>
-<tr class="separator:a1a4b2fdc32329c11feb5cf9c79ef4963"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6f8a4f593df95ee2cc642e066341a77"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVThread.html#ac6f8a4f593df95ee2cc642e066341a77">AVThread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;<a class="el" href="classAVThread.html#a6d38520da8f5ce8d0592c95ef84dc36b">infifo</a>, <a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;<a class="el" href="classAVThread.html#aef685bb726dc4d804f06fa8deb5cd007">outfilter</a>, int core_id=-1, long int <a class="el" href="classAVThread.html#a500682ab48302bc94c4f2a9adf08b701">mstimetolerance</a>=0)</td></tr>
+<tr class="memdesc:ac6f8a4f593df95ee2cc642e066341a77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ac6f8a4f593df95ee2cc642e066341a77">More...</a><br /></td></tr>
+<tr class="separator:ac6f8a4f593df95ee2cc642e066341a77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab47e906b4eed1c9853e80ade1f429c9f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab47e906b4eed1c9853e80ade1f429c9f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVThread.html#ab47e906b4eed1c9853e80ade1f429c9f">~AVThread</a> ()</td></tr>
 <tr class="memdesc:ab47e906b4eed1c9853e80ade1f429c9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor // &lt;pyapi&gt; <br /></td></tr>
@@ -232,6 +232,10 @@ Protected Attributes</h2></td></tr>
 std::vector&lt; <a class="el" href="classDecoderBase.html">DecoderBase</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVThread.html#a8979fa7236713ab3a9239c4ca4845896">decoders</a></td></tr>
 <tr class="memdesc:a8979fa7236713ab3a9239c4ca4845896"><td class="mdescLeft">&#160;</td><td class="mdescRight">A vector/list of registered and instantiated decoders. <br /></td></tr>
 <tr class="separator:a8979fa7236713ab3a9239c4ca4845896"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a500682ab48302bc94c4f2a9adf08b701"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a500682ab48302bc94c4f2a9adf08b701"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVThread.html#a500682ab48302bc94c4f2a9adf08b701">mstimetolerance</a></td></tr>
+<tr class="memdesc:a500682ab48302bc94c4f2a9adf08b701"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drop frames if they are in milliseconds this much late. <br /></td></tr>
+<tr class="separator:a500682ab48302bc94c4f2a9adf08b701"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a41b87694feafc97697f0e1debba396"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2a41b87694feafc97697f0e1debba396"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVThread.html#a2a41b87694feafc97697f0e1debba396">is_decoding</a></td></tr>
 <tr class="memdesc:a2a41b87694feafc97697f0e1debba396"><td class="mdescLeft">&#160;</td><td class="mdescRight">should currently decode or not <br /></td></tr>
@@ -327,7 +331,7 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a1a4b2fdc32329c11feb5cf9c79ef4963"></a>
+<a class="anchor" id="ac6f8a4f593df95ee2cc642e066341a77"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -353,7 +357,13 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>core_id</em> = <code>-1</code>&#160;</td>
+          <td class="paramname"><em>core_id</em> = <code>-1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long int&#160;</td>
+          <td class="paramname"><em>mstimetolerance</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -369,6 +379,8 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
     <tr><td class="paramname">name</td><td>Name of the thread </td></tr>
     <tr><td class="paramname">infifo</td><td>Incoming frames are consumed from here </td></tr>
     <tr><td class="paramname">outfilter</td><td>Outgoing frames are written here. Outgoing frames may be of type <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a> </td></tr>
+    <tr><td class="paramname">core_id</td><td>Bind the decoding thread to cpu number core_id </td></tr>
+    <tr><td class="paramname">mstimetolerance</td><td>Drop frames if they are in milliseconds this much late </td></tr>
   </table>
   </dd>
 </dl>
@@ -434,10 +446,11 @@ Here is the call graph for this function:</div>
 <area shape="rect" id="node2" href="classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64" title="Pop a frame from the end of the fifo and return the frame to the reservoir stack. ..." alt="" coords="187,5,302,32"/>
 <area shape="rect" id="node3" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="179,56,310,83"/>
 <area shape="rect" id="node5" href="classDecoderBase.html#a2ce8ff1e1474b05b893889d0f37133e5" title="Decode in_frame to out_frame. Return true if decoder returned a new frame (into out_frame), otherwise false. " alt="" coords="180,107,309,133"/>
-<area shape="rect" id="node6" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="187,157,302,184"/>
-<area shape="rect" id="node8" href="classAVThread.html#a8515dade99fab93b4443e26d2b6400af" title="AVThread::handleSignals" alt="" coords="160,208,329,235"/>
+<area shape="rect" id="node6" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="161,157,328,184"/>
+<area shape="rect" id="node7" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="187,208,302,235"/>
+<area shape="rect" id="node9" href="classAVThread.html#a8515dade99fab93b4443e26d2b6400af" title="AVThread::handleSignals" alt="" coords="160,259,329,285"/>
 <area shape="rect" id="node4" href="classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="385,56,481,83"/>
-<area shape="rect" id="node7" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="377,157,488,184"/>
+<area shape="rect" id="node8" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="377,208,488,235"/>
 </map>
 </div>
 </p>

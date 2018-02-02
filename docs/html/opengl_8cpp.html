@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.1.0</span>
+   &#160;<span id="projectnumber">0.3.0</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -100,20 +100,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="opengl_8h_source.html">opengl.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="logging_8h_source.html">logging.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tools_8h_source.html">tools.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for opengl.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="opengl_8cpp__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2src_2opengl_8cpp" alt=""/></div>
 <map name="_2home_2sampsa_2C_2valkka_2src_2opengl_8cpp" id="_2home_2sampsa_2C_2valkka_2src_2opengl_8cpp">
-<area shape="rect" id="node2" href="opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1145,95,1216,121"/>
-<area shape="rect" id="node32" href="logging_8h.html" title="Logging utilities. " alt="" coords="2071,244,2146,271"/>
-<area shape="rect" id="node3" href="common_8h.html" title="List of common header files. " alt="" coords="1070,244,1153,271"/>
-<area shape="rect" id="node29" href="sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1079,169,1143,196"/>
+<area shape="rect" id="node2" href="opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1001,95,1071,121"/>
+<area shape="rect" id="node33" href="logging_8h.html" title="Logging utilities. " alt="" coords="175,244,249,271"/>
+<area shape="rect" id="node34" href="tools_8h.html" title="Auxiliary routines. " alt="" coords="828,95,889,121"/>
+<area shape="rect" id="node3" href="common_8h.html" title="List of common header files. " alt="" coords="956,244,1039,271"/>
+<area shape="rect" id="node29" href="sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="896,169,960,196"/>
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a69229b2aeb3a32e79cfd7f19fe1edf51"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a69229b2aeb3a32e79cfd7f19fe1edf51"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="opengl_8cpp.html#a69229b2aeb3a32e79cfd7f19fe1edf51">is_glx_extension_supported</a> (Display *dpy, const char *query)</td></tr>
+<tr class="memdesc:a69229b2aeb3a32e79cfd7f19fe1edf51"><td class="mdescLeft">&#160;</td><td class="mdescRight">// ripped off from glxgears.c Determine whether or not a GLX extension is supported. <br /></td></tr>
+<tr class="separator:a69229b2aeb3a32e79cfd7f19fe1edf51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8266c515f1790ec26a32a70f8f4377e7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__openglthread__tag.html#ga8266c515f1790ec26a32a70f8f4377e7">readbytes</a> (const char *fname, char *&amp;buffer)</td></tr>
 <tr class="separator:ga8266c515f1790ec26a32a70f8f4377e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2dae177b964fb3ddbac3edcff0c137d9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2dae177b964fb3ddbac3edcff0c137d9"></a>
@@ -131,10 +137,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="open
 <tr class="memitem:aaa047fc451d8206fd7ede940772e4b13"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa047fc451d8206fd7ede940772e4b13"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>releasePBO</b> (GLuint *index, GLubyte *payload)</td></tr>
 <tr class="separator:aaa047fc451d8206fd7ede940772e4b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef5a056f871a5820b48ed2ee8015c426"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aef5a056f871a5820b48ed2ee8015c426"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="opengl_8cpp.html#aef5a056f871a5820b48ed2ee8015c426">getTEX</a> (GLuint &amp;index, GLint format, GLsizei w, GLsizei h)</td></tr>
-<tr class="memdesc:aef5a056f871a5820b48ed2ee8015c426"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get texture from the GPU. <br /></td></tr>
-<tr class="separator:aef5a056f871a5820b48ed2ee8015c426"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e28eb9de356dea5e91256c70bba0281"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e28eb9de356dea5e91256c70bba0281"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="opengl_8cpp.html#a2e28eb9de356dea5e91256c70bba0281">getTEX</a> (GLuint &amp;index, GLint internal_format, GLint format, GLsizei w, GLsizei h)</td></tr>
+<tr class="memdesc:a2e28eb9de356dea5e91256c70bba0281"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get texture from the GPU. <br /></td></tr>
+<tr class="separator:a2e28eb9de356dea5e91256c70bba0281"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4aaed272ee0b777ebe57d3071c7701d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa4aaed272ee0b777ebe57d3071c7701d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="opengl_8cpp.html#aa4aaed272ee0b777ebe57d3071c7701d">loadYUVPBO</a> (<a class="el" href="classYUVPBO.html">YUVPBO</a> *pbo, GLsizei size, GLubyte *y, GLubyte *u, GLubyte *v)</td></tr>
 <tr class="memdesc:aa4aaed272ee0b777ebe57d3071c7701d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load data from pointer addresses to PBOs. <br /></td></tr>
@@ -157,7 +163,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="textblock"><p>X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines. </p>
 <dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.1</dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.3.0</dd></dl>
 <h1><a class="anchor" id="DESCRIPTION"></a>
 DESCRIPTION</h1>
 </div><h2 class="groupheader">Function Documentation</h2>
@@ -193,7 +199,8 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="opengl_8cpp_a8880cbf915561c43f7d65617d7a626b2_cgraph.png" border="0" usemap="#opengl_8cpp_a8880cbf915561c43f7d65617d7a626b2_cgraph" alt=""/></div>
 <map name="opengl_8cpp_a8880cbf915561c43f7d65617d7a626b2_cgraph" id="opengl_8cpp_a8880cbf915561c43f7d65617d7a626b2_cgraph">
-<area shape="rect" id="node2" href="opengl_8cpp.html#ac222cd569fc79264162971959c33015c" title="Print payload of a YUVPBO instance. " alt="" coords="153,5,260,32"/>
+<area shape="rect" id="node2" href="opengl_8cpp.html#ac222cd569fc79264162971959c33015c" title="Print payload of a YUVPBO instance. " alt="" coords="183,5,290,32"/>
+<area shape="rect" id="node3" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="153,56,320,83"/>
 </map>
 </div>
 </p>
