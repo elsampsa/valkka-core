@@ -42,7 +42,6 @@ Some key features of the Valkka library are:
   - And much more .. !
 - Two-level API.  Level 1 is simply swig-wrapped cpp.  Level 2 is higher level and makes development even easier.
 
-
 See also the list of (latest) features below.
 
 ## For the impatient
@@ -58,11 +57,11 @@ See also the list of (latest) features below.
 
 - Download python3 examples from "valkka-examples" [repository](https://github.com/elsampsa/valkka-examples).
 - Benchmarking and testing Valkka is done with the api level 2 programs at the "valkka-examples" repository (see that repo for more instructions).
-- Check out Valkka cpp [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
+- See Valkka cpp [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
 
 ## Features
 
-### Current stable version is 0.3.0 (coming online in .. maybe a minute)
+### Current stable version is 0.3.0
 0.3.0 Version name : "It was all about the vblank"
 - Several full-HD cameras now streaming OK
 - Interoperability with python multiprocesses (and from there, with OpenCV)
