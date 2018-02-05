@@ -65,7 +65,7 @@ OpenGLFrameFifo::OpenGLFrameFifo(unsigned short n_stack_720p, unsigned short n_s
   FrameFifo::initStack(reservoir_4K,    stack_4K);
   FrameFifo::initStack(reservoir_audio, stack_audio);
   
-  // YUVPBO's will are reserved in OpenGLThread::preRun
+  // YUVPBO's will be reserved in OpenGLThread::preRun
 }
 
 
@@ -165,6 +165,7 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
   Frame* tmpframe=NULL;
   GLsizei nbuf   =0;
   
+  // frames that are pulled from the stacks have their yuvpbo attribute enabled 
   if (frame->av_codec_context->codec_type==AVMEDIA_TYPE_VIDEO) {// VIDEO
     if ( // ALLOWED PIXEL FORMATS // NEW_CODEC_DEV: is your pixel format supported?
       frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUV420P  ||
@@ -201,7 +202,9 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
       // std::cout << "yuvpbo>"<<tmpframe->yuvpbo<<std::endl;
       
       frame->copyMeta(tmpframe); // timestamps, slots, etc.
-      (tmpframe->yuv_pars).pix_fmt=frame->av_codec_context->pix_fmt;
+      (tmpframe->yuv_pars).pix_fmt =frame->av_codec_context->pix_fmt;
+      (tmpframe->yuv_pars).width   =frame->av_frame->width;
+      (tmpframe->yuv_pars).height  =frame->av_frame->height;
       
       nbuf =(frame->av_frame->height)*(frame->av_frame->linesize[0]);
       
@@ -1061,10 +1064,12 @@ OpenGLFrameFifo& OpenGLThread::getFifo() {
 
 
 // void OpenGLThread::activateSlot(unsigned int i, GLsizei w, GLsizei h) {
-void OpenGLThread::activateSlot(SlotNumber i, BitmapType bmtype) {
+// void OpenGLThread::activateSlot(SlotNumber i, BitmapType bmtype) {
+void OpenGLThread::activateSlot(SlotNumber i, YUVFramePars yuv_pars) {
   GLsizei w, h;
   // if (!slotOk(i)) {return 0;} // assume checked (this method for internal use only)
   
+  /*
   switch(bmtype) {
     case (BitmapPars::N720::type): {
       w =BitmapPars::N720::w;
@@ -1093,14 +1098,16 @@ void OpenGLThread::activateSlot(SlotNumber i, BitmapType bmtype) {
       break;
     }
   }
-  
   slots_[i].activate(w, h, yuv_shader);
+  */
+  slots_[i].activate(yuv_pars.width, yuv_pars.height, yuv_shader);
 }
 
 
-void OpenGLThread::activateSlotIf(SlotNumber i, BitmapType bmtype) {
+// void OpenGLThread::activateSlotIf(SlotNumber i, BitmapType bmtype) {
+void OpenGLThread::activateSlotIf(SlotNumber i, YUVFramePars yuv_pars) {
  if (slots_[i].isActive()) {return;}
- activateSlot(i, bmtype);
+ activateSlot(i, yuv_pars);
 }
 
 
@@ -1287,7 +1294,8 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
 #endif
           // if next frame was give too fast, scrap it
           if (slotTimingOk(f->n_slot,mstime)) {
-            activateSlotIf(f->n_slot, (f->yuv_pars).bmtype); // activate if not already active
+            // activateSlotIf(f->n_slot, (f->yuv_pars).bmtype); // activate if not already active
+            activateSlotIf(f->n_slot, f->yuv_pars); // activate if not already active
 #ifdef TIMING_VERBOSE
             reportCallTime(0);
 #endif

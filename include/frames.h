@@ -77,10 +77,13 @@ struct AVFramePars { ///< Information corresponding to FrameType::avframe
 };
 std::ostream &operator<<(std::ostream &os, AVFramePars const &m);
 
-struct YUVFramePars { ///< Information corresponding to FrameType::yuvframe
-  BitmapType bmtype;
+struct YUVFramePars {    ///< Information corresponding to FrameType::yuvframe
+  BitmapType    bmtype;  // this corresponds to 720p, 1080p, etc. i.e. the maximum reso
   AVPixelFormat pix_fmt;
+  int           width;
+  int           height;
 };
+
 std::ostream &operator<<(std::ostream &os, YUVFramePars const &m);
 
 // A SWIG note here: https://stackoverflow.com/questions/5508182/static-const-int-causes-linking-error-undefined-reference
@@ -166,7 +169,7 @@ public: // public metadata
   H264Pars   h264_pars  = {H264SliceType::none};  ///< Used, if frametype == FrameTypes::h264
   PCMUPars   pcmu_pars  = {};                     ///< Used, if frametype == FrameTypes::pcmu 
   AVFramePars av_pars   = {};                     ///< Used, if frametype == FrameTypes::avframe
-  YUVFramePars yuv_pars = {BitmapPars::notype, AV_PIX_FMT_NONE};    ///< Used, if frametype == FrameTypes::yuvframe
+  YUVFramePars yuv_pars = {BitmapPars::notype, AV_PIX_FMT_NONE, 0, 0};    ///< Used, if frametype == FrameTypes::yuvframe
     
 public: // public metadata you might want to copy between different frametypes
   long int mstimestamp;                  ///< Presentation time stamp (PTS) in milliseconds

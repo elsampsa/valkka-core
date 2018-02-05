@@ -117,10 +117,10 @@ void test_2() {
   //
   
   // this works fine for a single n1080p cam
-  // OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); 
+  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); 
   
   // WARNING: this produces jitter for a single n1080p cam.. why!?
-  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/61,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/2000,/*core_id*/-1); 
+  // OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/61,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/2000,/*core_id*/-1); 
   
   // no jitter here:
   // OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/60,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); 

@@ -376,8 +376,10 @@ public: // API // <pyapi>
   OpenGLFrameFifo&    getFifo(); ///< Retrieve the communication fifo  // <pyapi>
   
 public: // setter methods
-  void                activateSlot   (SlotNumber i, BitmapType bmtype);
-  void                activateSlotIf (SlotNumber i, BitmapType bmtype); // activate if not already active
+  // void                activateSlot   (SlotNumber i, BitmapType bmtype);
+  // void                activateSlotIf (SlotNumber i, BitmapType bmtype); // activate if not already active
+  void                activateSlot   (SlotNumber i, YUVFramePars yuv_pars);
+  void                activateSlotIf (SlotNumber i, YUVFramePars yuv_pars); // activate if not already active
   bool                slotTimingOk   (SlotNumber n_slot, long int mstime);
   void                debugOn()  {debug=true;}
   void                debugOff() {debug=false;}

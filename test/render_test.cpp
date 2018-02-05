@@ -98,7 +98,9 @@ void test_2() {
   idn=glthread.newRenderContext(1,window_id,0); // slot 1 goes to x window window_id
   std::cout << "new Render Context: " << idn << std::endl;
   
-  glthread.activateSlot(1,BitmapPars::N720::type); // i.e. when config frame arrives .. vector slots_[n_slot] initialized
+  YUVFramePars yuv_pars={BitmapPars::N720::type,AV_PIX_FMT_YUV420P,BitmapPars::N720::w,BitmapPars::N720::h};
+  
+  glthread.activateSlot(1,yuv_pars); // i.e. when config frame arrives .. vector slots_[n_slot] initialized
   
   glthread.reportSlots(); // show active slots, slots with RenderGroups and their RenderContexes
   glthread.reportRenderGroups();
@@ -149,7 +151,9 @@ void test_3() {
   idn3=glthread.newRenderContext(2,window_id3,0);
   std::cout << "new Render Context: " << idn << std::endl;
   
-  glthread.activateSlot(1,BitmapPars::N720::type);
+  YUVFramePars yuv_pars={BitmapPars::N720::type,AV_PIX_FMT_YUV420P,BitmapPars::N720::w,BitmapPars::N720::h};
+  
+  glthread.activateSlot(1,yuv_pars);
   
   glthread.reportSlots(); // show active slots, slots with RenderGroups and their RenderContexes
   glthread.reportRenderGroups();
@@ -239,7 +243,8 @@ void test_4() {
   glthread.reportRenderGroups();
   glthread.reportRenderList();
  
-  glthread.activateSlot(1,BitmapPars::N720::type);
+  YUVFramePars yuv_pars={BitmapPars::N720::type,AV_PIX_FMT_YUV420P,BitmapPars::N720::w,BitmapPars::N720::h};
+  glthread.activateSlot(1,yuv_pars);
   
   // frame => slot 1
   // slots_[1] => if active, slots_[1]->loadTEX(frames PBO instance here)
