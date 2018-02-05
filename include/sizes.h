@@ -53,7 +53,7 @@ namespace Timeouts { ///< Various thread timeouts in milliseconds
 
 enum PayloadSizes {
   DEFAULT_PAYLOAD_SIZE            = 1024,    ///< Default buffer size in Live555 for h264
-  DEFAULT_PAYLOAD_SIZE_H264       = 1024*30, ///< Default buffer size in Live555 for h264
+  DEFAULT_PAYLOAD_SIZE_H264       = 1024*100, ///< Default buffer size in Live555 for h264
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024*300, ///< Default buffer size in Live555 for h264 // debug
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024*10,  ///< Default buffer size in Live555 for h264 // debug
   DEFAULT_PAYLOAD_SIZE_PCMU       = 1024,    ///< Default buffer size in Live555 for pcmu

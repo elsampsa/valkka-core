@@ -91,6 +91,12 @@ void Decoder::flush() {
 
 
 VideoDecoder::VideoDecoder(AVCodecID av_codec_id) : Decoder(av_codec_id) {
+  /*
+  // decoder slow down simulation
+  gen =std::mt19937(rd());
+  dis =std::uniform_int_distribution<>(0,5);
+  */
+  
 };
 VideoDecoder::~VideoDecoder() {
 };
@@ -114,8 +120,27 @@ bool VideoDecoder::pull() {
   std::cout << "VideoDecoder: pull: payload =[" << in_frame.dumpPayload() << "]" << std::endl;
 #endif
   
+#ifdef DECODE_TIMING
+  long int mstime=getCurrentMsTimestamp();
+#endif
+  
   retcode=avcodec_decode_video2(av_codec_context,av_frame,&got_frame,av_packet);
-
+  
+#ifdef DECODE_TIMING
+  mstime=getCurrentMsTimestamp()-mstime;
+  if (mstime>40) {
+    std::cout << "VideoDecoder: pull: decoding took " << mstime << "milliseconds" << std::endl;
+  }
+#endif
+  
+  /*
+  // debugging: let's simulate slow decoding
+  int delay=dis(gen)+40;
+  std::cout << "VideoDecoder: pull: delay=" << delay << std::endl;
+  std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+  */
+  
+  
 #ifdef DECODE_VERBOSE
   std::cout << "VideoDecoder: pull: retcode, got_frame, av_frame->width : " << retcode << " " << got_frame << " " << av_frame->width << std::endl;
 #endif

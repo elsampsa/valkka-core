@@ -88,12 +88,18 @@ if    (timing_verbose)
   message("TIMING_VERBOSE ENABLED")
 endif (timing_verbose)
 
-
 option(opengl_timing "opengl_timing" OFF)
 if    (opengl_timing)
   add_definitions("-DOPENGL_TIMING")
   message("OPENGL_TIMING ENABLED")
 endif (opengl_timing)
+
+option(decode_timing "decode_timing" OFF)
+if    (decode_timing)
+  add_definitions("-DDECODE_TIMING")
+  message("DECODE_TIMING ENABLED")
+endif (decode_timing)
+
 
 
 # ****************************************************************

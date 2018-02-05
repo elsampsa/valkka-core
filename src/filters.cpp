@@ -281,49 +281,63 @@ void SwScaleFrameFilter::run(Frame* frame) { // AVThread calls this ..
 
 void SwScaleFrameFilter::go(Frame* frame) { // do the scaling
   if (frame->frametype==FrameType::avframe) {
-    // input AVFrame aliases
-    AVFrame         *in_avframe   = frame->av_frame;
-    AVCodecContext  *ctx          = frame->av_codec_context;
-    // output AVFrame alias
-    AVFrame         *out_avframe  = outframe.av_frame;
+    if (frame->av_codec_context->codec_type==AVMEDIA_TYPE_VIDEO) {// VIDEO
+      /*
+      if ( // ALLOWED PIXEL FORMATS // NEW_CODEC_DEV: is your pixel format supported?
+        frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUV420P  ||
+        frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUVJ420P
+      ) 
+      */
     
-    if (!sws_ctx) {
-    }
-    /*
-    else { // so, scaling context has been set .. let's see if input dimensions still hold
-      if (in_avframe->width!=sws_ctx->dstW or in_avframe->height!=sws_ctx->dstH) { // dimensions changed - time to reinit
-        sws_freeContext(sws_ctx);
-        sws_ctx=NULL;
-      }
-    }
-    */
-    
-    if (!sws_ctx) { // got frame for the first time
-      sws_ctx =sws_getContext(in_avframe->width, in_avframe->height, ctx->pix_fmt, out_avframe->width, out_avframe->height, target_pix_fmt, SWS_POINT, NULL, NULL, NULL);
-    }
+        
+      // input AVFrame aliases
+      AVFrame         *in_avframe   = frame->av_frame;
+      AVCodecContext  *ctx          = frame->av_codec_context;
+      // output AVFrame alias
+      AVFrame         *out_avframe  = outframe.av_frame;
       
-    // refer to: https://ffmpeg.org/doxygen/trunk/group__libsws.html#gae531c9754c9205d90ad6800015046d74
-    sws_scale(sws_ctx, (const uint8_t * const*)in_avframe->data, in_avframe->linesize, 0, in_avframe->height, out_avframe->data, out_avframe->linesize);
+      if (!sws_ctx) {
+      }
+      /*
+      else { // so, scaling context has been set .. let's see if input dimensions still hold
+        if (in_avframe->width!=sws_ctx->dstW or in_avframe->height!=sws_ctx->dstH) { // dimensions changed - time to reinit
+          sws_freeContext(sws_ctx);
+          sws_ctx=NULL;
+        }
+      }
+      */
+      
+      if (!sws_ctx) { // got frame for the first time
+        sws_ctx =sws_getContext(in_avframe->width, in_avframe->height, ctx->pix_fmt, out_avframe->width, out_avframe->height, target_pix_fmt, SWS_POINT, NULL, NULL, NULL);
+      }
+        
+      // refer to: https://ffmpeg.org/doxygen/trunk/group__libsws.html#gae531c9754c9205d90ad6800015046d74
+      sws_scale(sws_ctx, (const uint8_t * const*)in_avframe->data, in_avframe->linesize, 0, in_avframe->height, out_avframe->data, out_avframe->linesize);
+      
+      if (!this->next) { return; } // call next filter .. if there is any
+      
+      frame->copyMeta(&outframe); // mstimestamp, subsession index, slot, etc.
+      
+      // copy data to the actual payload..
+      // std::cout << "SwScaleFrameFilter: linesizes: " << out_avframe->linesize[0] << " " << out_avframe->linesize[1] << " " << out_avframe->linesize[2] << std::endl; // linesize[0] == width * 3 (for rgb)
+      std::size_t n=out_avframe->linesize[0]*out_avframe->height;
+      outframe.payload.resize(n);
+      memcpy(outframe.payload.data(),out_avframe->data[0], n);
+      
     
-    if (!this->next) { return; } // call next filter .. if there is any
+      //outframe.payload.resize(out_avframe->linesize
+      //outframe->data
+      
+      
+      (this->next)->run(&outframe);
+    } // VIDEO
+    else {
+      decoderlogger.log(LogLevel::debug) << "SwScaleFrameFilter: go: got avframe that's not bitmap: " << *frame << std::endl;
+    }
     
-    frame->copyMeta(&outframe); // mstimestamp, subsession index, slot, etc.
-    
-    // copy data to the actual payload..
-    // std::cout << "SwScaleFrameFilter: linesizes: " << out_avframe->linesize[0] << " " << out_avframe->linesize[1] << " " << out_avframe->linesize[2] << std::endl; // linesize[0] == width * 3 (for rgb)
-    std::size_t n=out_avframe->linesize[0]*out_avframe->height;
-    outframe.payload.resize(n);
-    memcpy(outframe.payload.data(),out_avframe->data[0], n);
-    
-  
-    //outframe.payload.resize(out_avframe->linesize
-    //outframe->data
-    
-    
-    (this->next)->run(&outframe);
   }
   else {
-    decoderlogger.log(LogLevel::fatal) << "SwScaleFrameFilter: go: FATAL: needs a Frame with frame->frametype = FrameType::avframe " << std::endl;
+    // decoderlogger.log(LogLevel::fatal) << "SwScaleFrameFilter: go: FATAL: needs a Frame with frame->frametype = FrameType::avframe. Got " << *frame << std::endl;
   }
 }
 

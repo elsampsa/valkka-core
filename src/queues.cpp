@@ -148,6 +148,7 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) { // take a frame from the stack,
     else {
       queuelogger.log(LogLevel::fatal) << "FrameFifo: "<<name<<" writeCopy: OVERFLOW! No more frames in stack.  Frame="<<(*f)<<std::endl;
       return false;
+      // TODO: it might be a good idea to recycle all frames in fifo if this happends .. depends
     }
   }
   //*/

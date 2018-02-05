@@ -33,6 +33,7 @@
  */ 
 
 #include "frames.h"
+#include <random>
 
 
 /** A Virtual class for decoders
@@ -118,6 +119,14 @@ public:
       
 public:
   bool pull(); ///< @copydoc Decoder::pull
+  
+/*
+private: // for simulating decoder slow down
+  std::random_device rd;  //Will be used to obtain a seed for the random number engine
+  std::mt19937       gen; //Standard mersenne_twister_engine seeded with rd()
+  std::uniform_int_distribution<> dis;
+*/
+  
 };
 
 
