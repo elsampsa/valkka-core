@@ -162,8 +162,8 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
     return NULL;
   }
   
-  Frame* tmpframe=NULL;
-  GLsizei nbuf   =0;
+  Frame* tmpframe    =NULL;
+  GLsizei nbuf       =0;
   
   // frames that are pulled from the stacks have their yuvpbo attribute enabled 
   if (frame->av_codec_context->codec_type==AVMEDIA_TYPE_VIDEO) {// VIDEO
@@ -171,16 +171,19 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
       frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUV420P  ||
       frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUVJ420P
     ) {
-      if      (frame->av_frame->width<=BitmapPars::N720::w)  {
+      
+      nbuf=(frame->av_frame->height)*(frame->av_frame->linesize[0]);
+      
+      if      (nbuf<=BitmapPars::N720::size)  {
         tmpframe=getFrame(BitmapPars::N720::type); // handling stacks with getFrame is mutex protected
       }
-      else if (frame->av_frame->width<=BitmapPars::N1080::w) {
+      else if (nbuf<=BitmapPars::N1080::size) {
         tmpframe=getFrame(BitmapPars::N1080::type);
       }
-      else if (frame->av_frame->width<=BitmapPars::N1440::w) {
+      else if (nbuf<=BitmapPars::N1440::size) {
         tmpframe=getFrame(BitmapPars::N1440::type);
       }
-      else if (frame->av_frame->width<=BitmapPars::N4K::w)   {
+      else if (nbuf<=BitmapPars::N4K::size)   {
         tmpframe=getFrame(BitmapPars::N4K::type);
       }
       else {
@@ -203,10 +206,10 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
       
       frame->copyMeta(tmpframe); // timestamps, slots, etc.
       (tmpframe->yuv_pars).pix_fmt =frame->av_codec_context->pix_fmt;
-      (tmpframe->yuv_pars).width   =frame->av_frame->width;
+      (tmpframe->yuv_pars).width   =frame->av_frame->linesize[0];
       (tmpframe->yuv_pars).height  =frame->av_frame->height;
       
-      nbuf =(frame->av_frame->height)*(frame->av_frame->linesize[0]);
+      // nbuf =(frame->av_frame->height)*(frame->av_frame->linesize[0]);
       
 #ifdef PRESENT_VERBOSE
       std::cout << "OpenGLFrameFifo: prepareAVFrame:  av_frame->height, av_frame->linesize[0], nbuf "<< frame->av_frame->height << " " << frame->av_frame->linesize[0] << " " << nbuf <<std::endl;
@@ -215,11 +218,13 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
       
       // std::cout << "yuvpbo->size>"<<tmpframe->yuvpbo->size<<std::endl;
       
+      ///*
       tmpframe->yuvpbo->upload(nbuf, 
                               frame->av_frame->data[0],
                               frame->av_frame->data[1],
                               frame->av_frame->data[2]); // up to the GPU! :)
-
+      //*/
+                              
       return tmpframe;
     } //ALLOWED PIXEL FORMATS
     else {
@@ -423,7 +428,7 @@ void SlotContext::activate(GLsizei w, GLsizei h, YUVShader* shader) {//Allocate 
     deActivate();
   }
   this->shader=shader;
-  opengllogger.log(LogLevel::crazy) << "SlotContext: activate: activating" << std::endl;
+  opengllogger.log(LogLevel::crazy) << "SlotContext: activate: activating for w, h " << w << " " << h << " " << std::endl;
   yuvtex=new YUVTEX(w, h);
   // shader=new YUVShader(); // nopes..
   active=true;
@@ -1100,6 +1105,7 @@ void OpenGLThread::activateSlot(SlotNumber i, YUVFramePars yuv_pars) {
   }
   slots_[i].activate(w, h, yuv_shader);
   */
+  opengllogger.log(LogLevel::crazy) << "OpenGLThread: activateSlot: "<<yuv_pars.bmtype<<" "<<yuv_pars.width<< " "<< yuv_pars.height << std::endl;
   slots_[i].activate(yuv_pars.width, yuv_pars.height, yuv_shader);
 }
 
