@@ -1,0 +1,8 @@
+*** HIK substreams ***
+
+/Streaming/Channels/N
+
+N   stream
+1   main
+2   second substream
+3   third substream

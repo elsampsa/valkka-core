@@ -1,0 +1,8 @@
+*** UNV Analog => Digital encoder ***
+
+/media/video-N-M
+
+N = channel
+M = substream (0=main, etc.)
+
+
