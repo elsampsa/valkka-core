@@ -163,7 +163,9 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
   }
   
   Frame* tmpframe    =NULL;
-  GLsizei nbuf       =0;
+  GLsizei planesize_y =0;
+  GLsizei planesize_u =0;
+  GLsizei planesize_v =0;
   
   // frames that are pulled from the stacks have their yuvpbo attribute enabled 
   if (frame->av_codec_context->codec_type==AVMEDIA_TYPE_VIDEO) {// VIDEO
@@ -172,18 +174,20 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
       frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUVJ420P
     ) {
       
-      nbuf=(frame->av_frame->height)*(frame->av_frame->linesize[0]);
+      planesize_y=(frame->av_frame->height)  *(frame->av_frame->linesize[0]);
+      planesize_u=(frame->av_frame->height/2)*(frame->av_frame->linesize[1]);
+      planesize_v=(frame->av_frame->height/2)*(frame->av_frame->linesize[2]);
       
-      if      (nbuf<=BitmapPars::N720::size)  {
+      if      (planesize_y <= BitmapPars::N720::size)  {
         tmpframe=getFrame(BitmapPars::N720::type); // handling stacks with getFrame is mutex protected
       }
-      else if (nbuf<=BitmapPars::N1080::size) {
+      else if (planesize_y <= BitmapPars::N1080::size) {
         tmpframe=getFrame(BitmapPars::N1080::type);
       }
-      else if (nbuf<=BitmapPars::N1440::size) {
+      else if (planesize_y <= BitmapPars::N1440::size) {
         tmpframe=getFrame(BitmapPars::N1440::type);
       }
-      else if (nbuf<=BitmapPars::N4K::size)   {
+      else if (planesize_y <= BitmapPars::N4K::size)   {
         tmpframe=getFrame(BitmapPars::N4K::type);
       }
       else {
@@ -209,17 +213,19 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
       (tmpframe->yuv_pars).width   =frame->av_frame->linesize[0];
       (tmpframe->yuv_pars).height  =frame->av_frame->height;
       
-      // nbuf =(frame->av_frame->height)*(frame->av_frame->linesize[0]);
+      // planesize =(frame->av_frame->height)*(frame->av_frame->linesize[0]);
       
 #ifdef PRESENT_VERBOSE
-      std::cout << "OpenGLFrameFifo: prepareAVFrame:  av_frame->height, av_frame->linesize[0], nbuf "<< frame->av_frame->height << " " << frame->av_frame->linesize[0] << " " << nbuf <<std::endl;
+      std::cout << "OpenGLFrameFifo: prepareAVFrame:  av_frame->height, av_frame->linesize[0], planesize "<< frame->av_frame->height << " " << frame->av_frame->linesize[0] << " " << planesize <<std::endl;
       std::cout << "OpenGLFrameFifo: prepareAVFrame:  payload: "<< int(frame->av_frame->data[0][0]) << " " << int(frame->av_frame->data[1][0]) << " " << int(frame->av_frame->data[2][0]) << std::endl;
 #endif
       
       // std::cout << "yuvpbo->size>"<<tmpframe->yuvpbo->size<<std::endl;
       
       ///*
-      tmpframe->yuvpbo->upload(nbuf, 
+      tmpframe->yuvpbo->upload(planesize_y,
+                              planesize_u,
+                              planesize_v,
                               frame->av_frame->data[0],
                               frame->av_frame->data[1],
                               frame->av_frame->data[2]); // up to the GPU! :)
@@ -237,7 +243,6 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
   
   return NULL;
 }
-
 
 
 bool OpenGLFrameFifo::writeCopy(Frame* f, bool wait) {

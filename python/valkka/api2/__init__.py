@@ -5,3 +5,5 @@ from .logging import setValkkaLogLevel, loglevel_silent, loglevel_normal, loglev
 # setValkkaLogLevel(loglevel_silent) # this should be default for production
 setValkkaLogLevel(loglevel_normal) # default for development # informs about frame drops
 # setValkkaLogLevel(loglevel_debug) # default for more serious development
+
+from .chains import BasicFilterchain, ShmemFilterchain

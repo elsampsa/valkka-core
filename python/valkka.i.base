@@ -10,6 +10,7 @@
 #include "include/filters.h"
 #include "include/queues.h"
 #include "include/livethread.h"
+#include "include/filethread.h"
 #include "include/avthread.h"
 #include "include/openglthread.h"
 #include "include/sharedmem.h"

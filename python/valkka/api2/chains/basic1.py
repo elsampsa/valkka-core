@@ -1,5 +1,5 @@
 """
-chains.py : Some basic classes encapsulating filter chains
+basic1.py : Some more custom filterchain classes for different use cases
 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -22,24 +22,24 @@ chains.py : Some basic classes encapsulating filter chains
  *
  */
 
-@file    chains.py
+@file    basic1.py
 @author  Sampsa Riikonen
-@date    2017
+@date    2018
 @version 0.3.0 
   
-@brief Some basic classes encapsulating filter chains
+@brief Some more custom filterchain classes for different use cases
 """
 
 import sys
 import time
 import random
 from valkka import valkka_core as core # so, everything that has .core, refers to the api1 level (i.e. swig wrapped cpp code)
-from valkka.api2.threads import LiveThread, OpenGLThread # api2 versions of the thread classes
+from valkka.api2.threads import LiveThread, OpenGLThread, FileThread # api2 versions of the thread classes
 from valkka.api2.tools import parameterInitCheck, typeCheck
 pre_mod="valkka.api2.chains: "
 
 
-class BasicFilterchain:
+class BasicFilterchain1:
   """This class implements the following filterchain:
   
   ::
@@ -47,12 +47,12 @@ class BasicFilterchain:
     (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) --> {FifoFrameFilter:gl_in_gilter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   
   i.e. the stream is decoded by an AVThread and sent to the OpenGLThread for presentation
+  
+  LiveConnectionContext and FileContext are managed by the user
   """
   
   parameter_defs={
-    "livethread"   : LiveThread,
     "openglthread" : OpenGLThread,
-    "address"      : str,
     "slot"         : int,
     "fifolen"      : (int,100),
     "affinity"     : (int,-1)
@@ -68,7 +68,6 @@ class BasicFilterchain:
   def init(self):
     self.idst=str(id(self))
     self.makeChain()
-    self.createContext()
     self.startThreads()
     self.active=True
     
@@ -80,7 +79,6 @@ class BasicFilterchain:
   def close(self):
     if (self.active):
       self.decodingOff()
-      self.closeContext()
       self.stopThreads()
       self.active=False
     
@@ -105,36 +103,60 @@ class BasicFilterchain:
     # self.live_out_filter =core.InfoFrameFilter    ("live_out_filter"+self.idst,self.av_in_filter)
     
 
-
-  def createContext(self):
-    """Creates a LiveConnectionContext and registers it to LiveThread
+  def setLiveContext(self,address):
     """
-    # define stream source, how the stream is passed on, etc.
+    The user is responsible for:
     
-    self.ctx=core.LiveConnectionContext()
-    self.ctx.slot=self.slot                          # slot number identifies the stream source
-    
-    if (self.address.find("rtsp://")==0):
-      self.ctx.connection_type=core.LiveConnectionType_rtsp
-    else:
-      self.ctx.connection_type=core.LiveConnectionType_sdp # this is an rtsp connection
-    
-    self.ctx.address=self.address         
-    # stream address, i.e. "rtsp://.."
-    
-    self.ctx.framefilter=self.av_in_filter
-    # self.ctx.framefilter=self.live_out_filter        # where the received frames are written to.  See filterchain (**)
-    
-    # send the information about the stream to LiveThread
     self.livethread.registerStream(self.ctx)
     self.livethread.playStream(self.ctx)
-
-      
-  def closeContext(self):
     self.livethread.stopStream(self.ctx)
     self.livethread.deregisterStream(self.ctx)
+    """
     
-      
+    self.live_ctx=core.LiveConnectionContext()
+    self.live_ctx.slot=self.slot                          # slot number identifies the stream source
+    
+    if (address.find("rtsp://")==0):
+      self.live_ctx.connection_type=core.LiveConnectionType_rtsp
+    else:
+      self.live_ctx.connection_type=core.LiveConnectionType_sdp # this is an rtsp connection
+    
+    self.live_ctx.address=address         
+    # stream address, i.e. "rtsp://.."
+    
+    self.live_ctx.framefilter=self.av_in_filter
+    
+    
+  def setFileContext(self,filename):
+    """
+    The user is responsible for:
+    
+    filethread.openFileStreamCall(self.file_ctx);
+    file_ctx.seektime_=10000;
+    filethread.seekFileStreamCall(self.file_ctx);
+    filethread.playFileStreamCall(self.file_ctx);
+    filethread.stopFileStreamCall(self.file_ctx);
+    """
+    
+    self.file_ctx =core.FileContext()
+    """ # filecontext from the cpp headers:
+    std::string    filename;        ///< incoming: the filename                                      // <pyapi>
+    SlotNumber     slot;            ///< incoming: a unique stream slot that identifies this stream  // <pyapi>
+    FrameFilter*   framefilter;     ///< incoming: the frames are feeded into this FrameFilter       // <pyapi>
+    long int       seektime_;       ///< incoming: used by signal seek_stream                        // <pyapi>
+    long int*      duration;        ///< outgoing: duration of the stream                            // <pyapi>
+    long int*      mstimestamp;     ///< outgoing: current position of the stream (stream time)      // <pyapi>
+    FileState      status;          ///< outgoing: status of the file                                // <pyapi>
+    """
+    self.file_ctx.filename       =filename
+    self.file_ctx.slot           =self.slot
+    self.file_ctx.framefilter    =self.av_in_filter
+    self.file_ctx.seektime_      =0
+    # self.file_ctx.duration       
+    # self.file_ctx.mstimestamp   
+    # self.file_ctx.status         
+    
+    
   def startThreads(self):
     """Starts thread required by the filter chain
     """
@@ -155,7 +177,8 @@ class BasicFilterchain:
     self.avthread.decodingOnCall()
       
       
-class ShmemFilterchain(BasicFilterchain):
+      
+class ShmemFilterchain1(BasicFilterchain1):
   """A filter chain with a shared mem hook
   
   ::
@@ -175,6 +198,8 @@ class ShmemFilterchain(BasicFilterchain):
   * The stream of YUV frames is forked into two branches
   * branch 1 goes to OpenGLThread that interpolates YUV to RGB on the GPU
   * branch 2 goes to interval_filter that passes a YUV frame only once every second.  From there, frames are interpolated on the CPU from YUV to RGB and finally passed through shared memory to another process.
+  
+  LiveConnectionContext and FileContext are managed by the user
   """
   
   parameter_defs={ # additional parameters to the mother class
@@ -184,7 +209,7 @@ class ShmemFilterchain(BasicFilterchain):
     "shmem_name"              : None
     }
   
-  parameter_defs.update(BasicFilterchain.parameter_defs) # don't forget!
+  parameter_defs.update(BasicFilterchain1.parameter_defs) # don't forget!
   
   
   def __init__(self, **kwargs):
@@ -242,7 +267,7 @@ class ShmemFilterchain(BasicFilterchain):
       
       
 def test1():
-  st=""" Test single stream
+  st=""" Test single live stream
   """
   pre=pre_mod+"test1 :"
   print(pre,st)
@@ -260,22 +285,65 @@ def test1():
   
   # now livethread and openglthread are running ..
   
-  chain=BasicFilterchain(
-    livethread=livethread, 
+  chain=BasicFilterchain1(
     openglthread=openglthread,
-    address="rtsp://admin:admin@192.168.1.10",
     slot=1
     )
 
+  chain.setLiveContext("rtsp://admin:nordic12345@192.168.1.41")
+  
+  livethread.registerStream   (chain.live_ctx)
+  livethread.playStream       (chain.live_ctx)
+  print("sleeping for some secs")
+  time.sleep(5)
+  livethread.stopStream       (chain.live_ctx)
+  livethread.deregisterStream (chain.live_ctx)
+  print("bye!")
+
+
+def test2():
+  st=""" Test single file stream
+  """
+  pre=pre_mod+"test2 :"
+  print(pre,st)
+  
+  filethread=FileThread(
+    name   ="filethread",
+    verbose=True
+    )
+  
+  openglthread=OpenGLThread(
+    name    ="mythread",
+    n1440p  =5,
+    verbose =True
+    )
+  
+  # now livethread and openglthread are running ..
+  
+  chain=BasicFilterchain1(
+    openglthread=openglthread,
+    slot=1
+    )
+
+  chain.setFileContext("kokkelis.mkv")
+  
+  filethread.openStream(chain.file_ctx)
+  # chain.file_ctx.seektime_=10000
+  chain.file_ctx.seektime_=0
+  filethread.seekStream(chain.file_ctx)
+  filethread.playStream(chain.file_ctx)
+  filethread.stopStream(chain.file_ctx)
+  
   print("sleeping for some secs")
   time.sleep(3)
   print("bye!")
 
 
-def test2():
+
+def test3():
   st=""" Test ShmemFilterchain
   """
-  pre=pre_mod+"test2 :"
+  pre=pre_mod+"test3 :"
   print(pre,st)
   
   livethread=LiveThread(
@@ -291,24 +359,26 @@ def test2():
   
   # now livethread and openglthread are running ..
   
-  chain=ShmemFilterchain(
-    livethread=livethread, 
+  chain=ShmemFilterchain1(
     openglthread=openglthread,
-    address="rtsp://admin:admin@192.168.1.10",
     slot=1,
     shmem_image_dimensions=(1920//4,1080//4),  # images passed over shmem are full-hd/4 reso
     shmem_image_interval  =1000,              # .. passed every 1000 milliseconds
     shmem_ringbuffer_size =10                 # size of the ringbuffer
     )
 
+
+  chain.setLiveContext("rtsp://admin:nordic12345@192.168.1.41")
+  
+  livethread.registerStream   (chain.live_ctx)
+  livethread.playStream       (chain.live_ctx)
   print("sleeping for some secs")
-  time.sleep(3)
+  time.sleep(5)
+  livethread.stopStream       (chain.live_ctx)
+  livethread.deregisterStream (chain.live_ctx)
+
   print("bye!")
 
-
-  
-  
-  
 
 def main():
   pre=pre_mod+"main :"

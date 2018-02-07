@@ -70,7 +70,8 @@ void test_1() {
   // frame=glthread.getFrame720p();
   frame=glthread.getFrame(BitmapPars::N720::type);
   pbo=frame->yuvpbo;
-  loadYUVPBO(pbo, ysize, y, u, v); // load payload into PBO
+  // loadYUVPBO(pbo, ysize, y, u, v); // load payload into PBO
+  perror("not up to date");
   
   glthread.postRun();
 }
@@ -219,11 +220,13 @@ void test_4() {
   size=readyuvbytes("../aux/1.yuv",y,u,v);
   ysize=(size*2)/3;
   
-  std::cout << "File size "<< size <<" pbo size "<< pbo->size << std::endl;
+  std::cout << "Y size "<< size <<" pbo size "<< pbo->y_size << std::endl;
   
   // zeroyuvbytes(ysize,y,u,v); // so.. zero data creates a green screen
   
-  loadYUVPBO(pbo, ysize, y, u, v); // load payload into PBO
+  // loadYUVPBO(pbo, ysize, y, u, v); // load payload into PBO
+  perror("not up to date");
+  
   // return;
   peekYUVPBO(pbo);
   // return;

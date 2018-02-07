@@ -1875,6 +1875,92 @@ normal_log_all = _valkka_core.normal_log_all
 def fatal_log_all():
     return _valkka_core.fatal_log_all()
 fatal_log_all = _valkka_core.fatal_log_all
+class FileContext(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FileContext, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, FileContext, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["filename"] = _valkka_core.FileContext_filename_set
+    __swig_getmethods__["filename"] = _valkka_core.FileContext_filename_get
+    if _newclass:
+        filename = _swig_property(_valkka_core.FileContext_filename_get, _valkka_core.FileContext_filename_set)
+    __swig_setmethods__["slot"] = _valkka_core.FileContext_slot_set
+    __swig_getmethods__["slot"] = _valkka_core.FileContext_slot_get
+    if _newclass:
+        slot = _swig_property(_valkka_core.FileContext_slot_get, _valkka_core.FileContext_slot_set)
+    __swig_setmethods__["framefilter"] = _valkka_core.FileContext_framefilter_set
+    __swig_getmethods__["framefilter"] = _valkka_core.FileContext_framefilter_get
+    if _newclass:
+        framefilter = _swig_property(_valkka_core.FileContext_framefilter_get, _valkka_core.FileContext_framefilter_set)
+    __swig_setmethods__["seektime_"] = _valkka_core.FileContext_seektime__set
+    __swig_getmethods__["seektime_"] = _valkka_core.FileContext_seektime__get
+    if _newclass:
+        seektime_ = _swig_property(_valkka_core.FileContext_seektime__get, _valkka_core.FileContext_seektime__set)
+    __swig_setmethods__["duration"] = _valkka_core.FileContext_duration_set
+    __swig_getmethods__["duration"] = _valkka_core.FileContext_duration_get
+    if _newclass:
+        duration = _swig_property(_valkka_core.FileContext_duration_get, _valkka_core.FileContext_duration_set)
+    __swig_setmethods__["mstimestamp"] = _valkka_core.FileContext_mstimestamp_set
+    __swig_getmethods__["mstimestamp"] = _valkka_core.FileContext_mstimestamp_get
+    if _newclass:
+        mstimestamp = _swig_property(_valkka_core.FileContext_mstimestamp_get, _valkka_core.FileContext_mstimestamp_set)
+    __swig_setmethods__["status"] = _valkka_core.FileContext_status_set
+    __swig_getmethods__["status"] = _valkka_core.FileContext_status_get
+    if _newclass:
+        status = _swig_property(_valkka_core.FileContext_status_get, _valkka_core.FileContext_status_set)
+
+    def __init__(self):
+        this = _valkka_core.new_FileContext()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_FileContext
+    __del__ = lambda self: None
+FileContext_swigregister = _valkka_core.FileContext_swigregister
+FileContext_swigregister(FileContext)
+
+class FileThread(Thread):
+    __swig_setmethods__ = {}
+    for _s in [Thread]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FileThread, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Thread]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, FileThread, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, core_id=-1):
+        this = _valkka_core.new_FileThread(name, core_id)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_FileThread
+    __del__ = lambda self: None
+
+    def closeFileStreamCall(self, file_ctx):
+        return _valkka_core.FileThread_closeFileStreamCall(self, file_ctx)
+
+    def openFileStreamCall(self, file_ctx):
+        return _valkka_core.FileThread_openFileStreamCall(self, file_ctx)
+
+    def seekFileStreamCall(self, file_ctx):
+        return _valkka_core.FileThread_seekFileStreamCall(self, file_ctx)
+
+    def playFileStreamCall(self, file_ctx):
+        return _valkka_core.FileThread_playFileStreamCall(self, file_ctx)
+
+    def stopFileStreamCall(self, file_ctx):
+        return _valkka_core.FileThread_stopFileStreamCall(self, file_ctx)
+
+    def stopCall(self):
+        return _valkka_core.FileThread_stopCall(self)
+FileThread_swigregister = _valkka_core.FileThread_swigregister
+FileThread_swigregister(FileThread)
+
 # This file is compatible with both classic and new-style classes.
 
 

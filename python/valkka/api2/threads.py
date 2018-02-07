@@ -125,6 +125,69 @@ class LiveThread:
   # """
 
 
+
+class FileThread:
+  # FileThread(const char* name, int core_id=-1);
+  
+  parameter_defs={
+    "name"      : (str,"file_thread"),
+    "affinity"  : (int,-1),
+    "verbose"   : (bool, False)
+    }
+  
+
+  def __init__(self,**kwargs):
+    self.pre=self.__class__.__name__+" : " # auxiliary string for debugging output
+    parameterInitCheck(FileThread.parameter_defs,kwargs,self) # checks kwargs agains parameter_defs, attach ok'd parameters to this object as attributes
+    
+    # this is the "api-level 1" object.  Just a swig-wrapped cpp instance.
+    self.core=valkka_core.FileThread(self.name, self.affinity)
+    
+    self.active=True
+    self.core.startCall()
+    
+  """
+  void closeFileStreamCall      (FileContext &file_ctx); ///< API method: registers a stream                                // <pyapi> 
+  void openFileStreamCall       (FileContext &file_ctx); ///< API method: de-registers a stream                             // <pyapi>
+  void seekFileStreamCall       (FileContext &file_ctx); ///< API method: seek to a certain point                           // <pyapi>
+  void playFileStreamCall       (FileContext &file_ctx); ///< API method: starts playing the stream and feeding frames      // <pyapi>
+  void stopFileStreamCall       (FileContext &file_ctx); ///< API method: stops playing the stream and feeding frames       // <pyapi>
+  """
+  
+  def openStream(self,ctx):
+    self.core.openFileStreamCall(ctx)
+  
+  
+  def closeStream(self,ctx):
+    self.core.closeFileStreamCall(ctx)
+  
+  
+  def seekStream(self,ctx):
+    self.core.seekFileStreamCall(ctx)
+  
+  
+  def playStream(self,ctx):
+    self.core.playFileStreamCall(ctx)
+  
+
+  def stopStream(self,ctx):
+    self.core.stopFileStreamCall(ctx)
+  
+  
+  def close(self):
+    if (self.active):
+      if (self.verbose): print(self.pre,"stopping core.FileThread")
+      self.core.stopCall()
+      self.active=False
+      
+  # """
+  def __del__(self):
+    self.close()
+  # """
+
+
+
+
 class OpenGLThread:
   # OpenGLThread(const char* name, unsigned short n720p=0, unsigned short n1080p=0, unsigned short n1440p=0, unsigned short n4K=0, unsigned short naudio=0, unsigned msbuftime=100, int core_id=-1);
 

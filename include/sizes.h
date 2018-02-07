@@ -91,7 +91,8 @@ namespace BitmapPars {
     const static BitmapType type     =2; 
     const static unsigned w          =1920;
     const static unsigned h          =1080;
-    const static unsigned size       =1920*1080;
+    const static unsigned size       =1920*1080; 
+    // 1280*960 uses this .. takes a frame from stack with YUVPBO .. y_size, u_size, v_size = 1920*1080, etc.
     const static unsigned yuvsize    =1920*1080*3/2;
  };
  namespace N1440 {

@@ -193,6 +193,7 @@ void getTEX(GLuint& index, GLint internal_format, GLint format, GLsizei w, GLsiz
 }
 
 
+/*
 void loadYUVPBO(YUVPBO* pbo, GLsizei size, GLubyte* y, GLubyte* u, GLubyte* v) {
   unsigned int i;
   
@@ -205,29 +206,28 @@ void loadYUVPBO(YUVPBO* pbo, GLsizei size, GLubyte* y, GLubyte* u, GLubyte* v) {
   
   // memcpy(pbo->y_payload, y, 1); // debugging
   memcpy(pbo->y_payload, y, i);
-  // /*
   memcpy(pbo->u_payload, u, i/4);
   memcpy(pbo->v_payload, v, i/4);
-  // */
 }
+*/
 
 void peekYUVPBO(YUVPBO* pbo) {
   int i;
   
   std::cout << "peekYUVPBO: y_payload: ";
-  for(i=0; i<std::min(20,pbo->size); i++) {
+  for(i=0; i<std::min(20,pbo->y_size); i++) {
     std::cout << (unsigned int) pbo->y_payload[i] << " ";
   }
   std::cout << std::endl;
   
   std::cout << "peekYUVPBO: u_payload: ";
-  for(i=0; i<std::min(20,pbo->size/4); i++) {
+  for(i=0; i<std::min(20,pbo->u_size); i++) {
     std::cout << (unsigned int) pbo->u_payload[i] << " ";
   }
   std::cout << std::endl;
   
   std::cout << "peekYUVPBO: v_payload: ";
-  for(i=0; i<std::min(20,pbo->size/4); i++) {
+  for(i=0; i<std::min(20,pbo->v_size); i++) {
     std::cout << (unsigned int) pbo->v_payload[i] << " ";
   }
   std::cout << std::endl;
@@ -302,29 +302,32 @@ void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex) {
 YUVPBO::YUVPBO(BitmapType bmtype) : bmtype(bmtype) {
   switch(bmtype) {
     case (BitmapPars::N720::type): {
-      size=BitmapPars::N720::size;
+      y_size=BitmapPars::N720::size;
       break;
     }
     case (BitmapPars::N1080::type): {
-      size=BitmapPars::N1080::size;
+      y_size=BitmapPars::N1080::size;
       break;
     }
     case (BitmapPars::N1440::type): {
-      size=BitmapPars::N1440::size;
+      y_size=BitmapPars::N1440::size;
       break;
     }
     case (BitmapPars::N4K::type): {
-      size=BitmapPars::N4K::size;
+      y_size=BitmapPars::N4K::size;
       break;
     }
     default: {
       opengllogger.log(LogLevel::fatal) << "YUVPBO: FATAL! No such bitmap type "<<bmtype<<std::endl;
-      size=0;
+      y_size=0;
       break;
     }
   }
   
   // std::cout<<">>>> size="<<size<<std::endl;
+  
+  u_size=y_size/4;
+  v_size=y_size/4;
   
   reserve();
 }
@@ -342,17 +345,17 @@ YUVPBO::~YUVPBO() {
 void YUVPBO::reserve() {
   bool ok=true;
   
-  getPBO(y_index,size,y_payload);
+  getPBO(y_index,y_size,y_payload);
   if (y_payload) {
     opengllogger.log(LogLevel::crazy) << "YUVPBO: reserve: Y: Got databuf pbo_id " <<y_index<< " with adr="<<(long unsigned)(y_payload)<<std::endl;
   } else {ok=false;}
   
-  getPBO(u_index,size/4,u_payload);
+  getPBO(u_index,u_size,u_payload);
   if (u_payload) {
     opengllogger.log(LogLevel::crazy) << "YUVPBO: reserve: U: Got databuf pbo_id " <<u_index<< " with adr="<<(long unsigned)(u_payload)<<std::endl;
   } else {ok=false;}
   
-  getPBO(v_index,size/4,v_payload);
+  getPBO(v_index,v_size,v_payload);
   if (v_payload) {
     opengllogger.log(LogLevel::crazy) << "YUVPBO: reserve: V: Got databuf pbo_id " <<v_index<< " with adr="<<(long unsigned)(v_payload)<<std::endl;
   } else {ok=false;}
@@ -365,15 +368,15 @@ void YUVPBO::reserve() {
 }
 
 
-void YUVPBO::upload(GLsizei isize, GLubyte* y, GLubyte* u, GLubyte* v) {
+void YUVPBO::upload(GLsizei y_planesize, GLsizei u_planesize, GLsizei v_planesize, GLubyte* y, GLubyte* u, GLubyte* v) {
   // loadYUVPBO(YUVPBO* pbo, GLsizei size, GLubyte* y, GLubyte* u, GLubyte* v); // let's rewrite it here..
-  GLsizei i;
-  i=std::min(isize,size);
+  // GLsizei i;
+  // i=std::min(isize,size); // (isize=requested planesize)  <=  (size=planesize of this YUVPBO)
   // memcpy(pbo->y_payload, y, 1); // debugging
-  memcpy(y_payload, y, i);
+  memcpy(y_payload, y, std::min(y_planesize,y_size));
   // /*
-  memcpy(u_payload, u, i/4);
-  memcpy(v_payload, v, i/4);
+  memcpy(u_payload, u, std::min(u_planesize,u_size)); 
+  memcpy(v_payload, v, std::min(v_planesize,v_size));
   // */
 }
 
@@ -401,7 +404,6 @@ YUVTEX::YUVTEX(GLsizei w, GLsizei h) : TEX(w, h), y_index(0), u_index(0), v_inde
   this->format             =GL_RED;
   this->internal_format    =GL_RED;
   
-  
   getTEX(this->y_index, this->internal_format, this->format, this->w,   this->h);
   getTEX(this->u_index, this->internal_format, this->format, this->w/2, this->h/2);
   getTEX(this->v_index, this->internal_format, this->format, this->w/2, this->h/2);
@@ -420,7 +422,7 @@ YUVTEX::~YUVTEX() {
   
   
 std::ostream &operator<<(std::ostream &os, YUVPBO const &m) {
- return os << "<y size=" <<m.size << " y ["<<m.y_index<<" "<<(unsigned long)m.y_payload<<"] " << "u ["<<m.u_index<<" "<<(unsigned long)m.u_payload<<"] " << "v ["<<m.v_index<<" "<<(unsigned long)m.v_payload<<"]> ";
+ return os << "<y size=" <<m.y_size << " y ["<<m.y_index<<" "<<(unsigned long)m.y_payload<<"] " << "u ["<<m.u_index<<" "<<(unsigned long)m.u_payload<<"] " << "v ["<<m.v_index<<" "<<(unsigned long)m.v_payload<<"]> ";
 }
 
 

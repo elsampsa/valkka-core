@@ -104,7 +104,9 @@ private:
   
 public:
   BitmapType bmtype;
-  GLsizei    size;    ///< Size of Y plane in bytes.  Size of U and V planes is calculated
+  GLsizei    y_size;    ///< Size of Y plane in bytes.  Size of U and V planes is calculated
+  GLsizei    u_size;    ///< Size of U plane in bytes.
+  GLsizei    v_size;    ///< Size of V plane in bytes.
   
   GLuint   y_index;   ///< internal OpenGL/GPU index
   GLuint   u_index;   ///< internal OpenGL/GPU index
@@ -115,8 +117,7 @@ public:
   GLubyte* v_payload; ///< direct memory access (dma) memory address, returned by GPU
   
 public:
-  void upload(GLsizei isize, GLubyte* y, GLubyte* u, GLubyte* v); ///< Upload to GPU
-  
+  void upload(GLsizei y_planesize, GLsizei u_planesize, GLsizei v_planesize, GLubyte* y, GLubyte* u, GLubyte* v); ///< Upload to GPU
 };
 
 
@@ -179,7 +180,7 @@ void releasePBO(GLuint* index, GLubyte* payload);
 
 void getTEX(GLuint& index, GLint internal_format, GLint format, GLsizei w, GLsizei h); ///< Get texture from the GPU
 
-void loadYUVPBO(YUVPBO* pbo, GLsizei size, GLubyte* y, GLubyte* u, GLubyte* v); ///< Load data from pointer addresses to PBOs
+// void loadYUVPBO(YUVPBO* pbo, GLsizei size, GLubyte* y, GLubyte* u, GLubyte* v); ///< Load data from pointer addresses to PBOs 
 void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex); ///< Load data from PBOs to textures
 
 void peekYUVPBO(YUVPBO* pbo); ///< Print payload of a YUVPBO instance

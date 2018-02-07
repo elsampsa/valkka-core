@@ -41,6 +41,8 @@ import inspect
 is_py3 = (sys.version_info >= (3,0))
 
 
+
+# this is module specific!
 def getModulePath():
   lis=inspect.getabsfile(inspect.currentframe()).split("/")
   st="/"
@@ -194,7 +196,8 @@ def parameterInitCheck(definitions, parameters, obj, undefined_ok=False):
         setattr(obj,key,definition[1]); # parameters2.pop(key)
     elif (definition==None):            # parameter that can be void
       # parameters2.pop(key)
-      pass
+      # pass
+      setattr(obj,key,None)
     else:
       raise(AttributeError("Missing a mandatory parameter "+key))
     
