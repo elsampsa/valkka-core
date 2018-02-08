@@ -130,6 +130,7 @@ void FileStream::seek(long int ms_streamtime_) {
   // i=av_seek_frame(input_context, 0, ms_streamtime_, 0); //  seek in stream.time_base units // last one: flags which define seeking direction and mode ..
   
   i=avformat_seek_file(input_context, 0, std::min((long int)0,ms_streamtime_-1000), ms_streamtime_,ms_streamtime_+500, 0);
+  // TODO: .. what if stream has non-keyframes in the beginning .. then the thread will idle until the first keyframe is found
   
   filethreadlogger.log(LogLevel::normal) << "FileStream : av_seek_frame returned " << i << std::endl;
   if (i<0) {
@@ -149,6 +150,7 @@ void FileStream::seek(long int ms_streamtime_) {
   std::cout << "FileStream : seek : avpkt->pts : " << frame_mstimestamp_ << std::endl;
   state=FileState::seek;
   stream_mstimestamp_=-1; // no target time has not been reached yet
+  // TODO: if we do the seek here, all other streams are stopped meanwhile
 }
 
 
@@ -302,7 +304,7 @@ void FileStream::stopSeek() {
 
 
 
-FileThread::FileThread(const char* name, int core_id) : Thread(name, core_id) {
+FileThread::FileThread(const char* name, int core_id) : Thread(name, core_id), count_streams_seeking(0) {
   this->slots_.resize(I_MAX_SLOTS+1,NULL);
 }
 
@@ -337,6 +339,15 @@ void FileThread::sendSignalAndWait(SignalContext signal_ctx) {
   std::unique_lock<std::mutex> lk(this->mutex);
   this->signal_fifo.push_back(signal_ctx);  
   this->condition.wait(lk);
+}
+
+
+void FileThread::waitSeek() {
+  std::unique_lock<std::mutex> lk(this->mutex);
+  std::cout << "FileThread: waitSeek: count =" << count_streams_seeking << std::endl;
+  if (count_streams_seeking<1) {return;}
+  std::cout << "FileThread: waiting for seek condition" << std::endl;
+  this->seek_condition.wait(lk);
 }
 
 
@@ -396,8 +407,9 @@ void FileThread::run() {
   
   // timeout=Timeouts::filethread;
   start_mutex.unlock();
-  
-  loop=true;
+
+  reached=false;
+  loop   =true;
   while(loop) {
     timeout=Timeouts::filethread; // assume default timeout
     ///*
@@ -419,6 +431,14 @@ void FileThread::run() {
           if (fstream->state==FileState::seek and reached) { // required target time reached !
             fstream->state=FileState::stop; // if seeking, then stop
             std::cout << "FileThread : run : seeking stopped " << int(fstream->state) << std::endl;
+            {
+              std::unique_lock<std::mutex> lk(this->mutex);
+              count_streams_seeking--;
+              std::cout << "FileThread : run : count_streams_seeking =" << count_streams_seeking << std::endl;
+              if (count_streams_seeking<1) {
+                seek_condition.notify_one();
+              }
+            }
           }
           timeout=std::min(timeout,dt);
         }
@@ -542,6 +562,8 @@ void FileThread::seekFileStream(FileContext &file_ctx) {
       break;
     case 1: // slot is reserved
       filethreadlogger.log(LogLevel::debug) << "FileThread: seekFileStream : seeking.. " << file_ctx.slot << std::endl;
+      count_streams_seeking++;
+      std::cout << "FileThread: seekFileStream: count_streams_seeking =" << count_streams_seeking << std::endl;
       file_stream->seek(file_ctx.seektime_);
       break;
   }
@@ -616,10 +638,14 @@ void FileThread::closeFileStreamCall(FileContext &file_ctx) {
 
 void FileThread::seekFileStreamCall(FileContext &file_ctx) {
   SignalContext signal_ctx = {Signals::seek_stream, &file_ctx};
-  sendSignal(signal_ctx);
+  // sendSignal(signal_ctx);
+  sendSignalAndWait(signal_ctx); // go through the seeking .. count_streams_seeking is modified
 }
 
 void FileThread::playFileStreamCall(FileContext &file_ctx) {
+  // TODO: don't send signal to the queue until seek ended ..
+  //
+  waitSeek();
   SignalContext signal_ctx = {Signals::play_stream, &file_ctx};
   sendSignal(signal_ctx);
 }

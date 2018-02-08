@@ -148,6 +148,11 @@ protected:
   bool loop;                              ///< Controls the execution of the main loop
   std::list<FileStream*>  streamlist;     ///< FileStream s that have frames to be presented are queued here
   
+protected:
+  int                       count_streams_seeking; ///< number of stream seeking at the moment
+  std::condition_variable   seek_condition;        ///< notified when all streams have stopped seeking 
+  
+  
 public: // redefined virtual functions
   void run();
   void preRun();
@@ -155,6 +160,7 @@ public: // redefined virtual functions
   /** @copydoc Thread::sendSignal */
   void sendSignal(SignalContext signal_ctx);         ///< Must be explicitly *redefined* just in case : Thread::SignalContext has been changed to LiveThread::SignalContext
   void sendSignalAndWait(SignalContext signal_ctx); 
+  void waitSeek();
   
 protected:
   void handleSignals();

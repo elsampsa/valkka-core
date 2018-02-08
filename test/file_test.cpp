@@ -422,6 +422,84 @@ void test_6() {
 }
 
 
+void test_7() {
+  const char* name = "@TEST: file_test: test 7: ";
+  std::cout << name <<"** @@Stream from FileThread to AVThread and OpenGLThread. Seek and play. **" << std::endl;
+  int i;
+  
+  // (LiveThread:livethread) --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) --> {OpenGLFrameFifo:gl_in_filter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
+  
+  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/500,/*core_id*/-1); // remember buffering time!
+  OpenGLFrameFifo&  gl_fifo         =glthread.getFifo();      // get gl_fifo from glthread
+  FifoFrameFilter   gl_in_filter    ("gl_in_filter",gl_fifo);  
+  
+  // InfoFrameFilter   info            ("info");
+  
+  FrameFifo                 av_fifo         ("av_fifo",10); // TODO: we need here a fifo that waits ..
+  AVThread                  avthread        ("avthread",av_fifo,gl_in_filter);  // [av_fifo] -->> (avthread) --> {gl_in_filter}
+  BlockingFifoFrameFilter   av_in_filter    ("av_in_filter",av_fifo); // TODO: better idea .. FrameFifo could have two writing methods: blocking and non-blocking .. it depends on the filter which one it calls
+  
+  FileThread      file_thread("file_thread");
+  FileContext     ctx;
+  long int        duration, mstimestamp;
+  
+  std::cout << "starting threads" << std::endl;
+  
+  glthread.   startCall();
+  file_thread.startCall();
+  avthread.   startCall();
+  
+  avthread.  decodingOnCall();
+  
+  Window window_id  =glthread.createWindow();
+  glthread.makeCurrent(window_id);
+  
+  glthread.newRenderGroupCall(window_id);
+  i =glthread.newRenderContextCall(1, window_id,  0);
+  
+  std::cout << "new x window "<<window_id<<std::endl;
+  
+  sleep_for(2s);
+  
+  std::cout << "registering stream" << std::endl;
+  
+  ctx=(FileContext){"kokkelis.mkv", 1, &av_in_filter, 0, &duration, &mstimestamp}; // filename, slot, framefilter, start seek, etc.
+  
+  file_thread.openFileStreamCall(ctx);
+  std::cout << "got file status" << int(ctx.status) << std::endl;
+  
+  // sleep_for(2s);
+  
+  // case (1): immediate play // TODO: immediate calls: open, play => can't play.  Stream time not set
+  file_thread.playFileStreamCall(ctx);
+  
+  /*
+  // case (2): wait, seek, wait (1 sec), play
+  sleep_for(5s);
+  ctx.seektime_=0;
+  std::cout << "\nSEEK\n\n";
+  file_thread.seekFileStreamCall(ctx);
+  // sleep_for(1s); // not enough .. seeking might take some time
+  std::cout << "\nPLAY\n\n";
+  file_thread.playFileStreamCall(ctx);
+  */
+  
+  // all cases: play for 5 secs
+  sleep_for(5s);
+  
+  std::cout << "stopping threads" << std::endl;
+  
+  // glthread.delRenderContextCall(i);
+  // glthread.delRenderGroupCall(window_id); // TODO: what happends if you forget these..?  fix!  // TODO: what happens if file unavailable? fix!
+  
+  avthread.   stopCall();
+  file_thread.stopCall();
+  glthread.   stopCall(); // TODO: print warning if you try to re-start a thread!
+}
+
+
+
+
 int main(int argc, char** argcv) {
   if (argc<2) {
     std::cout << argcv[0] << " needs an integer argument.  Second interger argument (optional) is verbosity" << std::endl;
@@ -470,6 +548,9 @@ int main(int argc, char** argcv) {
         break;
       case(6):
         test_6();
+        break; 
+      case(7):
+        test_7();
         break; 
       default:
         std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;
