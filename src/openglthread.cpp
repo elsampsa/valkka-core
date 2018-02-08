@@ -1644,6 +1644,15 @@ unsigned OpenGLThread::getVsyncAtStartup() {
 }
 
 
+int OpenGLThread::hasCompositor(int screen) {
+  // https://stackoverflow.com/questions/33195570/detect-if-compositor-is-running
+  char prop_name[20];
+  snprintf(prop_name, 20, "_NET_WM_CM_S%d", screen);
+  Atom prop_atom = XInternAtom(display_id, prop_name, False);
+  return XGetSelectionOwner(display_id, prop_atom) != None;
+}
+
+
 void OpenGLThread::closeGLX() {
   XFree(this->fbConfigs);
   glXDestroyContext(this->display_id, this->glc);

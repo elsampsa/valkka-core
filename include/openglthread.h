@@ -400,6 +400,7 @@ public: // methods, internal : initializing / closing .. but we might want to te
   void closeGLX();         ///< Close connection to X11
   void loadExtensions();   ///< Load OpenGL extensions using GLEW
   void VSyncOff();         ///< Turn off vsync for swapbuffers
+  int hasCompositor(int screen); ///< Detect if a compositor is running
   void makeShaders();      ///< Compile shaders
   void delShaders();       ///< Delete shader
   void reserveFrames();    ///< Attaches YUVPBO instances with direct GPU memory access to Frame::yuvpbo \callgraph

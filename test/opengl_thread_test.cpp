@@ -144,6 +144,8 @@ void test_2() {
   std::cout << name << "starting threads" << std::endl;
   glthread.startCall(); // start running OpenGLThread!
   
+  std::cout << "Is compositor running? =" << glthread.hasCompositor(0) << std::endl;
+  
   Window window_id=glthread.createWindow();
   glthread.makeCurrent(window_id);
   std::cout << "new x window "<<window_id<<std::endl;
