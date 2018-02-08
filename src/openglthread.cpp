@@ -449,10 +449,17 @@ void SlotContext::deActivate() {//Deallocate
 }
 
 
-void SlotContext::loadTEX(YUVPBO* pbo) {
+void SlotContext::loadTEX(YUVPBO* pbo, long int mstimestamp) {
 #ifdef PRESENT_VERBOSE
   std::cout << "SlotContext: loadTEX: pbo: "<< *pbo <<std::endl;
 #endif
+#ifdef OPENGL_TIMING
+  if (mstimestamp<=prev_mstimestamp) { // check that we have fed the frames in correct order (per slot)
+    std::cout << "loadTEX: feeding frames in reverse order!" << std::endl;
+  }
+  prev_mstimestamp=mstimestamp
+#endif
+  
   loadYUVTEX(pbo, this->yuvtex);
   // this->pbo=pbo; // nopes ..
 }
@@ -1062,9 +1069,9 @@ void OpenGLThread::delRenderContexes() {
 
    
 
-void OpenGLThread::loadTEX(SlotNumber n_slot, YUVPBO* pbo){// Load PBO to texture in slot n_slot
+void OpenGLThread::loadTEX(SlotNumber n_slot, YUVPBO* pbo, long int mstimestamp){// Load PBO to texture in slot n_slot
   // if (!slotOk(n_slot)) {return 0;} // assume checked (this is for internal use only)
-  slots_[n_slot].loadTEX(pbo);
+  slots_[n_slot].loadTEX(pbo, mstimestamp);
 }
   
 
@@ -1310,11 +1317,13 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
 #ifdef TIMING_VERBOSE
             reportCallTime(0);
 #endif
-            loadTEX(f->n_slot, f->yuvpbo); // f->yuv_pbo [YUVPBO] has already been uploaded to GPU.  Now it is loaded to the textures. // wtf? can take up to 10 ms ..?
+            // f->yuv_pbo [YUVPBO] has already been uploaded to GPU.  Now it is loaded to the textures.
+            // loadTEX uses slots_[], where each vector element is a SlotContext (=set of textures, a shader program)
+            loadTEX(f->n_slot, f->yuvpbo, f->mstimestamp); // timestamp is used only for debugging purposes ..
 #ifdef TIMING_VERBOSE
             reportCallTime(1);
 #endif
-            render(f->n_slot); // renders all render groups that depend on this slot // wtf?  7 ms?
+            render(f->n_slot); // renders all render groups that depend on this slot.  A slot => RenderGroups (x window) => list of RenderContext => SlotContext (textures)
 #ifdef TIMING_VERBOSE
             reportCallTime(2);
 #endif

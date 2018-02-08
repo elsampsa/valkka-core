@@ -119,10 +119,13 @@ private:
   bool      active;     ///< Is acticated or not
   AVCodecID codec_id  ; ///< FFmpeg codec id
   
+private:
+  long int  prev_mstimestamp; ///< for debugging: check if frames are fed in correct timestamp order
+  
 public:
   void activate(GLsizei w, GLsizei h, YUVShader* shader);   ///< Allocate SlotContext::yuvtex (for a frame of certain size) and SlotContext::shader.
   void deActivate();         ///< Deallocate textures
-  void loadTEX(YUVPBO* pbo); ///< Load bitmap from PBO to SlotContext::yuvtex
+  void loadTEX(YUVPBO* pbo, long int mstimestamp=0); ///< Load bitmap from PBO to SlotContext::yuvtex
   
 public: // getters
   bool isActive() const {return active;}   ///< Check if active
@@ -364,7 +367,7 @@ public: // manipulate RenderContex(es)
   bool                delRenderContext(int id); ///< Runs through OpenGLThread::render_groups and removes indicated RenderContext
   
 public: // loading and rendering actions
-  void                loadTEX(SlotNumber n_slot, YUVPBO* pbo); ///< Load PBO to texture in slot n_slot
+  void                loadTEX(SlotNumber n_slot, YUVPBO* pbo, long int mstimestamp=0); ///< Load PBO to texture in slot n_slot
   void                render(SlotNumber n_slot); ///< Render all RenderGroup(s) depending on slot n_slot
   
 public: // getter methods
