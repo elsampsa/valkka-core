@@ -99,6 +99,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">FileThread Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Seeks and sends frames from files at realtime.  
+ <a href="classFileThread.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="filethread_8h_source.html">filethread.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for FileThread:</div>
 <div class="dyncontent">
@@ -226,7 +231,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a25d7bab2682e2098ad54e0bfce17c9c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a0735d0aaec1f351696f81314a6d177"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2a0735d0aaec1f351696f81314a6d177"></a>
 std::list&lt; <a class="el" href="classFileStream.html">FileStream</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a2a0735d0aaec1f351696f81314a6d177">streamlist</a></td></tr>
-<tr class="memdesc:a2a0735d0aaec1f351696f81314a6d177"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classFileStream.html" title="Keeping the books for each stream: the reference time (see Presention timing and playing) and the sta...">FileStream</a> s that have frames to be presented are queued here. <br /></td></tr>
+<tr class="memdesc:a2a0735d0aaec1f351696f81314a6d177"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classFileStream.html" title="Keeping the books for each stream: ">FileStream</a> s that have frames to be presented are queued here. <br /></td></tr>
 <tr class="separator:a2a0735d0aaec1f351696f81314a6d177"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classThread')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:a2e64f4b9dab400b7b06f2c73da4e465a inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e64f4b9dab400b7b06f2c73da4e465a"></a>
@@ -284,7 +289,7 @@ Private Types</h2></td></tr>
 <b>stop_stream</b>, 
 <b>get_state</b>
 <br />
- }<tr class="memdesc:a3bf170d7845daf0004b7b0e3f67f0c08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Characteristic signals for the <a class="el" href="classFileThread.html">FileThread</a>.  <a href="classFileThread.html#a3bf170d7845daf0004b7b0e3f67f0c08">More...</a><br /></td></tr>
+ }<tr class="memdesc:a3bf170d7845daf0004b7b0e3f67f0c08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Characteristic signals for the <a class="el" href="classFileThread.html" title="Seeks and sends frames from files at realtime. ">FileThread</a>.  <a href="classFileThread.html#a3bf170d7845daf0004b7b0e3f67f0c08">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:a3bf170d7845daf0004b7b0e3f67f0c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -322,7 +327,10 @@ Additional Inherited Members</h2></td></tr>
 static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b> (void *p)</td></tr>
 <tr class="separator:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Seeks and sends frames from files at realtime. </p>
+<p>See also <a class="el" href="timing.html">Presention timing and playing</a>. </p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a3bf170d7845daf0004b7b0e3f67f0c08"></a>
 <div class="memitem">
 <div class="memproto">
@@ -341,7 +349,7 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 </table>
 </div><div class="memdoc">
 
-<p>Characteristic signals for the <a class="el" href="classFileThread.html">FileThread</a>. </p>
+<p>Characteristic signals for the <a class="el" href="classFileThread.html" title="Seeks and sends frames from files at realtime. ">FileThread</a>. </p>
 <p>These signals map directly into methods with the same names </p>
 
 </div>
@@ -405,9 +413,6 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 </div><div class="memdoc">
 
 <p>Main execution loop is defined here. </p>
-<ul>
-<li></li>
-</ul>
 
 <p>Implements <a class="el" href="classThread.html#aae90dfabab3e1776cf01a26e7ee3a620">Thread</a>.</p>
 
@@ -416,10 +421,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph.png" border="0" usemap="#classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph" alt=""/></div>
 <map name="classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph" id="classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph">
-<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="169,5,335,32"/>
-<area shape="rect" id="node3" href="classFileStream.html#ac27433b0ecaf682edeaa16983bb2c42f" title="FileStream::pullNextFrame" alt="" coords="163,56,341,83"/>
-<area shape="rect" id="node4" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="389,56,504,83"/>
-<area shape="rect" id="node5" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="552,56,663,83"/>
+<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="163,5,329,32"/>
 </map>
 </div>
 </p>

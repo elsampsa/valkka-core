@@ -10,7 +10,6 @@ var searchData=
   ['prepareframe',['prepareFrame',['../classOpenGLFrameFifo.html#aa413592f88c40a8d6405ec94b4e851a1',1,'OpenGLFrameFifo']]],
   ['prerun',['preRun',['../classAVThread.html#a87f867f2cef8a30bbd6d525993aa0b59',1,'AVThread::preRun()'],['../classFileThread.html#ac7e09c3f733ea3a518d337a808646885',1,'FileThread::preRun()'],['../classLiveThread.html#a465a627cd8bee51a1c9a50014f804e7c',1,'LiveThread::preRun()'],['../classOpenGLThread.html#a8229c3916b40e90d7a7473df99a89931',1,'OpenGLThread::preRun()'],['../classThread.html#ab862ff46c28cbc4673977d962623f0fa',1,'Thread::preRun()'],['../classTestProducerThread.html#abd3c356874bab5d63c86239d49202900',1,'TestProducerThread::preRun()'],['../classTestConsumerThread.html#a7d1774e516f38ae47674aae3b08f7bcc',1,'TestConsumerThread::preRun()']]],
   ['pull',['pull',['../classDecoderBase.html#a2ce8ff1e1474b05b893889d0f37133e5',1,'DecoderBase::pull()'],['../classDummyDecoder.html#a1c300e5a16cf8ac526a1c37b5333db8f',1,'DummyDecoder::pull()'],['../classVideoDecoder.html#abf098d34924e5ecb01154fd30c82b708',1,'VideoDecoder::pull()']]],
-  ['pullframes',['pullFrames',['../classFileStream.html#aaebe6c70acf2b40684488fd49a54fbda',1,'FileStream']]],
-  ['pullnextframe',['pullNextFrame',['../classFileStream.html#ac27433b0ecaf682edeaa16983bb2c42f',1,'FileStream']]],
+  ['pullnextframe',['pullNextFrame',['../classFileStream.html#aab67ac1fec72625ac9c358f50b8a5665',1,'FileStream']]],
   ['put',['put',['../classSharedMemSegment.html#a0c21b537eb3c59bfb999bac5054ee62e',1,'SharedMemSegment']]]
 ];

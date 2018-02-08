@@ -86,8 +86,6 @@ FileStream::FileStream(std::string filename, SlotNumber slot, FrameFilter& frame
     n++;
   }
   reftime =0;
-  frame_mstimestamp_=0;
-  stream_mstimestamp_=-1;
   seek(0);
 }
   
@@ -146,16 +144,15 @@ void FileStream::seek(long int ms_streamtime_) {
     return;
   }
     
-  frame_mstimestamp_=(long int)avpkt->pts;
-  std::cout << "FileStream : seek : avpkt->pts : " << frame_mstimestamp_ << std::endl;
+  std::cout << "FileStream : seek : avpkt->pts : " << (long int)avpkt->pts << std::endl;
   state=FileState::seek;
-  stream_mstimestamp_=-1; // no target time has not been reached yet
-  // TODO: if we do the seek here, all other streams are stopped meanwhile
+  target_mstimestamp_=ms_streamtime_;
+  frame_mstimestamp_ =-1;
 }
 
 
 void FileStream::play() {
-  setRefMstime(stream_mstimestamp_);
+  setRefMstime(target_mstimestamp_);
   state=FileState::play;
 }
 
@@ -165,146 +162,70 @@ void FileStream::stop() {
 }
 
 
-void FileStream::pullNextFrame(long int target_mstimestamp, long int &timeout, bool &reached) {
+long int FileStream::update(long int mstimestamp) { // update the target time .. (only when playing)
+  long int timeout;
+  if (state==FileState::stop) {
+    return Timeouts::filethread;
+  }
+  if (state==FileState::play) { // when playing, target time changes ..
+    target_mstimestamp_=mstimestamp-reftime;
+  }
+  timeout=pullNextFrame(); // for play and seek
+  
+  if (state==FileState::seek and (frame_mstimestamp_>=target_mstimestamp_)) {
+    state=FileState::stop;
+    timeout=Timeouts::filethread;
+  }
+  return timeout;
+}
+
+
+long int FileStream::pullNextFrame() {
   long int dt;
   int i;
-
   ///*
   std::cout << "pullNextFrame:                     " <<  std::endl;
-  std::cout << "pullNextFrame: target_mstimestamp: " << target_mstimestamp << std::endl;           // wallclock time
-  std::cout << "pullNextFrame: reftime           : " << reftime << std::endl;
-  std::cout << "pullNextFrame: frame_mstimestamp_: " << frame_mstimestamp_ << std::endl;          // frame, stream time
-  std::cout << "pullNextFrame: frame_..+ref      : " << frame_mstimestamp_+reftime << std::endl;   // frame, wallclock time
-  std::cout << "pullNextFrame: dt                : " << (frame_mstimestamp_+reftime)-target_mstimestamp << std::endl;   // frame, wallclock time
+  std::cout << "pullNextFrame: reftime            : " << reftime << std::endl;
+  std::cout << "pullNextFrame: target_mstimestamp_: " << target_mstimestamp_ << std::endl;   
+  std::cout << "pullNextFrame: frame_mstimestamp_ : " << frame_mstimestamp_ << std::endl;          // frame, stream time
   std::cout << "pullNextFrame:                     " << std::endl;
   //*/
   
   // target time has been reached if ..
-  // frame_mstimestamp-target_mstimestamp==0
+  // frame_mstimestamp_-target_mstimestamp_==0
   // or
-  // next frame_mstimestamp-target_mstimestamp > 0
-  reached=false;
+  // next frame_mstimestamp_-target_mstimestamp_ > 0
   
-  dt=(frame_mstimestamp_+reftime)-target_mstimestamp; // frame timestamp in wallclock time : t = t_ + reftime
+  dt=frame_mstimestamp_-target_mstimestamp_;
   if ( dt>0 ) { // so, this has been called in vain.. must wait still
     std::cout << "pullNextFrame: return timeout " << dt << std::endl;
-    timeout=dt;
-    return;
+    return dt;
   }
   else {
-    if (dt==0) {
-      // stream timestamp can be between the frames, but here it is exactly at a frame
-      stream_mstimestamp_=frame_mstimestamp_; 
-      reached=true;
-    }
+    // if frame_mstimestamp_==-1 .. there is no previous frame
     out_frame.reset();
     out_frame.n_slot=slot;
     out_frame.fromAVPacket(avpkt); // copy payload, timestamp, stream index
     out_frame.frametype=frame_types[avpkt->stream_index];
+    frame_mstimestamp_=out_frame.mstimestamp; // the timestamp in stream time of the current frame
+    
     // out_frame is in stream time.. let's fix that:
-    out_frame.mstimestamp=out_frame.mstimestamp+reftime;
-    
-    out_frame.reportMsTime(); // debugging
-    
+    out_frame.mstimestamp=frame_mstimestamp_+reftime;
     framefilter.run(&out_frame); // send frame
     
     // read the next frame and save it for the next call
     i=av_read_frame(input_context, avpkt);
     if (i<0) {
-      state=FileState::stop; // TODO: send an infoframe indicating that streams finished
-      timeout=-1;
-      return;
+      state=FileState::stop; // TODO: send an infoframe indicating that stream has finished
+      return Timeouts::filethread;
     }
-    frame_mstimestamp_=(long int)avpkt->pts;
-    dt=(frame_mstimestamp_+reftime)-target_mstimestamp; // frame timestamp in wallclock time : t = t_ + reftime
-    if (dt>0) {
-      // stream timestamp is between the frames ..
-      reached=true;
-      stream_mstimestamp_=frame_mstimestamp_-dt;
-    }
-    std::cout << "pullNextFrame: dt2               : " << dt << std::endl;
-    // return std::max((long int)0,dt); // inform the caller about the timeout
-    timeout=std::max((long int)0,dt);
+    dt=frame_mstimestamp_-target_mstimestamp_;
+    return std::max((long int)0,dt);
   }
 }
 
 
-
-/** Sends all frames up to current wallclock time
- * 
- * @param target_mstimestamp  target wallclock time
- * 
- *
- *                      target_mstimestamp
- *   old (smaller value)      |                      young (bigger value)
- *       
- * 
- */
-void FileStream::pullFrames(long int target_mstimestamp) { // dont use this - multiplex instead!
-  int i;
-
-  ///*
-  std::cout << "pullFrames:                     " <<  std::endl;
-  std::cout << "pullFrames: target_mstimestamp: " << target_mstimestamp << std::endl;           // wallclock time
-  std::cout << "pullFrames: reftime           : " << reftime << std::endl;
-  std::cout << "pullFrames: frame_mstimestamp_ : " << frame_mstimestamp_ << std::endl;          // frame, stream time
-  std::cout << "pullFrames: frame_..+ref      : " << frame_mstimestamp_+reftime << std::endl;   // frame, wallclock time
-  std::cout << "pullFrames:                     " << std::endl;
-  //*/
-  
-  
-  if ( (frame_mstimestamp_+reftime) > target_mstimestamp ) { // frame timestamp in wallclock time : t = t^(stream) + reftime
-    return;
-  }
-  
-  // TODO: how to init 
-  // frame_mstimestamp_ has been saved from the previous call to pullFrames
-  while( (frame_mstimestamp_+reftime) <= target_mstimestamp) {
-    std::cout << "pullFrames: SENDING FRAME (stream time)      : " << frame_mstimestamp_ << std::endl;
-    std::cout << "pullFrames: SENDING FRAME (diff to wallclock): " << (frame_mstimestamp_+reftime)-getCurrentMsTimestamp() << std::endl;
-    
-    out_frame.reset();
-    out_frame.n_slot=slot;
-    out_frame.fromAVPacket(avpkt); // copy payload, timestamp, stream index
-    out_frame.frametype=frame_types[avpkt->stream_index];
-    // out_frame is in stream time.. let's fix that:
-    out_frame.mstimestamp=out_frame.mstimestamp+reftime;
-    
-    out_frame.reportMsTime(); // debugging
-    
-    framefilter.run(&out_frame);
-    i=av_read_frame(input_context, avpkt);
-    if (i<0) {
-      state=FileState::stop;
-      return;
-    }
-    frame_mstimestamp_=(long int)avpkt->pts;
-  }
-  // read the next frame and save it for the next call
-  i=av_read_frame(input_context, avpkt);
-  frame_mstimestamp_=(long int)avpkt->pts;
-}
-
-
-long int FileStream::getNextTimestamp() { // returns next frame's timestamp in wallclock time
- return frame_mstimestamp_+reftime;
-}
-
-
-bool FileStream::playOrSeek() {
- return (state==FileState::play or state==FileState::seek); 
-}
-
-
-void FileStream::stopSeek() {
-  if (state==FileState::seek) {
-    state==FileState::stop;
-  }
-}
-
-
-
-FileThread::FileThread(const char* name, int core_id) : Thread(name, core_id), count_streams_seeking(0) {
+FileThread::FileThread(const char* name, int core_id) : Thread(name, core_id) {
   this->slots_.resize(I_MAX_SLOTS+1,NULL);
 }
 
@@ -342,6 +263,7 @@ void FileThread::sendSignalAndWait(SignalContext signal_ctx) {
 }
 
 
+/*
 void FileThread::waitSeek() {
   std::unique_lock<std::mutex> lk(this->mutex);
   std::cout << "FileThread: waitSeek: count =" << count_streams_seeking << std::endl;
@@ -349,6 +271,7 @@ void FileThread::waitSeek() {
   std::cout << "FileThread: waiting for seek condition" << std::endl;
   this->seek_condition.wait(lk);
 }
+*/
 
 
 void FileThread::handleSignals() {
@@ -401,7 +324,8 @@ void FileThread::run() {
   FileStream *fstream;
   SlotNumber islot;  
   Frame* f;
-
+  // int seek_count;
+  
   mstime    =getCurrentMsTimestamp();
   old_mstime=mstime;
   
@@ -412,57 +336,28 @@ void FileThread::run() {
   loop   =true;
   while(loop) {
     timeout=Timeouts::filethread; // assume default timeout
-    ///*
     // multiplexing file streams..
     // ideally, we'd like to have here a live555-type event loop..
     // i.e., no need to scan all active streams, but the the next frame from all
     // streams would be next in a queue
     // .. or the queue would have the next FileStream object that's about to give us a frame
+    // seek_count=0;
     for(auto it=active_slots.begin(); it!=active_slots.end(); ++it) {
       fstream=slots_[*it];
-      if (fstream->playOrSeek()) { // this stream is either playing or seeking 
-        fstream->pullNextFrame(mstime,dt,reached); // input: target time (mstime).  Sets timeout for next frame and a boolean flag
-        std::cout << "FileThread : run : dt, reached " << dt <<" "<<reached<<std::endl;
-        if (dt<0) { // there's no next frame ..
-          std::cout << "FileThread : run : calling stopSeek" << std::endl;
-          if (fstream->state==FileState::seek) {fstream->state=FileState::stop;}
-        }
-        else {
-          if (fstream->state==FileState::seek and reached) { // required target time reached !
-            fstream->state=FileState::stop; // if seeking, then stop
-            std::cout << "FileThread : run : seeking stopped " << int(fstream->state) << std::endl;
-            {
-              std::unique_lock<std::mutex> lk(this->mutex);
-              count_streams_seeking--;
-              std::cout << "FileThread : run : count_streams_seeking =" << count_streams_seeking << std::endl;
-              if (count_streams_seeking<1) {
-                seek_condition.notify_one();
-              }
-            }
-          }
-          timeout=std::min(timeout,dt);
-        }
-        // timeout=std::min(timeout,(slots_[*it]->getNextTimestamp()-mstime));
+      timeout=std::min(fstream->update(mstime),timeout);
+      /*
+      if (fstream->state==FileState::seek) {
+        seek_count++;
       }
+      */
     }
-    //*/
-    
     std::cout << "run: timeout: " << timeout << std::endl;
-    
-    // timeout=std::min(timeout,Timeouts::filethread);
-    // timeout=std::max(timeout,(long int)0); // just in case ..
-    // std::cout << "run: timeout2:" << timeout << std::endl;
-    
-    // either ..
-    // sleep timeout milliseconds
-    // or read from a FrameFifo with timeout millisecond timeout
-    
-    // http://www.martinbroadhurst.com/sleep-for-milliseconds-in-c.html
     std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
     
     mstime =getCurrentMsTimestamp();
-    
     if ( (mstime-old_mstime)>=Timeouts::openglthread ) {
+      
+      
       handleSignals();
       old_mstime=mstime;
     }
@@ -562,8 +457,8 @@ void FileThread::seekFileStream(FileContext &file_ctx) {
       break;
     case 1: // slot is reserved
       filethreadlogger.log(LogLevel::debug) << "FileThread: seekFileStream : seeking.. " << file_ctx.slot << std::endl;
-      count_streams_seeking++;
-      std::cout << "FileThread: seekFileStream: count_streams_seeking =" << count_streams_seeking << std::endl;
+      // count_streams_seeking++;
+      // std::cout << "FileThread: seekFileStream: count_streams_seeking =" << count_streams_seeking << std::endl;
       file_stream->seek(file_ctx.seektime_);
       break;
   }
@@ -582,12 +477,7 @@ void FileThread::playFileStream(FileContext &file_ctx) {
       break;
     case 1: // slot is reserved
       filethreadlogger.log(LogLevel::debug) << "FileThread: playStream : playing.. " << file_ctx.slot << std::endl;
-      if (file_stream->stream_mstimestamp_>0) {
-        file_stream->play();
-      }
-      else {
-        std::cout << "FileThread: can't play!  Stream time not set" << std::endl;
-      }
+      file_stream->play();
       break;
   }
 }
@@ -643,9 +533,6 @@ void FileThread::seekFileStreamCall(FileContext &file_ctx) {
 }
 
 void FileThread::playFileStreamCall(FileContext &file_ctx) {
-  // TODO: don't send signal to the queue until seek ended ..
-  //
-  waitSeek();
   SignalContext signal_ctx = {Signals::play_stream, &file_ctx};
   sendSignal(signal_ctx);
 }

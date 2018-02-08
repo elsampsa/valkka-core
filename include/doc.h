@@ -473,7 +473,7 @@
  * File streams
  * ------------
  * 
- * The underscore "_" tags "stream time".  Stream timestamps are timestamps on each recorded frame.. they can be far in the past or in the future.
+ * The underscore "_" tags "stream time". %Stream timestamps are timestamps on each recorded frame: they can be far in the past or in the future.
  * 
  * The following equation holds:
  * 
@@ -504,20 +504,22 @@
  * [ check: t = t_ + reftime <=> t = t_ + t0 - t0_ <=> t - t0 <=> t_ - t0_ ]
  * 
  * 
- * Different actions for file streams:
+ * Different actions for file streams
+ * 
+ * For file streams, a target_time_ is set.  Frames are consumed until t_>=target_time_
  * 
  * Action     | What it does
- * ---------- | ------------------------------------------
- * register   | ..
- * seek       | set reftime, consume frames 'till t==t_
- * play       | set reftime, keep consuming frames
- * stop       | ..
- * deregister | ..
+ * ---------- | -----------------------------------------------
+ * open       | Open file, do seek(0_)
+ * seek       | set target_time_, once t_>=target_time_, stop
+ * play       | set target_time_, keep consuming frames with t_>=target_time_.  Update target_time_.
+ * stop       | Stop
+ * close      | Deregister file
  * 
  * 
  * 
- * Timing for realtime streams 
- * ---------------------------
+ * Realtime streams 
+ * ----------------
  * 
  * Symbol         | Explanation
  * -------------- | ------------------------------

@@ -194,10 +194,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a3996cf6c20676fd6c5f3103f4d723627">delRenderContext</a> (int id)</td></tr>
 <tr class="memdesc:a3996cf6c20676fd6c5f3103f4d723627"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs through <a class="el" href="classOpenGLThread.html#adc39f4a0676a56524c58d3517df97fdb" title="window_id =&gt; RenderGroup mapping. RenderGroup objects are warehoused here. ">OpenGLThread::render_groups</a> and removes indicated <a class="el" href="classRenderContext.html" title="Encapsulates data for rendering a single bitmap: vertex array object (VAO), vertex buffer object (VBO...">RenderContext</a>. <br /></td></tr>
 <tr class="separator:a3996cf6c20676fd6c5f3103f4d723627"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02238e35ab2e6cc47f7e013b9bd6d4a5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a02238e35ab2e6cc47f7e013b9bd6d4a5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a02238e35ab2e6cc47f7e013b9bd6d4a5">loadTEX</a> (SlotNumber n_slot, <a class="el" href="classYUVPBO.html">YUVPBO</a> *pbo)</td></tr>
-<tr class="memdesc:a02238e35ab2e6cc47f7e013b9bd6d4a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load <a class="el" href="structPBO.html" title="A Structure encapsulating an OpenGL PBO (Pixel Buffer Object) ">PBO</a> to texture in slot n_slot. <br /></td></tr>
-<tr class="separator:a02238e35ab2e6cc47f7e013b9bd6d4a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af74fc473b3c348498635b9d32b4415d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af74fc473b3c348498635b9d32b4415d0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#af74fc473b3c348498635b9d32b4415d0">loadTEX</a> (SlotNumber n_slot, <a class="el" href="classYUVPBO.html">YUVPBO</a> *pbo, long int mstimestamp=0)</td></tr>
+<tr class="memdesc:af74fc473b3c348498635b9d32b4415d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load <a class="el" href="structPBO.html" title="A Structure encapsulating an OpenGL PBO (Pixel Buffer Object) ">PBO</a> to texture in slot n_slot. <br /></td></tr>
+<tr class="separator:af74fc473b3c348498635b9d32b4415d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c52452ac81f91999cf8487d9796a1f0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9c52452ac81f91999cf8487d9796a1f0"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a9c52452ac81f91999cf8487d9796a1f0">render</a> (SlotNumber n_slot)</td></tr>
 <tr class="memdesc:a9c52452ac81f91999cf8487d9796a1f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render all <a class="el" href="classRenderGroup.html" title="Group of bitmaps that are rendered into the same X-window. ">RenderGroup(s)</a> depending on slot n_slot. <br /></td></tr>
@@ -215,12 +215,12 @@ const Window &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getRoot
 <a class="el" href="classOpenGLFrameFifo.html">OpenGLFrameFifo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ac96bdf32800352fa52cb9c5a571d1f49">getFifo</a> ()</td></tr>
 <tr class="memdesc:ac96bdf32800352fa52cb9c5a571d1f49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the communication fifo // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:ac96bdf32800352fa52cb9c5a571d1f49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59cdf8d805666bf5749cd1557002cd48"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a59cdf8d805666bf5749cd1557002cd48"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>activateSlot</b> (SlotNumber i, BitmapType bmtype)</td></tr>
-<tr class="separator:a59cdf8d805666bf5749cd1557002cd48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae75631de8009aee9fd27c1bcb9d995fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae75631de8009aee9fd27c1bcb9d995fe"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>activateSlotIf</b> (SlotNumber i, BitmapType bmtype)</td></tr>
-<tr class="separator:ae75631de8009aee9fd27c1bcb9d995fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a235497e170328e2c962988035c2db085"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a235497e170328e2c962988035c2db085"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>activateSlot</b> (SlotNumber i, <a class="el" href="structYUVFramePars.html">YUVFramePars</a> yuv_pars)</td></tr>
+<tr class="separator:a235497e170328e2c962988035c2db085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7597abee0bd46324ba8639026b8f060e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7597abee0bd46324ba8639026b8f060e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>activateSlotIf</b> (SlotNumber i, <a class="el" href="structYUVFramePars.html">YUVFramePars</a> yuv_pars)</td></tr>
+<tr class="separator:a7597abee0bd46324ba8639026b8f060e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3bb68a137ac8a44bd17c847928a6a8a0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3bb68a137ac8a44bd17c847928a6a8a0"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>slotTimingOk</b> (SlotNumber n_slot, long int mstime)</td></tr>
 <tr class="separator:a3bb68a137ac8a44bd17c847928a6a8a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -270,6 +270,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ab01f7e3f4d5ef02e5c9db3db6071cb01">VSyncOff</a> ()</td></tr>
 <tr class="memdesc:ab01f7e3f4d5ef02e5c9db3db6071cb01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turn off vsync for swapbuffers. <br /></td></tr>
 <tr class="separator:ab01f7e3f4d5ef02e5c9db3db6071cb01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7b43b972b6efa7c71f6f94b9aece24b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac7b43b972b6efa7c71f6f94b9aece24b"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ac7b43b972b6efa7c71f6f94b9aece24b">hasCompositor</a> (int screen)</td></tr>
+<tr class="memdesc:ac7b43b972b6efa7c71f6f94b9aece24b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detect if a compositor is running. <br /></td></tr>
+<tr class="separator:ac7b43b972b6efa7c71f6f94b9aece24b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2c27197566dfc1f2fa894342f22d6df"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2c27197566dfc1f2fa894342f22d6df"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#af2c27197566dfc1f2fa894342f22d6df">makeShaders</a> ()</td></tr>
 <tr class="memdesc:af2c27197566dfc1f2fa894342f22d6df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compile shaders. <br /></td></tr>
@@ -786,7 +790,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="483,88,649,114"/>
 <area shape="rect" id="node3" href="tools_8h.html#a9cec5da1c89d2e3965b8156b366280a1" title="Checks the slot number range. " alt="" coords="303,37,363,64"/>
 <area shape="rect" id="node4" href="classOpenGLThread.html#a4473e951ddb16921d4119a90594bfc5f" title="How much time since handleFifo exited. " alt="" coords="232,88,435,114"/>
-<area shape="rect" id="node5" href="classOpenGLThread.html#a02238e35ab2e6cc47f7e013b9bd6d4a5" title="Load PBO to texture in slot n_slot. " alt="" coords="249,138,417,165"/>
+<area shape="rect" id="node5" href="classOpenGLThread.html#af74fc473b3c348498635b9d32b4415d0" title="Load PBO to texture in slot n_slot. " alt="" coords="249,138,417,165"/>
 <area shape="rect" id="node6" href="classOpenGLThread.html#a9c52452ac81f91999cf8487d9796a1f0" title="Render all RenderGroup(s) depending on slot n_slot. " alt="" coords="256,189,411,216"/>
 <area shape="rect" id="node7" href="classOpenGLFrameFifo.html#a25e2f26e359bcf532ea7d85efd6231cd" title="Return Frame f back into the stack (relevant stack is chosen automatically) " alt="" coords="244,240,423,266"/>
 </map>

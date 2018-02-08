@@ -111,20 +111,28 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVPBO.html#acdabb9fccd49c084dc7acc97d2dae201">~YUVPBO</a> ()</td></tr>
 <tr class="memdesc:acdabb9fccd49c084dc7acc97d2dae201"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
 <tr class="separator:acdabb9fccd49c084dc7acc97d2dae201"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22dc0a5dd2610776aaf113d711701616"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22dc0a5dd2610776aaf113d711701616"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVPBO.html#a22dc0a5dd2610776aaf113d711701616">upload</a> (GLsizei isize, GLubyte *y, GLubyte *u, GLubyte *v)</td></tr>
-<tr class="memdesc:a22dc0a5dd2610776aaf113d711701616"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upload to GPU. <br /></td></tr>
-<tr class="separator:a22dc0a5dd2610776aaf113d711701616"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a609e4c6578816dbbf51d3c7708788bd8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a609e4c6578816dbbf51d3c7708788bd8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVPBO.html#a609e4c6578816dbbf51d3c7708788bd8">upload</a> (GLsizei y_planesize, GLsizei u_planesize, GLsizei v_planesize, GLubyte *y, GLubyte *u, GLubyte *v)</td></tr>
+<tr class="memdesc:a609e4c6578816dbbf51d3c7708788bd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upload to GPU. <br /></td></tr>
+<tr class="separator:a609e4c6578816dbbf51d3c7708788bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a1469e23b530adcf7c1888d25bcedfded"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1469e23b530adcf7c1888d25bcedfded"></a>
 BitmapType&#160;</td><td class="memItemRight" valign="bottom"><b>bmtype</b></td></tr>
 <tr class="separator:a1469e23b530adcf7c1888d25bcedfded"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9e678117a789419dbc8506244520e56"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa9e678117a789419dbc8506244520e56"></a>
-GLsizei&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVPBO.html#aa9e678117a789419dbc8506244520e56">size</a></td></tr>
-<tr class="memdesc:aa9e678117a789419dbc8506244520e56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of Y plane in bytes. Size of U and V planes is calculated. <br /></td></tr>
-<tr class="separator:aa9e678117a789419dbc8506244520e56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75fec8630cca7b796da081c1eaeba858"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75fec8630cca7b796da081c1eaeba858"></a>
+GLsizei&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVPBO.html#a75fec8630cca7b796da081c1eaeba858">y_size</a></td></tr>
+<tr class="memdesc:a75fec8630cca7b796da081c1eaeba858"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of Y plane in bytes. Size of U and V planes is calculated. <br /></td></tr>
+<tr class="separator:a75fec8630cca7b796da081c1eaeba858"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af12c3272ae213ab5d50cdde0217eeef1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af12c3272ae213ab5d50cdde0217eeef1"></a>
+GLsizei&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVPBO.html#af12c3272ae213ab5d50cdde0217eeef1">u_size</a></td></tr>
+<tr class="memdesc:af12c3272ae213ab5d50cdde0217eeef1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of U plane in bytes. <br /></td></tr>
+<tr class="separator:af12c3272ae213ab5d50cdde0217eeef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa832807817062640980160d08cdecbcb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa832807817062640980160d08cdecbcb"></a>
+GLsizei&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVPBO.html#aa832807817062640980160d08cdecbcb">v_size</a></td></tr>
+<tr class="memdesc:aa832807817062640980160d08cdecbcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of V plane in bytes. <br /></td></tr>
+<tr class="separator:aa832807817062640980160d08cdecbcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71f1d12b7d396602b8b7e6131da8a7fa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a71f1d12b7d396602b8b7e6131da8a7fa"></a>
 GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVPBO.html#a71f1d12b7d396602b8b7e6131da8a7fa">y_index</a></td></tr>
 <tr class="memdesc:a71f1d12b7d396602b8b7e6131da8a7fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">internal OpenGL/GPU index <br /></td></tr>

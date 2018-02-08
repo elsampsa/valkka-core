@@ -1,6 +1,3 @@
 <map id="FileThread::run" name="FileThread::run">
-<area shape="rect" id="node2" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="169,5,335,32"/>
-<area shape="rect" id="node3" href="$classFileStream.html#ac27433b0ecaf682edeaa16983bb2c42f" title="FileStream::pullNextFrame" alt="" coords="163,56,341,83"/>
-<area shape="rect" id="node4" href="$classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="389,56,504,83"/>
-<area shape="rect" id="node5" href="$classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="552,56,663,83"/>
+<area shape="rect" id="node2" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="163,5,329,32"/>
 </map>

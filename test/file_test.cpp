@@ -285,24 +285,27 @@ void test_5() {
   file_thread.seekFileStreamCall(ctx);
   
   sleep_for(3s);
+  std::cout << "\nPLAY\n";
   
   file_thread.playFileStreamCall(ctx);
   
   sleep_for(5s);
+  std::cout << "\nSTOP\n";
   
   file_thread.stopFileStreamCall(ctx);
   
   sleep_for(5s);
+  std::cout << "\nSEEK\n";
   
   ctx.seektime_=1000;
   file_thread.seekFileStreamCall(ctx);
   
   sleep_for(3s);
+  std::cout << "\nPLAY\n";
   
   file_thread.playFileStreamCall(ctx);
   
   sleep_for(3s);
-  
   std::cout << "stopping threads" << std::endl;
   
   // glthread.delRenderContextCall(i);
@@ -470,19 +473,19 @@ void test_7() {
   
   // sleep_for(2s);
   
-  // case (1): immediate play // TODO: immediate calls: open, play => can't play.  Stream time not set
+  // case (1): immediate play
   file_thread.playFileStreamCall(ctx);
   
-  /*
+  ///*
   // case (2): wait, seek, wait (1 sec), play
   sleep_for(5s);
   ctx.seektime_=0;
   std::cout << "\nSEEK\n\n";
   file_thread.seekFileStreamCall(ctx);
-  // sleep_for(1s); // not enough .. seeking might take some time
+  // sleep_for(1s);
   std::cout << "\nPLAY\n\n";
   file_thread.playFileStreamCall(ctx);
-  */
+  //*/
   
   // all cases: play for 5 secs
   sleep_for(5s);

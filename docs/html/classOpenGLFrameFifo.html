@@ -151,9 +151,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#a6e51e2c3c7645e171b36c57a4ddcdd83">getFrame</a> (BitmapType bmtype)</td></tr>
 <tr class="memdesc:a6e51e2c3c7645e171b36c57a4ddcdd83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a frame from a stack by bitmap type (uses <a class="el" href="classOpenGLFrameFifo.html#affb18c6b12f28e31c238c2d65bc28677" title="Take a frame from a stack. Not mutex protection. Only for internal use. ">OpenGLFrameFifo::getFrame_</a>) <br /></td></tr>
 <tr class="separator:a6e51e2c3c7645e171b36c57a4ddcdd83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba800b51221cbb52dcd925c7d4899caf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aba800b51221cbb52dcd925c7d4899caf"></a>
-<a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#aba800b51221cbb52dcd925c7d4899caf">prepareAVFrame</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
-<tr class="memdesc:aba800b51221cbb52dcd925c7d4899caf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chooses a frame from the stack, does GPU uploading for frames of the type <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>. <br /></td></tr>
+<tr class="memitem:aba800b51221cbb52dcd925c7d4899caf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#aba800b51221cbb52dcd925c7d4899caf">prepareAVFrame</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
+<tr class="memdesc:aba800b51221cbb52dcd925c7d4899caf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chooses a frame from the stack, does GPU uploading for frames of the type <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>.  <a href="#aba800b51221cbb52dcd925c7d4899caf">More...</a><br /></td></tr>
 <tr class="separator:aba800b51221cbb52dcd925c7d4899caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71356c2eeea511481876d53675855a6c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a71356c2eeea511481876d53675855a6c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#a71356c2eeea511481876d53675855a6c">writeCopy</a> (<a class="el" href="classFrame.html">Frame</a> *f, bool wait=false)</td></tr>
@@ -377,6 +376,42 @@ std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a cl
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="aba800b51221cbb52dcd925c7d4899caf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFrame.html">Frame</a> * OpenGLFrameFifo::prepareAVFrame </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classFrame.html">Frame</a> *&#160;</td>
+          <td class="paramname"><em>frame</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Chooses a frame from the stack, does GPU uploading for frames of the type <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>. </p>
+<ul>
+<li></li>
+</ul>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classOpenGLFrameFifo_aba800b51221cbb52dcd925c7d4899caf_cgraph.png" border="0" usemap="#classOpenGLFrameFifo_aba800b51221cbb52dcd925c7d4899caf_cgraph" alt=""/></div>
+<map name="classOpenGLFrameFifo_aba800b51221cbb52dcd925c7d4899caf_cgraph" id="classOpenGLFrameFifo_aba800b51221cbb52dcd925c7d4899caf_cgraph">
+<area shape="rect" id="node2" href="classFrameFifo.html#a7d9dbc000f3f2e57ff80faeba3cb10df" title="Take a frame from the stack. " alt="" coords="267,5,411,32"/>
+<area shape="rect" id="node3" href="classOpenGLFrameFifo.html#a4326480a8e0b422a85c59f51f0b4f505" title="Show stack usage. " alt="" coords="233,56,444,83"/>
+<area shape="rect" id="node5" href="classFrame.html#a596d590b841166a204fe9ba5b9313159" title="Copy public metadata across different frame types (timestamp, subsession_index, pars) to f..." alt="" coords="277,107,401,133"/>
+<area shape="rect" id="node6" href="classYUVPBO.html#a609e4c6578816dbbf51d3c7708788bd8" title="Upload to GPU. " alt="" coords="277,157,401,184"/>
+<area shape="rect" id="node4" href="classOpenGLFrameFifo.html#a1cfb01cb4ad4713ae29c4fb40f106b22" title="Show stack usage. No mutex protection. " alt="" coords="492,56,711,83"/>
+</map>
+</div>
+</p>
 
 </div>
 </div>

@@ -47,7 +47,15 @@ enum class FileState {
 };
 
 
-/** Keeping the books for each stream: the reference time (see \ref timing) and the state of the stream */
+/** Keeping the books for each stream: 
+ *
+ * - Desider target time (FileStream::target_mstimestamp_)
+ * - Timestamp of the previous frame (FileStream::frame_mstimestamp_)
+ * - State if the stream (FileStream::state)
+ * - FFmpeg stream handles, etc.
+ * 
+ * For timing of file streams, see \ref timing
+ */
 class FileStream {
   
 public:
@@ -65,8 +73,8 @@ public:
   Frame       out_frame;
   long int    duration;
   long int    reftime; 
-  long int    frame_mstimestamp_;    ///< Millisecond timestamp of the current available frame.  Note the convention: _ means that this is in frame time
-  long int    stream_mstimestamp_;   ///< Millisecond timestamp: where the stream is currently.  -1 means nowhere (must seek first).
+  long int    target_mstimestamp_;   ///< Where the stream would like to be (underscore means stream time)
+  long int    frame_mstimestamp_;    ///< Timestamp of previous frame sent, -1 means there was no previous frame (underscore means stream time)
   FileState   state;
   AVPacket    *avpkt;
   std::vector<FrameType> frame_types;
@@ -79,11 +87,8 @@ public:
   void seek(long int ms_streamtime_);
   void play();
   void stop();
-  void pullNextFrame(long int target_mstimestamp, long int &timeout, bool &reached);
-  void pullFrames(long int target_mstimestamp);
-  long int getNextTimestamp();
-  bool playOrSeek();
-  void stopSeek();
+  long int update(long int mstimestamp);
+  long int pullNextFrame();
 };
 
 
@@ -101,6 +106,8 @@ struct FileContext { // <pyapi>
 // {"kokkelis.mkv", 1, framefilter, duration, mstimestamp}  
 
 
+/** Seeks and sends frames from files at realtime.  See also \ref timing.
+ */
 class FileThread : public Thread { // <pyapi>
 
   /** Characteristic signals for the FileThread.
@@ -148,9 +155,11 @@ protected:
   bool loop;                              ///< Controls the execution of the main loop
   std::list<FileStream*>  streamlist;     ///< FileStream s that have frames to be presented are queued here
   
+/*
 protected:
   int                       count_streams_seeking; ///< number of stream seeking at the moment
   std::condition_variable   seek_condition;        ///< notified when all streams have stopped seeking 
+*/
   
   
 public: // redefined virtual functions
@@ -160,7 +169,7 @@ public: // redefined virtual functions
   /** @copydoc Thread::sendSignal */
   void sendSignal(SignalContext signal_ctx);         ///< Must be explicitly *redefined* just in case : Thread::SignalContext has been changed to LiveThread::SignalContext
   void sendSignalAndWait(SignalContext signal_ctx); 
-  void waitSeek();
+  // void waitSeek();
   
 protected:
   void handleSignals();
