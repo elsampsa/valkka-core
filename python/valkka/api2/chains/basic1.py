@@ -54,7 +54,7 @@ class BasicFilterchain1:
   parameter_defs={
     "openglthread" : OpenGLThread,
     "slot"         : int,
-    "fifolen"      : (int,100),
+    "fifolen"      : (int,10),
     "affinity"     : (int,-1)
     }
   
@@ -90,7 +90,7 @@ class BasicFilterchain1:
     self.gl_fifo         =self.openglthread.core.getFifo()
     self.gl_in_filter    =core.FifoFrameFilter    ("gl_in_filter_"+self.idst,self.gl_fifo)
 
-    self.av_fifo         =core.FrameFifo          ("av_fifo_"+self.idst,self.fifolen)        # FrameFifo is 10 frames long.  Payloads in the frames adapt automatically to the streamed data.
+    self.av_fifo         =core.FrameFifo          ("av_fifo_"+self.idst,self.fifolen,True)        # FrameFifo is 10 frames long.  Payloads in the frames adapt automatically to the streamed data.  Clear fifo when saturated.
 
     # [av_fifo] -->> (avthread) --> {gl_in_filter}
     self.avthread        =core.AVThread           ("avthread_"+self.idst,            # name    
@@ -248,7 +248,7 @@ class ShmemFilterchain1(BasicFilterchain1):
     
     # main branch
     # [av_fifo] -->> (avthread) --> {gl_in_filter}
-    self.av_fifo         =core.FrameFifo          ("av_fifo"+self.idst,self.fifolen)        # FrameFifo is 10 frames long.  Payloads in the frames adapt automatically to the streamed data.
+    self.av_fifo         =core.FrameFifo          ("av_fifo"+self.idst,self.fifolen,True)        # FrameFifo is 10 frames long.  Payloads in the frames adapt automatically to the streamed data.  Clear fifo when saturated
     self.avthread        =core.AVThread           ("avthread"+self.idst,   # name    
                                                     self.av_fifo,          # read from
                                                     self.fork_filter,     # write to

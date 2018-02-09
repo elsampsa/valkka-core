@@ -29,11 +29,6 @@
  *  @version 0.3.0 
  *  
  *  @brief Lockable safe-queues for frame queueing in multithreading applications
- *
- *  @section DESCRIPTION
- *  
- *  Yes, the description
- *
  */
 
 #include "queues.h" // deque: http://en.cppreference.com/w/cpp/container/deque
@@ -74,7 +69,7 @@ void FrameFifo::dump(std::deque<Frame*> &queue) {
 }
 
 
-FrameFifo::FrameFifo(const char* name, unsigned short int n_stack) : name(name), n_stack(n_stack), count(0) {
+FrameFifo::FrameFifo(const char* name, unsigned short int n_stack, bool clear_when_filled) : name(name), n_stack(n_stack), clear_when_filled(clear_when_filled), count(0) {
   unsigned short int i;
   
   // reservoir.resize(this->n_stack); // avoid resizing vectors and deques of pointers ..
@@ -147,6 +142,9 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) { // take a frame from the stack,
     }
     else {
       queuelogger.log(LogLevel::fatal) << "FrameFifo: "<<name<<" writeCopy: OVERFLOW! No more frames in stack.  Frame="<<(*f)<<std::endl;
+      if (clear_when_filled) {
+        recycleAll();
+      }
       return false;
       // TODO: it might be a good idea to recycle all frames in fifo if this happends .. depends
     }
@@ -228,7 +226,8 @@ Frame* FrameFifo::read(unsigned short int mstimeout) {
 #ifdef FIFO_VERBOSE
   if (count>1) {std::cout << "FrameFifo: "<<name<<"      read: count=" << this->count << std::endl;}
 #endif
-  tmpframe=this->fifo[this->count-1]; // take the last element
+  // tmpframe=this->fifo[this->count-1]; // take the last element
+  tmpframe=fifo.back();
   this->fifo.pop_back(); // remove the last element
   --(this->count);
   return tmpframe;
@@ -249,6 +248,20 @@ void FrameFifo::recycle(Frame* f) {
   */
 }
 
+
+void FrameFifo::recycleAll() { // recycle all frames from fifo back to stack
+  std::unique_lock<std::mutex> lk(this->mutex);
+  Frame *tmpframe;
+  queuelogger.log(LogLevel::debug) << "FrameFifo: recycleAll: " << std::endl;
+  while(fifo.size()>0) {
+    // tmpframe=this->fifo[this->count-1]; // take the last element
+    tmpframe=fifo.back();
+    stack.push_front(tmpframe);
+    fifo.pop_back();
+    --(this->count); // aux counter .. do we really need this..?
+  }
+}
+    
 
 /*
 // pop a frame from the end of the fifo, recycle it into stack and return a copy of the frame ("copy-on-read")

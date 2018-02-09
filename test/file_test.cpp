@@ -208,10 +208,12 @@ void test_4() {
   
   sleep_for(2s);
   
+  /*
   std::cout << "seeking stream" << std::endl;
   
   ctx.seektime_=2000;
   file_thread.seekFileStreamCall(ctx);
+  */
   
   sleep_for(5s);
   

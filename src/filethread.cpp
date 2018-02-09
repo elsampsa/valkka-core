@@ -55,16 +55,16 @@ FileStream::FileStream(std::string filename, SlotNumber slot, FrameFilter& frame
   
   
   if (i<0) {
-    std::cout << "FileStream : my_avformat_open_input: got nothing" << std::endl;
+    filethreadlogger.log(LogLevel::fatal) << "FileStream : my_avformat_open_input: got nothing" << std::endl;
     state=FileState::error;
     return;
   }
   else {
-    std::cout << "FileStream : got " << i << " " << input_context << std::endl;
+    filethreadlogger.log(LogLevel::debug) << "FileStream : got " << i << " " << input_context << std::endl;
   }
   
   if (avformat_find_stream_info(input_context, NULL) < 0) {
-    fprintf(stderr, "Could not find stream information\n");
+    filethreadlogger.log(LogLevel::normal) << "Could not find stream information" << std::endl;
   }
   
   state=FileState::stop;
@@ -123,7 +123,9 @@ void FileStream::seek(long int ms_streamtime_) {
   //state=FileState::ok;
   setRefMstime(ms_streamtime_);
   
+#ifdef FILE_VERBOSE  
   std::cout << "FileStream : seek : seeking to " << ms_streamtime_ << std::endl;
+#endif
   
   // i=av_seek_frame(input_context, 0, ms_streamtime_, 0); //  seek in stream.time_base units // last one: flags which define seeking direction and mode ..
   
@@ -143,11 +145,13 @@ void FileStream::seek(long int ms_streamtime_) {
     // TODO: send an info frame indicating stream end
     return;
   }
-    
+   
+#ifdef FILE_VERBOSE  
   std::cout << "FileStream : seek : avpkt->pts : " << (long int)avpkt->pts << std::endl;
+#endif
   state=FileState::seek;
   target_mstimestamp_=ms_streamtime_;
-  frame_mstimestamp_ =-1;
+  frame_mstimestamp_ =(long int)avpkt->pts;
 }
 
 
@@ -167,15 +171,18 @@ long int FileStream::update(long int mstimestamp) { // update the target time ..
   if (state==FileState::stop) {
     return Timeouts::filethread;
   }
-  if (state==FileState::play) { // when playing, target time changes ..
+  if (state==FileState::play or state==FileState::seek) { // when playing, target time changes ..
     target_mstimestamp_=mstimestamp-reftime;
   }
   timeout=pullNextFrame(); // for play and seek
   
+  /*
   if (state==FileState::seek and (frame_mstimestamp_>=target_mstimestamp_)) {
     state=FileState::stop;
     timeout=Timeouts::filethread;
   }
+  */
+  
   return timeout;
 }
 
@@ -183,13 +190,13 @@ long int FileStream::update(long int mstimestamp) { // update the target time ..
 long int FileStream::pullNextFrame() {
   long int dt;
   int i;
-  ///*
+#ifdef FILE_VERBOSE  
   std::cout << "pullNextFrame:                     " <<  std::endl;
   std::cout << "pullNextFrame: reftime            : " << reftime << std::endl;
   std::cout << "pullNextFrame: target_mstimestamp_: " << target_mstimestamp_ << std::endl;   
   std::cout << "pullNextFrame: frame_mstimestamp_ : " << frame_mstimestamp_ << std::endl;          // frame, stream time
   std::cout << "pullNextFrame:                     " << std::endl;
-  //*/
+#endif
   
   // target time has been reached if ..
   // frame_mstimestamp_-target_mstimestamp_==0
@@ -198,7 +205,9 @@ long int FileStream::pullNextFrame() {
   
   dt=frame_mstimestamp_-target_mstimestamp_;
   if ( dt>0 ) { // so, this has been called in vain.. must wait still
+#ifdef FILE_VERBOSE  
     std::cout << "pullNextFrame: return timeout " << dt << std::endl;
+#endif
     return dt;
   }
   else {
@@ -211,6 +220,9 @@ long int FileStream::pullNextFrame() {
     
     // out_frame is in stream time.. let's fix that:
     out_frame.mstimestamp=frame_mstimestamp_+reftime;
+#ifdef FILE_VERBOSE  
+    std::cout << "FileStream: pullNextFrame: sending frame: " << out_frame << std::endl;
+#endif
     framefilter.run(&out_frame); // send frame
     
     // read the next frame and save it for the next call
@@ -219,8 +231,19 @@ long int FileStream::pullNextFrame() {
       state=FileState::stop; // TODO: send an infoframe indicating that stream has finished
       return Timeouts::filethread;
     }
-    dt=frame_mstimestamp_-target_mstimestamp_;
-    return std::max((long int)0,dt);
+    if (((long int)avpkt->pts)<=frame_mstimestamp_) { // same timestamp!  recurse (typical for sequences: sps, pps, keyframe)
+#ifdef FILE_VERBOSE  
+      std::cout << "FileStream: pullNextFrame: recurse: " << std::endl;
+#endif
+      dt=pullNextFrame();
+    }
+    else {
+      if (state==FileState::seek) {
+        state=FileState::stop;
+      }
+      dt=frame_mstimestamp_-target_mstimestamp_;
+      return std::max((long int)0,dt);
+    }
   }
 }
 
@@ -351,7 +374,9 @@ void FileThread::run() {
       }
       */
     }
+#ifdef FILE_VERBOSE  
     std::cout << "run: timeout: " << timeout << std::endl;
+#endif
     std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
     
     mstime =getCurrentMsTimestamp();

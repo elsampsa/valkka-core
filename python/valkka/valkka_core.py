@@ -1472,8 +1472,8 @@ class FrameFifo(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, FrameFifo, name)
     __repr__ = _swig_repr
 
-    def __init__(self, name, n_stack):
-        this = _valkka_core.new_FrameFifo(name, n_stack)
+    def __init__(self, name, n_stack, clear_when_filled=False):
+        this = _valkka_core.new_FrameFifo(name, n_stack, clear_when_filled)
         try:
             self.this.append(this)
         except Exception:

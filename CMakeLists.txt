@@ -100,6 +100,12 @@ if    (decode_timing)
   message("DECODE_TIMING ENABLED")
 endif (decode_timing)
 
+option(file_verbose "file_verbose" OFF)
+if    (file_verbose)
+  add_definitions("-DFILE_VERBOSE")
+  message("FILE_VERBOSE ENABLED")
+endif (file_verbose)
+
 
 
 # ****************************************************************

@@ -77,7 +77,7 @@ public: // <pyapi>
    * @param n_stack   Size of the frame reservoir
    * 
    */
-  FrameFifo(const char* name, unsigned short int n_stack); // <pyapi>
+  FrameFifo(const char* name, unsigned short int n_stack, bool clear_when_filled=false); // <pyapi>
   /** Default virtual destructor
    */
   virtual ~FrameFifo(); // <pyapi>
@@ -94,8 +94,9 @@ private:
   
 
 protected: // initialized at constructor time
-  std::string name;            ///< A unique name identifying this fifo
-  unsigned short int n_stack;  ///< Max number of frames in the fifo
+  std::string        name;              ///< A unique name identifying this fifo
+  unsigned short int n_stack;           ///< Max number of frames in the fifo
+  bool               clear_when_filled; ///< Recycle all frames from fifo to stack is running empty
   
 public:
   // insert a frame into the beginning of fifo
@@ -107,6 +108,7 @@ public:
   virtual Frame* read(unsigned short int mstimeout=0);   ///< Pop a frame from the end of the fifo and return the frame to the reservoir stack
   // Frame* readCopy();                                  ///< Pop a frame from the end of the fifo, recycle it into stack and return a copy of the frame ("copy-on-read")
   virtual void recycle(Frame* f);                        ///< Return Frame f back into the stack.  Update target_size if necessary
+  virtual void recycleAll();                             ///< Recycle all frames from fifo back to stack.
   
   virtual void dumpStack(); ///< Dump the frames in the stack
   virtual void dumpFifo();  ///< Dump frames in the fifo
