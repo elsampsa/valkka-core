@@ -391,6 +391,11 @@ void OpenGLFrameFifo::dumpStack_() {
 }
 
 
+void OpenGLFrameFifo::diagnosis_() {
+  std::cout << "FIFO: " <<  fifo.size() << " 720p: " << stack_720p.size() << " 1080p: " << stack_1080p.size() << " 1440p: " << stack_1440p.size() << " 4K: " << stack_4K.size() << " audio: " << stack_audio.size() << std::endl;
+}
+
+
 void OpenGLFrameFifo::reportStacks() {
   std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
   reportStacks_();
@@ -401,6 +406,12 @@ void OpenGLFrameFifo::dumpStack() {
   std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
   dumpStack_();
 }
+
+void OpenGLFrameFifo::diagnosis() {
+  std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+  diagnosis_();
+}
+  
 
 /*
 void OpenGLFrameFifo::checkOrder() {
@@ -1175,6 +1186,12 @@ void OpenGLThread::dumpFifo() {
 }
 
 
+void OpenGLThread::diagnosis() {
+  infifo.diagnosis();
+  std::cout << "PRESFIFO: " << presfifo.size() << std::endl;
+}
+
+
 void OpenGLThread::resetCallTime() {
   callswaptime =0;
   calltime     =getCurrentMsTimestamp();
@@ -1355,8 +1372,8 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
     return (long unsigned)rel_mstimestamp; // time delay until the next presentation event..
   }
 }
+    
   
-
 void OpenGLThread::run() {// Main execution loop
   // time_t timer;
   // time_t oldtimer;
@@ -1421,6 +1438,7 @@ void OpenGLThread::run() {// Main execution loop
       handleSignals();
       // oldtimer=timer;
       old_mstime=mstime;
+      diagnosis();
     }
   }
 }

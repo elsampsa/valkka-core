@@ -73,6 +73,7 @@ public:
   Frame* getFrame_(BitmapType bmtype);               ///< Take a frame from a stack.  Not mutex protection.  Only for internal use
   void reportStacks_();                              ///< Show stack usage.  No mutex protection
   void dumpStack_();                                 ///< Dump the frames in the stack.  No mutex protection
+  void diagnosis_();
   
 public: // mutex protected calls .. be carefull when calling mutex protected call inside a mutex protected call (always check mutex protected context)
   Frame* getAudioFrame();                            ///< Take a frame from the OpenGLFrameFifo::stack_audio stack
@@ -83,6 +84,7 @@ public: // mutex protected calls .. be carefull when calling mutex protected cal
   void recycle(Frame* f);                            ///< Return Frame f back into the stack (relevant stack is chosen automatically)
   void reportStacks();                               ///< Show stack usage
   void dumpStack();                                  ///< Dump the frames in the stack
+  void diagnosis();
   //void checkOrder();                                 ///< Check that frames are in chronological order (debugging only)
   
 public: // setters
@@ -411,6 +413,7 @@ public: // methods, internal : initializing / closing .. but we might want to te
   
 protected: // internal methods
   void dumpFifo();
+  void diagnosis();
   void resetCallTime();
   void reportCallTime(unsigned i);        ///< How much time since handleFifo exited
   long unsigned insertFifo(Frame* f);     ///< Sorted insert: insert a timestamped frame into the fifo \callgraph

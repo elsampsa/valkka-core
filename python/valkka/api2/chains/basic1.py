@@ -78,6 +78,8 @@ class BasicFilterchain1:
     
   def close(self):
     if (self.active):
+      if (self.verbose):
+        print(self.pre,"Closing threads and contexes")
       self.decodingOff()
       self.stopThreads()
       self.active=False

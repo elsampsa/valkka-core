@@ -57,7 +57,8 @@ class BasicFilterchain:
     "address"      : str,
     "slot"         : int,
     "fifolen"      : (int,10),
-    "affinity"     : (int,-1)
+    "affinity"     : (int,-1),
+    "verbose"      : (bool,False)
     }
   
   
@@ -81,10 +82,13 @@ class BasicFilterchain:
     
   def close(self):
     if (self.active):
+      if (self.verbose):
+        print(self.pre,"Closing threads and contexes")
       self.decodingOff()
       self.closeContext()
       self.stopThreads()
       self.active=False
+    
     
 
   def makeChain(self):

@@ -112,6 +112,7 @@ public:
   
   virtual void dumpStack(); ///< Dump the frames in the stack
   virtual void dumpFifo();  ///< Dump frames in the fifo
+  virtual void diagnosis(); ///< Print a resumen of fifo and stack usage
   
   bool isEmpty(); ///< Tell if fifo is empty
   

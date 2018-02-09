@@ -67,9 +67,8 @@ def safe_select(l1,l2,l3,timeout=0):
 
 
 
-class Namespace:
-  
-  
+class Namespace: # generic namespace ..
+    
   def __init__(self):
     pass
 
@@ -221,7 +220,8 @@ class OpenGLThread:
 
 
   def close(self):
-    if (self.active):
+      #if (self.active):
+      if (self.verbose): print(self.pre,"stopping core.OpenGLThread")
       self.core.stopCall()
       self.active=False
 

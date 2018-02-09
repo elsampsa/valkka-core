@@ -290,6 +290,12 @@ void FrameFifo::dumpFifo() {
 }
 
 
+void FrameFifo::diagnosis() {
+  std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+  std::cout << "FrameFifo: " << name << " diagnosis: FIFO: " << fifo.size() << " STACK: " << stack.size() << std::endl;
+}
+
+
 bool FrameFifo::isEmpty() {
   std::unique_lock<std::mutex> lk(this->mutex);
   return this->fifo.empty();
