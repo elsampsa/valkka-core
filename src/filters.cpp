@@ -139,7 +139,6 @@ TimestampFrameFilter::TimestampFrameFilter(const char* name, FrameFilter* next, 
 }
 
 
-// #define TIMESTAMPFILTER_DEBUG
 void TimestampFrameFilter::go(Frame* frame) {
   long int ctime, corrected, diff;
   
@@ -163,6 +162,43 @@ void TimestampFrameFilter::go(Frame* frame) {
   std::cout << "TimestampFrameFilter: go: final frame->mstimestamp " << frame->mstimestamp << std::endl;
 #endif
 }
+
+
+
+TimestampFrameFilter2::TimestampFrameFilter2(const char* name, FrameFilter* next, long int msdiff_max) : FrameFilter(name,next), msdiff_max(msdiff_max), mstime_delta(0), savedtimestamp(0) {
+}
+
+
+void TimestampFrameFilter2::go(Frame* frame) {
+  long int ctime, corrected, diff;
+  
+  if ( (frame->mstimestamp-savedtimestamp)>600000 ) {
+    mstime_delta=0;
+    savedtimestamp=frame->mstimestamp;
+    std::cout << "TimestampFrameFilter2: reset correction" << std::endl;
+  }
+  
+  ctime     =getCurrentMsTimestamp();           // current time
+  corrected =frame->mstimestamp+mstime_delta;  // corrected timestamp
+  diff      =corrected-ctime;                  // time difference between corrected and current time.  positive == frame in the future, mstime_delta must be set to negative
+
+#ifdef TIMESTAMPFILTER_DEBUG
+  std::cout << "TimestampFrameFilter2: go: ctime, frame->mstimestamp, corrected, diff : " << ctime << " " << frame->mstimestamp << " " << corrected << " " << diff << std::endl;
+#endif
+  
+  if ( std::abs(diff)>msdiff_max ) { // correct the correction..
+    mstime_delta=mstime_delta-diff; // positive diff, mstime_delta must be subtracted
+#ifdef TIMESTAMPFILTER_DEBUG
+    std::cout << "TimestampFrameFilter2: go: CHANGING mstime_delta to " << mstime_delta << std::endl;
+#endif
+  }
+  
+  frame->setMsTimestamp(frame->mstimestamp+mstime_delta);
+#ifdef TIMESTAMPFILTER_DEBUG
+  std::cout << "TimestampFrameFilter2: go: final frame->mstimestamp " << frame->mstimestamp << std::endl;
+#endif
+}
+
 
 
 

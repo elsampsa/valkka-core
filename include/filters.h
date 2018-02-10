@@ -143,13 +143,13 @@ protected:
 
 
 
-/** Corrects erroneous timestamps (while preserving timestamp distances). TODO
+/** Corrects erroneous timestamps (while preserving timestamp distances).
  * @ingroup filters_tag
  */
 class TimestampFrameFilter : public FrameFilter { // <pyapi>
   
 public: // <pyapi>
-  TimestampFrameFilter(const char* name, FrameFilter* next=NULL, long int msdiff_max=1000); ///< @copydoc FrameFilter::FrameFilter // <pyapi>
+  TimestampFrameFilter(const char* name, FrameFilter* next=NULL, long int msdiff_max=200); ///< @copydoc FrameFilter::FrameFilter // <pyapi>
     
 protected:
   long int mstime_delta;
@@ -159,6 +159,28 @@ protected:
   void go(Frame* frame);
   
 }; // <pyapi>
+
+
+
+/** Corrects erroneous timestamps (while preserving timestamp distances).  Reset correction every 10 minutes.
+ * @ingroup filters_tag
+ */
+class TimestampFrameFilter2 : public FrameFilter { // <pyapi>
+  
+public: // <pyapi>
+  TimestampFrameFilter2(const char* name, FrameFilter* next=NULL, long int msdiff_max=200); ///< @copydoc FrameFilter::FrameFilter // <pyapi>
+    
+protected:
+  long int mstime_delta;
+  long int msdiff_max;
+  long int savedtimestamp;
+  
+protected: 
+  void go(Frame* frame);
+  
+}; // <pyapi>
+
+
 
 
 /** For H264, some cameras don't send sps and pps packets again before every keyframe.  In that case, this filter sends sps and pps before each keyframe.  TODO

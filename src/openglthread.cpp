@@ -1283,7 +1283,8 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
     f=*it; // f==pointer to frame
     rel_mstimestamp=(f->mstimestamp-mstime_delta); // == trel = t_ - delta
     if (rel_mstimestamp>0 and rel_mstimestamp<=future_ms_tolerance) {// frames from [inf,0) are left in the fifo
-      ++it;
+      // ++it;
+      break; // in fact, just break the while loop (frames are in time order)
     }
     else {// remove the frame *f from the fifo.  Either scrap or present it
       // 40 20 -20 => found -20

@@ -1335,7 +1335,7 @@ class TimestampFrameFilter(FrameFilter):
     __getattr__ = lambda self, name: _swig_getattr(self, TimestampFrameFilter, name)
     __repr__ = _swig_repr
 
-    def __init__(self, name, next=None, msdiff_max=1000):
+    def __init__(self, name, next=None, msdiff_max=200):
         this = _valkka_core.new_TimestampFrameFilter(name, next, msdiff_max)
         try:
             self.this.append(this)
@@ -1345,6 +1345,28 @@ class TimestampFrameFilter(FrameFilter):
     __del__ = lambda self: None
 TimestampFrameFilter_swigregister = _valkka_core.TimestampFrameFilter_swigregister
 TimestampFrameFilter_swigregister(TimestampFrameFilter)
+
+class TimestampFrameFilter2(FrameFilter):
+    __swig_setmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, TimestampFrameFilter2, name, value)
+    __swig_getmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, TimestampFrameFilter2, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, next=None, msdiff_max=200):
+        this = _valkka_core.new_TimestampFrameFilter2(name, next, msdiff_max)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_TimestampFrameFilter2
+    __del__ = lambda self: None
+TimestampFrameFilter2_swigregister = _valkka_core.TimestampFrameFilter2_swigregister
+TimestampFrameFilter2_swigregister(TimestampFrameFilter2)
 
 class RepeatH264ParsFrameFilter(FrameFilter):
     __swig_setmethods__ = {}

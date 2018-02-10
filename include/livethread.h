@@ -91,7 +91,7 @@ protected:
   // internal framefilter chain.. if we'd like to modify the frames before they are passed to the API user
   // more framefilter could be generated here, initialized it the constructor init list
   // the starting filter should always be named as "inputfilter" .. this is where Live555 writes the frames
-  TimestampFrameFilter    timestampfilter; ///< Internal framefilter: correct timestamp
+  TimestampFrameFilter2   timestampfilter; ///< Internal framefilter: correct timestamp
   SlotFrameFilter         inputfilter;     ///< Internal framefilter: set slot number
   
 public:
