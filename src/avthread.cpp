@@ -163,7 +163,9 @@ void AVThread::run() {
     if (difftime(timer,oldtimer)>=1) { // time to check the signals..
       handleSignals();
       oldtimer=timer;
+#ifdef FIFO_DIAGNOSIS
       infifo.diagnosis();
+#endif
     }
     
   }

@@ -1439,7 +1439,9 @@ void OpenGLThread::run() {// Main execution loop
       handleSignals();
       // oldtimer=timer;
       old_mstime=mstime;
+#ifdef FIFO_DIAGNOSIS
       diagnosis();
+#endif
     }
   }
 }

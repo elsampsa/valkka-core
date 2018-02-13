@@ -178,7 +178,7 @@ void TimestampFrameFilter2::go(Frame* frame) {
     std::cout << "TimestampFrameFilter2: reset correction" << std::endl;
   }
   
-  ctime     =getCurrentMsTimestamp();           // current time
+  ctime     =getCurrentMsTimestamp();          // current time
   corrected =frame->mstimestamp+mstime_delta;  // corrected timestamp
   diff      =corrected-ctime;                  // time difference between corrected and current time.  positive == frame in the future, mstime_delta must be set to negative
 

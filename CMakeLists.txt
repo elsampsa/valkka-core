@@ -106,6 +106,12 @@ if    (file_verbose)
   message("FILE_VERBOSE ENABLED")
 endif (file_verbose)
 
+option(fifo_diagnosis "fifo_diagnosis" OFF)
+if    (fifo_diagnosis)
+  add_definitions("-DFIFO_DIAGNOSIS")
+  message("FIFO DIAGNOSIS ENABLED")
+endif (fifo_diagnosis)
+
 
 
 # ****************************************************************

@@ -174,8 +174,8 @@ void test_2() {
   std::cout << "got render context id "<<i<<std::endl;
   sleep_for(1s);
   
-  sleep_for(3s);
-  // sleep_for(604800s); //one week
+  // sleep_for(3s);
+  sleep_for(604800s); //one week
   
   glthread.delRenderContextCall(i);
   glthread.delRenderGroupCall(window_id);
