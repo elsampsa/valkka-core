@@ -200,16 +200,18 @@ public:
    * 
    * @param display_id        Pointer to x display id
    * @param glc               Reference to GXLContext
-   * @param window_id         X window id
+   * @param window_id         X window id: used as an id for the render group
+   * @param child_id          X window id: this is the actual render target.  Can be the same as window_id.
    * @param doublebuffer_flag Use double buffering or not (default true)
    */
-  RenderGroup(Display *display_id, const GLXContext &glc, Window window_id, bool doublebuffer_flag=true);
+  RenderGroup(Display *display_id, const GLXContext &glc, Window window_id, Window child_id, bool doublebuffer_flag=true);
   ~RenderGroup();        ///< Default destructor
   
 public:
   Display* display_id;    ///< X display id
   const GLXContext &glc;  ///< GLX Context
-  Window   window_id;     ///< X window id
+  Window   window_id;     ///< X window id: render group id
+  Window   child_id;      ///< X window id: rendering target
   bool     doublebuffer_flag; ///< Double buffer rendering or not?
   std::list<RenderContext> render_contexes; ///< RenderContext instances in ascending z order.  User created rendercontexes are warehoused here
   XWindowAttributes x_window_attr;          ///< X window attributes
@@ -220,7 +222,7 @@ public: // getters
   
   
 public:
-  std::list<RenderContext>::iterator getContext(int id);
+  std::list<RenderContext>::iterator getContext(int id); ///< Returns iterator at matched render context id
   bool addContext(RenderContext render_context);         ///< Add RenderContext to RenderGroup::render_contexes (with checking)
   bool delContext(int id);                               ///< Remove RenderContext from RenderGroup::render_contexes (with checking)
   bool isEmpty();                                        ///< Checks if there are any render contexes in the render_contexes list
@@ -440,10 +442,11 @@ public: // testing
   void recycle(Frame* f)             {infifo.recycle(f);} ///< Recycle a frame back to OpenGLFrameFifo
   
 public: // for testing // <pyapi>
-  Window    createWindow();                       ///< Creates a new X window (for debugging/testing only) // <pyapi>
-  void      makeCurrent(const Window window_id);  ///< Set current X windox                                // <pyapi>
-  unsigned  getVsyncAtStartup();                  ///< What vsync was at startup time?                     // <pyapi> 
-  void      reConfigWindow(Window &window_id);
+  Window     createWindow();                       ///< Creates a new X window (for debugging/testing only) // <pyapi>
+  void       makeCurrent(const Window window_id);  ///< Set current X windox                                // <pyapi>
+  unsigned   getVsyncAtStartup();                  ///< What vsync was at startup time?                     // <pyapi> 
+  void       reConfigWindow(Window window_id);
+  Window     getChildWindow(Window parent_id);
   
 public: // API // <pyapi>
   /** API call: stops the thread

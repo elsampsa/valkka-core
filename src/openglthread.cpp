@@ -756,7 +756,7 @@ void RenderContext::unBind() {
 
 
 
-RenderGroup::RenderGroup(Display* display_id, const GLXContext& glc, Window window_id, bool doublebuffer_flag) : display_id(display_id), glc(glc), window_id(window_id), doublebuffer_flag(doublebuffer_flag) {
+RenderGroup::RenderGroup(Display* display_id, const GLXContext& glc, Window window_id, Window child_id, bool doublebuffer_flag) : display_id(display_id), glc(glc), window_id(window_id), child_id(child_id), doublebuffer_flag(doublebuffer_flag) {
 }
 
 
@@ -809,7 +809,7 @@ void RenderGroup::render() {
 #ifdef PRESENT_VERBOSE
   std::cout << "RenderGroup: " << std::endl;
   std::cout << "RenderGroup: start rendering!" << std::endl;
-  std::cout << "RenderGroup: render: display, window" <<display_id<<" "<<window_id<<std::endl;
+  std::cout << "RenderGroup: render: display, window_id, child_id" <<display_id<<" "<<window_id<<" "<<child_id << std::endl;
 #endif
   
   // glFlush();
@@ -820,10 +820,10 @@ void RenderGroup::render() {
   long int swaptime;
 #endif
   
-  if (!glXMakeCurrent(display_id, window_id, glc)) { // choose this x window for manipulation
+  if (!glXMakeCurrent(display_id, child_id, glc)) { // choose this x window for manipulation
     opengllogger.log(LogLevel::normal) << "RenderGroup: render: WARNING! could not draw"<<std::endl;
   }
-  XGetWindowAttributes(display_id, window_id, &(x_window_attr));
+  XGetWindowAttributes(display_id, child_id, &(x_window_attr));
   
 #ifdef OPENGL_TIMING
   swaptime=mstime; mstime=getCurrentMsTimestamp();
@@ -857,7 +857,7 @@ void RenderGroup::render() {
 #ifdef PRESENT_VERBOSE
     std::cout << "RenderGroup: render: swapping buffers "<<std::endl;
 #endif
-    glXSwapBuffers(display_id, window_id);
+    glXSwapBuffers(display_id, child_id);
   }
   
   // glFlush();
@@ -984,8 +984,11 @@ bool OpenGLThread::newRenderGroup(Window window_id) {
   if (hasRenderGroup(window_id)) {
     return false;
   }
+  Window child_id;
   reConfigWindow(window_id);
-  RenderGroup rg(display_id, glc, window_id, doublebuffer_flag);
+  // child_id =getChildWindow(window_id); // X11 does not create nested windowses .. that's a job for the window manager, right?
+  child_id=window_id;
+  RenderGroup rg(display_id, glc, window_id, child_id, doublebuffer_flag); // window_id = RenderGroup index, child_id = actual window id
   render_groups.insert(std::pair<Window,RenderGroup>(window_id,rg));
   return true;
 }
@@ -1801,19 +1804,40 @@ Window OpenGLThread::createWindow() {
   this->vi =glXGetVisualFromFBConfig( this->display_id, this->fbConfigs[0] ); // another way to do it ..
   
   swa.colormap   =XCreateColormap(this->display_id, this->root_id, (this->vi)->visual, AllocNone);
-  swa.event_mask =ExposureMask | KeyPressMask;
+  // swa.event_mask =ExposureMask | KeyPressMask;
+  swa.event_mask =NoEventMask;
   
   win_id =XCreateWindow(this->display_id, this->root_id, 0, 0, 600, 600, 0, vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
+  
   XMapWindow(this->display_id, win_id);
   XStoreName(this->display_id, win_id, "test window");
 
+  // win_id =glXCreateWindow(this->display_id, this->fbConfigs[0], win_id, NULL);
+  
   return win_id;
 }
 
 
-void OpenGLThread::reConfigWindow(Window &window_id) {
+void OpenGLThread::reConfigWindow(Window window_id) {
   // glXSwapIntervalEXT(display_id, window_id, 0); // segfaults ..
+  XSetWindowAttributes swa;
+  // swa.colormap   =XCreateColormap(this->display_id, this->root_id, (this->vi)->visual, AllocNone);
+  swa.event_mask =NoEventMask;
   // XChangeWindowAttributes(display_id, window_id, valuemask, attributes)
+  // XChangeWindowAttributes(this->display_id, window_id, CWColormap | CWEventMask, &swa); // crashhhh
+  XChangeWindowAttributes(this->display_id, window_id, CWEventMask, &swa); // ok ..
+  // return glXCreateWindow(this->display_id, this->fbConfigs[0], window_id, NULL); // what crap is this..?
+  // return window_id;
+}
+
+
+Window OpenGLThread::getChildWindow(Window parent_id) { // create new x window as a child of window_id
+  Window child_id;
+  
+  child_id=createWindow();
+  XReparentWindow(this->display_id, child_id, parent_id, 0, 0);
+  XMapWindow(this->display_id, child_id); 
+  return child_id;
 }
 
 
