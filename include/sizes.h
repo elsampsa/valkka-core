@@ -46,7 +46,7 @@ namespace Timeouts { ///< Various thread timeouts in milliseconds
   const static long unsigned thread       =250; // Timeouts::thread
   const static long unsigned livethread   =250; // Timeouts::livethread
   const static long unsigned avthread     =250; // Timeouts::avthread
-  const static long unsigned openglthread =250; // Timeouts::openglthread
+  const static long unsigned openglthread =10; // Timeouts::openglthread
   const static long int filethread   =2000; // Timeouts::filethread
 }
 

@@ -442,7 +442,7 @@ public: // testing
   void recycle(Frame* f)             {infifo.recycle(f);} ///< Recycle a frame back to OpenGLFrameFifo
   
 public: // for testing // <pyapi>
-  Window     createWindow();                       ///< Creates a new X window (for debugging/testing only) // <pyapi>
+  Window     createWindow(bool map=true);          ///< Creates a new X window (for debugging/testing only) // <pyapi>
   void       makeCurrent(const Window window_id);  ///< Set current X windox                                // <pyapi>
   unsigned   getVsyncAtStartup();                  ///< What vsync was at startup time?                     // <pyapi> 
   void       reConfigWindow(Window window_id);

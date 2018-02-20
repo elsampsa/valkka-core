@@ -985,9 +985,12 @@ bool OpenGLThread::newRenderGroup(Window window_id) {
     return false;
   }
   Window child_id;
+  
   reConfigWindow(window_id);
-  // child_id =getChildWindow(window_id); // X11 does not create nested windowses .. that's a job for the window manager, right?
   child_id=window_id;
+  
+  // child_id =getChildWindow(window_id); // X11 does not create nested windowses .. that's a job for the window manager, right?
+  
   RenderGroup rg(display_id, glc, window_id, child_id, doublebuffer_flag); // window_id = RenderGroup index, child_id = actual window id
   render_groups.insert(std::pair<Window,RenderGroup>(window_id,rg));
   return true;
@@ -1796,7 +1799,7 @@ void OpenGLThread::delShaders() {
 }
   
 
-Window OpenGLThread::createWindow() {
+Window OpenGLThread::createWindow(bool map) {
   Window win_id;
   XSetWindowAttributes swa;
   
@@ -1806,14 +1809,19 @@ Window OpenGLThread::createWindow() {
   swa.colormap   =XCreateColormap(this->display_id, this->root_id, (this->vi)->visual, AllocNone);
   // swa.event_mask =ExposureMask | KeyPressMask;
   swa.event_mask =NoEventMask;
+  // swa.event_mask =ButtonPressMask|ButtonReleaseMask;
+  // swa.event_mask =ExposureMask|KeyPressMask|KeyReleaseMask|ButtonPressMask|ButtonReleaseMask|StructureNotifyMask;
   
   win_id =XCreateWindow(this->display_id, this->root_id, 0, 0, 600, 600, 0, vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
   
-  XMapWindow(this->display_id, win_id);
   XStoreName(this->display_id, win_id, "test window");
-
-  // win_id =glXCreateWindow(this->display_id, this->fbConfigs[0], win_id, NULL);
+  if (map) {
+    XMapWindow(this->display_id, win_id);
+  }
   
+  // win_id =glXCreateWindow(this->display_id, this->fbConfigs[0], win_id, NULL);
+
+  // makeCurrent(win_id);
   return win_id;
 }
 
@@ -1823,6 +1831,7 @@ void OpenGLThread::reConfigWindow(Window window_id) {
   XSetWindowAttributes swa;
   // swa.colormap   =XCreateColormap(this->display_id, this->root_id, (this->vi)->visual, AllocNone);
   swa.event_mask =NoEventMask;
+  // swa.event_mask =ExposureMask|KeyPressMask|KeyReleaseMask|ButtonPressMask|ButtonReleaseMask|StructureNotifyMask;
   // XChangeWindowAttributes(display_id, window_id, valuemask, attributes)
   // XChangeWindowAttributes(this->display_id, window_id, CWColormap | CWEventMask, &swa); // crashhhh
   XChangeWindowAttributes(this->display_id, window_id, CWEventMask, &swa); // ok ..
@@ -1832,11 +1841,14 @@ void OpenGLThread::reConfigWindow(Window window_id) {
 
 
 Window OpenGLThread::getChildWindow(Window parent_id) { // create new x window as a child of window_id
+  // https://forum.qt.io/topic/34165/x11-reparenting-does-not-work
   Window child_id;
   
   child_id=createWindow();
   XReparentWindow(this->display_id, child_id, parent_id, 0, 0);
-  XMapWindow(this->display_id, child_id); 
+  // XReparentWindow(this->display_id, parent_id, child_id, 0, 0); // nopes ..
+  // XMapWindow(this->display_id, child_id); 
+  XFlush(this->display_id);
   return child_id;
 }
 
@@ -1973,7 +1985,6 @@ int OpenGLThread::newRenderContextCall(SlotNumber slot, Window window_id, unsign
   
   SignalContext signal_ctx = {Signals::new_render_context, &ctx};
   sendSignalAndWait(signal_ctx);
-  
   // there could be a mutex going in with the signal .. and then we wait for that mutex
   
   opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContextCall: return ctx="<< ctx <<std::endl;

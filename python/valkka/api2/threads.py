@@ -36,6 +36,8 @@ import time
 from valkka import valkka_core
 from valkka.api2.tools import *
 
+valkka_core.XInitThreads()
+
 pre_mod="valkka.api2 : "
 
 
@@ -230,10 +232,10 @@ class OpenGLThread:
     self.close()
     
 
-  def createWindow(self):
+  def createWindow(self,show=True):
     """Create an x window.  For debugging/testing only.  Returns x-window id.
     """
-    window_id=self.core.createWindow()
+    window_id=self.core.createWindow(show)
     self.core.makeCurrent(window_id)
     return window_id
   
