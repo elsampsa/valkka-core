@@ -134,11 +134,11 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) { // take a frame from the stack,
   std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
 
   ///*
-  if (this->stack.empty()) {
+  while (this->stack.empty()) { // deal with spurious wake-ups
     if (wait) {
       queuelogger.log(LogLevel::normal) << "FrameFifo: "<<name<<" writeCopy: waiting for stack frames.  Frame="<<(*f)<<std::endl;
       this->ready_condition.wait(lk);
-      queuelogger.log(LogLevel::normal) << "FrameFifo: "<<name<<" writeCopy: .. got stack frame.  " << std::endl;
+      // queuelogger.log(LogLevel::normal) << "FrameFifo: "<<name<<" writeCopy: .. got stack frame.  " << std::endl;
     }
     else {
       queuelogger.log(LogLevel::fatal) << "FrameFifo: "<<name<<" writeCopy: OVERFLOW! No more frames in stack.  Frame="<<(*f)<<std::endl;
@@ -146,7 +146,6 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) { // take a frame from the stack,
         recycleAll();
       }
       return false;
-      // TODO: it might be a good idea to recycle all frames in fifo if this happends .. depends
     }
   }
   //*/
@@ -202,7 +201,7 @@ Frame* FrameFifo::read(unsigned short int mstimeout) {
   
   result=std::cv_status::no_timeout; // default, return no frame
   
-  while((this->count)<=0) {
+  while((this->count)<=0) { // deal with spurious wakeups
     result=std::cv_status::no_timeout;
     if (mstimeout==0) {
       this->condition.wait(lk);
