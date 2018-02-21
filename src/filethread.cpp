@@ -353,8 +353,6 @@ void FileThread::run() {
   old_mstime=mstime;
   
   // timeout=Timeouts::filethread;
-  start_mutex.unlock();
-
   reached=false;
   loop   =true;
   while(loop) {

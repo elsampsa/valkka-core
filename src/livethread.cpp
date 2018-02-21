@@ -431,7 +431,6 @@ void LiveThread::handleFrame(Frame *f) { // handle an incoming frame ..
 
 
 void LiveThread::run() {
-  start_mutex.unlock();
   env->taskScheduler().doEventLoop(&eventLoopWatchVariable);
   livethreadlogger.log(LogLevel::debug) << this->name << " run : live555 loop exit " << std::endl;
 }

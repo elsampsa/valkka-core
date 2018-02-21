@@ -53,7 +53,6 @@ Thread::Thread(const char* name, int core_id) : name(std::string(name)), core_id
     threadlogger.log(LogLevel::fatal) << "Thread: constructor: WARNING: core_id="<< core_id <<" but number of processors is " << npros << this->name <<std::endl;
     core_id=0;
   }
-  start_mutex.lock();
 }
 
 
@@ -68,7 +67,11 @@ Thread::~Thread() {
 
 void Thread::mainRun() {// for std::thread version
   this->preRun();
-  this->run(); // unlock start_mutex here
+  {
+    std::unique_lock<std::mutex> lk(this->start_mutex);
+    this->start_condition.notify_one();
+  }
+  this->run();
   this->postRun();
   threadlogger.log(LogLevel::debug) << "Thread: mainRun: bye from "<< this->name <<std::endl;
 }
@@ -100,6 +103,8 @@ void Thread::closeThread() {
 }
 
 void Thread::startCall() {
+  std::unique_lock<std::mutex> lk(this->start_mutex);
+  
   this->has_thread=true;
   
 #ifdef STD_THREAD
@@ -134,7 +139,7 @@ void Thread::startCall() {
 #endif
   
   threadlogger.log(LogLevel::debug) << "Thread: startCall: waiting for "<< this->name << " to start"<<std::endl;
-  this->start_mutex.lock();
+  this->start_condition.wait(lk);
 }
 
 
@@ -172,8 +177,6 @@ void TestProducerThread::run() {
   uint i;
   Frame f;
   bool res;
-  
-  start_mutex.unlock();
   for(i=0; i<5; i++) {
     f.setMsTimestamp(i+index*1000);
     threadlogger.log(LogLevel::normal) << this->name <<" writeCopy " << i << " writing " << f << std::endl;
@@ -195,8 +198,6 @@ void TestConsumerThread::run() {
   Frame* f;
   SignalContext signal_ctx;
   // bool ok;
-  
-  start_mutex.unlock();
   f=NULL;
   // ok=true;
   loop=true;
@@ -241,7 +242,6 @@ void ExampleThread::run() {
   oldtimer=timer;
   loop=true;
   
-  start_mutex.unlock();
   while(loop) {
     // Timeouts::examplethread
     

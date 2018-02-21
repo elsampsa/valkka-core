@@ -110,7 +110,10 @@ public:
 protected: // common variables of all Thread subclasses
   std::string  name;                     ///< Name of the thread
   bool         has_thread;               ///< true if thread has been started 
-  std::mutex   start_mutex;              ///< released when the thread has been started
+  
+  std::mutex   start_mutex;                ///< Mutex protecting start_condition
+  std::condition_variable start_condition; ///< Notified when the thread has been started
+  
   std::mutex   mutex;                    ///< Mutex protecting the condition variable and signal queue
   std::condition_variable condition;     ///< Condition variable for the signal queue (triggered when all signals processed).  Not necessarily used by all subclasses.
   std::deque<SignalContext> signal_fifo; ///< Signal queue (fifo).  Redefine in child classes.

@@ -69,7 +69,6 @@ void AVThread::run() {
   oldtimer=timer;
   loop=true;
   
-  start_mutex.unlock();
   while(loop) {
     // f=infifo->read(1000);
     f=infifo.read(Timeouts::avthread);

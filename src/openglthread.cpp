@@ -1398,7 +1398,6 @@ void OpenGLThread::run() {// Main execution loop
   loop=true;
   
   timeout=Timeouts::openglthread;
-  start_mutex.unlock();
   while(loop) {
 #ifdef PRESENT_VERBOSE
     std::cout << "OpenGLThread: "<< this->name <<" : run : timeout = " << timeout << std::endl;
