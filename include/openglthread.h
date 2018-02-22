@@ -37,6 +37,7 @@
 #include "threads.h"
 #include "shaders.h"
 
+typedef void ( *PFNGLXSWAPINTERVALEXTPROC) (Display *dpy, GLXDrawable drawable, int interval);
 
 /** A FrameFifo with multiple stacks.  Used by OpenGLThread
  * 
@@ -341,6 +342,7 @@ protected: // Variables related to X11 and GLX.  Initialized by initGLX.
   std::vector<long int>                 slot_times;    ///< Save last time OpenGL was fed with a frame for this slot
   
 private: // function pointers for glx extensions
+  PFNGLXSWAPINTERVALEXTPROC     pglXSwapIntervalEXT;
   PFNGLXGETSWAPINTERVALMESAPROC pglXGetSwapIntervalMESA;
   PFNGLXSWAPINTERVALMESAPROC    pglXSwapIntervalMESA;
   
