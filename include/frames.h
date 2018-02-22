@@ -61,9 +61,12 @@ enum class FrameType {
   avpkt,    ///< Data is in the Frame::avpkt struct (encoded frames)
   avframe,  ///< Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames)
   yuvframe, ///< Data is in the Frame::yuvpbo struct (decoded yuv frames - ready for OpenGL upload)
+  
   setup,    ///< This frame contains data obtained from an rtsp setup / sdp file in Frame::pcmu_pars
   h264,     ///< H264 slice. Payload in Frame::payload, additional data in Frame::h264_pars
-  pcmu      ///< PCM-ulaw. Payload in Frame::payload, additional data in Frame::pcmu_pars
+  pcmu,     ///< PCM-ulaw. Payload in Frame::payload, additional data in Frame::pcmu_pars
+  
+  glsetup   ///< A generic command to the OpenGLThread .. draw rectangles, change projection, whatever.  To-be-specified
 };
 
 struct SetupPars { ///< Information corresponding to FrameType::setup

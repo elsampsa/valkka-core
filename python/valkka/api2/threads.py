@@ -190,7 +190,7 @@ class FileThread:
 
 
 class OpenGLThread:
-  # OpenGLThread(const char* name, unsigned short n720p=0, unsigned short n1080p=0, unsigned short n1440p=0, unsigned short n4K=0, unsigned short naudio=0, unsigned msbuftime=100, int core_id=-1);
+  # OpenGLThread(const char* name, unsigned short n720p=0, unsigned short n1080p=0, unsigned short n1440p=0, unsigned short n4K=0, unsigned msbuftime=100, int core_id=-1);
 
   parameter_defs={
     "name"      : (str,"live_thread"),
@@ -198,7 +198,7 @@ class OpenGLThread:
     "n1080p"    : (int, 10),
     "n1440p"    : (int, 0),
     "n4K"       : (int, 0),
-    "naudio"    : (int, 10),
+    # "naudio"    : (int, 10),
     "msbuftime" : (int, 100),   
     "affinity"  : (int, -1),
     "verbose"   : (bool,False)
@@ -210,7 +210,7 @@ class OpenGLThread:
     parameterInitCheck(self.parameter_defs,kwargs,self) # check kwargs agains parameter_defs, attach ok'd parameters to this object as attributes
     
     # this is the "api-level 1" object.  Just a swig-wrapped cpp instance.
-    self.core=valkka_core.OpenGLThread(self.name, self.n720p, self.n1080p, self.n1440p, self.n4K, self.naudio, self.msbuftime, self.affinity)
+    self.core=valkka_core.OpenGLThread(self.name, self.n720p, self.n1080p, self.n1440p, self.n4K, self.msbuftime, self.affinity)
     
     self.render_groups =[] # list of registered x windowses
     self.render_counts =[] # how many slots are mapped per each x window

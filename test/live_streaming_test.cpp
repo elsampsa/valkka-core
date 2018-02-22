@@ -56,7 +56,7 @@ void test_1() {
   // (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) -->
   // --> {FifoFrameFilter:gl_in_filter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   //
-  OpenGLThread     glthread       ("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread     glthread       ("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
   OpenGLFrameFifo& gl_fifo        =glthread.getFifo(); // get gl_fifo from glthread
   FifoFrameFilter  gl_in_filter   ("gl_in_filter",gl_fifo); 
   
@@ -92,7 +92,7 @@ void test_2() {
   // (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) -->
   // --> {FifoFrameFilter:gl_in_filter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   //
-  OpenGLThread     glthread       ("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread     glthread       ("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
   OpenGLFrameFifo& gl_fifo        =glthread.getFifo(); // get gl_fifo from glthread
   FifoFrameFilter  gl_in_filter   ("gl_in_filter",gl_fifo); 
   
@@ -152,7 +152,7 @@ void test_3() {
   // (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) -->
   // --> {FifoFrameFilter:gl_in_filter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   //
-  OpenGLThread     glthread       ("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread     glthread       ("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
   OpenGLFrameFifo& gl_fifo        =glthread.getFifo(); // get gl_fifo from glthread
   FifoFrameFilter  gl_in_filter   ("gl_in_filter",gl_fifo); 
   
@@ -213,7 +213,7 @@ void test_4() {
   // (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) -->
   // --> {FifoFrameFilter:gl_in_filter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   //
-  OpenGLThread     glthread       ("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread     glthread       ("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
   OpenGLFrameFifo& gl_fifo        =glthread.getFifo(); // get gl_fifo from glthread
   FifoFrameFilter  gl_in_filter   ("gl_in_filter",gl_fifo); 
   
@@ -275,7 +275,7 @@ void test_5() {
   // (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) -->
   // --> {FifoFrameFilter:gl_in_filter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   //
-  OpenGLThread     glthread       ("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/2); // at processor 2 = CPU 3
+  OpenGLThread     glthread       ("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/2); // at processor 2 = CPU 3
   OpenGLFrameFifo& gl_fifo        =glthread.getFifo(); // get gl_fifo from glthread
   FifoFrameFilter  gl_in_filter   ("gl_in_filter",gl_fifo); 
   

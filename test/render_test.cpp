@@ -58,7 +58,7 @@ void test_1() {
   Display* display;
   int idn;
   
-  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
   
   size=readyuvbytes("../aux/1.yuv",y,u,v);
   ysize=(size*2)/3;
@@ -83,7 +83,7 @@ void test_2() {
   Window window_id;
   int idn;
   
-  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
   glthread.preRun();
   
   window_id=glthread.createWindow();
@@ -115,7 +115,7 @@ void test_3() {
   Window window_id, window_id2, window_id3;
   int idn, idn2, idn3;
   
-  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
   
   glthread.preRun();
   
@@ -200,7 +200,7 @@ void test_4() {
   int size, ysize;
   GLubyte *y, *u, *v;
   
-  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
   glthread.preRun();
   
   glthread.reportStacks();

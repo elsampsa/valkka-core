@@ -26,7 +26,6 @@ openglthread=OpenGLThread(     # starts frame presenting services
   n1080p  =10,
   n1440p  =0,
   n4K     =0,
-  naudio  =10,
   verbose =False
   )
 

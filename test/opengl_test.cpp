@@ -48,8 +48,8 @@ void test_1() {
   const char* name = "@TEST: opengl_test: test 1: ";
   std::cout << name <<"** @@Compile shaders **" << std::endl;
 
-  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
-  // const char* name, unsigned short n720p=0, unsigned short n1080p=0, unsigned short n1440p=0, unsigned short n4K=0, unsigned short naudio=0, unsigned msbuftime=100, int core_id=-1
+  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
+  // const char* name, unsigned short n720p=0, unsigned short n1080p=0, unsigned short n1440p=0, unsigned short n4K=0, unsigned msbuftime=100, int core_id=-1
   glthread.preRun();
   glthread.postRun();
 }
@@ -60,7 +60,7 @@ void test_2() {
   std::cout << name <<"** @@Open a window **" << std::endl;
   
   Window window_id;
-  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
   
   glthread.preRun();
   
@@ -78,7 +78,7 @@ void test_3() {
   const char* name = "@TEST: opengl_test: test 3: ";
   std::cout << name <<"** @@Reserve PBOs **" << std::endl;
   
-  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/10,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/10,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
 
   glthread.preRun();
   
@@ -91,7 +91,7 @@ void test_3() {
 void test_4() {
   const char* name = "@TEST: opengl_test: test 4: ";
   
-  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/10,/*4K*/0,/*naudio*/10,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/10,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
   
   glthread.preRun();
   

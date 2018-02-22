@@ -62,10 +62,9 @@ public: // <pyapi>
    * @param n_stack_1080p Size of the frame reservoir for 1080p
    * @param n_stack_1440p Size of the frame reservoir for 1440p
    * @param n_stack_4K    Size of the frame reservoir for 4K
-   * @param n_stack_audio Size of the payload reservoir for audio frames
    * 
    */
-  OpenGLFrameFifo(unsigned short n_stack_720p, unsigned short n_stack_1080p, unsigned short n_stack_1440p, unsigned short n_stack_4K, unsigned short n_stack_audio); // <pyapi>
+  OpenGLFrameFifo(unsigned short n_stack_720p, unsigned short n_stack_1080p, unsigned short n_stack_1440p, unsigned short n_stack_4K); // <pyapi>
   /** Default destructor
    */
   ~OpenGLFrameFifo(); // <pyapi>
@@ -77,7 +76,7 @@ public:
   void diagnosis_();
   
 public: // mutex protected calls .. be carefull when calling mutex protected call inside a mutex protected call (always check mutex protected context)
-  Frame* getAudioFrame();                            ///< Take a frame from the OpenGLFrameFifo::stack_audio stack
+  // Frame* getAudioFrame();                            ///< Take a frame from the OpenGLFrameFifo::stack_audio stack
   Frame* prepareFrame(Frame* frame);                 ///< Create a copy of frames other than FrameType::avframe
   Frame* getFrame(BitmapType bmtype);                ///< Take a frame from a stack by bitmap type (uses OpenGLFrameFifo::getFrame_)
   Frame* prepareAVFrame(Frame* frame);               ///< Chooses a frame from the stack, does GPU uploading for frames of the type FrameType::avframe
@@ -94,9 +93,9 @@ public: // setters
   
 private:
   bool               debug;
-  unsigned short     n_stack_720p,n_stack_1080p, n_stack_1440p, n_stack_4K, n_stack_audio;
-  std::deque<Frame*> stack_720p,  stack_1080p,   stack_1440p,   stack_4K,   stack_audio;
-  std::vector<Frame> reservoir_720p, reservoir_1080p, reservoir_1440p, reservoir_4K, reservoir_audio;
+  unsigned short     n_stack_720p,n_stack_1080p, n_stack_1440p, n_stack_4K; // , n_stack_audio;
+  std::deque<Frame*> stack_720p,  stack_1080p,   stack_1440p,   stack_4K; //   stack_audio;
+  std::vector<Frame> reservoir_720p, reservoir_1080p, reservoir_1440p, reservoir_4K; // reservoir_audio;
 }; // <pyapi>
 
 
@@ -127,8 +126,8 @@ private:
   
 public:
   void activate(GLsizei w, GLsizei h, YUVShader* shader);   ///< Allocate SlotContext::yuvtex (for a frame of certain size) and SlotContext::shader.
-  void deActivate();         ///< Deallocate textures
-  void loadTEX(YUVPBO* pbo, long int mstimestamp=0); ///< Load bitmap from PBO to SlotContext::yuvtex
+  void deActivate();                                        ///< Deallocate textures
+  void loadTEX(YUVPBO* pbo, long int mstimestamp=0);        ///< Load bitmap from PBO to SlotContext::yuvtex
   
 public: // getters
   bool isActive() const {return active;}   ///< Check if active
@@ -283,14 +282,13 @@ public: // <pyapi>
    * @param n_stack_1080p Size of the frame reservoir for 1080p
    * @param n_stack_1440p Size of the frame reservoir for 1440p
    * @param n_stack_4K    Size of the frame reservoir for 4K
-   * @param n_stack_audio Size of the payload reservoir for audio frames
    * @param msbuftime     Jitter buffer size in milliseconds (default=100 ms)
    * @param core_id       Force thread affinity (default=-1 = no affinity)
    * 
    * n_stack parameters are used to initialize OpenGLFrameFifo.  When OpenGLThread is started (at OpenGLThread::preRun), OpenGLThread::reserveFrames is called.  OpenGLThread::reserveFrames then instantiates YUVPBO objects, that have direct memory access to GPU.  YUVPBO instances are attached to the Frame::yuvpbo pointer of frames in OpenGLFrameFifo's frame reservoirs.
    * 
    */
-  OpenGLThread(const char* name, unsigned short n720p=0, unsigned short n1080p=0, unsigned short n1440p=0, unsigned short n4K=0, unsigned short naudio=0, unsigned msbuftime=100, int core_id=-1); // <pyapi>
+  OpenGLThread(const char* name, unsigned short n720p=0, unsigned short n1080p=0, unsigned short n1440p=0, unsigned short n4K=0, unsigned msbuftime=100, int core_id=-1); // <pyapi>
   virtual ~OpenGLThread(); ///< Virtual destructor // <pyapi>
   
 public:
@@ -385,10 +383,8 @@ public: // API // <pyapi>
   OpenGLFrameFifo&    getFifo(); ///< Retrieve the communication fifo  // <pyapi>
   
 public: // setter methods
-  // void                activateSlot   (SlotNumber i, BitmapType bmtype);
-  // void                activateSlotIf (SlotNumber i, BitmapType bmtype); // activate if not already active
   void                activateSlot   (SlotNumber i, YUVFramePars yuv_pars);
-  void                activateSlotIf (SlotNumber i, YUVFramePars yuv_pars); // activate if not already active
+  void                activateSlotIf (SlotNumber i, YUVFramePars yuv_pars); // Activate slot if it's not already active or if the texture has changed
   bool                slotTimingOk   (SlotNumber n_slot, long int mstime);
   void                debugOn()  {debug=true;}
   void                debugOff() {debug=false;}

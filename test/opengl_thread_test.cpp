@@ -53,7 +53,7 @@ void test_1() {
   std::cout << name <<"** @@OpenGLThread signals **" << std::endl;
   
   int i;
-  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*naudio*/0,/*msbuftime*/0,/*core_id*/-1);
+  OpenGLThread glthread("glthread",/*n720p*/10,/*n1080p*/0,/*n1440p*/0,/*4K*/0,/*msbuftime*/0,/*core_id*/-1);
   
   glthread.startCall();
   
@@ -117,13 +117,13 @@ void test_2() {
   //
   
   // this works fine for a single n1080p cam
-  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); 
+  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*msbuftime*/100,/*core_id*/-1); 
   
   // WARNING: this produces jitter for a single n1080p cam.. why!?
-  // OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/61,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/2000,/*core_id*/-1); 
+  // OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/61,/*n1440p*/0,/*4K*/0,/*msbuftime*/2000,/*core_id*/-1); 
   
   // no jitter here:
-  // OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/60,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); 
+  // OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/60,/*n1440p*/0,/*4K*/0,/*msbuftime*/100,/*core_id*/-1); 
   
   // remember buffering time!
   OpenGLFrameFifo&  gl_fifo         =glthread.getFifo();      // get gl_fifo from glthread
@@ -212,7 +212,7 @@ void test_3() {
   // (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) --> {FifoFrameFilter:gl_in_gilter} --> 
   // --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   //
-  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); // remember buffering time!
+  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*msbuftime*/100,/*core_id*/-1); // remember buffering time!
   OpenGLFrameFifo&  gl_fifo         =glthread.getFifo();      // get gl_fifo from glthread
   FifoFrameFilter   gl_in_filter    ("gl_in_filter",gl_fifo);   
   
@@ -318,7 +318,7 @@ void test_4() {
   // filtergraph:
   // (LiveThread:livethread) --> BasicChain --> {FifoFrameFilter:gl_in_gilter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   //
-  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); // remember buffering time!
+  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*msbuftime*/100,/*core_id*/-1); // remember buffering time!
   OpenGLFrameFifo&  gl_fifo         =glthread.getFifo();      // get gl_fifo from glthread
   FifoFrameFilter   gl_in_filter    ("gl_in_filter",gl_fifo);   
   
@@ -380,7 +380,7 @@ void test_5() {
   // filtergraph:
   // (LiveThread:livethread) --> BasicChain --> {FifoFrameFilter:gl_in_gilter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   //
-  OpenGLThread      glthread        ("glthread",/*n720p*/n_stack,/*n1080p*/n_stack,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/-1); // remember buffering time!
+  OpenGLThread      glthread        ("glthread",/*n720p*/n_stack,/*n1080p*/n_stack,/*n1440p*/0,/*4K*/0,/*msbuftime*/100,/*core_id*/-1); // remember buffering time!
   OpenGLFrameFifo&  gl_fifo         =glthread.getFifo();      // get gl_fifo from glthread
   FifoFrameFilter   gl_in_filter    ("gl_in_filter",gl_fifo);   
   // BasicChain chain(LiveConnectionType::sdp, stream_sdp, 1, gl_in_filter); // BasicChain(LiveConnectionType contype, const char* adr, SlotNumber n_slot, FifoFrameFilter& gl_in_filter);
@@ -472,7 +472,7 @@ void test_6() {
   // filtergraph:
   // (LiveThread:livethread) --> BasicChain --> {FifoFrameFilter:gl_in_gilter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
   //
-  OpenGLThread      glthread        ("glthread",/*n720p*/n_stack,/*n1080p*/n_stack,/*n1440p*/0,/*4K*/0,/*naudio*/10,/*msbuftime*/100,/*core_id*/1); // remember buffering time!
+  OpenGLThread      glthread        ("glthread",/*n720p*/n_stack,/*n1080p*/n_stack,/*n1440p*/0,/*4K*/0,/*msbuftime*/100,/*core_id*/1); // remember buffering time!
   OpenGLFrameFifo&  gl_fifo         =glthread.getFifo();      // get gl_fifo from glthread
   FifoFrameFilter   gl_in_filter    ("gl_in_filter",gl_fifo);   
   // BasicChain chain(LiveConnectionType::sdp, stream_sdp, 1, gl_in_filter); // BasicChain(LiveConnectionType contype, const char* adr, SlotNumber n_slot, FifoFrameFilter& gl_in_filter);

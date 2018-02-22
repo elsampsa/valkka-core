@@ -51,19 +51,19 @@ std::ostream &operator<<(std::ostream &os, OpenGLSignalContext const &m) {
 }
 
 
-OpenGLFrameFifo::OpenGLFrameFifo(unsigned short n_stack_720p, unsigned short n_stack_1080p, unsigned short n_stack_1440p, unsigned short n_stack_4K, unsigned short n_stack_audio) : FrameFifo("open_gl",0), n_stack_720p(n_stack_720p), n_stack_1080p(n_stack_1080p), n_stack_1440p(n_stack_1440p), n_stack_4K(n_stack_4K), n_stack_audio(n_stack_audio), debug(false) {
+OpenGLFrameFifo::OpenGLFrameFifo(unsigned short n_stack_720p, unsigned short n_stack_1080p, unsigned short n_stack_1440p, unsigned short n_stack_4K) : FrameFifo("open_gl",0), n_stack_720p(n_stack_720p), n_stack_1080p(n_stack_1080p), n_stack_1440p(n_stack_1440p), n_stack_4K(n_stack_4K), debug(false) {
 
   FrameFifo::initReservoir(reservoir_720p,  n_stack_720p);
   FrameFifo::initReservoir(reservoir_1080p, n_stack_1080p);
   FrameFifo::initReservoir(reservoir_1440p, n_stack_1440p);
   FrameFifo::initReservoir(reservoir_4K,    n_stack_4K);
-  FrameFifo::initReservoir(reservoir_audio, n_stack_audio);
+  // FrameFifo::initReservoir(reservoir_audio, n_stack_audio);
   
   FrameFifo::initStack(reservoir_720p,  stack_720p);
   FrameFifo::initStack(reservoir_1080p, stack_1080p);
   FrameFifo::initStack(reservoir_1440p, stack_1440p);
   FrameFifo::initStack(reservoir_4K,    stack_4K);
-  FrameFifo::initStack(reservoir_audio, stack_audio);
+  // FrameFifo::initStack(reservoir_audio, stack_audio);
   
   // YUVPBO's will be reserved in OpenGLThread::preRun
 }
@@ -122,6 +122,7 @@ Frame* OpenGLFrameFifo::getFrame_(BitmapType bmtype) {
 }
 
 
+/*
 Frame* OpenGLFrameFifo::getAudioFrame() {
   std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
   Frame* tmpframe;
@@ -133,8 +134,10 @@ Frame* OpenGLFrameFifo::getAudioFrame() {
   stack_audio.pop_front(); // .. remove that pointer from the stack
   return tmpframe;
 }
+*/
 
 
+/*
 Frame* OpenGLFrameFifo::prepareFrame(Frame* frame) {
   Frame* tmpframe=NULL;
   
@@ -154,13 +157,18 @@ Frame* OpenGLFrameFifo::prepareFrame(Frame* frame) {
   
   return tmpframe;
 }
+*/
 
 
 Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is about to be inserted into the presentaton infifo
+  // Feed here only avframes and video!
+  
+  /*
   if (frame->frametype!=FrameType::avframe) {
     opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: prepareAVFrame: WARNING! Frame is not an avframe "<< *frame << std::endl; // << " " << int(frame->frametype) << " " << int(FrameType::avframe) << std::endl;
     return NULL;
   }
+  */
   
   Frame* tmpframe    =NULL;
   GLsizei planesize_y =0;
@@ -168,102 +176,97 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
   GLsizei planesize_v =0;
   
   // frames that are pulled from the stacks have their yuvpbo attribute enabled 
-  if (frame->av_codec_context->codec_type==AVMEDIA_TYPE_VIDEO) {// VIDEO
-    if ( // ALLOWED PIXEL FORMATS // NEW_CODEC_DEV: is your pixel format supported?
-      frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUV420P  ||
-      frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUVJ420P
-    ) {
-      
-      planesize_y=(frame->av_frame->height)  *(frame->av_frame->linesize[0]);
-      planesize_u=(frame->av_frame->height/2)*(frame->av_frame->linesize[1]);
-      planesize_v=(frame->av_frame->height/2)*(frame->av_frame->linesize[2]);
-      
-      if      (planesize_y <= BitmapPars::N720::size)  {
-        tmpframe=getFrame(BitmapPars::N720::type); // handling stacks with getFrame is mutex protected
-      }
-      else if (planesize_y <= BitmapPars::N1080::size) {
-        tmpframe=getFrame(BitmapPars::N1080::type);
-      }
-      else if (planesize_y <= BitmapPars::N1440::size) {
-        tmpframe=getFrame(BitmapPars::N1440::type);
-      }
-      else if (planesize_y <= BitmapPars::N4K::size)   {
-        tmpframe=getFrame(BitmapPars::N4K::type);
-      }
-      else {
-        opengllogger.log(LogLevel::fatal) << "OpenGLFrameFifo: prepareAVFrame:  WARNING! Could not get frame dimensions "<< *frame <<std::endl;
-        if (opengllogger.log_level>=LogLevel::normal) { reportStacks(); }
-        return NULL;
-      }
-      
-      if (!tmpframe) {
-        opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: prepareAVFrame:  WARNING! Could not get frame from the stack"<<std::endl;
-        return NULL;
-      }
-      
-      if (tmpframe->frametype!=FrameType::yuvframe) {
-        opengllogger.log(LogLevel::fatal) << "OpenGLFrameFifo: prepareAVFrame:  WARNING! frames in stack are not initialized to FrameType::yuvframe.  Did you forget to start OpenGLThread?"<<std::endl;
-        return NULL;
-      }
-      
-      // std::cout << "yuvpbo>"<<tmpframe->yuvpbo<<std::endl;
-      
-      frame->copyMeta(tmpframe); // timestamps, slots, etc.
-      (tmpframe->yuv_pars).pix_fmt =frame->av_codec_context->pix_fmt;
-      (tmpframe->yuv_pars).width   =frame->av_frame->linesize[0];
-      (tmpframe->yuv_pars).height  =frame->av_frame->height;
-      
-      // planesize =(frame->av_frame->height)*(frame->av_frame->linesize[0]);
-      
-#ifdef PRESENT_VERBOSE
-      std::cout << "OpenGLFrameFifo: prepareAVFrame:  av_frame->height, av_frame->linesize[0], planesize "<< frame->av_frame->height << " " << frame->av_frame->linesize[0] << " " << planesize <<std::endl;
-      std::cout << "OpenGLFrameFifo: prepareAVFrame:  payload: "<< int(frame->av_frame->data[0][0]) << " " << int(frame->av_frame->data[1][0]) << " " << int(frame->av_frame->data[2][0]) << std::endl;
-#endif
-      
-      // std::cout << "yuvpbo->size>"<<tmpframe->yuvpbo->size<<std::endl;
-      
-      ///*
-      tmpframe->yuvpbo->upload(planesize_y,
-                              planesize_u,
-                              planesize_v,
-                              frame->av_frame->data[0],
-                              frame->av_frame->data[1],
-                              frame->av_frame->data[2]); // up to the GPU! :)
-      //*/
-                              
-      return tmpframe;
-    } //ALLOWED PIXEL FORMATS
-    else {
-      opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: pixel format "<< frame->av_codec_context->pix_fmt <<" not supported "<<std::endl;
+  if ( // ALLOWED PIXEL FORMATS // NEW_CODEC_DEV: is your pixel format supported?
+    frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUV420P  ||
+    frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUVJ420P
+  ) {
+    
+    planesize_y=(frame->av_frame->height)  *(frame->av_frame->linesize[0]);
+    planesize_u=(frame->av_frame->height/2)*(frame->av_frame->linesize[1]);
+    planesize_v=(frame->av_frame->height/2)*(frame->av_frame->linesize[2]);
+    
+    if      (planesize_y <= BitmapPars::N720::size)  { // frames obtained with getFrame will be recycled by the presentation routine
+      tmpframe=getFrame(BitmapPars::N720::type); // handling stacks with getFrame is mutex protected
     }
-  } //VIDEO
-  else { // NEW_CODEC_DEV: so, you return an audio Frame with avframe enabled..?  Maybe copy from the avframe structure to Frame::payload ?
-    opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: only video supported "<<std::endl;
+    else if (planesize_y <= BitmapPars::N1080::size) {
+      tmpframe=getFrame(BitmapPars::N1080::type);
+    }
+    else if (planesize_y <= BitmapPars::N1440::size) {
+      tmpframe=getFrame(BitmapPars::N1440::type);
+    }
+    else if (planesize_y <= BitmapPars::N4K::size)   {
+      tmpframe=getFrame(BitmapPars::N4K::type);
+    }
+    else {
+      opengllogger.log(LogLevel::fatal) << "OpenGLFrameFifo: prepareAVFrame:  WARNING! Could not get frame dimensions "<< *frame <<std::endl;
+      if (opengllogger.log_level>=LogLevel::normal) { reportStacks(); }
+      return NULL;
+    }
+    
+    if (!tmpframe) {
+      opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: prepareAVFrame:  WARNING! Could not get frame from the stack"<<std::endl;
+      return NULL;
+    }
+    
+    if (tmpframe->frametype!=FrameType::yuvframe) {
+      opengllogger.log(LogLevel::fatal) << "OpenGLFrameFifo: prepareAVFrame:  WARNING! frames in stack are not initialized to FrameType::yuvframe.  Did you forget to start OpenGLThread?"<<std::endl;
+      return NULL;
+    }
+    
+    // std::cout << "yuvpbo>"<<tmpframe->yuvpbo<<std::endl;
+    
+    frame->copyMeta(tmpframe); // timestamps, slots, etc.
+    (tmpframe->yuv_pars).pix_fmt =frame->av_codec_context->pix_fmt;
+    (tmpframe->yuv_pars).width   =frame->av_frame->linesize[0];
+    (tmpframe->yuv_pars).height  =frame->av_frame->height;
+    
+    // planesize =(frame->av_frame->height)*(frame->av_frame->linesize[0]);
+    
+#ifdef PRESENT_VERBOSE
+    std::cout << "OpenGLFrameFifo: prepareAVFrame:  av_frame->height, av_frame->linesize[0], planesize "<< frame->av_frame->height << " " << frame->av_frame->linesize[0] << " " << planesize <<std::endl;
+    std::cout << "OpenGLFrameFifo: prepareAVFrame:  payload: "<< int(frame->av_frame->data[0][0]) << " " << int(frame->av_frame->data[1][0]) << " " << int(frame->av_frame->data[2][0]) << std::endl;
+#endif
+    
+    // std::cout << "yuvpbo->size>"<<tmpframe->yuvpbo->size<<std::endl;
+    
+    ///*
+    tmpframe->yuvpbo->upload(planesize_y,
+                            planesize_u,
+                            planesize_v,
+                            frame->av_frame->data[0],
+                            frame->av_frame->data[1],
+                            frame->av_frame->data[2]); // up to the GPU! :)
+    //*/
+                            
+    return tmpframe;
+  } //ALLOWED PIXEL FORMATS
+  else {
+    opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: pixel format "<< frame->av_codec_context->pix_fmt <<" not supported "<<std::endl;
   }
-  
   return NULL;
 }
 
 
 bool OpenGLFrameFifo::writeCopy(Frame* f, bool wait) {
+  // One should feed here only:
+  // (a) frames of FrameType avframe, i.e. AVFrame bitmaps and with codec_type AVMEDIA_TYPE_VIDEO.  
+  //     sound frames should be dealed in some other place (i.e. alsa thread .. that will be implemented someday)
+  // (b) frames that represent configurations/commands to the opengl thread.  Will be specified later
+  
   Frame* tmpframe=NULL;
   long int dt;
   
-  /*
-  if (f->frametype!=FrameType::yuvframe) {
-    opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: writeCopy: WARNING! Fifo does not accept frame "<< *f <<std::endl;
-    return false;
-  }
-  tmpframe=getFrame_((f->yuv_pars).bmtype);
-  */
-  
   if (f->frametype==FrameType::avframe) { // NEW_CODEC_DEV // when adding new codecs: if the decoder you have implemented, returns Frames with avframe enabled, do some thinking here..
-    tmpframe=prepareAVFrame(f);
+    if (f->av_codec_context->codec_type==AVMEDIA_TYPE_VIDEO) { // only video .. audio should never end up here
+      tmpframe=prepareAVFrame(f);
+    }
   }
-  else { // NEW_CODEC_DEV // when adding new codecs: if the decoder you have implemented, returns Frames that don't have avframe enabled, do some thinking here..
-    // opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: writeCopy: WARNING! accepts only avframe, not "<< *f <<std::endl;
-    // return false;
-    tmpframe=prepareFrame(f);
+  else if (f->frametype==FrameType::glsetup) { // a generic command to OpenGLThread : to-be-specified
+  }
+    
+  if (!tmpframe) {
+    opengllogger.log(LogLevel::debug) << "OpenGLFrameFifo: writeCopy: WARNING! could not stage frame "<< *f <<std::endl;
+    return false;
   }
   
 #ifdef TIMING_VERBOSE
@@ -272,11 +275,6 @@ bool OpenGLFrameFifo::writeCopy(Frame* f, bool wait) {
     std::cout << "OpenGLFrameFifo: writeCopy : timing : inserting frame " << dt << " ms late" << std::endl;
   }
 #endif
-  
-  if (!tmpframe) {
-    opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: writeCopy: WARNING! could not stage frame "<< *f <<std::endl;
-    return false;
-  }
   
   if (debug) {
     opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: writeCopy: DEBUG MODE: recycling frame "<< *tmpframe <<std::endl;
@@ -341,10 +339,17 @@ void OpenGLFrameFifo::recycle(Frame* f) {// Return Frame f back into the stack. 
       }
     }
   }
+  else { // recycle opengl command frames: to-be-specified
+    std::cout << "OpenGLFrameFifo: recycle: weird frame" << std::endl;
+    perror("OpenGLFrameFifo: recycle: weird frame");
+  }
+  
+  /*
   else {// recycle any other type of frame (i.e. audio)
     // opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: recycle: WARNING! None of the stacks accepts frame "<< *f <<std::endl;
     tmpstack=&stack_audio;
   }
+  */
   
 #ifdef PRESENT_VERBOSE
   std::cout << "OpenGLFrameFifo: recycle: recycling frame "<<*f<<std::endl;
@@ -369,7 +374,7 @@ void OpenGLFrameFifo::reportStacks_() {
   std::cout<<"OpenGLFrameFifo reportStacks: "<< "1080p   "<<reservoir_1080p.size()<<", "<<stack_1080p.size()  <<std::endl;
   std::cout<<"OpenGLFrameFifo reportStacks: "<< "1440p   "<<reservoir_1440p.size()<<", "<<stack_1440p.size()  <<std::endl;
   std::cout<<"OpenGLFrameFifo reportStacks: "<< "4K      "<<reservoir_4K   .size()<<", "<<stack_4K.   size()  <<std::endl;
-  std::cout<<"OpenGLFrameFifo reportStacks: "<< "audio   "<<reservoir_audio.size()<<", "<<stack_audio.size()  <<std::endl;
+  // std::cout<<"OpenGLFrameFifo reportStacks: "<< "audio   "<<reservoir_audio.size()<<", "<<stack_audio.size()  <<std::endl;
   std::cout<<"OpenGLFrameFifo reportStacks: "<<std::endl;
 }
 
@@ -385,14 +390,14 @@ void OpenGLFrameFifo::dumpStack_() {
   FrameFifo::dump(stack_1440p);
   queuelogger.log(LogLevel::normal) << "OpenGLFrameFifo: 4K" << std::endl;
   FrameFifo::dump(stack_4K);
-  queuelogger.log(LogLevel::normal) << "OpenGLFrameFifo: audio" << std::endl;
-  FrameFifo::dump(stack_audio);
+  //queuelogger.log(LogLevel::normal) << "OpenGLFrameFifo: audio" << std::endl;
+  //FrameFifo::dump(stack_audio);
   queuelogger.log(LogLevel::normal) << "OpenGLFrameFifo: <dumpStack" << std::endl;
 }
 
 
 void OpenGLFrameFifo::diagnosis_() {
-  std::cout << "FIFO: " <<  fifo.size() << " 720p: " << stack_720p.size() << " 1080p: " << stack_1080p.size() << " 1440p: " << stack_1440p.size() << " 4K: " << stack_4K.size() << " audio: " << stack_audio.size() << std::endl;
+  std::cout << "FIFO: " <<  fifo.size() << " 720p: " << stack_720p.size() << " 1080p: " << stack_1080p.size() << " 1440p: " << stack_1440p.size() << " 4K: " << stack_4K.size() << std::endl; // << " audio: " << stack_audio.size() << std::endl;
 }
 
 
@@ -881,7 +886,7 @@ void RenderGroup::render() {
 
 
 
-OpenGLThread::OpenGLThread(const char* name, unsigned short n720p, unsigned short n1080p, unsigned short n1440p, unsigned short n4K, unsigned short naudio, unsigned msbuftime, int core_id) : Thread(name, core_id), infifo(n720p, n1080p, n1440p, n4K, naudio), msbuftime(msbuftime), debug(false) {
+OpenGLThread::OpenGLThread(const char* name, unsigned short n720p, unsigned short n1080p, unsigned short n1440p, unsigned short n4K, unsigned msbuftime, int core_id) : Thread(name, core_id), infifo(n720p, n1080p, n1440p, n4K), msbuftime(msbuftime), debug(false) {
   // So, what happens here..?
   // We create the OpenGLFrameFifo instance "infifo" at constructor time, and then pass "infifo" to AVFifoFrameFilter instance "framefilter" as a parameter
   // * framefilter (AVFifoFrameFilter) knows infifo
@@ -1098,52 +1103,25 @@ OpenGLFrameFifo& OpenGLThread::getFifo() {
 }
 
 
-// void OpenGLThread::activateSlot(unsigned int i, GLsizei w, GLsizei h) {
-// void OpenGLThread::activateSlot(SlotNumber i, BitmapType bmtype) {
 void OpenGLThread::activateSlot(SlotNumber i, YUVFramePars yuv_pars) {
   GLsizei w, h;
-  // if (!slotOk(i)) {return 0;} // assume checked (this method for internal use only)
-  
-  /*
-  switch(bmtype) {
-    case (BitmapPars::N720::type): {
-      w =BitmapPars::N720::w;
-      h =BitmapPars::N720::h;
-      break;
-    }
-    case (BitmapPars::N1080::type): {
-      w =BitmapPars::N1080::w;
-      h =BitmapPars::N1080::h;
-      break;
-    }
-    case (BitmapPars::N1440::type): {
-      w =BitmapPars::N1440::w;
-      h =BitmapPars::N1440::h;
-      break;
-    }
-    case (BitmapPars::N4K::type): {
-      w =BitmapPars::N4K::w;
-      h =BitmapPars::N4K::h;
-      break;
-    }
-    default: {
-      opengllogger.log(LogLevel::fatal) << "OpenGLThread: activateSlot: FATAL! No such bitmap type "<<bmtype<<std::endl;
-      w=0;
-      h=0;
-      break;
-    }
-  }
-  slots_[i].activate(w, h, yuv_shader);
-  */
   opengllogger.log(LogLevel::crazy) << "OpenGLThread: activateSlot: "<<yuv_pars.bmtype<<" "<<yuv_pars.width<< " "<< yuv_pars.height << std::endl;
   slots_[i].activate(yuv_pars.width, yuv_pars.height, yuv_shader);
 }
 
 
-// void OpenGLThread::activateSlotIf(SlotNumber i, BitmapType bmtype) {
 void OpenGLThread::activateSlotIf(SlotNumber i, YUVFramePars yuv_pars) {
- if (slots_[i].isActive()) {return;}
- activateSlot(i, yuv_pars);
+  if (slots_[i].isActive()) {
+    if (yuv_pars.width==slots_[i].yuvtex->w and yuv_pars.height==slots_[i].yuvtex->h) { // nothings changed ..
+    }
+    else {
+      opengllogger.log(LogLevel::debug) << "OpenGLThread: activateSlotIf: texture dimensions changed: reactivate" << std::endl;
+      activateSlot(i, yuv_pars);
+    }
+  } 
+  else { // not activated => activate
+    activateSlot(i, yuv_pars);
+  }
 }
 
 
@@ -1598,9 +1576,11 @@ void OpenGLThread::reserveFrames() {
   }
   glFinish();
   
+  /*
   for(auto it=infifo.reservoir_audio.begin(); it!=infifo.reservoir_audio.end(); ++it) {
     it->reserve(DEFAULT_PAYLOAD_SIZE_PCMU);
   }
+  */
 }
 
 

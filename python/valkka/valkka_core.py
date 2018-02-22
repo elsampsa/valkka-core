@@ -1757,8 +1757,8 @@ class OpenGLFrameFifo(FrameFifo):
     __getattr__ = lambda self, name: _swig_getattr(self, OpenGLFrameFifo, name)
     __repr__ = _swig_repr
 
-    def __init__(self, n_stack_720p, n_stack_1080p, n_stack_1440p, n_stack_4K, n_stack_audio):
-        this = _valkka_core.new_OpenGLFrameFifo(n_stack_720p, n_stack_1080p, n_stack_1440p, n_stack_4K, n_stack_audio)
+    def __init__(self, n_stack_720p, n_stack_1080p, n_stack_1440p, n_stack_4K):
+        this = _valkka_core.new_OpenGLFrameFifo(n_stack_720p, n_stack_1080p, n_stack_1440p, n_stack_4K)
         try:
             self.this.append(this)
         except Exception:
@@ -1779,8 +1779,8 @@ class OpenGLThread(Thread):
     __getattr__ = lambda self, name: _swig_getattr(self, OpenGLThread, name)
     __repr__ = _swig_repr
 
-    def __init__(self, name, n720p=0, n1080p=0, n1440p=0, n4K=0, naudio=0, msbuftime=100, core_id=-1):
-        this = _valkka_core.new_OpenGLThread(name, n720p, n1080p, n1440p, n4K, naudio, msbuftime, core_id)
+    def __init__(self, name, n720p=0, n1080p=0, n1440p=0, n4K=0, msbuftime=100, core_id=-1):
+        this = _valkka_core.new_OpenGLThread(name, n720p, n1080p, n1440p, n4K, msbuftime, core_id)
         try:
             self.this.append(this)
         except Exception:
