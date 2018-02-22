@@ -1733,7 +1733,8 @@ void OpenGLThread::loadExtensions() {
         (PFNGLXSWAPINTERVALEXTPROC) 
         glXGetProcAddressARB((const GLubyte *) "glXSwapIntervalEXT");
       // perror("OpenGLThread: loadExtensions: GLX_EXT_swap_control: GXL_MESA_swap_control required!");
-      swap_flavor =swap_flavors::ext;
+      // swap_flavor =swap_flavors::ext;
+      swap_flavor =swap_flavors::none; // lets not use this
   }
   //*/
   else if (is_glx_extension_supported(display_id, "GLX_MESA_swap_control")) {
