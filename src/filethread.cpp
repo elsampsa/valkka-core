@@ -281,8 +281,10 @@ void FileThread::sendSignal(SignalContext signal_ctx) {
 
 void FileThread::sendSignalAndWait(SignalContext signal_ctx) {
   std::unique_lock<std::mutex> lk(this->mutex);
-  this->signal_fifo.push_back(signal_ctx);  
-  this->condition.wait(lk);
+  this->signal_fifo.push_back(signal_ctx);
+  while (!this->signal_fifo.empty()) {
+    this->condition.wait(lk);
+  }
 }
 
 
@@ -302,7 +304,7 @@ void FileThread::handleSignals() {
   FileContext file_context;
   unsigned short int i;
   
-  if (signal_fifo.empty()) {return;}
+  // if (signal_fifo.empty()) {return;} // nopes ..
   
   // handle pending signals from the signals fifo
   for (std::deque<SignalContext>::iterator it = signal_fifo.begin(); it != signal_fifo.end(); ++it) { // it == pointer to the actual object (struct SignalContext)

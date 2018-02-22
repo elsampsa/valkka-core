@@ -163,7 +163,9 @@ void Thread::sendSignalAndWait(SignalContext signal_ctx) {
   std::unique_lock<std::mutex> lk(this->mutex);
   // this->signal=signal;
   this->signal_fifo.push_back(signal_ctx); 
-  this->condition.wait(lk);
+  while (!this->signal_fifo.empty()) {
+    this->condition.wait(lk);
+  }
 }
 
 

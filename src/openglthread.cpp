@@ -1481,7 +1481,7 @@ void OpenGLThread::handleSignals() {
   
   opengllogger.log(LogLevel::crazy) << "OpenGLThread: handleSignals: " << std::endl;
   
-  if (signal_fifo.empty()) {return;}
+  // if (signal_fifo.empty()) {return;}
   
   // handle pending signals from the signals fifo
   for (auto it = signal_fifo.begin(); it != signal_fifo.end(); ++it) { // it == pointer to the actual object (struct SignalContext)
@@ -1565,7 +1565,9 @@ void OpenGLThread::sendSignal(SignalContext signal_ctx) {
 void OpenGLThread::sendSignalAndWait(SignalContext signal_ctx) {
   std::unique_lock<std::mutex> lk(this->mutex);
   this->signal_fifo.push_back(signal_ctx);  
-  this->condition.wait(lk);
+  while (!this->signal_fifo.empty()) {
+    this->condition.wait(lk);
+  }
 }
 
 

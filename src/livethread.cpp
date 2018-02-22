@@ -372,7 +372,7 @@ void LiveThread::handleSignals() {
   LiveConnectionContext connection_ctx;
   unsigned short int i;
   
-  if (signal_fifo.empty()) {return;}
+  // if (signal_fifo.empty()) {return;}
   
   // handle pending signals from the signals fifo
   for (std::deque<SignalContext>::iterator it = signal_fifo.begin(); it != signal_fifo.end(); ++it) { // it == pointer to the actual object (struct SignalContext)
