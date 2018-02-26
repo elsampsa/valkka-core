@@ -55,7 +55,8 @@ class BasicFilterchain1:
     "openglthread" : OpenGLThread,
     "slot"         : int,
     "fifolen"      : (int,10),
-    "affinity"     : (int,-1)
+    "affinity"     : (int,-1),
+    "msreconnect"  : (int,0)
     }
   
   
@@ -127,6 +128,8 @@ class BasicFilterchain1:
     # stream address, i.e. "rtsp://.."
     
     self.live_ctx.framefilter=self.av_in_filter
+    
+    self.live_ctx.msreconnect=self.msreconnect # if no frames received in this time, attempt to reconnect
     
     
   def setFileContext(self,filename):

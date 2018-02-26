@@ -58,7 +58,8 @@ class BasicFilterchain:
     "slot"         : int,
     "fifolen"      : (int,10),
     "affinity"     : (int,-1),
-    "verbose"      : (bool,False)
+    "verbose"      : (bool,False),
+    "msreconnect"  : (int,0)
     }
   
   
@@ -130,6 +131,8 @@ class BasicFilterchain:
     
     self.ctx.framefilter=self.av_in_filter
     # self.ctx.framefilter=self.live_out_filter        # where the received frames are written to.  See filterchain (**)
+    
+    self.ctx.msreconnect=self.msreconnect
     
     # send the information about the stream to LiveThread
     self.livethread.registerStream(self.ctx)

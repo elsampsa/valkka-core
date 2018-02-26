@@ -1,0 +1,7 @@
+<map id="OpenGLFrameFifo::prepareAVFrame" name="OpenGLFrameFifo::prepareAVFrame">
+<area shape="rect" id="node2" href="$classFrameFifo.html#a7d9dbc000f3f2e57ff80faeba3cb10df" title="Take a frame from the stack. " alt="" coords="267,5,411,32"/>
+<area shape="rect" id="node3" href="$classOpenGLFrameFifo.html#a4326480a8e0b422a85c59f51f0b4f505" title="Show stack usage. " alt="" coords="233,56,444,83"/>
+<area shape="rect" id="node5" href="$classFrame.html#a596d590b841166a204fe9ba5b9313159" title="Copy public metadata across different frame types (timestamp, subsession_index, pars) to f..." alt="" coords="277,107,401,133"/>
+<area shape="rect" id="node6" href="$classYUVPBO.html#a609e4c6578816dbbf51d3c7708788bd8" title="Upload to GPU. " alt="" coords="277,157,401,184"/>
+<area shape="rect" id="node4" href="$classOpenGLFrameFifo.html#a1cfb01cb4ad4713ae29c4fb40f106b22" title="Show stack usage. No mutex protection. " alt="" coords="492,56,711,83"/>
+</map>

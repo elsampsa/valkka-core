@@ -80,19 +80,23 @@ public:
    * @param address      A string identifying the connection
    * @param slot         An integer defining a "slot" where this connection is placed
    * @param framefilter  Connection feeds frames to this FrameFilter (i.e., its the beginning of the "filter-chain")
+   * @param msreconnect  Reconnect if stream has received nothing after this many milliseconds.  0 = do not reconnect.
    */
-  Connection(UsageEnvironment& env, std::string address, SlotNumber slot, FrameFilter& framefilter);
+  Connection(UsageEnvironment& env, std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect=0);
   virtual ~Connection(); ///< Default destructor
   
 protected:
   std::string         address;      ///< Stream address
   SlotNumber          slot;         ///< Stream slot number (that identifies the source)
-  FrameFilter&        framefilter;  ///< User-provided entry point for the stream. 
+  FrameFilter&        framefilter;  ///< User-provided entry point for the stream.
+  long unsigned int   msreconnect;  ///< Reconnect if stream has received nothing after this many milliseconds.  0 = do not reconnect.
+  
   // internal framefilter chain.. if we'd like to modify the frames before they are passed to the API user
   // more framefilter could be generated here, initialized it the constructor init list
   // the starting filter should always be named as "inputfilter" .. this is where Live555 writes the frames
   TimestampFrameFilter2   timestampfilter; ///< Internal framefilter: correct timestamp
   SlotFrameFilter         inputfilter;     ///< Internal framefilter: set slot number
+  long int                frametimer;
   
 public:
   UsageEnvironment& env;
@@ -102,6 +106,8 @@ public:
   virtual void playStream() =0;   ///< Called from within the live555 event loop
   virtual void stopStream() =0;   ///< Called from within the live555 event loop
   virtual void reStartStream();   ///< Called from within the live555 event loop
+  virtual void reStartStreamIf(); ///< Called from within the live555 event loop
+  virtual bool hasStopped();      ///< Has the stream stopped or is it pending?
   SlotNumber getSlot();           ///< Return the slot number
 };
 
@@ -139,17 +145,20 @@ class RTSPConnection : public Connection {
 
 public:
   /** @copydoc Connection::Connection */
-  RTSPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter); 
+  RTSPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect=0); 
   ~RTSPConnection();
-
+  // RTSPConnection(const RTSPConnection& cp); ///< Copy constructor .. default copy constructor good enough
+  
+  
 private:
   ValkkaRTSPClient* client; ///< ValkkaRTSPClient defines the behaviour (i.e. event registration and callbacks) of the RTSP client (see \ref live_tag)
   LiveStatus livestatus;
   
 public:
-  void playStream(); ///< Uses ValkkaRTSPClient instance to initiate the RTSP negotiation
-  void stopStream(); ///< Uses ValkkaRTSPClient instance to shut down the stream
-  
+  void playStream();      ///< Uses ValkkaRTSPClient instance to initiate the RTSP negotiation
+  void stopStream();      ///< Uses ValkkaRTSPClient instance to shut down the stream
+  void reStartStreamIf(); ///< Restarts the stream if no frames have been received for a while
+  bool hasStopped();      ///< Has the stream stopped or is it pending
 };
 
 
@@ -166,7 +175,8 @@ public:
   ~SDPConnection();
 
 private:
-  MediaSession* session;
+  // MediaSession* session;
+  StreamClientState *scs;
   
 public:
   void playStream(); ///< Creates Live555 MediaSessions, MediaSinks, etc. instances and registers them directly to the Live555 event loop
@@ -215,6 +225,7 @@ struct LiveConnectionContext { // <pyapi>
   std::string        address;         ///< Stream address                                    // <pyapi>
   SlotNumber         slot;            ///< A unique stream slot that identifies this stream  // <pyapi>
   FrameFilter*       framefilter;     ///< The frames are feeded into this FrameFilter       // <pyapi>
+  long unsigned int  msreconnect;     ///< If stream has delivered nothing during this many milliseconds, reconnect // <pyapi>
   // LiveConnectionContext() : connection_type(ConnectionType::none), address(""), slot(0), framefilter(NULL) {} // Initialization to a default value : does not compile ..! // <pyapi>
 };                             // <pyapi>
 
@@ -289,11 +300,14 @@ protected: // redefinitions
   std::deque<SignalContext> signal_fifo;    ///< Redefinition of signal fifo (Thread::signal_fifo is now hidden from usage) 
   
 protected:
-  TaskScheduler*    scheduler;              ///< Live555 event loop TaskScheduler
-  UsageEnvironment* env;                    ///< Live555 UsageEnvironment identifying the event loop
-  char              eventLoopWatchVariable; ///< Modifying this, kills the Live555 event loop
-  std::vector<Connection*>   slots_;        ///< A constant sized vector.  Book-keeping of the connections (RTSP or SDP) currently active in the live555 thread.  Organized in "slots".
+  TaskScheduler*    scheduler;               ///< Live555 event loop TaskScheduler
+  UsageEnvironment* env;                     ///< Live555 UsageEnvironment identifying the event loop
+  char              eventLoopWatchVariable;  ///< Modifying this, kills the Live555 event loop
+  std::vector<Connection*>   slots_;         ///< A constant sized vector.  Book-keeping of the connections (RTSP or SDP) currently active in the live555 thread.  Organized in "slots".
   std::vector<Outbound*>     out_slots_;
+  std::list<Connection*>     pending;        ///< Connections pending for closing
+  bool                       exit_requested; ///< Exit asap
+  
   // SlotNumber n_max_slots;                   ///< Maximum number of possible slots .. use a global constant (in sizes.h)
   EventTriggerId    event_trigger_id_hello_world;
   EventTriggerId    event_trigger_id_frame_arrived;
@@ -310,6 +324,8 @@ public: // redefined virtual functions
   void sendSignal(SignalContext signal_ctx); ///< Must be explicitly *redefined* just in case : Thread::SignalContext has been changed to LiveThread::SignalContext
   
 protected:
+  void handlePending();       ///< Try to close streams that were not properly closed (i.e. idling for the tcp socket while closing)
+  void checkAlive();
   void handleSignals();
   void handleFrame(Frame* f); ///< Handles frames incoming to live555
   

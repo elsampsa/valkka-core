@@ -122,6 +122,7 @@ public:
 
 enum class LiveStatus {
   none,
+  pending,
   alive,
   closed
 };
@@ -133,15 +134,24 @@ enum class LiveStatus {
 class StreamClientState {
 public:
   StreamClientState();
-  virtual ~StreamClientState();
+  virtual ~StreamClientState();   ///< Calls Medium::close on the MediaSession object
 
 public:
-  MediaSubsessionIterator* iter;
-  int subsession_index;
-  MediaSession* session;
-  MediaSubsession* subsession;
+  MediaSubsessionIterator* iter;  ///< Created by RTSPClient or SDPClient.  Deleted by StreamClientState::~StreamClientState
+  int subsession_index;           ///< Managed by RTSPClient or SDPClient
+  MediaSession* session;          ///< Created by RTSPClient or SDPClient.  Closed by StreamClientState::~StreamClientState
+  MediaSubsession* subsession;    ///< Created by RTSPClient or SDPClient.  Closed by StreamClientState::close
   TaskToken streamTimerTask;
   double duration;
+  bool frame_flag;
+  
+public:
+  void close();                   ///< Calls Medium::close on the MediaSubsession objects and their sinks
+  
+public: // setters & getters
+  void setFrame()     {this->frame_flag=true;}
+  void clearFrame()   {this->frame_flag=false;}
+  bool gotFrame()     {return this->frame_flag;}
 };
 
 /** Handles a live555 RTSP connection
@@ -203,10 +213,13 @@ public:
 class FrameSink: public MediaSink {
 
 public:
-  static FrameSink* createNew(UsageEnvironment& env, MediaSubsession& subsession, FrameFilter& framefilter, int subsession_index, char const* streamId = NULL);
+  // static FrameSink* createNew(UsageEnvironment& env, MediaSubsession& subsession, FrameFilter& framefilter, int subsession_index, char const* streamId = NULL);
+  static FrameSink* createNew(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId = NULL);
 
+  
 private:
-  FrameSink(UsageEnvironment& env, MediaSubsession& subsession, FrameFilter& framefilter, int subsession_index, char const* streamId);
+  // FrameSink(UsageEnvironment& env, MediaSubsession& subsession, FrameFilter& framefilter, int subsession_index, char const* streamId);
+  FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId);
     // called only by "createNew()"
   virtual ~FrameSink();
 
@@ -223,14 +236,15 @@ private:
   virtual Boolean continuePlaying();
 
 private:
-  u_int8_t*        fReceiveBuffer;
-  long unsigned    nbuf;       ///< Size of bytebuffer
-  MediaSubsession& fSubsession;
-  char*            fStreamId;
-  FrameFilter&     framefilter;
-  Frame            setupframe; ///< This frame is used to send subsession information
-  Frame            frame;      ///< Data is being copied into this frame
-  int              subsession_index;
+  StreamClientState &scs;
+  u_int8_t*         fReceiveBuffer;
+  long unsigned     nbuf;       ///< Size of bytebuffer
+  MediaSubsession&  fSubsession;
+  char*             fStreamId;
+  FrameFilter&      framefilter;
+  Frame             setupframe; ///< This frame is used to send subsession information
+  Frame             frame;      ///< Data is being copied into this frame
+  int               subsession_index;
 
 public: // getters & setters
   uint8_t* getReceiveBuffer() {return fReceiveBuffer;}

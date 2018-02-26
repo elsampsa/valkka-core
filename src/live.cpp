@@ -41,7 +41,7 @@
 #include "tools.h"
 #include "logging.h"
 
-#define SEND_PARAMETER_SETS // keep this always defined!
+#define SEND_PARAMETER_SETS // keep this always defined
 
 
 BufferSource::BufferSource(UsageEnvironment& env, FrameFifo &fifo, unsigned preferredFrameSize, unsigned playTimePerFrame, unsigned offset) : FramedSource(env), fifo(fifo), fPreferredFrameSize(preferredFrameSize), fPlayTimePerFrame(playTimePerFrame), offset(offset), active(true) {
@@ -388,7 +388,8 @@ void ValkkaRTSPClient::continueAfterSETUP(RTSPClient* rtspClient, int resultCode
     // (This will prepare the data sink to receive data; the actual flow of data from the client won't start happening until later,
     // after we've sent a RTSP "PLAY" command.)
 
-    scs.subsession->sink = FrameSink::createNew(env, *scs.subsession, framefilter, scs.subsession_index, rtspClient->url());
+    // scs.subsession->sink = FrameSink::createNew(env, *scs.subsession, framefilter, scs.subsession_index, rtspClient->url());
+    scs.subsession->sink = FrameSink::createNew(env, scs, framefilter, rtspClient->url());
       // perhaps use your own custom "MediaSink" subclass instead
     if (scs.subsession->sink == NULL) {
       livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << "Failed to create a data sink for the \"" << *scs.subsession
@@ -540,7 +541,8 @@ void ValkkaRTSPClient::shutdownStream(RTSPClient* rtspClient, int exitCode) {
   Medium::close(rtspClient);
   // Note that this will also cause this stream's "StreamClientState" structure to get reclaimed.
   // Uh-oh: how do we tell the event loop that this particular client does not exist anymore..?
-  
+  // .. before this RTSPClient deletes itself, we have modified the livestatus member .. that points to
+  // a variable managed by the live thread
   /*
   if (--rtspClientCount == 0) {
     // The final stream has ended, so exit the application now.
@@ -553,16 +555,30 @@ void ValkkaRTSPClient::shutdownStream(RTSPClient* rtspClient, int exitCode) {
 
 // Implementation of "StreamClientState":
 
-StreamClientState::StreamClientState() : iter(NULL), session(NULL), subsession(NULL), streamTimerTask(NULL), duration(0.0), subsession_index(-1)
+StreamClientState::StreamClientState() : iter(NULL), session(NULL), subsession(NULL), streamTimerTask(NULL), duration(0.0), subsession_index(-1), frame_flag(false)
 {
 }
 
+
+void StreamClientState::close() {
+  MediaSubsessionIterator iter2(*session);
+  while ((subsession = iter2.next()) != NULL) {
+    if (subsession->sink != NULL) {
+      livelogger.log(LogLevel::debug) << "StreamClientState : closing subsession" <<std::endl;
+      Medium::close(subsession->sink);
+      livelogger.log(LogLevel::debug) << "StreamClientState : closed subsession" <<std::endl;
+      subsession->sink = NULL;
+    }
+  }
+}
+
+
 StreamClientState::~StreamClientState() {
   delete iter;
+  // return;
   if (session != NULL) {
     // We also need to delete "session", and unschedule "streamTimerTask" (if set)
     UsageEnvironment& env = session->envir(); // alias
-
     env.taskScheduler().unscheduleDelayedTask(streamTimerTask);
     Medium::close(session);
   }
@@ -575,15 +591,29 @@ StreamClientState::~StreamClientState() {
 // Define the size of the buffer that we'll use:
 #define DUMMY_SINK_RECEIVE_BUFFER_SIZE 100000
 
+/*
 FrameSink* FrameSink::createNew(UsageEnvironment& env, MediaSubsession& subsession, FrameFilter& framefilter, int subsession_index, char const* streamId) {
   return new FrameSink(env, subsession, framefilter, subsession_index, streamId);
 }
 
-FrameSink::FrameSink(UsageEnvironment& env, MediaSubsession& subsession, FrameFilter& framefilter, int subsession_index, char const* streamId) : MediaSink(env), fSubsession(subsession), framefilter(framefilter), subsession_index(subsession_index), on(true), nbuf(0) {
+FrameSink::FrameSink(UsageEnvironment& env, MediaSubsession& subsession, FrameFilter& framefilter, int subsession_index, char const* streamId) : MediaSink(env), fSubsession(subsession), framefilter(framefilter), subsession_index(subsession_index), on(true), nbuf(0) 
+*/
+
+FrameSink* FrameSink::createNew(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId) {
+  return new FrameSink(env, scs, framefilter, streamId);
+}
+
+FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId) : MediaSink(env), scs(scs), framefilter(framefilter), on(true), nbuf(0), fSubsession(*(scs.subsession))
+
+{
+  // some aliases:
+  // MediaSubsession &subsession = *(scs.subsession);
+  int subsession_index        = scs.subsession_index;
+  
   fStreamId = strDup(streamId);
   // fReceiveBuffer = new u_int8_t[DUMMY_SINK_RECEIVE_BUFFER_SIZE];
   
-  const char* codec_name=subsession.codecName();
+  const char* codec_name=fSubsession.codecName();
   
   livelogger.log(LogLevel::debug) << "FrameSink: constructor: codec_name ="<< codec_name << ", subsession_index ="<<subsession_index <<std::endl;
   
@@ -632,7 +662,6 @@ FrameSink::FrameSink(UsageEnvironment& env, MediaSubsession& subsession, FrameFi
 #endif
   
   livelogger.log(LogLevel::debug) << "FrameSink: constructor: internal_frame= "<< frame <<std::endl;
-  
 }
 
 FrameSink::~FrameSink() {
@@ -693,6 +722,7 @@ void FrameSink::afterGettingFrame(unsigned frameSize, unsigned numTruncatedBytes
   */
   frame.payload.resize(checkBufferSize(frameSize)); // set correct frame size .. now information about the packet length goes into the filter chain
   
+  scs.setFrame(); // flag that indicates that we got a frame
   framefilter.run(&frame); // starts the frame filter chain
   
   if (numTruncatedBytes>0) {// time to grow the buffer..
@@ -757,6 +787,7 @@ void FrameSink::sendParameterSets() {
       afterGettingFrame(pars[i].sPropLength, 0, frametime, 0);
     }
   }
+  delete[] pars;
 }
 
 

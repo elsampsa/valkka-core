@@ -67,7 +67,7 @@ void test_1() {
   
   sleep_for(2s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter};
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter, 0};
   livethread.registerStreamCall(ctx);
     
   sleep_for(3s);
@@ -111,7 +111,7 @@ void test_2() {
   
   sleep_for(2s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1};
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1,0};
   livethread.registerStreamCall(ctx);
   
   sleep_for(1s);
@@ -132,12 +132,12 @@ void test_2() {
   
   sleep_for(1s);
 
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter2};
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter2,0};
   livethread.registerStreamCall(ctx); // slot already taken
   
   sleep_for(1s);
 
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_2), 3, &dummyfilter2};
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_2), 3, &dummyfilter2,0};
   livethread.registerStreamCall(ctx); // register another stream from another
   livethread.playStreamCall(ctx); // play immediately
   
@@ -171,7 +171,7 @@ void test_3() {
   
   sleep_for(2s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1};
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1,0};
   livethread.registerStreamCall(ctx);  
   livethread.playStreamCall(ctx);
   
@@ -184,8 +184,7 @@ void test_3() {
   livethread.registerStreamCall(ctx);  
   livethread.playStreamCall(ctx);
   
-  
-  sleep_for(5s);
+  sleep_for(15s);
 
   std::cout << "stopping live thread" << std::endl;
   
@@ -216,7 +215,7 @@ void test_4() {
   
   sleep_for(2s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 2, &dummyfilter};
+  ctx = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 2, &dummyfilter,0};
   livethread.registerStreamCall(ctx);
   livethread.playStreamCall(ctx);  
   
@@ -265,11 +264,11 @@ void test_5() {
   
   sleep_for(2s);
   
-  ctx1 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 2, &dummyfilter1};
-  ctx2 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 3, &dummyfilter2};
-  ctx3 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 4, &dummyfilter3};
-  ctx4 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 5, &dummyfilter4};
-  ctx5 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 6, &dummyfilter5};
+  ctx1 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 2, &dummyfilter1, 0};
+  ctx2 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 3, &dummyfilter2, 0};
+  ctx3 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 4, &dummyfilter3, 0};
+  ctx4 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 5, &dummyfilter4, 0};
+  ctx5 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 6, &dummyfilter5, 0};
   
   livethread.registerStreamCall(ctx1);
   livethread.registerStreamCall(ctx2);
@@ -313,7 +312,7 @@ void test_6() {
   std::cout << "starting live thread" << std::endl;
   livethread.startCall();
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1};
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1, 0};
   livethread.registerStreamCall(ctx);  
   livethread.playStreamCall(ctx);
   
@@ -348,7 +347,7 @@ void test_7() {
   
   sleep_for(2s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter};
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter, 0};
   livethread.registerStreamCall(ctx);
     
   livethread.testTrigger();
@@ -406,7 +405,7 @@ void test_8() {
   
   sleep_for(1s);
 
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter};
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter, 0};
   livethread.registerStreamCall(ctx);
   livethread.playStreamCall(ctx);
   
@@ -449,7 +448,7 @@ void test_9() {
   
   sleep_for(1s);
 
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter};
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter, 0};
   livethread.registerStreamCall(ctx);
   livethread.playStreamCall(ctx);
   
@@ -498,7 +497,7 @@ void test_10() {
   
   sleep_for(1s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter};
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter, 0};
   livethread.registerStreamCall(ctx);
   livethread.playStreamCall(ctx);
   
@@ -511,6 +510,43 @@ void test_10() {
   std::cout << "stopping live thread" << std::endl;
   livethread. stopCall();
   livethread2.stopCall();
+}
+
+
+void test_11() {
+  const char* name = "@TEST: live_thread_test: test 11: ";
+  std::cout << name <<"** @@Print payload, one rtsp connection.  Test auto reconnection. **" << std::endl;
+  
+  if (!stream_1) {
+    std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+    exit(2);
+  }
+  std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+  
+  // filtergraph:
+  // (LiveThread:livethread) --> {InfoFrameFilter:dummyfilter1)   
+  LiveThread livethread("livethread");
+  InfoFrameFilter dummyfilter1("dummy1");
+  
+  LiveConnectionContext ctx;
+  
+  std::cout << "starting live thread" << std::endl;
+  livethread.startCall();
+  
+  sleep_for(2s);
+  
+  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1, 10000}; // if nothing in 10 secs, reconnect
+  livethread.registerStreamCall(ctx);  
+  livethread.playStreamCall(ctx);
+  
+  // take out your cam, reconnect it, etc.
+  // sleep_for(120s);
+  sleep_for(120s);
+  // sleep_for(10s);
+  
+  std::cout << "stopping live thread" << std::endl;
+  
+  livethread.stopCall();
 }
 
 
@@ -573,6 +609,9 @@ int main(int argc, char** argcv) {
         break;
       case(10):
         test_10();
+        break;
+      case(11):
+        test_11();
         break;
       default:
         std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;

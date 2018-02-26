@@ -1622,6 +1622,10 @@ class LiveConnectionContext(_object):
     __swig_getmethods__["framefilter"] = _valkka_core.LiveConnectionContext_framefilter_get
     if _newclass:
         framefilter = _swig_property(_valkka_core.LiveConnectionContext_framefilter_get, _valkka_core.LiveConnectionContext_framefilter_set)
+    __swig_setmethods__["msreconnect"] = _valkka_core.LiveConnectionContext_msreconnect_set
+    __swig_getmethods__["msreconnect"] = _valkka_core.LiveConnectionContext_msreconnect_get
+    if _newclass:
+        msreconnect = _swig_property(_valkka_core.LiveConnectionContext_msreconnect_get, _valkka_core.LiveConnectionContext_msreconnect_set)
 
     def __init__(self):
         this = _valkka_core.new_LiveConnectionContext()

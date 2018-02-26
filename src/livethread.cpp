@@ -35,6 +35,8 @@
 #include "livethread.h"
 #include "logging.h"
 
+// #define RECONNECT_VERBOSE   // by default, disable
+
 using namespace std::chrono_literals;
 using std::this_thread::sleep_for; 
 
@@ -76,14 +78,17 @@ bool LiveFifo::writeCopy(Frame* f, bool wait) {
 #define TIMESTAMP_CORRECTOR // keep this always defined
 
 #ifdef TIMESTAMP_CORRECTOR
-Connection::Connection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter) : env(env), address(address), slot(slot), framefilter(framefilter), is_playing(false), timestampfilter("timestamp_filter",&framefilter), inputfilter("input_filter",slot,&timestampfilter) {
-  // filterchain: {FrameFilter: inputfilter} --> {TimestampFrameFilter: timestampfilter} --> {FrameFilter: framefilter}
-};
+// filterchain: {FrameFilter: inputfilter} --> {TimestampFrameFilter: timestampfilter} --> {FrameFilter: framefilter}
+Connection::Connection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect) : env(env), address(address), slot(slot), framefilter(framefilter), msreconnect(msreconnect), is_playing(false), frametimer(0), timestampfilter("timestamp_filter",&framefilter), inputfilter("input_filter",slot,&timestampfilter)
 #else
-Connection::Connection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter) : env(env), address(address), slot(slot), framefilter(framefilter), is_playing(false), timestampfilter("timestamp_filter",&framefilter), inputfilter("input_filter",slot,&framefilter) {
-  // filterchain: {FrameFilter: inputfilter} --> {FrameFilter: framefilter}
-};
+// filterchain: {FrameFilter: inputfilter} --> {FrameFilter: framefilter}
+Connection::Connection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect) : env(env), address(address), slot(slot), framefilter(framefilter), msreconnect(msreconnect), is_playing(false), frametimer(0), timestampfilter("timestamp_filter",&framefilter), inputfilter("input_filter",slot,&framefilter)
 #endif
+{
+  if (msreconnect>0 and msreconnect<=Timeouts::livethread) {
+    livethreadlogger.log(LogLevel::fatal) << "Connection: constructor: your requested reconnection time is less than equal to the LiveThread timeout.  You will get problems" << std::endl;
+  }  
+};
 
 
 Connection::~Connection() {
@@ -94,9 +99,18 @@ void Connection::reStartStream() {
  playStream();
 }
 
+void Connection::reStartStreamIf() {
+}
+
 SlotNumber Connection::getSlot() {
   return slot;
 };
+
+bool Connection::hasStopped() {
+  return true;
+}
+
+
 
 
 Outbound::Outbound(UsageEnvironment &env, FrameFifo &fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl) : env(env), fifo(fifo), slot(slot), adr(adr), portnum(portnum), ttl(ttl) {
@@ -152,64 +166,119 @@ void Outbound::handleFrame(Frame* f) {
 
 
 
-RTSPConnection::RTSPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter) : Connection(env, address, slot, framefilter) {
-  livestatus=LiveStatus::none;
-  // client=ValkkaRTSPClient::createNew(this->env, this->address, this->framefilter);
+RTSPConnection::RTSPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect) : Connection(env, address, slot, framefilter, msreconnect), livestatus(LiveStatus::none) {
 };
 
 RTSPConnection::~RTSPConnection() {
   // delete client;
 }
 
+/* default copy constructor good enough ..
+RTSPConnection(const RTSPConnection &cp) : env(cp.env), address(cp.address), slot(cp.slot), framefilter(cp.framefilter)  { 
+}
+*/
+  
+
 void RTSPConnection::playStream() {
-  // Here we are a part of the live555 event loop (this is called from periodicTask => handleSignals => stopStream => this method)
-  livethreadlogger.log(LogLevel::crazy) << "RTSPConnection : playStream" << std::endl;
-  client=ValkkaRTSPClient::createNew(this->env, this->address, this->inputfilter, &livestatus);
-  livethreadlogger.log(LogLevel::debug) << "RTSPConnection : playStream : name " << client->name() << std::endl;
-  client->sendDescribeCommand(ValkkaRTSPClient::continueAfterDESCRIBE);
+  if (is_playing) {
+    livethreadlogger.log(LogLevel::debug) << "RTSPConnection : playStream : stream already playing" << std::endl;
+  }
+  else {
+    // Here we are a part of the live555 event loop (this is called from periodicTask => handleSignals => stopStream => this method)
+    livestatus=LiveStatus::pending;
+    frametimer=0;
+    livethreadlogger.log(LogLevel::crazy) << "RTSPConnection : playStream" << std::endl;
+    client=ValkkaRTSPClient::createNew(this->env, this->address, this->inputfilter, &livestatus);
+    livethreadlogger.log(LogLevel::debug) << "RTSPConnection : playStream : name " << client->name() << std::endl;
+    client->sendDescribeCommand(ValkkaRTSPClient::continueAfterDESCRIBE);
+  }
   is_playing=true; // in the sense that we have requested a play .. and that the event handlers will try to restart the play infinitely..
 }
 
+
 void RTSPConnection::stopStream() {
-  Medium* medium;
+  // Medium* medium;
   // HashTable* htable;
-  
   // Here we are a part of the live555 event loop (this is called from periodicTask => handleSignals => stopStream => this method)
   livethreadlogger.log(LogLevel::crazy) << "RTSPConnection : stopStream" << std::endl;
   if (is_playing) {
-    
-    /* this does not work either .. will crasshhhh
-    htable=MediaLookupTable::getTable();
-    if (htable->isEmpty()) {
-      livethreadlogger.log(LogLevel::debug) << "RTSPConnection : stopStream: media lookup empty" << std::endl;
-    }
-    */
-    
-    /*
-    if (Medium::lookupByName(env,client->name(), medium)) { // this crashes if the Media has been shut
-      ValkkaRTSPClient::shutdownStream(client, 1); // .. in that case, this crashes as well .. viva la vida555
-      livethreadlogger.log(LogLevel::debug) << "RTSPConnection : stopStream: shut down" << std::endl;
-    }
-    */
-    
+    // before the RTSPClient instance destroyed itself (!) it modified the value of livestatus
     if (livestatus==LiveStatus::closed) { // so, we need this to avoid calling Media::close on our RTSPClient instance
       livethreadlogger.log(LogLevel::debug) << "RTSPConnection : stopStream: already shut down" << std::endl;
     }
+    else if (livestatus==LiveStatus::pending) { // the event-loop-callback system has not yet decided what to do with this stream ..
+      livethreadlogger.log(LogLevel::debug) << "RTSPConnection : stopStream: pending" << std::endl;
+      // we could do .. env.taskScheduler().unscheduleDelayedTask(...);
+      // .. this callback chain exits by itself.  However, we'll get problems if we delete everything before that
+      // .. this happens typically, when the DESCRIBE command has been set and we're waiting for the reply.
+      // an easy solution: set the timeout (i.e. the interval we can send messages to the thread) larger than the time it takes wait for the describe response
+      // but what if the user sends lots of stop commands to the signal queue ..?
+      // TODO: add counter for pending events .. wait for pending events, etc .. ?
+      // better idea: allow only one play/stop command per stream per handleSignals interval
+      // possible to wait until handleSignals has been called
+    }
     else {
-      ValkkaRTSPClient::shutdownStream(client, 1); // .. in that case, this crashes as well .. viva la vida555
+      ValkkaRTSPClient::shutdownStream(client, 1); // sets LiveStatus to closed
       livethreadlogger.log(LogLevel::debug) << "RTSPConnection : stopStream: shut down" << std::endl;
     }
-    
-    is_playing=false;
   }
   else {
-    livethreadlogger.log(LogLevel::debug) << "RTSPConnection : stopStream : woops! stream was not playing" << std::endl;
+    livethreadlogger.log(LogLevel::debug) << "RTSPConnection : stopStream : stream was not playing" << std::endl;
   }
+  is_playing=false;
+}
+
+
+void RTSPConnection::reStartStreamIf() {
+  if (msreconnect<=0) { // don't attempt to reconnect
+    return;
+  }
+  
+  if (livestatus==LiveStatus::pending) { // stream trying to connect .. waiting for tcp socket most likely
+    // frametimer=frametimer+Timeouts::livethread;
+    return;
+  }
+  
+  if (livestatus==LiveStatus::alive) { // alive
+    if (client->scs.gotFrame()) { // there has been frames .. all is well
+      client->scs.clearFrame(); // reset the watch flag
+      frametimer=0;
+    }
+    else {
+      frametimer=frametimer+Timeouts::livethread;
+    }
+  } // alive
+  else if (livestatus==LiveStatus::closed) {
+    frametimer=frametimer+Timeouts::livethread;
+  }
+  else {
+   livethreadlogger.log(LogLevel::fatal) << "RTSPConnection: restartStreamIf called without client";
+   return;
+  }
+  
+#ifdef RECONNECT_VERBOSE
+  std::cout << "RTSPConnection: frametimer=" << frametimer << std::endl;
+#endif
+  
+  if (frametimer>=msreconnect) {
+    livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: restart at slot " << slot << std::endl;
+    if (livestatus==LiveStatus::alive) {
+      stopStream();
+    }
+    if (livestatus==LiveStatus::closed) {
+      is_playing=false; // just to get playStream running ..
+      playStream();
+    } // so, the stream might be left to the pending state
+  }
+}
+
+bool RTSPConnection::hasStopped() {
+ return (livestatus==LiveStatus::closed or livestatus==LiveStatus::none); // either closed or not initialized at all
 }
 
 
 
-SDPConnection::SDPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter) : Connection(env, address, slot, framefilter), session(NULL) {
+SDPConnection::SDPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter) : Connection(env, address, slot, framefilter, 0) {
 };
 
 SDPConnection :: ~SDPConnection() {
@@ -217,13 +286,14 @@ SDPConnection :: ~SDPConnection() {
 
 void SDPConnection :: playStream() {
   // great no-brainer example! https://stackoverflow.com/questions/32475317/how-to-open-the-local-sdp-file-by-live555
-  // MediaSession* session = NULL;
-  MediaSubsession* subsession = NULL;
-  bool ok;
-  
+  MediaSession* session = NULL;
+  // MediaSubsession* subsession = NULL;
+  // bool ok;
   std::string sdp;
   std::ifstream infile;
-  unsigned cc;
+  // unsigned cc;
+  scs =NULL;
+  is_playing=false;
   
   infile.open(address.c_str());
   
@@ -249,62 +319,62 @@ void SDPConnection :: playStream() {
   session = MediaSession::createNew(env, sdp.c_str());
   if (session == NULL)
   {
-    env << "Failed to create a MediaSession object from the SDP description: " << env.getResultMsg() << "\n";     
+    env << "Failed to create a MediaSession object from the SDP description: " << env.getResultMsg() << "\n";
     return;
   }
   
-  MediaSubsessionIterator iter(*session);
-  cc=0;
-  ok=true;
-  while ((subsession = iter.next()) != NULL) 
+  is_playing=true;
+  scs =new StreamClientState();
+  scs->session=session;
+  scs->iter = new MediaSubsessionIterator(*scs->session);
+  scs->subsession_index=0;
+  // ok=true;
+  while ((scs->subsession = scs->iter->next()) != NULL) 
   {
-    if (!subsession->initiate (0))
+    if (!scs->subsession->initiate(0))
     {
-      env << "Failed to initiate the \"" << *subsession << "\" subsession: " << env.getResultMsg() << "\n";
-      ok=false;
+      env << "Failed to initiate the \"" << *scs->subsession << "\" subsession: " << env.getResultMsg() << "\n";
+      // ok=false;
     }
     else
     {
       // subsession->sink = DummySink::createNew(*env, *subsession, filename);
-      env << "Creating data sink for subsession \"" << *subsession << "\" \n";
-      subsession->sink= FrameSink::createNew(env, *subsession, inputfilter, cc, address.c_str());
-      if (subsession->sink == NULL)
+      env << "Creating data sink for subsession \"" << *scs->subsession << "\" \n";
+      // subsession->sink= FrameSink::createNew(env, *subsession, inputfilter, cc, address.c_str());
+      scs->subsession->sink= FrameSink::createNew(env, *scs, inputfilter, address.c_str());
+      if (scs->subsession->sink == NULL)
       {
-        env << "Failed to create a data sink for the \"" << *subsession << "\" subsession: " << env.getResultMsg() << "\n";
-        ok=false;
+        env << "Failed to create a data sink for the \"" << *scs->subsession << "\" subsession: " << env.getResultMsg() << "\n";
+        // ok=false;
       }
       else
       {
-        subsession->sink->startPlaying(*subsession->rtpSource(), NULL, NULL);
+        scs->subsession->sink->startPlaying(*scs->subsession->rtpSource(), NULL, NULL);
       }
     }
-    cc++;
+    scs->subsession_index++;
   }
   
+  /*
   if (ok) {
     is_playing=true;
   }
   else {
-    Medium::close(session);
+    // Medium::close(scs.session);
   }
-
+  */
 }
 
 
 void SDPConnection :: stopStream() {
-  Medium* medium;
-  
+  // Medium* medium;
   livethreadlogger.log(LogLevel::crazy) << "SDPConnection : stopStream" << std::endl;
-  if (is_playing) {
-    if (Medium::lookupByName(env,session->name(), medium)) {
-      Medium::close(session);
-      livethreadlogger.log(LogLevel::debug) << "SDPConnection : stopStream: shut down" << std::endl;
-    }
-    is_playing=false;
+  if (scs!=NULL) {
+    scs->close();
+    delete scs;
+    scs=NULL;
   }
-  else {
-    livethreadlogger.log(LogLevel::debug) << "SDPConnection : stopStream : woops! stream was not playing" << std::endl;
-  }
+  is_playing=false;
   
 }
 
@@ -320,7 +390,7 @@ SDPOutbound::~SDPOutbound() {
 
 
 // LiveThread::LiveThread(const char* name, SlotNumber n_max_slots) : Thread(name), n_max_slots(n_max_slots) {
-LiveThread::LiveThread(const char* name, unsigned short int n_stack, int core_id) : Thread(name, core_id), infifo(name, n_stack) {
+LiveThread::LiveThread(const char* name, unsigned short int n_stack, int core_id) : Thread(name, core_id), infifo(name, n_stack), exit_requested(false) {
   scheduler = BasicTaskScheduler::createNew();
   env       = BasicUsageEnvironment::createNew(*scheduler);
   eventLoopWatchVariable = 0;
@@ -341,29 +411,78 @@ LiveThread::LiveThread(const char* name, unsigned short int n_stack, int core_id
 
 
 LiveThread::~LiveThread() {
- delete scheduler;
- unsigned short int i;
- Connection* connection;
- // delete env;
- // release connection objects in slots_
- for (std::vector<Connection*>::iterator it = slots_.begin(); it != slots_.end(); ++it) {
-  connection=*it;
-  if (!connection) {
-    }
-  else {
-    livethreadlogger.log(LogLevel::crazy) << "LiveThread: destructor: connection ptr : "<< connection << std::endl;
-    livethreadlogger.log(LogLevel::crazy) << "LiveThread: destructor: removing connection at slot " << connection->getSlot() << std::endl;
-    delete connection;
-    }
- }
+  unsigned short int i;
+  Connection* connection;
+  // delete env;
+  // release connection objects in slots_
+  // TODO: iterate over the pending list
+  for (std::vector<Connection*>::iterator it = slots_.begin(); it != slots_.end(); ++it) {
+    connection=*it;
+    if (!connection) {
+      }
+    else {
+      livethreadlogger.log(LogLevel::crazy) << "LiveThread: destructor: connection ptr : "<< connection << std::endl;
+      livethreadlogger.log(LogLevel::crazy) << "LiveThread: destructor: removing connection at slot " << connection->getSlot() << std::endl;
+      delete connection;
+      }
+  }
+  
+  /*
+  auto it=pending.begin();
+  while (it!=pending.end()) {
+    std::cout << "LiveThread: destructor: pending stream" << std::endl;
+    connection=*it;
+    it++;
+  }
+  */
+  
+  env->reclaim(); env = NULL;
+  delete scheduler; scheduler = NULL;
 }
 // 
-void LiveThread::preRun() {}
-void LiveThread::postRun() {}
+void LiveThread::preRun() {
+  exit_requested=false;
+}
+
+void LiveThread::postRun() {
+}
 
 void LiveThread::sendSignal(SignalContext signal_ctx) {
   std::unique_lock<std::mutex> lk(this->mutex);
   this->signal_fifo.push_back(signal_ctx);
+}
+
+
+void LiveThread::checkAlive() {
+  Connection *connection;
+  for (std::vector<Connection*>::iterator it = slots_.begin(); it != slots_.end(); ++it) {
+    connection=*it;
+    if (connection!=NULL) {
+      if (connection->is_playing) {
+        connection->reStartStreamIf();
+      }
+    }
+  }
+}
+
+
+void LiveThread::handlePending() {
+  Connection* connection;
+  auto it=pending.begin();
+  while (it!=pending.end()) {
+    connection=*it;
+    if (connection->is_playing) { // this has been scheduled for termination, without calling stop stream
+      connection->stopStream();
+    }
+    if (connection->hasStopped()) {
+      livethreadlogger.log(LogLevel::crazy) << "LiveThread: handlePending: deleting a stopped stream at slot " << connection->getSlot() << std::endl;
+      it=pending.erase(it);
+      delete connection;
+    }
+    else {
+      it++;
+    }
+  }
 }
 
 
@@ -383,7 +502,8 @@ void LiveThread::handleSignals() {
           connection_ctx.slot=i;
           deregisterStream(connection_ctx);
         }
-        this->eventLoopWatchVariable=1;
+        // this->eventLoopWatchVariable=1;
+        exit_requested=true;
         break;
       // inbound streams
       case Signals::register_stream:
@@ -395,16 +515,15 @@ void LiveThread::handleSignals() {
       case Signals::play_stream:
         this->playStream(*(it->connection_context));
         break;
+      case Signals::stop_stream:
+        this->stopStream(*(it->connection_context));
+        break;
       // outbound streams
       case Signals::register_outbound:
         this->registerOutbound(*(it->outbound_context));
         break;
       case Signals::deregister_outbound:
         this->deRegisterOutbound(*(it->outbound_context));
-        break;
-      // thread control
-      case Signals::stop_stream:
-        this->stopStream(*(it->connection_context));
         break;
       }
   }
@@ -505,9 +624,12 @@ int LiveThread::safeGetOutboundSlot(SlotNumber slot, Outbound*& outbound) { // -
 }
 
 
-
-
 void LiveThread::registerStream(LiveConnectionContext &connection_ctx) {
+  // semantics:
+  // register   : create RTSP/SDPConnection object into the slots_ vector
+  // play       : create RTSPClient object in the Connection object .. start the callback chain describe => play, etc.
+  // stop       : start shutting down by calling shutDownStream .. destruct the RTSPClient object
+  // deregister : stop (if playing), and destruct RTSP/SDPConnection object from the slots_ vector
   Connection* connection;
   livethreadlogger.log(LogLevel::crazy) << "LiveThread: registerStream" << std::endl;
   switch (safeGetSlot(connection_ctx.slot,connection)) {
@@ -518,13 +640,15 @@ void LiveThread::registerStream(LiveConnectionContext &connection_ctx) {
       switch (connection_ctx.connection_type) {
         
         case LiveConnectionType::rtsp:
-          this->slots_[connection_ctx.slot] = new RTSPConnection(*(this->env), connection_ctx.address, connection_ctx.slot, *(connection_ctx.framefilter));
+          this->slots_[connection_ctx.slot] = new RTSPConnection(*(this->env), connection_ctx.address, connection_ctx.slot, *(connection_ctx.framefilter), connection_ctx.msreconnect);
           livethreadlogger.log(LogLevel::debug) << "LiveThread: registerStream : rtsp stream registered at slot " << connection_ctx.slot << " with ptr " << this->slots_[connection_ctx.slot] << std::endl;
+          // this->slots_[connection_ctx.slot]->playStream(); // not here ..
           break;
           
         case LiveConnectionType::sdp:
           this->slots_[connection_ctx.slot] = new SDPConnection(*(this->env), connection_ctx.address, connection_ctx.slot, *(connection_ctx.framefilter));
           livethreadlogger.log(LogLevel::debug) << "LiveThread: registerStream : sdp stream registered at slot "  << connection_ctx.slot << " with ptr " << this->slots_[connection_ctx.slot] << std::endl;
+          // this->slots_[connection_ctx.slot]->playStream(); // not here ..
           break;
           
         default:
@@ -556,9 +680,14 @@ void LiveThread::deregisterStream(LiveConnectionContext &connection_ctx) {
       if (connection->is_playing) {
         connection->stopStream();
       }
-      delete connection;
-      this->slots_[connection_ctx.slot]=NULL;
-  }
+      if (!connection->hasStopped()) { // didn't stop .. queue for stopping
+        pending.push_back(connection);
+      }
+      else {
+        delete connection;
+      }
+      this->slots_[connection_ctx.slot]=NULL; // case 1
+  } // switch
 }
 
 
@@ -574,7 +703,23 @@ void LiveThread::playStream(LiveConnectionContext &connection_ctx) {
     case 1: // slot is reserved
       livethreadlogger.log(LogLevel::debug) << "LiveThread: playStream : playing.. " << connection_ctx.slot << std::endl;
       connection->playStream();
-      // connection->is_playing=true; // nopes!  connection sets this value by itself (depending if connection could be played or not)
+      break;
+  }
+}
+
+
+void LiveThread::stopStream(LiveConnectionContext &connection_ctx) {
+  Connection* connection;
+  livethreadlogger.log(LogLevel::crazy) << "LiveThread: stopStream" << std::endl;
+  switch (safeGetSlot(connection_ctx.slot,connection)) {
+    case -1: // out of range
+      break;
+    case 0: // slot is free
+      livethreadlogger.log(LogLevel::normal) << "LiveThread: stopStream : nothing at slot " << connection_ctx.slot << std::endl;
+      break;
+    case 1: // slot is reserved
+      livethreadlogger.log(LogLevel::debug) << "LiveThread: stopStream : stopping.. " << connection_ctx.slot << std::endl;
+      connection->stopStream();
       break;
   }
 }
@@ -626,32 +771,22 @@ void LiveThread::deRegisterOutbound(LiveOutboundContext &outbound_ctx) {
 }
 
 
-void LiveThread::stopStream(LiveConnectionContext &connection_ctx) {
-  Connection* connection;
-  livethreadlogger.log(LogLevel::crazy) << "LiveThread: stopStream" << std::endl;
-  switch (safeGetSlot(connection_ctx.slot,connection)) {
-    case -1: // out of range
-      break;
-    case 0: // slot is free
-      livethreadlogger.log(LogLevel::normal) << "LiveThread: stopStream : nothing at slot " << connection_ctx.slot << std::endl;
-      break;
-    case 1: // slot is reserved
-      livethreadlogger.log(LogLevel::debug) << "LiveThread: stopStream : stopping.. " << connection_ctx.slot << std::endl;
-      if (connection->is_playing) {
-        connection->stopStream();
-      }
-      else {
-        livethreadlogger.log(LogLevel::debug) << "LiveThread: stopStream : woops slot " << connection_ctx.slot << " was not playing " << std::endl;
-      }
-      break;
-  }
-}
-
-
 void LiveThread::periodicTask(void* cdata) {
   LiveThread* livethread = (LiveThread*)cdata;
   livethreadlogger.log(LogLevel::crazy) << "LiveThread: periodicTask" << std::endl;
-  livethread->handleSignals(); // WARNING: sending commands to live555 must be done within the event loop
+  livethread->handlePending(); // remove connections that were pending closing, but are ok now
+  
+  // std::cout << "LiveThread: periodicTask: pending streams " << livethread->pending.size() << std::endl;
+  
+  if (livethread->pending.empty() and livethread->exit_requested) {
+    livethread->eventLoopWatchVariable=1;
+  }
+  
+  if (!livethread->exit_requested) {
+    livethread->checkAlive();
+    livethread->handleSignals(); // WARNING: sending commands to live555 must be done within the event loop
+  }
+  
   livethread->scheduler->scheduleDelayedTask(Timeouts::livethread*1000,(TaskFunc*)(LiveThread::periodicTask),(void*)livethread); // re-schedule itself
 }
 
@@ -668,6 +803,7 @@ void LiveThread::deregisterStreamCall(LiveConnectionContext &connection_ctx) {
   SignalContext signal_ctx = {Signals::deregister_stream, &connection_ctx, NULL};
   sendSignal(signal_ctx);
 }
+
 
 void LiveThread::playStreamCall(LiveConnectionContext &connection_ctx) {
   SignalContext signal_ctx = {Signals::play_stream, &connection_ctx, NULL};
