@@ -63,7 +63,6 @@ void test_1() {
   LiveThread      livethread  ("livethread"); 
   // *************
   
-  LiveConnectionContext ctx;
   bool verbose;
   
   std::cout << name << "starting threads" << std::endl;
@@ -72,8 +71,8 @@ void test_1() {
   sleep_for(2s);
   
   std::cout << name << "registering stream" << std::endl;
-  // ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info, 0}; // Request livethread to write into filter info
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &file_out, 0}; // Request livethread to write into filter info
+  // LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info); // Request livethread to write into filter info
+  LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &file_out); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   
   sleep_for(1s);
@@ -129,8 +128,7 @@ void test_3() {
   
   FileThread      file_thread("file_thread");
   InfoFrameFilter info        ("info");
-  FileContext     ctx;
-  long int        duration, mstimestamp;
+  // long int        duration, mstimestamp;
   
   std::cout << "starting file thread" << std::endl;
   
@@ -140,7 +138,7 @@ void test_3() {
   
   std::cout << "registering stream" << std::endl;
   
-  ctx=(FileContext){"kokkelis.mkv", 1, &info, 0, &duration, &mstimestamp}; // filename, slot, framefilter, start seek, etc.
+  FileContext ctx=FileContext("kokkelis.mkv", 1, &info); // 0, &duration, &mstimestamp); // filename, slot, framefilter, start seek, etc.
   
   file_thread.openFileStreamCall(ctx);
   
@@ -177,7 +175,6 @@ void test_4() {
   BlockingFifoFrameFilter   av_in_filter    ("av_in_filter",av_fifo); // TODO: better idea .. FrameFifo could have two writing methods: blocking and non-blocking .. it depends on the filter which one it calls
   
   FileThread      file_thread("file_thread");
-  FileContext     ctx;
   long int        duration, mstimestamp;
   
   std::cout << "starting threads" << std::endl;
@@ -200,7 +197,7 @@ void test_4() {
   
   std::cout << "registering stream" << std::endl;
   
-  ctx=(FileContext){"kokkelis.mkv", 1, &av_in_filter, 0, &duration, &mstimestamp}; // filename, slot, framefilter, start seek, etc.
+  FileContext ctx=FileContext("kokkelis.mkv", 1, &av_in_filter); // , 0, &duration, &mstimestamp); // filename, slot, framefilter, start seek, etc.
   
   file_thread.openFileStreamCall(ctx);
   
@@ -246,7 +243,6 @@ void test_5() {
   BlockingFifoFrameFilter   av_in_filter    ("av_in_filter",av_fifo); // TODO: better idea .. FrameFifo could have two writing methods: blocking and non-blocking .. it depends on the filter which one it calls
   
   FileThread      file_thread("file_thread");
-  FileContext     ctx;
   long int        duration, mstimestamp;
   
   std::cout << "starting threads" << std::endl;
@@ -269,7 +265,7 @@ void test_5() {
   
   std::cout << "registering stream" << std::endl;
   
-  ctx=(FileContext){"kokkelis.mkv", 1, &av_in_filter, 0, &duration, &mstimestamp}; // filename, slot, framefilter, start seek, etc.
+  FileContext ctx=FileContext("kokkelis.mkv", 1, &av_in_filter); // 0, &duration, &mstimestamp); // filename, slot, framefilter, start seek, etc.
   
   file_thread.openFileStreamCall(ctx);
   
@@ -338,7 +334,6 @@ void test_6() {
   BlockingFifoFrameFilter   av_in_filter    ("av_in_filter",av_fifo); // TODO: better idea .. FrameFifo could have two writing methods: blocking and non-blocking .. it depends on the filter which one it calls
   
   FileThread      file_thread("file_thread");
-  FileContext     ctx, ctx2;
   long int        duration, mstimestamp;
   
   std::cout << "starting threads" << std::endl;
@@ -364,8 +359,8 @@ void test_6() {
   std::cout << "new x window "<<window_id<<" "<<window_id2<<std::endl;
   std::cout << "registering stream" << std::endl;
   
-  ctx =(FileContext){"kokkelis.mkv", 1, &av_in_filter, 0, &duration, &mstimestamp}; // filename, slot, framefilter, start seek, etc.
-  ctx2=(FileContext){"kokkelis.mkv", 2, &av_in_filter, 0, &duration, &mstimestamp}; // filename, slot, framefilter, start seek, etc.
+  FileContext ctx  =FileContext("kokkelis.mkv", 1, &av_in_filter); // 0, &duration, &mstimestamp); // filename, slot, framefilter, start seek, etc.
+  FileContext ctx2 =FileContext("kokkelis.mkv", 2, &av_in_filter); // 0, &duration, &mstimestamp); // filename, slot, framefilter, start seek, etc.
   
   file_thread.openFileStreamCall(ctx);
   file_thread.openFileStreamCall(ctx2);
@@ -445,7 +440,6 @@ void test_7() {
   BlockingFifoFrameFilter   av_in_filter    ("av_in_filter",av_fifo); // TODO: better idea .. FrameFifo could have two writing methods: blocking and non-blocking .. it depends on the filter which one it calls
   
   FileThread      file_thread("file_thread");
-  FileContext     ctx;
   long int        duration, mstimestamp;
   
   std::cout << "starting threads" << std::endl;
@@ -468,7 +462,7 @@ void test_7() {
   
   std::cout << "registering stream" << std::endl;
   
-  ctx=(FileContext){"kokkelis.mkv", 1, &av_in_filter, 0, &duration, &mstimestamp}; // filename, slot, framefilter, start seek, etc.
+  FileContext ctx=FileContext("kokkelis.mkv", 1, &av_in_filter); // , 0, &duration, &mstimestamp); // filename, slot, framefilter, start seek, etc.
   
   file_thread.openFileStreamCall(ctx);
   std::cout << "got file status" << int(ctx.status) << std::endl;

@@ -181,6 +181,12 @@ public:
   FrameFilter& framefilter;
   LiveStatus* livestatus; ///< This points to a variable that is being used by LiveThread
   
+public: // some extra parameters and their setters
+  bool request_multicast; ///< Request multicast during rtsp negotiation
+  bool request_tcp;       ///< Request interleaved streaming over tcp
+  void requestMulticast() {this->request_multicast=true;}
+  void requestTCP()       {this->request_tcp=true;}
+  
 public: 
   // Response handlers
   static void continueAfterDESCRIBE(RTSPClient* rtspClient, int resultCode, char* resultString); ///< Called after rtsp DESCRIBE command gets a reply

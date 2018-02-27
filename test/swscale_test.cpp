@@ -76,8 +76,6 @@ void test_1() {
   InfoFrameFilter info        ("info",&terminal);       
   LiveThread      livethread  ("livethread"); 
   // *************
-  
-  LiveConnectionContext ctx;
   bool verbose;
   
   std::cout << name << "starting threads" << std::endl;
@@ -89,7 +87,7 @@ void test_1() {
   sleep_for(2s);
   
   std::cout << name << "registering stream" << std::endl;
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info, 0}; // Request livethread to write into filter info
+  LiveConnectionContext ctx=LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   
   sleep_for(1s);
@@ -136,8 +134,6 @@ void test_2() {
   InfoFrameFilter info        ("info",&terminal);       
   LiveThread      livethread  ("livethread"); 
   // *************
-  
-  LiveConnectionContext ctx;
   bool verbose;
   
   std::cout << name << "starting threads" << std::endl;
@@ -149,7 +145,7 @@ void test_2() {
   sleep_for(2s);
   
   std::cout << name << "registering stream" << std::endl;
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info, 0}; // Request livethread to write into filter info
+  LiveConnectionContext ctx=LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   
   sleep_for(1s);

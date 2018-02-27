@@ -72,8 +72,6 @@ void test_1() {
   LiveThread      livethread       ("livethread");                  
   // ***********************************
   
-  LiveConnectionContext ctx;
-  
   std::cout << name << "starting threads" << std::endl;
   livethread.startCall();
   avthread.  startCall();
@@ -81,7 +79,10 @@ void test_1() {
   avthread.decodingOnCall();
   
   std::cout << name << "registering stream" << std::endl;
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &live_out_filter, 0}; // Request livethread to write into filter info
+  
+  LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &live_out_filter);
+  
+  // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   std::cout << name << "playing stream !" << std::endl;
   livethread.playStreamCall(ctx);

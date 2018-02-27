@@ -47,6 +47,25 @@ enum class FileState {
 };
 
 
+/** Used by SignalContext to carry info in the signal */
+struct FileContext {                                                                               // <pyapi>
+  FileContext(std::string filename, SlotNumber slot, FrameFilter* framefilter, long int st=0) :    // <pyapi>
+  filename(filename), slot(slot), framefilter(framefilter), seektime_(st),                         // <pyapi>
+  duration(0), mstimestamp(0), status(FileState::none)                                             // <pyapi>
+  {}                                                                                               // <pyapi>
+  FileContext() : filename(""), slot(0), framefilter(NULL), seektime_(0),                          // <pyapi>
+  duration(0), mstimestamp(0), status(FileState::none)                                             // <pyapi>
+  {}                                                                                               // <pyapi> 
+  std::string    filename;        ///< incoming: the filename                                      // <pyapi>
+  SlotNumber     slot;            ///< incoming: a unique stream slot that identifies this stream  // <pyapi>
+  FrameFilter*   framefilter;     ///< incoming: the frames are feeded into this FrameFilter       // <pyapi>
+  long int       seektime_;       ///< incoming: used by signal seek_stream                        // <pyapi>
+  long int       duration;        ///< outgoing: duration of the stream                            // <pyapi>
+  long int       mstimestamp;     ///< outgoing: current position of the stream (stream time)      // <pyapi>
+  FileState      status;          ///< outgoing: status of the file                                // <pyapi>
+};                                                                                                 // <pyapi>
+
+
 /** Keeping the books for each stream: 
  *
  * - Desider target time (FileStream::target_mstimestamp_)
@@ -59,13 +78,17 @@ enum class FileState {
 class FileStream {
   
 public:
-  FileStream(std::string filename, SlotNumber slot, FrameFilter& framefilter);
+  // FileStream(std::string filename, SlotNumber slot, FrameFilter& framefilter);
+  FileStream(FileContext &ctx);
   ~FileStream();
   
 public:
+  FileContext         &ctx;
+  /*
   std::string         filename;        ///< FileStream address
   SlotNumber          slot;            ///< FileStream slot number (that identifies the source)
   FrameFilter         &framefilter;    ///< User-provided entry point for the stream. 
+  */
   AVFormatContext     *input_context;
  
 public:
@@ -80,7 +103,7 @@ public:
   std::vector<FrameType> frame_types;
   
 public: // getters
-  SlotNumber getSlot() {return slot;}
+  SlotNumber getSlot() {return ctx.slot;}
   
 public:
   void setRefMstime(long int ms_streamtime_);
@@ -91,19 +114,6 @@ public:
   long int pullNextFrame();
 };
 
-
-/** Used by SignalContext to carry info in the signal */
-struct FileContext { // <pyapi>
-  std::string    filename;        ///< incoming: the filename                                      // <pyapi>
-  SlotNumber     slot;            ///< incoming: a unique stream slot that identifies this stream  // <pyapi>
-  FrameFilter*   framefilter;     ///< incoming: the frames are feeded into this FrameFilter       // <pyapi>
-  long int       seektime_;       ///< incoming: used by signal seek_stream                        // <pyapi>
-  long int*      duration;        ///< outgoing: duration of the stream                            // <pyapi>
-  long int*      mstimestamp;     ///< outgoing: current position of the stream (stream time)      // <pyapi>
-  FileState      status;          ///< outgoing: status of the file                                // <pyapi>
-}; // <pyapi>
-
-// {"kokkelis.mkv", 1, framefilter, duration, mstimestamp}  
 
 
 /** Seeks and sends frames from files at realtime.  See also \ref timing.

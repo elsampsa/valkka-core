@@ -33,7 +33,8 @@
 
 #include "filethread.h"
 
-FileStream::FileStream(std::string filename, SlotNumber slot, FrameFilter& framefilter) : filename(filename), slot(slot), framefilter(framefilter) {
+// FileStream::FileStream(std::string filename, SlotNumber slot, FrameFilter& framefilter) : filename(filename), slot(slot), framefilter(framefilter) {
+FileStream::FileStream(FileContext &ctx) : ctx(ctx) {
   int i;
   unsigned short n;
   
@@ -42,7 +43,7 @@ FileStream::FileStream(std::string filename, SlotNumber slot, FrameFilter& frame
   
   // https://ffmpeg.org/doxygen/trunk/group__lavf__decoding.html#ga31d601155e9035d5b0e7efedc894ee49
   input_context=NULL;
-  i=avformat_open_input(&input_context, filename.c_str(), av_find_input_format("matroska"), NULL);
+  i=avformat_open_input(&input_context, ctx.filename.c_str(), av_find_input_format("matroska"), NULL);
   // matroska_read_seek(input_context,-1,0,0);
   
   /*
@@ -80,9 +81,9 @@ FileStream::FileStream(std::string filename, SlotNumber slot, FrameFilter& frame
     setupframe.setup_pars.frametype=*it;   // what frame types are to be expected from this stream
     setupframe.subsession_index=n;
     setupframe.setMsTimestamp(getCurrentMsTimestamp());
-    setupframe.n_slot=slot;
+    setupframe.n_slot=ctx.slot;
     // send setup frame
-    framefilter.run(&setupframe);
+    ctx.framefilter->run(&setupframe);
     n++;
   }
   reftime =0;
@@ -213,7 +214,7 @@ long int FileStream::pullNextFrame() {
   else {
     // if frame_mstimestamp_==-1 .. there is no previous frame
     out_frame.reset();
-    out_frame.n_slot=slot;
+    out_frame.n_slot=ctx.slot;
     out_frame.fromAVPacket(avpkt); // copy payload, timestamp, stream index
     out_frame.frametype=frame_types[avpkt->stream_index];
     frame_mstimestamp_=out_frame.mstimestamp; // the timestamp in stream time of the current frame
@@ -223,7 +224,7 @@ long int FileStream::pullNextFrame() {
 #ifdef FILE_VERBOSE  
     std::cout << "FileStream: pullNextFrame: sending frame: " << out_frame << std::endl;
 #endif
-    framefilter.run(&out_frame); // send frame
+    ctx.framefilter->run(&out_frame); // send frame
     
     // read the next frame and save it for the next call
     i=av_read_frame(input_context, avpkt);
@@ -430,7 +431,8 @@ void FileThread::openFileStream(FileContext &file_ctx) {
       break;
       
     case 0: // slot is free
-      file_stream = new FileStream(file_ctx.filename, file_ctx.slot, *file_ctx.framefilter); // constructor opens file
+      // file_stream = new FileStream(file_ctx.filename, file_ctx.slot, *file_ctx.framefilter); // constructor opens file
+      file_stream = new FileStream(file_ctx); // constructor opens file
       if (file_stream->state==FileState::error) {
         delete file_stream;
         filethreadlogger.log(LogLevel::fatal) << "FileThread: openStream: could not open file " << file_ctx.filename << std::endl;
@@ -535,8 +537,8 @@ void FileThread::openFileStreamCall(FileContext &file_ctx) {
   SlotNumber     slot;            ///< incoming: a unique stream slot that identifies this stream 
   FrameFilter*   framefilter;     ///< incoming: the frames are feeded into this FrameFilter       
   long int       seektime_;       ///< incoming: used by signal seek_stream                        
-  long int*      duration;        ///< outgoing: duration of the stream                            
-  long int*      mstimestamp;     ///< outgoing: current position of the stream (stream time)      
+  long int       duration;        ///< outgoing: duration of the stream                            
+  long int       mstimestamp;     ///< outgoing: current position of the stream (stream time)      
   FileState      status;          ///< outgoing: status of the file                               
   */
   

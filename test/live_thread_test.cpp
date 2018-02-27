@@ -60,14 +60,12 @@ void test_1() {
   LiveThread livethread("livethread");
   DummyFrameFilter dummyfilter("dummy");
   
-  LiveConnectionContext ctx;
-  
   std::cout << "starting live thread" << std::endl;
   livethread.startCall();
   
   sleep_for(2s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter, 0};
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter);
   livethread.registerStreamCall(ctx);
     
   sleep_for(3s);
@@ -104,14 +102,12 @@ void test_2() {
   InfoFrameFilter  dummyfilter1("dummy1");
   DummyFrameFilter dummyfilter2("dummy2",verbose);
   
-  LiveConnectionContext ctx;
-  
   std::cout << "starting live thread" << std::endl;
   livethread.startCall();
   
   sleep_for(2s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1,0};
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1);
   livethread.registerStreamCall(ctx);
   
   sleep_for(1s);
@@ -132,14 +128,14 @@ void test_2() {
   
   sleep_for(1s);
 
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter2,0};
-  livethread.registerStreamCall(ctx); // slot already taken
+  LiveConnectionContext ctx2 =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter2);
+  livethread.registerStreamCall(ctx2); // slot already taken
   
   sleep_for(1s);
 
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_2), 3, &dummyfilter2,0};
-  livethread.registerStreamCall(ctx); // register another stream from another
-  livethread.playStreamCall(ctx); // play immediately
+  LiveConnectionContext ctx3 =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_2), 3, &dummyfilter2);
+  livethread.registerStreamCall(ctx3); // register another stream from another
+  livethread.playStreamCall(ctx3); // play immediately
   
   sleep_for(2s);
 
@@ -164,14 +160,12 @@ void test_3() {
   LiveThread livethread("livethread");
   InfoFrameFilter dummyfilter1("dummy1");
   
-  LiveConnectionContext ctx;
-  
   std::cout << "starting live thread" << std::endl;
   livethread.startCall();
   
   sleep_for(2s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1,0};
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1);
   livethread.registerStreamCall(ctx);  
   livethread.playStreamCall(ctx);
   
@@ -208,14 +202,12 @@ void test_4() {
   LiveThread livethread("livethread");
   DummyFrameFilter dummyfilter("dummy");
   
-  LiveConnectionContext ctx;
-  
   std::cout << "starting live thread" << std::endl;
   livethread.startCall();
   
   sleep_for(2s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 2, &dummyfilter,0};
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::sdp, std::string(stream_sdp), 2, &dummyfilter);
   livethread.registerStreamCall(ctx);
   livethread.playStreamCall(ctx);  
   
@@ -253,22 +245,16 @@ void test_5() {
   DummyFrameFilter dummyfilter4("dummy4");
   DummyFrameFilter dummyfilter5("dummy5");
 
-  LiveConnectionContext ctx1;
-  LiveConnectionContext ctx2;
-  LiveConnectionContext ctx3;
-  LiveConnectionContext ctx4;
-  LiveConnectionContext ctx5;
-  
   std::cout << "starting live thread" << std::endl;
   livethread.startCall();
   
   sleep_for(2s);
   
-  ctx1 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 2, &dummyfilter1, 0};
-  ctx2 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 3, &dummyfilter2, 0};
-  ctx3 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 4, &dummyfilter3, 0};
-  ctx4 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 5, &dummyfilter4, 0};
-  ctx5 = (LiveConnectionContext){LiveConnectionType::sdp, std::string(stream_sdp), 6, &dummyfilter5, 0};
+  LiveConnectionContext ctx1 = LiveConnectionContext(LiveConnectionType::sdp, std::string(stream_sdp), 2, &dummyfilter1);
+  LiveConnectionContext ctx2 = LiveConnectionContext(LiveConnectionType::sdp, std::string(stream_sdp), 3, &dummyfilter2);
+  LiveConnectionContext ctx3 = LiveConnectionContext(LiveConnectionType::sdp, std::string(stream_sdp), 4, &dummyfilter3);
+  LiveConnectionContext ctx4 = LiveConnectionContext(LiveConnectionType::sdp, std::string(stream_sdp), 5, &dummyfilter4);
+  LiveConnectionContext ctx5 = LiveConnectionContext(LiveConnectionType::sdp, std::string(stream_sdp), 6, &dummyfilter5);
   
   livethread.registerStreamCall(ctx1);
   livethread.registerStreamCall(ctx2);
@@ -307,12 +293,10 @@ void test_6() {
   InfoFrameFilter dummyfilter1("info");
   // BriefInfoFrameFilter dummyfilter1("info");
   
-  LiveConnectionContext ctx;
-  
   std::cout << "starting live thread" << std::endl;
   livethread.startCall();
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1, 0};
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1);
   livethread.registerStreamCall(ctx);  
   livethread.playStreamCall(ctx);
   
@@ -340,14 +324,12 @@ void test_7() {
   LiveThread livethread("livethread");
   DummyFrameFilter dummyfilter("dummy");
   
-  LiveConnectionContext ctx;
-  
   std::cout << "starting live thread" << std::endl;
   livethread.startCall();
   
   sleep_for(2s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter, 0};
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter);
   livethread.registerStreamCall(ctx);
     
   livethread.testTrigger();
@@ -397,15 +379,13 @@ void test_8() {
   // BriefInfoFrameFilter info_filter("info_filter",&fifo_filter);
   CountFrameFilter info_filter("info_filter",&fifo_filter);
   
-  LiveConnectionContext ctx;
-  
   std::cout << "starting live threads" << std::endl;
   livethread. startCall();
   livethread2.startCall();
   
   sleep_for(1s);
 
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter, 0};
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter);
   livethread.registerStreamCall(ctx);
   livethread.playStreamCall(ctx);
   
@@ -441,14 +421,12 @@ void test_9() {
   // BriefInfoFrameFilter info_filter("info_filter",&fifo_filter);
   CountFrameFilter info_filter("info_filter",&fifo_filter);
   
-  LiveConnectionContext ctx;
-  
   std::cout << "starting live threads" << std::endl;
   livethread. startCall();
   
   sleep_for(1s);
 
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter, 0};
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter);
   livethread.registerStreamCall(ctx);
   livethread.playStreamCall(ctx);
   
@@ -483,21 +461,18 @@ void test_10() {
   // BriefInfoFrameFilter info_filter("info_filter",&fifo_filter);
   CountFrameFilter info_filter("info_filter",&fifo_filter);
   
-  LiveConnectionContext ctx;
-  LiveOutboundContext out_ctx;
-  
   std::cout << "starting live threads" << std::endl;
   livethread. startCall();
   livethread2.startCall();
   
   sleep_for(1s);
 
-  out_ctx = (LiveOutboundContext){LiveConnectionType::sdp, std::string("224.1.168.91"),50000,255,2};
+  LiveOutboundContext out_ctx = LiveOutboundContext(LiveConnectionType::sdp, std::string("224.1.168.91"), 2, 50000);
   livethread2.registerOutboundCall(out_ctx);
   
   sleep_for(1s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter, 0};
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter);
   livethread.registerStreamCall(ctx);
   livethread.playStreamCall(ctx);
   
@@ -528,14 +503,14 @@ void test_11() {
   LiveThread livethread("livethread");
   InfoFrameFilter dummyfilter1("dummy1");
   
-  LiveConnectionContext ctx;
-  
   std::cout << "starting live thread" << std::endl;
   livethread.startCall();
   
   sleep_for(2s);
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1, 10000}; // if nothing in 10 secs, reconnect
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1);
+  ctx.msreconnect=10000; // if nothing in 10 secs, reconnect
+  
   livethread.registerStreamCall(ctx);  
   livethread.playStreamCall(ctx);
   

@@ -59,6 +59,69 @@ public:
 };                                                        // <pyapi>
 
 
+/** LiveThread connection types
+ * 
+ * This enumeration class identifies different kinds of connections (i.e. rtsp and sdp).  Used by LiveConnectionContext.
+ * 
+ * @ingroup livethread_tag
+ * @ingroup threading_tag
+ * @ingroup live_tag
+ */
+enum class LiveConnectionType { // <pyapi>
+  none,                         // <pyapi>
+  rtsp,                         // <pyapi>
+  sdp                           // <pyapi>
+};                              // <pyapi>
+
+/** Identifies a stream and encapsulates information about the type of connection, the user is requesting to LiveThread.  LiveConnectionContext is included into LiveThread::SignalContext, i.e. it carries the signal information to LiveThread.  For the thread signaling system, see \ref threading_tag
+  * 
+  * (A side note: this class is not nested inside the LiveThread class for one simple reason: swig does not like nested classes, so it would make it harder to create Python bindings)
+  * 
+  * Information in LiveConnectionContext is passed by LiveThread to RTSPConnection and SDPConnection
+  * 
+  * Comes with two different versions of the constructor.  First is for primary use and the second is a "dummy" constructor.
+  * 
+  * @ingroup livethread_tag
+  * @ingroup threading_tag
+  * @ingroup live_tag
+  */  
+struct LiveConnectionContext {                                                                        // <pyapi>
+  LiveConnectionContext(LiveConnectionType ct, std::string address, SlotNumber slot,                  // <pyapi>
+                        FrameFilter* framefilter) :                                                   // <pyapi>
+  connection_type(ct), address(address), slot(slot), framefilter(framefilter), msreconnect(0),        // <pyapi>
+  request_multicast(false), request_tcp(false)                                                        // <pyapi>
+  {}                                                                                                  // <pyapi>
+  LiveConnectionContext() :                                                                           // <pyapi>
+  connection_type(LiveConnectionType::none), address(""), slot(0), framefilter(NULL), msreconnect(0), // <pyapi>
+  request_multicast(false), request_tcp(false)                                                        // <pyapi>
+  {}                                                                                                  // <pyapi>
+  LiveConnectionType connection_type;   ///< Identifies the connection type                           // <pyapi>
+  std::string        address;           ///< Stream address                                           // <pyapi>
+  SlotNumber         slot;              ///< A unique stream slot that identifies this stream         // <pyapi>
+  FrameFilter*       framefilter;       ///< The frames are feeded into this FrameFilter              // <pyapi>
+  long unsigned int  msreconnect;       ///< If stream has delivered nothing during this many milliseconds, reconnect // <pyapi>
+  bool               request_multicast; ///< Request multicast in the rtsp negotiation or not         // <pyapi>
+  bool               request_tcp;       ///< Request interleaved rtsp streaming or not                // <pyapi>
+};                                                                                                    // <pyapi>
+
+
+struct LiveOutboundContext {                                                                     // <pyapi>
+  LiveOutboundContext(LiveConnectionType ct, std::string address, SlotNumber slot,               // <pyapi>
+                      unsigned short int portnum) :                                              // <pyapi>
+  connection_type(ct), address(address), slot(slot), portnum(portnum), ttl(225)                  // <pyapi>
+  {}                                                                                             // <pyapi>
+  LiveOutboundContext() :                                                                        // <pyapi>
+  connection_type(LiveConnectionType::none), address(""), slot(0), portnum(0), ttl(255)          // <pyapi>
+  {}                                                                                             // <pyapi>
+  LiveConnectionType  connection_type; ///< Identifies the connection type                       // <pyapi>
+  std::string         address;         ///< Stream address                                       // <pyapi>
+  SlotNumber          slot;            ///< A unique stream slot that identifies this stream     // <pyapi>
+  unsigned short int  portnum;         ///< Start port number (for sdp)                          // <pyapi>
+  unsigned char       ttl;             ///< Packet time-to-live                                  // <pyapi>
+};                                                                                               // <pyapi>
+
+
+
 
 /** A base class that unifies all kinds of connections (RTSP and SDP).
  * 
@@ -82,14 +145,19 @@ public:
    * @param framefilter  Connection feeds frames to this FrameFilter (i.e., its the beginning of the "filter-chain")
    * @param msreconnect  Reconnect if stream has received nothing after this many milliseconds.  0 = do not reconnect.
    */
-  Connection(UsageEnvironment& env, std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect=0);
+  // Connection(UsageEnvironment& env, std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect=0);
+  Connection(UsageEnvironment& env, LiveConnectionContext& ctx);
+  
   virtual ~Connection(); ///< Default destructor
   
 protected:
+  /*
   std::string         address;      ///< Stream address
   SlotNumber          slot;         ///< Stream slot number (that identifies the source)
   FrameFilter&        framefilter;  ///< User-provided entry point for the stream.
   long unsigned int   msreconnect;  ///< Reconnect if stream has received nothing after this many milliseconds.  0 = do not reconnect.
+  */
+  LiveConnectionContext &ctx;
   
   // internal framefilter chain.. if we'd like to modify the frames before they are passed to the API user
   // more framefilter could be generated here, initialized it the constructor init list
@@ -99,7 +167,7 @@ protected:
   long int                frametimer;
   
 public:
-  UsageEnvironment& env;
+  UsageEnvironment &env;
   bool is_playing;
   
 public:
@@ -115,14 +183,18 @@ public:
 class Outbound { // will leave this quite generic .. don't know at this point how the rtsp server is going to be // analogy: AVThread
   
 public:
-  Outbound(UsageEnvironment& env, FrameFifo& fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl=255);
+  // Outbound(UsageEnvironment& env, FrameFifo& fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl=255);
+  Outbound(UsageEnvironment& env, FrameFifo& fifo, LiveOutboundContext& ctx);
   virtual ~Outbound();
   
 public:
+  LiveOutboundContext &ctx;
+  /*
   SlotNumber          slot;
   std::string         adr;
   unsigned short int  portnum;
   unsigned char       ttl;
+  */
   
 public:
   std::vector<Stream*> streams; // typically two 
@@ -145,7 +217,8 @@ class RTSPConnection : public Connection {
 
 public:
   /** @copydoc Connection::Connection */
-  RTSPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect=0); 
+  // RTSPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect=0); 
+  RTSPConnection(UsageEnvironment& env, LiveConnectionContext& ctx);
   ~RTSPConnection();
   // RTSPConnection(const RTSPConnection& cp); ///< Copy constructor .. default copy constructor good enough
   
@@ -171,7 +244,8 @@ class SDPConnection : public Connection {
 
 public:
   /** @copydoc Connection::Connection */
-  SDPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter);
+  // SDPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter);
+  SDPConnection(UsageEnvironment& env, LiveConnectionContext& ctx);
   ~SDPConnection();
 
 private:
@@ -189,54 +263,11 @@ public:
 class SDPOutbound : public Outbound {
   
 public: 
-  SDPOutbound(UsageEnvironment &env, FrameFifo &fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl=255);
+  // SDPOutbound(UsageEnvironment &env, FrameFifo &fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl=255);
+  SDPOutbound(UsageEnvironment &env, FrameFifo &fifo, LiveOutboundContext& ctx);
   ~SDPOutbound();
   
 };
-
-
-
-/** LiveThread connection types
- * 
- * This enumeration class identifies different kinds of connections (i.e. rtsp and sdp).  Used by LiveConnectionContext.
- * 
- * @ingroup livethread_tag
- * @ingroup threading_tag
- * @ingroup live_tag
- */
-enum class LiveConnectionType { // <pyapi>
-  none,                         // <pyapi>
-  rtsp,                         // <pyapi>
-  sdp                           // <pyapi>
-};                              // <pyapi>
-
-/** Identifies a stream and encapsulates information about the type of connection, the user is requesting to LiveThread.  LiveConnectionContext is included into LiveThread::SignalContext, i.e. it carries the signal information to LiveThread.  For the thread signaling system, see \ref threading_tag
-  * 
-  * (A side note: this class is not nested inside the LiveThread class for one simple reason: swig does not like nested classes, so it would make it harder to create Python bindings)
-  * 
-  * Information in LiveConnectionContext is passed by LiveThread to RTSPConnection and SDPConnection
-  * 
-  * @ingroup livethread_tag
-  * @ingroup threading_tag
-  * @ingroup live_tag
-  */  
-struct LiveConnectionContext { // <pyapi>
-  LiveConnectionType connection_type; ///< Identifies the connection type                    // <pyapi>
-  std::string        address;         ///< Stream address                                    // <pyapi>
-  SlotNumber         slot;            ///< A unique stream slot that identifies this stream  // <pyapi>
-  FrameFilter*       framefilter;     ///< The frames are feeded into this FrameFilter       // <pyapi>
-  long unsigned int  msreconnect;     ///< If stream has delivered nothing during this many milliseconds, reconnect // <pyapi>
-  // LiveConnectionContext() : connection_type(ConnectionType::none), address(""), slot(0), framefilter(NULL) {} // Initialization to a default value : does not compile ..! // <pyapi>
-};                             // <pyapi>
-
-
-struct LiveOutboundContext { // <pyapi>
-  LiveConnectionType  connection_type; ///< Identifies the connection type                    // <pyapi>
-  std::string         address;         ///< Stream address                                    // <pyapi>
-  unsigned short int  portnum;         ///< Start port number (for sdp)                       // <pyapi>
-  unsigned char       ttl;             ///< Packet time-to-live                               // <pyapi>
-  SlotNumber          slot;             ///< A unique stream slot that identifies this stream   // <pyapi>
-};                             // <pyapi>
 
 
 /** Live555, running in a separate thread

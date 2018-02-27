@@ -68,8 +68,6 @@ void test_1() {
   LiveThread       livethread     ("livethread");                   
   // ******
   
-  LiveConnectionContext ctx;
-  
   glthread.preRun(); // don't start the thread, just test.  avfilter uses OpenGLFrameFifo.
   // just testing memory (de)allocations
   glthread.postRun();
@@ -104,8 +102,6 @@ void test_2() {
   LiveThread       livethread     ("livethread");                   
   // ******
   
-  LiveConnectionContext ctx;
-  
   std::cout << name << "starting threads" << std::endl;
   glthread.preRun(); // don't start the thread, just test.  avfilter uses OpenGLFrameFifo.
   
@@ -117,7 +113,7 @@ void test_2() {
   // sleep_for(2s);
   
   std::cout << name << "registering stream" << std::endl;
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &live_out_filter, 0}; // Request livethread to write into filter info
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &live_out_filter); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   
   // sleep_for(1s);
@@ -164,8 +160,6 @@ void test_3() {
   LiveThread       livethread     ("livethread");                   
   // ******
   
-  LiveConnectionContext ctx;
-  
   glthread.debugOn(); // recycle frames immediately
   
   std::cout << name << "starting threads" << std::endl;
@@ -179,7 +173,7 @@ void test_3() {
   // sleep_for(1s);
   
   std::cout << name << "registering stream" << std::endl;
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &live_out_filter, 0}; // Request livethread to write into filter info
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &live_out_filter); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   
   // sleep_for(1s);
@@ -225,8 +219,6 @@ void test_4() {
   LiveThread       livethread     ("livethread");                   
   // ******
   
-  LiveConnectionContext ctx;
-  
   std::cout << name << "starting threads" << std::endl;
   glthread.startCall(); // start running OpenGLThread!
   
@@ -238,7 +230,7 @@ void test_4() {
   // sleep_for(1s);
   
   std::cout << name << "registering stream" << std::endl;
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &live_out_filter, 0}; // Request livethread to write into filter info
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &live_out_filter); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   
   // sleep_for(1s);
@@ -287,8 +279,6 @@ void test_5() {
   LiveThread       livethread     ("livethread",0,1); // processor 1 == CPU 2          
   // ******
   
-  LiveConnectionContext ctx;
-  
   std::cout << name << "starting threads" << std::endl;
   glthread.startCall(); // start running OpenGLThread!
   
@@ -300,7 +290,7 @@ void test_5() {
   // sleep_for(1s);
   
   std::cout << name << "registering stream" << std::endl;
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 2, &live_out_filter, 0}; // Request livethread to write into filter info
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &live_out_filter); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   
   // sleep_for(1s);

@@ -12,8 +12,10 @@ av   =AVThread("av",inp,out)
 gl   =OpenGLThread("gl")
 
 ctx=LiveConnectionContext()
+print("test: LiveConnectionContext.request_multicast =",ctx.request_multicast)
 ctx.slot=1
 ctx.connection_type=LiveConnectionType_rtsp
 ctx.address="rtsp://admin:12345@192.168.0.157"
 
-# ctx=LiveConnectionContext(slot=1,connection_type=LiveConnectionType_rtsp,address="rtsp://admin:12345@192.168.0.157") # we should create things like this in the level 2 api ..
+ctx2=LiveConnectionContext(LiveConnectionType_rtsp, "rtsp://admin:12345@192.168.0.157", 1, out)
+print("test: LiveConnectionContext.address =",ctx2.address)

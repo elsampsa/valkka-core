@@ -1606,6 +1606,13 @@ class LiveConnectionContext(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, LiveConnectionContext, name)
     __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _valkka_core.new_LiveConnectionContext(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
     __swig_setmethods__["connection_type"] = _valkka_core.LiveConnectionContext_connection_type_set
     __swig_getmethods__["connection_type"] = _valkka_core.LiveConnectionContext_connection_type_get
     if _newclass:
@@ -1626,13 +1633,14 @@ class LiveConnectionContext(_object):
     __swig_getmethods__["msreconnect"] = _valkka_core.LiveConnectionContext_msreconnect_get
     if _newclass:
         msreconnect = _swig_property(_valkka_core.LiveConnectionContext_msreconnect_get, _valkka_core.LiveConnectionContext_msreconnect_set)
-
-    def __init__(self):
-        this = _valkka_core.new_LiveConnectionContext()
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
+    __swig_setmethods__["request_multicast"] = _valkka_core.LiveConnectionContext_request_multicast_set
+    __swig_getmethods__["request_multicast"] = _valkka_core.LiveConnectionContext_request_multicast_get
+    if _newclass:
+        request_multicast = _swig_property(_valkka_core.LiveConnectionContext_request_multicast_get, _valkka_core.LiveConnectionContext_request_multicast_set)
+    __swig_setmethods__["request_tcp"] = _valkka_core.LiveConnectionContext_request_tcp_set
+    __swig_getmethods__["request_tcp"] = _valkka_core.LiveConnectionContext_request_tcp_get
+    if _newclass:
+        request_tcp = _swig_property(_valkka_core.LiveConnectionContext_request_tcp_get, _valkka_core.LiveConnectionContext_request_tcp_set)
     __swig_destroy__ = _valkka_core.delete_LiveConnectionContext
     __del__ = lambda self: None
 LiveConnectionContext_swigregister = _valkka_core.LiveConnectionContext_swigregister
@@ -1644,6 +1652,13 @@ class LiveOutboundContext(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, LiveOutboundContext, name)
     __repr__ = _swig_repr
+
+    def __init__(self):
+        this = _valkka_core.new_LiveOutboundContext()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
     __swig_setmethods__["connection_type"] = _valkka_core.LiveOutboundContext_connection_type_set
     __swig_getmethods__["connection_type"] = _valkka_core.LiveOutboundContext_connection_type_get
     if _newclass:
@@ -1652,6 +1667,10 @@ class LiveOutboundContext(_object):
     __swig_getmethods__["address"] = _valkka_core.LiveOutboundContext_address_get
     if _newclass:
         address = _swig_property(_valkka_core.LiveOutboundContext_address_get, _valkka_core.LiveOutboundContext_address_set)
+    __swig_setmethods__["slot"] = _valkka_core.LiveOutboundContext_slot_set
+    __swig_getmethods__["slot"] = _valkka_core.LiveOutboundContext_slot_get
+    if _newclass:
+        slot = _swig_property(_valkka_core.LiveOutboundContext_slot_get, _valkka_core.LiveOutboundContext_slot_set)
     __swig_setmethods__["portnum"] = _valkka_core.LiveOutboundContext_portnum_set
     __swig_getmethods__["portnum"] = _valkka_core.LiveOutboundContext_portnum_get
     if _newclass:
@@ -1660,17 +1679,6 @@ class LiveOutboundContext(_object):
     __swig_getmethods__["ttl"] = _valkka_core.LiveOutboundContext_ttl_get
     if _newclass:
         ttl = _swig_property(_valkka_core.LiveOutboundContext_ttl_get, _valkka_core.LiveOutboundContext_ttl_set)
-    __swig_setmethods__["slot"] = _valkka_core.LiveOutboundContext_slot_set
-    __swig_getmethods__["slot"] = _valkka_core.LiveOutboundContext_slot_get
-    if _newclass:
-        slot = _swig_property(_valkka_core.LiveOutboundContext_slot_get, _valkka_core.LiveOutboundContext_slot_set)
-
-    def __init__(self):
-        this = _valkka_core.new_LiveOutboundContext()
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
     __swig_destroy__ = _valkka_core.delete_LiveOutboundContext
     __del__ = lambda self: None
 LiveOutboundContext_swigregister = _valkka_core.LiveOutboundContext_swigregister

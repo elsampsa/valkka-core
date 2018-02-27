@@ -139,8 +139,6 @@ void test_2() {
   LiveThread        livethread      ("livethread",0,-1); // size of input fifo, thread affinity
   // ***********************************
   
-  LiveConnectionContext ctx;
-  
   std::cout << name << "starting threads" << std::endl;
   glthread.startCall(); // start running OpenGLThread!
   
@@ -158,8 +156,10 @@ void test_2() {
   // sleep_for(1s);
   
   std::cout << name << "registering stream" << std::endl;
-  // ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 1, &live_out_filter, 0}; // Request livethread to write into filter info
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 1, &av_in_filter, 0}; // Request livethread to write into filter info
+  
+  // LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 1, &live_out_filter);
+  LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 1, &av_in_filter);
+  
   livethread.registerStreamCall(ctx);
   
   // sleep_for(1s);
@@ -231,9 +231,6 @@ void test_3() {
   LiveThread        livethread      ("livethread");
   // ***********************************
   
-  LiveConnectionContext ctx;
-  LiveConnectionContext ctx2;
-  
   std::cout << name << "starting threads" << std::endl;
   glthread.startCall(); // start running OpenGLThread!
   
@@ -257,8 +254,8 @@ void test_3() {
   
   std::cout << name << "registering stream" << std::endl;
   
-  ctx = (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_1), 1, &live_out_filter, 0}; // Request livethread to write into filter info
-  ctx2= (LiveConnectionContext){LiveConnectionType::rtsp, std::string(stream_2), 2, &live_out_filter2, 0}; // Request livethread to write into filter info
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 1, &live_out_filter); // Request livethread to write into filter info
+  LiveConnectionContext ctx2=LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_2), 2, &live_out_filter); // Request livethread to write into filter info
   
   livethread.registerStreamCall(ctx);
   livethread.registerStreamCall(ctx2);

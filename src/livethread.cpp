@@ -77,6 +77,7 @@ bool LiveFifo::writeCopy(Frame* f, bool wait) {
 
 #define TIMESTAMP_CORRECTOR // keep this always defined
 
+/*
 #ifdef TIMESTAMP_CORRECTOR
 // filterchain: {FrameFilter: inputfilter} --> {TimestampFrameFilter: timestampfilter} --> {FrameFilter: framefilter}
 Connection::Connection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect) : env(env), address(address), slot(slot), framefilter(framefilter), msreconnect(msreconnect), is_playing(false), frametimer(0), timestampfilter("timestamp_filter",&framefilter), inputfilter("input_filter",slot,&timestampfilter)
@@ -84,8 +85,17 @@ Connection::Connection(UsageEnvironment& env, const std::string address, SlotNum
 // filterchain: {FrameFilter: inputfilter} --> {FrameFilter: framefilter}
 Connection::Connection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect) : env(env), address(address), slot(slot), framefilter(framefilter), msreconnect(msreconnect), is_playing(false), frametimer(0), timestampfilter("timestamp_filter",&framefilter), inputfilter("input_filter",slot,&framefilter)
 #endif
+*/
+
+#ifdef TIMESTAMP_CORRECTOR
+// filterchain: {FrameFilter: inputfilter} --> {TimestampFrameFilter: timestampfilter} --> {FrameFilter: framefilter}
+Connection::Connection(UsageEnvironment& env, LiveConnectionContext& ctx) : env(env), ctx(ctx), is_playing(false), frametimer(0), timestampfilter("timestamp_filter",ctx.framefilter), inputfilter("input_filter",ctx.slot,&timestampfilter)
+#else
+// filterchain: {FrameFilter: inputfilter} --> {FrameFilter: framefilter}
+Connection::Connection(UsageEnvironment& env, LiveConnectionContext& ctx) : env(env), ctx(ctx), is_playing(false), frametimer(0), timestampfilter("timestamp_filter",NULL), inputfilter("input_filter",slot,ctx.framefilter)
+#endif
 {
-  if (msreconnect>0 and msreconnect<=Timeouts::livethread) {
+  if (ctx.msreconnect>0 and ctx.msreconnect<=Timeouts::livethread) {
     livethreadlogger.log(LogLevel::fatal) << "Connection: constructor: your requested reconnection time is less than equal to the LiveThread timeout.  You will get problems" << std::endl;
   }  
 };
@@ -103,7 +113,7 @@ void Connection::reStartStreamIf() {
 }
 
 SlotNumber Connection::getSlot() {
-  return slot;
+  return ctx.slot;
 };
 
 bool Connection::hasStopped() {
@@ -113,13 +123,9 @@ bool Connection::hasStopped() {
 
 
 
-Outbound::Outbound(UsageEnvironment &env, FrameFifo &fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl) : env(env), fifo(fifo), slot(slot), adr(adr), portnum(portnum), ttl(ttl) {
-  
-}
-  
-Outbound::~Outbound() {
-  
-}
+// Outbound::Outbound(UsageEnvironment &env, FrameFifo &fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl) : env(env), fifo(fifo), slot(slot), adr(adr), portnum(portnum), ttl(ttl) {}
+Outbound::Outbound(UsageEnvironment &env, FrameFifo &fifo, LiveOutboundContext &ctx) : env(env), fifo(fifo), ctx(ctx) {}
+Outbound::~Outbound() {}
 
 void Outbound::handleFrame(Frame* f) { 
   int subsession_index;
@@ -128,20 +134,20 @@ void Outbound::handleFrame(Frame* f) {
   // info frame    : init
   // regular frame : make a copy
   if ( subsession_index>=streams.size()) { // subsession_index too big
-    livethreadlogger.log(LogLevel::fatal) << "Outbound :"<<adr<<" : handleFrame :  stream slot overlow : "<<subsession_index<<"/"<<streams.size()<< std::endl;
+    livethreadlogger.log(LogLevel::fatal) << "Outbound :"<<ctx.address<<" : handleFrame :  substream index overlow : "<<subsession_index<<"/"<<streams.size()<< std::endl;
     fifo.recycle(f); // return frame to the stack - never forget this!
   }
   else if (f->frametype==FrameType::setup) { // INIT
-    if (streams[subsession_index]!=NULL) { // slot is occupied
-      livethreadlogger.log(LogLevel::debug) << "Outbound:"<<adr <<" : handleFrame : stream reinit " << std::endl;
+    if (streams[subsession_index]!=NULL) {
+      livethreadlogger.log(LogLevel::debug) << "Outbound:"<<ctx.address <<" : handleFrame : stream reinit " << std::endl;
       delete streams[subsession_index];
       streams[subsession_index]=NULL;
     }
     // register a new stream
-    livethreadlogger.log(LogLevel::debug) << "Outbound:"<<adr <<" : handleFrame : registering stream to subsession index " <<subsession_index<< std::endl;
+    livethreadlogger.log(LogLevel::debug) << "Outbound:"<<ctx.address <<" : handleFrame : registering stream to subsession index " <<subsession_index<< std::endl;
     switch ( (f->setup_pars).frametype ) { // NEW_CODEC_DEV // when adding new codecs, make changes here: add relevant stream per codec
       case FrameType::h264:
-        streams[subsession_index]=new H264Stream(env, fifo, adr, portnum, ttl);
+        streams[subsession_index]=new H264Stream(env, fifo, ctx.address, ctx.portnum, ctx.ttl);
         streams[subsession_index]->startPlaying();
         // TODO: for rtsp case, some of these are negotiated with the client
         break;
@@ -153,7 +159,7 @@ void Outbound::handleFrame(Frame* f) {
     fifo.recycle(f); // return frame to the stack - never forget this!
   } // got frame: DECODER INIT
   else if (streams[subsession_index]==NULL) { // woops, no decoder registered yet..
-    livethreadlogger.log(LogLevel::normal) << "Outbound:"<<adr <<" : handleFrame : no stream registered for " << subsession_index << std::endl;
+    livethreadlogger.log(LogLevel::normal) << "Outbound:"<<ctx.address <<" : handleFrame : no stream registered for " << subsession_index << std::endl;
     fifo.recycle(f); // return frame to the stack - never forget this!
   }
   else if (f->frametype==FrameType::none) { // void frame, do nothing
@@ -166,8 +172,10 @@ void Outbound::handleFrame(Frame* f) {
 
 
 
-RTSPConnection::RTSPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect) : Connection(env, address, slot, framefilter, msreconnect), livestatus(LiveStatus::none) {
-};
+// RTSPConnection::RTSPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect) : Connection(env, address, slot, framefilter, msreconnect), livestatus(LiveStatus::none) {};
+
+RTSPConnection::RTSPConnection(UsageEnvironment& env, LiveConnectionContext& ctx) : Connection(env, ctx), livestatus(LiveStatus::none) {};
+
 
 RTSPConnection::~RTSPConnection() {
   // delete client;
@@ -188,7 +196,9 @@ void RTSPConnection::playStream() {
     livestatus=LiveStatus::pending;
     frametimer=0;
     livethreadlogger.log(LogLevel::crazy) << "RTSPConnection : playStream" << std::endl;
-    client=ValkkaRTSPClient::createNew(this->env, this->address, this->inputfilter, &livestatus);
+    client=ValkkaRTSPClient::createNew(env, ctx.address, inputfilter, &livestatus);
+    if (ctx.request_multicast) { client->requestMulticast(); }
+    if (ctx.request_tcp) { client->requestTCP(); }
     livethreadlogger.log(LogLevel::debug) << "RTSPConnection : playStream : name " << client->name() << std::endl;
     client->sendDescribeCommand(ValkkaRTSPClient::continueAfterDESCRIBE);
   }
@@ -230,7 +240,7 @@ void RTSPConnection::stopStream() {
 
 
 void RTSPConnection::reStartStreamIf() {
-  if (msreconnect<=0) { // don't attempt to reconnect
+  if (ctx.msreconnect<=0) { // don't attempt to reconnect
     return;
   }
   
@@ -260,8 +270,8 @@ void RTSPConnection::reStartStreamIf() {
   std::cout << "RTSPConnection: frametimer=" << frametimer << std::endl;
 #endif
   
-  if (frametimer>=msreconnect) {
-    livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: restart at slot " << slot << std::endl;
+  if (frametimer>=ctx.msreconnect) {
+    livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: restart at slot " << ctx.slot << std::endl;
     if (livestatus==LiveStatus::alive) {
       stopStream();
     }
@@ -278,8 +288,10 @@ bool RTSPConnection::hasStopped() {
 
 
 
-SDPConnection::SDPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter) : Connection(env, address, slot, framefilter, 0) {
-};
+//SDPConnection::SDPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter) : Connection(env, address, slot, framefilter, 0) {};
+
+SDPConnection::SDPConnection(UsageEnvironment& env, LiveConnectionContext& ctx) : Connection(env, ctx) {};
+
 
 SDPConnection :: ~SDPConnection() {
 }
@@ -295,7 +307,7 @@ void SDPConnection :: playStream() {
   scs =NULL;
   is_playing=false;
   
-  infile.open(address.c_str());
+  infile.open(ctx.address.c_str());
   
   /* 
    * https://cboard.cprogramming.com/cplusplus-programming/69272-reading-whole-file-w-ifstream.html
@@ -312,7 +324,7 @@ void SDPConnection :: playStream() {
     livethreadlogger.log(LogLevel::debug) << "SDPConnection: reading sdp file: " << sdp << std::endl;
   }
   else {
-    livethreadlogger.log(LogLevel::fatal) << "SDPConnection: FATAL! Unable to open file " << address << std::endl;
+    livethreadlogger.log(LogLevel::fatal) << "SDPConnection: FATAL! Unable to open file " << ctx.address << std::endl;
     return;
   }
   
@@ -340,8 +352,8 @@ void SDPConnection :: playStream() {
     {
       // subsession->sink = DummySink::createNew(*env, *subsession, filename);
       env << "Creating data sink for subsession \"" << *scs->subsession << "\" \n";
-      // subsession->sink= FrameSink::createNew(env, *subsession, inputfilter, cc, address.c_str());
-      scs->subsession->sink= FrameSink::createNew(env, *scs, inputfilter, address.c_str());
+      // subsession->sink= FrameSink::createNew(env, *subsession, inputfilter, cc, ctx.address.c_str());
+      scs->subsession->sink= FrameSink::createNew(env, *scs, inputfilter, ctx.address.c_str());
       if (scs->subsession->sink == NULL)
       {
         env << "Failed to create a data sink for the \"" << *scs->subsession << "\" subsession: " << env.getResultMsg() << "\n";
@@ -379,7 +391,8 @@ void SDPConnection :: stopStream() {
 }
 
 
-SDPOutbound::SDPOutbound(UsageEnvironment& env, FrameFifo &fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl) : Outbound(env,fifo,slot,adr,portnum,ttl) {
+//SDPOutbound::SDPOutbound(UsageEnvironment& env, FrameFifo &fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl) : Outbound(env,fifo,slot,adr,portnum,ttl) {
+SDPOutbound::SDPOutbound(UsageEnvironment& env, FrameFifo &fifo, LiveOutboundContext& ctx) : Outbound(env,fifo,ctx) {
   streams.resize(2); // we'll be ready for two media streams
 }
 
@@ -640,13 +653,15 @@ void LiveThread::registerStream(LiveConnectionContext &connection_ctx) {
       switch (connection_ctx.connection_type) {
         
         case LiveConnectionType::rtsp:
-          this->slots_[connection_ctx.slot] = new RTSPConnection(*(this->env), connection_ctx.address, connection_ctx.slot, *(connection_ctx.framefilter), connection_ctx.msreconnect);
+          // this->slots_[connection_ctx.slot] = new RTSPConnection(*(this->env), connection_ctx.address, connection_ctx.slot, *(connection_ctx.framefilter), connection_ctx.msreconnect);
+          this->slots_[connection_ctx.slot] = new RTSPConnection(*(this->env), connection_ctx);
           livethreadlogger.log(LogLevel::debug) << "LiveThread: registerStream : rtsp stream registered at slot " << connection_ctx.slot << " with ptr " << this->slots_[connection_ctx.slot] << std::endl;
           // this->slots_[connection_ctx.slot]->playStream(); // not here ..
           break;
           
         case LiveConnectionType::sdp:
-          this->slots_[connection_ctx.slot] = new SDPConnection(*(this->env), connection_ctx.address, connection_ctx.slot, *(connection_ctx.framefilter));
+          // this->slots_[connection_ctx.slot] = new SDPConnection(*(this->env), connection_ctx.address, connection_ctx.slot, *(connection_ctx.framefilter));
+          this->slots_[connection_ctx.slot] = new SDPConnection(*(this->env), connection_ctx);
           livethreadlogger.log(LogLevel::debug) << "LiveThread: registerStream : sdp stream registered at slot "  << connection_ctx.slot << " with ptr " << this->slots_[connection_ctx.slot] << std::endl;
           // this->slots_[connection_ctx.slot]->playStream(); // not here ..
           break;
@@ -737,7 +752,8 @@ void LiveThread::registerOutbound(LiveOutboundContext &outbound_ctx) {
           break;
           
         case LiveConnectionType::sdp:
-          this->out_slots_[outbound_ctx.slot] = new SDPOutbound(*env, infifo, outbound_ctx.slot, outbound_ctx.address, outbound_ctx.portnum, outbound_ctx.ttl);
+          // this->out_slots_[outbound_ctx.slot] = new SDPOutbound(*env, infifo, outbound_ctx.slot, outbound_ctx.address, outbound_ctx.portnum, outbound_ctx.ttl);
+          this->out_slots_[outbound_ctx.slot] = new SDPOutbound(*env, infifo, outbound_ctx);
           livethreadlogger.log(LogLevel::debug) << "LiveThread: "<<name<<" registerOutbound : sdp stream registered at slot "  << outbound_ctx.slot << " with ptr " << this->out_slots_[outbound_ctx.slot] << std::endl;
           break;
           

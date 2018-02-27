@@ -50,7 +50,9 @@ BasicChain::BasicChain(LiveConnectionType contype, const char* adr, SlotNumber n
     // live_out_filter=new InfoFrameFilter(iffname.c_str(),av_in_filter);
     live_out_filter=new DummyFrameFilter(iffname.c_str(),true,av_in_filter);
     
-    ctx = (LiveConnectionContext){contype, std::string(adr), n_slot, live_out_filter};
+    // ctx = (LiveConnectionContext){contype, std::string(adr), n_slot, live_out_filter};
+    // ctx = new LiveConnectionContext(contype, std::string(adr), n_slot, live_out_filter);
+    ctx.connection_type=contype; ctx.address=std::string(adr); ctx.slot=n_slot; ctx.framefilter=live_out_filter;
     render_ctx=0;
     window_id =0;
   }
@@ -61,5 +63,6 @@ BasicChain::~BasicChain() {
   delete avthread;
   delete av_in_filter;
   delete live_out_filter;
+  // delete ctx;
 }
 

@@ -258,22 +258,16 @@ void usage(UsageEnvironment& env, char const* progName) {
   livelogger.log(LogLevel::normal) << "\t(where each <rtsp-url-i> is a \"rtsp://\" URL)\n";
 }
 
-// By default, we request that the server stream its data using RTP/UDP.
-// If, instead, you want to request that the server stream via RTP-over-TCP, change the following to True:
-#define REQUEST_STREAMING_OVER_TCP False
-
 // Implementation of "ValkkaRTSPClient":
 
 ValkkaRTSPClient* ValkkaRTSPClient::createNew(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum) {
   return new ValkkaRTSPClient(env, rtspURL, framefilter, livestatus, verbosityLevel, applicationName, tunnelOverHTTPPortNum);
 }
 
-ValkkaRTSPClient::ValkkaRTSPClient(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum) : RTSPClient(env, rtspURL.c_str(), verbosityLevel, applicationName, tunnelOverHTTPPortNum, -1), framefilter(framefilter), livestatus(livestatus)
-{
+ValkkaRTSPClient::ValkkaRTSPClient(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum) : RTSPClient(env, rtspURL.c_str(), verbosityLevel, applicationName, tunnelOverHTTPPortNum, -1), framefilter(framefilter), livestatus(livestatus), request_multicast(false), request_tcp(false) {
 }
 
-ValkkaRTSPClient::~ValkkaRTSPClient() 
-{
+ValkkaRTSPClient::~ValkkaRTSPClient() {
 }
 
 
@@ -318,8 +312,10 @@ void ValkkaRTSPClient::continueAfterDESCRIBE(RTSPClient* rtspClient, int resultC
 }
 
 void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
-  UsageEnvironment& env = rtspClient->envir(); // alias
-  StreamClientState& scs = ((ValkkaRTSPClient*)rtspClient)->scs; // alias
+  // aliases:
+  UsageEnvironment& env    = rtspClient->envir();
+  StreamClientState& scs   = ((ValkkaRTSPClient*)rtspClient)->scs;
+  ValkkaRTSPClient* client = (ValkkaRTSPClient*)rtspClient;
   bool ok_subsession_type = false;
   
   scs.subsession = scs.iter->next();
@@ -346,7 +342,18 @@ void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
       livelogger.log(LogLevel::debug) << ")\n";
 
       // Continue setting up this subsession, by sending a RTSP "SETUP" command:
-      rtspClient->sendSetupCommand(*scs.subsession, continueAfterSETUP, False, REQUEST_STREAMING_OVER_TCP);
+      rtspClient->sendSetupCommand(*scs.subsession, continueAfterSETUP, False, client->request_tcp, client->request_multicast);
+      
+      /*
+      unsigned RTSPClient::sendSetupCommand 	( 	MediaSubsession &  	subsession,
+		responseHandler *  	responseHandler,
+		Boolean  	streamOutgoing = False,
+		Boolean  	streamUsingTCP = False,
+		Boolean  	forceMulticastOnUnspecified = False,
+		Authenticator *  	authenticator = NULL 
+	) 	
+      */
+      
     }
     return;
   }
