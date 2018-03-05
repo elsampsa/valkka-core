@@ -1,0 +1,6 @@
+<map id="Stream::Stream" name="Stream::Stream">
+<area shape="rect" id="node2" href="$classBufferSource.html#a04cb4018658d080aec540054e5936761" title="Copies a Frame from BufferSource::fifo into BufferSource::internal_fifo. Sets BufferSource::active. " alt="" coords="168,5,349,32"/>
+<area shape="rect" id="node3" href="$classBufferSource.html#a796bc84e5233c21c379a57f2a3b65e54" title="All the fun happens here. " alt="" coords="397,5,604,32"/>
+<area shape="rect" id="node4" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="652,5,783,32"/>
+<area shape="rect" id="node5" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="831,5,927,32"/>
+</map>
