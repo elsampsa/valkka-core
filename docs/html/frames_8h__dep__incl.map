@@ -1,6 +1,6 @@
 <map id="/home/sampsa/C/valkka/include/frames.h" name="/home/sampsa/C/valkka/include/frames.h">
 <area shape="rect" id="node2" href="$avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="193,273,357,315"/>
-<area shape="rect" id="node6" href="$queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="721,95,885,136"/>
+<area shape="rect" id="node6" href="$queues_8h.html" title="Lockable and safe queues for multithreading. " alt="" coords="721,95,885,136"/>
 <area shape="rect" id="node10" href="$filethread_8h.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="5,273,169,315"/>
 <area shape="rect" id="node15" href="$live_8h.html" title="Interface to live555. " alt="" coords="1021,184,1185,225"/>
 <area shape="rect" id="node18" href="$decoders_8h.html" title="FFmpeg decoders. " alt="" coords="421,95,585,136"/>
@@ -20,7 +20,7 @@
 <area shape="rect" id="node16" href="$live_8cpp.html" title="Interface to live555. " alt="" coords="1008,273,1172,315"/>
 <area shape="rect" id="node19" href="$decoders_8cpp.html" title="FFmpeg decoders. " alt="" coords="301,184,465,225"/>
 <area shape="rect" id="node21" href="$file_8h.html" title="File input and output to and from matroska files. " alt="" coords="1436,273,1600,315"/>
-<area shape="rect" id="node23" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synced with posix sem..." alt="" coords="1624,273,1788,315"/>
+<area shape="rect" id="node23" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="1624,273,1788,315"/>
 <area shape="rect" id="node25" href="$filters_8cpp.html" title="Common frame filters. The FrameFilter base class is defined in frames.h. " alt="" coords="1248,273,1412,315"/>
 <area shape="rect" id="node22" href="$file_8cpp.html" title="File input and output to and from matroska files. " alt="" coords="1436,363,1600,404"/>
 <area shape="rect" id="node24" href="$sharedmem_8cpp.html" title="/home/sampsa/C/valkka\l/src/sharedmem.cpp" alt="" coords="1624,363,1788,404"/>

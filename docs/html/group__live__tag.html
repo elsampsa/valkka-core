@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>Valkka: Live_tag</title>
+<title>Valkka: live555 bridge</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -83,25 +83,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
-<div class="title">Live_tag</div>  </div>
+<div class="title">live555 bridge</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Things related to Live555.  
+<p>How we're using the live555 API.  
 <a href="#details">More...</a></p>
-<div class="dynheader">
-Collaboration diagram for Live_tag:</div>
-<div class="dyncontent">
-<center><table><tr><td><img src="group__live__tag.png" border="0" alt="" usemap="#group____live____tag"/>
-<map name="group____live____tag" id="group____live____tag">
-<area shape="rect" id="node1" href="group__livethread__tag.html" title="The LiveThread class implements a &quot;producer&quot; thread (see Threading_tag) that feeds frames into a Fram..." alt="" coords="261,56,368,83"/>
-<area shape="rect" id="node2" href="group__threading__tag.html" title="The Thread class is a prototype for implementing thread&#45;safe multithreading classes. " alt="" coords="263,116,367,143"/>
-</map>
-</td></tr></table></center>
-</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html">BufferSource</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements a FramedSource for sending frames.  <a href="classBufferSource.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStream.html">Stream</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An outbound <a class="el" href="classStream.html" title="An outbound Stream. ">Stream</a>.  <a href="classStream.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamClientState.html">StreamClientState</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class to hold per-stream state that we maintain throughout each stream's lifetime.  <a href="classStreamClientState.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -111,57 +107,19 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameSink.html">FrameSink</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Live555 handling of media frames.  <a href="classFrameSink.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html">Connection</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A base class that unifies all kinds of connections (RTSP and SDP).  <a href="classConnection.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRTSPConnection.html">RTSPConnection</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A negotiated RTSP connection.  <a href="classRTSPConnection.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSDPConnection.html">SDPConnection</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Streaming, the source of stream is defined in an SDP file.  <a href="classSDPConnection.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structLiveConnectionContext.html">LiveConnectionContext</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a stream and encapsulates information about the type of connection, the user is requesting to <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a>.  <a href="structLiveConnectionContext.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLiveThread.html">LiveThread</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Live555, running in a separate thread.  <a href="classLiveThread.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:ga393bb55d7e6d624a2e428e600fbea26c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__live__tag.html#ga393bb55d7e6d624a2e428e600fbea26c">LiveConnectionType</a> { <b>none</b>, 
-<b>rtsp</b>, 
-<b>sdp</b>
- }<tr class="memdesc:ga393bb55d7e6d624a2e428e600fbea26c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> connection types.  <a href="group__live__tag.html#ga393bb55d7e6d624a2e428e600fbea26c">More...</a><br /></td></tr>
+<tr class="memitem:ga267e2aa9269281d26f54d6c0371a8e76"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga267e2aa9269281d26f54d6c0371a8e76"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__live__tag.html#ga267e2aa9269281d26f54d6c0371a8e76">LiveStatus</a> { <b>none</b>, 
+<b>pending</b>, 
+<b>alive</b>, 
+<b>closed</b>
+ }<tr class="memdesc:ga267e2aa9269281d26f54d6c0371a8e76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Statuses for the <a class="el" href="classValkkaRTSPClient.html" title="Handles a live555 RTSP connection. ">ValkkaRTSPClient</a>. <br /></td></tr>
 </td></tr>
-<tr class="separator:ga393bb55d7e6d624a2e428e600fbea26c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:ga267e2aa9269281d26f54d6c0371a8e76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>Things related to Live555. </p>
-<h2 class="groupheader">Enumeration Type Documentation</h2>
-<a class="anchor" id="ga393bb55d7e6d624a2e428e600fbea26c"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="group__live__tag.html#ga393bb55d7e6d624a2e428e600fbea26c">LiveConnectionType</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p><a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> connection types. </p>
-<p>This enumeration class identifies different kinds of connections (i.e. rtsp and sdp). Used by <a class="el" href="structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection, the user is requesting...">LiveConnectionContext</a>. </p>
-
-</div>
-</div>
+<p>How we're using the live555 API. </p>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

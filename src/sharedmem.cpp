@@ -169,7 +169,7 @@ bool SharedMemSegment::getClientState() {
 SharedMemRingBuffer::SharedMemRingBuffer(const char* name, int n_cells, std::size_t n_bytes, int mstimeout, bool is_server) : name(name), n_cells(n_cells), n_bytes(n_bytes), mstimeout(mstimeout), is_server(is_server) {
   int i;
   
-  std::cout << "SharedMemRingBuffer: constructor" << std::endl;
+  // std::cout << "SharedMemRingBuffer: constructor" << std::endl;
   
   sema_name    =std::string("/")+name+std::string("_valkka_ringbuffer");
   flagsema_name=std::string("/")+name+std::string("_valkka_ringflag");
@@ -243,7 +243,7 @@ int   SharedMemRingBuffer::getFlagValue() {  //Used by SharedMemoryRingBuffer::f
 
 
 void  SharedMemRingBuffer::zero() {          //Force reset.  Semaphore value is set to 0
-  std::cout << "RingBuffer: zero"<<std::endl;
+  // std::cout << "RingBuffer: zero"<<std::endl;
   int i;
   // while (errno!=EAGAIN) {
   while (getValue()>0) {

@@ -92,7 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classTestConsumerThread-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">TestConsumerThread Class Reference<div class="ingroups"><a class="el" href="group__threading__tag.html">Threading_tag</a></div></div>  </div>
+<div class="title">TestConsumerThread Class Reference<div class="ingroups"><a class="el" href="group__threading__tag.html">multithreads</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -176,8 +176,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a9e604c94f8ee52771ffbc1dac03b93ad inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3fe753fa03016d016345c1171b123828"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a3fe753fa03016d016345c1171b123828">start_mutex</a></td></tr>
-<tr class="memdesc:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">released when the thread has been started <br /></td></tr>
+<tr class="memdesc:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting start_condition. <br /></td></tr>
 <tr class="separator:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d9732ab4852c250f4fbfc5dd5356de2"></a>
+std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a7d9732ab4852c250f4fbfc5dd5356de2">start_condition</a></td></tr>
+<tr class="memdesc:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notified when the thread has been started. <br /></td></tr>
+<tr class="separator:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6383ead608b8e4be6debb9f25bcfe80a inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6383ead608b8e4be6debb9f25bcfe80a"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a6383ead608b8e4be6debb9f25bcfe80a">mutex</a></td></tr>
 <tr class="memdesc:a6383ead608b8e4be6debb9f25bcfe80a inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting the condition variable and signal queue. <br /></td></tr>

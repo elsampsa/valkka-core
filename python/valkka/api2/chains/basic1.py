@@ -56,7 +56,8 @@ class BasicFilterchain1:
     "slot"         : int,
     "fifolen"      : (int,10),
     "affinity"     : (int,-1),
-    "msreconnect"  : (int,0)
+    "msreconnect"  : (int,0),
+    "verbose"      : (bool,False)
     }
   
   
@@ -162,6 +163,10 @@ class BasicFilterchain1:
     # self.file_ctx.status         
     
     
+  def fileStatusOk(self):
+    return (self.file_ctx.status!=core.FileState_error)
+    
+    
   def startThreads(self):
     """Starts thread required by the filter chain
     """
@@ -232,7 +237,7 @@ class ShmemFilterchain1(BasicFilterchain1):
       self.shmem_name ="shmemff"+self.idst
     
     # dimensions of the rgb image
-    print(self.pre,self.shmem_name)
+    # print(self.pre,"makeChain :",self.shmem_name)
     self.n_bytes =self.shmem_image_dimensions[0]*self.shmem_image_dimensions[1]*3
     n_buf   =self.shmem_ringbuffer_size
     

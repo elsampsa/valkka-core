@@ -99,7 +99,7 @@ Inheritance diagram for H264Stream:</div>
 <div class="dyncontent">
 <div class="center"><img src="classH264Stream__inherit__graph.png" border="0" usemap="#H264Stream_inherit__map" alt="Inheritance graph"/></div>
 <map name="H264Stream_inherit__map" id="H264Stream_inherit__map">
-<area shape="rect" id="node2" href="classStream.html" title="Stream" alt="" coords="21,5,85,32"/>
+<area shape="rect" id="node2" href="classStream.html" title="An outbound Stream. " alt="" coords="21,5,85,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -107,8 +107,8 @@ Collaboration diagram for H264Stream:</div>
 <div class="dyncontent">
 <div class="center"><img src="classH264Stream__coll__graph.png" border="0" usemap="#H264Stream_coll__map" alt="Collaboration graph"/></div>
 <map name="H264Stream_coll__map" id="H264Stream_coll__map">
-<area shape="rect" id="node2" href="classStream.html" title="Stream" alt="" coords="93,184,157,211"/>
-<area shape="rect" id="node3" href="classBufferSource.html" title="BufferSource" alt="" coords="24,95,123,121"/>
+<area shape="rect" id="node2" href="classStream.html" title="An outbound Stream. " alt="" coords="93,184,157,211"/>
+<area shape="rect" id="node3" href="classBufferSource.html" title="Implements a FramedSource for sending frames. " alt="" coords="24,95,123,121"/>
 <area shape="rect" id="node5" href="classFrameFifo.html" title="A thread&#45;safe FrameFifo (first&#45;in&#45;first&#45;out) queue with thread&#45;safe methods for inserting and popping..." alt="" coords="137,5,218,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
@@ -116,12 +116,16 @@ Collaboration diagram for H264Stream:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1ea125993b10031225a42e14e60c7b18"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ea125993b10031225a42e14e60c7b18"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>H264Stream</b> (UsageEnvironment &amp;env, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl=255)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>H264Stream</b> (UsageEnvironment &amp;<a class="el" href="classStream.html#a26aca4e6383ae9aab56db2984e13b7c7">env</a>, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;<a class="el" href="classStream.html#a5b2c74a66a721754d456240a0428c8a6">fifo</a>, const std::string adr, unsigned short int portnum, const unsigned char ttl=255)</td></tr>
 <tr class="separator:a1ea125993b10031225a42e14e60c7b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classStream"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classStream')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classStream.html">Stream</a></td></tr>
-<tr class="memitem:ad35dde8e7e114b7125392384affb1d9f inherit pub_methods_classStream"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad35dde8e7e114b7125392384affb1d9f"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Stream</b> (UsageEnvironment &amp;env, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl=255)</td></tr>
+<tr class="memitem:ad35dde8e7e114b7125392384affb1d9f inherit pub_methods_classStream"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStream.html#ad35dde8e7e114b7125392384affb1d9f">Stream</a> (UsageEnvironment &amp;<a class="el" href="classStream.html#a26aca4e6383ae9aab56db2984e13b7c7">env</a>, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;<a class="el" href="classStream.html#a5b2c74a66a721754d456240a0428c8a6">fifo</a>, const std::string adr, unsigned short int portnum, const unsigned char ttl=255)</td></tr>
+<tr class="memdesc:ad35dde8e7e114b7125392384affb1d9f inherit pub_methods_classStream"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ad35dde8e7e114b7125392384affb1d9f">More...</a><br /></td></tr>
 <tr class="separator:ad35dde8e7e114b7125392384affb1d9f inherit pub_methods_classStream"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dc4517a9e6a87abb662fcd14c2ea969 inherit pub_methods_classStream"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6dc4517a9e6a87abb662fcd14c2ea969"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStream.html#a6dc4517a9e6a87abb662fcd14c2ea969">~Stream</a> ()</td></tr>
+<tr class="memdesc:a6dc4517a9e6a87abb662fcd14c2ea969 inherit pub_methods_classStream"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
+<tr class="separator:a6dc4517a9e6a87abb662fcd14c2ea969 inherit pub_methods_classStream"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe7299b9f13f811385197acdeebb360c inherit pub_methods_classStream"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe7299b9f13f811385197acdeebb360c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>handleFrame</b> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
 <tr class="separator:afe7299b9f13f811385197acdeebb360c inherit pub_methods_classStream"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,13 +141,16 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>afterPlaying</
 <tr class="separator:acd2f32c677f84a25571f06a725bbd3c8 inherit pub_static_methods_classStream"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classStream"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classStream')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classStream.html">Stream</a></td></tr>
 <tr class="memitem:a26aca4e6383ae9aab56db2984e13b7c7 inherit pro_attribs_classStream"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a26aca4e6383ae9aab56db2984e13b7c7"></a>
-UsageEnvironment &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>env</b></td></tr>
+UsageEnvironment &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStream.html#a26aca4e6383ae9aab56db2984e13b7c7">env</a></td></tr>
+<tr class="memdesc:a26aca4e6383ae9aab56db2984e13b7c7 inherit pro_attribs_classStream"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies the live555 event loop. <br /></td></tr>
 <tr class="separator:a26aca4e6383ae9aab56db2984e13b7c7 inherit pro_attribs_classStream"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b2c74a66a721754d456240a0428c8a6 inherit pro_attribs_classStream"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5b2c74a66a721754d456240a0428c8a6"></a>
-<a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>fifo</b></td></tr>
+<a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStream.html#a5b2c74a66a721754d456240a0428c8a6">fifo</a></td></tr>
+<tr class="memdesc:a5b2c74a66a721754d456240a0428c8a6 inherit pro_attribs_classStream"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frames are read from here. This reference leads all the way down to LiveThread::fifo. <br /></td></tr>
 <tr class="separator:a5b2c74a66a721754d456240a0428c8a6 inherit pro_attribs_classStream"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75e6d47496fdf1b5dfa847a8fdbfb6e9 inherit pro_attribs_classStream"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75e6d47496fdf1b5dfa847a8fdbfb6e9"></a>
-RTPSink *&#160;</td><td class="memItemRight" valign="bottom"><b>sink</b></td></tr>
+RTPSink *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStream.html#a75e6d47496fdf1b5dfa847a8fdbfb6e9">sink</a></td></tr>
+<tr class="memdesc:a75e6d47496fdf1b5dfa847a8fdbfb6e9 inherit pro_attribs_classStream"><td class="mdescLeft">&#160;</td><td class="mdescRight">Live555 class: queries frames from terminal. <br /></td></tr>
 <tr class="separator:a75e6d47496fdf1b5dfa847a8fdbfb6e9 inherit pro_attribs_classStream"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a571f0756b54cd12d23b2f4178b3b6243 inherit pro_attribs_classStream"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a571f0756b54cd12d23b2f4178b3b6243"></a>
 RTCPInstance *&#160;</td><td class="memItemRight" valign="bottom"><b>rtcp</b></td></tr>
@@ -161,7 +168,8 @@ unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>cname</b> [1
 <a class="el" href="classBufferSource.html">BufferSource</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>buffer_source</b></td></tr>
 <tr class="separator:a79b7e99786a5e067c83e3bba9c970300 inherit pro_attribs_classStream"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab992b8659da9bacd9fc5ca2c921ca291 inherit pro_attribs_classStream"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab992b8659da9bacd9fc5ca2c921ca291"></a>
-FramedSource *&#160;</td><td class="memItemRight" valign="bottom"><b>terminal</b></td></tr>
+FramedSource *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStream.html#ab992b8659da9bacd9fc5ca2c921ca291">terminal</a></td></tr>
+<tr class="memdesc:ab992b8659da9bacd9fc5ca2c921ca291 inherit pro_attribs_classStream"><td class="mdescLeft">&#160;</td><td class="mdescRight">The final sink in the live555 filterchain. <br /></td></tr>
 <tr class="separator:ab992b8659da9bacd9fc5ca2c921ca291 inherit pro_attribs_classStream"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>

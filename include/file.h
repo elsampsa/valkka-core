@@ -59,17 +59,22 @@ Extend LiveThread into sending frames over rtsp (or sdp)
  * 
  * This FrameFilter should be connected to the live stream at all times: it observes the setup frames (FrameTypes::setup) and saves them internally.
  * 
- * When the FileFrameFilter::activate method is called, it configures the files accordingly and starts streaming into disk.
+ * When the FileFrameFilter::activate method is called, it configures the files accordingly, and starts streaming into disk.
  * 
- * 
+ * @ingroup filters_tag
+ * @ingroup file_tag
  */
 class FileFrameFilter : public FrameFilter { // <pyapi>
   
 public: // <pyapi>  
-  /** Default constructor */
+  /** Default constructor 
+   *
+   * @param name    name
+   * @param next    next framefilter to be applied in the filterchain
+   */
   FileFrameFilter(const char *name, FrameFilter *next=NULL);              // <pyapi>
   /** Default destructor */
-  ~FileFrameFilter();             // <pyapi>
+  ~FileFrameFilter();                                                     // <pyapi>
   
 protected:
   bool active;
@@ -92,18 +97,10 @@ protected:
 protected:
   void go(Frame* frame);
   
-public: // <pyapi>
-  // setFileName(const char* fname); ///< Sets the output filename  // <pyapi>
-  bool activate(const char* fname, long int zerotime=0);       ///< Starts streaming to disk  // <pyapi>
-  void deActivate();                     ///< Stop streaming to disk    // <pyapi>
-}; // <pyapi>
-
-
-
-
-
-
-
-
+public: // API calls                                                                         // <pyapi>
+  // setFileName(const char* fname); ///< Sets the output filename                           // <pyapi>
+  bool activate(const char* fname, long int zerotime=0);       ///< Starts streaming to disk // <pyapi>
+  void deActivate();                                           ///< Stop streaming to disk   // <pyapi>
+};                                                                                           // <pyapi>
 
 

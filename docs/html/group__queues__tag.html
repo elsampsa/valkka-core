@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>Valkka: Queues_tag</title>
+<title>Valkka: queues and fifos</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -82,24 +82,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a>  </div>
   <div class="headertitle">
-<div class="title">Queues_tag</div>  </div>
+<div class="title">queues and fifos</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>Multiprocessing queues/fifos.  
 <a href="#details">More...</a></p>
 <div class="dynheader">
-Collaboration diagram for Queues_tag:</div>
+Collaboration diagram for queues and fifos:</div>
 <div class="dyncontent">
 <center><table><tr><td><img src="group__queues__tag.png" border="0" alt="" usemap="#group____queues____tag"/>
 <map name="group____queues____tag" id="group____queues____tag">
-<area shape="rect" id="node2" href="group__filters__tag.html" title="Things related to FrameFilters. " alt="" coords="284,21,367,48"/>
+<area shape="rect" id="node1" href="group__openglthread__tag.html" title="Things related to OpenGL. " alt="" coords="352,5,412,32"/>
+<area shape="rect" id="node3" href="group__filters__tag.html" title="Things related to FrameFilters. " alt="" coords="311,65,453,92"/>
+<area shape="rect" id="node4" href="group__livethread__tag.html" title="The LiveThread class implements a &quot;producer&quot; thread (see multithreads) that feeds frames into a Frame..." alt="" coords="343,116,421,143"/>
 </map>
 </td></tr></table></center>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLiveFifo.html">LiveFifo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a special <a class="el" href="classFrameFifo.html" title="A thread-safe FrameFifo (first-in-first-out) queue with thread-safe methods for inserting and popping...">FrameFifo</a> class for feeding frames <em>into</em> live555, i.e.  <a href="classLiveFifo.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html">OpenGLFrameFifo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="classFrameFifo.html" title="A thread-safe FrameFifo (first-in-first-out) queue with thread-safe methods for inserting and popping...">FrameFifo</a> with multiple stacks.  <a href="classOpenGLFrameFifo.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html">FrameFifo</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A thread-safe <a class="el" href="classFrameFifo.html" title="A thread-safe FrameFifo (first-in-first-out) queue with thread-safe methods for inserting and popping...">FrameFifo</a> (first-in-first-out) queue with thread-safe methods for inserting and popping frames in/from the queue.  <a href="classFrameFifo.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -112,6 +120,7 @@ Classes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Multiprocessing queues/fifos. </p>
+<p>The base class is <a class="el" href="classFrameFifo.html" title="A thread-safe FrameFifo (first-in-first-out) queue with thread-safe methods for inserting and popping...">FrameFifo</a>. Special derived classes (<a class="el" href="classLiveFifo.html" title="This is a special FrameFifo class for feeding frames into live555, i.e. ">LiveFifo</a>, <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a>) are usually created and managed by certain derived <a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> classes (<a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a>, <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>). </p>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

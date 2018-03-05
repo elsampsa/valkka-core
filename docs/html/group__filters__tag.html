@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>Valkka: Filters_tag</title>
+<title>Valkka: available framefilters</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -82,24 +82,29 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a>  </div>
   <div class="headertitle">
-<div class="title">Filters_tag</div>  </div>
+<div class="title">available framefilters</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>Things related to FrameFilters.  
 <a href="#details">More...</a></p>
 <div class="dynheader">
-Collaboration diagram for Filters_tag:</div>
+Collaboration diagram for available framefilters:</div>
 <div class="dyncontent">
 <center><table><tr><td><img src="group__filters__tag.png" border="0" alt="" usemap="#group____filters____tag"/>
 <map name="group____filters____tag" id="group____filters____tag">
-<area shape="rect" id="node1" href="group__queues__tag.html" title="Multiprocessing queues/fifos. " alt="" coords="275,21,367,48"/>
+<area shape="rect" id="node1" href="group__shmem__tag.html" title="Posix shared memory and semaphores. " alt="" coords="361,5,427,32"/>
+<area shape="rect" id="node2" href="group__queues__tag.html" title="Multiprocessing queues/fifos. " alt="" coords="335,65,453,92"/>
+<area shape="rect" id="node3" href="group__file__tag.html" title="Things related to streaming from/into files. " alt="" coords="344,116,444,143"/>
 </map>
 </td></tr></table></center>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html">FileFrameFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pipe stream into a matroska (mkv) file.  <a href="classFileFrameFilter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInfoFrameFilter.html">InfoFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dump the beginning of <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>'s payload into stdout.  <a href="classInfoFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,8 +126,23 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTimestampFrameFilter.html">TimestampFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Corrects erroneous timestamps (while preserving timestamp distances).  <a href="classTimestampFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTimestampFrameFilter2.html">TimestampFrameFilter2</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Corrects erroneous timestamps (while preserving timestamp distances).  <a href="classTimestampFrameFilter2.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRepeatH264ParsFrameFilter.html">RepeatH264ParsFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">For H264, some cameras don't send sps and pps packets again before every keyframe.  <a href="classRepeatH264ParsFrameFilter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGateFrameFilter.html">GateFrameFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">When turned on, passes frames.  <a href="classGateFrameFilter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSetSlotFrameFilter.html">SetSlotFrameFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the slot number of the <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>.  <a href="classSetSlotFrameFilter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTimeIntervalFrameFilter.html">TimeIntervalFrameFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass frames, but not all of them - only on regular intervals.  <a href="classTimeIntervalFrameFilter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSwScaleFrameFilter.html">SwScaleFrameFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interpolate from YUV bitmap to RGB.  <a href="classSwScaleFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFilter.html">FrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mother class of all frame filters! FrameFilters are used to create "filter chains".  <a href="classFrameFilter.html#details">More...</a><br /></td></tr>
@@ -135,6 +155,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBlockingFifoFrameFilter.html">BlockingFifoFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Passes frames to a multiprocessing fifo.  <a href="classBlockingFifoFrameFilter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemFrameFilter.html">SharedMemFrameFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> writes frames into a shared memory buffer (<a class="el" href="classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. ">SharedMemRingBuffer</a>)  <a href="classSharedMemFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>

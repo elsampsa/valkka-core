@@ -92,15 +92,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classOutbound-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Outbound Class Reference</div>  </div>
+<div class="title">Outbound Class Reference<div class="ingroups"><a class="el" href="group__livethread__tag.html">livethread</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A base class that unifies all kinds of outgoing streams (i.e.  
+ <a href="classOutbound.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="livethread_8h_source.html">livethread.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for Outbound:</div>
 <div class="dyncontent">
 <div class="center"><img src="classOutbound__inherit__graph.png" border="0" usemap="#Outbound_inherit__map" alt="Inheritance graph"/></div>
 <map name="Outbound_inherit__map" id="Outbound_inherit__map">
-<area shape="rect" id="node2" href="classSDPOutbound.html" title="SDPOutbound" alt="" coords="5,80,112,107"/>
+<area shape="rect" id="node2" href="classSDPOutbound.html" title="Sending a stream without rtsp negotiation (i.e. " alt="" coords="5,80,112,107"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -109,44 +114,55 @@ Collaboration diagram for Outbound:</div>
 <div class="center"><img src="classOutbound__coll__graph.png" border="0" usemap="#Outbound_coll__map" alt="Collaboration graph"/></div>
 <map name="Outbound_coll__map" id="Outbound_coll__map">
 <area shape="rect" id="node2" href="classFrameFifo.html" title="A thread&#45;safe FrameFifo (first&#45;in&#45;first&#45;out) queue with thread&#45;safe methods for inserting and popping..." alt="" coords="5,5,87,32"/>
+<area shape="rect" id="node3" href="structLiveOutboundContext.html" title="Same as LiveConnectionContext, but for outbound streams (i.e. " alt="" coords="111,5,259,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a866520b24ec74f0511aa3e23929c93b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a866520b24ec74f0511aa3e23929c93b2"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Outbound</b> (UsageEnvironment &amp;env, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;<a class="el" href="classOutbound.html#ab3868b59677c60e84574d66ef0b8558d">fifo</a>, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl=255)</td></tr>
-<tr class="separator:a866520b24ec74f0511aa3e23929c93b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31c910641a5a954d793895f26e085f91"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a31c910641a5a954d793895f26e085f91"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOutbound.html#a31c910641a5a954d793895f26e085f91">Outbound</a> (UsageEnvironment &amp;<a class="el" href="classOutbound.html#a9bfb7a0a797eccae63728b815df5457b">env</a>, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;<a class="el" href="classOutbound.html#ab3868b59677c60e84574d66ef0b8558d">fifo</a>, <a class="el" href="structLiveOutboundContext.html">LiveOutboundContext</a> &amp;<a class="el" href="classOutbound.html#a34295a795ac5b6e23f4a7ef165564821">ctx</a>)</td></tr>
+<tr class="memdesc:a31c910641a5a954d793895f26e085f91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
+<tr class="separator:a31c910641a5a954d793895f26e085f91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f3817099d18c92479fa8cc5d69ad751"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7f3817099d18c92479fa8cc5d69ad751"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOutbound.html#a7f3817099d18c92479fa8cc5d69ad751">~Outbound</a> ()</td></tr>
+<tr class="memdesc:a7f3817099d18c92479fa8cc5d69ad751"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default virtual destructor. <br /></td></tr>
+<tr class="separator:a7f3817099d18c92479fa8cc5d69ad751"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa79c5b31b4c4d7fa0d5a8b409232bb68"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa79c5b31b4c4d7fa0d5a8b409232bb68"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>handleFrame</b> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
 <tr class="separator:aa79c5b31b4c4d7fa0d5a8b409232bb68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a5d4f6b84d99070d0429412830a4ce41a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d4f6b84d99070d0429412830a4ce41a"></a>
-SlotNumber&#160;</td><td class="memItemRight" valign="bottom"><b>slot</b></td></tr>
-<tr class="separator:a5d4f6b84d99070d0429412830a4ce41a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4923fbef291c27b28cb62c1db765ff38"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4923fbef291c27b28cb62c1db765ff38"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>adr</b></td></tr>
-<tr class="separator:a4923fbef291c27b28cb62c1db765ff38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25a0bcc0c71c44d438c131edf0620280"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a25a0bcc0c71c44d438c131edf0620280"></a>
-unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><b>portnum</b></td></tr>
-<tr class="separator:a25a0bcc0c71c44d438c131edf0620280"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa920b25210d141bb9e3408a3870e5c13"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa920b25210d141bb9e3408a3870e5c13"></a>
-unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>ttl</b></td></tr>
-<tr class="separator:aa920b25210d141bb9e3408a3870e5c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34295a795ac5b6e23f4a7ef165564821"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a34295a795ac5b6e23f4a7ef165564821"></a>
+<a class="el" href="structLiveOutboundContext.html">LiveOutboundContext</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOutbound.html#a34295a795ac5b6e23f4a7ef165564821">ctx</a></td></tr>
+<tr class="memdesc:a34295a795ac5b6e23f4a7ef165564821"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies the connection type, stream address, etc. See <a class="el" href="structLiveOutboundContext.html" title="Same as LiveConnectionContext, but for outbound streams (i.e. ">LiveOutboundContext</a>. <br /></td></tr>
+<tr class="separator:a34295a795ac5b6e23f4a7ef165564821"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedb0466963783c84f1242ca8b101ca97"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aedb0466963783c84f1242ca8b101ca97"></a>
-std::vector&lt; <a class="el" href="classStream.html">Stream</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>streams</b></td></tr>
+std::vector&lt; <a class="el" href="classStream.html">Stream</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOutbound.html#aedb0466963783c84f1242ca8b101ca97">streams</a></td></tr>
+<tr class="memdesc:aedb0466963783c84f1242ca8b101ca97"><td class="mdescLeft">&#160;</td><td class="mdescRight">SubStreams of the outgoing streams (typically two, e.g. video and sound) <br /></td></tr>
 <tr class="separator:aedb0466963783c84f1242ca8b101ca97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9bfb7a0a797eccae63728b815df5457b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9bfb7a0a797eccae63728b815df5457b"></a>
-UsageEnvironment &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>env</b></td></tr>
+UsageEnvironment &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOutbound.html#a9bfb7a0a797eccae63728b815df5457b">env</a></td></tr>
+<tr class="memdesc:a9bfb7a0a797eccae63728b815df5457b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies the live555 event loop. <br /></td></tr>
 <tr class="separator:a9bfb7a0a797eccae63728b815df5457b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3868b59677c60e84574d66ef0b8558d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab3868b59677c60e84574d66ef0b8558d"></a>
 <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOutbound.html#ab3868b59677c60e84574d66ef0b8558d">fifo</a></td></tr>
-<tr class="memdesc:ab3868b59677c60e84574d66ef0b8558d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frames are recycled here. <br /></td></tr>
+<tr class="memdesc:ab3868b59677c60e84574d66ef0b8558d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outgoing fFrames are being read and finally recycled here. <br /></td></tr>
 <tr class="separator:ab3868b59677c60e84574d66ef0b8558d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A base class that unifies all kinds of outgoing streams (i.e. </p>
+<p>streams sent by live555). Analogical to <a class="el" href="classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP). ">Connection</a> (that is for incoming streams).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">env</td><td>See <a class="el" href="classOutbound.html#a9bfb7a0a797eccae63728b815df5457b" title="Identifies the live555 event loop. ">Outbound::env</a> </td></tr>
+    <tr><td class="paramname">fifo</td><td>See <a class="el" href="classOutbound.html#ab3868b59677c60e84574d66ef0b8558d" title="Outgoing fFrames are being read and finally recycled here. ">Outbound::fifo</a> </td></tr>
+    <tr><td class="paramname">ctx</td><td>See <a class="el" href="classOutbound.html#a34295a795ac5b6e23f4a7ef165564821" title="Identifies the connection type, stream address, etc. See LiveOutboundContext. ">Outbound::ctx</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="livethread_8h_source.html">livethread.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="livethread_8cpp.html">livethread.cpp</a></li>
 </ul>

@@ -56,7 +56,7 @@ BufferSource::~BufferSource() {
 
 void BufferSource::handleFrame(Frame* f) {
   internal_fifo.push_front(f);
-  if (!active) {
+  if (!active) { // time to activate and re-schedule doGetNextFrame
     doGetNextFrame();
   }
 }

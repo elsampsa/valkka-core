@@ -1,5 +1,5 @@
 <map id="/home/sampsa/C/valkka/include/chains.h" name="/home/sampsa/C/valkka/include/chains.h">
-<area shape="rect" id="node2" href="$queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="655,244,729,271"/>
+<area shape="rect" id="node2" href="$queues_8h.html" title="Lockable and safe queues for multithreading. " alt="" coords="655,244,729,271"/>
 <area shape="rect" id="node43" href="$livethread_8h.html" title="A live555 thread. " alt="" coords="681,95,770,121"/>
 <area shape="rect" id="node47" href="$filters_8h.html" title="filters.h : Common frame filters. The FrameFilter base class is defined in frames.h " alt="" coords="775,244,841,271"/>
 <area shape="rect" id="node48" href="$avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="917,95,1000,121"/>

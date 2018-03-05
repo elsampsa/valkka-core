@@ -175,7 +175,9 @@ void TimestampFrameFilter2::go(Frame* frame) {
   if ( (frame->mstimestamp-savedtimestamp)>600000 ) {
     mstime_delta=0;
     savedtimestamp=frame->mstimestamp;
+#ifdef TIMESTAMPFILTER_DEBUG
     std::cout << "TimestampFrameFilter2: reset correction" << std::endl;
+#endif
   }
   
   ctime     =getCurrentMsTimestamp();          // current time
@@ -211,37 +213,59 @@ void RepeatH264ParsFrameFilter::go(Frame* frame) {// TODO
 
 
 
-GateFrameFilter::GateFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next), on(false) {
+GateFrameFilter::GateFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next), on(false), config_frames(true) {
 }
   
 void GateFrameFilter::go(Frame* frame) {
 }
   
 void GateFrameFilter::run(Frame* frame) {
+  std::unique_lock<std::mutex> lk(mutex);
   this->go(frame); // manipulate frame
-  if (!this->next and on) { return; } // call next filter .. if there is any and if the flag on is set
-  (this->next)->run(frame);
+  if (!next) {return;}
+  if (on) { // pass all frames if flag is set
+    (this->next)->run(frame);
+  }
+  else if (frame->frametype==FrameType::setup and config_frames) { // .. if flag is not set, pass still config frames if config_frames is set
+    (this->next)->run(frame);  
+  }
 }
   
 void GateFrameFilter::set() {
+  std::unique_lock<std::mutex> lk(mutex);
   on=true;
 }
 
 void GateFrameFilter::unSet() {
+  std::unique_lock<std::mutex> lk(mutex);
   on=false;
 }
+
+void GateFrameFilter::passConfigFrames() {
+  std::unique_lock<std::mutex> lk(mutex);
+  config_frames=true;
+}
+
+void GateFrameFilter::noConfigFrames() {
+  std::unique_lock<std::mutex> lk(mutex);
+  config_frames=false;
   
+}
+
 
 SetSlotFrameFilter::SetSlotFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next), n_slot(0) {
 }
 
 void SetSlotFrameFilter::go(Frame* frame) {
+  std::unique_lock<std::mutex> lk(mutex);
   if (n_slot>0) {
     frame->n_slot=n_slot;
   }
 }
   
 void SetSlotFrameFilter::setSlot(SlotNumber n) {
+  std::unique_lock<std::mutex> lk(mutex);
+  n_slot=n;
 }
   
 

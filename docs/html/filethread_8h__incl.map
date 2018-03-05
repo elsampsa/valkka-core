@@ -7,5 +7,5 @@
 <area shape="rect" id="node29" href="$sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1560,393,1624,420"/>
 <area shape="rect" id="node30" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="849,319,917,345"/>
 <area shape="rect" id="node36" href="$opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1389,319,1459,345"/>
-<area shape="rect" id="node43" href="$queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="1511,169,1585,196"/>
+<area shape="rect" id="node43" href="$queues_8h.html" title="Lockable and safe queues for multithreading. " alt="" coords="1511,169,1585,196"/>
 </map>

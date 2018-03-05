@@ -96,11 +96,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classFileThread-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">FileThread Class Reference</div>  </div>
+<div class="title">FileThread Class Reference<div class="ingroups"><a class="el" href="group__file__tag.html">file streaming</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Seeks and sends frames from files at realtime.  
+<p>This class in analogous to <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a>, but it handles files instead of live streams.  
  <a href="classFileThread.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="filethread_8h_source.html">filethread.h</a>&gt;</code></p>
@@ -132,6 +132,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5121ceb98001083499c5e6a55368982b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a5121ceb98001083499c5e6a55368982b">FileThread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, int core_id=-1)</td></tr>
 <tr class="memdesc:a5121ceb98001083499c5e6a55368982b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a5121ceb98001083499c5e6a55368982b">More...</a><br /></td></tr>
 <tr class="separator:a5121ceb98001083499c5e6a55368982b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19c2ddf586a72a7874db99e57fcdb0e5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a19c2ddf586a72a7874db99e57fcdb0e5"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a19c2ddf586a72a7874db99e57fcdb0e5">~FileThread</a> ()</td></tr>
+<tr class="memdesc:a19c2ddf586a72a7874db99e57fcdb0e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
+<tr class="separator:a19c2ddf586a72a7874db99e57fcdb0e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32e46f3b4dd14222563596bf9f41a5c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a32e46f3b4dd14222563596bf9f41a5c4">run</a> ()</td></tr>
 <tr class="memdesc:a32e46f3b4dd14222563596bf9f41a5c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main execution loop is defined here.  <a href="#a32e46f3b4dd14222563596bf9f41a5c4">More...</a><br /></td></tr>
 <tr class="separator:a32e46f3b4dd14222563596bf9f41a5c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -143,11 +147,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a14d0f424c46596aa03243ae6aeb93dea">postRun</a> ()</td></tr>
 <tr class="memdesc:a14d0f424c46596aa03243ae6aeb93dea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the main execution loop exits, but before joining the thread. <br /></td></tr>
 <tr class="separator:a14d0f424c46596aa03243ae6aeb93dea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94a9a8a8988eef2f7b71d3863a813f33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a94a9a8a8988eef2f7b71d3863a813f33">sendSignal</a> (<a class="el" href="structFileThread_1_1SignalContext.html">SignalContext</a> signal_ctx)</td></tr>
-<tr class="memdesc:a94a9a8a8988eef2f7b71d3863a813f33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a signal to the thread.  <a href="#a94a9a8a8988eef2f7b71d3863a813f33">More...</a><br /></td></tr>
+<tr class="memitem:a94a9a8a8988eef2f7b71d3863a813f33"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a94a9a8a8988eef2f7b71d3863a813f33"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a94a9a8a8988eef2f7b71d3863a813f33">sendSignal</a> (<a class="el" href="structFileThread_1_1SignalContext.html">SignalContext</a> signal_ctx)</td></tr>
+<tr class="memdesc:a94a9a8a8988eef2f7b71d3863a813f33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redefined : <a class="el" href="structThread_1_1SignalContext.html" title="Encapsulates data sent by the signal. ">Thread::SignalContext</a> has been changed to <a class="el" href="structFileThread_1_1SignalContext.html" title="Identifies the information the signals FileThread::Signals carry. ">FileThread::SignalContext</a>. <br /></td></tr>
 <tr class="separator:a94a9a8a8988eef2f7b71d3863a813f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3360659edcd7b6859d33b17fbf8dc6f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3360659edcd7b6859d33b17fbf8dc6f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>sendSignalAndWait</b> (<a class="el" href="structFileThread_1_1SignalContext.html">SignalContext</a> signal_ctx)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#aa3360659edcd7b6859d33b17fbf8dc6f">sendSignalAndWait</a> (<a class="el" href="structFileThread_1_1SignalContext.html">SignalContext</a> signal_ctx)</td></tr>
+<tr class="memdesc:aa3360659edcd7b6859d33b17fbf8dc6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redefined : <a class="el" href="structThread_1_1SignalContext.html" title="Encapsulates data sent by the signal. ">Thread::SignalContext</a> has been changed to <a class="el" href="structFileThread_1_1SignalContext.html" title="Identifies the information the signals FileThread::Signals carry. ">FileThread::SignalContext</a>. <br /></td></tr>
 <tr class="separator:aa3360659edcd7b6859d33b17fbf8dc6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dacbcfa480ceff7f6688c3b8961694a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0dacbcfa480ceff7f6688c3b8961694a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a0dacbcfa480ceff7f6688c3b8961694a">closeFileStreamCall</a> (<a class="el" href="structFileContext.html">FileContext</a> &amp;file_ctx)</td></tr>
@@ -220,19 +226,16 @@ std::deque&lt; <a class="el" href="structFileThread_1_1SignalContext.html">Signa
 <tr class="separator:a1d1d4f08c095e7f082e640e0a2a46250"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1620a1f1113a68d9f1dfae025b6cb672"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1620a1f1113a68d9f1dfae025b6cb672"></a>
 std::vector&lt; <a class="el" href="classFileStream.html">FileStream</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a1620a1f1113a68d9f1dfae025b6cb672">slots_</a></td></tr>
-<tr class="memdesc:a1620a1f1113a68d9f1dfae025b6cb672"><td class="mdescLeft">&#160;</td><td class="mdescRight">A constant sized vector. Keep the books for each stream. <br /></td></tr>
+<tr class="memdesc:a1620a1f1113a68d9f1dfae025b6cb672"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slots: a vector of <a class="el" href="classFileStream.html" title="This class in analogous to the Connection class in live streams. ">FileStream</a> instances. <br /></td></tr>
 <tr class="separator:a1620a1f1113a68d9f1dfae025b6cb672"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38e115da765b12cb03bc52208b079fa8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38e115da765b12cb03bc52208b079fa8"></a>
-std::list&lt; SlotNumber &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>active_slots</b></td></tr>
+std::list&lt; SlotNumber &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a38e115da765b12cb03bc52208b079fa8">active_slots</a></td></tr>
+<tr class="memdesc:a38e115da765b12cb03bc52208b079fa8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slots that are activated. <br /></td></tr>
 <tr class="separator:a38e115da765b12cb03bc52208b079fa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25d7bab2682e2098ad54e0bfce17c9c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a25d7bab2682e2098ad54e0bfce17c9c1"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a25d7bab2682e2098ad54e0bfce17c9c1">loop</a></td></tr>
 <tr class="memdesc:a25d7bab2682e2098ad54e0bfce17c9c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls the execution of the main loop. <br /></td></tr>
 <tr class="separator:a25d7bab2682e2098ad54e0bfce17c9c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a0735d0aaec1f351696f81314a6d177"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2a0735d0aaec1f351696f81314a6d177"></a>
-std::list&lt; <a class="el" href="classFileStream.html">FileStream</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileThread.html#a2a0735d0aaec1f351696f81314a6d177">streamlist</a></td></tr>
-<tr class="memdesc:a2a0735d0aaec1f351696f81314a6d177"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classFileStream.html" title="Keeping the books for each stream: ">FileStream</a> s that have frames to be presented are queued here. <br /></td></tr>
-<tr class="separator:a2a0735d0aaec1f351696f81314a6d177"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classThread')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:a2e64f4b9dab400b7b06f2c73da4e465a inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e64f4b9dab400b7b06f2c73da4e465a"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a></td></tr>
@@ -244,8 +247,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a9e604c94f8ee52771ffbc1dac03b93ad inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3fe753fa03016d016345c1171b123828"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a3fe753fa03016d016345c1171b123828">start_mutex</a></td></tr>
-<tr class="memdesc:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">released when the thread has been started <br /></td></tr>
+<tr class="memdesc:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting start_condition. <br /></td></tr>
 <tr class="separator:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d9732ab4852c250f4fbfc5dd5356de2"></a>
+std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a7d9732ab4852c250f4fbfc5dd5356de2">start_condition</a></td></tr>
+<tr class="memdesc:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notified when the thread has been started. <br /></td></tr>
+<tr class="separator:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6383ead608b8e4be6debb9f25bcfe80a inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6383ead608b8e4be6debb9f25bcfe80a"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a6383ead608b8e4be6debb9f25bcfe80a">mutex</a></td></tr>
 <tr class="memdesc:a6383ead608b8e4be6debb9f25bcfe80a inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting the condition variable and signal queue. <br /></td></tr>
@@ -287,9 +294,9 @@ Private Types</h2></td></tr>
 &#160;&#160;<b>seek_stream</b>, 
 <b>play_stream</b>, 
 <b>stop_stream</b>, 
-<b>get_state</b>
+<a class="el" href="classFileThread.html#a3bf170d7845daf0004b7b0e3f67f0c08acf4cc12dfe1b839eff145b8150508ee4">Signals::get_state</a>
 <br />
- }<tr class="memdesc:a3bf170d7845daf0004b7b0e3f67f0c08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Characteristic signals for the <a class="el" href="classFileThread.html" title="Seeks and sends frames from files at realtime. ">FileThread</a>.  <a href="classFileThread.html#a3bf170d7845daf0004b7b0e3f67f0c08">More...</a><br /></td></tr>
+ }<tr class="memdesc:a3bf170d7845daf0004b7b0e3f67f0c08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Characteristic signals for the <a class="el" href="classFileThread.html" title="This class in analogous to LiveThread, but it handles files instead of live streams. ">FileThread</a>.  <a href="classFileThread.html#a3bf170d7845daf0004b7b0e3f67f0c08">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:a3bf170d7845daf0004b7b0e3f67f0c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -328,7 +335,13 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 <tr class="separator:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Seeks and sends frames from files at realtime. </p>
+<div class="textblock"><p>This class in analogous to <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a>, but it handles files instead of live streams. </p>
+<p><a class="el" href="classFileThread.html" title="This class in analogous to LiveThread, but it handles files instead of live streams. ">FileThread</a>'s execution loop works roughly as follows:</p>
+<ul>
+<li>Each active slot has a <a class="el" href="classFileStream.html" title="This class in analogous to the Connection class in live streams. ">FileStream</a> instance</li>
+<li>For each <a class="el" href="classFileStream.html" title="This class in analogous to the Connection class in live streams. ">FileStream</a>, <a class="el" href="classFileStream.html#ab47343c0697fa713205673a95ef0d845" title="Tries to achieve mstimestamp: calculates FileStream::target_mstimestamp_ and calls pullNextFrame...">FileStream::update</a> is called with the current wallclock time</li>
+<li><a class="el" href="classFileStream.html#ab47343c0697fa713205673a95ef0d845" title="Tries to achieve mstimestamp: calculates FileStream::target_mstimestamp_ and calls pullNextFrame...">FileStream::update</a> returns a timeout to the next frame in the file - in the case of seek, this is zero untill the target time is met</li>
+</ul>
 <p>See also <a class="el" href="timing.html">Presention timing and playing</a>. </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a3bf170d7845daf0004b7b0e3f67f0c08"></a>
@@ -349,8 +362,13 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 </table>
 </div><div class="memdoc">
 
-<p>Characteristic signals for the <a class="el" href="classFileThread.html" title="Seeks and sends frames from files at realtime. ">FileThread</a>. </p>
+<p>Characteristic signals for the <a class="el" href="classFileThread.html" title="This class in analogous to LiveThread, but it handles files instead of live streams. ">FileThread</a>. </p>
 <p>These signals map directly into methods with the same names </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a3bf170d7845daf0004b7b0e3f67f0c08acf4cc12dfe1b839eff145b8150508ee4"></a>get_state&#160;</td><td class="fielddoc">
+<p>query information about the stream </p>
+</td></tr>
+</table>
 
 </div>
 </div>
@@ -383,7 +401,7 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td><a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> name </td></tr>
-    <tr><td class="paramname">n_max_slots</td><td>Maximum number of connections (each <a class="el" href="classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP). ">Connection</a> instance is placed in a slot) </td></tr>
+    <tr><td class="paramname">core_id</td><td>(optional) bind this thread to a specific processor </td></tr>
   </table>
   </dd>
 </dl>
@@ -421,29 +439,20 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph.png" border="0" usemap="#classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph" alt=""/></div>
 <map name="classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph" id="classFileThread_a32e46f3b4dd14222563596bf9f41a5c4_cgraph">
-<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="163,5,329,32"/>
+<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="569,23,736,49"/>
+<area shape="rect" id="node3" href="classFileStream.html#ab47343c0697fa713205673a95ef0d845" title="Tries to achieve mstimestamp: calculates FileStream::target_mstimestamp_ and calls pullNextFrame..." alt="" coords="163,149,295,176"/>
+<area shape="rect" id="node9" href="classFileStream.html#a2790fb16762a066b418d1d93653deddf" title="Seek to a desider stream time. " alt="" coords="168,48,289,75"/>
+<area shape="rect" id="node11" href="classFileStream.html#ae1f929f6ac1a57fbb980ef49380dcc17" title="Start playing the stream. " alt="" coords="170,99,287,125"/>
+<area shape="rect" id="node12" href="classFileStream.html#a2d6ae46a63ddc7067184ab66df1276d6" title="Stop playing the strem. " alt="" coords="169,200,288,227"/>
+<area shape="rect" id="node4" href="classFileStream.html#aab67ac1fec72625ac9c358f50b8a5665" title="Tries to achieve FileStream::target_mstimestamp_ . Sends frames whose timestamps are less than that t..." alt="" coords="343,149,521,176"/>
+<area shape="rect" id="node5" href="classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="605,99,701,125"/>
+<area shape="rect" id="node6" href="classFrame.html#ac2450a1060d6bbd03cd0e85a58f94d52" title="Copy data from AVPacket: payload, timestamp, substream index. " alt="" coords="577,149,729,176"/>
+<area shape="rect" id="node7" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="595,200,710,227"/>
+<area shape="rect" id="node8" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="784,200,895,227"/>
+<area shape="rect" id="node10" href="classFileStream.html#a8f6115df951a7e447cb349011844dcb3" title="Creates a correspondence with the current wallclock time and a desider stream time, by calculating FileStream::reftime. See Presention timing and playing. " alt="" coords="345,48,519,75"/>
 </map>
 </div>
 </p>
-
-</div>
-</div>
-<a class="anchor" id="a94a9a8a8988eef2f7b71d3863a813f33"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void FileThread::sendSignal </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structFileThread_1_1SignalContext.html">SignalContext</a>&#160;</td>
-          <td class="paramname"><em>signal_ctx</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Send a signal to the thread. </p>
-<p>Must be explicitly <em>redefined</em> just in case : <a class="el" href="structThread_1_1SignalContext.html" title="Encapsulates data sent by the signal. ">Thread::SignalContext</a> has been changed to <a class="el" href="structLiveThread_1_1SignalContext.html" title="Identifies the information the signals LiveThread::Signals carry. ">LiveThread::SignalContext</a> </p>
 
 </div>
 </div>

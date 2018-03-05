@@ -12,6 +12,8 @@ var searchData=
   ['delrendergroupcall',['delRenderGroupCall',['../classOpenGLThread.html#ac05c2be99cdeb614aac854d442995c45',1,'OpenGLThread']]],
   ['delshaders',['delShaders',['../classOpenGLThread.html#a7c421fdb80d8838ee63e5057e881d5d7',1,'OpenGLThread']]],
   ['deregisterstreamcall',['deregisterStreamCall',['../classLiveThread.html#ad9c33d99f8aa561c67559744b9f3e4b0',1,'LiveThread']]],
+  ['diagnosis',['diagnosis',['../classOpenGLFrameFifo.html#a363ab3a9c1254485af945fa28af5b32b',1,'OpenGLFrameFifo::diagnosis()'],['../classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4',1,'FrameFifo::diagnosis()']]],
+  ['dogetnextframe',['doGetNextFrame',['../classBufferSource.html#a796bc84e5233c21c379a57f2a3b65e54',1,'BufferSource']]],
   ['dummyframefilter',['DummyFrameFilter',['../classDummyFrameFilter.html#ab0e6cf935f2c79be37770eee6767a673',1,'DummyFrameFilter']]],
   ['dumpavframe',['dumpAVFrame',['../classFrame.html#a62a11ecc89c1ac1e79441dc82feacdc5',1,'Frame']]],
   ['dumpfifo',['dumpFifo',['../classFrameFifo.html#afbff47ed40f017d26d8a905f7decc9e1',1,'FrameFifo']]],

@@ -57,11 +57,15 @@ Thread::Thread(const char* name, int core_id) : name(std::string(name)), core_id
 
 
 Thread::~Thread() {
+  threadlogger.log(LogLevel::crazy) << "Thread: destructor: "<< this->name <<std::endl;
+  this->stopCall();
+  /*
   if (this->has_thread) {
     threadlogger.log(LogLevel::debug) << "Thread: destructor: joining "<< this->name <<std::endl;
     this->closeThread();
     threadlogger.log(LogLevel::debug) << "Thread destructor: joined "<< this->name <<std::endl;
   }
+  */
 }
 
 
@@ -87,7 +91,8 @@ void* Thread::mainRun_(void *p) {// for the pthread_* version
 
 
 void Thread::closeThread() {
-  #ifdef STD_THREAD
+  threadlogger.log(LogLevel::debug) << "Thread: closeThread: "<< this->name <<std::endl;
+#ifdef STD_THREAD
   // std::thread way
   this->internal_thread.join();
 #else
@@ -99,8 +104,10 @@ void Thread::closeThread() {
   free(res); // free resources allocated by thread
   i=pthread_attr_destroy(&thread_attr);
   if (i!=0) {perror("Thread: closeThread: WARNING! pthread_attr_destroy failed"); exit(1);}
-#endif  
+#endif
+  threadlogger.log(LogLevel::debug) << "Thread: closeThread: bye "<< this->name <<std::endl;
 }
+
 
 void Thread::startCall() {
   std::unique_lock<std::mutex> lk(this->start_mutex);
@@ -144,8 +151,11 @@ void Thread::startCall() {
 
 
 void Thread::stopCall() {
+  threadlogger.log(LogLevel::crazy) << "Thread: stopCall: "<< this->name <<std::endl;
+  if (!this->has_thread) {return;}
   SignalContext signal_ctx;
   signal_ctx.signal=Signals::exit;
+  threadlogger.log(LogLevel::crazy) << "Thread: sending exit signal "<< this->name <<std::endl;
   this->sendSignal(signal_ctx);
   this->closeThread();
   this->has_thread=false;

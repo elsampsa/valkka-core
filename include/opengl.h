@@ -66,13 +66,6 @@ namespace glx_attr { // https://stackoverflow.com/questions/11623451/static-vs-n
   };
 };
 
-/* // There's no *****ng way to partition the variables separately into the header and cpp files
-namespace glx_attr {
-  // int* singleBufferAttributes;
-  // int* doubleBufferAttributes;
-};
-*/
-
 
 
 /** A Structure encapsulating an OpenGL %PBO (Pixel Buffer Object)
@@ -81,7 +74,7 @@ namespace glx_attr {
 struct PBO {
   GLuint   index;   ///< internal OpenGL/GPU index
   GLsizei  size;    ///< payload max size
-  GLubyte* payload; ///< direct memory access (dma) memory address, returned by GPU
+  GLubyte* payload; ///< direct memory access (dma) memory address into GPU
 };
 
 
@@ -139,15 +132,17 @@ public:
 public: // format, dimensions
   GLint    internal_format;    ///< OpenGL internal format - this MUST be optimized!       
   GLint    format;             ///< OpenGL format of the texture - this MUST be optimized!
-  GLsizei  w;         ///< Width of the largest plane (Y)
-  GLsizei  h;         ///< Height of the largest plane (Y)
+  GLsizei  w;                  ///< Width of the largest plane (Y)
+  GLsizei  h;                  ///< Height of the largest plane (Y)
   
 public: // OpenGL reference data: indices
   GLuint   index;     ///< OpenGL reference 
-  
 };
 
+
+
 /** A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.)
+ * 
  * @ingroup openglthread_tag 
  */
 class YUVTEX : public TEX {

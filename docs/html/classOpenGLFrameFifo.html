@@ -93,7 +93,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#friends">Friends</a> &#124;
 <a href="classOpenGLFrameFifo-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenGLFrameFifo Class Reference<div class="ingroups"><a class="el" href="group__openglthread__tag.html">Openglthread_tag</a></div></div>  </div>
+<div class="title">OpenGLFrameFifo Class Reference<div class="ingroups"><a class="el" href="group__openglthread__tag.html">opengl</a> &#124; <a class="el" href="group__queues__tag.html">queues and fifos</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -120,9 +120,9 @@ Collaboration diagram for OpenGLFrameFifo:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a65e1f9fcbd1534416c9e4e36b72b8753"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#a65e1f9fcbd1534416c9e4e36b72b8753">OpenGLFrameFifo</a> (unsigned short n_stack_720p, unsigned short n_stack_1080p, unsigned short n_stack_1440p, unsigned short n_stack_4K, unsigned short n_stack_audio)</td></tr>
-<tr class="memdesc:a65e1f9fcbd1534416c9e4e36b72b8753"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a65e1f9fcbd1534416c9e4e36b72b8753">More...</a><br /></td></tr>
-<tr class="separator:a65e1f9fcbd1534416c9e4e36b72b8753"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d1cbc8e28fcfc73ed2c93df5ce34cac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#a1d1cbc8e28fcfc73ed2c93df5ce34cac">OpenGLFrameFifo</a> (unsigned short n_stack_720p, unsigned short n_stack_1080p, unsigned short n_stack_1440p, unsigned short n_stack_4K)</td></tr>
+<tr class="memdesc:a1d1cbc8e28fcfc73ed2c93df5ce34cac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a1d1cbc8e28fcfc73ed2c93df5ce34cac">More...</a><br /></td></tr>
+<tr class="separator:a1d1cbc8e28fcfc73ed2c93df5ce34cac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73b7f37bc6891626677cc96ce5b547c2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a73b7f37bc6891626677cc96ce5b547c2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#a73b7f37bc6891626677cc96ce5b547c2">~OpenGLFrameFifo</a> ()</td></tr>
 <tr class="memdesc:a73b7f37bc6891626677cc96ce5b547c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
@@ -139,20 +139,19 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#ae19a3b5eb22c9a857436ae6174083f73">dumpStack_</a> ()</td></tr>
 <tr class="memdesc:ae19a3b5eb22c9a857436ae6174083f73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dump the frames in the stack. No mutex protection. <br /></td></tr>
 <tr class="separator:ae19a3b5eb22c9a857436ae6174083f73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a288da225915d75fdf64ea9bee321ac6d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a288da225915d75fdf64ea9bee321ac6d"></a>
-<a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#a288da225915d75fdf64ea9bee321ac6d">getAudioFrame</a> ()</td></tr>
-<tr class="memdesc:a288da225915d75fdf64ea9bee321ac6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a frame from the OpenGLFrameFifo::stack_audio stack. <br /></td></tr>
-<tr class="separator:a288da225915d75fdf64ea9bee321ac6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa413592f88c40a8d6405ec94b4e851a1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa413592f88c40a8d6405ec94b4e851a1"></a>
-<a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#aa413592f88c40a8d6405ec94b4e851a1">prepareFrame</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
-<tr class="memdesc:aa413592f88c40a8d6405ec94b4e851a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a copy of frames other than <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>. <br /></td></tr>
-<tr class="separator:aa413592f88c40a8d6405ec94b4e851a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a779a7de05f5411d6618657bb7d571472"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a779a7de05f5411d6618657bb7d571472"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>diagnosis_</b> ()</td></tr>
+<tr class="separator:a779a7de05f5411d6618657bb7d571472"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37b4dee7369df5e7c98fce681880c9c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a37b4dee7369df5e7c98fce681880c9c3"></a>
+<a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#a37b4dee7369df5e7c98fce681880c9c3">prepareFrame</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
+<tr class="memdesc:a37b4dee7369df5e7c98fce681880c9c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a copy of frames other than <a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>. <br /></td></tr>
+<tr class="separator:a37b4dee7369df5e7c98fce681880c9c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e51e2c3c7645e171b36c57a4ddcdd83"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e51e2c3c7645e171b36c57a4ddcdd83"></a>
 <a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#a6e51e2c3c7645e171b36c57a4ddcdd83">getFrame</a> (BitmapType bmtype)</td></tr>
 <tr class="memdesc:a6e51e2c3c7645e171b36c57a4ddcdd83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a frame from a stack by bitmap type (uses <a class="el" href="classOpenGLFrameFifo.html#affb18c6b12f28e31c238c2d65bc28677" title="Take a frame from a stack. Not mutex protection. Only for internal use. ">OpenGLFrameFifo::getFrame_</a>) <br /></td></tr>
 <tr class="separator:a6e51e2c3c7645e171b36c57a4ddcdd83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba800b51221cbb52dcd925c7d4899caf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#aba800b51221cbb52dcd925c7d4899caf">prepareAVFrame</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
-<tr class="memdesc:aba800b51221cbb52dcd925c7d4899caf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chooses a frame from the stack, does GPU uploading for frames of the type <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>.  <a href="#aba800b51221cbb52dcd925c7d4899caf">More...</a><br /></td></tr>
+<tr class="memdesc:aba800b51221cbb52dcd925c7d4899caf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chooses a frame from the stack, does GPU uploading for frames of the type <a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>.  <a href="#aba800b51221cbb52dcd925c7d4899caf">More...</a><br /></td></tr>
 <tr class="separator:aba800b51221cbb52dcd925c7d4899caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71356c2eeea511481876d53675855a6c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a71356c2eeea511481876d53675855a6c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#a71356c2eeea511481876d53675855a6c">writeCopy</a> (<a class="el" href="classFrame.html">Frame</a> *f, bool wait=false)</td></tr>
@@ -170,6 +169,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#aa10d25b0cd368d44fe40aa31066a6419">dumpStack</a> ()</td></tr>
 <tr class="memdesc:aa10d25b0cd368d44fe40aa31066a6419"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dump the frames in the stack. <br /></td></tr>
 <tr class="separator:aa10d25b0cd368d44fe40aa31066a6419"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a363ab3a9c1254485af945fa28af5b32b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a363ab3a9c1254485af945fa28af5b32b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLFrameFifo.html#a363ab3a9c1254485af945fa28af5b32b">diagnosis</a> ()</td></tr>
+<tr class="memdesc:a363ab3a9c1254485af945fa28af5b32b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print a resumen of fifo and stack usage. <br /></td></tr>
+<tr class="separator:a363ab3a9c1254485af945fa28af5b32b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a587f7bf0ac59fc7883276786b16b57da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a587f7bf0ac59fc7883276786b16b57da"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>debugOn</b> ()</td></tr>
 <tr class="separator:a587f7bf0ac59fc7883276786b16b57da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,9 +180,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>debugOn</b> ()</td></
 void&#160;</td><td class="memItemRight" valign="bottom"><b>debugOff</b> ()</td></tr>
 <tr class="separator:a8cc1378311249728f03bd1dc2ece0d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classFrameFifo"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classFrameFifo')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classFrameFifo.html">FrameFifo</a></td></tr>
-<tr class="memitem:aa90e09c733c54b7a1c1f9e252599b4c3 inherit pub_methods_classFrameFifo"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#aa90e09c733c54b7a1c1f9e252599b4c3">FrameFifo</a> (const char *<a class="el" href="classFrameFifo.html#a773560493e8d226f2b0c2b4e31ad8505">name</a>, unsigned short int <a class="el" href="classFrameFifo.html#ae0ae5c0c72de6d1a2611e7af75db1be3">n_stack</a>)</td></tr>
-<tr class="memdesc:aa90e09c733c54b7a1c1f9e252599b4c3 inherit pub_methods_classFrameFifo"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#aa90e09c733c54b7a1c1f9e252599b4c3">More...</a><br /></td></tr>
-<tr class="separator:aa90e09c733c54b7a1c1f9e252599b4c3 inherit pub_methods_classFrameFifo"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab66a2d4512d5cb7701f79d8e3af6ebb6 inherit pub_methods_classFrameFifo"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#ab66a2d4512d5cb7701f79d8e3af6ebb6">FrameFifo</a> (const char *<a class="el" href="classFrameFifo.html#a773560493e8d226f2b0c2b4e31ad8505">name</a>, unsigned short int <a class="el" href="classFrameFifo.html#ae0ae5c0c72de6d1a2611e7af75db1be3">n_stack</a>, bool <a class="el" href="classFrameFifo.html#ab4a0c5d710e7a164bd87c5afe569a084">clear_when_filled</a>=false)</td></tr>
+<tr class="memdesc:ab66a2d4512d5cb7701f79d8e3af6ebb6 inherit pub_methods_classFrameFifo"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ab66a2d4512d5cb7701f79d8e3af6ebb6">More...</a><br /></td></tr>
+<tr class="separator:ab66a2d4512d5cb7701f79d8e3af6ebb6 inherit pub_methods_classFrameFifo"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa85de58431db509135505e7956a0715e inherit pub_methods_classFrameFifo"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa85de58431db509135505e7956a0715e"></a>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#aa85de58431db509135505e7956a0715e">~FrameFifo</a> ()</td></tr>
 <tr class="memdesc:aa85de58431db509135505e7956a0715e inherit pub_methods_classFrameFifo"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default virtual destructor. <br /></td></tr>
@@ -191,6 +194,10 @@ virtual <a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="me
 <tr class="memitem:aae984545cb5d40a1d0fe8b8e369d9c64 inherit pub_methods_classFrameFifo"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64">read</a> (unsigned short int mstimeout=0)</td></tr>
 <tr class="memdesc:aae984545cb5d40a1d0fe8b8e369d9c64 inherit pub_methods_classFrameFifo"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pop a frame from the end of the fifo and return the frame to the reservoir stack.  <a href="#aae984545cb5d40a1d0fe8b8e369d9c64">More...</a><br /></td></tr>
 <tr class="separator:aae984545cb5d40a1d0fe8b8e369d9c64 inherit pub_methods_classFrameFifo"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a094d025e259aef84c8d3d4b76c0076eb inherit pub_methods_classFrameFifo"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a094d025e259aef84c8d3d4b76c0076eb"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a094d025e259aef84c8d3d4b76c0076eb">recycleAll</a> ()</td></tr>
+<tr class="memdesc:a094d025e259aef84c8d3d4b76c0076eb inherit pub_methods_classFrameFifo"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recycle all frames from fifo back to stack (make a "flush") <br /></td></tr>
+<tr class="separator:a094d025e259aef84c8d3d4b76c0076eb inherit pub_methods_classFrameFifo"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afbff47ed40f017d26d8a905f7decc9e1 inherit pub_methods_classFrameFifo"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afbff47ed40f017d26d8a905f7decc9e1"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#afbff47ed40f017d26d8a905f7decc9e1">dumpFifo</a> ()</td></tr>
 <tr class="memdesc:afbff47ed40f017d26d8a905f7decc9e1 inherit pub_methods_classFrameFifo"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dump frames in the fifo. <br /></td></tr>
@@ -217,9 +224,6 @@ unsigned short&#160;</td><td class="memItemRight" valign="bottom"><b>n_stack_144
 <tr class="memitem:a2fc9f8fef61de00cfa307e04c4c5ae40"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fc9f8fef61de00cfa307e04c4c5ae40"></a>
 unsigned short&#160;</td><td class="memItemRight" valign="bottom"><b>n_stack_4K</b></td></tr>
 <tr class="separator:a2fc9f8fef61de00cfa307e04c4c5ae40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb10261ddf1c5798230fad3829c737f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abb10261ddf1c5798230fad3829c737f3"></a>
-unsigned short&#160;</td><td class="memItemRight" valign="bottom"><b>n_stack_audio</b></td></tr>
-<tr class="separator:abb10261ddf1c5798230fad3829c737f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6061a1680550625cec50cc0f02bdf16"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa6061a1680550625cec50cc0f02bdf16"></a>
 std::deque&lt; <a class="el" href="classFrame.html">Frame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>stack_720p</b></td></tr>
 <tr class="separator:aa6061a1680550625cec50cc0f02bdf16"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -232,9 +236,6 @@ std::deque&lt; <a class="el" href="classFrame.html">Frame</a> * &gt;&#160;</td><
 <tr class="memitem:a36c39a2c4c4b3e0905a885a44746389b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a36c39a2c4c4b3e0905a885a44746389b"></a>
 std::deque&lt; <a class="el" href="classFrame.html">Frame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>stack_4K</b></td></tr>
 <tr class="separator:a36c39a2c4c4b3e0905a885a44746389b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7649b4cf90ab3766eff467720cac8d8f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7649b4cf90ab3766eff467720cac8d8f"></a>
-std::deque&lt; <a class="el" href="classFrame.html">Frame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>stack_audio</b></td></tr>
-<tr class="separator:a7649b4cf90ab3766eff467720cac8d8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a181527914e4d33e61e633f25d4c0b4ac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a181527914e4d33e61e633f25d4c0b4ac"></a>
 std::vector&lt; <a class="el" href="classFrame.html">Frame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>reservoir_720p</b></td></tr>
 <tr class="separator:a181527914e4d33e61e633f25d4c0b4ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -247,9 +248,6 @@ std::vector&lt; <a class="el" href="classFrame.html">Frame</a> &gt;&#160;</td><t
 <tr class="memitem:a323fd26138f807512b0623b30167d33e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a323fd26138f807512b0623b30167d33e"></a>
 std::vector&lt; <a class="el" href="classFrame.html">Frame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>reservoir_4K</b></td></tr>
 <tr class="separator:a323fd26138f807512b0623b30167d33e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3b3ac4d5c59961d987076478e625eac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3b3ac4d5c59961d987076478e625eac"></a>
-std::vector&lt; <a class="el" href="classFrame.html">Frame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>reservoir_audio</b></td></tr>
-<tr class="separator:aa3b3ac4d5c59961d987076478e625eac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -290,6 +288,10 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#ae0ae5c0c72de6d1a2611e7af75db1be3">n_stack</a></td></tr>
 <tr class="memdesc:ae0ae5c0c72de6d1a2611e7af75db1be3 inherit pro_attribs_classFrameFifo"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max number of frames in the fifo. <br /></td></tr>
 <tr class="separator:ae0ae5c0c72de6d1a2611e7af75db1be3 inherit pro_attribs_classFrameFifo"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4a0c5d710e7a164bd87c5afe569a084 inherit pro_attribs_classFrameFifo"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab4a0c5d710e7a164bd87c5afe569a084"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#ab4a0c5d710e7a164bd87c5afe569a084">clear_when_filled</a></td></tr>
+<tr class="memdesc:ab4a0c5d710e7a164bd87c5afe569a084 inherit pro_attribs_classFrameFifo"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recycle all frames from fifo to stack is running empty. <br /></td></tr>
+<tr class="separator:ab4a0c5d710e7a164bd87c5afe569a084 inherit pro_attribs_classFrameFifo"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a937f07e8345eeced5fcb2447e4c234ea inherit pro_attribs_classFrameFifo"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a937f07e8345eeced5fcb2447e4c234ea"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a937f07e8345eeced5fcb2447e4c234ea">mutex</a></td></tr>
 <tr class="memdesc:a937f07e8345eeced5fcb2447e4c234ea inherit pro_attribs_classFrameFifo"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Lock. <br /></td></tr>
@@ -317,13 +319,13 @@ std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a cl
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A <a class="el" href="classFrameFifo.html" title="A thread-safe FrameFifo (first-in-first-out) queue with thread-safe methods for inserting and popping...">FrameFifo</a> with multiple stacks. </p>
-<p>Used by <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a></p>
-<p>This is a special <a class="el" href="classFrameFifo.html" title="A thread-safe FrameFifo (first-in-first-out) queue with thread-safe methods for inserting and popping...">FrameFifo</a> class. You should never instantiate it by yourself! Instead, request it from <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a> by calling <a class="el" href="classOpenGLThread.html#ac96bdf32800352fa52cb9c5a571d1f49" title="Retrieve the communication fifo // &lt;pyapi&gt; ">OpenGLThread::getFifo</a> (fifo's frames get properly initialized after <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a> has been started and/or if <a class="el" href="classOpenGLThread.html#a8229c3916b40e90d7a7473df99a89931" title="Called before entering the main execution loop, but after creating the thread. ">OpenGLThread::preRun</a> is called)</p>
+<p>Created, managed and used by <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>.</p>
+<p>This is a special <a class="el" href="classFrameFifo.html" title="A thread-safe FrameFifo (first-in-first-out) queue with thread-safe methods for inserting and popping...">FrameFifo</a> class. You should never instantiate it by yourself! Instead, request it from <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a> by calling <a class="el" href="classOpenGLThread.html#ac96bdf32800352fa52cb9c5a571d1f49" title="Retrieve the communication fifo // &lt;pyapi&gt; ">OpenGLThread::getFifo</a> (fifo's frames get properly initialized after <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a> has been started and/or if <a class="el" href="classOpenGLThread.html#a8229c3916b40e90d7a7473df99a89931" title="Called before entering the main execution loop, but after creating the thread. Calls OpenGLThread::cr...">OpenGLThread::preRun</a> is called)</p>
 <p>Why not instantiate it by the API user? The reason is simple: in order to construct an instance of <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a>, we need to call various OpenGL routines, and in this library, all OpenGL calls are done by one, and only one thread, e.g. <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>.</p>
-<p>In detail, the pre-reserved frames we are warehousing in this object's stacks, have their <a class="el" href="classFrame.html#a6756411f84cc92128275c3785db6d630" title="Type of the frame. ">Frame::frametype</a> set to <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a376bf3c0bb30c3c3276663258f9a12cc" title="Data is in the Frame::yuvpbo struct (decoded yuv frames - ready for OpenGL upload) ...">FrameType::yuvframe</a>, and they are making use of the <a class="el" href="classFrame.html#a6b86da1e00b483afaf192c75473c055f" title="NOT MANAGED by Frame. Managed by an OpenGLThread instance. ">Frame::yuvpbo</a> pointer. <a class="el" href="classFrame.html#a6b86da1e00b483afaf192c75473c055f" title="NOT MANAGED by Frame. Managed by an OpenGLThread instance. ">Frame::yuvpbo</a> are of the type <a class="el" href="classYUVPBO.html" title="Encapsulates OpenGL PBOs (Pixel Buffer Objects) for a YUV420 image. ">YUVPBO</a>, i.e. they present OpenGL Pixel Buffer Objects (PBOs), having direct memory access to the GPU memory. And initializing OpenGL and reserving PBOs is done by the <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>.</p>
-<p>In a typical situation, frames from <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a> are feeded, through <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter(s)</a> into <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a>. Decoded frames have typically have their <a class="el" href="classFrame.html#a6756411f84cc92128275c3785db6d630" title="Type of the frame. ">Frame::frametype</a> set to <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>, indicating that the decoded frame is pointer by the <a class="el" href="classFrame.html#a6e31efaba2a5e93fffa7dc07023dad8b" title="This is a pointer to short-lived, temporary storage, used by the FFmpeg decoder (and finally overwrit...">Frame::av_frame</a> pointer. In such cases <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a> then <a class="el" href="classOpenGLFrameFifo.html#aba800b51221cbb52dcd925c7d4899caf" title="Chooses a frame from the stack, does GPU uploading for frames of the type FrameType::avframe. ">OpenGLFrameFifo::prepareAVFrame</a> to upload the data from <a class="el" href="classFrame.html#a6e31efaba2a5e93fffa7dc07023dad8b" title="This is a pointer to short-lived, temporary storage, used by the FFmpeg decoder (and finally overwrit...">Frame::av_frame</a> directly into GPU, using the PBO(s). </p>
+<p>In detail, the pre-reserved frames we are warehousing in this object's stacks, have their <a class="el" href="classFrame.html#a6756411f84cc92128275c3785db6d630" title="Type of the frame. ">Frame::frametype</a> set to <a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a376bf3c0bb30c3c3276663258f9a12cc" title="Data is in the Frame::yuvpbo struct (decoded yuv frames - ready for OpenGL upload) ...">FrameType::yuvframe</a>, and they are making use of the <a class="el" href="classFrame.html#a6b86da1e00b483afaf192c75473c055f" title="NOT MANAGED by Frame. Managed by an OpenGLThread instance. ">Frame::yuvpbo</a> pointer. <a class="el" href="classFrame.html#a6b86da1e00b483afaf192c75473c055f" title="NOT MANAGED by Frame. Managed by an OpenGLThread instance. ">Frame::yuvpbo</a> are of the type <a class="el" href="classYUVPBO.html" title="Encapsulates OpenGL PBOs (Pixel Buffer Objects) for a YUV420 image. ">YUVPBO</a>, i.e. they present OpenGL Pixel Buffer Objects (PBOs), having direct memory access to the GPU memory. And initializing OpenGL and reserving PBOs is done by the <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>.</p>
+<p>In a typical situation, frames from <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a> are feeded, through <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter(s)</a> into <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a>. Decoded frames have typically have their <a class="el" href="classFrame.html#a6756411f84cc92128275c3785db6d630" title="Type of the frame. ">Frame::frametype</a> set to <a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>, indicating that the decoded frame is pointer by the <a class="el" href="classFrame.html#a6e31efaba2a5e93fffa7dc07023dad8b" title="This is a pointer to short-lived, temporary storage, used by the FFmpeg decoder (and finally overwrit...">Frame::av_frame</a> pointer. In such cases <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a> then <a class="el" href="classOpenGLFrameFifo.html#aba800b51221cbb52dcd925c7d4899caf" title="Chooses a frame from the stack, does GPU uploading for frames of the type FrameType::avframe. ">OpenGLFrameFifo::prepareAVFrame</a> to upload the data from <a class="el" href="classFrame.html#a6e31efaba2a5e93fffa7dc07023dad8b" title="This is a pointer to short-lived, temporary storage, used by the FFmpeg decoder (and finally overwrit...">Frame::av_frame</a> directly into GPU, using the PBO(s). </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a65e1f9fcbd1534416c9e4e36b72b8753"></a>
+<a class="anchor" id="a1d1cbc8e28fcfc73ed2c93df5ce34cac"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -349,13 +351,7 @@ std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a cl
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned short&#160;</td>
-          <td class="paramname"><em>n_stack_4K</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned short&#160;</td>
-          <td class="paramname"><em>n_stack_audio</em>&#160;</td>
+          <td class="paramname"><em>n_stack_4K</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -372,7 +368,6 @@ std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a cl
     <tr><td class="paramname">n_stack_1080p</td><td>Size of the frame reservoir for 1080p </td></tr>
     <tr><td class="paramname">n_stack_1440p</td><td>Size of the frame reservoir for 1440p </td></tr>
     <tr><td class="paramname">n_stack_4K</td><td>Size of the frame reservoir for 4K </td></tr>
-    <tr><td class="paramname">n_stack_audio</td><td>Size of the payload reservoir for audio frames </td></tr>
   </table>
   </dd>
 </dl>
@@ -394,7 +389,7 @@ std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a cl
       </table>
 </div><div class="memdoc">
 
-<p>Chooses a frame from the stack, does GPU uploading for frames of the type <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>. </p>
+<p>Chooses a frame from the stack, does GPU uploading for frames of the type <a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a>. </p>
 <ul>
 <li></li>
 </ul>

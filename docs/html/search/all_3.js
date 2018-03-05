@@ -6,7 +6,7 @@ var searchData=
   ['decoders',['decoders',['../classAVThread.html#a8979fa7236713ab3a9239c4ca4845896',1,'AVThread']]],
   ['decoders_2ecpp',['decoders.cpp',['../decoders_8cpp.html',1,'']]],
   ['decoders_2eh',['decoders.h',['../decoders_8h.html',1,'']]],
-  ['decoding_5ftag',['Decoding_tag',['../group__decoding__tag.html',1,'']]],
+  ['decoding',['decoding',['../group__decoding__tag.html',1,'']]],
   ['decodingoffcall',['decodingOffCall',['../classAVThread.html#a6980eb7ce7507b9dffc64627c933fd19',1,'AVThread']]],
   ['decodingoncall',['decodingOnCall',['../classAVThread.html#afc34041dd3f955e4029ef114f9efeb12',1,'AVThread']]],
   ['default_5fframe_5ffifo_5fpayload_5fsize',['DEFAULT_FRAME_FIFO_PAYLOAD_SIZE',['../sizes_8h.html#ac54159dfcf89ea1a904276dc94cc7e8fad437f8eec992e09aac841dc7c1c2632e',1,'sizes.h']]],
@@ -22,8 +22,10 @@ var searchData=
   ['delrendergroupcall',['delRenderGroupCall',['../classOpenGLThread.html#ac05c2be99cdeb614aac854d442995c45',1,'OpenGLThread']]],
   ['delshaders',['delShaders',['../classOpenGLThread.html#a7c421fdb80d8838ee63e5057e881d5d7',1,'OpenGLThread']]],
   ['deregisterstreamcall',['deregisterStreamCall',['../classLiveThread.html#ad9c33d99f8aa561c67559744b9f3e4b0',1,'LiveThread']]],
+  ['diagnosis',['diagnosis',['../classOpenGLFrameFifo.html#a363ab3a9c1254485af945fa28af5b32b',1,'OpenGLFrameFifo::diagnosis()'],['../classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4',1,'FrameFifo::diagnosis()']]],
   ['display_5fid',['display_id',['../classRenderGroup.html#a4747ce66c8739d85fb560d720aee9eb7',1,'RenderGroup']]],
   ['doc_2eh',['doc.h',['../doc_8h.html',1,'']]],
+  ['dogetnextframe',['doGetNextFrame',['../classBufferSource.html#a796bc84e5233c21c379a57f2a3b65e54',1,'BufferSource']]],
   ['doublebuffer_5fflag',['doublebuffer_flag',['../classRenderGroup.html#a5299bce3ce130b4f4e8bad5db4be3637',1,'RenderGroup']]],
   ['dummydecoder',['DummyDecoder',['../classDummyDecoder.html',1,'']]],
   ['dummyframefilter',['DummyFrameFilter',['../classDummyFrameFilter.html',1,'DummyFrameFilter'],['../classDummyFrameFilter.html#ab0e6cf935f2c79be37770eee6767a673',1,'DummyFrameFilter::DummyFrameFilter()']]],
@@ -33,5 +35,5 @@ var searchData=
   ['dumppayload',['dumpPayload',['../classFrame.html#a13e9ae3eac3e0efcb3684723ff77cf34',1,'Frame']]],
   ['dumpstack',['dumpStack',['../classOpenGLFrameFifo.html#aa10d25b0cd368d44fe40aa31066a6419',1,'OpenGLFrameFifo::dumpStack()'],['../classFrameFifo.html#af6b1aca3db868d937039a9f066e8f0ca',1,'FrameFifo::dumpStack()']]],
   ['dumpstack_5f',['dumpStack_',['../classOpenGLFrameFifo.html#ae19a3b5eb22c9a857436ae6174083f73',1,'OpenGLFrameFifo']]],
-  ['duration',['duration',['../structFileContext.html#ace5871e860d5e2d31f138dcc1946350a',1,'FileContext']]]
+  ['duration',['duration',['../structFileContext.html#af2525987b3d3049c4fbff872520ee5d0',1,'FileContext::duration()'],['../classFileStream.html#abd3fc60ff8652037587ab422ebbbeff6',1,'FileStream::duration()']]]
 ];

@@ -6,6 +6,6 @@ var searchData=
   ['bindvertexarray',['bindVertexArray',['../classRenderContext.html#a630b1b31808a041f28d8a1661feca92a',1,'RenderContext']]],
   ['blockingfifoframefilter',['BlockingFifoFrameFilter',['../classBlockingFifoFrameFilter.html',1,'BlockingFifoFrameFilter'],['../classBlockingFifoFrameFilter.html#a7a2cb4dbcde7aa000bcdc763dca2e469',1,'BlockingFifoFrameFilter::BlockingFifoFrameFilter()']]],
   ['bmtype',['bmtype',['../structYUVFramePars.html#a5d13c0698a24258d312f97ceaa2721d8',1,'YUVFramePars']]],
-  ['briefinfoframefilter',['BriefInfoFrameFilter',['../classBriefInfoFrameFilter.html',1,'BriefInfoFrameFilter'],['../classBriefInfoFrameFilter.html#acb5bfe6ba8400c835f2f28972dd7b678',1,'BriefInfoFrameFilter::BriefInfoFrameFilter()']]],
-  ['buffersource',['BufferSource',['../classBufferSource.html',1,'']]]
+  ['briefinfoframefilter',['BriefInfoFrameFilter',['../classBriefInfoFrameFilter.html',1,'']]],
+  ['buffersource',['BufferSource',['../classBufferSource.html',1,'BufferSource'],['../classBufferSource.html#a814a533eb701d314be971fcd6e9695bb',1,'BufferSource::BufferSource()']]]
 ];

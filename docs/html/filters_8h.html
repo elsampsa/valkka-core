@@ -122,7 +122,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <area shape="rect" id="node2" href="livethread_8h.html" title="A live555 thread. " alt="" coords="193,95,357,136"/>
 <area shape="rect" id="node3" href="chains_8h.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="5,184,169,225"/>
 <area shape="rect" id="node6" href="file_8h.html" title="File input and output to and from matroska files. " alt="" coords="381,95,545,136"/>
-<area shape="rect" id="node8" href="sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synced with posix sem..." alt="" coords="569,95,733,136"/>
+<area shape="rect" id="node8" href="sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="569,95,733,136"/>
 <area shape="rect" id="node10" href="filters_8cpp.html" title="Common frame filters. The FrameFilter base class is defined in frames.h. " alt="" coords="757,95,921,136"/>
 <area shape="rect" id="node5" href="livethread_8cpp.html" title="A live555 thread. " alt="" coords="193,184,357,225"/>
 <area shape="rect" id="node4" href="chains_8cpp.html" title="Some ready&#45;made chains with filters, decoders and framefifos. " alt="" coords="5,273,169,315"/>
@@ -156,12 +156,17 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTimestampFrameFilter.html">TimestampFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Corrects erroneous timestamps (while preserving timestamp distances).  <a href="classTimestampFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTimestampFrameFilter2.html">TimestampFrameFilter2</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Corrects erroneous timestamps (while preserving timestamp distances).  <a href="classTimestampFrameFilter2.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRepeatH264ParsFrameFilter.html">RepeatH264ParsFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">For H264, some cameras don't send sps and pps packets again before every keyframe.  <a href="classRepeatH264ParsFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGateFrameFilter.html">GateFrameFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">When turned on, passes frames.  <a href="classGateFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSetSlotFrameFilter.html">SetSlotFrameFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the slot number of the <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>.  <a href="classSetSlotFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTimeIntervalFrameFilter.html">TimeIntervalFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass frames, but not all of them - only on regular intervals.  <a href="classTimeIntervalFrameFilter.html#details">More...</a><br /></td></tr>

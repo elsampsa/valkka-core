@@ -1,7 +1,6 @@
 var searchData=
 [
   ['infocall',['infoCall',['../classOpenGLThread.html#a4510108836ef5727ebc63e468bb963fb',1,'OpenGLThread']]],
-  ['infoframefilter',['InfoFrameFilter',['../classInfoFrameFilter.html#a3d0d5a3ad9454d754818e6548876ee1b',1,'InfoFrameFilter']]],
   ['initglx',['initGLX',['../classOpenGLThread.html#abde6e36adfa45693fac38444f93ab81a',1,'OpenGLThread']]],
   ['insertfifo',['insertFifo',['../classOpenGLThread.html#a1ca155ce98922acce2b36b08acddeedc',1,'OpenGLThread']]],
   ['is_5fglx_5fextension_5fsupported',['is_glx_extension_supported',['../opengl_8h.html#a69229b2aeb3a32e79cfd7f19fe1edf51',1,'is_glx_extension_supported(Display *dpy, const char *query):&#160;opengl.cpp'],['../opengl_8cpp.html#a69229b2aeb3a32e79cfd7f19fe1edf51',1,'is_glx_extension_supported(Display *dpy, const char *query):&#160;opengl.cpp']]],

@@ -93,7 +93,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classSlotContext-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">SlotContext Class Reference<div class="ingroups"><a class="el" href="group__openglthread__tag.html">Openglthread_tag</a></div></div>  </div>
+<div class="title">SlotContext Class Reference<div class="ingroups"><a class="el" href="group__openglthread__tag.html">opengl</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -168,10 +168,12 @@ long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Each <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a> carries information about it's slot number in Frame::slot. </p>
-<p>Slot number identifies the origin of the stream. When the bitmap <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a> arrives to <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>, each stream/slot requires:</p><ul>
+<p>Slot number identifies the origin of the stream. When the bitmap <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a> arrives to <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>, each stream/slot requires:</p>
+<ul>
 <li>A set of OpenGL Textures (<a class="el" href="classSlotContext.html#a58022f51371b002a544e44cd56066d62" title="This could be a base class for different kinds of textures (now only YUVTEX) ">SlotContext::yuvtex</a>)</li>
-<li>A reference to the relevant shader program (<a class="el" href="classSlotContext.html#a73f47b6bfd1e88f0c9bb0b583ca33435" title="Base class for the chosen Shader for this slot. Now always YUVShader. ">SlotContext::shader</a>) This class encapsulates all that. <a class="el" href="classSlotContext.html" title="Each Frame carries information about it&#39;s slot number in Frame::slot. ">SlotContext</a> can be in an active (with textures reserved and shaders set) or in an inactive state. </li>
+<li>A reference to the relevant shader program (<a class="el" href="classSlotContext.html#a73f47b6bfd1e88f0c9bb0b583ca33435" title="Base class for the chosen Shader for this slot. Now always YUVShader. ">SlotContext::shader</a>)</li>
 </ul>
+<p>This class encapsulates all that. <a class="el" href="classSlotContext.html" title="Each Frame carries information about it&#39;s slot number in Frame::slot. ">SlotContext</a> can be in an active (with textures reserved and shaders set) or in an inactive state. </p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="openglthread_8h_source.html">openglthread.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="openglthread_8cpp.html">openglthread.cpp</a></li>

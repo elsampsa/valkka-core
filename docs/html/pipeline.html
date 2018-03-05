@@ -87,12 +87,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Let's recall a typical filtergraph from <a class="el" href="process_chart.html">Library architecture</a> </p><pre class="fragment">(1.LiveThread) --&gt; {2.FifoFrameFilter} --&gt; [3.FrameFifo] --&gt;&gt; (4.AVThread) --&gt; {5.FifoFrameFilter} --&gt; [6.OpenGLFrameFifo] --&gt;&gt; (7.OpenGLThread)
 </pre><p>In detail, frames are transported from (1) to (7) like this:</p>
 <p>1 <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a></p><ul>
-<li><a class="el" href="classFrame.html#a6756411f84cc92128275c3785db6d630" title="Type of the frame. ">Frame::frametype</a> set to <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a10dc9f554d16c87ec54b127438551658" title="H264 slice. Payload in Frame::payload, additional data in Frame::h264_pars. ">FrameType::h264</a></li>
+<li><a class="el" href="classFrame.html#a6756411f84cc92128275c3785db6d630" title="Type of the frame. ">Frame::frametype</a> set to <a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a10dc9f554d16c87ec54b127438551658" title="H264 slice. Payload in Frame::payload, additional data in Frame::h264_pars. ">FrameType::h264</a></li>
 <li><a class="el" href="classFrame.html#a93b131179e6402e7af5e75cd0cc0044a" title="Raw payload data (use .data() to get the pointer from std::vector) ">Frame::payload</a> has the raw data</li>
 </ul>
 <p>4 <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a></p><ul>
 <li>Uses data in <a class="el" href="classFrame.html#a93b131179e6402e7af5e75cd0cc0044a" title="Raw payload data (use .data() to get the pointer from std::vector) ">Frame::payload</a></li>
-<li>Sets <a class="el" href="classFrame.html#a6756411f84cc92128275c3785db6d630" title="Type of the frame. ">Frame::frametype</a> to <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a></li>
+<li>Sets <a class="el" href="classFrame.html#a6756411f84cc92128275c3785db6d630" title="Type of the frame. ">Frame::frametype</a> to <a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a></li>
 </ul>
 <p>6 <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a></p><ul>
 <li>Has internal stacks of <a class="el" href="classYUVPBO.html" title="Encapsulates OpenGL PBOs (Pixel Buffer Objects) for a YUV420 image. ">YUVPBO</a> objects (with direct memory access to GPU)</li>

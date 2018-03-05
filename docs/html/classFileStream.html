@@ -92,11 +92,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classFileStream-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">FileStream Class Reference</div>  </div>
+<div class="title">FileStream Class Reference<div class="ingroups"><a class="el" href="group__file__tag.html">file streaming</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Keeping the books for each stream:  
+<p>This class in analogous to the <a class="el" href="classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP). ">Connection</a> class in live streams.  
  <a href="classFileStream.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="filethread_8h_source.html">filethread.h</a>&gt;</code></p>
@@ -105,71 +105,79 @@ Collaboration diagram for FileStream:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFileStream__coll__graph.png" border="0" usemap="#FileStream_coll__map" alt="Collaboration graph"/></div>
 <map name="FileStream_coll__map" id="FileStream_coll__map">
-<area shape="rect" id="node2" href="classFrame.html" title="A universal frame class encapsulating all media formats. " alt="" coords="319,95,377,121"/>
-<area shape="rect" id="node3" href="structSetupPars.html" title="SetupPars" alt="" coords="5,5,88,32"/>
-<area shape="rect" id="node4" href="structYUVFramePars.html" title="YUVFramePars" alt="" coords="112,5,227,32"/>
-<area shape="rect" id="node5" href="classYUVPBO.html" title="Encapsulates OpenGL PBOs (Pixel Buffer Objects) for a YUV420 image. " alt="" coords="251,5,330,32"/>
-<area shape="rect" id="node6" href="structAVFramePars.html" title="AVFramePars" alt="" coords="355,5,459,32"/>
-<area shape="rect" id="node7" href="structH264Pars.html" title="H264Pars" alt="" coords="483,5,563,32"/>
-<area shape="rect" id="node8" href="structPCMUPars.html" title="PCMUPars" alt="" coords="587,5,677,32"/>
-<area shape="rect" id="node9" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="404,95,492,121"/>
+<area shape="rect" id="node2" href="structFileContext.html" title="This class descibes the origin and state of a FileStream. " alt="" coords="177,95,266,121"/>
+<area shape="rect" id="node3" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="5,5,93,32"/>
+<area shape="rect" id="node4" href="classFrame.html" title="A universal frame class encapsulating all media formats. " alt="" coords="427,95,485,121"/>
+<area shape="rect" id="node5" href="structSetupPars.html" title="SetupPars" alt="" coords="171,5,253,32"/>
+<area shape="rect" id="node6" href="structYUVFramePars.html" title="YUVFramePars" alt="" coords="277,5,392,32"/>
+<area shape="rect" id="node7" href="classYUVPBO.html" title="Encapsulates OpenGL PBOs (Pixel Buffer Objects) for a YUV420 image. " alt="" coords="417,5,495,32"/>
+<area shape="rect" id="node8" href="structAVFramePars.html" title="AVFramePars" alt="" coords="520,5,624,32"/>
+<area shape="rect" id="node9" href="structH264Pars.html" title="H264Pars" alt="" coords="648,5,728,32"/>
+<area shape="rect" id="node10" href="structPCMUPars.html" title="PCMUPars" alt="" coords="753,5,842,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5013abe09a8af8aad1513d0aff8f2dca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5013abe09a8af8aad1513d0aff8f2dca"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>FileStream</b> (std::string <a class="el" href="classFileStream.html#ab0b3ebeafcfa654d6cac50702d1e9673">filename</a>, SlotNumber <a class="el" href="classFileStream.html#af8fc5af127083812370d74fb062828c3">slot</a>, <a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;<a class="el" href="classFileStream.html#accab402ee47a855d11c59c67991fe816">framefilter</a>)</td></tr>
-<tr class="separator:a5013abe09a8af8aad1513d0aff8f2dca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e83daa23512e7d9fccd651f3f1a12bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a7e83daa23512e7d9fccd651f3f1a12bb">FileStream</a> (<a class="el" href="structFileContext.html">FileContext</a> &amp;<a class="el" href="classFileStream.html#a6b7d4aa732ab99459d323e8d248df6b9">ctx</a>)</td></tr>
+<tr class="memdesc:a7e83daa23512e7d9fccd651f3f1a12bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a7e83daa23512e7d9fccd651f3f1a12bb">More...</a><br /></td></tr>
+<tr class="separator:a7e83daa23512e7d9fccd651f3f1a12bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c410d9531313aa1fc924bbd77cd4781"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c410d9531313aa1fc924bbd77cd4781"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a3c410d9531313aa1fc924bbd77cd4781">~FileStream</a> ()</td></tr>
+<tr class="memdesc:a3c410d9531313aa1fc924bbd77cd4781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
+<tr class="separator:a3c410d9531313aa1fc924bbd77cd4781"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ecbef13fabdcdeae69f48a49bd0ece9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8ecbef13fabdcdeae69f48a49bd0ece9"></a>
 SlotNumber&#160;</td><td class="memItemRight" valign="bottom"><b>getSlot</b> ()</td></tr>
 <tr class="separator:a8ecbef13fabdcdeae69f48a49bd0ece9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f6115df951a7e447cb349011844dcb3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f6115df951a7e447cb349011844dcb3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setRefMstime</b> (long int ms_streamtime_)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a8f6115df951a7e447cb349011844dcb3">setRefMstime</a> (long int ms_streamtime_)</td></tr>
+<tr class="memdesc:a8f6115df951a7e447cb349011844dcb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a correspondence with the current wallclock time and a desider stream time, by calculating <a class="el" href="classFileStream.html#a68ab147eaf01d0686207c31911a9eafe" title="Relation between the stream time and wallclock time. See Presention timing and playing. ">FileStream::reftime</a>. See <a class="el" href="timing.html">Presention timing and playing</a>. <br /></td></tr>
 <tr class="separator:a8f6115df951a7e447cb349011844dcb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2790fb16762a066b418d1d93653deddf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2790fb16762a066b418d1d93653deddf"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>seek</b> (long int ms_streamtime_)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a2790fb16762a066b418d1d93653deddf">seek</a> (long int ms_streamtime_)</td></tr>
+<tr class="memdesc:a2790fb16762a066b418d1d93653deddf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seek to a desider stream time. <br /></td></tr>
 <tr class="separator:a2790fb16762a066b418d1d93653deddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1f929f6ac1a57fbb980ef49380dcc17"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1f929f6ac1a57fbb980ef49380dcc17"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#ae1f929f6ac1a57fbb980ef49380dcc17">play</a> ()</td></tr>
+<tr class="memdesc:ae1f929f6ac1a57fbb980ef49380dcc17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start playing the stream. <br /></td></tr>
 <tr class="separator:ae1f929f6ac1a57fbb980ef49380dcc17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d6ae46a63ddc7067184ab66df1276d6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d6ae46a63ddc7067184ab66df1276d6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a2d6ae46a63ddc7067184ab66df1276d6">stop</a> ()</td></tr>
+<tr class="memdesc:a2d6ae46a63ddc7067184ab66df1276d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop playing the strem. <br /></td></tr>
 <tr class="separator:a2d6ae46a63ddc7067184ab66df1276d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab47343c0697fa713205673a95ef0d845"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab47343c0697fa713205673a95ef0d845"></a>
-long int&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (long int mstimestamp)</td></tr>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#ab47343c0697fa713205673a95ef0d845">update</a> (long int mstimestamp)</td></tr>
+<tr class="memdesc:ab47343c0697fa713205673a95ef0d845"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to achieve mstimestamp: calculates <a class="el" href="classFileStream.html#adef0251c398077a62bb9b5074a4c1a7e" title="Where the stream would like to be (underscore means stream time) ">FileStream::target_mstimestamp_</a> and calls pullNextFrame. Returns the timeout for the next frame. <br /></td></tr>
 <tr class="separator:ab47343c0697fa713205673a95ef0d845"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab67ac1fec72625ac9c358f50b8a5665"><td class="memItemLeft" align="right" valign="top">long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#aab67ac1fec72625ac9c358f50b8a5665">pullNextFrame</a> ()</td></tr>
+<tr class="memitem:aab67ac1fec72625ac9c358f50b8a5665"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aab67ac1fec72625ac9c358f50b8a5665"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#aab67ac1fec72625ac9c358f50b8a5665">pullNextFrame</a> ()</td></tr>
+<tr class="memdesc:aab67ac1fec72625ac9c358f50b8a5665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to achieve <a class="el" href="classFileStream.html#adef0251c398077a62bb9b5074a4c1a7e" title="Where the stream would like to be (underscore means stream time) ">FileStream::target_mstimestamp_</a> . Sends frames whose timestamps are less than that to the filterchain (e.g. to <a class="el" href="structFileContext.html#a0aef136b3defe8a09f072c866e306c77" title="incoming: the frames are feeded into this FrameFilter // &lt;pyapi&gt; ">FileContext::framefilter</a>). Returns timeout to the next frame. <br /></td></tr>
 <tr class="separator:aab67ac1fec72625ac9c358f50b8a5665"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ab0b3ebeafcfa654d6cac50702d1e9673"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0b3ebeafcfa654d6cac50702d1e9673"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#ab0b3ebeafcfa654d6cac50702d1e9673">filename</a></td></tr>
-<tr class="memdesc:ab0b3ebeafcfa654d6cac50702d1e9673"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classFileStream.html" title="Keeping the books for each stream: ">FileStream</a> address. <br /></td></tr>
-<tr class="separator:ab0b3ebeafcfa654d6cac50702d1e9673"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8fc5af127083812370d74fb062828c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af8fc5af127083812370d74fb062828c3"></a>
-SlotNumber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#af8fc5af127083812370d74fb062828c3">slot</a></td></tr>
-<tr class="memdesc:af8fc5af127083812370d74fb062828c3"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classFileStream.html" title="Keeping the books for each stream: ">FileStream</a> slot number (that identifies the source) <br /></td></tr>
-<tr class="separator:af8fc5af127083812370d74fb062828c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accab402ee47a855d11c59c67991fe816"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="accab402ee47a855d11c59c67991fe816"></a>
-<a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#accab402ee47a855d11c59c67991fe816">framefilter</a></td></tr>
-<tr class="memdesc:accab402ee47a855d11c59c67991fe816"><td class="mdescLeft">&#160;</td><td class="mdescRight">User-provided entry point for the stream. <br /></td></tr>
-<tr class="separator:accab402ee47a855d11c59c67991fe816"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b7d4aa732ab99459d323e8d248df6b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b7d4aa732ab99459d323e8d248df6b9"></a>
+<a class="el" href="structFileContext.html">FileContext</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a6b7d4aa732ab99459d323e8d248df6b9">ctx</a></td></tr>
+<tr class="memdesc:a6b7d4aa732ab99459d323e8d248df6b9"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structFileContext.html" title="This class descibes the origin and state of a FileStream. ">FileContext</a> describing this stream. <br /></td></tr>
+<tr class="separator:a6b7d4aa732ab99459d323e8d248df6b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fb0a03ed8cc2cc9b88a746ff2791d08"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9fb0a03ed8cc2cc9b88a746ff2791d08"></a>
 AVFormatContext *&#160;</td><td class="memItemRight" valign="bottom"><b>input_context</b></td></tr>
 <tr class="separator:a9fb0a03ed8cc2cc9b88a746ff2791d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af324bc13c0d9dc1fc14edb6c0dda1b92"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af324bc13c0d9dc1fc14edb6c0dda1b92"></a>
-<a class="el" href="classFrame.html">Frame</a>&#160;</td><td class="memItemRight" valign="bottom"><b>setupframe</b></td></tr>
+<a class="el" href="classFrame.html">Frame</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#af324bc13c0d9dc1fc14edb6c0dda1b92">setupframe</a></td></tr>
+<tr class="memdesc:af324bc13c0d9dc1fc14edb6c0dda1b92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup frame written to the filterchain. <br /></td></tr>
 <tr class="separator:af324bc13c0d9dc1fc14edb6c0dda1b92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6efd35fb9317cee6ee0076e2ce43d64"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa6efd35fb9317cee6ee0076e2ce43d64"></a>
-<a class="el" href="classFrame.html">Frame</a>&#160;</td><td class="memItemRight" valign="bottom"><b>out_frame</b></td></tr>
+<a class="el" href="classFrame.html">Frame</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#aa6efd35fb9317cee6ee0076e2ce43d64">out_frame</a></td></tr>
+<tr class="memdesc:aa6efd35fb9317cee6ee0076e2ce43d64"><td class="mdescLeft">&#160;</td><td class="mdescRight">This frame is written to the filterchain (i.e. to <a class="el" href="classFileStream.html#a6b7d4aa732ab99459d323e8d248df6b9" title="FileContext describing this stream. ">FileStream::ctx</a> and there to <a class="el" href="structFileContext.html#a0aef136b3defe8a09f072c866e306c77" title="incoming: the frames are feeded into this FrameFilter // &lt;pyapi&gt; ">FileContext::framefilter</a>) <br /></td></tr>
 <tr class="separator:aa6efd35fb9317cee6ee0076e2ce43d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd3fc60ff8652037587ab422ebbbeff6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd3fc60ff8652037587ab422ebbbeff6"></a>
-long int&#160;</td><td class="memItemRight" valign="bottom"><b>duration</b></td></tr>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#abd3fc60ff8652037587ab422ebbbeff6">duration</a></td></tr>
+<tr class="memdesc:abd3fc60ff8652037587ab422ebbbeff6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Duration of the stream. <br /></td></tr>
 <tr class="separator:abd3fc60ff8652037587ab422ebbbeff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68ab147eaf01d0686207c31911a9eafe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68ab147eaf01d0686207c31911a9eafe"></a>
-long int&#160;</td><td class="memItemRight" valign="bottom"><b>reftime</b></td></tr>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a68ab147eaf01d0686207c31911a9eafe">reftime</a></td></tr>
+<tr class="memdesc:a68ab147eaf01d0686207c31911a9eafe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Relation between the stream time and wallclock time. See <a class="el" href="timing.html">Presention timing and playing</a>. <br /></td></tr>
 <tr class="separator:a68ab147eaf01d0686207c31911a9eafe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adef0251c398077a62bb9b5074a4c1a7e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adef0251c398077a62bb9b5074a4c1a7e"></a>
 long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#adef0251c398077a62bb9b5074a4c1a7e">target_mstimestamp_</a></td></tr>
@@ -180,48 +188,63 @@ long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <tr class="memdesc:a9719400347ea834137c8d4f74b1365fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timestamp of previous frame sent, -1 means there was no previous frame (underscore means stream time) <br /></td></tr>
 <tr class="separator:a9719400347ea834137c8d4f74b1365fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5258e5596180e8bf51bc81c3ce73f330"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5258e5596180e8bf51bc81c3ce73f330"></a>
-FileState&#160;</td><td class="memItemRight" valign="bottom"><b>state</b></td></tr>
+<a class="el" href="group__file__tag.html#ga57306ae0f9e356347388234ed69e0ce7">FileState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a5258e5596180e8bf51bc81c3ce73f330">state</a></td></tr>
+<tr class="memdesc:a5258e5596180e8bf51bc81c3ce73f330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decribes the <a class="el" href="classFileStream.html" title="This class in analogous to the Connection class in live streams. ">FileStream</a> state: errors, stopped, playing, etc. <br /></td></tr>
 <tr class="separator:a5258e5596180e8bf51bc81c3ce73f330"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d45aaef6d0e4a91a944f34c0543b4a6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d45aaef6d0e4a91a944f34c0543b4a6"></a>
-AVPacket *&#160;</td><td class="memItemRight" valign="bottom"><b>avpkt</b></td></tr>
+AVPacket *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a2d45aaef6d0e4a91a944f34c0543b4a6">avpkt</a></td></tr>
+<tr class="memdesc:a2d45aaef6d0e4a91a944f34c0543b4a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data for the next frame in ffmpeg AVPacket format. <br /></td></tr>
 <tr class="separator:a2d45aaef6d0e4a91a944f34c0543b4a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a130d190dfb9f343ba921b9c220627655"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a130d190dfb9f343ba921b9c220627655"></a>
-std::vector&lt; <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854">FrameType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>frame_types</b></td></tr>
+std::vector&lt; <a class="el" href="group__frames__tag.html#gad495a9f61af7fff07d7e97979d1ab854">FrameType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>frame_types</b></td></tr>
 <tr class="separator:a130d190dfb9f343ba921b9c220627655"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Keeping the books for each stream: </p>
+<div class="textblock"><p>This class in analogous to the <a class="el" href="classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP). ">Connection</a> class in live streams. </p>
+<p>Instances of this class are placed in slots in <a class="el" href="classFileThread.html" title="This class in analogous to LiveThread, but it handles files instead of live streams. ">FileThread</a>.</p>
+<p>This class "keeps the books" for each file stream, in particular:</p>
 <ul>
 <li>Desider target time (<a class="el" href="classFileStream.html#adef0251c398077a62bb9b5074a4c1a7e" title="Where the stream would like to be (underscore means stream time) ">FileStream::target_mstimestamp_</a>)</li>
 <li>Timestamp of the previous frame (<a class="el" href="classFileStream.html#a9719400347ea834137c8d4f74b1365fc" title="Timestamp of previous frame sent, -1 means there was no previous frame (underscore means stream time)...">FileStream::frame_mstimestamp_</a>)</li>
-<li>State if the stream (FileStream::state)</li>
-<li>FFmpeg stream handles, etc.</li>
+<li>State of the stream (<a class="el" href="classFileStream.html#a5258e5596180e8bf51bc81c3ce73f330" title="Decribes the FileStream state: errors, stopped, playing, etc. ">FileStream::state</a>)</li>
+<li>FFmpeg stream handles</li>
+<li>etc.</li>
 </ul>
-<p>For timing of file streams, see <a class="el" href="timing.html">Presention timing and playing</a> </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aab67ac1fec72625ac9c358f50b8a5665"></a>
+<p>In variable names, underscore means stream time. See <a class="el" href="timing.html">Presention timing and playing</a> </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a7e83daa23512e7d9fccd651f3f1a12bb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">long int FileStream::pullNextFrame </td>
+          <td class="memname">FileStream::FileStream </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structFileContext.html">FileContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>ctx</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<ul>
-<li></li>
-</ul>
+
+<p>Default constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ctx</td><td>: A <a class="el" href="structFileContext.html" title="This class descibes the origin and state of a FileStream. ">FileContext</a> instance describing the stream </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classFileStream_aab67ac1fec72625ac9c358f50b8a5665_cgraph.png" border="0" usemap="#classFileStream_aab67ac1fec72625ac9c358f50b8a5665_cgraph" alt=""/></div>
-<map name="classFileStream_aab67ac1fec72625ac9c358f50b8a5665_cgraph" id="classFileStream_aab67ac1fec72625ac9c358f50b8a5665_cgraph">
-<area shape="rect" id="node2" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="232,5,347,32"/>
-<area shape="rect" id="node3" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="395,5,505,32"/>
+<div class="center"><img src="classFileStream_a7e83daa23512e7d9fccd651f3f1a12bb_cgraph.png" border="0" usemap="#classFileStream_a7e83daa23512e7d9fccd651f3f1a12bb_cgraph" alt=""/></div>
+<map name="classFileStream_a7e83daa23512e7d9fccd651f3f1a12bb_cgraph" id="classFileStream_a7e83daa23512e7d9fccd651f3f1a12bb_cgraph">
+<area shape="rect" id="node2" href="classFrame.html#a4d1ea5d3a6d5c8d3bfc2481db4ba98f8" title="Set PTS in unix epoch millisecond timestamp. " alt="" coords="209,5,377,32"/>
+<area shape="rect" id="node3" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="648,107,815,133"/>
+<area shape="rect" id="node4" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="236,107,351,133"/>
+<area shape="rect" id="node6" href="classFileStream.html#a2790fb16762a066b418d1d93653deddf" title="Seek to a desider stream time. " alt="" coords="233,157,354,184"/>
+<area shape="rect" id="node5" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="457,107,568,133"/>
+<area shape="rect" id="node7" href="classFileStream.html#a8f6115df951a7e447cb349011844dcb3" title="Creates a correspondence with the current wallclock time and a desider stream time, by calculating FileStream::reftime. See Presention timing and playing. " alt="" coords="425,157,600,184"/>
 </map>
 </div>
 </p>

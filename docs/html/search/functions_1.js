@@ -4,5 +4,5 @@ var searchData=
   ['bindvars',['bindVars',['../classRenderContext.html#a88ab37322c33571a7855a02df7ecaa43',1,'RenderContext']]],
   ['bindvertexarray',['bindVertexArray',['../classRenderContext.html#a630b1b31808a041f28d8a1661feca92a',1,'RenderContext']]],
   ['blockingfifoframefilter',['BlockingFifoFrameFilter',['../classBlockingFifoFrameFilter.html#a7a2cb4dbcde7aa000bcdc763dca2e469',1,'BlockingFifoFrameFilter']]],
-  ['briefinfoframefilter',['BriefInfoFrameFilter',['../classBriefInfoFrameFilter.html#acb5bfe6ba8400c835f2f28972dd7b678',1,'BriefInfoFrameFilter']]]
+  ['buffersource',['BufferSource',['../classBufferSource.html#a814a533eb701d314be971fcd6e9695bb',1,'BufferSource']]]
 ];

@@ -1153,9 +1153,9 @@ def getNumpyShmem(rb, i):
     return _valkka_core.getNumpyShmem(rb, i)
 getNumpyShmem = _valkka_core.getNumpyShmem
 
-def XInitThreads():
-    return _valkka_core.XInitThreads()
-XInitThreads = _valkka_core.XInitThreads
+def ValkkaXInitThreads():
+    return _valkka_core.ValkkaXInitThreads()
+ValkkaXInitThreads = _valkka_core.ValkkaXInitThreads
 class FrameFilter(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, FrameFilter, name, value)
@@ -1413,6 +1413,12 @@ class GateFrameFilter(FrameFilter):
 
     def unSet(self):
         return _valkka_core.GateFrameFilter_unSet(self)
+
+    def passConfigFrames(self):
+        return _valkka_core.GateFrameFilter_passConfigFrames(self)
+
+    def noConfigFrames(self):
+        return _valkka_core.GateFrameFilter_noConfigFrames(self)
     __swig_destroy__ = _valkka_core.delete_GateFrameFilter
     __del__ = lambda self: None
 GateFrameFilter_swigregister = _valkka_core.GateFrameFilter_swigregister
@@ -1653,8 +1659,8 @@ class LiveOutboundContext(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, LiveOutboundContext, name)
     __repr__ = _swig_repr
 
-    def __init__(self):
-        this = _valkka_core.new_LiveOutboundContext()
+    def __init__(self, *args):
+        this = _valkka_core.new_LiveOutboundContext(*args)
         try:
             self.this.append(this)
         except Exception:
@@ -1909,12 +1915,34 @@ normal_log_all = _valkka_core.normal_log_all
 def fatal_log_all():
     return _valkka_core.fatal_log_all()
 fatal_log_all = _valkka_core.fatal_log_all
+
+_valkka_core.FileState_none_swigconstant(_valkka_core)
+FileState_none = _valkka_core.FileState_none
+
+_valkka_core.FileState_error_swigconstant(_valkka_core)
+FileState_error = _valkka_core.FileState_error
+
+_valkka_core.FileState_seek_swigconstant(_valkka_core)
+FileState_seek = _valkka_core.FileState_seek
+
+_valkka_core.FileState_stop_swigconstant(_valkka_core)
+FileState_stop = _valkka_core.FileState_stop
+
+_valkka_core.FileState_play_swigconstant(_valkka_core)
+FileState_play = _valkka_core.FileState_play
 class FileContext(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, FileContext, name, value)
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, FileContext, name)
     __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _valkka_core.new_FileContext(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
     __swig_setmethods__["filename"] = _valkka_core.FileContext_filename_set
     __swig_getmethods__["filename"] = _valkka_core.FileContext_filename_get
     if _newclass:
@@ -1943,13 +1971,6 @@ class FileContext(_object):
     __swig_getmethods__["status"] = _valkka_core.FileContext_status_get
     if _newclass:
         status = _swig_property(_valkka_core.FileContext_status_get, _valkka_core.FileContext_status_set)
-
-    def __init__(self):
-        this = _valkka_core.new_FileContext()
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
     __swig_destroy__ = _valkka_core.delete_FileContext
     __del__ = lambda self: None
 FileContext_swigregister = _valkka_core.FileContext_swigregister
@@ -1994,6 +2015,34 @@ class FileThread(Thread):
         return _valkka_core.FileThread_stopCall(self)
 FileThread_swigregister = _valkka_core.FileThread_swigregister
 FileThread_swigregister(FileThread)
+
+class FileFrameFilter(FrameFilter):
+    __swig_setmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FileFrameFilter, name, value)
+    __swig_getmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, FileFrameFilter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, next=None):
+        this = _valkka_core.new_FileFrameFilter(name, next)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_FileFrameFilter
+    __del__ = lambda self: None
+
+    def activate(self, fname, zerotime=0):
+        return _valkka_core.FileFrameFilter_activate(self, fname, zerotime)
+
+    def deActivate(self):
+        return _valkka_core.FileFrameFilter_deActivate(self)
+FileFrameFilter_swigregister = _valkka_core.FileFrameFilter_swigregister
+FileFrameFilter_swigregister(FileFrameFilter)
 
 # This file is compatible with both classic and new-style classes.
 

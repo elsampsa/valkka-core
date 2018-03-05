@@ -108,8 +108,9 @@ FrameFifo::FrameFifo(const char* name, unsigned short int n_stack, bool clear_wh
 FrameFifo::~FrameFifo() {
   // When this goes out of scope ..
   queuelogger.log(LogLevel::crazy) << "FrameFifo: "<<name<<" destructor!" << std::endl;
-  stack.clear();
-  fifo.clear();
+  // reservoir (vector of frames gets cleaned up)
+  // stack.clear(); // no need for this .. stack is emptied automatically
+  // fifo.clear(); // no need for this either ..
   queuelogger.log(LogLevel::crazy) << "FrameFifo: "<<name<<" bye from destructor" << std::endl;
 }
 
@@ -119,6 +120,8 @@ Frame* FrameFifo::getFrame() {
   
   if (this->stack.empty()) {
     queuelogger.log(LogLevel::fatal) << "FrameFifo: "<<name<<" getFrame: OVERFLOW! No more frames in stack "<<std::endl;
+    dumpFifo();
+    dumpStack();
     return NULL;
   }
   

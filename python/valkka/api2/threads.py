@@ -36,7 +36,7 @@ import time
 from valkka import valkka_core
 from valkka.api2.tools import *
 
-valkka_core.XInitThreads()
+valkka_core.ValkkaXInitThreads()
 
 pre_mod="valkka.api2 : "
 

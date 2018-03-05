@@ -45,7 +45,7 @@
 class InfoFrameFilter : public FrameFilter { // <pyapi>
   
 public: // <pyapi>
-  InfoFrameFilter(const char* name, FrameFilter* next=NULL); ///< @copydoc FrameFilter::FrameFilter // <pyapi>
+  InfoFrameFilter(const char* name, FrameFilter* next=NULL); // <pyapi>
     
 protected:
   void go(Frame* frame);
@@ -59,7 +59,7 @@ protected:
 class BriefInfoFrameFilter : public FrameFilter { // <pyapi>
   
 public: // <pyapi>
-  BriefInfoFrameFilter(const char* name, FrameFilter* next=NULL); ///< @copydoc FrameFilter::FrameFilter // <pyapi>
+  BriefInfoFrameFilter(const char* name, FrameFilter* next=NULL); // <pyapi>
     
 protected:
   void go(Frame* frame);
@@ -98,7 +98,7 @@ public:
 class SlotFrameFilter : public FrameFilter { // <pyapi>
   
 public: // <pyapi>
-  SlotFrameFilter(const char* name, SlotNumber n_slot, FrameFilter* next=NULL); ///< @copydoc FrameFilter::FrameFilter // <pyapi>
+  SlotFrameFilter(const char* name, SlotNumber n_slot, FrameFilter* next=NULL);  // <pyapi>
     
 protected:
   unsigned n_slot;
@@ -183,7 +183,10 @@ protected:
 
 
 
-/** For H264, some cameras don't send sps and pps packets again before every keyframe.  In that case, this filter sends sps and pps before each keyframe.  TODO
+/** For H264, some cameras don't send sps and pps packets again before every keyframe.  In that case, this filter sends sps and pps before each keyframe.
+ * 
+ * WARNING: not ready .. in the TODO list
+ * 
  * @ingroup filters_tag
  */
 class RepeatH264ParsFrameFilter : public FrameFilter { // <pyapi>
@@ -200,25 +203,41 @@ protected:
 }; // <pyapi>
 
 
+/** When turned on, passes frames.  When turned off, frames are not passed.  
+ * 
+ * - Configuration frames (FrameType::setup) are passed, even if the gate is unSet
+ * - Passing of configuration frames can be turned off (when gate is unSet) by calling noConfigFrames()
+ * - Mutex-protected (calls to GateFrameFilter::set and GateFrameFilter::unSet happen during streaming)
+ * 
+ * @ingroup filters_tag
+ */
 class GateFrameFilter : public FrameFilter { // <pyapi>
   
 public: // <pyapi>
   GateFrameFilter(const char* name, FrameFilter* next=NULL); // <pyapi>
   
 protected:
-  bool on;
+  bool        on;
+  bool        config_frames;
+  std::mutex  mutex;
   
 protected: 
   void run(Frame* frame);
   void go(Frame* frame);
   
-public: // <pyapi>
-  void set(); // <pyapi>
-  void unSet(); // <pyapi>
-  
+public:                     // <pyapi>
+  void set();               // <pyapi>
+  void unSet();             // <pyapi>
+  void passConfigFrames();  // <pyapi>
+  void noConfigFrames();    // <pyapi>
 }; // <pyapi>
 
-
+/** Changes the slot number of the Frame
+ *
+ * Mutex-protected (calls to SetSlotFrameFilter::setSlot happen during streaming)
+ * 
+ * @ingroup filters_tag 
+ */
 class SetSlotFrameFilter : public FrameFilter { // <pyapi>
   
 public: // <pyapi>
@@ -226,6 +245,7 @@ public: // <pyapi>
 
 protected:
   SlotNumber n_slot;
+  std::mutex mutex;
   
 protected: 
   void go(Frame* frame);
@@ -237,12 +257,14 @@ public: // <pyapi>
   
 
 /** Pass frames, but not all of them - only on regular intervals.  This serves for downshifting the fps rate.
- * Of course, use only for decoded frames.
+ *
+ * Should be used, of course, only for decoded frames..!
  * 
  * @param name          A name identifying the frame filter
  * @param mstimedelta   Time interval in milliseconds
  * @param next          Next filter in chain
  * 
+ * @ingroup filters_tag
  */
 class TimeIntervalFrameFilter : public FrameFilter { // <pyapi>
   
@@ -269,6 +291,7 @@ public:
  * - When first frame arrives here, reserve SwsContext (SwScaleFrameFilter::sws_ctx)
  * - If incoming frame's dimensions change, re-reserve sws_ctx
  * 
+ * @ingroup filters_tag
  */
 class SwScaleFrameFilter : public FrameFilter { // <pyapi>
   

@@ -9,5 +9,5 @@
 <area shape="rect" id="node4" href="$common_8h.html" title="List of common header files. " alt="" coords="1114,543,1197,569"/>
 <area shape="rect" id="node31" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="569,393,637,420"/>
 <area shape="rect" id="node37" href="$opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1120,393,1191,420"/>
-<area shape="rect" id="node44" href="$queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="1010,244,1085,271"/>
+<area shape="rect" id="node44" href="$queues_8h.html" title="Lockable and safe queues for multithreading. " alt="" coords="1010,244,1085,271"/>
 </map>

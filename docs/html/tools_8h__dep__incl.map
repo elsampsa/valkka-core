@@ -8,7 +8,7 @@
 <area shape="rect" id="node28" href="$opengl_8cpp.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1972,95,2136,136"/>
 <area shape="rect" id="node29" href="$tools_8cpp.html" title="Auxiliary routines. " alt="" coords="2160,95,2324,136"/>
 <area shape="rect" id="node3" href="$avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="861,363,1025,404"/>
-<area shape="rect" id="node7" href="$queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="523,184,687,225"/>
+<area shape="rect" id="node7" href="$queues_8h.html" title="Lockable and safe queues for multithreading. " alt="" coords="523,184,687,225"/>
 <area shape="rect" id="node16" href="$live_8h.html" title="Interface to live555. " alt="" coords="673,273,837,315"/>
 <area shape="rect" id="node19" href="$decoders_8h.html" title="FFmpeg decoders. " alt="" coords="913,184,1077,225"/>
 <area shape="rect" id="node27" href="$frames_8cpp.html" title="Basic frame types implementations. " alt="" coords="40,184,204,225"/>
@@ -23,7 +23,7 @@
 <area shape="rect" id="node12" href="$filethread_8cpp.html" title="A thread sending frames from files. " alt="" coords="5,452,169,493"/>
 <area shape="rect" id="node20" href="$decoders_8cpp.html" title="FFmpeg decoders. " alt="" coords="913,273,1077,315"/>
 <area shape="rect" id="node22" href="$file_8h.html" title="File input and output to and from matroska files. " alt="" coords="1631,273,1795,315"/>
-<area shape="rect" id="node24" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synced with posix sem..." alt="" coords="1443,273,1607,315"/>
+<area shape="rect" id="node24" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="1443,273,1607,315"/>
 <area shape="rect" id="node26" href="$filters_8cpp.html" title="Common frame filters. The FrameFilter base class is defined in frames.h. " alt="" coords="1255,273,1419,315"/>
 <area shape="rect" id="node23" href="$file_8cpp.html" title="File input and output to and from matroska files. " alt="" coords="1631,363,1795,404"/>
 <area shape="rect" id="node25" href="$sharedmem_8cpp.html" title="/home/sampsa/C/valkka\l/src/sharedmem.cpp" alt="" coords="1443,363,1607,404"/>

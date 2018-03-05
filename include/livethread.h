@@ -40,14 +40,21 @@
 #include "queues.h"
 
 
-/** An input queue for LiveThread
+/** This is a special FrameFifo class for feeding frames *into* live555, i.e. for sending them to the network.
+ * 
+ * Should not be instantiated by the user, but requested from LiveThread with LiveThread::getFifo()
+ * 
+ * There is a single LiveFifo instance per LiveThread
+ * 
+ * @ingroup livethread_tag
+ * @ingroup queues_tag
  */
 class LiveFifo : public FrameFifo {                       // <pyapi>
   
 public:                                                   // <pyapi> 
+  /** Default constructor */
   LiveFifo(const char* name, unsigned short int n_stack); // <pyapi>
-  /** Default virtual destructor
-   */
+  /** Default virtual destructor */
   ~LiveFifo();                                            // <pyapi>
   
 protected:
@@ -61,11 +68,9 @@ public:
 
 /** LiveThread connection types
  * 
- * This enumeration class identifies different kinds of connections (i.e. rtsp and sdp).  Used by LiveConnectionContext.
+ * Identifies different kinds of connections (i.e. rtsp and sdp).  Used by LiveConnectionContext.
  * 
  * @ingroup livethread_tag
- * @ingroup threading_tag
- * @ingroup live_tag
  */
 enum class LiveConnectionType { // <pyapi>
   none,                         // <pyapi>
@@ -73,24 +78,24 @@ enum class LiveConnectionType { // <pyapi>
   sdp                           // <pyapi>
 };                              // <pyapi>
 
-/** Identifies a stream and encapsulates information about the type of connection, the user is requesting to LiveThread.  LiveConnectionContext is included into LiveThread::SignalContext, i.e. it carries the signal information to LiveThread.  For the thread signaling system, see \ref threading_tag
+/** Identifies a stream and encapsulates information about the type of connection the user is requesting to LiveThread.  LiveConnectionContext is also included in LiveThread::SignalContext, i.e. it carries the signal information to LiveThread (for the thread signaling system, see \ref threading_tag).
   * 
   * (A side note: this class is not nested inside the LiveThread class for one simple reason: swig does not like nested classes, so it would make it harder to create Python bindings)
   * 
-  * Information in LiveConnectionContext is passed by LiveThread to RTSPConnection and SDPConnection
+  * Information in LiveConnectionContext is further passed by LiveThread to RTSPConnection and SDPConnection
   * 
   * Comes with two different versions of the constructor.  First is for primary use and the second is a "dummy" constructor.
   * 
   * @ingroup livethread_tag
-  * @ingroup threading_tag
-  * @ingroup live_tag
   */  
 struct LiveConnectionContext {                                                                        // <pyapi>
+  /** Default constructor */
   LiveConnectionContext(LiveConnectionType ct, std::string address, SlotNumber slot,                  // <pyapi>
                         FrameFilter* framefilter) :                                                   // <pyapi>
   connection_type(ct), address(address), slot(slot), framefilter(framefilter), msreconnect(0),        // <pyapi>
   request_multicast(false), request_tcp(false)                                                        // <pyapi>
   {}                                                                                                  // <pyapi>
+  /** Dummy constructor : remember to set member values by hand */
   LiveConnectionContext() :                                                                           // <pyapi>
   connection_type(LiveConnectionType::none), address(""), slot(0), framefilter(NULL), msreconnect(0), // <pyapi>
   request_multicast(false), request_tcp(false)                                                        // <pyapi>
@@ -105,6 +110,10 @@ struct LiveConnectionContext {                                                  
 };                                                                                                    // <pyapi>
 
 
+/** Same as LiveConnectionContext, but for outbound streams (i.e. streams sent over the net by live555)
+ * 
+ * @ingroup livethread_tag
+ */
 struct LiveOutboundContext {                                                                     // <pyapi>
   LiveOutboundContext(LiveConnectionType ct, std::string address, SlotNumber slot,               // <pyapi>
                       unsigned short int portnum) :                                              // <pyapi>
@@ -121,53 +130,42 @@ struct LiveOutboundContext {                                                    
 };                                                                                               // <pyapi>
 
 
-
-
 /** A base class that unifies all kinds of connections (RTSP and SDP).
  * 
- * Methods of this class are used by the LiveThread class and they are called from within the Live555 event loop (i.e. this is not part of the API)
+ * Methods of this class are used by the LiveThread class and they are called from within the Live555 event loop.
+ * 
+ * Connect typically has a small, default internal filterchain to correct for the often-so-erroneous timestamps (see the cpp file for more details):
+ * 
+ * Filterchain: --> {FrameFilter: Connection::inputfilter} --> {TimestampFrameFilter2: Connection::timestampfilter} --> {FrameFilter: Connection::framefilter} -->
  * 
  * @ingroup livethread_tag
- * @ingroup live_tag
- * 
- *  Has an internal filterchain:
- * 
- *  Filterchain: --> {FrameFilter: Connection::inputfilter} --> {TimestampFrameFilter: Connection::timestampfilter} --> {FrameFilter: Connection::framefilter} -->
  * 
  */ 
 class Connection {
   
 public:
-  /** 
-   * @param env          UsageEnvironment identifying the Live555 event loop (see \ref live555_page)
-   * @param address      A string identifying the connection
-   * @param slot         An integer defining a "slot" where this connection is placed
-   * @param framefilter  Connection feeds frames to this FrameFilter (i.e., its the beginning of the "filter-chain")
-   * @param msreconnect  Reconnect if stream has received nothing after this many milliseconds.  0 = do not reconnect.
+  /** Default constructor
+   * 
+   * @param env   See Connection::env
+   * @param ctx   See Connection::ctx
+   * 
+   * @ingroup livethread_tag
    */
-  // Connection(UsageEnvironment& env, std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect=0);
   Connection(UsageEnvironment& env, LiveConnectionContext& ctx);
-  
   virtual ~Connection(); ///< Default destructor
   
 protected:
-  /*
-  std::string         address;      ///< Stream address
-  SlotNumber          slot;         ///< Stream slot number (that identifies the source)
-  FrameFilter&        framefilter;  ///< User-provided entry point for the stream.
-  long unsigned int   msreconnect;  ///< Reconnect if stream has received nothing after this many milliseconds.  0 = do not reconnect.
-  */
-  LiveConnectionContext &ctx;
+  LiveConnectionContext   &ctx;           ///< LiveConnectionContext identifying the stream source (address), it's destination (slot and target framefilter), etc. 
   
   // internal framefilter chain.. if we'd like to modify the frames before they are passed to the API user
-  // more framefilter could be generated here, initialized it the constructor init list
+  // more framefilters could be generated here and initialized in the constructor init list
   // the starting filter should always be named as "inputfilter" .. this is where Live555 writes the frames
   TimestampFrameFilter2   timestampfilter; ///< Internal framefilter: correct timestamp
   SlotFrameFilter         inputfilter;     ///< Internal framefilter: set slot number
-  long int                frametimer;
+  long int                frametimer;      ///< Measures time when the last frame was received
   
 public:
-  UsageEnvironment &env;
+  UsageEnvironment &env;                   ///< UsageEnvironment identifying the Live555 event loop (see \ref live555_page)
   bool is_playing;
   
 public:
@@ -180,26 +178,27 @@ public:
 };
 
 
+/** A base class that unifies all kinds of outgoing streams (i.e. streams sent by live555).  Analogical to Connection (that is for incoming streams).
+ * 
+ * @param env    See Outbound::env
+ * @param fifo   See Outbound::fifo
+ * @param ctx    See Outbound::ctx
+ * 
+ * @ingroup livethread_tag
+ */
 class Outbound { // will leave this quite generic .. don't know at this point how the rtsp server is going to be // analogy: AVThread
   
 public:
-  // Outbound(UsageEnvironment& env, FrameFifo& fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl=255);
-  Outbound(UsageEnvironment& env, FrameFifo& fifo, LiveOutboundContext& ctx);
-  virtual ~Outbound();
+  Outbound(UsageEnvironment& env, FrameFifo& fifo, LiveOutboundContext& ctx);  ///< Default constructor
+  virtual ~Outbound(); ///< Default virtual destructor
   
 public:
-  LiveOutboundContext &ctx;
-  /*
-  SlotNumber          slot;
-  std::string         adr;
-  unsigned short int  portnum;
-  unsigned char       ttl;
-  */
-  
+  LiveOutboundContext &ctx;      ///< Identifies the connection type, stream address, etc.  See LiveOutboundContext
+    
 public:
-  std::vector<Stream*> streams; // typically two 
-  UsageEnvironment     &env;
-  FrameFifo            &fifo; ///< Frames are recycled here
+  std::vector<Stream*> streams;  ///< SubStreams of the outgoing streams (typically two, e.g. video and sound)
+  UsageEnvironment     &env;     ///< Identifies the live555 event loop
+  FrameFifo            &fifo;    ///< Outgoing fFrames are being read and finally recycled here
   
 public:
   void handleFrame(Frame *f);
@@ -211,21 +210,19 @@ public:
  * Uses the internal ValkkaRTSPClient instance which defines the RTSP client behaviour, i. e. the events and callbacks that are registered into the Live555 event loop (see \ref live_tag)
  * 
  * @ingroup livethread_tag
- * @ingroup live_tag
  */
 class RTSPConnection : public Connection {
 
 public:
   /** @copydoc Connection::Connection */
-  // RTSPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect=0); 
   RTSPConnection(UsageEnvironment& env, LiveConnectionContext& ctx);
   ~RTSPConnection();
-  // RTSPConnection(const RTSPConnection& cp); ///< Copy constructor .. default copy constructor good enough
+  // RTSPConnection(const RTSPConnection& cp); ///< Copy constructor .. nopes, default copy constructor good enough
   
   
 private:
   ValkkaRTSPClient* client; ///< ValkkaRTSPClient defines the behaviour (i.e. event registration and callbacks) of the RTSP client (see \ref live_tag)
-  LiveStatus livestatus;
+  LiveStatus livestatus;    ///< Reference of this variable is passed to ValkkaRTSPClient.  We can see outside of the live555 callback chains if RTSPConnection::client has deallocated itself
   
 public:
   void playStream();      ///< Uses ValkkaRTSPClient instance to initiate the RTSP negotiation
@@ -235,21 +232,19 @@ public:
 };
 
 
-/** Streaming, the source of stream is defined in an SDP file
+/** Connection is is defined in an SDP file
  * 
  * @ingroup livethread_tag
- * @ingroup live_tag
  */
 class SDPConnection : public Connection {
 
 public:
   /** @copydoc Connection::Connection */
-  // SDPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter);
   SDPConnection(UsageEnvironment& env, LiveConnectionContext& ctx);
+  /** Default destructor */
   ~SDPConnection();
 
 private:
-  // MediaSession* session;
   StreamClientState *scs;
   
 public:
@@ -259,11 +254,17 @@ public:
 };
 
 
-
+/** Sending a stream without rtsp negotiation (i.e. without rtsp server) to certain ports
+ * 
+ * @param env    See Outbound::env
+ * @param fifo   See Outbound::fifo
+ * @param ctx    See Outbound::ctx
+ * 
+ * @ingroup livethread_tag
+ */
 class SDPOutbound : public Outbound {
   
 public: 
-  // SDPOutbound(UsageEnvironment &env, FrameFifo &fifo, SlotNumber slot, const std::string adr, const unsigned short int portnum, const unsigned char ttl=255);
   SDPOutbound(UsageEnvironment &env, FrameFifo &fifo, LiveOutboundContext& ctx);
   ~SDPOutbound();
   
@@ -274,15 +275,12 @@ public:
  * 
  * This class implements a "producer" thread that outputs frames into a FrameFilter (see \ref threading_tag)
  * 
- * This Thread has its own running Live555 event loop.  At constructor time, it registers a callback into the Live555 event loop which checks periodically for signals the API user has been sending, by using the API methods.  The API methods are: registerStream, deregisterStream, playStream and stopStream
+ * This Thread has its own running Live555 event loop.  It registers a callback into the Live555 event loop which checks periodically for signals send to the thread.  Signals to this thread are sent using the LiveThread::sendSignal method.
  * 
- * The API methods use, internally, the sendSignal method for thread-safe communication with LiveThread
- * 
- * The API methods take as parameter, a LiveConnectionContext instance identifying the stream (type, address, slot number, etc.)
+ * API methods take as parameter either LiveConnectionContext or LiveOutboundContext instances that identify the stream (type, address, slot number, etc.)
  *
  * @ingroup livethread_tag
  * @ingroup threading_tag
- * @ingroup live_tag
  */  
 class LiveThread : public Thread { // <pyapi>
   
@@ -306,7 +304,7 @@ public:
     deregister_outbound
   };
   
-  /** Identifies the information the signals LiveThread::Signals carry.  Encapsulates a LiveConnectionContext instance.
+  /** Identifies the information the signals LiveThread::Signals carry.  Encapsulates a LiveConnectionContext and a LiveOutboundContext instance (one of the two is used, depending on the signal)
    *
    */
   struct SignalContext {
@@ -335,16 +333,14 @@ protected:
   UsageEnvironment* env;                     ///< Live555 UsageEnvironment identifying the event loop
   char              eventLoopWatchVariable;  ///< Modifying this, kills the Live555 event loop
   std::vector<Connection*>   slots_;         ///< A constant sized vector.  Book-keeping of the connections (RTSP or SDP) currently active in the live555 thread.  Organized in "slots".
-  std::vector<Outbound*>     out_slots_;
-  std::list<Connection*>     pending;        ///< Connections pending for closing
+  std::vector<Outbound*>     out_slots_;     ///< Book-keeping for the outbound connections
+  std::list<Connection*>     pending;        ///< Incoming connections pending for closing
   bool                       exit_requested; ///< Exit asap
-  
-  // SlotNumber n_max_slots;                   ///< Maximum number of possible slots .. use a global constant (in sizes.h)
   EventTriggerId    event_trigger_id_hello_world;
   EventTriggerId    event_trigger_id_frame_arrived;
   EventTriggerId    event_trigger_id_got_frames;
-  LiveFifo          infifo;
-  int fc; // debugging: incoming frame counter
+  LiveFifo          infifo;                           ///< A FrameFifo for incoming frames
+  int fc;                                             ///< debugging: incoming frame counter
   
   
 public: // redefined virtual functions
@@ -352,13 +348,13 @@ public: // redefined virtual functions
   void preRun();
   void postRun();
   /** @copydoc Thread::sendSignal */
-  void sendSignal(SignalContext signal_ctx); ///< Must be explicitly *redefined* just in case : Thread::SignalContext has been changed to LiveThread::SignalContext
+  void sendSignal(SignalContext signal_ctx); ///< Redefined : Thread::SignalContext has been changed to LiveThread::SignalContext
   
 protected:
-  void handlePending();       ///< Try to close streams that were not properly closed (i.e. idling for the tcp socket while closing)
-  void checkAlive();
-  void handleSignals();
-  void handleFrame(Frame* f); ///< Handles frames incoming to live555
+  void handlePending();       ///< Try to close streams that were not properly closed (i.e. idling for the tcp socket while closing).  Used by LiveThread::periodicTask
+  void checkAlive();          ///< Used by LiveThread::periodicTask
+  void handleSignals();       ///< Handle pending signals in the signals queue.  Used by LiveThread::periodicTask
+  void handleFrame(Frame* f); ///< Handle incoming frames.  See \ref live_streaming_page
   
 private: // internal
   int  safeGetSlot         (SlotNumber slot, Connection*& con);
@@ -380,23 +376,21 @@ public: // *** C & Python API *** .. these routines go through the condvar/mutex
   void playStreamCall       (LiveConnectionContext &connection_ctx); ///< API method: starts playing the stream and feeding frames      // <pyapi>
   void stopStreamCall       (LiveConnectionContext &connection_ctx); ///< API method: stops playing the stream and feeding frames       // <pyapi>
   // outbound streams
-  void registerOutboundCall   (LiveOutboundContext &outbound_ctx);     ///< API method: register outbound stream                        // <pyapi>
+  void registerOutboundCall   (LiveOutboundContext &outbound_ctx);   ///< API method: register outbound stream                          // <pyapi>
   void deRegisterOutboundCall (LiveOutboundContext &outbound_ctx);
   // thread control
   void stopCall();                                                   ///< API method: stops the LiveThread                              // <pyapi>
-  
-  LiveFifo &getFifo();  // <pyapi>
+  LiveFifo &getFifo();                                               ///< API method: get fifo for sending frames with live555          // <pyapi>
   
 public: // live555 events and tasks
   static void helloWorldEvent(void* clientData);   ///< For testing/debugging  
   static void frameArrivedEvent(void* clientData); ///< For debugging
-  static void gotFramesEvent(void* clientData);    ///< Triggered when an empty fifo gets a frame.  Schedules readFrameFifoTask
-  
+  static void gotFramesEvent(void* clientData);    ///< Triggered when an empty fifo gets a frame.  Schedules readFrameFifoTask.  See \ref live_streaming_page
   static void readFrameFifoTask(void* clientData); ///< This task registers itself if there are frames in the fifo
 
 public:  
-  void testTrigger();
-  void triggerGotFrames();
+  void testTrigger();         ///< See \ref live_streaming_page
+  void triggerGotFrames();    ///< See \ref live_streaming_page
 }; // <pyapi>
 
 #endif

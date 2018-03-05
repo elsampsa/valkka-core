@@ -93,7 +93,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classFileFrameFilter-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">FileFrameFilter Class Reference</div>  </div>
+<div class="title">FileFrameFilter Class Reference<div class="ingroups"><a class="el" href="group__filters__tag.html">available framefilters</a> &#124; <a class="el" href="group__file__tag.html">file streaming</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -120,9 +120,8 @@ Collaboration diagram for FileFrameFilter:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad574ff26061537687aa1c9568b28dc09"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad574ff26061537687aa1c9568b28dc09"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#ad574ff26061537687aa1c9568b28dc09">FileFrameFilter</a> (const char *name, <a class="el" href="classFrameFilter.html">FrameFilter</a> *<a class="el" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a>=NULL)</td></tr>
-<tr class="memdesc:ad574ff26061537687aa1c9568b28dc09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
+<tr class="memitem:ad574ff26061537687aa1c9568b28dc09"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#ad574ff26061537687aa1c9568b28dc09">FileFrameFilter</a> (const char *name, <a class="el" href="classFrameFilter.html">FrameFilter</a> *<a class="el" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a>=NULL)</td></tr>
+<tr class="memdesc:ad574ff26061537687aa1c9568b28dc09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ad574ff26061537687aa1c9568b28dc09">More...</a><br /></td></tr>
 <tr class="separator:ad574ff26061537687aa1c9568b28dc09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe2eea52de2bd61e1880ebbe58d26f28"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe2eea52de2bd61e1880ebbe58d26f28"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#abe2eea52de2bd61e1880ebbe58d26f28">~FileFrameFilter</a> ()</td></tr>
@@ -217,8 +216,44 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td><
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Pipe stream into a matroska (mkv) file. </p>
 <p>This <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> should be connected to the live stream at all times: it observes the setup frames (FrameTypes::setup) and saves them internally.</p>
-<p>When the <a class="el" href="classFileFrameFilter.html#a4f7dfe3dba7d2e76be57541428f41a9e" title="Starts streaming to disk // &lt;pyapi&gt; ">FileFrameFilter::activate</a> method is called, it configures the files accordingly and starts streaming into disk. </p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+<p>When the <a class="el" href="classFileFrameFilter.html#a4f7dfe3dba7d2e76be57541428f41a9e" title="Starts streaming to disk // &lt;pyapi&gt; ">FileFrameFilter::activate</a> method is called, it configures the files accordingly, and starts streaming into disk. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ad574ff26061537687aa1c9568b28dc09"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">FileFrameFilter::FileFrameFilter </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classFrameFilter.html">FrameFilter</a> *&#160;</td>
+          <td class="paramname"><em>next</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>name </td></tr>
+    <tr><td class="paramname">next</td><td>next framefilter to be applied in the filterchain </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="file_8h_source.html">file.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="file_8cpp.html">file.cpp</a></li>
 </ul>

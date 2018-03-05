@@ -39,7 +39,7 @@
 
 typedef void ( *PFNGLXSWAPINTERVALEXTPROC) (Display *dpy, GLXDrawable drawable, int interval);
 
-/** A FrameFifo with multiple stacks.  Used by OpenGLThread
+/** A FrameFifo with multiple stacks.  Created, managed and used by OpenGLThread.
  * 
  * This is a special FrameFifo class.  You should never instantiate it by yourself!  Instead, request it from OpenGLThread by calling OpenGLThread::getFifo (fifo's frames get properly initialized after OpenGLThread has been started and/or if OpenGLThread::preRun is called)
  *
@@ -50,6 +50,7 @@ typedef void ( *PFNGLXSWAPINTERVALEXTPROC) (Display *dpy, GLXDrawable drawable, 
  * In a typical situation, frames from AVThread are feeded, through FrameFilter(s) into OpenGLFrameFifo.  Decoded frames have typically have their Frame::frametype set to FrameType::avframe, indicating that the decoded frame is pointer by the Frame::av_frame pointer.  In such cases OpenGLFrameFifo then OpenGLFrameFifo::prepareAVFrame to upload the data from Frame::av_frame directly into GPU, using the %PBO(s).
  *  
  * @ingroup openglthread_tag
+ * @ingroup queues_tag
  */
 class OpenGLFrameFifo : public FrameFifo { // <pyapi>
   
@@ -101,8 +102,10 @@ private:
 
 
 /** Each Frame carries information about it's slot number in Frame::slot.  Slot number identifies the origin of the stream.  When the bitmap Frame arrives to OpenGLThread, each stream/slot requires:
+ * 
  * - A set of OpenGL Textures (SlotContext::yuvtex)
  * - A reference to the relevant shader program (SlotContext::shader)
+ * 
  * This class encapsulates all that.  SlotContext can be in an active (with textures reserved and shaders set) or in an inactive state.
  * 
  * @ingroup openglthread_tag
@@ -139,7 +142,6 @@ public: // getters
 /** Encapsulates data for rendering a single bitmap: vertex array object (VAO), vertex buffer object (VBO), vertice coordinates, transformation matrix, etc.
  * 
  * @ingroup openglthread_tag
- * 
  */
 class RenderContext {
 
@@ -191,7 +193,6 @@ public:
 /** Group of bitmaps that are rendered into the same X-window.  A RenderGroup instance is indentified uniquely by an x-window id.  API user should **never** create this (use the API calls in OpenGLThread instead)
  * 
  * @ingroup openglthread_tag
- * 
  */ 
 class RenderGroup {
   
@@ -254,7 +255,10 @@ struct OpenGLSignalContext {   // used by signals:
 std::ostream &operator<<(std::ostream &os, OpenGLSignalContext const &m);
 
 
-namespace swap_flavors { // this glx extension(?) is a mess..
+/** GLX extensions for controlling the vertical sync / framerate issue are a mess.  Hence this namespace.
+ * 
+ */
+namespace swap_flavors {
   const static unsigned     none =0;
   const static unsigned     ext  =1;
   const static unsigned     mesa =2;
@@ -263,6 +267,7 @@ namespace swap_flavors { // this glx extension(?) is a mess..
 
 
 /** This class does a lot of things:
+ * 
  * - Handles all OpenGL calls.  GLX and OpenGL initializations are done at thread start (i.e., at OpenGLThread::preRun, not at the constructor)
  * - Creates an OpenGLFrameFifo instance (OpenGLThread::infifo) that has direct memory access to the GPU.  It is retrieved by calling OpenGLThread::getFifo (fifo's frames get initialized once OpenGLThread starts running)
  * - The main execution loop (OpenGLThread::run) reads OpenGLThread::infifo, passes frames to the presentation queue OpenGLThread::presfifo and presents the frames accordint to their presentation timestamps
@@ -393,12 +398,12 @@ public: // Thread variables
   std::deque<SignalContext> signal_fifo;   ///< Redefinition of signal fifo.  Signal fifo of Thread::SignalContext(s) is now hidden.
   
 public: // Thread virtual methods
-  void run();     ///< Main execution loop is defined here. \callgraph
-  void preRun();  ///< Called before entering the main execution loop, but after creating the thread \callgraph
-  void postRun(); ///< Called after the main execution loop exits, but before joining the thread \callgraph
-  void handleSignals(); ///< From signals to methods \callgraph
-  void sendSignal(SignalContext signal_ctx); ///< Send a signal to the thread \callgraph
-  void sendSignalAndWait(SignalContext signal_ctx); ///< Send a signal to the thread and wait all signals to be executed \callgraph
+  void run();                                       ///< Main execution loop is defined here.
+  void preRun();                                    ///< Called before entering the main execution loop, but after creating the thread.  Calls OpenGLThread::createShaders and OpenGLThread::reserveFrames
+  void postRun();                                   ///< Called after the main execution loop exits, but before joining the thread
+  void handleSignals();                             ///< From signals to methods 
+  void sendSignal(SignalContext signal_ctx);        ///< Send a signal to the thread 
+  void sendSignalAndWait(SignalContext signal_ctx); ///< Send a signal to the thread and wait all signals to be executed
   
 public: // methods, internal : initializing / closing .. but we might want to test these separately, keep public
   void initGLX();          ///< Connect to X11 server, init GLX direct rendering
@@ -408,20 +413,19 @@ public: // methods, internal : initializing / closing .. but we might want to te
   int hasCompositor(int screen); ///< Detect if a compositor is running
   void makeShaders();      ///< Compile shaders
   void delShaders();       ///< Delete shader
-  void reserveFrames();    ///< Attaches YUVPBO instances with direct GPU memory access to Frame::yuvpbo \callgraph
-  void releaseFrames();    ///< Deletes YUVPBO by calling Frame::reset \callgraph
+  void reserveFrames();    ///< Attaches YUVPBO instances with direct GPU memory access to Frame::yuvpbo
+  void releaseFrames();    ///< Deletes YUVPBO by calling Frame::reset
   
 protected: // internal methods
   void dumpFifo();
   void diagnosis();
   void resetCallTime();
   void reportCallTime(unsigned i);        ///< How much time since handleFifo exited
-  long unsigned insertFifo(Frame* f);     ///< Sorted insert: insert a timestamped frame into the fifo \callgraph
+  long unsigned insertFifo(Frame* f);     ///< Sorted insert: insert a timestamped frame into the fifo
   
-  /** Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation \callgraph
+  /** Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation
    * 
    * See also \ref timing
-   * 
    */
   long unsigned handleFifo();
   void delRenderContexes();
@@ -437,7 +441,7 @@ public:  // reporting
   
 public: // testing 
   Frame* getFrame(BitmapType bmtype) {return infifo.getFrame(bmtype);} ///< Get a frame from the OpenGLFrameFifo
-  void recycle(Frame* f)             {infifo.recycle(f);} ///< Recycle a frame back to OpenGLFrameFifo
+  void recycle(Frame* f)             {infifo.recycle(f);}               ///< Recycle a frame back to OpenGLFrameFifo
   
 public: // for testing // <pyapi>
   Window     createWindow(bool map=true);          ///< Creates a new X window (for debugging/testing only) // <pyapi>

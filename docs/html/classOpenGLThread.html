@@ -97,7 +97,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classOpenGLThread-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenGLThread Class Reference<div class="ingroups"><a class="el" href="group__threading__tag.html">Threading_tag</a> &#124; <a class="el" href="group__openglthread__tag.html">Openglthread_tag</a></div></div>  </div>
+<div class="title">OpenGLThread Class Reference<div class="ingroups"><a class="el" href="group__threading__tag.html">multithreads</a> &#124; <a class="el" href="group__openglthread__tag.html">opengl</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -157,9 +157,9 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a397e9fb5b59834694ae6b161df2bc42e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a397e9fb5b59834694ae6b161df2bc42e">OpenGLThread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, unsigned short n720p=0, unsigned short n1080p=0, unsigned short n1440p=0, unsigned short n4K=0, unsigned short naudio=0, unsigned <a class="el" href="classOpenGLThread.html#abd95b01df8ebaf9cae08e13d4ba87cda">msbuftime</a>=100, int core_id=-1)</td></tr>
-<tr class="memdesc:a397e9fb5b59834694ae6b161df2bc42e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a397e9fb5b59834694ae6b161df2bc42e">More...</a><br /></td></tr>
-<tr class="separator:a397e9fb5b59834694ae6b161df2bc42e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad94201c2b599ad0a82f79359bf3a6786"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ad94201c2b599ad0a82f79359bf3a6786">OpenGLThread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, unsigned short n720p=0, unsigned short n1080p=0, unsigned short n1440p=0, unsigned short n4K=0, unsigned <a class="el" href="classOpenGLThread.html#abd95b01df8ebaf9cae08e13d4ba87cda">msbuftime</a>=100, int core_id=-1)</td></tr>
+<tr class="memdesc:ad94201c2b599ad0a82f79359bf3a6786"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ad94201c2b599ad0a82f79359bf3a6786">More...</a><br /></td></tr>
+<tr class="separator:ad94201c2b599ad0a82f79359bf3a6786"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e717cf423eb5e219cbce12615739d53"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e717cf423eb5e219cbce12615739d53"></a>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a2e717cf423eb5e219cbce12615739d53">~OpenGLThread</a> ()</td></tr>
 <tr class="memdesc:a2e717cf423eb5e219cbce12615739d53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor // &lt;pyapi&gt; <br /></td></tr>
@@ -236,7 +236,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:aea9d886d946b00b12ce01ef0719865f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8229c3916b40e90d7a7473df99a89931"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8229c3916b40e90d7a7473df99a89931"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a8229c3916b40e90d7a7473df99a89931">preRun</a> ()</td></tr>
-<tr class="memdesc:a8229c3916b40e90d7a7473df99a89931"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called before entering the main execution loop, but after creating the thread. <br /></td></tr>
+<tr class="memdesc:a8229c3916b40e90d7a7473df99a89931"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called before entering the main execution loop, but after creating the thread. Calls OpenGLThread::createShaders and <a class="el" href="classOpenGLThread.html#a8c666e8caa25401f1c86350dce28e813" title="Attaches YUVPBO instances with direct GPU memory access to Frame::yuvpbo. ">OpenGLThread::reserveFrames</a>. <br /></td></tr>
 <tr class="separator:a8229c3916b40e90d7a7473df99a89931"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a475f0e7a05bc5ec5bb4b89131a6a7d9e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a475f0e7a05bc5ec5bb4b89131a6a7d9e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a475f0e7a05bc5ec5bb4b89131a6a7d9e">postRun</a> ()</td></tr>
@@ -262,9 +262,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#aad619c3ffcaeb78cdc79877700e103a6">closeGLX</a> ()</td></tr>
 <tr class="memdesc:aad619c3ffcaeb78cdc79877700e103a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Close connection to X11. <br /></td></tr>
 <tr class="separator:aad619c3ffcaeb78cdc79877700e103a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fbb85f85279c8910037df79a2d394f0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5fbb85f85279c8910037df79a2d394f0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a5fbb85f85279c8910037df79a2d394f0">loadExtensions</a> ()</td></tr>
-<tr class="memdesc:a5fbb85f85279c8910037df79a2d394f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load OpenGL extensions using GLEW. <br /></td></tr>
+<tr class="memitem:a5fbb85f85279c8910037df79a2d394f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a5fbb85f85279c8910037df79a2d394f0">loadExtensions</a> ()</td></tr>
+<tr class="memdesc:a5fbb85f85279c8910037df79a2d394f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load OpenGL extensions using GLEW.  <a href="#a5fbb85f85279c8910037df79a2d394f0">More...</a><br /></td></tr>
 <tr class="separator:a5fbb85f85279c8910037df79a2d394f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab01f7e3f4d5ef02e5c9db3db6071cb01"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab01f7e3f4d5ef02e5c9db3db6071cb01"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ab01f7e3f4d5ef02e5c9db3db6071cb01">VSyncOff</a> ()</td></tr>
@@ -316,10 +315,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>dumpInFifo</b> ()</td
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#af1e9c1ef78e7b030dd560d65a906e92f">recycle</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
 <tr class="memdesc:af1e9c1ef78e7b030dd560d65a906e92f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recycle a frame back to <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a>. <br /></td></tr>
 <tr class="separator:af1e9c1ef78e7b030dd560d65a906e92f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e3f28d936d8fb15a7174a0576bf6844"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e3f28d936d8fb15a7174a0576bf6844"></a>
-Window&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a8e3f28d936d8fb15a7174a0576bf6844">createWindow</a> ()</td></tr>
-<tr class="memdesc:a8e3f28d936d8fb15a7174a0576bf6844"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new X window (for debugging/testing only) // &lt;pyapi&gt; <br /></td></tr>
-<tr class="separator:a8e3f28d936d8fb15a7174a0576bf6844"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51aa28ce5521df79c47038aa72c03cf5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a51aa28ce5521df79c47038aa72c03cf5"></a>
+Window&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a51aa28ce5521df79c47038aa72c03cf5">createWindow</a> (bool map=true)</td></tr>
+<tr class="memdesc:a51aa28ce5521df79c47038aa72c03cf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new X window (for debugging/testing only) // &lt;pyapi&gt; <br /></td></tr>
+<tr class="separator:a51aa28ce5521df79c47038aa72c03cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6337f5a97ff1a71134200565b354d2d7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6337f5a97ff1a71134200565b354d2d7"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a6337f5a97ff1a71134200565b354d2d7">makeCurrent</a> (const Window window_id)</td></tr>
 <tr class="memdesc:a6337f5a97ff1a71134200565b354d2d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set current X windox // &lt;pyapi&gt; <br /></td></tr>
@@ -328,9 +327,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ae82f6394f1e09cc778f4b202ca6ee3dd">getVsyncAtStartup</a> ()</td></tr>
 <tr class="memdesc:ae82f6394f1e09cc778f4b202ca6ee3dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">What vsync was at startup time? // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:ae82f6394f1e09cc778f4b202ca6ee3dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60f9e66d016bdc7e26a93f40b5e01322"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60f9e66d016bdc7e26a93f40b5e01322"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>reConfigWindow</b> (Window &amp;window_id)</td></tr>
-<tr class="separator:a60f9e66d016bdc7e26a93f40b5e01322"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75f7bfc8834385869678c48277dee057"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75f7bfc8834385869678c48277dee057"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reConfigWindow</b> (Window window_id)</td></tr>
+<tr class="separator:a75f7bfc8834385869678c48277dee057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75f1dcad4638c31568db16e4c3f37c10"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75f1dcad4638c31568db16e4c3f37c10"></a>
+Window&#160;</td><td class="memItemRight" valign="bottom"><b>getChildWindow</b> (Window parent_id)</td></tr>
+<tr class="separator:a75f1dcad4638c31568db16e4c3f37c10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c556c232d541bb7d5345b7164bc95e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c556c232d541bb7d5345b7164bc95e9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a3c556c232d541bb7d5345b7164bc95e9">stopCall</a> ()</td></tr>
 <tr class="memdesc:a3c556c232d541bb7d5345b7164bc95e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">API call: stops the thread. <br /></td></tr>
@@ -395,6 +397,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:adbc2543c594d857f6e69f99f85d87335"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adbc2543c594d857f6e69f99f85d87335"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>dumpFifo</b> ()</td></tr>
 <tr class="separator:adbc2543c594d857f6e69f99f85d87335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae13e33cc0aa85c84032078b21cc6bac1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae13e33cc0aa85c84032078b21cc6bac1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>diagnosis</b> ()</td></tr>
+<tr class="separator:ae13e33cc0aa85c84032078b21cc6bac1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae90f0a63c4c7182b98224295b7af8595"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae90f0a63c4c7182b98224295b7af8595"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>resetCallTime</b> ()</td></tr>
 <tr class="separator:ae90f0a63c4c7182b98224295b7af8595"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -481,7 +486,7 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <tr class="separator:abd95b01df8ebaf9cae08e13d4ba87cda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e6678f1bdf0aaffa639b2c058426fe5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1e6678f1bdf0aaffa639b2c058426fe5"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a1e6678f1bdf0aaffa639b2c058426fe5">future_ms_tolerance</a></td></tr>
-<tr class="memdesc:a1e6678f1bdf0aaffa639b2c058426fe5"><td class="mdescLeft">&#160;</td><td class="mdescRight">If frame is this much in the future, it will be discarded. See <a class="el" href="classOpenGLThread.html#a397e9fb5b59834694ae6b161df2bc42e" title="Default constructor. ">OpenGLThread::OpenGLThread</a> for its value (some multiple of <a class="el" href="classOpenGLThread.html#abd95b01df8ebaf9cae08e13d4ba87cda" title="Buffering time in milliseconds. ">OpenGLThread::msbuftime</a>) <br /></td></tr>
+<tr class="memdesc:a1e6678f1bdf0aaffa639b2c058426fe5"><td class="mdescLeft">&#160;</td><td class="mdescRight">If frame is this much in the future, it will be discarded. See <a class="el" href="classOpenGLThread.html#ad94201c2b599ad0a82f79359bf3a6786" title="Default constructor. ">OpenGLThread::OpenGLThread</a> for its value (some multiple of <a class="el" href="classOpenGLThread.html#abd95b01df8ebaf9cae08e13d4ba87cda" title="Buffering time in milliseconds. ">OpenGLThread::msbuftime</a>) <br /></td></tr>
 <tr class="separator:a1e6678f1bdf0aaffa639b2c058426fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf3b9209978de731fc09ee405511b6c8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf3b9209978de731fc09ee405511b6c8"></a>
 std::list&lt; <a class="el" href="classFrame.html">Frame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#acf3b9209978de731fc09ee405511b6c8">presfifo</a></td></tr>
@@ -508,8 +513,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a9e604c94f8ee52771ffbc1dac03b93ad inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3fe753fa03016d016345c1171b123828"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a3fe753fa03016d016345c1171b123828">start_mutex</a></td></tr>
-<tr class="memdesc:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">released when the thread has been started <br /></td></tr>
+<tr class="memdesc:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting start_condition. <br /></td></tr>
 <tr class="separator:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d9732ab4852c250f4fbfc5dd5356de2"></a>
+std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a7d9732ab4852c250f4fbfc5dd5356de2">start_condition</a></td></tr>
+<tr class="memdesc:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notified when the thread has been started. <br /></td></tr>
+<tr class="separator:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6383ead608b8e4be6debb9f25bcfe80a inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6383ead608b8e4be6debb9f25bcfe80a"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a6383ead608b8e4be6debb9f25bcfe80a">mutex</a></td></tr>
 <tr class="memdesc:a6383ead608b8e4be6debb9f25bcfe80a inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting the condition variable and signal queue. <br /></td></tr>
@@ -542,6 +551,9 @@ pthread_t&#160;</td><td class="memItemRight" valign="bottom"><b>internal_thread<
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a706bdd6d8355d46d43a4c58011377f98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a706bdd6d8355d46d43a4c58011377f98"></a>
+PFNGLXSWAPINTERVALEXTPROC&#160;</td><td class="memItemRight" valign="bottom"><b>pglXSwapIntervalEXT</b></td></tr>
+<tr class="separator:a706bdd6d8355d46d43a4c58011377f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fa540ea9840935b914e5e45c1049000"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fa540ea9840935b914e5e45c1049000"></a>
 PFNGLXGETSWAPINTERVALMESAPROC&#160;</td><td class="memItemRight" valign="bottom"><b>pglXGetSwapIntervalMESA</b></td></tr>
 <tr class="separator:a2fa540ea9840935b914e5e45c1049000"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -559,7 +571,7 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class does a lot of things: </p>
 <ul>
-<li>Handles all OpenGL calls. GLX and OpenGL initializations are done at thread start (i.e., at <a class="el" href="classOpenGLThread.html#a8229c3916b40e90d7a7473df99a89931" title="Called before entering the main execution loop, but after creating the thread. ">OpenGLThread::preRun</a>, not at the constructor)</li>
+<li>Handles all OpenGL calls. GLX and OpenGL initializations are done at thread start (i.e., at <a class="el" href="classOpenGLThread.html#a8229c3916b40e90d7a7473df99a89931" title="Called before entering the main execution loop, but after creating the thread. Calls OpenGLThread::cr...">OpenGLThread::preRun</a>, not at the constructor)</li>
 <li>Creates an <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a> instance (<a class="el" href="classOpenGLThread.html#a6c1f4f9521164d1dbccf251e13bbe00b" title="This thread reads from this communication fifo. ">OpenGLThread::infifo</a>) that has direct memory access to the GPU. It is retrieved by calling <a class="el" href="classOpenGLThread.html#ac96bdf32800352fa52cb9c5a571d1f49" title="Retrieve the communication fifo // &lt;pyapi&gt; ">OpenGLThread::getFifo</a> (fifo's frames get initialized once <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a> starts running)</li>
 <li>The main execution loop (<a class="el" href="classOpenGLThread.html#aea9d886d946b00b12ce01ef0719865f9" title="Main execution loop is defined here. ">OpenGLThread::run</a>) reads <a class="el" href="classOpenGLThread.html#a6c1f4f9521164d1dbccf251e13bbe00b" title="This thread reads from this communication fifo. ">OpenGLThread::infifo</a>, passes frames to the presentation queue <a class="el" href="classOpenGLThread.html#acf3b9209978de731fc09ee405511b6c8" title="Double-linked list of buffered frames about to be presented. ">OpenGLThread::presfifo</a> and presents the frames accordint to their presentation timestamps</li>
 </ul>
@@ -611,7 +623,7 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a397e9fb5b59834694ae6b161df2bc42e"></a>
+<a class="anchor" id="ad94201c2b599ad0a82f79359bf3a6786"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -648,12 +660,6 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned short&#160;</td>
-          <td class="paramname"><em>naudio</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">unsigned&#160;</td>
           <td class="paramname"><em>msbuftime</em> = <code>100</code>, </td>
         </tr>
@@ -679,13 +685,12 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
     <tr><td class="paramname">n_stack_1080p</td><td>Size of the frame reservoir for 1080p </td></tr>
     <tr><td class="paramname">n_stack_1440p</td><td>Size of the frame reservoir for 1440p </td></tr>
     <tr><td class="paramname">n_stack_4K</td><td>Size of the frame reservoir for 4K </td></tr>
-    <tr><td class="paramname">n_stack_audio</td><td>Size of the payload reservoir for audio frames </td></tr>
     <tr><td class="paramname">msbuftime</td><td>Jitter buffer size in milliseconds (default=100 ms) </td></tr>
     <tr><td class="paramname">core_id</td><td>Force thread affinity (default=-1 = no affinity)</td></tr>
   </table>
   </dd>
 </dl>
-<p>n_stack parameters are used to initialize <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a>. When <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a> is started (at <a class="el" href="classOpenGLThread.html#a8229c3916b40e90d7a7473df99a89931" title="Called before entering the main execution loop, but after creating the thread. ">OpenGLThread::preRun</a>), <a class="el" href="classOpenGLThread.html#a8c666e8caa25401f1c86350dce28e813" title="Attaches YUVPBO instances with direct GPU memory access to Frame::yuvpbo. ">OpenGLThread::reserveFrames</a> is called. <a class="el" href="classOpenGLThread.html#a8c666e8caa25401f1c86350dce28e813" title="Attaches YUVPBO instances with direct GPU memory access to Frame::yuvpbo. ">OpenGLThread::reserveFrames</a> then instantiates <a class="el" href="classYUVPBO.html" title="Encapsulates OpenGL PBOs (Pixel Buffer Objects) for a YUV420 image. ">YUVPBO</a> objects, that have direct memory access to GPU. <a class="el" href="classYUVPBO.html" title="Encapsulates OpenGL PBOs (Pixel Buffer Objects) for a YUV420 image. ">YUVPBO</a> instances are attached to the <a class="el" href="classFrame.html#a6b86da1e00b483afaf192c75473c055f" title="NOT MANAGED by Frame. Managed by an OpenGLThread instance. ">Frame::yuvpbo</a> pointer of frames in <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a>'s frame reservoirs. </p>
+<p>n_stack parameters are used to initialize <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a>. When <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a> is started (at <a class="el" href="classOpenGLThread.html#a8229c3916b40e90d7a7473df99a89931" title="Called before entering the main execution loop, but after creating the thread. Calls OpenGLThread::cr...">OpenGLThread::preRun</a>), <a class="el" href="classOpenGLThread.html#a8c666e8caa25401f1c86350dce28e813" title="Attaches YUVPBO instances with direct GPU memory access to Frame::yuvpbo. ">OpenGLThread::reserveFrames</a> is called. <a class="el" href="classOpenGLThread.html#a8c666e8caa25401f1c86350dce28e813" title="Attaches YUVPBO instances with direct GPU memory access to Frame::yuvpbo. ">OpenGLThread::reserveFrames</a> then instantiates <a class="el" href="classYUVPBO.html" title="Encapsulates OpenGL PBOs (Pixel Buffer Objects) for a YUV420 image. ">YUVPBO</a> objects, that have direct memory access to GPU. <a class="el" href="classYUVPBO.html" title="Encapsulates OpenGL PBOs (Pixel Buffer Objects) for a YUV420 image. ">YUVPBO</a> instances are attached to the <a class="el" href="classFrame.html#a6b86da1e00b483afaf192c75473c055f" title="NOT MANAGED by Frame. Managed by an OpenGLThread instance. ">Frame::yuvpbo</a> pointer of frames in <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. ">OpenGLFrameFifo</a>'s frame reservoirs. </p>
 
 </div>
 </div>
@@ -787,12 +792,44 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph.png" border="0" usemap="#classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph" alt=""/></div>
 <map name="classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph" id="classOpenGLThread_ae3c205644b06c34f4bb44e6cdc7b8e88_cgraph">
-<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="483,88,649,114"/>
-<area shape="rect" id="node3" href="tools_8h.html#a9cec5da1c89d2e3965b8156b366280a1" title="Checks the slot number range. " alt="" coords="303,37,363,64"/>
-<area shape="rect" id="node4" href="classOpenGLThread.html#a4473e951ddb16921d4119a90594bfc5f" title="How much time since handleFifo exited. " alt="" coords="232,88,435,114"/>
+<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="495,87,662,114"/>
+<area shape="rect" id="node3" href="tools_8h.html#a9cec5da1c89d2e3965b8156b366280a1" title="Checks the slot number range. " alt="" coords="303,37,363,63"/>
+<area shape="rect" id="node4" href="classOpenGLThread.html#a4473e951ddb16921d4119a90594bfc5f" title="How much time since handleFifo exited. " alt="" coords="232,87,435,114"/>
 <area shape="rect" id="node5" href="classOpenGLThread.html#af74fc473b3c348498635b9d32b4415d0" title="Load PBO to texture in slot n_slot. " alt="" coords="249,138,417,165"/>
-<area shape="rect" id="node6" href="classOpenGLThread.html#a9c52452ac81f91999cf8487d9796a1f0" title="Render all RenderGroup(s) depending on slot n_slot. " alt="" coords="256,189,411,216"/>
-<area shape="rect" id="node7" href="classOpenGLFrameFifo.html#a25e2f26e359bcf532ea7d85efd6231cd" title="Return Frame f back into the stack (relevant stack is chosen automatically) " alt="" coords="244,240,423,266"/>
+<area shape="rect" id="node6" href="classOpenGLThread.html#a9c52452ac81f91999cf8487d9796a1f0" title="Render all RenderGroup(s) depending on slot n_slot. " alt="" coords="256,189,411,215"/>
+<area shape="rect" id="node8" href="classOpenGLFrameFifo.html#a25e2f26e359bcf532ea7d85efd6231cd" title="Return Frame f back into the stack (relevant stack is chosen automatically) " alt="" coords="244,239,423,266"/>
+<area shape="rect" id="node7" href="classOpenGLFrameFifo.html#a363ab3a9c1254485af945fa28af5b32b" title="Print a resumen of fifo and stack usage. " alt="" coords="483,189,675,215"/>
+</map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a5fbb85f85279c8910037df79a2d394f0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OpenGLThread::loadExtensions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Load OpenGL extensions using GLEW. </p>
+<ul>
+<li></li>
+</ul>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classOpenGLThread_a5fbb85f85279c8910037df79a2d394f0_cgraph.png" border="0" usemap="#classOpenGLThread_a5fbb85f85279c8910037df79a2d394f0_cgraph" alt=""/></div>
+<map name="classOpenGLThread_a5fbb85f85279c8910037df79a2d394f0_cgraph" id="classOpenGLThread_a5fbb85f85279c8910037df79a2d394f0_cgraph">
+<area shape="rect" id="node2" href="classOpenGLThread.html#a6337f5a97ff1a71134200565b354d2d7" title="Set current X windox // &lt;pyapi&gt; " alt="" coords="260,5,453,32"/>
+<area shape="rect" id="node3" href="opengl_8h.html#a69229b2aeb3a32e79cfd7f19fe1edf51" title="// ripped off from glxgears.c Determine whether or not a GLX extension is supported. " alt="" coords="265,56,448,83"/>
 </map>
 </div>
 </p>

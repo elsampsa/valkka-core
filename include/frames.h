@@ -43,6 +43,7 @@
 
 /** Various H264 frame types
  * 
+ * @ingroup frames_tag
  */
 namespace H264SliceType {
   static const unsigned none  =0;
@@ -55,6 +56,7 @@ namespace H264SliceType {
 
 /** Different frame types recognized by Frame
  * 
+ * @ingroup frames_tag
  */
 enum class FrameType {
   none,     ///< Uninitialized frame
@@ -112,7 +114,11 @@ AVCodecID frametype_to_codec_id(FrameType frametype);
   * 
   * In the multithreading fifos we want to reserve the frame objects beforehand.  This way we avoid constant memory (de)allocations.  However, not knowing what frames to expect, we can only instantiate the base class Frame.
   * 
+  * TODO: could we use a stack of base class Frame and cast it to different derived Frame types as frames arrive..?
+  * 
   * This class is a bit like ffmpeg's AVPacket structure.  Another possibility would be to use AVPackets only, but that's not flexible enough for our needs.
+  * 
+  * Frame class can be in a different "state", depending in which member(s) the actual data is found.  See FrameType.
   * 
   * Creating a deep copy of a Frame instance (including a copy of the payload):
   * 

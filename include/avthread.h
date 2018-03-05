@@ -88,7 +88,7 @@ public: // <pyapi>
    * 
    */
   AVThread(const char* name, FrameFifo& infifo, FrameFilter& outfilter, int core_id=-1, long int mstimetolerance=0); // <pyapi>
-  ~AVThread(); ///< Default destructor // <pyapi>
+  ~AVThread(); ///< Default destructor.  Calls AVThread::stopCall // <pyapi>
   
 protected:
   FrameFifo&   infifo;                  ///< Incoming frames are read from here
@@ -106,7 +106,7 @@ public: // redefined virtual functions
   void run();
   void preRun();
   void postRun();
-  void sendSignal(SignalContext signal_ctx); ///< Must be explicitly *redefined* just in case : Thread::SignalContext has been changed to AVThread::SignalContext  
+  void sendSignal(SignalContext signal_ctx); ///< Redefined : Thread::SignalContext has been changed to AVThread::SignalContext  
 
 protected:
   /*! @copydoc Thread::hangleSignals

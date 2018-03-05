@@ -125,7 +125,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="center"><img src="frames_8h__dep__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2include_2frames_8hdep" alt=""/></div>
 <map name="_2home_2sampsa_2C_2valkka_2include_2frames_8hdep" id="_2home_2sampsa_2C_2valkka_2include_2frames_8hdep">
 <area shape="rect" id="node2" href="avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="193,273,357,315"/>
-<area shape="rect" id="node6" href="queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="721,95,885,136"/>
+<area shape="rect" id="node6" href="queues_8h.html" title="Lockable and safe queues for multithreading. " alt="" coords="721,95,885,136"/>
 <area shape="rect" id="node10" href="filethread_8h.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="5,273,169,315"/>
 <area shape="rect" id="node15" href="live_8h.html" title="Interface to live555. " alt="" coords="1021,184,1185,225"/>
 <area shape="rect" id="node18" href="decoders_8h.html" title="FFmpeg decoders. " alt="" coords="421,95,585,136"/>
@@ -145,7 +145,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <area shape="rect" id="node16" href="live_8cpp.html" title="Interface to live555. " alt="" coords="1008,273,1172,315"/>
 <area shape="rect" id="node19" href="decoders_8cpp.html" title="FFmpeg decoders. " alt="" coords="301,184,465,225"/>
 <area shape="rect" id="node21" href="file_8h.html" title="File input and output to and from matroska files. " alt="" coords="1436,273,1600,315"/>
-<area shape="rect" id="node23" href="sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synced with posix sem..." alt="" coords="1624,273,1788,315"/>
+<area shape="rect" id="node23" href="sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="1624,273,1788,315"/>
 <area shape="rect" id="node25" href="filters_8cpp.html" title="Common frame filters. The FrameFilter base class is defined in frames.h. " alt="" coords="1248,273,1412,315"/>
 <area shape="rect" id="node22" href="file_8cpp.html" title="File input and output to and from matroska files. " alt="" coords="1436,363,1600,404"/>
 <area shape="rect" id="node24" href="sharedmem_8cpp.html" title="/home/sampsa/C/valkka\l/src/sharedmem.cpp" alt="" coords="1624,363,1788,404"/>
@@ -184,19 +184,20 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:ad495a9f61af7fff07d7e97979d1ab854"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854">FrameType</a> { <br />
-&#160;&#160;<a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a334c4a4c42fdb79d7ebc3e73b517e6f8">FrameType::none</a>, 
-<a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a97ef9389ad005c2cca5aaa6d3708db32">FrameType::avpkt</a>, 
-<a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa">FrameType::avframe</a>, 
-<a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a376bf3c0bb30c3c3276663258f9a12cc">FrameType::yuvframe</a>, 
+<tr class="memitem:gad495a9f61af7fff07d7e97979d1ab854"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__frames__tag.html#gad495a9f61af7fff07d7e97979d1ab854">FrameType</a> { <br />
+&#160;&#160;<a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a334c4a4c42fdb79d7ebc3e73b517e6f8">FrameType::none</a>, 
+<a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a97ef9389ad005c2cca5aaa6d3708db32">FrameType::avpkt</a>, 
+<a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa">FrameType::avframe</a>, 
+<a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a376bf3c0bb30c3c3276663258f9a12cc">FrameType::yuvframe</a>, 
 <br />
-&#160;&#160;<a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854aa0f848942ce863cf53c0fa6cc684007d">FrameType::setup</a>, 
-<a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a10dc9f554d16c87ec54b127438551658">FrameType::h264</a>, 
-<a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a3b8930c1da52512794862099a20b91d1">FrameType::pcmu</a>
+&#160;&#160;<a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854aa0f848942ce863cf53c0fa6cc684007d">FrameType::setup</a>, 
+<a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a10dc9f554d16c87ec54b127438551658">FrameType::h264</a>, 
+<a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a3b8930c1da52512794862099a20b91d1">FrameType::pcmu</a>, 
+<a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a545c04047c24c3c244716e6cbb2cc196">FrameType::glsetup</a>
 <br />
- }<tr class="memdesc:ad495a9f61af7fff07d7e97979d1ab854"><td class="mdescLeft">&#160;</td><td class="mdescRight">Different frame types recognized by <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>.  <a href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854">More...</a><br /></td></tr>
+ }<tr class="memdesc:gad495a9f61af7fff07d7e97979d1ab854"><td class="mdescLeft">&#160;</td><td class="mdescRight">Different frame types recognized by <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>.  <a href="group__frames__tag.html#gad495a9f61af7fff07d7e97979d1ab854">More...</a><br /></td></tr>
 </td></tr>
-<tr class="separator:ad495a9f61af7fff07d7e97979d1ab854"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:gad495a9f61af7fff07d7e97979d1ab854"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -216,10 +217,10 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, <a class="el" href="structPCMUPars.html">PCMUPars</a> const &amp;m)</td></tr>
 <tr class="separator:a6a7b953a9f5f6c3eecf9f269a4eb7896"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25f6ec94652fc225d41f74b5f75669a0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a25f6ec94652fc225d41f74b5f75669a0"></a>
-<a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854">FrameType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>codec_id_to_frametype</b> (AVCodecID av_codec_id)</td></tr>
+<a class="el" href="group__frames__tag.html#gad495a9f61af7fff07d7e97979d1ab854">FrameType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>codec_id_to_frametype</b> (AVCodecID av_codec_id)</td></tr>
 <tr class="separator:a25f6ec94652fc225d41f74b5f75669a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e9d8e96bac0ef5859f8a0c90ba3810c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e9d8e96bac0ef5859f8a0c90ba3810c"></a>
-AVCodecID&#160;</td><td class="memItemRight" valign="bottom"><b>frametype_to_codec_id</b> (<a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854">FrameType</a> frametype)</td></tr>
+AVCodecID&#160;</td><td class="memItemRight" valign="bottom"><b>frametype_to_codec_id</b> (<a class="el" href="group__frames__tag.html#gad495a9f61af7fff07d7e97979d1ab854">FrameType</a> frametype)</td></tr>
 <tr class="separator:a4e9d8e96bac0ef5859f8a0c90ba3810c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -227,53 +228,7 @@ AVCodecID&#160;</td><td class="memItemRight" valign="bottom"><b>frametype_to_cod
 <dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>0.3.0 </dd></dl>
-</div><h2 class="groupheader">Enumeration Type Documentation</h2>
-<a class="anchor" id="ad495a9f61af7fff07d7e97979d1ab854"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854">FrameType</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Different frame types recognized by <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ad495a9f61af7fff07d7e97979d1ab854a334c4a4c42fdb79d7ebc3e73b517e6f8"></a>none&#160;</td><td class="fielddoc">
-<p>Uninitialized frame. </p>
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="ad495a9f61af7fff07d7e97979d1ab854a97ef9389ad005c2cca5aaa6d3708db32"></a>avpkt&#160;</td><td class="fielddoc">
-<p>Data is in the Frame::avpkt struct (encoded frames) </p>
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa"></a>avframe&#160;</td><td class="fielddoc">
-<p>Data is in the <a class="el" href="classFrame.html#a6e31efaba2a5e93fffa7dc07023dad8b" title="This is a pointer to short-lived, temporary storage, used by the FFmpeg decoder (and finally overwrit...">Frame::av_frame</a> and <a class="el" href="classFrame.html#aede3f561f1951d6325aa3fa5bf756627" title="NOT MANAGED by Frame. Managed by a Decoder instance. ">Frame::av_codec_context</a> structs (decoded frames) </p>
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="ad495a9f61af7fff07d7e97979d1ab854a376bf3c0bb30c3c3276663258f9a12cc"></a>yuvframe&#160;</td><td class="fielddoc">
-<p>Data is in the <a class="el" href="classFrame.html#a6b86da1e00b483afaf192c75473c055f" title="NOT MANAGED by Frame. Managed by an OpenGLThread instance. ">Frame::yuvpbo</a> struct (decoded yuv frames - ready for OpenGL upload) </p>
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="ad495a9f61af7fff07d7e97979d1ab854aa0f848942ce863cf53c0fa6cc684007d"></a>setup&#160;</td><td class="fielddoc">
-<p>This frame contains data obtained from an rtsp setup / sdp file in <a class="el" href="classFrame.html#a61641fe70c9e7f84e70b8fff626dcbe2" title="Used, if frametype == FrameTypes::pcmu. ">Frame::pcmu_pars</a>. </p>
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="ad495a9f61af7fff07d7e97979d1ab854a10dc9f554d16c87ec54b127438551658"></a>h264&#160;</td><td class="fielddoc">
-<p>H264 slice. Payload in <a class="el" href="classFrame.html#a93b131179e6402e7af5e75cd0cc0044a" title="Raw payload data (use .data() to get the pointer from std::vector) ">Frame::payload</a>, additional data in <a class="el" href="classFrame.html#a377a8204065bfddb76547309090e7575" title="Used, if frametype == FrameTypes::h264. ">Frame::h264_pars</a>. </p>
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="ad495a9f61af7fff07d7e97979d1ab854a3b8930c1da52512794862099a20b91d1"></a>pcmu&#160;</td><td class="fielddoc">
-<p>PCM-ulaw. Payload in <a class="el" href="classFrame.html#a93b131179e6402e7af5e75cd0cc0044a" title="Raw payload data (use .data() to get the pointer from std::vector) ">Frame::payload</a>, additional data in <a class="el" href="classFrame.html#a61641fe70c9e7f84e70b8fff626dcbe2" title="Used, if frametype == FrameTypes::pcmu. ">Frame::pcmu_pars</a>. </p>
-</td></tr>
-</table>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

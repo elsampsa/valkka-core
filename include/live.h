@@ -27,11 +27,10 @@
  *  @author  Sampsa Riikonen
  *  @date    2017
  *  @version 0.3.0 
- *  
  *  @brief Interface to live555
  * 
  *  Acknowledgements: Ross Finlayson for his advice
- *
+ * 
  */
 
 #include "livedep.h"
@@ -41,72 +40,89 @@
 
 UsageEnvironment& operator<<(UsageEnvironment& env, const RTSPClient& rtspClient);       ///< A function that outputs a string that identifies each stream (for debugging output).
 UsageEnvironment& operator<<(UsageEnvironment& env, const MediaSubsession& subsession);  ///< A function that outputs a string that identifies each subsession (for debugging output).
-Logger& operator<<(Logger& logger, const RTSPClient& rtspClient);                           ///< A function that outputs a string that identifies each stream (for debugging output).
-Logger& operator<<(Logger& logger, const MediaSubsession& subsession);                      ///< A function that outputs a string that identifies each subsession (for debugging output).
+Logger& operator<<(Logger& logger, const RTSPClient& rtspClient);                        ///< A function that outputs a string that identifies each stream (for debugging output).
+Logger& operator<<(Logger& logger, const MediaSubsession& subsession);                   ///< A function that outputs a string that identifies each subsession (for debugging output).
 void usage(UsageEnvironment& env, char const* progName);
 
 
 
+/** Implements a FramedSource for sending frames.  See \ref live_streaming_page
+ * 
+ * @ingroup live_tag
+ */
 class BufferSource: public FramedSource {
 
 public:
+  /** Default constructor
+   * 
+   * @param env    Identifies the live555 event loop
+   * @param fifo   See BufferSource::fifo
+   * 
+   */
   BufferSource(UsageEnvironment &env, FrameFifo &fifo, unsigned preferredFrameSize =0, unsigned playTimePerFrame =0, unsigned offset=0);
   virtual ~BufferSource();
   
 private:
-  virtual void doGetNextFrame();
+  virtual void doGetNextFrame();  ///< All the fun happens here
   
 private:
-  FrameFifo          &fifo;
-  
-  // uint8_t*  fBuffer;
-  // unsigned  fMstimestamp;
-  // unsigned  fBufferSize;
-  
-  // Boolean   fDeleteBufferOnClose;
+  FrameFifo &fifo;                ///< Frames are being read from here.  This reference leads all the way down to LiveThread::fifo
   unsigned  fPreferredFrameSize;
   unsigned  fPlayTimePerFrame;
   unsigned  offset;
-  // unsigned  fLastPlayTime;
-  // Boolean   fLimitNumBytesToStream;
-  // u_int64_t fNumBytesToStream; // used if "fLimitNumBytesToStream" is True
   
 public:
   std::deque<Frame*> internal_fifo;
-  bool      active;
+  bool      active;             ///< If set, doGetNextFrame is currently re-scheduled
   
 public:
-  void handleFrame(Frame* f);
+  void handleFrame(Frame* f);   ///< Copies a Frame from BufferSource::fifo into BufferSource::internal_fifo.  Sets BufferSource::active
   
 };
 
 
-// encapsulates an outbound stream
-class Stream { // analogy: DecoderBase
+/** An outbound Stream
+ * 
+ * In the live555 API, there are filterchains as well.  These end to a sink, while the sink queries frames from the source.
+ * 
+ * Here the source is Stream::buffer_source (BufferSource) and the final sink is Stream::terminal.  Frames are fed with FrameFifo s into BufferSource.  If BufferSource has frames in it's BufferSource::internal_fifo, it will pass a frame down the live555 filterchain.
+ * 
+ * @ingroup live_tag
+ */
+class Stream {
   
 public:
+  /** Default constructor
+   * 
+   * @param env      Identifies the live555 event loop
+   * @param fifo     See Stream::fifo
+   * @param adr      Target address for sending the stream
+   * @param portnum  Start port number for sending the stream
+   * @param ttl      Packet time-to-live
+   * 
+   */
   Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl=255);
+  /** Default destructor */
   virtual ~Stream();
   
 protected:
-  UsageEnvironment  &env;
-  FrameFifo         &fifo;
+  UsageEnvironment  &env;   ///< Identifies the live555 event loop
+  FrameFifo         &fifo;  ///< Frames are read from here.  This reference leads all the way down to LiveThread::fifo
   
-  RTPSink           *sink; // queries frames from terminal
+  RTPSink           *sink;  ///< Live555 class: queries frames from terminal
   RTCPInstance      *rtcp;
   
   Groupsock  *rtpGroupsock;
   Groupsock  *rtcpGroupsock;
   unsigned char cname[101];
   
-  BufferSource *buffer_source;
-  FramedSource *terminal; // the final device in the live555 filterchain
+  BufferSource *buffer_source;   
+  FramedSource *terminal;        ///< The final sink in the live555 filterchain
   
 public:
   void handleFrame(Frame *f);
   void startPlaying();
   static void afterPlaying(void* cdata);
-  
 };
 
 
@@ -119,7 +135,10 @@ public:
 };
 
 
-
+/** Statuses for the ValkkaRTSPClient
+ * 
+ * @ingroup live_tag
+ */
 enum class LiveStatus {
   none,
   pending,
@@ -128,13 +147,18 @@ enum class LiveStatus {
 };
 
 
-/** Class to hold per-stream state that we maintain throughout each stream's lifetime
+/** Class to hold per-stream state that we maintain throughout each stream's lifetime.
+ * 
+ * An instance of this class is included in the ValkkaRTSPClient and used in the response handlers / callback chain.
+ * 
+ * This is a bit cumbersome .. Some of the members are created/managed by the ValkkaRTSPClient instance.  When ValkkaRTSPClient destructs itself (by calling Medium::close on its sinks and MediaSession) in the response-handler callback chain, we need to know that in LiveThread.
+ *
  * @ingroup live_tag
  */
 class StreamClientState {
 public:
-  StreamClientState();
-  virtual ~StreamClientState();   ///< Calls Medium::close on the MediaSession object
+  StreamClientState();            ///< Default constructor
+  virtual ~StreamClientState();   ///< Default virtual destructor.  Calls Medium::close on the MediaSession object
 
 public:
   MediaSubsessionIterator* iter;  ///< Created by RTSPClient or SDPClient.  Deleted by StreamClientState::~StreamClientState
@@ -143,7 +167,7 @@ public:
   MediaSubsession* subsession;    ///< Created by RTSPClient or SDPClient.  Closed by StreamClientState::close
   TaskToken streamTimerTask;
   double duration;
-  bool frame_flag;
+  bool frame_flag;                ///< Set always when a frame is received
   
 public:
   void close();                   ///< Calls Medium::close on the MediaSubsession objects and their sinks
@@ -154,32 +178,37 @@ public: // setters & getters
   bool gotFrame()     {return this->frame_flag;}
 };
 
+
+
 /** Handles a live555 RTSP connection
  * 
  * To get an idea how this works, see \ref live555_page
- * 
- * @param env                The usage environment, i.e. event loop in question
- * @param rtspURL            The URL of the live stream
- * @param framefilter        Start of the frame filter chain.  New frames are being fed here.
- * @param verbosityLevel     (optional) Verbosity level
- * @param applicationName    (optional)
- * @param tunnelOverHTTPPortNum (optional)
  * 
  * @ingroup live_tag
  */
 class ValkkaRTSPClient: public RTSPClient {
   
 public:
+  /** Default constructor
+   * @param env                   The usage environment, i.e. event loop in question
+   * @param rtspURL               The URL of the live stream
+   * @param framefilter           Start of the frame filter chain.  New frames are being fed here.
+   * @param livestatus            This used to inform LiveThread about the state of the stream
+   * @param verbosityLevel        (optional) Verbosity level
+   * @param applicationName       (optional)
+   * @param tunnelOverHTTPPortNum (optional)
+   */
   static ValkkaRTSPClient* createNew(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, int verbosityLevel = 0, char const* applicationName = NULL, portNumBits tunnelOverHTTPPortNum = 0);
-  virtual ~ValkkaRTSPClient();
   
 protected:
   ValkkaRTSPClient(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum);
+  /** Default virtual destructor */
+  virtual ~ValkkaRTSPClient();
   
 public:
   StreamClientState scs;
-  FrameFilter& framefilter;
-  LiveStatus* livestatus; ///< This points to a variable that is being used by LiveThread
+  FrameFilter& framefilter;     ///< Target frame filter where frames are being fed
+  LiveStatus* livestatus;       ///< This points to a variable that is being used by LiveThread to inform about the stream state
   
 public: // some extra parameters and their setters
   bool request_multicast; ///< Request multicast during rtsp negotiation
@@ -207,39 +236,39 @@ public:
 
 /** Live555 handling of media frames 
  * 
- * When the event loop has composed a new frame, it's passed to this class and afterGettingFrame is called.  In our case, we pass the new frame to the beginning of a frame filter chain.
- * 
- * @param env        - The usage environment, i.e. event loop in question
- * @param subsession - Identifies the kind of data that's being received (media type, codec, etc.)
- * @param framefilter - FrameFilter to be appliced to the frame.  The start of a FrameFilter callback cascade.
- * @param streamId   - (optional) identifies the stream itself
+ * When the live555 event loop has composed a new frame, it's passed to FrameSink::afterGettingFrame.  There it is passed to the beginning of valkka framefilter chain.
  * 
  * @ingroup live_tag
  */
 class FrameSink: public MediaSink {
 
 public:
-  // static FrameSink* createNew(UsageEnvironment& env, MediaSubsession& subsession, FrameFilter& framefilter, int subsession_index, char const* streamId = NULL);
+
+  /** Default constructor
+   * @param env          The usage environment, i.e. event loop in question
+   * @param scs          Info about the stream state
+   * @param subsession   Identifies the kind of data that's being received (media type, codec, etc.)
+   * @param framefilter  The start of valkka FrameFilter filterchain
+   * @param streamId     (optional) identifies the stream itself
+   * 
+   */
   static FrameSink* createNew(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId = NULL);
 
-  
 private:
-  // FrameSink(UsageEnvironment& env, MediaSubsession& subsession, FrameFilter& framefilter, int subsession_index, char const* streamId);
   FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId);
-    // called only by "createNew()"
+  /** Default virtual destructor */
   virtual ~FrameSink();
 
-  static void afterGettingFrame(void* clientData, unsigned frameSize, unsigned numTruncatedBytes, struct timeval presentationTime, unsigned durationInMicroseconds);
-  void afterGettingFrame(unsigned frameSize, unsigned numTruncatedBytes, struct timeval presentationTime, unsigned durationInMicroseconds);
+  static void afterGettingFrame(void* clientData, unsigned frameSize, unsigned numTruncatedBytes, struct timeval presentationTime, unsigned durationInMicroseconds); ///< Called after live555 event loop has composed a new frame
+  void afterGettingFrame(unsigned frameSize, unsigned numTruncatedBytes, struct timeval presentationTime, unsigned durationInMicroseconds); ///< Called by the other afterGettingFrame
   
 private:
-  void setReceiveBuffer(unsigned target_size);
-  unsigned checkBufferSize(unsigned target_size);
-  void sendParameterSets();
+  void setReceiveBuffer(unsigned target_size);     ///< Calculates receiving memory buffer size
+  unsigned checkBufferSize(unsigned target_size);  ///< Calculates receiving memory buffer size
+  void sendParameterSets();                        ///< Extracts sps and pps info from the SDP string.  Creates sps and pps frames and sends them to the filterchain.
   
-private:
-  // redefined virtual functions:
-  virtual Boolean continuePlaying();
+private: // redefined virtual functions:
+  virtual Boolean continuePlaying();  ///< Live555 redefined virtual function
 
 private:
   StreamClientState &scs;

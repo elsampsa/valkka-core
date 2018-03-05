@@ -1,4 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classOutbound.html" title="Outbound" alt="" coords="5,5,84,32"/>
-<area shape="rect" id="node2" href="$classSDPOutbound.html" title="SDPOutbound" alt="" coords="132,5,239,32"/>
+<area shape="rect" id="node1" href="$classOutbound.html" title="A base class that unifies all kinds of outgoing streams (i.e. " alt="" coords="5,5,84,32"/>
+<area shape="rect" id="node2" href="$classSDPOutbound.html" title="Sending a stream without rtsp negotiation (i.e. " alt="" coords="132,5,239,32"/>
 </map>

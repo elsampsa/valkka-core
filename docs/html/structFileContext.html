@@ -88,14 +88,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structFileContext-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">FileContext Struct Reference</div>  </div>
+<div class="title">FileContext Struct Reference<div class="ingroups"><a class="el" href="group__file__tag.html">file streaming</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Used by SignalContext to carry info in the signal.  
+<p>This class descibes the origin and state of a <a class="el" href="classFileStream.html" title="This class in analogous to the Connection class in live streams. ">FileStream</a>.  
  <a href="structFileContext.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="filethread_8h_source.html">filethread.h</a>&gt;</code></p>
@@ -108,6 +109,17 @@ Collaboration diagram for FileContext:</div>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ae6f5c89aa9a3525a3add01956c918115"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae6f5c89aa9a3525a3add01956c918115"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileContext.html#ae6f5c89aa9a3525a3add01956c918115">FileContext</a> (std::string <a class="el" href="structFileContext.html#ad3db2cc11d2175a8747b14cae3f2a119">filename</a>, SlotNumber <a class="el" href="structFileContext.html#afd034300d2154ef68fb2936fdf7415e6">slot</a>, <a class="el" href="classFrameFilter.html">FrameFilter</a> *<a class="el" href="structFileContext.html#a0aef136b3defe8a09f072c866e306c77">framefilter</a>, long int st=0)</td></tr>
+<tr class="memdesc:ae6f5c89aa9a3525a3add01956c918115"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor // &lt;pyapi&gt; <br /></td></tr>
+<tr class="separator:ae6f5c89aa9a3525a3add01956c918115"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92707f5c82151c722b6fba08de09ad73"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92707f5c82151c722b6fba08de09ad73"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileContext.html#a92707f5c82151c722b6fba08de09ad73">FileContext</a> ()</td></tr>
+<tr class="memdesc:a92707f5c82151c722b6fba08de09ad73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dummy constructor. Set values by manipulating members // &lt;pyapi&gt; <br /></td></tr>
+<tr class="separator:a92707f5c82151c722b6fba08de09ad73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ad3db2cc11d2175a8747b14cae3f2a119"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3db2cc11d2175a8747b14cae3f2a119"></a>
@@ -126,21 +138,23 @@ SlotNumber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href
 long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileContext.html#a12d1aafa806e991e9a8b401616b56909">seektime_</a></td></tr>
 <tr class="memdesc:a12d1aafa806e991e9a8b401616b56909"><td class="mdescLeft">&#160;</td><td class="mdescRight">incoming: used by signal seek_stream // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:a12d1aafa806e991e9a8b401616b56909"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace5871e860d5e2d31f138dcc1946350a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ace5871e860d5e2d31f138dcc1946350a"></a>
-long int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileContext.html#ace5871e860d5e2d31f138dcc1946350a">duration</a></td></tr>
-<tr class="memdesc:ace5871e860d5e2d31f138dcc1946350a"><td class="mdescLeft">&#160;</td><td class="mdescRight">outgoing: duration of the stream // &lt;pyapi&gt; <br /></td></tr>
-<tr class="separator:ace5871e860d5e2d31f138dcc1946350a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf8bad7ebc1324ac47d91b10e734e6ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf8bad7ebc1324ac47d91b10e734e6ed"></a>
-long int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileContext.html#adf8bad7ebc1324ac47d91b10e734e6ed">mstimestamp</a></td></tr>
-<tr class="memdesc:adf8bad7ebc1324ac47d91b10e734e6ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">outgoing: current position of the stream (stream time) // &lt;pyapi&gt; <br /></td></tr>
-<tr class="separator:adf8bad7ebc1324ac47d91b10e734e6ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2525987b3d3049c4fbff872520ee5d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2525987b3d3049c4fbff872520ee5d0"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileContext.html#af2525987b3d3049c4fbff872520ee5d0">duration</a></td></tr>
+<tr class="memdesc:af2525987b3d3049c4fbff872520ee5d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">outgoing: duration of the stream // &lt;pyapi&gt; <br /></td></tr>
+<tr class="separator:af2525987b3d3049c4fbff872520ee5d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac2a5997885dc75927cf55d4785f3c46"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aac2a5997885dc75927cf55d4785f3c46"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileContext.html#aac2a5997885dc75927cf55d4785f3c46">mstimestamp</a></td></tr>
+<tr class="memdesc:aac2a5997885dc75927cf55d4785f3c46"><td class="mdescLeft">&#160;</td><td class="mdescRight">outgoing: current position of the stream (stream time) // &lt;pyapi&gt; <br /></td></tr>
+<tr class="separator:aac2a5997885dc75927cf55d4785f3c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f95d781ab62a727d27b9f469934c053"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f95d781ab62a727d27b9f469934c053"></a>
-FileState&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileContext.html#a4f95d781ab62a727d27b9f469934c053">status</a></td></tr>
+<a class="el" href="group__file__tag.html#ga57306ae0f9e356347388234ed69e0ce7">FileState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileContext.html#a4f95d781ab62a727d27b9f469934c053">status</a></td></tr>
 <tr class="memdesc:a4f95d781ab62a727d27b9f469934c053"><td class="mdescLeft">&#160;</td><td class="mdescRight">outgoing: status of the file // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:a4f95d781ab62a727d27b9f469934c053"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Used by SignalContext to carry info in the signal. </p>
+<div class="textblock"><p>This class descibes the origin and state of a <a class="el" href="classFileStream.html" title="This class in analogous to the Connection class in live streams. ">FileStream</a>. </p>
+<p>It's also used by <a class="el" href="structFileThread_1_1SignalContext.html" title="Identifies the information the signals FileThread::Signals carry. ">FileThread::SignalContext</a> to carry signal information.</p>
+<p>Two different constructors are provided, the one without arguments can be used to create "dummy" objects. </p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="filethread_8h_source.html">filethread.h</a></li>
 </ul>

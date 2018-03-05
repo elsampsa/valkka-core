@@ -93,9 +93,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classSetSlotFrameFilter-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">SetSlotFrameFilter Class Reference</div>  </div>
+<div class="title">SetSlotFrameFilter Class Reference<div class="ingroups"><a class="el" href="group__filters__tag.html">available framefilters</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Changes the slot number of the <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>.  
+ <a href="classSetSlotFrameFilter.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="filters_8h_source.html">filters.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for SetSlotFrameFilter:</div>
 <div class="dyncontent">
@@ -146,6 +151,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:aa982ff54938a6d272cc12322f15e1dfa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa982ff54938a6d272cc12322f15e1dfa"></a>
 SlotNumber&#160;</td><td class="memItemRight" valign="bottom"><b>n_slot</b></td></tr>
 <tr class="separator:aa982ff54938a6d272cc12322f15e1dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e9517d62c7bdd5171f5923c6892a7b8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e9517d62c7bdd5171f5923c6892a7b8"></a>
+std::mutex&#160;</td><td class="memItemRight" valign="bottom"><b>mutex</b></td></tr>
+<tr class="separator:a8e9517d62c7bdd5171f5923c6892a7b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classFrameFilter"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classFrameFilter')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classFrameFilter.html">FrameFilter</a></td></tr>
 <tr class="memitem:a56531ed5f05cdce0d5ce3accea729aab inherit pro_attribs_classFrameFilter"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a56531ed5f05cdce0d5ce3accea729aab"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
@@ -155,7 +163,10 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td><
 <tr class="memdesc:a992da6bcdb61db69511f222dbe33e818 inherit pro_attribs_classFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">The next frame filter in the chain to be applied. <br /></td></tr>
 <tr class="separator:a992da6bcdb61db69511f222dbe33e818 inherit pro_attribs_classFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Changes the slot number of the <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>. </p>
+<p>Mutex-protected (calls to SetSlotFrameFilter::setSlot happen during streaming) </p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="filters_8h_source.html">filters.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="filters_8cpp.html">filters.cpp</a></li>
 </ul>

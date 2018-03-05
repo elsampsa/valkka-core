@@ -920,6 +920,7 @@ OpenGLThread::OpenGLThread(const char* name, unsigned short n720p, unsigned shor
 
 
 OpenGLThread::~OpenGLThread() {// WARNING: deallocations shoud be in postRun, i.e. before thread join
+  stopCall();
   opengllogger.log(LogLevel::debug) << "OpenGLThread: destructor "<<std::endl;
 }
 
@@ -1904,8 +1905,8 @@ void OpenGLThread::reportRenderList() {
 // API
 
 void OpenGLThread::stopCall() {
+  if (!this->has_thread) {return;}
   SignalContext signal_ctx;
-  
   signal_ctx.signal=Signals::exit;
   sendSignal(signal_ctx);
   this->closeThread();

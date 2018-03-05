@@ -5,7 +5,7 @@
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
- * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
+ * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi> and Markus Kaukonen <markus.kaukonen@iki.fi>
  * 
  * This file is part of the Valkka library.
  * 

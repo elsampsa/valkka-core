@@ -1,5 +1,5 @@
 /*
- * sharedmem.h : Posix shared memory segment server/client management, shared memory ring buffer synced with posix semaphores.
+ * sharedmem.h : Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -28,7 +28,7 @@
  *  @date    2017
  *  @version 0.3.0 
  *  
- *  @brief Posix shared memory segment server/client management, shared memory ring buffer synced with posix semaphores.
+ *  @brief Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  */ 
 
 
@@ -48,6 +48,7 @@
  *
  * Never instantiate both server and client side from the same process.
  * 
+ * @ingroup shmem_tag
  */
 class SharedMemSegment {
 
@@ -97,6 +98,7 @@ public:
  * 
  * Don't expect this shmem ring buffer to work for high-throughput media streaming.  It's good for sending a few frames per second between multiprocesses.  For high-throughput cases, use multithreading instead.
  * 
+ * @ingroup shmem_tag
  */
 class SharedMemRingBuffer { // <pyapi>
 
@@ -165,9 +167,24 @@ public: // client side routines - call only from the client side // <pyapi>
 
 
 
+/** This FrameFilter writes frames into a shared memory buffer (SharedMemRingBuffer)
+ * 
+ * @ingroup filters_tag
+ * @ingroup shmem_tag
+ */
 class SharedMemFrameFilter : public FrameFilter { // <pyapi> 
   
 public: // <pyapi>
+  /** Default constructor
+   * 
+   * Creates and initializes a SharedMemoryRingBuffer.  Frames fed into this FrameFilter are written into that buffer.
+   * 
+   * @param   name. Important!  Identifies the SharedMemoryRingBuffer where the frames are being written
+   * @param   n_cells. Number of shared memory segments in the ring buffer
+   * @param   n_bytes. Size of shared memory segments in the ringbuffer
+   * @param   mstimeout. Semaphore timeout wait for the ringbuffer
+   * 
+   */
   SharedMemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0); // <pyapi>
 
 protected: // initialized at constructor

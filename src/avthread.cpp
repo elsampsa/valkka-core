@@ -42,6 +42,8 @@ AVThread::AVThread(const char* name, FrameFifo& infifo, FrameFilter& outfilter, 
 
 
 AVThread::~AVThread() {
+  threadlogger.log(LogLevel::crazy) << "AVThread: destructor: "<< this->name <<std::endl;
+  stopCall();
   DecoderBase* decoder;
   for (std::vector<DecoderBase*>::iterator it = decoders.begin(); it != decoders.end(); ++it) {
   decoder=*it;
@@ -229,13 +231,15 @@ void AVThread::decodingOffCall() {
   sendSignal(signal_ctx);
 }
   
-
-void AVThread::stopCall() {
-  SignalContext signal_ctx;
   
+void AVThread::stopCall() {
+  threadlogger.log(LogLevel::debug) << "AVThread: stopCall: "<< this->name <<std::endl;
+  if (!this->has_thread) {return;}
+  SignalContext signal_ctx;
   signal_ctx.signal=Signals::exit;
   sendSignal(signal_ctx);
   this->closeThread();
   this->has_thread=false;
 }
+
 

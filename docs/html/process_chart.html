@@ -110,14 +110,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
  |                           | -&gt; [FIFO] -&gt;      [AVthread] -&gt;                                |             |
  +---------------------------+                                                                |             |
                                                                                               +-------------+
-</pre><p>A general purpose "mother" class <a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> has been implemented (see <a class="el" href="group__threading__tag.html">Threading_tag</a>) for multithreading schemes and is inherited by:</p>
+</pre><p>A general purpose "mother" class <a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> has been implemented (see <a class="el" href="group__threading__tag.html">multithreads</a>) for multithreading schemes and is inherited by:</p>
 <ul>
-<li><a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a>, for connecting to media sources using the Live555 streaming library, see <a class="el" href="group__livethread__tag.html">Livethread_tag</a></li>
-<li><a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a>, for decoding streams using the FFMpeg library and uploading them to GPU, see <a class="el" href="group__decoding__tag.html">Decoding_tag</a></li>
-<li><a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>, that handles direct memory access to GPU and presents the Frames, based on their timestamps, see <a class="el" href="group__openglthread__tag.html">Openglthread_tag</a></li>
+<li><a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a>, for connecting to media sources using the Live555 streaming library, see <a class="el" href="group__livethread__tag.html">livethread</a></li>
+<li><a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a>, for decoding streams using the FFMpeg library and uploading them to GPU, see <a class="el" href="group__decoding__tag.html">decoding</a></li>
+<li><a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>, that handles direct memory access to GPU and presents the Frames, based on their timestamps, see <a class="el" href="group__openglthread__tag.html">opengl</a></li>
 </ul>
-<p>To get a rough idea how Live555 works, please see <a class="el" href="live555_page.html">Live555 primer</a> and <a class="el" href="group__live__tag.html">Live_tag</a>. The livethread produces frames (class <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>), that are passed to mutex-protected fifos (see <a class="el" href="group__queues__tag.html">Queues_tag</a>).</p>
-<p>Between the threads, frames are passed through series of "filters" (see <a class="el" href="group__filters__tag.html">Filters_tag</a>). Filters can be used to modify the media packets (say, their timestamps for example) and to produce copying and redirection of the stream. Valkka library filters should not be confused with Live555 sink/source/filters nor with FFmpeg filters - which are completely different things.</p>
+<p>To get a rough idea how Live555 works, please see <a class="el" href="live555_page.html">Live555 primer</a> and <a class="el" href="group__live__tag.html">live555 bridge</a>. The livethread produces frames (class <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>), that are passed to mutex-protected fifos (see <a class="el" href="group__queues__tag.html">queues and fifos</a>).</p>
+<p>Between the threads, frames are passed through series of "filters" (see <a class="el" href="group__filters__tag.html">available framefilters</a>). Filters can be used to modify the media packets (say, their timestamps for example) and to produce copying and redirection of the stream. Valkka library filters should not be confused with Live555 sink/source/filters nor with FFmpeg filters - which are completely different things.</p>
 <p>For visualization of the media stream plumbings / graphs, we adopt the following notation which you should always use when commenting your python or cpp code:</p>
 <pre class="fragment">() == Thread
 {} == FrameFilter
@@ -155,8 +155,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
                                                                                                                                            |    |
                                   (10.OpenGLThread:openglthread) &lt;&lt;-- [9.OpenGLFrameFifo:gl_fifo] &lt;-- {8.FifoFrameFilter:gl_in_filter}  &lt;--+    +--&gt; .. finally, to analyzing process
                              feeds the video into various X-windoses</pre><ul>
-<li>For the various FrameFilters, see <a class="el" href="group__filters__tag.html">Filters_tag</a></li>
-<li>For threads, see <a class="el" href="group__threading__tag.html">Threading_tag</a></li>
+<li>For the various FrameFilters, see <a class="el" href="group__filters__tag.html">available framefilters</a></li>
+<li>For threads, see <a class="el" href="group__threading__tag.html">multithreads</a></li>
 </ul>
 <p>Some more miscellaneous details about the architecture:</p>
 <ul>

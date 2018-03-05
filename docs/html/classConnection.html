@@ -93,7 +93,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classConnection-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Connection Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group__livethread__tag.html">Livethread_tag</a> &#124; <a class="el" href="group__live__tag.html">Live_tag</a></div></div>  </div>
+<div class="title">Connection Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group__livethread__tag.html">livethread</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -107,7 +107,7 @@ Inheritance diagram for Connection:</div>
 <div class="center"><img src="classConnection__inherit__graph.png" border="0" usemap="#Connection_inherit__map" alt="Inheritance graph"/></div>
 <map name="Connection_inherit__map" id="Connection_inherit__map">
 <area shape="rect" id="node2" href="classRTSPConnection.html" title="A negotiated RTSP connection. " alt="" coords="5,80,129,107"/>
-<area shape="rect" id="node3" href="classSDPConnection.html" title="Streaming, the source of stream is defined in an SDP file. " alt="" coords="153,80,269,107"/>
+<area shape="rect" id="node3" href="classSDPConnection.html" title="Connection is is defined in an SDP file. " alt="" coords="153,80,269,107"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -115,16 +115,18 @@ Collaboration diagram for Connection:</div>
 <div class="dyncontent">
 <div class="center"><img src="classConnection__coll__graph.png" border="0" usemap="#Connection_coll__map" alt="Collaboration graph"/></div>
 <map name="Connection_coll__map" id="Connection_coll__map">
-<area shape="rect" id="node2" href="classTimestampFrameFilter.html" title="Corrects erroneous timestamps (while preserving timestamp distances). " alt="" coords="88,81,241,108"/>
-<area shape="rect" id="node3" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="121,5,209,32"/>
-<area shape="rect" id="node4" href="classSlotFrameFilter.html" title="Sets the frame slot value. " alt="" coords="265,81,376,108"/>
+<area shape="rect" id="node2" href="structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection the user is requesting ..." alt="" coords="5,95,164,121"/>
+<area shape="rect" id="node3" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="225,5,313,32"/>
+<area shape="rect" id="node4" href="classTimestampFrameFilter2.html" title="Corrects erroneous timestamps (while preserving timestamp distances). " alt="" coords="189,95,349,121"/>
+<area shape="rect" id="node5" href="classSlotFrameFilter.html" title="Sets the frame slot value. " alt="" coords="373,95,484,121"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae4ef625d76e1a96eb874aea4a40691c0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#ae4ef625d76e1a96eb874aea4a40691c0">Connection</a> (UsageEnvironment &amp;env, std::string <a class="el" href="classConnection.html#a485150c403569b7cbe7901a42e66313f">address</a>, SlotNumber <a class="el" href="classConnection.html#a623f9884f4e686664ec4fc3b3ac7df94">slot</a>, <a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;<a class="el" href="classConnection.html#a3f32a1042e7d425c958052f1f1b00b0c">framefilter</a>)</td></tr>
-<tr class="separator:ae4ef625d76e1a96eb874aea4a40691c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac7724aa950a968459770fd85e6cf95c0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__livethread__tag.html#gac7724aa950a968459770fd85e6cf95c0">Connection</a> (UsageEnvironment &amp;<a class="el" href="classConnection.html#acf581375c7480e3a588cf635c1a36f8d">env</a>, <a class="el" href="structLiveConnectionContext.html">LiveConnectionContext</a> &amp;<a class="el" href="classConnection.html#a5c17423073e0eae31f3f6d6d9eba8a93">ctx</a>)</td></tr>
+<tr class="memdesc:gac7724aa950a968459770fd85e6cf95c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="group__livethread__tag.html#gac7724aa950a968459770fd85e6cf95c0">More...</a><br /></td></tr>
+<tr class="separator:gac7724aa950a968459770fd85e6cf95c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e4352edf667bea83001569e9da8a24d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e4352edf667bea83001569e9da8a24d"></a>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a2e4352edf667bea83001569e9da8a24d">~Connection</a> ()</td></tr>
 <tr class="memdesc:a2e4352edf667bea83001569e9da8a24d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
@@ -141,6 +143,14 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a14fbb9e21221aea750a3de1b9289b00d">reStartStream</a> ()</td></tr>
 <tr class="memdesc:a14fbb9e21221aea750a3de1b9289b00d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called from within the live555 event loop. <br /></td></tr>
 <tr class="separator:a14fbb9e21221aea750a3de1b9289b00d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74e26cf62f8122f455e900a870bc11ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a74e26cf62f8122f455e900a870bc11ba"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a74e26cf62f8122f455e900a870bc11ba">reStartStreamIf</a> ()</td></tr>
+<tr class="memdesc:a74e26cf62f8122f455e900a870bc11ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called from within the live555 event loop. <br /></td></tr>
+<tr class="separator:a74e26cf62f8122f455e900a870bc11ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb9ef6ffffb25c7a819b36d10a92d084"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb9ef6ffffb25c7a819b36d10a92d084"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#afb9ef6ffffb25c7a819b36d10a92d084">hasStopped</a> ()</td></tr>
+<tr class="memdesc:afb9ef6ffffb25c7a819b36d10a92d084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Has the stream stopped or is it pending? <br /></td></tr>
+<tr class="separator:afb9ef6ffffb25c7a819b36d10a92d084"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1c3d8e91e7b1c61fe25b6905de703ee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1c3d8e91e7b1c61fe25b6905de703ee"></a>
 SlotNumber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#ae1c3d8e91e7b1c61fe25b6905de703ee">getSlot</a> ()</td></tr>
 <tr class="memdesc:ae1c3d8e91e7b1c61fe25b6905de703ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the slot number. <br /></td></tr>
@@ -149,7 +159,8 @@ SlotNumber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:acf581375c7480e3a588cf635c1a36f8d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf581375c7480e3a588cf635c1a36f8d"></a>
-UsageEnvironment &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>env</b></td></tr>
+UsageEnvironment &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#acf581375c7480e3a588cf635c1a36f8d">env</a></td></tr>
+<tr class="memdesc:acf581375c7480e3a588cf635c1a36f8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">UsageEnvironment identifying the Live555 event loop (see <a class="el" href="live555_page.html">Live555 primer</a>) <br /></td></tr>
 <tr class="separator:acf581375c7480e3a588cf635c1a36f8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfa3797a68f667c489fe0f9a811323b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abfa3797a68f667c489fe0f9a811323b1"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_playing</b></td></tr>
@@ -157,81 +168,29 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_playing</b></td></
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a485150c403569b7cbe7901a42e66313f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a485150c403569b7cbe7901a42e66313f"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a485150c403569b7cbe7901a42e66313f">address</a></td></tr>
-<tr class="memdesc:a485150c403569b7cbe7901a42e66313f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classStream.html">Stream</a> address. <br /></td></tr>
-<tr class="separator:a485150c403569b7cbe7901a42e66313f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a623f9884f4e686664ec4fc3b3ac7df94"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a623f9884f4e686664ec4fc3b3ac7df94"></a>
-SlotNumber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a623f9884f4e686664ec4fc3b3ac7df94">slot</a></td></tr>
-<tr class="memdesc:a623f9884f4e686664ec4fc3b3ac7df94"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classStream.html">Stream</a> slot number (that identifies the source) <br /></td></tr>
-<tr class="separator:a623f9884f4e686664ec4fc3b3ac7df94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f32a1042e7d425c958052f1f1b00b0c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f32a1042e7d425c958052f1f1b00b0c"></a>
-<a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a3f32a1042e7d425c958052f1f1b00b0c">framefilter</a></td></tr>
-<tr class="memdesc:a3f32a1042e7d425c958052f1f1b00b0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">User-provided entry point for the stream. <br /></td></tr>
-<tr class="separator:a3f32a1042e7d425c958052f1f1b00b0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63b2eda9624991bd02fe8eb93a5b3617"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a63b2eda9624991bd02fe8eb93a5b3617"></a>
-<a class="el" href="classTimestampFrameFilter.html">TimestampFrameFilter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a63b2eda9624991bd02fe8eb93a5b3617">timestampfilter</a></td></tr>
-<tr class="memdesc:a63b2eda9624991bd02fe8eb93a5b3617"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal framefilter: correct timestamp. <br /></td></tr>
-<tr class="separator:a63b2eda9624991bd02fe8eb93a5b3617"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c17423073e0eae31f3f6d6d9eba8a93"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5c17423073e0eae31f3f6d6d9eba8a93"></a>
+<a class="el" href="structLiveConnectionContext.html">LiveConnectionContext</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a5c17423073e0eae31f3f6d6d9eba8a93">ctx</a></td></tr>
+<tr class="memdesc:a5c17423073e0eae31f3f6d6d9eba8a93"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection the user is requesting ...">LiveConnectionContext</a> identifying the stream source (address), it's destination (slot and target framefilter), etc. <br /></td></tr>
+<tr class="separator:a5c17423073e0eae31f3f6d6d9eba8a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af72450ac3d857b9e93b01caf375a1b12"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af72450ac3d857b9e93b01caf375a1b12"></a>
+<a class="el" href="classTimestampFrameFilter2.html">TimestampFrameFilter2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#af72450ac3d857b9e93b01caf375a1b12">timestampfilter</a></td></tr>
+<tr class="memdesc:af72450ac3d857b9e93b01caf375a1b12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal framefilter: correct timestamp. <br /></td></tr>
+<tr class="separator:af72450ac3d857b9e93b01caf375a1b12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc3d1c25b742633d73fa64ec33a754d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc3d1c25b742633d73fa64ec33a754d0"></a>
 <a class="el" href="classSlotFrameFilter.html">SlotFrameFilter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#afc3d1c25b742633d73fa64ec33a754d0">inputfilter</a></td></tr>
 <tr class="memdesc:afc3d1c25b742633d73fa64ec33a754d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal framefilter: set slot number. <br /></td></tr>
 <tr class="separator:afc3d1c25b742633d73fa64ec33a754d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae800ae88429dff518994ed3301ed633e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae800ae88429dff518994ed3301ed633e"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#ae800ae88429dff518994ed3301ed633e">frametimer</a></td></tr>
+<tr class="memdesc:ae800ae88429dff518994ed3301ed633e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measures time when the last frame was received. <br /></td></tr>
+<tr class="separator:ae800ae88429dff518994ed3301ed633e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A base class that unifies all kinds of connections (RTSP and SDP). </p>
-<p>Methods of this class are used by the <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> class and they are called from within the Live555 event loop (i.e. this is not part of the API)</p>
-<p>Has an internal filterchain:</p>
-<p>Filterchain: &ndash;&gt; {<a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a>: <a class="el" href="classConnection.html#afc3d1c25b742633d73fa64ec33a754d0" title="Internal framefilter: set slot number. ">Connection::inputfilter</a>} &ndash;&gt; {<a class="el" href="classTimestampFrameFilter.html" title="Corrects erroneous timestamps (while preserving timestamp distances). ">TimestampFrameFilter</a>: <a class="el" href="classConnection.html#a63b2eda9624991bd02fe8eb93a5b3617" title="Internal framefilter: correct timestamp. ">Connection::timestampfilter</a>} &ndash;&gt; {<a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a>: <a class="el" href="classConnection.html#a3f32a1042e7d425c958052f1f1b00b0c" title="User-provided entry point for the stream. ">Connection::framefilter</a>} &ndash;&gt; </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ae4ef625d76e1a96eb874aea4a40691c0"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Connection::Connection </td>
-          <td>(</td>
-          <td class="paramtype">UsageEnvironment &amp;&#160;</td>
-          <td class="paramname"><em>env</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>address</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SlotNumber&#160;</td>
-          <td class="paramname"><em>slot</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;&#160;</td>
-          <td class="paramname"><em>framefilter</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">env</td><td>UsageEnvironment identifying the Live555 event loop (see <a class="el" href="live555_page.html">Live555 primer</a>) </td></tr>
-    <tr><td class="paramname">address</td><td>A string identifying the connection </td></tr>
-    <tr><td class="paramname">slot</td><td>An integer defining a "slot" where this connection is placed </td></tr>
-    <tr><td class="paramname">framefilter</td><td><a class="el" href="classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP). ">Connection</a> feeds frames to this <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> (i.e., its the beginning of the "filter-chain") </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<p>Methods of this class are used by the <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> class and they are called from within the Live555 event loop.</p>
+<p>Connect typically has a small, default internal filterchain to correct for the often-so-erroneous timestamps (see the cpp file for more details):</p>
+<p>Filterchain: &ndash;&gt; {<a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a>: <a class="el" href="classConnection.html#afc3d1c25b742633d73fa64ec33a754d0" title="Internal framefilter: set slot number. ">Connection::inputfilter</a>} &ndash;&gt; {<a class="el" href="classTimestampFrameFilter2.html" title="Corrects erroneous timestamps (while preserving timestamp distances). ">TimestampFrameFilter2</a>: <a class="el" href="classConnection.html#af72450ac3d857b9e93b01caf375a1b12" title="Internal framefilter: correct timestamp. ">Connection::timestampfilter</a>} &ndash;&gt; {<a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a>: Connection::framefilter} &ndash;&gt; </p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="livethread_8h_source.html">livethread.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="livethread_8cpp.html">livethread.cpp</a></li>
 </ul>

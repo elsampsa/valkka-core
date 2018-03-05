@@ -6,5 +6,6 @@ var searchData=
   ['thread',['Thread',['../classThread.html',1,'']]],
   ['threadcontext',['ThreadContext',['../structThreadContext.html',1,'']]],
   ['timeintervalframefilter',['TimeIntervalFrameFilter',['../classTimeIntervalFrameFilter.html',1,'']]],
-  ['timestampframefilter',['TimestampFrameFilter',['../classTimestampFrameFilter.html',1,'']]]
+  ['timestampframefilter',['TimestampFrameFilter',['../classTimestampFrameFilter.html',1,'']]],
+  ['timestampframefilter2',['TimestampFrameFilter2',['../classTimestampFrameFilter2.html',1,'']]]
 ];

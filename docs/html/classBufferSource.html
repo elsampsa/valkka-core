@@ -94,9 +94,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBufferSource-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">BufferSource Class Reference</div>  </div>
+<div class="title">BufferSource Class Reference<div class="ingroups"><a class="el" href="group__live__tag.html">live555 bridge</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements a FramedSource for sending frames.  
+ <a href="classBufferSource.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="live_8h_source.html">live.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for BufferSource:</div>
 <div class="dyncontent">
@@ -113,11 +118,12 @@ Collaboration diagram for BufferSource:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a814a533eb701d314be971fcd6e9695bb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a814a533eb701d314be971fcd6e9695bb"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>BufferSource</b> (UsageEnvironment &amp;env, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;fifo, unsigned preferredFrameSize=0, unsigned playTimePerFrame=0, unsigned offset=0)</td></tr>
+<tr class="memitem:a814a533eb701d314be971fcd6e9695bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html#a814a533eb701d314be971fcd6e9695bb">BufferSource</a> (UsageEnvironment &amp;env, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;<a class="el" href="classBufferSource.html#a7d307d4aa8b7b95b84dfe5a26d674229">fifo</a>, unsigned preferredFrameSize=0, unsigned playTimePerFrame=0, unsigned offset=0)</td></tr>
+<tr class="memdesc:a814a533eb701d314be971fcd6e9695bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a814a533eb701d314be971fcd6e9695bb">More...</a><br /></td></tr>
 <tr class="separator:a814a533eb701d314be971fcd6e9695bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04cb4018658d080aec540054e5936761"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a04cb4018658d080aec540054e5936761"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>handleFrame</b> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html#a04cb4018658d080aec540054e5936761">handleFrame</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
+<tr class="memdesc:a04cb4018658d080aec540054e5936761"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a> from <a class="el" href="classBufferSource.html#a7d307d4aa8b7b95b84dfe5a26d674229" title="Frames are being read from here. This reference leads all the way down to LiveThread::fifo. ">BufferSource::fifo</a> into BufferSource::internal_fifo. Sets <a class="el" href="classBufferSource.html#af2891d20315d560f9e30924d1be25557" title="If set, doGetNextFrame is currently re-scheduled. ">BufferSource::active</a>. <br /></td></tr>
 <tr class="separator:a04cb4018658d080aec540054e5936761"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -126,19 +132,22 @@ Public Attributes</h2></td></tr>
 std::deque&lt; <a class="el" href="classFrame.html">Frame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>internal_fifo</b></td></tr>
 <tr class="separator:a7ae2cae923eecea5c60182f0c2eb7159"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2891d20315d560f9e30924d1be25557"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2891d20315d560f9e30924d1be25557"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>active</b></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html#af2891d20315d560f9e30924d1be25557">active</a></td></tr>
+<tr class="memdesc:af2891d20315d560f9e30924d1be25557"><td class="mdescLeft">&#160;</td><td class="mdescRight">If set, doGetNextFrame is currently re-scheduled. <br /></td></tr>
 <tr class="separator:af2891d20315d560f9e30924d1be25557"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a796bc84e5233c21c379a57f2a3b65e54"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a796bc84e5233c21c379a57f2a3b65e54"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>doGetNextFrame</b> ()</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html#a796bc84e5233c21c379a57f2a3b65e54">doGetNextFrame</a> ()</td></tr>
+<tr class="memdesc:a796bc84e5233c21c379a57f2a3b65e54"><td class="mdescLeft">&#160;</td><td class="mdescRight">All the fun happens here. <br /></td></tr>
 <tr class="separator:a796bc84e5233c21c379a57f2a3b65e54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a7d307d4aa8b7b95b84dfe5a26d674229"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d307d4aa8b7b95b84dfe5a26d674229"></a>
-<a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>fifo</b></td></tr>
+<a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html#a7d307d4aa8b7b95b84dfe5a26d674229">fifo</a></td></tr>
+<tr class="memdesc:a7d307d4aa8b7b95b84dfe5a26d674229"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frames are being read from here. This reference leads all the way down to LiveThread::fifo. <br /></td></tr>
 <tr class="separator:a7d307d4aa8b7b95b84dfe5a26d674229"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1f33e4578c36c4f92818a8186430bec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1f33e4578c36c4f92818a8186430bec"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>fPreferredFrameSize</b></td></tr>
@@ -150,6 +159,74 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>fPlayTimePerFrame
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>offset</b></td></tr>
 <tr class="separator:ae814d925ebcaaca9fcdd7c516ce3be79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements a FramedSource for sending frames. </p>
+<p>See <a class="el" href="live_streaming_page.html">Live streaming</a> </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a814a533eb701d314be971fcd6e9695bb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BufferSource::BufferSource </td>
+          <td>(</td>
+          <td class="paramtype">UsageEnvironment &amp;&#160;</td>
+          <td class="paramname"><em>env</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;&#160;</td>
+          <td class="paramname"><em>fifo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>preferredFrameSize</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>playTimePerFrame</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>offset</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">env</td><td>Identifies the live555 event loop </td></tr>
+    <tr><td class="paramname">fifo</td><td>See <a class="el" href="classBufferSource.html#a7d307d4aa8b7b95b84dfe5a26d674229" title="Frames are being read from here. This reference leads all the way down to LiveThread::fifo. ">BufferSource::fifo</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classBufferSource_a814a533eb701d314be971fcd6e9695bb_cgraph.png" border="0" usemap="#classBufferSource_a814a533eb701d314be971fcd6e9695bb_cgraph" alt=""/></div>
+<map name="classBufferSource_a814a533eb701d314be971fcd6e9695bb_cgraph" id="classBufferSource_a814a533eb701d314be971fcd6e9695bb_cgraph">
+<area shape="rect" id="node2" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="236,5,367,32"/>
+<area shape="rect" id="node3" href="classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="415,5,511,32"/>
+</map>
+</div>
+</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="live_8h_source.html">live.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="live_8cpp.html">live.cpp</a></li>

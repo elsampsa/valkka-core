@@ -88,11 +88,13 @@ void test_1() {
   std::cout << name << "playing stream !" << std::endl;
   livethread.playStreamCall(ctx);
   
-  sleep_for(10s);
+  sleep_for(3s);
   
   std::cout << name << "stopping threads" << std::endl;
   livethread.stopCall();
-  avthread.  stopCall();
+  // avthread.  stopCall();
+  // AVThread destructor => Thread destructor => stopCall (Thread::stopCall or AVThread::stopCall ..?) .. in destructor, virtual methods are not called
+  // 
   
 }
 

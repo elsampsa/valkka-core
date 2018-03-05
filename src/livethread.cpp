@@ -408,7 +408,7 @@ LiveThread::LiveThread(const char* name, unsigned short int n_stack, int core_id
   env       = BasicUsageEnvironment::createNew(*scheduler);
   eventLoopWatchVariable = 0;
   // this->slots_.resize(n_max_slots,NULL); // Reserve 256 slots!
-  this->slots_.resize(I_MAX_SLOTS+1,NULL);
+  this->slots_.resize    (I_MAX_SLOTS+1,NULL);
   this->out_slots_.resize(I_MAX_SLOTS+1,NULL);
   
   scheduler->scheduleDelayedTask(Timeouts::livethread*1000,(TaskFunc*)(LiveThread::periodicTask),(void*)this);
@@ -426,9 +426,9 @@ LiveThread::LiveThread(const char* name, unsigned short int n_stack, int core_id
 LiveThread::~LiveThread() {
   unsigned short int i;
   Connection* connection;
-  // delete env;
-  // release connection objects in slots_
-  // TODO: iterate over the pending list
+  
+  stopCall(); // stop if not stopped ..
+  
   for (std::vector<Connection*>::iterator it = slots_.begin(); it != slots_.end(); ++it) {
     connection=*it;
     if (!connection) {
@@ -439,15 +439,6 @@ LiveThread::~LiveThread() {
       delete connection;
       }
   }
-  
-  /*
-  auto it=pending.begin();
-  while (it!=pending.end()) {
-    std::cout << "LiveThread: destructor: pending stream" << std::endl;
-    connection=*it;
-    it++;
-  }
-  */
   
   env->reclaim(); env = NULL;
   delete scheduler; scheduler = NULL;
@@ -748,7 +739,7 @@ void LiveThread::registerOutbound(LiveOutboundContext &outbound_ctx) {
     case 0: // slot is free
       switch (outbound_ctx.connection_type) {
         case LiveConnectionType::rtsp:
-          livethreadlogger.log(LogLevel::fatal) << "Outbound RTSP not implemented!" << std::endl;
+          livethreadlogger.log(LogLevel::fatal) << "LiveThread : registerOutbound : outbound RTSP not implemented!" << std::endl;
           break;
           
         case LiveConnectionType::sdp:
@@ -845,8 +836,8 @@ void LiveThread::deRegisterOutboundCall(LiveOutboundContext &outbound_ctx) {
 
 
 void LiveThread::stopCall() {
+  if (!this->has_thread) {return;}
   SignalContext signal_ctx;
-  
   signal_ctx.signal=Signals::exit;
   sendSignal(signal_ctx);
   this->closeThread();

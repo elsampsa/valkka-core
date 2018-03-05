@@ -95,7 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classFrameFifo-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">FrameFifo Class Reference<div class="ingroups"><a class="el" href="group__queues__tag.html">Queues_tag</a></div></div>  </div>
+<div class="title">FrameFifo Class Reference<div class="ingroups"><a class="el" href="group__queues__tag.html">queues and fifos</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -108,16 +108,16 @@ Inheritance diagram for FrameFifo:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFrameFifo__inherit__graph.png" border="0" usemap="#FrameFifo_inherit__map" alt="Inheritance graph"/></div>
 <map name="FrameFifo_inherit__map" id="FrameFifo_inherit__map">
-<area shape="rect" id="node2" href="classLiveFifo.html" title="An input queue for LiveThread. " alt="" coords="5,80,73,107"/>
+<area shape="rect" id="node2" href="classLiveFifo.html" title="This is a special FrameFifo class for feeding frames into live555, i.e. " alt="" coords="5,80,73,107"/>
 <area shape="rect" id="node3" href="classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. " alt="" coords="97,80,227,107"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa90e09c733c54b7a1c1f9e252599b4c3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#aa90e09c733c54b7a1c1f9e252599b4c3">FrameFifo</a> (const char *<a class="el" href="classFrameFifo.html#a773560493e8d226f2b0c2b4e31ad8505">name</a>, unsigned short int <a class="el" href="classFrameFifo.html#ae0ae5c0c72de6d1a2611e7af75db1be3">n_stack</a>)</td></tr>
-<tr class="memdesc:aa90e09c733c54b7a1c1f9e252599b4c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#aa90e09c733c54b7a1c1f9e252599b4c3">More...</a><br /></td></tr>
-<tr class="separator:aa90e09c733c54b7a1c1f9e252599b4c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab66a2d4512d5cb7701f79d8e3af6ebb6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#ab66a2d4512d5cb7701f79d8e3af6ebb6">FrameFifo</a> (const char *<a class="el" href="classFrameFifo.html#a773560493e8d226f2b0c2b4e31ad8505">name</a>, unsigned short int <a class="el" href="classFrameFifo.html#ae0ae5c0c72de6d1a2611e7af75db1be3">n_stack</a>, bool <a class="el" href="classFrameFifo.html#ab4a0c5d710e7a164bd87c5afe569a084">clear_when_filled</a>=false)</td></tr>
+<tr class="memdesc:ab66a2d4512d5cb7701f79d8e3af6ebb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ab66a2d4512d5cb7701f79d8e3af6ebb6">More...</a><br /></td></tr>
+<tr class="separator:ab66a2d4512d5cb7701f79d8e3af6ebb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa85de58431db509135505e7956a0715e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa85de58431db509135505e7956a0715e"></a>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#aa85de58431db509135505e7956a0715e">~FrameFifo</a> ()</td></tr>
 <tr class="memdesc:aa85de58431db509135505e7956a0715e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default virtual destructor. <br /></td></tr>
@@ -127,7 +127,7 @@ virtual <a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="me
 <tr class="memdesc:a7d9dbc000f3f2e57ff80faeba3cb10df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a frame from the stack. <br /></td></tr>
 <tr class="separator:a7d9dbc000f3f2e57ff80faeba3cb10df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01765bd79b616a2425ba84d94a15d737"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a01765bd79b616a2425ba84d94a15d737">writeCopy</a> (<a class="el" href="classFrame.html">Frame</a> *f, bool wait=false)</td></tr>
-<tr class="memdesc:a01765bd79b616a2425ba84d94a15d737"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert"). The size of "ftmp" is also checked and set to target_size, if necessary.  <a href="#a01765bd79b616a2425ba84d94a15d737">More...</a><br /></td></tr>
+<tr class="memdesc:a01765bd79b616a2425ba84d94a15d737"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert"). The size of "ftmp" is also checked and set to target_size, if necessary. If wait is set to true, will wait until there are frames available in the stack.  <a href="#a01765bd79b616a2425ba84d94a15d737">More...</a><br /></td></tr>
 <tr class="separator:a01765bd79b616a2425ba84d94a15d737"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae984545cb5d40a1d0fe8b8e369d9c64"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64">read</a> (unsigned short int mstimeout=0)</td></tr>
 <tr class="memdesc:aae984545cb5d40a1d0fe8b8e369d9c64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pop a frame from the end of the fifo and return the frame to the reservoir stack.  <a href="#aae984545cb5d40a1d0fe8b8e369d9c64">More...</a><br /></td></tr>
@@ -136,6 +136,10 @@ virtual <a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="me
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52">recycle</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
 <tr class="memdesc:a09f514fe06c5e737cd74691f8b5d9d52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a> f back into the stack. Update target_size if necessary. <br /></td></tr>
 <tr class="separator:a09f514fe06c5e737cd74691f8b5d9d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a094d025e259aef84c8d3d4b76c0076eb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a094d025e259aef84c8d3d4b76c0076eb"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a094d025e259aef84c8d3d4b76c0076eb">recycleAll</a> ()</td></tr>
+<tr class="memdesc:a094d025e259aef84c8d3d4b76c0076eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recycle all frames from fifo back to stack (make a "flush") <br /></td></tr>
+<tr class="separator:a094d025e259aef84c8d3d4b76c0076eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6b1aca3db868d937039a9f066e8f0ca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6b1aca3db868d937039a9f066e8f0ca"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#af6b1aca3db868d937039a9f066e8f0ca">dumpStack</a> ()</td></tr>
 <tr class="memdesc:af6b1aca3db868d937039a9f066e8f0ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dump the frames in the stack. <br /></td></tr>
@@ -144,6 +148,10 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#afbff47ed40f017d26d8a905f7decc9e1">dumpFifo</a> ()</td></tr>
 <tr class="memdesc:afbff47ed40f017d26d8a905f7decc9e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dump frames in the fifo. <br /></td></tr>
 <tr class="separator:afbff47ed40f017d26d8a905f7decc9e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a956716c1cc2162314b7f305a8c4ca9e4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a956716c1cc2162314b7f305a8c4ca9e4"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4">diagnosis</a> ()</td></tr>
+<tr class="memdesc:a956716c1cc2162314b7f305a8c4ca9e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print a resumen of fifo and stack usage. <br /></td></tr>
+<tr class="separator:a956716c1cc2162314b7f305a8c4ca9e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37e3264d8b8f8a787cd305c79e568645"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a37e3264d8b8f8a787cd305c79e568645"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a37e3264d8b8f8a787cd305c79e568645">isEmpty</a> ()</td></tr>
 <tr class="memdesc:a37e3264d8b8f8a787cd305c79e568645"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell if fifo is empty. <br /></td></tr>
@@ -185,6 +193,10 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#ae0ae5c0c72de6d1a2611e7af75db1be3">n_stack</a></td></tr>
 <tr class="memdesc:ae0ae5c0c72de6d1a2611e7af75db1be3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max number of frames in the fifo. <br /></td></tr>
 <tr class="separator:ae0ae5c0c72de6d1a2611e7af75db1be3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4a0c5d710e7a164bd87c5afe569a084"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab4a0c5d710e7a164bd87c5afe569a084"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#ab4a0c5d710e7a164bd87c5afe569a084">clear_when_filled</a></td></tr>
+<tr class="memdesc:ab4a0c5d710e7a164bd87c5afe569a084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recycle all frames from fifo to stack is running empty. <br /></td></tr>
+<tr class="separator:ab4a0c5d710e7a164bd87c5afe569a084"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a937f07e8345eeced5fcb2447e4c234ea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a937f07e8345eeced5fcb2447e4c234ea"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a937f07e8345eeced5fcb2447e4c234ea">mutex</a></td></tr>
 <tr class="memdesc:a937f07e8345eeced5fcb2447e4c234ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Lock. <br /></td></tr>
@@ -239,7 +251,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <p>These steps are implemented in <a class="el" href="classFrameFifo.html#a01765bd79b616a2425ba84d94a15d737" title="Take a frame &quot;ftmp&quot; from the stack, copy contents of &quot;f&quot; into &quot;ftmp&quot; and insert &quot;ftmp&quot; into the begin...">FrameFifo::writeCopy</a> and <a class="el" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. ">FrameFifo::recycle</a></p>
 <p><a class="el" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. ">FrameFifo::recycle</a> also checks the payload size of the "recycled" frame (this may have been modified by the user) and augments <a class="el" href="classFrameFifo.html#ab46357a7162ee6151a01ae1898b88c31" title="Minimum frame payload size. ">FrameFifo.target_size</a> accordingly. On consecutive calls to <a class="el" href="classFrameFifo.html#a01765bd79b616a2425ba84d94a15d737" title="Take a frame &quot;ftmp&quot; from the stack, copy contents of &quot;f&quot; into &quot;ftmp&quot; and insert &quot;ftmp&quot; into the begin...">FrameFifo::writeCopy</a>, the frames in the stack are conformed to this payload size </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aa90e09c733c54b7a1c1f9e252599b4c3"></a>
+<a class="anchor" id="ab66a2d4512d5cb7701f79d8e3af6ebb6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -253,7 +265,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned short int&#160;</td>
-          <td class="paramname"><em>n_stack</em>&#160;</td>
+          <td class="paramname"><em>n_stack</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>clear_when_filled</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -266,7 +284,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <p>Default constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">name</td><td>Name identifying this fifo </td></tr>
     <tr><td class="paramname">n_stack</td><td>Size of the frame reservoir </td></tr>
+    <tr><td class="paramname">clear_when_filled</td><td>What to do when all frames in the reservoir are used? If set to true, all frames are immediately removed from the fifo (a "flush") and recycled back to the stack. Default=false. </td></tr>
   </table>
   </dd>
 </dl>
@@ -360,7 +380,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table>
 </div><div class="memdoc">
 
-<p>Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert"). The size of "ftmp" is also checked and set to target_size, if necessary. </p>
+<p>Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert"). The size of "ftmp" is also checked and set to target_size, if necessary. If wait is set to true, will wait until there are frames available in the stack. </p>
 <ul>
 <li></li>
 </ul>
@@ -372,7 +392,8 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFrameFifo_a01765bd79b616a2425ba84d94a15d737_cgraph.png" border="0" usemap="#classFrameFifo_a01765bd79b616a2425ba84d94a15d737_cgraph" alt=""/></div>
 <map name="classFrameFifo_a01765bd79b616a2425ba84d94a15d737_cgraph" id="classFrameFifo_a01765bd79b616a2425ba84d94a15d737_cgraph">
-<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="201,5,368,32"/>
+<area shape="rect" id="node2" href="classFrameFifo.html#a094d025e259aef84c8d3d4b76c0076eb" title="Recycle all frames from fifo back to stack (make a &quot;flush&quot;) " alt="" coords="211,5,358,32"/>
+<area shape="rect" id="node3" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="201,56,368,83"/>
 </map>
 </div>
 </p>

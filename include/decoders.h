@@ -114,11 +114,11 @@ public:
 class VideoDecoder : public Decoder {
   
 public:
-  VideoDecoder(AVCodecID av_codec_id); ///< @copydoc Decoder::Decoder
-  virtual ~VideoDecoder(); ///< Default destructor
+  VideoDecoder(AVCodecID av_codec_id); ///< Default constructor
+  virtual ~VideoDecoder();             ///< Default destructor
       
 public:
-  bool pull(); ///< @copydoc Decoder::pull
+  bool pull();
   
 /*
 private: // for simulating decoder slow down

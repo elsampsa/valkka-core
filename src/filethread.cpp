@@ -56,7 +56,7 @@ FileStream::FileStream(FileContext &ctx) : ctx(ctx) {
   
   
   if (i<0) {
-    filethreadlogger.log(LogLevel::fatal) << "FileStream : my_avformat_open_input: got nothing" << std::endl;
+    filethreadlogger.log(LogLevel::fatal) << "FileStream : my_avformat_open_input: got nothing from file "<< ctx.filename << std::endl;
     state=FileState::error;
     return;
   }
@@ -133,7 +133,7 @@ void FileStream::seek(long int ms_streamtime_) {
   i=avformat_seek_file(input_context, 0, std::min((long int)0,ms_streamtime_-1000), ms_streamtime_,ms_streamtime_+500, 0);
   // TODO: .. what if stream has non-keyframes in the beginning .. then the thread will idle until the first keyframe is found
   
-  filethreadlogger.log(LogLevel::normal) << "FileStream : av_seek_frame returned " << i << std::endl;
+  filethreadlogger.log(LogLevel::debug) << "FileStream : av_seek_frame returned " << i << std::endl;
   if (i<0) {
     state=FileState::stop;
     // TODO: send an info frame indicating end
@@ -257,6 +257,7 @@ FileThread::FileThread(const char* name, int core_id) : Thread(name, core_id) {
 FileThread::~FileThread() {
  FileStream* file_stream;
  // release file_stream objects in slots_
+ stopCall();
  
  for (std::vector<FileStream*>::iterator it = slots_.begin(); it != slots_.end(); ++it) {
   file_stream=*it;
@@ -437,7 +438,7 @@ void FileThread::openFileStream(FileContext &file_ctx) {
         delete file_stream;
         filethreadlogger.log(LogLevel::fatal) << "FileThread: openStream: could not open file " << file_ctx.filename << std::endl;
         file_ctx.status=FileState::error; // outgoing signal
-        std::cout << "FileThread: status "<< int(file_ctx.status) << std::endl;
+        filethreadlogger.log(LogLevel::debug) << "FileThread: status "<< int(file_ctx.status) << std::endl;
       }
       else {
         slots_[file_ctx.slot]=file_stream;
@@ -544,8 +545,7 @@ void FileThread::openFileStreamCall(FileContext &file_ctx) {
   
   SignalContext signal_ctx = {Signals::open_stream, &file_ctx};
   sendSignalAndWait(signal_ctx);
-  std::cout << "FileThread : openFileStreamCall : status " << int(file_ctx.status) << std::endl;
-  
+  // std::cout << "FileThread : openFileStreamCall : status " << int(file_ctx.status) << std::endl;
 }
 
 void FileThread::closeFileStreamCall(FileContext &file_ctx) {
@@ -571,8 +571,8 @@ void FileThread::stopFileStreamCall(FileContext &file_ctx) {
 
 
 void FileThread::stopCall() {
+  if (!this->has_thread) {return;}
   SignalContext signal_ctx;
-  
   signal_ctx.signal=Signals::exit;
   sendSignal(signal_ctx);
   this->closeThread();

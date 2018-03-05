@@ -1,7 +1,9 @@
 var searchData=
 [
   ['fifoframefilter',['FifoFrameFilter',['../classFifoFrameFilter.html#a29aca7ead936d4ad387d8a435772307d',1,'FifoFrameFilter']]],
+  ['filecontext',['FileContext',['../structFileContext.html#ae6f5c89aa9a3525a3add01956c918115',1,'FileContext::FileContext(std::string filename, SlotNumber slot, FrameFilter *framefilter, long int st=0)'],['../structFileContext.html#a92707f5c82151c722b6fba08de09ad73',1,'FileContext::FileContext()']]],
   ['fileframefilter',['FileFrameFilter',['../classFileFrameFilter.html#ad574ff26061537687aa1c9568b28dc09',1,'FileFrameFilter']]],
+  ['filestream',['FileStream',['../classFileStream.html#a7e83daa23512e7d9fccd651f3f1a12bb',1,'FileStream']]],
   ['filethread',['FileThread',['../classFileThread.html#a5121ceb98001083499c5e6a55368982b',1,'FileThread']]],
   ['fillpars',['fillPars',['../classFrame.html#a36c39451ae692f3c54ff84a6bdaaaf7d',1,'Frame']]],
   ['findvars',['findVars',['../classShader.html#a736e7f2738dfda3d7f7ed9a935926086',1,'Shader::findVars()'],['../classYUVShader.html#a5ee5a884a1018b52d3d89fc459867ea9',1,'YUVShader::findVars()']]],
@@ -10,7 +12,7 @@ var searchData=
   ['forkframefilter',['ForkFrameFilter',['../classForkFrameFilter.html#adab702ac80f3e9df32b7ee16b7e34f8e',1,'ForkFrameFilter']]],
   ['frame',['Frame',['../classFrame.html#ad2e5946cf41d4817e750500acf05d02b',1,'Frame']]],
   ['framearrivedevent',['frameArrivedEvent',['../classLiveThread.html#a3af76255f7009cc8b0f298844651221e',1,'LiveThread']]],
-  ['framefifo',['FrameFifo',['../classFrameFifo.html#aa90e09c733c54b7a1c1f9e252599b4c3',1,'FrameFifo::FrameFifo(const char *name, unsigned short int n_stack)'],['../classFrameFifo.html#ae5f547e4abad8f5bc1322d452418bfdd',1,'FrameFifo::FrameFifo(const FrameFifo &amp;)']]],
+  ['framefifo',['FrameFifo',['../classFrameFifo.html#ab66a2d4512d5cb7701f79d8e3af6ebb6',1,'FrameFifo::FrameFifo(const char *name, unsigned short int n_stack, bool clear_when_filled=false)'],['../classFrameFifo.html#ae5f547e4abad8f5bc1322d452418bfdd',1,'FrameFifo::FrameFifo(const FrameFifo &amp;)']]],
   ['framefilter',['FrameFilter',['../classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761',1,'FrameFilter']]],
   ['fromavpacket',['fromAVPacket',['../classFrame.html#ac2450a1060d6bbd03cd0e85a58f94d52',1,'Frame']]]
 ];

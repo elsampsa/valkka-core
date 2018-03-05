@@ -2,7 +2,7 @@
 <area shape="rect" id="node2" href="$frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="721,95,885,136"/>
 <area shape="rect" id="node28" href="$avdep_8cpp.html" title="/home/sampsa/C/valkka\l/src/avdep.cpp" alt="" coords="909,95,1073,136"/>
 <area shape="rect" id="node3" href="$avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="193,363,357,404"/>
-<area shape="rect" id="node7" href="$queues_8h.html" title="Lockable and safe queues for frame queueing in multithreading applications. " alt="" coords="721,184,885,225"/>
+<area shape="rect" id="node7" href="$queues_8h.html" title="Lockable and safe queues for multithreading. " alt="" coords="721,184,885,225"/>
 <area shape="rect" id="node11" href="$filethread_8h.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="5,363,169,404"/>
 <area shape="rect" id="node16" href="$live_8h.html" title="Interface to live555. " alt="" coords="1021,273,1185,315"/>
 <area shape="rect" id="node19" href="$decoders_8h.html" title="FFmpeg decoders. " alt="" coords="421,184,585,225"/>
@@ -22,7 +22,7 @@
 <area shape="rect" id="node17" href="$live_8cpp.html" title="Interface to live555. " alt="" coords="1008,363,1172,404"/>
 <area shape="rect" id="node20" href="$decoders_8cpp.html" title="FFmpeg decoders. " alt="" coords="301,273,465,315"/>
 <area shape="rect" id="node22" href="$file_8h.html" title="File input and output to and from matroska files. " alt="" coords="1436,363,1600,404"/>
-<area shape="rect" id="node24" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synced with posix sem..." alt="" coords="1624,363,1788,404"/>
+<area shape="rect" id="node24" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="1624,363,1788,404"/>
 <area shape="rect" id="node26" href="$filters_8cpp.html" title="Common frame filters. The FrameFilter base class is defined in frames.h. " alt="" coords="1248,363,1412,404"/>
 <area shape="rect" id="node23" href="$file_8cpp.html" title="File input and output to and from matroska files. " alt="" coords="1436,452,1600,493"/>
 <area shape="rect" id="node25" href="$sharedmem_8cpp.html" title="/home/sampsa/C/valkka\l/src/sharedmem.cpp" alt="" coords="1624,452,1788,493"/>

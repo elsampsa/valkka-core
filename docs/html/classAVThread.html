@@ -95,7 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classAVThread-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">AVThread Class Reference<div class="ingroups"><a class="el" href="group__decoding__tag.html">Decoding_tag</a> &#124; <a class="el" href="group__threading__tag.html">Threading_tag</a></div></div>  </div>
+<div class="title">AVThread Class Reference<div class="ingroups"><a class="el" href="group__decoding__tag.html">decoding</a> &#124; <a class="el" href="group__threading__tag.html">multithreads</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -166,7 +166,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a14f194f321f7a71ca8b219e08a5803d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afaeeae85d2fa9870e216642669dc5a78"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afaeeae85d2fa9870e216642669dc5a78"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVThread.html#afaeeae85d2fa9870e216642669dc5a78">sendSignal</a> (<a class="el" href="structAVThread_1_1SignalContext.html">SignalContext</a> signal_ctx)</td></tr>
-<tr class="memdesc:afaeeae85d2fa9870e216642669dc5a78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be explicitly <em>redefined</em> just in case : <a class="el" href="structThread_1_1SignalContext.html" title="Encapsulates data sent by the signal. ">Thread::SignalContext</a> has been changed to <a class="el" href="structAVThread_1_1SignalContext.html" title="Redefinition of characteristic signal contexts (info that goes with the signal) for AVThread thread...">AVThread::SignalContext</a>. <br /></td></tr>
+<tr class="memdesc:afaeeae85d2fa9870e216642669dc5a78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redefined : <a class="el" href="structThread_1_1SignalContext.html" title="Encapsulates data sent by the signal. ">Thread::SignalContext</a> has been changed to <a class="el" href="structAVThread_1_1SignalContext.html" title="Redefinition of characteristic signal contexts (info that goes with the signal) for AVThread thread...">AVThread::SignalContext</a>. <br /></td></tr>
 <tr class="separator:afaeeae85d2fa9870e216642669dc5a78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc34041dd3f955e4029ef114f9efeb12"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc34041dd3f955e4029ef114f9efeb12"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVThread.html#afc34041dd3f955e4029ef114f9efeb12">decodingOnCall</a> ()</td></tr>
@@ -255,8 +255,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a9e604c94f8ee52771ffbc1dac03b93ad inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3fe753fa03016d016345c1171b123828"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a3fe753fa03016d016345c1171b123828">start_mutex</a></td></tr>
-<tr class="memdesc:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">released when the thread has been started <br /></td></tr>
+<tr class="memdesc:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting start_condition. <br /></td></tr>
 <tr class="separator:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d9732ab4852c250f4fbfc5dd5356de2"></a>
+std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a7d9732ab4852c250f4fbfc5dd5356de2">start_condition</a></td></tr>
+<tr class="memdesc:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notified when the thread has been started. <br /></td></tr>
+<tr class="separator:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6383ead608b8e4be6debb9f25bcfe80a inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6383ead608b8e4be6debb9f25bcfe80a"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a6383ead608b8e4be6debb9f25bcfe80a">mutex</a></td></tr>
 <tr class="memdesc:a6383ead608b8e4be6debb9f25bcfe80a inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting the condition variable and signal queue. <br /></td></tr>
@@ -297,7 +301,7 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A thread consuming frames and feeding them to various encoders. </p>
 <p>This class implements a "consumer &amp; producer" thread: it reads <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a> instances from a <a class="el" href="classFrameFifo.html" title="A thread-safe FrameFifo (first-in-first-out) queue with thread-safe methods for inserting and popping...">FrameFifo</a>, decodes them and writes them to an outbound <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a></p>
-<p>Each arriving frame is inspected for its subsession index, i.e. for <a class="el" href="classFrame.html#aadf128935ea3e7966af10e9bd08df785" title="Media subsession index. ">Frame.subsession_index</a> and passed on to the adequate decoder, which are warehoused in <a class="el" href="classAVThread.html#a8979fa7236713ab3a9239c4ca4845896" title="A vector/list of registered and instantiated decoders. ">AVThread::decoders</a>. This vector/list is initialized by sending special "setup frames" to <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a>. These frames correspond to frametype <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854aa0f848942ce863cf53c0fa6cc684007d" title="This frame contains data obtained from an rtsp setup / sdp file in Frame::pcmu_pars. ">FrameType::setup</a>, and they are typically sent by the <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> after an rtsp negotiation</p>
+<p>Each arriving frame is inspected for its subsession index, i.e. for <a class="el" href="classFrame.html#aadf128935ea3e7966af10e9bd08df785" title="Media subsession index. ">Frame.subsession_index</a> and passed on to the adequate decoder, which are warehoused in <a class="el" href="classAVThread.html#a8979fa7236713ab3a9239c4ca4845896" title="A vector/list of registered and instantiated decoders. ">AVThread::decoders</a>. This vector/list is initialized by sending special "setup frames" to <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a>. These frames correspond to frametype <a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854aa0f848942ce863cf53c0fa6cc684007d" title="This frame contains data obtained from an rtsp setup / sdp file in Frame::pcmu_pars. ">FrameType::setup</a>, and they are typically sent by the <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> after an rtsp negotiation</p>
 <p>See also <a class="el" href="pipeline.html">Code walkthrough: rendering</a> </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="aaf842257d145962ccde0dc3c3a25eaef"></a>
@@ -378,7 +382,7 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
   <table class="params">
     <tr><td class="paramname">name</td><td>Name of the thread </td></tr>
     <tr><td class="paramname">infifo</td><td>Incoming frames are consumed from here </td></tr>
-    <tr><td class="paramname">outfilter</td><td>Outgoing frames are written here. Outgoing frames may be of type <a class="el" href="frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a> </td></tr>
+    <tr><td class="paramname">outfilter</td><td>Outgoing frames are written here. Outgoing frames may be of type <a class="el" href="group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a8ae978e1a4ee3dd59e7c215e1b62a6fa" title="Data is in the Frame::av_frame and Frame::av_codec_context structs (decoded frames) ...">FrameType::avframe</a> </td></tr>
     <tr><td class="paramname">core_id</td><td>Bind the decoding thread to cpu number core_id </td></tr>
     <tr><td class="paramname">mstimetolerance</td><td>Drop frames if they are in milliseconds this much late </td></tr>
   </table>
@@ -449,6 +453,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" id="node6" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="161,157,328,184"/>
 <area shape="rect" id="node7" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="187,208,302,235"/>
 <area shape="rect" id="node9" href="classAVThread.html#a8515dade99fab93b4443e26d2b6400af" title="AVThread::handleSignals" alt="" coords="160,259,329,285"/>
+<area shape="rect" id="node10" href="classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4" title="Print a resumen of fifo and stack usage. " alt="" coords="173,309,317,336"/>
 <area shape="rect" id="node4" href="classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="385,56,481,83"/>
 <area shape="rect" id="node8" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="377,208,488,235"/>
 </map>

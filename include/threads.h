@@ -67,9 +67,9 @@ public: // <pyapi>
    */
   Thread(const char* name, int core_id=-1); // don't include into python (this class is abstract)
   
-  /** Virtual destructor: in subclasses, release acquired resources
+  /** Destructor:**not** virtual.  Each subclass needs to invoke it's own Thread::stopCall() method
    */
-  virtual ~Thread(); // <pyapi>
+  ~Thread(); // <pyapi>
 
   
 private:
@@ -143,19 +143,19 @@ public: // not protected, cause we might need to test these separately
   virtual void sendSignalAndWait(SignalContext signal_ctx);
   
 protected:
-  void mainRun(); ///< Does the preRun, run, postRun sequence
-  void closeThread();
+  void mainRun();               ///< Does the preRun, run, postRun sequence
+  void closeThread();           ///< Sends exit signal to the thread, calls join.  This method blocks until thread has exited.  Set Thread::has_thread to false.
 #ifdef STD_THREAD
 #else
   static void* mainRun_(void *p);
 #endif
   
   
-public: // *** API *** // <pyapi>
+public: // *** API ***                                                  // <pyapi>
   /** API method for the end-user of the thread: starts the thread */
-  void startCall(); // <pyapi>
+  void startCall();                                                     // <pyapi>
   /** API method for the end-user of the thread: stops the thread */
-  void stopCall(); // <pyapi>
+  virtual void stopCall(); ///<  if Thread::has_thread is true, sends exit signal to the thread and calls Thread::closeThread // <pyapi>
 }; // <pyapi>
 
 

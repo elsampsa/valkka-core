@@ -37,25 +37,35 @@
 #include "logging.h"
 #include "tools.h"
 
+/** Describes the state of a FileStream 
+ *
+ * @ingroup file_tag
+ */
+enum class FileState {                      // <pyapi>
+  none,                                     // <pyapi>
+  error,                                    // <pyapi>
+  seek, // in the middle of a seek          // <pyapi>
+  stop, // stream stopped                   // <pyapi>
+  play  // stream is playing                // <pyapi> 
+};                                          // <pyapi>
 
-enum class FileState {
-  none,
-  error,
-  seek, // in the middle of a seek
-  stop, // stream stopped
-  play  // stream is playing
-};
 
-
-/** Used by SignalContext to carry info in the signal */
+/** This class descibes the origin and state of a FileStream.
+ * 
+ * It's also used by FileThread::SignalContext to carry signal information.
+ * 
+ * Two different constructors are provided, the one without arguments can be used to create "dummy" objects.
+ * 
+ * @ingroup file_tag
+ */
 struct FileContext {                                                                               // <pyapi>
   FileContext(std::string filename, SlotNumber slot, FrameFilter* framefilter, long int st=0) :    // <pyapi>
   filename(filename), slot(slot), framefilter(framefilter), seektime_(st),                         // <pyapi>
   duration(0), mstimestamp(0), status(FileState::none)                                             // <pyapi>
-  {}                                                                                               // <pyapi>
+  {}                              ///< Default constructor                                         // <pyapi>
   FileContext() : filename(""), slot(0), framefilter(NULL), seektime_(0),                          // <pyapi>
   duration(0), mstimestamp(0), status(FileState::none)                                             // <pyapi>
-  {}                                                                                               // <pyapi> 
+  {}                              ///< Dummy constructor.  Set values by manipulating members      // <pyapi> 
   std::string    filename;        ///< incoming: the filename                                      // <pyapi>
   SlotNumber     slot;            ///< incoming: a unique stream slot that identifies this stream  // <pyapi>
   FrameFilter*   framefilter;     ///< incoming: the frames are feeded into this FrameFilter       // <pyapi>
@@ -66,57 +76,70 @@ struct FileContext {                                                            
 };                                                                                                 // <pyapi>
 
 
-/** Keeping the books for each stream: 
+/** This class in analogous to the Connection class in live streams.  Instances of this class are placed in slots in FileThread.
+ * 
+ * This class "keeps the books" for each file stream, in particular:
  *
  * - Desider target time (FileStream::target_mstimestamp_)
  * - Timestamp of the previous frame (FileStream::frame_mstimestamp_)
- * - State if the stream (FileStream::state)
- * - FFmpeg stream handles, etc.
+ * - State of the stream (FileStream::state)
+ * - FFmpeg stream handles
+ * - etc.
  * 
- * For timing of file streams, see \ref timing
+ * In variable names, underscore means stream time.  See \ref timing
+ * 
+ * @ingroup file_tag
  */
 class FileStream {
   
 public:
-  // FileStream(std::string filename, SlotNumber slot, FrameFilter& framefilter);
+  /** Default constructor
+   * 
+   * @param ctx : A FileContext instance describing the stream
+   */
   FileStream(FileContext &ctx);
-  ~FileStream();
+  ~FileStream(); ///< Default destructor
   
 public:
-  FileContext         &ctx;
-  /*
-  std::string         filename;        ///< FileStream address
-  SlotNumber          slot;            ///< FileStream slot number (that identifies the source)
-  FrameFilter         &framefilter;    ///< User-provided entry point for the stream. 
-  */
+  FileContext         &ctx;           ///< FileContext describing this stream
   AVFormatContext     *input_context;
  
 public:
-  Frame       setupframe;
-  Frame       out_frame;
-  long int    duration;
-  long int    reftime; 
-  long int    target_mstimestamp_;   ///< Where the stream would like to be (underscore means stream time)
-  long int    frame_mstimestamp_;    ///< Timestamp of previous frame sent, -1 means there was no previous frame (underscore means stream time)
-  FileState   state;
-  AVPacket    *avpkt;
+  Frame       setupframe;             ///< Setup frame written to the filterchain
+  Frame       out_frame;              ///< This frame is written to the filterchain (i.e. to FileStream::ctx and there to FileContext::framefilter) 
+  long int    duration;               ///< Duration of the stream
+  long int    reftime;                ///< Relation between the stream time and wallclock time.  See \ref timing
+  long int    target_mstimestamp_;    ///< Where the stream would like to be (underscore means stream time)
+  long int    frame_mstimestamp_;     ///< Timestamp of previous frame sent, -1 means there was no previous frame (underscore means stream time)
+  FileState   state;                  ///< Decribes the FileStream state: errors, stopped, playing, etc.
+  AVPacket    *avpkt;                 ///< Data for the next frame in ffmpeg AVPacket format
   std::vector<FrameType> frame_types;
   
 public: // getters
   SlotNumber getSlot() {return ctx.slot;}
   
 public:
-  void setRefMstime(long int ms_streamtime_);
-  void seek(long int ms_streamtime_);
-  void play();
-  void stop();
-  long int update(long int mstimestamp);
-  long int pullNextFrame();
+  void setRefMstime(long int ms_streamtime_);  ///< Creates a correspondence with the current wallclock time and a desider stream time, by calculating FileStream::reftime.  See \ref timing
+  void seek(long int ms_streamtime_);          ///< Seek to a desider stream time
+  void play();                                 ///< Start playing the stream
+  void stop();                                 ///< Stop playing the strem
+  long int update(long int mstimestamp);       ///< Tries to achieve mstimestamp: calculates FileStream::target_mstimestamp_ and calls pullNextFrame.  Returns the timeout for the next frame
+  long int pullNextFrame();                    ///< Tries to achieve FileStream::target_mstimestamp_ . Sends frames whose timestamps are less than that to the filterchain (e.g. to FileContext::framefilter).  Returns timeout to the next frame.
 };
 
 
 
-/** Seeks and sends frames from files at realtime.  See also \ref timing.
+/** This class in analogous to LiveThread, but it handles files instead of live streams.
+ * 
+ * FileThread's execution loop works roughly as follows:
+ * 
+ * - Each active slot has a FileStream instance
+ * - For each FileStream, FileStream::update is called with the current wallclock time
+ * - FileStream::update returns a timeout to the next frame in the file - in the case of seek, this is zero untill the target time is met
+ * 
+ * See also \ref timing.
+ * 
+ * @ingroup file_tag
  */
 class FileThread : public Thread { // <pyapi>
 
@@ -133,7 +156,7 @@ class FileThread : public Thread { // <pyapi>
     seek_stream,
     play_stream,
     stop_stream,
-    get_state            // query information about the stream
+    get_state            ///< query information about the stream
   };
   
   /** Identifies the information the signals FileThread::Signals carry.  Encapsulates a FileContext instance.
@@ -141,7 +164,7 @@ class FileThread : public Thread { // <pyapi>
    */
   struct SignalContext {
     Signals     signal;
-    FileContext *file_context; // pointer cause we have return values
+    FileContext *file_context; ///< pointer, cause we have return values
   };
 
   
@@ -149,37 +172,36 @@ public:                                                // <pyapi>
   /** Default constructor
    * 
    * @param name          Thread name
-   * @param n_max_slots   Maximum number of connections (each Connection instance is placed in a slot)
+   * @param core_id       (optional) bind this thread to a specific processor
    * 
    */
   FileThread(const char* name, int core_id=-1);        // <pyapi>
+  /** Default destructor */
   ~FileThread();                                       // <pyapi>
   
 protected: // redefinitions
   std::deque<SignalContext> signal_fifo;    ///< Redefinition of signal fifo (Thread::signal_fifo is now hidden from usage) 
   
 protected:
-  std::vector<FileStream*> slots_;        ///< A constant sized vector.  Keep the books for each stream.
-  //std::map<SlotNumber,FileStream*> active_slots;
-  std::list<SlotNumber>   active_slots;
-  bool loop;                              ///< Controls the execution of the main loop
-  std::list<FileStream*>  streamlist;     ///< FileStream s that have frames to be presented are queued here
+  std::vector<FileStream*> slots_;          ///< Slots: a vector of FileStream instances
+  // TODO: all slots should be done in the future with std::map<SlotNumber,FileStream*>
+  std::list<SlotNumber>   active_slots;     ///< Slots that are activated 
+  bool loop;                                ///< Controls the execution of the main loop
+  // std::list<FileStream*>  streamlist;       // TODO: a better event loop: FileStream s that have frames to be presented are queued here
   
-/*
+/* // some misc. ideas ..
 protected:
   int                       count_streams_seeking; ///< number of stream seeking at the moment
   std::condition_variable   seek_condition;        ///< notified when all streams have stopped seeking 
 */
   
-  
+
 public: // redefined virtual functions
   void run();
   void preRun();
   void postRun();
-  /** @copydoc Thread::sendSignal */
-  void sendSignal(SignalContext signal_ctx);         ///< Must be explicitly *redefined* just in case : Thread::SignalContext has been changed to LiveThread::SignalContext
-  void sendSignalAndWait(SignalContext signal_ctx); 
-  // void waitSeek();
+  void sendSignal(SignalContext signal_ctx);         ///< Redefined : Thread::SignalContext has been changed to FileThread::SignalContext
+  void sendSignalAndWait(SignalContext signal_ctx);  ///< Redefined : Thread::SignalContext has been changed to FileThread::SignalContext
   
 protected:
   void handleSignals();
@@ -192,13 +214,13 @@ private: // internal
   void playFileStream       (FileContext &file_ctx);
   void stopFileStream       (FileContext &file_ctx);
   
-public: // *** C & Python API *** .. these routines go through the convar/mutex locking                                // <pyapi>
+public: // *** C & Python API *** .. these routines go through the convar/mutex locking                                     // <pyapi>
   void closeFileStreamCall      (FileContext &file_ctx); ///< API method: registers a stream                                // <pyapi> 
   void openFileStreamCall       (FileContext &file_ctx); ///< API method: de-registers a stream                             // <pyapi>
   void seekFileStreamCall       (FileContext &file_ctx); ///< API method: seek to a certain point                           // <pyapi>
   void playFileStreamCall       (FileContext &file_ctx); ///< API method: starts playing the stream and feeding frames      // <pyapi>
   void stopFileStreamCall       (FileContext &file_ctx); ///< API method: stops playing the stream and feeding frames       // <pyapi>
-  void stopCall();                                  ///< API method: stops the LiveThread                              // <pyapi>
-}; // <pyapi>
+  void stopCall();                                       ///< API method: stops the LiveThread                              // <pyapi>
+};                                                                                                                          // <pyapi>
 
 

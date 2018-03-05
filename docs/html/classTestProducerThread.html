@@ -93,7 +93,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classTestProducerThread-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">TestProducerThread Class Reference<div class="ingroups"><a class="el" href="group__threading__tag.html">Threading_tag</a></div></div>  </div>
+<div class="title">TestProducerThread Class Reference<div class="ingroups"><a class="el" href="group__threading__tag.html">multithreads</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -177,8 +177,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a9e604c94f8ee52771ffbc1dac03b93ad inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3fe753fa03016d016345c1171b123828"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a3fe753fa03016d016345c1171b123828">start_mutex</a></td></tr>
-<tr class="memdesc:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">released when the thread has been started <br /></td></tr>
+<tr class="memdesc:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting start_condition. <br /></td></tr>
 <tr class="separator:a3fe753fa03016d016345c1171b123828 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d9732ab4852c250f4fbfc5dd5356de2"></a>
+std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a7d9732ab4852c250f4fbfc5dd5356de2">start_condition</a></td></tr>
+<tr class="memdesc:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notified when the thread has been started. <br /></td></tr>
+<tr class="separator:a7d9732ab4852c250f4fbfc5dd5356de2 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6383ead608b8e4be6debb9f25bcfe80a inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6383ead608b8e4be6debb9f25bcfe80a"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a6383ead608b8e4be6debb9f25bcfe80a">mutex</a></td></tr>
 <tr class="memdesc:a6383ead608b8e4be6debb9f25bcfe80a inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting the condition variable and signal queue. <br /></td></tr>
@@ -272,8 +276,9 @@ Here is the call graph for this function:</div>
 <map name="classTestProducerThread_a8f800c7274990c13011ceba1dc828c3d_cgraph" id="classTestProducerThread_a8f800c7274990c13011ceba1dc828c3d_cgraph">
 <area shape="rect" id="node2" href="classFrame.html#a4d1ea5d3a6d5c8d3bfc2481db4ba98f8" title="Set PTS in unix epoch millisecond timestamp. " alt="" coords="220,5,388,32"/>
 <area shape="rect" id="node3" href="classFrameFifo.html#a01765bd79b616a2425ba84d94a15d737" title="Take a frame &quot;ftmp&quot; from the stack, copy contents of &quot;f&quot; into &quot;ftmp&quot; and insert &quot;ftmp&quot; into the begin..." alt="" coords="230,56,378,83"/>
-<area shape="rect" id="node5" href="classThread.html#a4c95ffca059eca2e45de68e304847824" title="Default constructor. " alt="" coords="249,107,359,133"/>
-<area shape="rect" id="node4" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="436,56,603,83"/>
+<area shape="rect" id="node6" href="classThread.html#a4c95ffca059eca2e45de68e304847824" title="Default constructor. " alt="" coords="249,107,359,133"/>
+<area shape="rect" id="node4" href="classFrameFifo.html#a094d025e259aef84c8d3d4b76c0076eb" title="Recycle all frames from fifo back to stack (make a &quot;flush&quot;) " alt="" coords="446,31,593,57"/>
+<area shape="rect" id="node5" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="436,81,603,108"/>
 </map>
 </div>
 </p>

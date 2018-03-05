@@ -3,7 +3,7 @@
 <area shape="rect" id="node3" href="$classFifoFrameFilter.html" title="Passes frames to a multiprocessing fifo. " alt="" coords="68,95,179,121"/>
 <area shape="rect" id="node6" href="$classAVThread.html" title="A thread consuming frames and feeding them to various encoders. " alt="" coords="203,95,283,121"/>
 <area shape="rect" id="node4" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="321,5,409,32"/>
-<area shape="rect" id="node5" href="$structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection, the user is requesting..." alt="" coords="308,95,467,121"/>
+<area shape="rect" id="node5" href="$structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection the user is requesting ..." alt="" coords="308,95,467,121"/>
 <area shape="rect" id="node8" href="$classDummyFrameFilter.html" title="A &quot;hello world&quot; demo class: prints its own name if verbose is set to true. " alt="" coords="491,95,625,121"/>
 <area shape="rect" id="node7" href="$classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="205,5,268,32"/>
 </map>

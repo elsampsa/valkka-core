@@ -1,7 +1,7 @@
 #ifndef QUEUES_HEADER_GUARD 
 #define QUEUES_HEADER_GUARD
 /*
- * queues.h : Lockable and safe queues for multithreading use
+ * queues.h : Lockable and safe queues for multithreading
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -30,14 +30,12 @@
  *  @date    2017
  *  @version 0.3.0 
  *  
- *  @brief Lockable and safe queues for frame queueing in multithreading applications
+ *  @brief Lockable and safe queues for multithreading
  *
  */
 
 #include <frames.h> 
 #include <deque>
-// #include <mutex>
-// #include <condition_variable>
 
 
 /** A thread-safe FrameFifo (first-in-first-out) queue with thread-safe methods for inserting and popping frames in/from the queue.
@@ -74,7 +72,9 @@ protected:
 public: // <pyapi>
   /** Default constructor
    * 
-   * @param n_stack   Size of the frame reservoir
+   * @param name                Name identifying this fifo
+   * @param n_stack             Size of the frame reservoir
+   * @param clear_when_filled   What to do when all frames in the reservoir are used?  If set to true, all frames are immediately removed from the fifo (a "flush") and recycled back to the stack.  Default=false.
    * 
    */
   FrameFifo(const char* name, unsigned short int n_stack, bool clear_when_filled=false); // <pyapi>
@@ -103,12 +103,12 @@ public:
   // void write(Frame* f);
   
   virtual Frame* getFrame();                             ///< Take a frame from the stack
-  virtual bool writeCopy(Frame* f, bool wait=false);     ///< Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").  The size of "ftmp" is also checked and set to target_size, if necessary  
+  virtual bool writeCopy(Frame* f, bool wait=false);     ///< Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").  The size of "ftmp" is also checked and set to target_size, if necessary.  If wait is set to true, will wait until there are frames available in the stack.
   // virtual bool writeCopy_(Frame* f);                     ///< Like FrameFifo::writeCopy, but waits for the fifo to have free frames
   virtual Frame* read(unsigned short int mstimeout=0);   ///< Pop a frame from the end of the fifo and return the frame to the reservoir stack
   // Frame* readCopy();                                  ///< Pop a frame from the end of the fifo, recycle it into stack and return a copy of the frame ("copy-on-read")
   virtual void recycle(Frame* f);                        ///< Return Frame f back into the stack.  Update target_size if necessary
-  virtual void recycleAll();                             ///< Recycle all frames from fifo back to stack.
+  virtual void recycleAll();                             ///< Recycle all frames from fifo back to stack (make a "flush")
   
   virtual void dumpStack(); ///< Dump the frames in the stack
   virtual void dumpFifo();  ///< Dump frames in the fifo
@@ -135,15 +135,6 @@ public:
   // for various reasons, use deques of pointers
   std::deque<Frame*> stack; ///< Reservoir of frames.  We could have several reservoirs, i.e. for different frame sizes, etc.
   std::deque<Frame*> fifo;  ///< The actual fifo
-  /*
-  std::deque<Frame> stack; ///< reservoir of frames
-  std::deque<Frame> fifo;  ///< the actual fifo
-  */
- 
-// When object of this type goes out of scope ..
-// .. Frames in the reservoir automatically d'allocated
-// 
-  
 }; // <pyapi>
 
 
@@ -157,6 +148,11 @@ public:
 class FifoFrameFilter : public FrameFilter { // <pyapi>
   
 public: // <pyapi>
+  /** Default constructor
+   * 
+   * @param name       Name
+   * @param framefifo  The FrameFifo where the frames are being written
+   */
   FifoFrameFilter(const char* name, FrameFifo& framefifo); ///< Default constructor // <pyapi>
   
 protected:
@@ -185,11 +181,5 @@ protected:
 protected:
   void go(Frame* frame);
 }; // <pyapi>
-
-
-
-
-
-
 
 #endif

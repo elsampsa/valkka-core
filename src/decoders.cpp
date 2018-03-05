@@ -33,6 +33,9 @@
 #include "decoders.h"
 #include "logging.h"
 
+// https://stackoverflow.com/questions/14914462/ffmpeg-memory-leak
+#define AV_REALLOC
+
 DecoderBase::DecoderBase() {};
 DecoderBase::~DecoderBase() {};
 
@@ -77,10 +80,16 @@ Decoder::Decoder(AVCodecID av_codec_id) : av_codec_id(av_codec_id) {
 
 
 Decoder::~Decoder() {
-  // av_free_packet(av_packet);
-  delete av_packet;
+  // https://stackoverflow.com/questions/14914462/ffmpeg-memory-leak
+  av_free_packet(av_packet);
+  
   av_frame_free(&av_frame);
+  av_free(av_frame); // needs this as well?
+  
+  avcodec_close(av_codec_context);
   avcodec_free_context(&av_codec_context);
+  
+  delete av_packet;
 }
 
 
@@ -124,7 +133,18 @@ bool VideoDecoder::pull() {
   long int mstime=getCurrentMsTimestamp();
 #endif
   
+  
+#ifdef AV_REALLOC
+  av_frame_free(&av_frame);
+  av_frame =av_frame_alloc();
+#endif
+  
   retcode=avcodec_decode_video2(av_codec_context,av_frame,&got_frame,av_packet);
+
+#ifdef AV_REALLOC
+  av_free_packet(av_packet);
+  av_init_packet(av_packet);
+#endif
   
 #ifdef DECODE_TIMING
   mstime=getCurrentMsTimestamp()-mstime;

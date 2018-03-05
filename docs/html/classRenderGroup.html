@@ -92,7 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classRenderGroup-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">RenderGroup Class Reference<div class="ingroups"><a class="el" href="group__openglthread__tag.html">Openglthread_tag</a></div></div>  </div>
+<div class="title">RenderGroup Class Reference<div class="ingroups"><a class="el" href="group__openglthread__tag.html">opengl</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -103,9 +103,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a27129b91a2ef7d92ba7026cd66a5d549"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderGroup.html#a27129b91a2ef7d92ba7026cd66a5d549">RenderGroup</a> (Display *<a class="el" href="classRenderGroup.html#a4747ce66c8739d85fb560d720aee9eb7">display_id</a>, const GLXContext &amp;<a class="el" href="classRenderGroup.html#ab07f502d116fc908a7f83fa5b5bb4531">glc</a>, Window <a class="el" href="classRenderGroup.html#ae93bfe558588d57cc66f43a10a931b3e">window_id</a>, bool <a class="el" href="classRenderGroup.html#a5299bce3ce130b4f4e8bad5db4be3637">doublebuffer_flag</a>=true)</td></tr>
-<tr class="memdesc:a27129b91a2ef7d92ba7026cd66a5d549"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a27129b91a2ef7d92ba7026cd66a5d549">More...</a><br /></td></tr>
-<tr class="separator:a27129b91a2ef7d92ba7026cd66a5d549"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7755291ffe4fcc6532fa080b3ba83c47"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderGroup.html#a7755291ffe4fcc6532fa080b3ba83c47">RenderGroup</a> (Display *<a class="el" href="classRenderGroup.html#a4747ce66c8739d85fb560d720aee9eb7">display_id</a>, const GLXContext &amp;<a class="el" href="classRenderGroup.html#ab07f502d116fc908a7f83fa5b5bb4531">glc</a>, Window <a class="el" href="classRenderGroup.html#ae93bfe558588d57cc66f43a10a931b3e">window_id</a>, Window <a class="el" href="classRenderGroup.html#a6eb2340dba794074fdd91bfb912241a7">child_id</a>, bool <a class="el" href="classRenderGroup.html#a5299bce3ce130b4f4e8bad5db4be3637">doublebuffer_flag</a>=true)</td></tr>
+<tr class="memdesc:a7755291ffe4fcc6532fa080b3ba83c47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a7755291ffe4fcc6532fa080b3ba83c47">More...</a><br /></td></tr>
+<tr class="separator:a7755291ffe4fcc6532fa080b3ba83c47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae34bcc97bcdb351454a956cdb83c5c94"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae34bcc97bcdb351454a956cdb83c5c94"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderGroup.html#ae34bcc97bcdb351454a956cdb83c5c94">~RenderGroup</a> ()</td></tr>
 <tr class="memdesc:ae34bcc97bcdb351454a956cdb83c5c94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
@@ -117,7 +117,8 @@ Window&#160;</td><td class="memItemRight" valign="bottom"><b>getWindowId</b> () 
 const std::list&lt; <a class="el" href="classRenderContext.html">RenderContext</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getRenderContexes</b> () const </td></tr>
 <tr class="separator:a297f409d1f8afa27daabda8b0576b32b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc7646ed7cf20b3421e705e14fe684cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc7646ed7cf20b3421e705e14fe684cf"></a>
-std::list&lt; <a class="el" href="classRenderContext.html">RenderContext</a> &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>getContext</b> (int id)</td></tr>
+std::list&lt; <a class="el" href="classRenderContext.html">RenderContext</a> &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderGroup.html#afc7646ed7cf20b3421e705e14fe684cf">getContext</a> (int id)</td></tr>
+<tr class="memdesc:afc7646ed7cf20b3421e705e14fe684cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns iterator at matched render context id. <br /></td></tr>
 <tr class="separator:afc7646ed7cf20b3421e705e14fe684cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a307689d413e200c783b6a8ed3d24df21"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a307689d413e200c783b6a8ed3d24df21"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderGroup.html#a307689d413e200c783b6a8ed3d24df21">addContext</a> (<a class="el" href="classRenderContext.html">RenderContext</a> render_context)</td></tr>
@@ -147,8 +148,12 @@ const GLXContext &amp;&#160;</td><td class="memItemRight" valign="bottom"><a cla
 <tr class="separator:ab07f502d116fc908a7f83fa5b5bb4531"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae93bfe558588d57cc66f43a10a931b3e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae93bfe558588d57cc66f43a10a931b3e"></a>
 Window&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderGroup.html#ae93bfe558588d57cc66f43a10a931b3e">window_id</a></td></tr>
-<tr class="memdesc:ae93bfe558588d57cc66f43a10a931b3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">X window id. <br /></td></tr>
+<tr class="memdesc:ae93bfe558588d57cc66f43a10a931b3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">X window id: render group id. <br /></td></tr>
 <tr class="separator:ae93bfe558588d57cc66f43a10a931b3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6eb2340dba794074fdd91bfb912241a7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6eb2340dba794074fdd91bfb912241a7"></a>
+Window&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderGroup.html#a6eb2340dba794074fdd91bfb912241a7">child_id</a></td></tr>
+<tr class="memdesc:a6eb2340dba794074fdd91bfb912241a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">X window id: rendering target. <br /></td></tr>
+<tr class="separator:a6eb2340dba794074fdd91bfb912241a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5299bce3ce130b4f4e8bad5db4be3637"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5299bce3ce130b4f4e8bad5db4be3637"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderGroup.html#a5299bce3ce130b4f4e8bad5db4be3637">doublebuffer_flag</a></td></tr>
 <tr class="memdesc:a5299bce3ce130b4f4e8bad5db4be3637"><td class="mdescLeft">&#160;</td><td class="mdescRight">Double buffer rendering or not? <br /></td></tr>
@@ -166,7 +171,7 @@ XWindowAttributes&#160;</td><td class="memItemRight" valign="bottom"><a class="e
 <div class="textblock"><p>Group of bitmaps that are rendered into the same X-window. </p>
 <p>A <a class="el" href="classRenderGroup.html" title="Group of bitmaps that are rendered into the same X-window. ">RenderGroup</a> instance is indentified uniquely by an x-window id. API user should <b>never</b> create this (use the API calls in <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a> instead) </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a27129b91a2ef7d92ba7026cd66a5d549"></a>
+<a class="anchor" id="a7755291ffe4fcc6532fa080b3ba83c47"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -191,6 +196,12 @@ XWindowAttributes&#160;</td><td class="memItemRight" valign="bottom"><a class="e
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">Window&#160;</td>
+          <td class="paramname"><em>child_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>doublebuffer_flag</em> = <code>true</code>&#160;</td>
         </tr>
@@ -207,7 +218,8 @@ XWindowAttributes&#160;</td><td class="memItemRight" valign="bottom"><a class="e
   <table class="params">
     <tr><td class="paramname">display_id</td><td>Pointer to x display id </td></tr>
     <tr><td class="paramname">glc</td><td>Reference to GXLContext </td></tr>
-    <tr><td class="paramname">window_id</td><td>X window id </td></tr>
+    <tr><td class="paramname">window_id</td><td>X window id: used as an id for the render group </td></tr>
+    <tr><td class="paramname">child_id</td><td>X window id: this is the actual render target. Can be the same as window_id. </td></tr>
     <tr><td class="paramname">doublebuffer_flag</td><td>Use double buffering or not (default true) </td></tr>
   </table>
   </dd>
@@ -232,7 +244,7 @@ XWindowAttributes&#160;</td><td class="memItemRight" valign="bottom"><a class="e
 <p>Render everything in this group (i.e. </p>
 <p>in this x window)</p>
 <ul>
-<li>Set current x window to <a class="el" href="classRenderGroup.html#ae93bfe558588d57cc66f43a10a931b3e" title="X window id. ">RenderGroup::window_id</a></li>
+<li>Set current x window to <a class="el" href="classRenderGroup.html#ae93bfe558588d57cc66f43a10a931b3e" title="X window id: render group id. ">RenderGroup::window_id</a></li>
 <li>Set viewport</li>
 <li>Clear drawing buffer</li>
 <li>Run over <a class="el" href="classRenderGroup.html#ad642287d394ed4cce063c1c17ad04712" title="RenderContext instances in ascending z order. User created rendercontexes are warehoused here...">RenderGroup::render_contexes</a> and call each one's <a class="el" href="classRenderContext.html#a1670d468447d7fa71085e7d482bdf2a8" title="Does the actual drawing of the bitmap. ">RenderContext::render()</a> method </li>

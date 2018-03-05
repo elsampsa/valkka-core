@@ -5,7 +5,7 @@ var searchData=
   ['y_5fsize',['y_size',['../classYUVPBO.html#a75fec8630cca7b796da081c1eaeba858',1,'YUVPBO']]],
   ['yuv_5fpars',['yuv_pars',['../classFrame.html#a25b341f6ec93fa000615f42caa0fede2',1,'Frame']]],
   ['yuv_5fshader',['yuv_shader',['../classOpenGLThread.html#ab4704fdd9c8cc5279bddf526a9eb7946',1,'OpenGLThread']]],
-  ['yuvframe',['yuvframe',['../frames_8h.html#ad495a9f61af7fff07d7e97979d1ab854a376bf3c0bb30c3c3276663258f9a12cc',1,'frames.h']]],
+  ['yuvframe',['yuvframe',['../group__frames__tag.html#ggad495a9f61af7fff07d7e97979d1ab854a376bf3c0bb30c3c3276663258f9a12cc',1,'frames.h']]],
   ['yuvframepars',['YUVFramePars',['../structYUVFramePars.html',1,'']]],
   ['yuvpbo',['YUVPBO',['../classYUVPBO.html',1,'YUVPBO'],['../classYUVPBO.html#a4377fac1ac9ef51d136f46a396eceee2',1,'YUVPBO::YUVPBO()'],['../classFrame.html#a6b86da1e00b483afaf192c75473c055f',1,'Frame::yuvpbo()']]],
   ['yuvshader',['YUVShader',['../classYUVShader.html',1,'']]],

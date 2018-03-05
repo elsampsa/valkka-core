@@ -292,30 +292,92 @@
  */
 
 
+/** @page live_streaming_page Live streaming
+ * 
+ * Some notes on receiving/sending live streams
+ * 
+ * Receiving streams
+ * -----------------
+ * 
+ *- LiveThread::slots_ is a vector of Connection instances.  
+ * 
+ *- Let's assume there is an RTSPConnection instance in a slot.  The RTSPConnection::client features a ValkkaRTSPClient instance, that is derived from the live555 RTSPClient class.  ValkkaRTSPClient encapsulates all the usual live555 stuff, i.e. response handlers, callbacks, etc.  
+ *
+ *- ValkkaRTSPClient has the target FrameFilter where the frames are being fed.  ValkkaRTSPClient::livestatus is a reference to a shared variable that is used by LiveThread::periodicTask to see if the client is alive or if it's been destroyed (calling the destructor happens within live555 callback chains) .. this part is a bit cumbersome, so fresh ideas are welcome.
+ * 
+ *- Signaling with the "outside world" is done by a periodic live555 task LiveThread::periodicTask that reads the signals sent from outside the thread (see LiveThread::handleSignals) 
+ * 
+ * Sending streams
+ * ---------------
+ * 
+ * From the point of view of API users, sending frames happens simply by connecting a source to LiveFifo (see the examples).  Behind the scene, frames are sent over the net, by calling LiveFifo::writeCopy - i.e. using the unified approach in Valkka library to handle frames; they are handled in the same way, whether they are passed to the decoder or sent to the screen by using OpenGLFrameFifo (see \ref process_chart).
+ * 
+ * Sending frames happens roughly as follows:
+ *
+ *- LiveFifo has a reference to the associated LiveThread
+ *
+ *- LiveFifo::writeCopy calls LiveThread::triggerGotFrames which triggers an event using the scheduler and the triggerEvent method (this is the only allowed way to launch events outside the live555 event loop)
+ *
+ *- The triggered event corresponds to LiveThread::gotFramesEvent
+ *
+ *- LiveThread::gotFramesEvent inserts a new (immediate) task to the live555 event loop, namely LiveThread::readFrameFifoTask
+ *
+ *- LiveThread::readFrameFifoTask (i) calls LiveThread::handleFrame and (ii) re-schedules itself if there are more than one frame in the fifo
+ *
+ *- LiveThread::handleFrame checks the slot of the outgoing frame, takes the corresponding Outbound instance and calls Outbound::handleFrame
+ *
+ *- Outbound has a set of Stream instances in Outbound::streams.  There is a Stream instance per media substream.
+ *
+ *- Stream instances encapsulate the usual live555 stuff per substream: RTPSink, RTCPInstance, Groupsock, FramedSource, etc.
+ *
+ *- Each Stream has also a reference to LiveFifo and Stream::buffer_source which is a BufferSource instance.
+ *
+ *- BufferSource is a subclass of live555 FramedSource that is used for sending frames. 
+ *
+ *- BufferSource has it's own internal fifo BufferSource::internal_fifo.  This fifo is used by BufferSource::doGetNextFrame, as it should in live555, i.e. if there are no frames left in the fifo, then BufferSource::doGetNextFrame exits immediately, otherwise it calls FramedSource::afterGetting and if necessary, re-schedules itself
+ *  
+ *- To summarize, the call chain looks like this: LiveThread::handleFrame => Outbound::handleFrame => Stream::handleFrame (transfers the frame from LiveFifo to BufferSource::internal_fifo) => BufferSource::handleFrame => FramedSource::afterGetting
+ *
+ *
+ */
+
+
 /********* GROUP/MODULE DEFINITIONS ***************/
 
 
-/** @defgroup frames_tag
+/** @defgroup frames_tag the frame class
  * 
  * Things related to Frame
  *
  */
 
 
-/** @defgroup filters_tag
+/** @defgroup filters_tag available framefilters
  * 
  * Things related to FrameFilters
  *
  */
 
 
-/** @defgroup live_tag
+/** @defgroup live_tag live555 bridge
  * 
- * Things related to Live555
+ * How we're using the live555 API
  *
  */
 
-/** @defgroup threading_tag
+
+/** @defgroup file_tag file streaming
+ * 
+ * Things related to streaming from/into files
+ * 
+ * At the moment, reading from files is done by a single thread that multiplexes the reading from various files, FileThread
+ * 
+ * Writing is done simply by writing to a special FrameFilter, namely, the FileFrameFilter.  In the future, we'd like to do this in a separate thread as well (include writing into FileThread, maybe)
+ * 
+ */
+
+
+/** @defgroup threading_tag multithreads
  * 
  * The Thread class is a prototype for implementing thread-safe multithreading classes.  There are three pure virtual classes, namely:
  * 
@@ -345,9 +407,23 @@
  * 
  * For practical Thread implementations, see for examṕle LiveThread and OpenGLThread
  * 
+ * Thread can be bound to a particular processor core, if needed.
+ * 
  */
 
-/** @defgroup livethread_tag
+
+/** @defgroup shmem_tag shmem
+ * 
+ * Posix shared memory and semaphores.  Using shared memory, multiprocesses, especially python processes, can interchange frames.  Used typically for sending frames from AVThread to a python multiprocess at the python API side.
+ * 
+ * According to my experience, this is good for passing, say, one full-hd frame per second (good enough to do ok image analysis).  However, don't expect this to work for high-throughput 30 fps per second for several cameras..!
+ * 
+ * In the SharedMemRingBuffer the name is important.  It identifies the POSIX shared memory segments both in the server and client side.
+ * 
+ */
+
+
+/** @defgroup livethread_tag livethread
  * The LiveThread class implements a "producer" thread (see \ref threading_tag) that feeds frames into a FrameFilter (see \ref frames_tag). 
  * The FrameFilter chain feeds finally a FrameFifo, which is being read by a "consumer" thread (typically a AVThread).
  * 
@@ -355,24 +431,39 @@
  * 
  */
 
-/** @defgroup decoding_tag
+
+/** @defgroup decoding_tag decoding
  * 
  * DecoderBase is the base class for various decoders.  AVThread is a Thread subclass that consumes frames, decodes them using DecoderBase instances and passes them along for the OpenGLThread.
  *
  */
 
-/** @defgroup openglthread_tag
+
+/** @defgroup openglthread_tag opengl
  * 
- * Things related to OpenGLThread: GLX, OpenGL, etc.
+ * Things related to OpenGL
  * 
  * 
  */
 
-/** @defgroup queues_tag
+
+/** @defgroup audio_tag audio
  * 
- * Multiprocessing queues/fifos
+ * Audio reproduction
+ * 
+ * Sorry, no audio at the moment..!
+ * 
+ * The plan for this is as follows: redirect, using filterchains, audio to a separate Thread.  The name of that thread will be ALSAThread, etc.  Analogical to OpenGLThread.
+ * 
+ */
+
+
+/** @defgroup queues_tag queues and fifos
+ * 
+ * Multiprocessing queues/fifos.  The base class is FrameFifo.  Special derived classes (LiveFifo, OpenGLFrameFifo) are usually created and managed by certain derived Thread classes (LiveThread, OpenGLThread).
  *
  */
+
 
 /** @page pipeline Code walkthrough: rendering
  * 

@@ -1,3 +1,5 @@
-<map id="Filters_tag" name="Filters_tag">
-<area shape="rect" id="node1" href="$group__queues__tag.html" title="Multiprocessing queues/fifos. " alt="" coords="275,21,367,48"/>
+<map id="available framefilters" name="available framefilters">
+<area shape="rect" id="node1" href="$group__shmem__tag.html" title="Posix shared memory and semaphores. " alt="" coords="361,5,427,32"/>
+<area shape="rect" id="node2" href="$group__queues__tag.html" title="Multiprocessing queues/fifos. " alt="" coords="335,65,453,92"/>
+<area shape="rect" id="node3" href="$group__file__tag.html" title="Things related to streaming from/into files. " alt="" coords="344,116,444,143"/>
 </map>

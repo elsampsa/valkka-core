@@ -1,4 +1,4 @@
 <map id="Live_tag" name="Live_tag">
-<area shape="rect" id="node1" href="$group__livethread__tag.html" title="The LiveThread class implements a &quot;producer&quot; thread (see Threading_tag) that feeds frames into a Fram..." alt="" coords="261,56,368,83"/>
-<area shape="rect" id="node2" href="$group__threading__tag.html" title="The Thread class is a prototype for implementing thread&#45;safe multithreading classes. " alt="" coords="263,116,367,143"/>
+<area shape="rect" id="node1" href="$group__livethread__tag.html" title="The LiveThread class implements a &quot;producer&quot; thread (see Threading_tag) that feeds frames into a Fram..." alt="" coords="227,41,333,68"/>
+<area shape="rect" id="node2" href="$group__threading__tag.html" title="The Thread class is a prototype for implementing thread&#45;safe multithreading classes. " alt="" coords="228,92,332,119"/>
 </map>

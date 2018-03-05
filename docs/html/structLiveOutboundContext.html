@@ -88,23 +88,39 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structLiveOutboundContext-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">LiveOutboundContext Struct Reference</div>  </div>
+<div class="title">LiveOutboundContext Struct Reference<div class="ingroups"><a class="el" href="group__livethread__tag.html">livethread</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Same as <a class="el" href="structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection the user is requesting ...">LiveConnectionContext</a>, but for outbound streams (i.e.  
+ <a href="structLiveOutboundContext.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="livethread_8h_source.html">livethread.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a12508e944891d6acd84db40c9f5b062c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a12508e944891d6acd84db40c9f5b062c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>LiveOutboundContext</b> (<a class="el" href="group__livethread__tag.html#ga393bb55d7e6d624a2e428e600fbea26c">LiveConnectionType</a> ct, std::string <a class="el" href="structLiveOutboundContext.html#ac08aac088340671c56ccdadb602744fe">address</a>, SlotNumber <a class="el" href="structLiveOutboundContext.html#a3314d69067103345a6538bb160ca3313">slot</a>, unsigned short int <a class="el" href="structLiveOutboundContext.html#a5c26199efccd7144ec4c10e6a43896f6">portnum</a>)</td></tr>
+<tr class="separator:a12508e944891d6acd84db40c9f5b062c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ade60b39c56a075cdd1dc9bc1271c689d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade60b39c56a075cdd1dc9bc1271c689d"></a>
-<a class="el" href="group__live__tag.html#ga393bb55d7e6d624a2e428e600fbea26c">LiveConnectionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structLiveOutboundContext.html#ade60b39c56a075cdd1dc9bc1271c689d">connection_type</a></td></tr>
+<a class="el" href="group__livethread__tag.html#ga393bb55d7e6d624a2e428e600fbea26c">LiveConnectionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structLiveOutboundContext.html#ade60b39c56a075cdd1dc9bc1271c689d">connection_type</a></td></tr>
 <tr class="memdesc:ade60b39c56a075cdd1dc9bc1271c689d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies the connection type // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:ade60b39c56a075cdd1dc9bc1271c689d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac08aac088340671c56ccdadb602744fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac08aac088340671c56ccdadb602744fe"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structLiveOutboundContext.html#ac08aac088340671c56ccdadb602744fe">address</a></td></tr>
-<tr class="memdesc:ac08aac088340671c56ccdadb602744fe"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classStream.html">Stream</a> address // &lt;pyapi&gt; <br /></td></tr>
+<tr class="memdesc:ac08aac088340671c56ccdadb602744fe"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classStream.html" title="An outbound Stream. ">Stream</a> address // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:ac08aac088340671c56ccdadb602744fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3314d69067103345a6538bb160ca3313"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3314d69067103345a6538bb160ca3313"></a>
+SlotNumber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structLiveOutboundContext.html#a3314d69067103345a6538bb160ca3313">slot</a></td></tr>
+<tr class="memdesc:a3314d69067103345a6538bb160ca3313"><td class="mdescLeft">&#160;</td><td class="mdescRight">A unique stream slot that identifies this stream // &lt;pyapi&gt; <br /></td></tr>
+<tr class="separator:a3314d69067103345a6538bb160ca3313"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c26199efccd7144ec4c10e6a43896f6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5c26199efccd7144ec4c10e6a43896f6"></a>
 unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structLiveOutboundContext.html#a5c26199efccd7144ec4c10e6a43896f6">portnum</a></td></tr>
 <tr class="memdesc:a5c26199efccd7144ec4c10e6a43896f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start port number (for sdp) // &lt;pyapi&gt; <br /></td></tr>
@@ -113,12 +129,11 @@ unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><a class="
 unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structLiveOutboundContext.html#add9c0b741471e4231e26fa4b9287286c">ttl</a></td></tr>
 <tr class="memdesc:add9c0b741471e4231e26fa4b9287286c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Packet time-to-live // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:add9c0b741471e4231e26fa4b9287286c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3314d69067103345a6538bb160ca3313"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3314d69067103345a6538bb160ca3313"></a>
-SlotNumber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structLiveOutboundContext.html#a3314d69067103345a6538bb160ca3313">slot</a></td></tr>
-<tr class="memdesc:a3314d69067103345a6538bb160ca3313"><td class="mdescLeft">&#160;</td><td class="mdescRight">A unique stream slot that identifies this stream // &lt;pyapi&gt; <br /></td></tr>
-<tr class="separator:a3314d69067103345a6538bb160ca3313"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Same as <a class="el" href="structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection the user is requesting ...">LiveConnectionContext</a>, but for outbound streams (i.e. </p>
+<p>streams sent over the net by live555) </p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="livethread_8h_source.html">livethread.h</a></li>
 </ul>
 </div><!-- contents -->

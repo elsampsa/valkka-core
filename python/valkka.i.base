@@ -11,6 +11,7 @@
 #include "include/queues.h"
 #include "include/livethread.h"
 #include "include/filethread.h"
+#include "include/file.h"
 #include "include/avthread.h"
 #include "include/openglthread.h"
 #include "include/sharedmem.h"
@@ -49,11 +50,16 @@ PyObject* getNumpyShmem(SharedMemRingBuffer* rb, int i) {
   return pa;                                                                       
 }
 
+
+void ValkkaXInitThreads(void) {
+  Status status = XInitThreads();
+}
+
 %}
 
 // next, expose what is necessary
 
-extern Status XInitThreads(void);
+// extern Status XInitThreads(void);
 
 // autogenerate from this point on
 

@@ -53,7 +53,7 @@ extern "C" { // realizing this took me half a day : https://stackoverflow.com/qu
 // We don't want the user to interact or even see the live555 and ffmpeg apis
 // For special cases where we need that, use these helper functions:
 
-void ffmpeg_av_register_all(); // <pyapi>
+void ffmpeg_av_register_all();           // <pyapi>
 void ffmpeg_av_log_set_level(int level); // <pyapi>
 
 #endif
