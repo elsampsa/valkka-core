@@ -34,7 +34,7 @@
 #include "logging.h"
 
 // https://stackoverflow.com/questions/14914462/ffmpeg-memory-leak
-#define AV_REALLOC
+// #define AV_REALLOC
 
 DecoderBase::DecoderBase() {};
 DecoderBase::~DecoderBase() {};
