@@ -1,6 +1,0 @@
-<map id="VideoDecoder::pull" name="VideoDecoder::pull">
-<area shape="rect" id="node2" href="$classFrame.html#a13e9ae3eac3e0efcb3684723ff77cf34" title="returns std::string with beginning of the payload " alt="" coords="195,5,342,32"/>
-<area shape="rect" id="node3" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="185,56,352,83"/>
-<area shape="rect" id="node4" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="221,107,317,133"/>
-<area shape="rect" id="node5" href="$classFrame.html#a596d590b841166a204fe9ba5b9313159" title="Copy public metadata across different frame types (timestamp, subsession_index, pars) to f..." alt="" coords="207,157,331,184"/>
-</map>

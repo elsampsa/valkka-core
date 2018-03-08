@@ -1809,8 +1809,8 @@ class OpenGLThread(Thread):
     def getFifo(self):
         return _valkka_core.OpenGLThread_getFifo(self)
 
-    def createWindow(self, map=True):
-        return _valkka_core.OpenGLThread_createWindow(self, map)
+    def createWindow(self, map=True, show=False):
+        return _valkka_core.OpenGLThread_createWindow(self, map, show)
 
     def makeCurrent(self, window_id):
         return _valkka_core.OpenGLThread_makeCurrent(self, window_id)

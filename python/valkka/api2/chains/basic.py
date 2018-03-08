@@ -229,7 +229,7 @@ class ShmemFilterchain(BasicFilterchain):
     self.gl_in_filter    =core.FifoFrameFilter    ("gl_in_filter"+self.idst,self.gl_fifo)
     
     # fork
-    self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.sws_filter)
+    self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.sws_filter) # WARNING! TODO: shouldn't this feed the interval filter!?!?
     
     # main branch
     # [av_fifo] -->> (avthread) --> {gl_in_filter}

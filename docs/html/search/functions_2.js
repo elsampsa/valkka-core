@@ -8,6 +8,7 @@ var searchData=
   ['close',['close',['../classStreamClientState.html#a2fadd0a8b27b8752c80a79b3d5e20e69',1,'StreamClientState']]],
   ['closefilestreamcall',['closeFileStreamCall',['../classFileThread.html#a0dacbcfa480ceff7f6688c3b8961694a',1,'FileThread']]],
   ['closeglx',['closeGLX',['../classOpenGLThread.html#aad619c3ffcaeb78cdc79877700e103a6',1,'OpenGLThread']]],
+  ['closethread',['closeThread',['../classThread.html#a4428ec86c8bc7da14b558f25fb723ce0',1,'Thread']]],
   ['compile',['compile',['../classShader.html#a5be69e48ac2436651ead777bf5fb5c9f',1,'Shader']]],
   ['connection',['Connection',['../group__livethread__tag.html#gac7724aa950a968459770fd85e6cf95c0',1,'Connection']]],
   ['continueafterdescribe',['continueAfterDESCRIBE',['../classValkkaRTSPClient.html#ab7072812dc29ccdfaf097615759dc34f',1,'ValkkaRTSPClient']]],
@@ -16,5 +17,5 @@ var searchData=
   ['continueplaying',['continuePlaying',['../classFrameSink.html#a8510cb04286c99b04111e33c55a0d8fd',1,'FrameSink']]],
   ['copymeta',['copyMeta',['../classFrame.html#a596d590b841166a204fe9ba5b9313159',1,'Frame']]],
   ['createnew',['createNew',['../classValkkaRTSPClient.html#a64807d6aa0069fff04bad1d10bb567b7',1,'ValkkaRTSPClient::createNew()'],['../classFrameSink.html#a86a4b5de6746d32a975dc883ee42f89d',1,'FrameSink::createNew()']]],
-  ['createwindow',['createWindow',['../classOpenGLThread.html#a51aa28ce5521df79c47038aa72c03cf5',1,'OpenGLThread']]]
+  ['createwindow',['createWindow',['../classOpenGLThread.html#ac98e61740bebef33797dc05f5f7a82fe',1,'OpenGLThread']]]
 ];

@@ -1,4 +1,0 @@
-<map id="FileStream::pullNextFrame" name="FileStream::pullNextFrame">
-<area shape="rect" id="node2" href="$classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="232,5,347,32"/>
-<area shape="rect" id="node3" href="$classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="395,5,505,32"/>
-</map>

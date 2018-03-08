@@ -1785,7 +1785,7 @@ void OpenGLThread::delShaders() {
 }
   
 
-Window OpenGLThread::createWindow(bool map) {
+Window OpenGLThread::createWindow(bool map, bool show) {
   Window win_id;
   XSetWindowAttributes swa;
   
@@ -1807,7 +1807,9 @@ Window OpenGLThread::createWindow(bool map) {
   
   // win_id =glXCreateWindow(this->display_id, this->fbConfigs[0], win_id, NULL);
 
-  // makeCurrent(win_id);
+  if (show) {
+    makeCurrent(win_id);
+  }
   return win_id;
 }
 
