@@ -101,7 +101,7 @@ void test_1() {
 
 void test_2() {
   const char* name = "@TEST: opengl_thread_test: test 2: ";
-  std::cout << name <<"** @@OpenGLThread live rendering **" << std::endl;
+  std::cout << name <<"** @@OpenGLThread live rendering. Long time. **" << std::endl;
   
   if (!stream_1) {
     std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
@@ -541,6 +541,98 @@ void test_6() {
 }
 
 
+void test_7() {
+  const char* name = "@TEST: opengl_thread_test: test 7: ";
+  std::cout << name <<"** @@OpenGLThread live rendering.  Short time. **" << std::endl;
+  
+  if (!stream_1) {
+    std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+    exit(2);
+  }
+  std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+  
+  int i;
+  // ***********************************
+  // filtergraph:
+  // (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) --> {FifoFrameFilter:gl_in_gilter} --> 
+  // --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
+  //
+  
+  // this works fine for a single n1080p cam
+  OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/10,/*n1440p*/0,/*4K*/0,/*msbuftime*/100,/*core_id*/-1); 
+  
+  // WARNING: this produces jitter for a single n1080p cam.. why!?
+  // OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/61,/*n1440p*/0,/*4K*/0,/*msbuftime*/2000,/*core_id*/-1); 
+  
+  // no jitter here:
+  // OpenGLThread      glthread        ("glthread",/*n720p*/10,/*n1080p*/60,/*n1440p*/0,/*4K*/0,/*msbuftime*/100,/*core_id*/-1); 
+  
+  // remember buffering time!
+  OpenGLFrameFifo&  gl_fifo         =glthread.getFifo();      // get gl_fifo from glthread
+  FifoFrameFilter   gl_in_filter    ("gl_in_filter",gl_fifo);   
+  
+  FrameFifo         av_fifo         ("av_fifo",10);                 
+  AVThread          avthread        ("avthread",av_fifo,gl_in_filter,-1);  // [av_fifo] -->> (avthread) --> {gl_in_filter}
+  
+  FifoFrameFilter   av_in_filter    ("av_in_filter",av_fifo);
+  // InfoFrameFilter   live_out_filter ("live_out_filter",&av_in_filter);
+  // DummyFrameFilter   live_out_filter ("live_out_filter",false,&av_in_filter);
+  BriefInfoFrameFilter   live_out_filter ("live_out_filter",&av_in_filter);
+  LiveThread        livethread      ("livethread",0,-1); // size of input fifo, thread affinity
+  // ***********************************
+  
+  std::cout << name << "starting threads" << std::endl;
+  glthread.startCall(); // start running OpenGLThread!
+  
+  std::cout << "Is compositor running? =" << glthread.hasCompositor(0) << std::endl;
+  
+  Window window_id=glthread.createWindow();
+  glthread.makeCurrent(window_id);
+  std::cout << "new x window "<<window_id<<std::endl;
+  
+  livethread.startCall();
+  avthread.  startCall();
+
+  avthread.decodingOnCall();
+  
+  // sleep_for(1s);
+  
+  std::cout << name << "registering stream" << std::endl;
+  
+  // LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 1, &live_out_filter);
+  LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 1, &av_in_filter);
+  
+  livethread.registerStreamCall(ctx);
+  
+  // sleep_for(1s);
+  std::cout << name << "playing stream !" << std::endl;
+  livethread.playStreamCall(ctx);
+  
+  // (1)
+  glthread.newRenderGroupCall(window_id);
+  sleep_for(1s);
+  
+  i=glthread.newRenderContextCall(1, window_id, 0);
+  std::cout << "got render context id "<<i<<std::endl;
+  sleep_for(1s);
+  
+  sleep_for(3s);
+  // sleep_for(604800s); //one week
+  
+  glthread.delRenderContextCall(i);
+  glthread.delRenderGroupCall(window_id);
+  
+  std::cout << name << "stopping threads" << std::endl;
+  livethread.stopCall();
+  avthread.  stopCall();
+  glthread.  stopCall();
+  std::cout << name << "All threads stopped" << std::endl;
+  sleep_for(1s);
+  std::cout << name << "Leaving context" << std::endl;
+}
+
+
+
 
 int main(int argc, char** argcv) {
   if (argc<2) {
@@ -589,6 +681,9 @@ int main(int argc, char** argcv) {
         break;
       case(6):
         test_6();
+        break;
+      case(7):
+        test_7();
         break;
       default:
         std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;

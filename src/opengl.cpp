@@ -38,10 +38,6 @@
 #include "logging.h"
 #include "tools.h"
 
-// WARNING: these define switches should be off (commented) by default
-// #define VALGRIND_GPU_DEBUG 1 // enable this for valgrind debugging.  Otherwise direct memory access to GPU drives it crazy.
-// #define LOAD_VERBOSE 1 // shows information on loading YUVPBO and TEX structures
-
 
 /** // ripped off from glxgears.c
  * Determine whether or not a GLX extension is supported.
@@ -193,23 +189,7 @@ void getTEX(GLuint& index, GLint internal_format, GLint format, GLsizei w, GLsiz
 }
 
 
-/*
-void loadYUVPBO(YUVPBO* pbo, GLsizei size, GLubyte* y, GLubyte* u, GLubyte* v) {
-  unsigned int i;
-  
-  i=std::min(size,pbo->size);
-  
-#ifdef LOAD_VERBOSE
-  std::cout << "loadYUVPBO: pbo= "<< *pbo << std::endl;
-  std::cout << "loadYUVPBO: i  ="<< i << std::endl;
-#endif
-  
-  // memcpy(pbo->y_payload, y, 1); // debugging
-  memcpy(pbo->y_payload, y, i);
-  memcpy(pbo->u_payload, u, i/4);
-  memcpy(pbo->v_payload, v, i/4);
-}
-*/
+
 
 void peekYUVPBO(YUVPBO* pbo) {
   int i;
@@ -252,7 +232,9 @@ void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex) {
   long int mstime =getCurrentMsTimestamp();
   long int swaptime;
 #endif
-  
+   
+#ifdef VALGRIND_GPU_DEBUG
+#else
   // y
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->y_index);
   glBindTexture(GL_TEXTURE_2D, tex->y_index); // this is the texture we will manipulate
@@ -287,6 +269,7 @@ void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex) {
   
   // glFlush();
   glFinish(); // TODO: debugging
+#endif
   
 #ifdef OPENGL_TIMING
   swaptime=mstime; mstime=getCurrentMsTimestamp();
@@ -404,19 +387,25 @@ YUVTEX::YUVTEX(GLsizei w, GLsizei h) : TEX(w, h), y_index(0), u_index(0), v_inde
   this->format             =GL_RED;
   this->internal_format    =GL_RED;
   
+#ifdef VALGRIND_GPU_DEBUG
+#else
   getTEX(this->y_index, this->internal_format, this->format, this->w,   this->h);
   getTEX(this->u_index, this->internal_format, this->format, this->w/2, this->h/2);
   getTEX(this->v_index, this->internal_format, this->format, this->w/2, this->h/2);
-  opengllogger.log(LogLevel::crazy) << "YUVTEX: reserved " << *this;
   glFinish();
+#endif
+  opengllogger.log(LogLevel::crazy) << "YUVTEX: reserved " << *this;
 }
 
 YUVTEX::~YUVTEX() {
   opengllogger.log(LogLevel::crazy) << "YUVTEX: releasing " << *this;
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glDeleteTextures(1, &(this->y_index));
   glDeleteTextures(1, &(this->u_index));
   glDeleteTextures(1, &(this->v_index));
   glFinish();
+#endif
 }
   
   

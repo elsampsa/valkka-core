@@ -161,7 +161,10 @@ Shader::Shader() {
 }
 
 Shader::~Shader() {
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glDeleteProgram(this->program);
+#endif
 }
 
 
@@ -228,7 +231,10 @@ void Shader::findVars() {
   position=0; // this is hard-coded into the shader code (see "location=0")
   texcoord=1; // this is hard-coded into the shader code (see "location=1")
   
+#ifdef VALGRIND_GPU_DEBUG
+#else
   transform=glGetUniformLocation(program,"transform");
+#endif
   opengllogger.log(LogLevel::debug) << "Shader: findVars: Location of the transform matrix: " << transform << std::endl;
 }
 
@@ -240,13 +246,19 @@ void Shader::scale(GLfloat fx, GLfloat fy) {
     {0.0f,             0.0f,             1.0f,   0.0f},
     {0.0f,             0.0f,             0.0f,   1.0f}
   };
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glUniformMatrix4fv(transform, 1, GL_FALSE, mat[0]);
+#endif
 }
 
 
 void Shader::use() {
-  opengllogger.log(LogLevel::crazy) << "Shader: use: using program index=" << this->program << std::endl;
+  // opengllogger.log(LogLevel::crazy) << "Shader: use: using program index=" << this->program << std::endl;
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glUseProgram(this->program);
+#endif
 }
 
 
@@ -273,9 +285,12 @@ void Shader::validate() {
 
 
 RGBShader::RGBShader() : Shader() {
+#ifdef VALGRIND_GPU_DEBUG
+#else
   compile();
   use();
   findVars();
+#endif
 }
 
 
@@ -285,9 +300,12 @@ RGBShader::~RGBShader() {
 
 
 YUVShader::YUVShader() : Shader() {
+#ifdef VALGRIND_GPU_DEBUG
+#else
   compile();
   use();
   findVars();
+#endif
 }
 
 YUVShader::~YUVShader() {

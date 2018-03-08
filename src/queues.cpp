@@ -125,7 +125,8 @@ Frame* FrameFifo::getFrame() {
     return NULL;
   }
   
-  tmpframe=this->stack[0]; // take a pointer to frame from the pre-allocated stack
+  // tmpframe=this->stack[0]; // take a pointer to frame from the pre-allocated stack
+  tmpframe=this->stack.front();
   this->stack.pop_front(); // .. remove that pointer from the stack
   
   return tmpframe;
@@ -160,15 +161,18 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) { // take a frame from the stack,
   }
   */
   
-  tmpframe=this->stack[0]; // take a pointer to frame from the pre-allocated stack
+  // tmpframe=this->stack[0]; // take a pointer to frame from the pre-allocated stack
+  tmpframe=this->stack.front();
   this->stack.pop_front(); // .. remove that pointer from the stack
   
+  /* this is done by the copy-assignment down there..
   // at this stage, resize the used stack frame to target size
   if (tmpframe->payload.capacity()<target_size) { // if frame payload not large enough, make it bigger
     queuelogger.log(LogLevel::debug) << "FrameFifo: "<<name<<" writeCopy: resizing stack element from "<< tmpframe->payload.capacity() << " to "<< target_size <<std::endl;
     tmpframe->payload.reserve(target_size);
   }
   // .. we could additionally run through the stack and resize all elements there
+  */
   
   *(tmpframe)=*(f); // a copy-assignment of objects (not pointers) makes a deep copy in our case (see the comments in the Frame class) .. actually, this should resize the payload capacity as well..
   this->fifo.push_front(tmpframe);
@@ -240,6 +244,7 @@ void FrameFifo::recycle(Frame* f) {
   std::unique_lock<std::mutex> lk(this->mutex);
   target_size=std::max(target_size,f->payload.capacity()); // update target_size 
   f->reset();
+  f->payload.reserve(target_size);  //  "If new_cap is greater than the current capacity(), new storage is allocated, otherwise the method does nothing."
   stack.push_front(f); 
   this->ready_condition.notify_one(); // TODO: release wait lock
   

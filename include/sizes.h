@@ -56,8 +56,9 @@ enum PayloadSizes {
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024*100, ///< Default buffer size in Live555 for h264
   DEFAULT_PAYLOAD_SIZE_H264       = 1024*300, ///< Default buffer size in Live555 for h264 // debug
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024*10,  ///< Default buffer size in Live555 for h264 // debug
+  // DEFAULT_PAYLOAD_SIZE_H264       = 1024, // use this small value for debugging
   DEFAULT_PAYLOAD_SIZE_PCMU       = 1024,    ///< Default buffer size in Live555 for pcmu
-  DEFAULT_FRAME_FIFO_PAYLOAD_SIZE = 1024*30  ///< Fifo buffers are this size by default
+  DEFAULT_FRAME_FIFO_PAYLOAD_SIZE = 1024*300,  ///< Fifo buffers are this size by default
   // DEFAULT_FRAME_FIFO_PAYLOAD_SIZE = 1024*300  ///< Fifo buffers are this size by default // debug
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024*10,  ///< Fifo buffers are this size by default // debug
 };

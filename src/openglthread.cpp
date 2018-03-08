@@ -223,7 +223,7 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
     // planesize =(frame->av_frame->height)*(frame->av_frame->linesize[0]);
     
 #ifdef PRESENT_VERBOSE
-    std::cout << "OpenGLFrameFifo: prepareAVFrame:  av_frame->height, av_frame->linesize[0], planesize "<< frame->av_frame->height << " " << frame->av_frame->linesize[0] << " " << planesize <<std::endl;
+    std::cout << "OpenGLFrameFifo: prepareAVFrame:  av_frame->height, av_frame->linesize[0], planesize "<< frame->av_frame->height << " " << frame->av_frame->linesize[0] << std::endl;
     std::cout << "OpenGLFrameFifo: prepareAVFrame:  payload: "<< int(frame->av_frame->data[0][0]) << " " << int(frame->av_frame->data[1][0]) << " " << int(frame->av_frame->data[2][0]) << std::endl;
 #endif
     
@@ -450,7 +450,7 @@ void SlotContext::activate(GLsizei w, GLsizei h, YUVShader* shader) {//Allocate 
   }
   this->shader=shader;
   opengllogger.log(LogLevel::crazy) << "SlotContext: activate: activating for w, h " << w << " " << h << " " << std::endl;
-  yuvtex=new YUVTEX(w, h);
+  yuvtex=new YUVTEX(w, h); // valgrind_debug protected
   // shader=new YUVShader(); // nopes..
   active=true;
 }
@@ -476,18 +476,10 @@ void SlotContext::loadTEX(YUVPBO* pbo, long int mstimestamp) {
   prev_mstimestamp=mstimestamp
 #endif
   
-  loadYUVTEX(pbo, this->yuvtex);
-  // this->pbo=pbo; // nopes ..
+  loadYUVTEX(pbo, this->yuvtex); // valgrind_debug protected
 }
-
-/*
-void SlotContext::loadTEX() {
-  loadYUVTEX(this->pbo, this->yuvtex);
-}
-*/
   
 
-// RenderContext::RenderContext(Shader *shader, const YUVTEX &yuvtex, const unsigned int z) : shader(shader), yuvtex(yuvtex), z(z) {
 RenderContext::RenderContext(const SlotContext &slot_context, unsigned int z) : slot_context(slot_context), z(z), active(false) {
   // https://learnopengl.com/#!Getting-started/Textures
   // https://www.khronos.org/opengl/wiki/Vertex_Specification
@@ -508,9 +500,12 @@ RenderContext::RenderContext(const SlotContext &slot_context, unsigned int z) : 
 
 RenderContext::~RenderContext() {
   if (active) {
+#ifdef VALGRIND_GPU_DEBUG
+#else
     glDeleteBuffers(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
+#endif
   }
 }
 
@@ -560,9 +555,9 @@ bool RenderContext::activate() {
   };
   indices_size=sizeof(GLuint)*indices.size();
   
-  
   // std::cout << "SIZEOF: " << sizeof(vertices) << " " << vertices_size << std::endl; // eh.. its the same
-  
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
   glGenBuffers(1, &EBO);
@@ -589,6 +584,7 @@ bool RenderContext::activate() {
   glEnableVertexAttribArray(shader->texcoord); // this refers to (location=1) in the shader program
   
   glBindVertexArray(0); // Unbind VAO
+#endif
   
   return true;
 }
@@ -619,7 +615,7 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
     shader->use(); // use the shader
     this->x_window_attr=x_window_attr;
     
-    bindTextures();
+    bindTextures(); // valgrind_debug protected
     
 #ifdef OPENGL_TIMING
   swaptime=mstime; mstime=getCurrentMsTimestamp();
@@ -628,7 +624,7 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
   }
 #endif
   
-    bindVars();
+    bindVars(); // valgrind_debug protected
     
 #ifdef OPENGL_TIMING
   swaptime=mstime; mstime=getCurrentMsTimestamp();
@@ -637,7 +633,7 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
   }
 #endif
     
-    bindVertexArray();
+    bindVertexArray(); // valgrind_debug protected
     
 #ifdef OPENGL_TIMING
   swaptime=mstime; mstime=getCurrentMsTimestamp();
@@ -666,6 +662,8 @@ void RenderContext::bindTextures() {// Associate textures with the shader progra
   
   // slot_context.loadTEX(); // not necessary
   
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, yuvtex->y_index);
   glUniform1i(shader->texy, 0); // pass variable to shader
@@ -677,6 +675,7 @@ void RenderContext::bindTextures() {// Associate textures with the shader progra
   glActiveTexture(GL_TEXTURE2);
   glBindTexture(GL_TEXTURE_2D, yuvtex->v_index);
   glUniform1i(shader->texv, 2); // pass variable to shader
+#endif
 }
 
 
@@ -720,7 +719,10 @@ void RenderContext::bindVars() {// Upload other data to the GPU (say, transforma
     {0.0f,             0.0f,             0.0f,   1.0f}
   };
   */
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glUniformMatrix4fv(shader->transform, 1, GL_FALSE, transform.data());
+#endif
 }
 
 
@@ -734,9 +736,12 @@ void RenderContext::bindVertexArray() {// Bind the vertex array and draw
   long int dt=getCurrentMsTimestamp();
 #endif
   
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
+#endif
   
 #ifdef TIMING_VERBOSE
   dt=getCurrentMsTimestamp()-dt;
@@ -841,10 +846,12 @@ void RenderGroup::render() {
   std::cout << "RenderGroup: render: window w, h " <<x_window_attr.width<<" "<<x_window_attr.height<<std::endl;
 #endif
   
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glFinish(); // TODO: debugging
-  
   glViewport(0, 0, x_window_attr.width, x_window_attr.height);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear the screen and the depth buffer
+#endif
   
   for(std::list<RenderContext>::iterator it=render_contexes.begin(); it!=render_contexes.end(); ++it) {
     it->render(x_window_attr);
@@ -862,7 +869,10 @@ void RenderGroup::render() {
 #ifdef PRESENT_VERBOSE
     std::cout << "RenderGroup: render: swapping buffers "<<std::endl;
 #endif
+#ifdef VALGRIND_GPU_DEBUG
+#else
     glXSwapBuffers(display_id, child_id);
+#endif
   }
   
   // glFlush();
@@ -1575,7 +1585,10 @@ void OpenGLThread::reserveFrames() {
     it->frametype  =FrameType::yuvframe;
     it->yuv_pars   ={BitmapPars::N4K::type};
   }
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glFinish();
+#endif
   
   /*
   for(auto it=infifo.reservoir_audio.begin(); it!=infifo.reservoir_audio.end(); ++it) {
@@ -1602,7 +1615,10 @@ void OpenGLThread::releaseFrames() {
     delete it->yuvpbo;
     it->reset();
   }
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glFinish();
+#endif
 }
 
 
@@ -1621,6 +1637,7 @@ void OpenGLThread::initGLX() {
     
   /* Request a suitable framebuffer configuration - try for a double buffered configuration first */
   this->doublebuffer_flag=true;
+  
   this->fbConfigs = glXChooseFBConfig(this->display_id,DefaultScreen(this->display_id),glx_attr::doubleBufferAttributes,&numReturned);
   // MEMORY LEAK when running with valgrind, see: http://stackoverflow.com/questions/10065849/memory-leak-using-glxcreatecontext
   
@@ -1637,6 +1654,8 @@ void OpenGLThread::initGLX() {
     opengllogger.log(LogLevel::fatal) << "OpenGLThread: initGLX: WARNING! no GLX framebuffer configuration" << std::endl;
   }
 
+#ifdef VALGRIND_GPU_DEBUG
+#else
   this->glc=glXCreateNewContext(this->display_id,this->fbConfigs[0],GLX_RGBA_TYPE,NULL,True);
   if (!this->glc) {
     opengllogger.log(LogLevel::fatal) << "OpenGLThread: initGLX: FATAL! Could not create glx context"<<std::endl; 
@@ -1649,12 +1668,15 @@ void OpenGLThread::initGLX() {
   // glXSwapIntervalEXT(0); // we dont have this..
   // PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");  // Set the glxSwapInterval to 0, ie. disable vsync!  khronos.org/opengl/wiki/Swap_Interval
   // glXSwapIntervalEXT(display_id, root_id, 0);  // glXSwapIntervalEXT(0); // not here ..
-  
+#endif
 }
 
 
 void OpenGLThread::makeCurrent(Window window_id) {
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glXMakeCurrent(this->display_id, window_id, this->glc);
+#endif
 }
 
 
@@ -1674,7 +1696,10 @@ int OpenGLThread::hasCompositor(int screen) {
 
 void OpenGLThread::closeGLX() {
   XFree(this->fbConfigs);
+#ifdef VALGRIND_GPU_DEBUG
+#else
   glXDestroyContext(this->display_id, this->glc);
+#endif
   XCloseDisplay(this->display_id);
 }
 
@@ -1790,8 +1815,11 @@ Window OpenGLThread::createWindow(bool map, bool show) {
   XSetWindowAttributes swa;
   
   // this->vi  =glXChooseVisual(this->display_id, 0, this->att); // "visual parameters" of the X window
+#ifdef VALGRIND_GPU_DEBUG
+  // DefaultVisual(display_id, DefaultScreen(display_id));
+  win_id=XCreateSimpleWindow(this->display_id, this->root_id, 10, 10, 600, 600, 2, 2, 0);
+#else
   this->vi =glXGetVisualFromFBConfig( this->display_id, this->fbConfigs[0] ); // another way to do it ..
-  
   swa.colormap   =XCreateColormap(this->display_id, this->root_id, (this->vi)->visual, AllocNone);
   // swa.event_mask =ExposureMask | KeyPressMask;
   swa.event_mask =NoEventMask;
@@ -1799,6 +1827,7 @@ Window OpenGLThread::createWindow(bool map, bool show) {
   // swa.event_mask =ExposureMask|KeyPressMask|KeyReleaseMask|ButtonPressMask|ButtonReleaseMask|StructureNotifyMask;
   
   win_id =XCreateWindow(this->display_id, this->root_id, 0, 0, 600, 600, 0, vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
+#endif
   
   XStoreName(this->display_id, win_id, "test window");
   if (map) {
