@@ -167,6 +167,9 @@ void getPBO(GLuint& index, GLsizei size, GLubyte*& payload) { // modify pointer 
   
   glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER); // release pointer to mapping buffer ** MANDATORY **
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0); // unbind ** MANDATORY **
+  
+  glFinish();
+  glFlush();
 }
 
 void releasePBO(GLuint* index, GLubyte* payload) {
@@ -281,7 +284,6 @@ void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex) {
 }
 
 
-// YUVPBO::YUVPBO(GLsizei size) : size(size) {
 YUVPBO::YUVPBO(BitmapType bmtype) : bmtype(bmtype) {
   switch(bmtype) {
     case (BitmapPars::N720::type): {
@@ -356,11 +358,32 @@ void YUVPBO::upload(GLsizei y_planesize, GLsizei u_planesize, GLsizei v_planesiz
   // GLsizei i;
   // i=std::min(isize,size); // (isize=requested planesize)  <=  (size=planesize of this YUVPBO)
   // memcpy(pbo->y_payload, y, 1); // debugging
+    
+#ifdef PRESENT_VERBOSE
+  std::cout << "YUVPBO: upload: ptr       ="<< (long unsigned)y_payload << " " << (long unsigned)u_payload << " " << (long unsigned)v_payload << " "<< std::endl;
+  std::cout << "YUVPBO: upload: planesize ="<< y_planesize << " " << u_planesize << " " << v_planesize << " "<< std::endl;
+  std::cout << "YUVPBO: upload: size      ="<< y_size << " " << u_size << " " << v_size << " "<< std::endl;
+#endif
+  ///*
   memcpy(y_payload, y, std::min(y_planesize,y_size));
-  // /*
   memcpy(u_payload, u, std::min(u_planesize,u_size)); 
   memcpy(v_payload, v, std::min(v_planesize,v_size));
-  // */
+  //*/
+  /* // debugging
+  memcpy(y_payload, y, 1);
+  memcpy(u_payload, u, 1); 
+  memcpy(v_payload, v, 1);
+  */
+  /*
+  GLubyte a,b,c;
+  a=0; b=0; c=0;
+  memcpy(y_payload, &a, 1);
+  memcpy(u_payload, &b, 1); 
+  memcpy(v_payload, &c, 1);
+  */
+#ifdef PRESENT_VERBOSE
+  std::cout << "YUVPBO: upload: done" << std::endl;
+#endif
 }
 
 
