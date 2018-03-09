@@ -81,25 +81,36 @@ Frame* OpenGLFrameFifo::getFrame(BitmapType bmtype) {
 
 
 Frame* OpenGLFrameFifo::getFrame_(BitmapType bmtype) {
-  // std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
   // .. no mutex protecting here!  This is used by writeCopy that is also mutex protected => stall
   Frame* tmpframe;
   std::deque<Frame*>* tmpstack; // alias
   
   switch(bmtype) {
     case (BitmapPars::N720::type): {
+#ifdef LOAD_VERBOSE
+  std::cout << "OpenGLFrameFifo: getFrame_: returning 720p" << std::endl;
+#endif
       tmpstack=&stack_720p;
       break;
     }
     case (BitmapPars::N1080::type): {
+#ifdef LOAD_VERBOSE
+  std::cout << "OpenGLFrameFifo: getFrame_: returning 1080p" << std::endl;
+#endif
       tmpstack=&stack_1080p;
       break;
     }
     case (BitmapPars::N1440::type): {
+#ifdef LOAD_VERBOSE
+  std::cout << "OpenGLFrameFifo: getFrame_: returning 1440p" << std::endl;
+#endif
       tmpstack=&stack_1440p;
       break;
     }
     case (BitmapPars::N4K::type): {
+#ifdef LOAD_VERBOSE
+  std::cout << "OpenGLFrameFifo: getFrame_: returning 4K" << std::endl;
+#endif
       tmpstack=&stack_4K;
       break;
     }
@@ -115,7 +126,8 @@ Frame* OpenGLFrameFifo::getFrame_(BitmapType bmtype) {
     return NULL;
   }
   
-  tmpframe=(*tmpstack)[0]; // take a pointer to frame from the pre-allocated stack
+  // tmpframe=(*tmpstack)[0]; // take a pointer to frame from the pre-allocated stack
+  tmpframe=tmpstack->front();
   tmpstack->pop_front(); // .. remove that pointer from the stack
   
   return tmpframe;
@@ -222,7 +234,7 @@ Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is
     
     // planesize =(frame->av_frame->height)*(frame->av_frame->linesize[0]);
     
-#ifdef PRESENT_VERBOSE
+#ifdef LOAD_VERBOSE
     std::cout << "OpenGLFrameFifo: prepareAVFrame:  av_frame->height, av_frame->linesize[0], planesize "<< frame->av_frame->height << " " << frame->av_frame->linesize[0] << std::endl;
     std::cout << "OpenGLFrameFifo: prepareAVFrame:  payload: "<< int(frame->av_frame->data[0][0]) << " " << int(frame->av_frame->data[1][0]) << " " << int(frame->av_frame->data[2][0]) << std::endl;
 #endif
@@ -289,7 +301,7 @@ bool OpenGLFrameFifo::writeCopy(Frame* f, bool wait) {
     this->fifo.push_front(tmpframe);
     ++(this->count);
     
-#ifdef PRESENT_VERBOSE
+#ifdef LOAD_VERBOSE
     std::cout << "OpenGLFrameFifo: writeCopy: count=" << this->count << " frame="<<*tmpframe<<std::endl;
 #endif
     
@@ -351,7 +363,7 @@ void OpenGLFrameFifo::recycle(Frame* f) {// Return Frame f back into the stack. 
   }
   */
   
-#ifdef PRESENT_VERBOSE
+#ifdef LOAD_VERBOSE
   std::cout << "OpenGLFrameFifo: recycle: recycling frame "<<*f<<std::endl;
 #endif
   // reportStacks_();
@@ -819,7 +831,7 @@ void RenderGroup::render() {
 #ifdef PRESENT_VERBOSE
   std::cout << "RenderGroup: " << std::endl;
   std::cout << "RenderGroup: start rendering!" << std::endl;
-  std::cout << "RenderGroup: render: display, window_id, child_id" <<display_id<<" "<<window_id<<" "<<child_id << std::endl;
+  std::cout << "RenderGroup: render: display, window_id, child_id " <<display_id<<" "<<window_id<<" "<<child_id << std::endl;
 #endif
   
   // glFlush();
@@ -1562,6 +1574,8 @@ void OpenGLThread::sendSignalAndWait(SignalContext signal_ctx) {
 
 
 void OpenGLThread::reserveFrames() {
+  dummyframe =new YUVPBO(BitmapPars::N720::type);
+  
   for(auto it=infifo.reservoir_720p.begin(); it!=infifo.reservoir_720p.end(); ++it) {
     opengllogger.log(LogLevel::crazy) << "OpenGLThread: reserveFrames: reserving YUVPBO with size "<< BitmapPars::N720::size << std::endl;
     it->yuvpbo     =new YUVPBO(BitmapPars::N720::type);
@@ -1599,6 +1613,8 @@ void OpenGLThread::reserveFrames() {
 
 
 void OpenGLThread::releaseFrames() {
+  delete dummyframe;
+  
   for(auto it=infifo.reservoir_720p.begin(); it!=infifo.reservoir_720p.end(); ++it) {
     delete it->yuvpbo;
     it->reset();

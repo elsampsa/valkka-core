@@ -338,6 +338,7 @@ protected: // Variables related to X11 and GLX.  Initialized by initGLX.
   XVisualInfo*  vi;
   GLXFBConfig*  fbConfigs;
   Colormap      cmap;
+  YUVPBO        *dummyframe;    ///< A PBO membuf which we reserve from the GPU as the first membuf, but is never used (this stabilizes GPU direct memory access)
   
   std::vector<SlotContext>              slots_;        ///< index => SlotContext mapping (based on vector indices)
   std::map<Window, RenderGroup>         render_groups; ///< window_id => RenderGroup mapping.  RenderGroup objects are warehoused here.

@@ -543,7 +543,7 @@ void test_6() {
 
 void test_7() {
   const char* name = "@TEST: opengl_thread_test: test 7: ";
-  std::cout << name <<"** @@OpenGLThread live rendering.  Short time. **" << std::endl;
+  std::cout << name <<"** @@OpenGLThread live rendering.  Short time 4 secs. **" << std::endl;
   
   if (!stream_1) {
     std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
@@ -614,9 +614,8 @@ void test_7() {
   
   i=glthread.newRenderContextCall(1, window_id, 0);
   std::cout << "got render context id "<<i<<std::endl;
-  sleep_for(1s);
   
-  sleep_for(3s);
+  sleep_for(10s);
   // sleep_for(604800s); //one week
   
   glthread.delRenderContextCall(i);

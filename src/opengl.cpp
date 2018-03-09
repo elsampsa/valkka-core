@@ -170,9 +170,11 @@ void getPBO(GLuint& index, GLsizei size, GLubyte*& payload) { // modify pointer 
   
   glFinish();
   glFlush();
+  memset(payload, 0, size); // warm up the gpu memory..
 }
 
 void releasePBO(GLuint* index, GLubyte* payload) {
+  opengllogger.log(LogLevel::crazy) << "releasePBO: released " << (unsigned long)payload << std::endl;
   glDeleteBuffers(1, index);
 }
 
@@ -354,12 +356,13 @@ void YUVPBO::reserve() {
 
 
 void YUVPBO::upload(GLsizei y_planesize, GLsizei u_planesize, GLsizei v_planesize, GLubyte* y, GLubyte* u, GLubyte* v) {
-  // loadYUVPBO(YUVPBO* pbo, GLsizei size, GLubyte* y, GLubyte* u, GLubyte* v); // let's rewrite it here..
-  // GLsizei i;
-  // i=std::min(isize,size); // (isize=requested planesize)  <=  (size=planesize of this YUVPBO)
-  // memcpy(pbo->y_payload, y, 1); // debugging
-    
-#ifdef PRESENT_VERBOSE
+  // so, this was a big fight..
+  // it seems that when reserving PBO memory buffers from GPU, the first reserved memory buffer can be problematic
+  // quite sporadically, we get segfaults when touching on the first membuf
+  // for that reason, we reserve, in OpenGLThread, a dummy memory buffer (dummyframe).  That is the first memory segment
+  // we request from the GPU, but we never actually touch it
+  //
+#ifdef LOAD_VERBOSE
   std::cout << "YUVPBO: upload: ptr       ="<< (long unsigned)y_payload << " " << (long unsigned)u_payload << " " << (long unsigned)v_payload << " "<< std::endl;
   std::cout << "YUVPBO: upload: planesize ="<< y_planesize << " " << u_planesize << " " << v_planesize << " "<< std::endl;
   std::cout << "YUVPBO: upload: size      ="<< y_size << " " << u_size << " " << v_size << " "<< std::endl;
@@ -369,19 +372,22 @@ void YUVPBO::upload(GLsizei y_planesize, GLsizei u_planesize, GLsizei v_planesiz
   memcpy(u_payload, u, std::min(u_planesize,u_size)); 
   memcpy(v_payload, v, std::min(v_planesize,v_size));
   //*/
-  /* // debugging
+  /* //debugging
   memcpy(y_payload, y, 1);
   memcpy(u_payload, u, 1); 
   memcpy(v_payload, v, 1);
-  */
-  /*
+  /* //debugging
+  memset(y_payload, 0, 1);
+  memset(u_payload, 0, 1); 
+  memset(v_payload, 0, 1);
+  /* //debugging
   GLubyte a,b,c;
   a=0; b=0; c=0;
   memcpy(y_payload, &a, 1);
   memcpy(u_payload, &b, 1); 
   memcpy(v_payload, &c, 1);
   */
-#ifdef PRESENT_VERBOSE
+#ifdef LOAD_VERBOSE
   std::cout << "YUVPBO: upload: done" << std::endl;
 #endif
 }
