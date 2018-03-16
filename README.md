@@ -3,6 +3,16 @@
 ## Synopsis
 The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VSMAs) in Linux environment.  The idea is to be able create VSMA systems with graphical user interfaces (GUIs) using the combination of python3 and Qt (i.e. PyQt).
 
+## For the impatient
+
+Installation instructions, demo programs and API tutorial are available [here](https://elsampsa.github.io/valkka-examples/_build/html/intro.html)
+
+If you just want to use the API, no need to go further.
+
+If you are interested in the core development, keep on reading.
+
+## Why this library?
+
 Lets take a look at a typical VSMA programming architecture problem:
 - Stream H264 video from an IP camera using the RTSP protocol
 - Branch that stream, and direct it to (1) filesystem and (2) a decoder
@@ -25,8 +35,6 @@ Using Valkka, you can instantiate threads, and define how media streams are bran
                   +--> [DecoderThread] --->| 
                   |                        | (branch 2)  
                   +--> Filesystem          +------> [OpenGLThread] -- > X window system
-
-Check out the API teaser in the end of this document.
              
 Some key features of the Valkka library are:
 - Python3 API: create process topologies from python3 only.
@@ -41,33 +49,23 @@ Some key features of the Valkka library are:
   - Arbitrary geometry transformations : think of fisheye spheres, etc.
   - And much more .. !
 - Two-level API.  Level 1 is simply swig-wrapped cpp.  Level 2 is higher level and makes development even easier.
+- For an overview of technical details, see [docu](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
 
-See also the list of (latest) features below.
-
-## For the impatient
-- You need to install two pre-built packages from [here](https://www.dropbox.com/sh/cx3uutbavp2cqpa/AAC_uDh-plu0Oo50r_klYPEXa?dl=0)
-- Install the debian (.deb) package with: 
-
-      sudo dpkg -i package_name
-      sudo apt-get -f install
-    
-- Install python3 binary package (.whl) with: 
-
-      pip3 install --upgrade package_name
-
-- Download python3 examples from "valkka-examples" [repository](https://github.com/elsampsa/valkka-examples).
-- Benchmarking and testing Valkka is done with the api level 2 programs at the "valkka-examples" repository (see that repo for more instructions).
-- See Valkka cpp [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
 
 ## Features
 
-### Current stable version is 0.3.0
+### Current stable version is 0.3.5
+0.3.5 Version : "10 x 1080p cameras running for a week"
+- Stable!  GPU direct memory access needed rubbing in the right way
+- Lots of fixes ..
+- Reading / writing from/to matroska container
+
+### Older versions
+
 0.3.0 Version name : "It was all about the vblank"
 - Several full-HD cameras now streaming OK
 - Interoperability with python multiprocesses (and from there, with OpenCV)
 - For benchmarking, testing and demos see the "valkka-examples" repository
-
-### Older versions
 
 0.2.1 Version
 - License change (to APGL)
@@ -83,12 +81,6 @@ See also the list of (latest) features below.
 0.1.0 Version name : "Proof of concept"
 - Initial git commit: core system, live streaming to X-window system
 
-### Features coming soon
-- Composite "video in video"
-- Writing to matroska files
-- Reading from matroska files
-- Audio reproduction
-
 ### Long term goals
 - Interserver communication and stream proxying
 - ValkkaFS filesystem, saving and searching video stream
@@ -97,11 +89,7 @@ See also the list of (latest) features below.
 ### Very long term goals
 - A complete VSMA system
 
-## Compile and deploy
-
-A word of warning: if you just want to use the API, no need to go further
-
-However, if you have decided to develop Valkka and build it from source, here are the instructions:
+## Compile yourself
 
 ### Dependencies
 
@@ -180,107 +168,3 @@ GClements
 This software is licensed under the GNU Affero General Public License (AGPL) v3 or later.
 
 If you need a different license arrangement, please contact us.
-
-## Appendum.  API Teaser
-
-Api level 2 teaser:
-
-- Connect to an rtsp camera
-- Decode the stream once, and only once from H264 into YUV
-- Redirect the YUV stream into two branches:
-- Branch 1 goes into GPU, where YUV => RGB interpolation is done 25-30 fps.  The final bitmap is shown in multiple windows
-- Branch 2 is interpolated from YUV => RGB once in a second on the CPU and into a small size.  This small sized image is then passed over shared memory to opencv running in python.
-
-Code:
-
-    import sys
-    import time
-    import cv2
-    from valkka.api2.threads import LiveThread, OpenGLThread, ShmemClient
-    from valkka.api2.chains import BasicFilterchain, ShmemFilterchain
-
-    address="rtsp://admin:123456@192.168.0.134"
-
-    livethread=LiveThread(         # starts live stream services (using live555)
-      name   ="live_thread",
-      verbose=False
-      )
-
-    openglthread=OpenGLThread(     # starts frame presenting services
-      name    ="mythread",
-      n720p   =10,  # reserve stacks of YUV video frames for various resolutions
-      n1080p  =10,
-      n1440p  =0,
-      n4K     =0,
-      naudio  =10,
-      verbose =False
-      )
-
-    # now livethread and openglthread are running
-
-    chain=ShmemFilterchain(       # decoding and branching the stream happens here
-      livethread  =livethread, 
-      openglthread=openglthread,
-      address     =address,
-      slot        =1,
-      # this filterchain creates a shared memory server
-      shmem_name             ="testing",
-      shmem_image_dimensions =(1920//4,1080//4),  # Images passed over shmem are quarter of the full-hd reso
-      shmem_image_interval   =1000,               # YUV => RGB interpolation to the small size is done each 1000 milliseconds and passed on to the shmem ringbuffer
-      shmem_ringbuffer_size  =10                  # Size of the shmem ringbuffer
-      )
-
-    # Let's create some x windows
-    win_id1 =openglthread.createWindow()
-    win_id2 =openglthread.createWindow()
-    win_id3 =openglthread.createWindow()
-
-    # Map video stream to three windowses
-    token1  =openglthread.connect(slot=1,window_id=win_id1) # map slot 1 to win_id1.  Frames are interpolated from YUV to RGB at the GPU
-    token2  =openglthread.connect(slot=1,window_id=win_id2)
-    token3  =openglthread.connect(slot=1,window_id=win_id3)
-      
-    name, n_buffer, n_bytes =chain.getShmemPars()
-    print("name, n_buffer, n_bytes",name,n_buffer,n_bytes)
-
-    # let's create a shared memory client
-    client=ShmemClient(
-      name          =name,       # e.g. "testing"
-      n_ringbuffer  =n_buffer,   # 10
-      n_bytes       =n_bytes,    # size of the RGB image
-      mstimeout     =1000,       # client timeouts if nothing has been received in 1000 milliseconds
-      verbose       =False
-      )
-      
-    chain.decodingOn() # tell the decoding thread to start its job
-      
-    # All the threads are running at the c-level, so there is no GIL problems here.. now, let's start doing stuff in python:
-    t=time.time()
-    while True:
-      index, isize = client.pull()
-      if (index==None):
-        print("Client timed out..")
-      else:
-        print("Client index, size =",index, isize)
-        data=client.shmem_list[index]
-        # print(">>>",data[0:10])
-        img=data.reshape((1080//4,1920//4,3))
-        cv2.imshow("openCV_window",img); cv2.waitKey(1) # Let's hope your OpenCV high-gui works
-      if ( (time.time()-t)>=20 ): break # exit after 20 secs
-      
-    print("bye!")
-      
-    # that ShmemClient could be instantiated from a forked or even an independent python process, and this would still work as long as you
-    # use same name for ShmemClient: name and ShmemFilterchain: shmem_name.  It's named and shared posix memory and semaphores.
-
-    openglthread.disconnect(token1)
-    openglthread.disconnect(token2)
-    openglthread.disconnect(token3)
-      
-    # garbage collection takes care of stopping threads etc.
-
-
-
-
-
-
