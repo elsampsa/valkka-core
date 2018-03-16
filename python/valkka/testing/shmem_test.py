@@ -25,7 +25,7 @@ shmem_test.py : Clone of the client side test of "shmem_test.cpp"
 @file    shmem_test.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.3.0 
+@version 0.3.5 
   
 @brief Clone of the client side test of "shmem_test.cpp" : launch "shmem_test 3 0" from the cpp side and after that, this python3 program
 """

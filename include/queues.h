@@ -28,7 +28,7 @@
  *  @file    queues.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.0 
+ *  @version 0.3.5 
  *  
  *  @brief Lockable and safe queues for multithreading
  *

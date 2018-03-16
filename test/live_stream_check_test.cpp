@@ -26,7 +26,7 @@
  *  @file    live_stream_check_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.0 
+ *  @version 0.3.5 
  *  
  *  @brief Dumping packets and decoded frames to disk
  *

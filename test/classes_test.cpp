@@ -26,7 +26,7 @@
  *  @file    classes_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.0 
+ *  @version 0.3.5 
  *  
  *  @brief Run tests on the classes: instatiation, copy-construction, etc.
  *

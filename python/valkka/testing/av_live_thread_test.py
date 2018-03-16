@@ -25,7 +25,7 @@ av_live_thread_test.py : Cloning some of the stuff in "av_live_thread_test.cpp"
 @file    av_live_thread_test.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.3.0 
+@version 0.3.5 
   
 @brief Cloning some of the stuff in "av_live_thread_test.cpp"
 """
