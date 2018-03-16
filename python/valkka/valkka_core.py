@@ -1258,6 +1258,28 @@ class ForkFrameFilter(FrameFilter):
 ForkFrameFilter_swigregister = _valkka_core.ForkFrameFilter_swigregister
 ForkFrameFilter_swigregister(ForkFrameFilter)
 
+class ForkFrameFilter3(FrameFilter):
+    __swig_setmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ForkFrameFilter3, name, value)
+    __swig_getmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ForkFrameFilter3, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, next=None, next2=None, next3=None):
+        this = _valkka_core.new_ForkFrameFilter3(name, next, next2, next3)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_ForkFrameFilter3
+    __del__ = lambda self: None
+ForkFrameFilter3_swigregister = _valkka_core.ForkFrameFilter3_swigregister
+ForkFrameFilter3_swigregister(ForkFrameFilter3)
+
 class SlotFrameFilter(FrameFilter):
     __swig_setmethods__ = {}
     for _s in [FrameFilter]:

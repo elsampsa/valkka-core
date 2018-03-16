@@ -108,7 +108,7 @@ public: // <pyapi>
    * @param name        Name of the ring buffer.  This name is used as unique identifier for the posix semaphores and shmem segments.  Don't use weird characters.
    * @param n_cells     Number of cells in the ring buffer
    * @param n_bytes     Size of each ring buffer cell in bytes
-   * @param mstimeout   Semaphore timeout in milliseconds.  SharedMemRingBuffer::clientPull returns after this many milliseconds even if data was not received.
+   * @param mstimeout   Semaphore timeout in milliseconds.  SharedMemRingBuffer::clientPull returns after this many milliseconds even if data was not received.  Default 0 = waits forever.
    * @param is_server   Set this to true if you are starting this from the server multiprocess
    * 
    * 

@@ -333,7 +333,7 @@ BlockingFifoFrameFilter::BlockingFifoFrameFilter(const char* name, FrameFifo& fr
 };
 
 void BlockingFifoFrameFilter::go(Frame* frame) {
-  std::cout << "BlockingFifoFrameFilter: go" << std::endl;
+  // std::cout << "BlockingFifoFrameFilter: go" << std::endl;
   framefifo.writeCopy(frame,true);
   /*
   

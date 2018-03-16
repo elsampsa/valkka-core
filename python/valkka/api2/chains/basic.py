@@ -212,7 +212,8 @@ class ShmemFilterchain(BasicFilterchain):
       self.shmem_name ="shmemff"+self.idst
     
     # dimensions of the rgb image
-    print(self.pre,self.shmem_name)
+    # print(self.pre,self.shmem_name)
+    
     self.n_bytes =self.shmem_image_dimensions[0]*self.shmem_image_dimensions[1]*3
     n_buf   =self.shmem_ringbuffer_size
     
@@ -221,15 +222,17 @@ class ShmemFilterchain(BasicFilterchain):
     # print(self.shmem_name)
     self.shmem_filter    =core.SharedMemFrameFilter    (self.shmem_name, n_buf, self.n_bytes) # shmem id, cells, bytes per cell # TODO: fix std::size_t in the swig wrapper
     # self.shmem_filter    =core.InfoFrameFilter         ("info"+self.idst) # debug
-    self.interval_filter =core.TimeIntervalFrameFilter ("interval_filter"+self.idst, self.shmem_image_interval, self.shmem_filter)
-    self.sws_filter      =core.SwScaleFrameFilter      ("sws_filter"+self.idst, self.shmem_image_dimensions[0], self.shmem_image_dimensions[1], self.interval_filter)
+    
+    self.sws_filter      =core.SwScaleFrameFilter      ("sws_filter"+self.idst, self.shmem_image_dimensions[0], self.shmem_image_dimensions[1], self.shmem_filter)
+    self.interval_filter =core.TimeIntervalFrameFilter ("interval_filter"+self.idst, self.shmem_image_interval, self.sws_filter)
     
     # branch 1
     self.gl_fifo         =self.openglthread.core.getFifo()
     self.gl_in_filter    =core.FifoFrameFilter    ("gl_in_filter"+self.idst,self.gl_fifo)
     
     # fork
-    self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.sws_filter) # WARNING! TODO: shouldn't this feed the interval filter!?!?
+    # self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.sws_filter) # FIX
+    self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.interval_filter)
     
     # main branch
     # [av_fifo] -->> (avthread) --> {gl_in_filter}

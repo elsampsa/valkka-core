@@ -49,6 +49,9 @@ class BasicFilterchain1:
   i.e. the stream is decoded by an AVThread and sent to the OpenGLThread for presentation
   
   LiveConnectionContext and FileContext are managed by the user
+  
+  Differet to BasicFilterChain: has a file context
+  
   """
   
   parameter_defs={
@@ -243,18 +246,24 @@ class ShmemFilterchain1(BasicFilterchain1):
     
     # branch 2
     # print(self.pre,"using shmem name",self.shmem_name)
-    # print(self.shmem_name)
+    # print(self.pre,self.shmem_name)
+    
     self.shmem_filter    =core.SharedMemFrameFilter    (self.shmem_name, n_buf, self.n_bytes) # shmem id, cells, bytes per cell # TODO: fix std::size_t in the swig wrapper
     # self.shmem_filter    =core.InfoFrameFilter         ("info"+self.idst) # debug
-    self.interval_filter =core.TimeIntervalFrameFilter ("interval_filter"+self.idst, self.shmem_image_interval, self.shmem_filter)
-    self.sws_filter      =core.SwScaleFrameFilter      ("sws_filter"+self.idst, self.shmem_image_dimensions[0], self.shmem_image_dimensions[1], self.interval_filter)
+    
+    # self.interval_filter =core.TimeIntervalFrameFilter ("interval_filter"+self.idst, self.shmem_image_interval, self.shmem_filter) # FIX
+    # self.sws_filter      =core.SwScaleFrameFilter      ("sws_filter"+self.idst, self.shmem_image_dimensions[0], self.shmem_image_dimensions[1], self.interval_filter) # FIX
+    
+    self.sws_filter      =core.SwScaleFrameFilter      ("sws_filter"+self.idst, self.shmem_image_dimensions[0], self.shmem_image_dimensions[1], self.shmem_filter)
+    self.interval_filter =core.TimeIntervalFrameFilter ("interval_filter"+self.idst, self.shmem_image_interval, self.sws_filter)
     
     # branch 1
     self.gl_fifo         =self.openglthread.core.getFifo()
     self.gl_in_filter    =core.FifoFrameFilter    ("gl_in_filter"+self.idst,self.gl_fifo)
     
     # fork
-    self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.sws_filter)
+    # self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.sws_filter) # FIX
+    self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.interval_filter)
     
     # main branch
     # [av_fifo] -->> (avthread) --> {gl_in_filter}
@@ -267,6 +276,7 @@ class ShmemFilterchain1(BasicFilterchain1):
     self.av_in_filter    =core.FifoFrameFilter    ("av_in_filter"+self.idst,   self.av_fifo)
     # self.live_out_filter =core.InfoFrameFilter    ("live_out_filter"+self.idst,self.av_in_filter) # for printing out every encoded frame, enable this and disable the next line ..
     self.live_out_filter =self.av_in_filter
+
 
     
   def getShmemPars(self):

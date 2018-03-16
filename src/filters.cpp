@@ -82,7 +82,37 @@ void ForkFrameFilter::run(Frame* frame) {
 
 
 void ForkFrameFilter::go(Frame* frame) {
- filterlogger.log(LogLevel::debug) << "ForkFrameFilter : "<< this->name << " : got frame : " << *(frame) << std::endl;
+ // filterlogger.log(LogLevel::debug) << "ForkFrameFilter : "<< this->name << " : got frame : " << *(frame) << std::endl;
+}
+
+
+
+ForkFrameFilter3::ForkFrameFilter3(const char* name, FrameFilter* next, FrameFilter* next2, FrameFilter* next3) : FrameFilter(name,next), next2(next2), next3(next3) {
+}
+
+void ForkFrameFilter3::run(Frame* frame) {
+  // std::cout << "ForkFrameFilter: run" << std::endl;
+  this->go(frame); // manipulate frame
+  if (!this->next) {
+    }
+  else {
+    (this->next)->run(frame);
+  }
+  if (!this->next2) {
+    }
+  else {
+    (this->next2)->run(frame);
+  }
+  if (!this->next3) {
+    }
+  else {
+    (this->next3)->run(frame);
+  }
+}
+
+
+void ForkFrameFilter3::go(Frame* frame) {
+ // filterlogger.log(LogLevel::debug) << "ForkFrameFilter : "<< this->name << " : got frame : " << *(frame) << std::endl;
 }
 
 
@@ -203,13 +233,11 @@ void TimestampFrameFilter2::go(Frame* frame) {
 
 
 
-
 RepeatH264ParsFrameFilter::RepeatH264ParsFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next) {
 }
 
 void RepeatH264ParsFrameFilter::go(Frame* frame) {// TODO
 }
-
 
 
 

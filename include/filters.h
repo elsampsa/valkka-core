@@ -92,6 +92,35 @@ public:
 }; // <pyapi>
 
 
+/** Replicates frame flow to three filters
+ * Use this frame filter to create frame filter tree structures
+ * @ingroup filters_tag
+ */
+class ForkFrameFilter3 : public FrameFilter { // <pyapi>
+  
+public: // <pyapi>
+  /** @copydoc FrameFilter::FrameFilter
+   * 
+   *  @param next2 Yet another next FrameFilter instance to be applied in the chain
+   *  @param next3 Still yet another next FrameFilter instance to be applied in the chain
+   * 
+   */
+  ForkFrameFilter3(const char* name, FrameFilter* next=NULL, FrameFilter* next2=NULL, FrameFilter* next3=NULL); // <pyapi>
+
+protected:
+  FrameFilter* next2;
+  FrameFilter* next3;
+
+protected:
+  void go(Frame* frame);
+  
+public:
+  void run(Frame* frame); 
+}; // <pyapi>
+
+
+
+
 /** Sets the frame slot value
  * @ingroup filters_tag
  */

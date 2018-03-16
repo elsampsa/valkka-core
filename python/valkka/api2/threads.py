@@ -360,10 +360,15 @@ class ShmemClient:
   
 class ValkkaProcess(Process):
   """
-  Frontend: the part of the forked process that keeps running in the curren virtual memory space
-  Backend : the part of the forked process that runs in its own virtual memory space
+  Semantics:
   
-  This class has frontend methods, that you should only call from frontend, and backend methods that are called only from the backend
+  Frontend: the part of the forked process that keeps running in the current, user virtual memory space
+  Backend : the part of the forked process that runs in its own virtual memory space (e.g. "in the background")
+  
+  This class has both backend and frontend methods:
+  
+  - Backend methods should only be called from backend.  They are designated with "_".
+  - Frontend methods should only be called from frontend
   
   To avoid confusion, backend methods are designated with "_", except for the "run()" method, that's always in the backend
   

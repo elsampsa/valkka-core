@@ -145,7 +145,6 @@ void test_4() {
       break; 
     }
     for(i=0;i<inp;++i) {
-      // index=rb.clientPull();
       ok=rb.clientPull(index, n);
       if (ok) {
         // n=rb.shmems[index]->getSize();
@@ -176,7 +175,7 @@ void test_6() { // open two terminals.  Start this from first terminal and test_
   std::cout << name <<"** @@Test ShmemFrameFilter **" << std::endl;
   
   Frame *f = new Frame;
-  SharedMemFrameFilter shmem          ("testing", 10, 1024*1024*30);
+  SharedMemFrameFilter shmem("testing", 10, 1024*1024*30);
   // SharedMemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout)
   
   int inp, cc, i, index;
