@@ -2,7 +2,8 @@
 <area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="5,81,68,108"/>
 <area shape="rect" id="node3" href="$classRGBShader.html" title="RGBShader" alt="" coords="92,81,184,108"/>
 <area shape="rect" id="node4" href="$classShader.html" title="A general purpose shader class. " alt="" coords="165,5,228,32"/>
-<area shape="rect" id="node7" href="$classYUVShader.html" title="YUVShader" alt="" coords="209,81,299,108"/>
-<area shape="rect" id="node5" href="$classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. " alt="" coords="324,81,453,108"/>
-<area shape="rect" id="node6" href="$classFrameFifo.html" title="A thread&#45;safe FrameFifo (first&#45;in&#45;first&#45;out) queue with thread&#45;safe methods for inserting and popping..." alt="" coords="348,5,429,32"/>
+<area shape="rect" id="node8" href="$classYUVShader.html" title="YUVShader" alt="" coords="209,81,299,108"/>
+<area shape="rect" id="node5" href="$classYUVPBO.html" title="Encapsulates OpenGL PBOs (Pixel Buffer Objects) for a YUV420 image. " alt="" coords="324,81,403,108"/>
+<area shape="rect" id="node6" href="$classOpenGLFrameFifo.html" title="A FrameFifo with multiple stacks. " alt="" coords="427,81,556,108"/>
+<area shape="rect" id="node7" href="$classFrameFifo.html" title="A thread&#45;safe FrameFifo (first&#45;in&#45;first&#45;out) queue with thread&#45;safe methods for inserting and popping..." alt="" coords="451,5,532,32"/>
 </map>

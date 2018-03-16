@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.3.0</span>
+   &#160;<span id="projectnumber">0.3.5</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -255,7 +255,7 @@ struct timespec&#160;</td><td class="memItemRight" valign="bottom"><a class="el"
     <tr><td class="paramname">name</td><td>Name of the ring buffer. This name is used as unique identifier for the posix semaphores and shmem segments. Don't use weird characters. </td></tr>
     <tr><td class="paramname">n_cells</td><td>Number of cells in the ring buffer </td></tr>
     <tr><td class="paramname">n_bytes</td><td>Size of each ring buffer cell in bytes </td></tr>
-    <tr><td class="paramname">mstimeout</td><td>Semaphore timeout in milliseconds. <a class="el" href="classSharedMemRingBuffer.html#a7285c34c4732ba4633d16bbcfbc7c24c" title="Returns the index of SharedMemoryRingBuffer::shmems that was just written. ">SharedMemRingBuffer::clientPull</a> returns after this many milliseconds even if data was not received. </td></tr>
+    <tr><td class="paramname">mstimeout</td><td>Semaphore timeout in milliseconds. <a class="el" href="classSharedMemRingBuffer.html#a7285c34c4732ba4633d16bbcfbc7c24c" title="Returns the index of SharedMemoryRingBuffer::shmems that was just written. ">SharedMemRingBuffer::clientPull</a> returns after this many milliseconds even if data was not received. Default 0 = waits forever. </td></tr>
     <tr><td class="paramname">is_server</td><td>Set this to true if you are starting this from the server multiprocess </td></tr>
   </table>
   </dd>
