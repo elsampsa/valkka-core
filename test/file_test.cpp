@@ -80,16 +80,17 @@ void test_1() {
   std::cout << name << "playing stream !" << std::endl;
   livethread.playStreamCall(ctx);
   
-  sleep_for(2s);
+  // sleep_for(2s);
   
   std::cout << name << "writing to disk" << std::endl;
   file_out.activate("kokkelis.mkv");
   
-  sleep_for(60s);
+  sleep_for(5s);
   std::cout << name << "stop writing" << std::endl;
   
   file_out.deActivate();
   
+  /*
   std::cout << name << "writing to disk - again" << std::endl;
   file_out.activate("kokkelis2.mkv");
   
@@ -97,6 +98,7 @@ void test_1() {
   std::cout << name << "stop writing" << std::endl;
   
   file_out.deActivate();
+  */
   
   std::cout << name << "stopping threads" << std::endl;
   livethread.stopCall();  
@@ -497,6 +499,147 @@ void test_7() {
 }
 
 
+void test_8() {
+  const char* name = "@TEST: file_test: test 8: ";
+  std::cout << name <<"** @@Test FileFrameFilter: wrong file **" << std::endl;
+  
+  // *************
+  // filtergraph:
+  // (LiveThread:livethread) --> {FileFrameFilter:file_out}
+  
+  // InfoFrameFilter     out_filter  ("out");
+  FileFrameFilter     file_out    ("file_writer");
+  // InfoFrameFilter info        ("info",&file_out);       
+  LiveThread      livethread  ("livethread"); 
+  // *************
+  
+  bool verbose;
+  
+  std::cout << name << "starting threads" << std::endl;
+  livethread.startCall();
+  
+  sleep_for(2s);
+  
+  std::cout << name << "registering stream" << std::endl;
+  // LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info); // Request livethread to write into filter info
+  LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &file_out); // Request livethread to write into filter info
+  livethread.registerStreamCall(ctx);
+  
+  sleep_for(1s);
+  
+  std::cout << name << "playing stream !" << std::endl;
+  livethread.playStreamCall(ctx);
+  
+  // sleep_for(2s);
+  
+  std::cout << name << "writing to disk" << std::endl;
+  file_out.activate("/root/kokkelis.mkv");
+  
+  sleep_for(5s);
+  std::cout << name << "stop writing" << std::endl;
+  
+  file_out.deActivate();
+  
+  std::cout << name << "stopping threads" << std::endl;
+  livethread.stopCall();  
+}
+
+
+void test_9() {
+  const char* name = "@TEST: file_test: test 9: ";
+  std::cout << name <<"** @@Test FileFrameFilter: activate, deActivate **" << std::endl;
+  
+  // *************
+  // filtergraph:
+  // (LiveThread:livethread) --> {FileFrameFilter:file_out}
+  
+  // InfoFrameFilter     out_filter  ("out");
+  FileFrameFilter     file_out    ("file_writer");
+  // InfoFrameFilter info        ("info",&file_out);       
+  LiveThread      livethread  ("livethread"); 
+  // *************
+  
+  bool verbose;
+  
+  std::cout << name << "starting threads" << std::endl;
+  livethread.startCall();
+  
+  sleep_for(2s);
+  
+  std::cout << name << "registering stream" << std::endl;
+  // LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info); // Request livethread to write into filter info
+  LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &file_out); // Request livethread to write into filter info
+  livethread.registerStreamCall(ctx);
+  
+  sleep_for(1s);
+  
+  std::cout << name << "playing stream !" << std::endl;
+  livethread.playStreamCall(ctx);
+  
+  // sleep_for(2s);
+  
+  std::cout << name << "writing to disk" << std::endl;
+  file_out.activate("kokkelis.mkv");
+  
+  sleep_for(5s);
+  std::cout << name << "stop writing" << std::endl;
+  
+  file_out.deActivate();
+  
+  std::cout << name << "writing to disk - again" << std::endl;
+  file_out.activate("kokkelis2.mkv");
+  
+  sleep_for(10s);
+  std::cout << name << "stop writing" << std::endl;
+  
+  file_out.deActivate();
+  
+  std::cout << name << "stopping threads" << std::endl;
+  livethread.stopCall();  
+}
+
+
+void test_10() {
+  const char* name = "@TEST: file_test: test 10: ";
+  std::cout << name <<"** @@Test FileFrameFilter: dirty close **" << std::endl;
+  
+  // *************
+  // filtergraph:
+  // (LiveThread:livethread) --> {FileFrameFilter:file_out}
+  
+  // InfoFrameFilter     out_filter  ("out");
+  FileFrameFilter     file_out    ("file_writer");
+  // InfoFrameFilter info        ("info",&file_out);       
+  LiveThread      livethread  ("livethread"); 
+  // *************
+  
+  bool verbose;
+  
+  std::cout << name << "starting threads" << std::endl;
+  livethread.startCall();
+  
+  sleep_for(2s);
+  
+  std::cout << name << "registering stream" << std::endl;
+  // LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info); // Request livethread to write into filter info
+  LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &file_out); // Request livethread to write into filter info
+  livethread.registerStreamCall(ctx);
+  
+  sleep_for(1s);
+  
+  std::cout << name << "playing stream !" << std::endl;
+  livethread.playStreamCall(ctx);
+  
+  // sleep_for(2s);
+  
+  std::cout << name << "writing to disk" << std::endl;
+  file_out.activate("kokkelis.mkv");
+  
+  sleep_for(5s);
+  
+  std::cout << name << "stopping threads" << std::endl;
+  livethread.stopCall();  
+}
 
 
 int main(int argc, char** argcv) {
@@ -550,6 +693,15 @@ int main(int argc, char** argcv) {
         break; 
       case(7):
         test_7();
+        break; 
+      case(8):
+        test_8();
+        break; 
+      case(9):
+        test_9();
+        break;
+      case(10):
+        test_10();
         break; 
       default:
         std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;

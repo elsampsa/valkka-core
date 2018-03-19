@@ -272,6 +272,8 @@ ValkkaRTSPClient::~ValkkaRTSPClient() {
 
 
 void ValkkaRTSPClient::continueAfterDESCRIBE(RTSPClient* rtspClient, int resultCode, char* resultString) {
+  LiveStatus* livestatus = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
+  
   do {
     UsageEnvironment& env = rtspClient->envir(); // alias
     StreamClientState& scs = ((ValkkaRTSPClient*)rtspClient)->scs; // alias
@@ -308,7 +310,7 @@ void ValkkaRTSPClient::continueAfterDESCRIBE(RTSPClient* rtspClient, int resultC
   } while (0);
 
   // An unrecoverable error occurred with this stream.
-  shutdownStream(rtspClient);
+  shutdownStream(rtspClient); // sets *livestatus=LiveStatus::closed;
 }
 
 void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
@@ -316,6 +318,7 @@ void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
   UsageEnvironment& env    = rtspClient->envir();
   StreamClientState& scs   = ((ValkkaRTSPClient*)rtspClient)->scs;
   ValkkaRTSPClient* client = (ValkkaRTSPClient*)rtspClient;
+  LiveStatus* livestatus   = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
   bool ok_subsession_type = false;
   
   scs.subsession = scs.iter->next();
@@ -325,39 +328,48 @@ void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
   // CAM_EXCEPTION : UNV-1 : Some UNV cameras go crazy if you try to issue SETUP on the "metadata" subsession which they themselves provide
   // CAM_EXCEPTION : UNV-1 : I get "failed to setup subsession", which is ok, but when "PLAY" command is issued (not on the metadata subsession, but just to normal session) 
   // CAM_EXCEPTION : UNV-1 : we get "connection reset by peer" at continueAfterPlay
-  // ok_subsession_type = (strcmp(scs.subsession->mediumName(),"video")==0 or strcmp(scs.subsession->mediumName(),"audio")==0); // CAM_EXCEPTION : UNV-1
-  ok_subsession_type = true; // TODO: debug this..! why it crashes sometimes?
   
-  if (scs.subsession != NULL and ok_subsession_type) {
-    if (!scs.subsession->initiate()) {
-      livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << "Failed to initiate the \"" << *scs.subsession << "\" subsession: " << env.getResultMsg() << "\n";
-      setupNextSubsession(rtspClient); // give up on this subsession; go to the next one
-    } else {
-      livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: " << *rtspClient << " Initiated the \"" << *scs.subsession << "\" subsession (";
-      if (scs.subsession->rtcpIsMuxed()) {
-        livelogger.log(LogLevel::debug) << "client port " << scs.subsession->clientPortNum();
-      } else {
-        livelogger.log(LogLevel::debug) << "client ports " << scs.subsession->clientPortNum() << "-" << scs.subsession->clientPortNum()+1;
-      }
-      livelogger.log(LogLevel::debug) << ")\n";
+  if (scs.subsession != NULL) { // has subsession
+    
+    livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: handling subsession " << scs.subsession->mediumName() << std::endl;
+    ok_subsession_type = (strcmp(scs.subsession->mediumName(),"video")==0 or strcmp(scs.subsession->mediumName(),"audio")==0); // CAM_EXCEPTION : UNV-1
+    
+    if (ok_subsession_type) { // a decent subsession
+    
+      if (!scs.subsession->initiate()) {
+        livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << "Failed to initiate the \"" << *scs.subsession << "\" subsession: " << env.getResultMsg() << "\n";
+        setupNextSubsession(rtspClient); // give up on this subsession; go to the next one
+      } else { // subsession ok
+        livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: " << *rtspClient << " Initiated the \"" << *scs.subsession << "\" subsession (";
+        if (scs.subsession->rtcpIsMuxed()) {
+          livelogger.log(LogLevel::debug) << "client port " << scs.subsession->clientPortNum();
+        } else {
+          livelogger.log(LogLevel::debug) << "client ports " << scs.subsession->clientPortNum() << "-" << scs.subsession->clientPortNum()+1;
+        }
+        livelogger.log(LogLevel::debug) << ")\n";
 
-      // Continue setting up this subsession, by sending a RTSP "SETUP" command:
-      rtspClient->sendSetupCommand(*scs.subsession, continueAfterSETUP, False, client->request_tcp, client->request_multicast);
-      
-      /*
-      unsigned RTSPClient::sendSetupCommand 	( 	MediaSubsession &  	subsession,
-		responseHandler *  	responseHandler,
-		Boolean  	streamOutgoing = False,
-		Boolean  	streamUsingTCP = False,
-		Boolean  	forceMulticastOnUnspecified = False,
-		Authenticator *  	authenticator = NULL 
-	) 	
-      */
-      
+        // Continue setting up this subsession, by sending a RTSP "SETUP" command:
+        rtspClient->sendSetupCommand(*scs.subsession, continueAfterSETUP, False, client->request_tcp, client->request_multicast);
+        
+        /*
+        unsigned RTSPClient::sendSetupCommand 	( 	MediaSubsession &  	subsession,
+                  responseHandler *  	responseHandler,
+                  Boolean  	streamOutgoing = False,
+                  Boolean  	streamUsingTCP = False,
+                  Boolean  	forceMulticastOnUnspecified = False,
+                  Authenticator *  	authenticator = NULL 
+          ) 	
+        */
+        
+      } // subsession ok
     }
-    return;
-  }
-
+    else { // decent subsession
+      livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: discarded subsession " << scs.subsession->mediumName() << std::endl;
+      setupNextSubsession(rtspClient); // give up on this subsession; go to the next one
+    } // decent subsession
+    return; // we have either called this routine again with another subsession or sent a setup command
+  } // has subsession
+    
   // We've finished setting up all of the subsessions.  Now, send a RTSP "PLAY" command to start the streaming:
   if (scs.session->absStartTime() != NULL) {
     // Special case: The stream is indexed by 'absolute' time, so send an appropriate "PLAY" command:
@@ -369,6 +381,8 @@ void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
 }
 
 void ValkkaRTSPClient::continueAfterSETUP(RTSPClient* rtspClient, int resultCode, char* resultString) {
+  LiveStatus* livestatus = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
+  
   do {
     UsageEnvironment& env    = rtspClient->envir(); // alias
     StreamClientState& scs   = ((ValkkaRTSPClient*)rtspClient)->scs; // alias
@@ -469,6 +483,7 @@ void ValkkaRTSPClient::continueAfterPLAY(RTSPClient* rtspClient, int resultCode,
 void ValkkaRTSPClient::subsessionAfterPlaying(void* clientData) {
   MediaSubsession* subsession = (MediaSubsession*)clientData;
   RTSPClient* rtspClient = (RTSPClient*)(subsession->miscPtr);
+  LiveStatus* livestatus = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
 
   // Begin by closing this subsession's stream:
   Medium::close(subsession->sink);

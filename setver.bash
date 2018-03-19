@@ -28,6 +28,13 @@ sed -i -r "s/VERSION_MAJOR(.*);/VERSION_MAJOR = $1;/g" include/sizes.h
 sed -i -r "s/VERSION_MINOR(.*);/VERSION_MINOR = $2;/g" include/sizes.h
 sed -i -r "s/VERSION_PATCH(.*);/VERSION_PATCH = $3;/g" include/sizes.h
 
+echo
+echo Updating docs
+echo
+cd docs
+./make_doc.bash
+cd ..
+
 echo "Dont forget to use .."
 echo
 echo "first commit and push the code, then .."

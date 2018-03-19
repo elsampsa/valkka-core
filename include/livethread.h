@@ -170,10 +170,11 @@ public:
   
 public:
   virtual void playStream() =0;   ///< Called from within the live555 event loop
-  virtual void stopStream() =0;   ///< Called from within the live555 event loop
+  virtual void stopStream() =0;   ///< Stops stream and reclaims it resources.  Called from within the live555 event loop
   virtual void reStartStream();   ///< Called from within the live555 event loop
   virtual void reStartStreamIf(); ///< Called from within the live555 event loop
-  virtual bool hasStopped();      ///< Has the stream stopped or is it pending?
+  virtual bool isClosed();        ///< Have the streams resources been reclaimed after stopping it?
+  virtual void forceClose();      ///< Normally, stopStream reclaims the resources.  This one forces the delete.
   SlotNumber getSlot();           ///< Return the slot number
 };
 
@@ -228,7 +229,8 @@ public:
   void playStream();      ///< Uses ValkkaRTSPClient instance to initiate the RTSP negotiation
   void stopStream();      ///< Uses ValkkaRTSPClient instance to shut down the stream
   void reStartStreamIf(); ///< Restarts the stream if no frames have been received for a while
-  bool hasStopped();      ///< Has the stream stopped or is it pending
+  bool isClosed();        ///< Have the streams resources been reclaimed?
+  void forceClose();
 };
 
 
@@ -353,6 +355,7 @@ public: // redefined virtual functions
 protected:
   void handlePending();       ///< Try to close streams that were not properly closed (i.e. idling for the tcp socket while closing).  Used by LiveThread::periodicTask
   void checkAlive();          ///< Used by LiveThread::periodicTask
+  void closePending();        ///< Force close all pending connections
   void handleSignals();       ///< Handle pending signals in the signals queue.  Used by LiveThread::periodicTask
   void handleFrame(Frame* f); ///< Handle incoming frames.  See \ref live_streaming_page
   

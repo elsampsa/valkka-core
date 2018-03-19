@@ -34,7 +34,7 @@
 #include "file.h"
 
 
-FileFrameFilter::FileFrameFilter(const char *name, FrameFilter *next) : FrameFilter(name, next), active(false), initialized(false), mstimestamp0(0), zerotimeset(false) {
+FileFrameFilter::FileFrameFilter(const char *name, FrameFilter *next) : FrameFilter(name, next), active(false), initialized(false), mstimestamp0(0), zerotimeset(false), ready(false) {
   int i;
   // two substreams per stream
   contexes.   resize(2,NULL);
@@ -54,9 +54,28 @@ void FileFrameFilter::go(Frame* frame) {
   
   // make a copy of the setup frames ..
   if (frame->frametype==FrameType::setup) {
-    setupframes[frame->subsession_index]=frame; 
+    if (frame->subsession_index>1) {
+      filelogger.log(LogLevel::fatal) << "FileFrameFilter : too many subsessions! " << std::endl;
+    }
+    else {
+      filelogger.log(LogLevel::debug) << "FileFrameFilter :  go : got setup frame " << std::endl;
+      setupframes[frame->subsession_index]=frame; 
+    }
   }
-  else if (active) { // everything's ok! just write..
+  else if (!ready) {
+    if (setupframes[0] != NULL) { // we have got at least one setupframe and after that, something else (payload)
+      ready=true;
+    }
+  }
+  
+  if (ready and active and !initialized) { // got setup frames, writing has been requested, but file has not been opened yet
+    initFile(); // modifies member initialized
+    if (!initialized) { // can't init this file.. de-activate
+      deActivate_();
+    }
+  }
+  
+  if (initialized) { // everything's ok! just write..
     if (!zerotimeset) {
      mstimestamp0=frame->mstimestamp;
      zerotimeset=true;
@@ -65,42 +84,41 @@ void FileFrameFilter::go(Frame* frame) {
     if (dt<0) { dt=0; }
   
     filelogger.log(LogLevel::debug) << "FileFrameFilter : writing frame with mstimestamp " << dt << std::endl;
-    av_stream=streams[frame->subsession_index];
+    //av_stream=streams[frame->subsession_index];
     
     frame->useAVPacket(dt); // "mirror" data into AVPacket structure with a certain timestamp
     av_interleaved_write_frame(output_context,frame->avpkt);
   }
+  else {
+    // std::cout << "FileFrameFilter: go: discarding frame" << std::endl;
+  }
 }
     
-
-bool FileFrameFilter::activate(const char* fname, long int zerotime) {
-  std::unique_lock<std::mutex> lk(this->mutex);
+    
+void FileFrameFilter::initFile() {
   int i;
   AVCodecID codec_id;
-  bool initialized = false;
+  
+  initialized = false;
   
   // int avformat_alloc_output_context2 	( 	AVFormatContext **  	ctx, AVOutputFormat *  	oformat, const char *  	format_name, const char *  	filename ) 	
   // int avio_open 	( 	AVIOContext **  	s, const char *  	url, int  	flags ) 	
   // av_warn_unused_result int avformat_write_header 	( 	AVFormatContext *  	s, AVDictionary **  	options ) 	
   
-  if (active) {
-    deActivate();
-  }
-  
   // create output context, open files
   i=avformat_alloc_output_context2(&output_context, NULL, "matroska", NULL);
   if (!output_context) {
-    filelogger.log(LogLevel::fatal) << "FileFrameFilter : FATAL : could not create output context!  Have you enabled matroska and registered all codecs and muxers? " << std::endl;
+    filelogger.log(LogLevel::fatal) << "FileFrameFilter : initFile : FATAL : could not create output context!  Have you enabled matroska and registered all codecs and muxers? " << std::endl;
     avformat_free_context(output_context);
     exit(2);
   }
   
-  i=avio_open(&output_context->pb, fname, AVIO_FLAG_WRITE);  //|| AVIO_SEEKABLE_NORMAL);
+  i=avio_open(&output_context->pb, filename.c_str(), AVIO_FLAG_WRITE);  //|| AVIO_SEEKABLE_NORMAL);
   if (i < 0) {
-    filelogger.log(LogLevel::fatal) << "Could not open " << fname << std::endl;
+    filelogger.log(LogLevel::fatal) << "FileFrameFilter : initFile : could not open " << filename << std::endl;
     // av_err2str(i)
     avformat_free_context(output_context);
-    return false;
+    return;
   }
     
   // use the saved setup frames (if any) to set up the streams
@@ -113,15 +131,15 @@ bool FileFrameFilter::activate(const char* fname, long int zerotime) {
     switch ( (frame->setup_pars).frametype ) { // NEW_CODEC_DEV // when adding new codecs, make changes here: add relevant decoder per codec
       case FrameType::h264: // AV_CODEC_ID_H264
         codec_id =AV_CODEC_ID_H264;
-        filelogger.log(LogLevel::debug) << "FileFrameFilter : Initializing H264 at index " << frame->subsession_index << std::endl;
+        filelogger.log(LogLevel::debug) << "FileFrameFilter :  initFile : Initializing H264 at index " << frame->subsession_index << std::endl;
         break;
       case FrameType::pcmu:
         codec_id =AV_CODEC_ID_PCM_MULAW;
-        filelogger.log(LogLevel::debug) << "FileFrameFilter : Initializing PCMU at index " << frame->subsession_index << std::endl;
+        filelogger.log(LogLevel::debug) << "FileFrameFilter :  initFile : Initializing PCMU at index " << frame->subsession_index << std::endl;
         break;
       default:
         codec_id=AV_CODEC_ID_NONE;
-        filelogger.log(LogLevel::debug) << "FileFrameFilter : Could not init subsession " << frame->subsession_index << std::endl;
+        filelogger.log(LogLevel::debug) << "FileFrameFilter :  initFile : Could not init subsession " << frame->subsession_index << std::endl;
         break;
       }
       // AVCodecContext* avcodec_alloc_context3(const AVCodec * codec)
@@ -130,6 +148,9 @@ bool FileFrameFilter::activate(const char* fname, long int zerotime) {
       // int avcodec_parameters_from_context(AVCodecParameters * par, const AVCodecContext *  codec)
     
       if (codec_id!=AV_CODEC_ID_NONE) {
+        AVCodecContext *av_codec_context;
+        AVStream       *av_stream;
+        
         av_codec_context =avcodec_alloc_context3(avcodec_find_decoder(codec_id));
         av_codec_context->width =BitmapPars::N720::w; // dummy values .. otherwise mkv muxer refuses to co-operate
         av_codec_context->height=BitmapPars::N720::h;
@@ -139,29 +160,29 @@ bool FileFrameFilter::activate(const char* fname, long int zerotime) {
         
         i=avcodec_parameters_from_context(av_stream->codecpar,av_codec_context);
         
+        // std::cout << "FileFrameFilter : initFile : context and stream " << std::endl;
         contexes[frame->subsession_index] =av_codec_context;
         streams [frame->subsession_index] =av_stream;
-        
         initialized =true; // so, at least one substream init'd
       }
     } // got setupframe
   }
   
   if (!initialized) {
-    return false;
+    return;
   }
+  
+  // contexes, streams, output_context reserved !
   
   i=avformat_write_header(output_context, NULL);
   if (i < 0) {
-    filelogger.log(LogLevel::fatal) << "Error occurred when opening output file " << fname << std::endl;
+    filelogger.log(LogLevel::fatal) << "FileFrameFilter :  initFile : Error occurred when opening output file " << filename << std::endl;
     // av_err2str(i)
-    avformat_free_context(output_context);
-    return false;
+    closeFile();
+    return;
   }
   
   // so far so good ..
-  active       =true;
-  // mstimestamp0 =getCurrentMsTimestamp(); // nopes
   if (zerotime>0) { // user wants to set time reference explicitly and not from first arrived packet ..
     mstimestamp0=zerotime;
     zerotimeset=true;
@@ -169,25 +190,63 @@ bool FileFrameFilter::activate(const char* fname, long int zerotime) {
   else {
     zerotimeset=false;
   }
-  filename     =std::string(fname);
-  return true;
+}
+
+
+void FileFrameFilter::closeFile() {
+ if (initialized) {
+   // std::cout << "FileFrameFilter: closeFile" << std::endl;
+   avio_closep(&output_context->pb);
+   avformat_free_context(output_context);
+   for (auto it=contexes.begin(); it!=contexes.end(); ++it) {
+      if (*it!=NULL) {
+        // std::cout << "FileFrameFilter: closeFile: context " << (long unsigned)(*it) << std::endl;
+        avcodec_close(*it);
+        avcodec_free_context(&*it);
+       *it=NULL;
+      }
+  }
+  for (auto it=streams.begin(); it!=streams.end(); ++it) {
+    if (*it!=NULL) {
+      // std::cout << "FileFrameFilter: closeFile: stream" << std::endl;
+      // eh.. nothing needed here.. enough to call close on the context
+      *it=NULL;
+    }
+  }
+ }
+ initialized=false;
+}
+
+
+void FileFrameFilter::deActivate_() {
+  if (initialized) {
+    av_write_trailer(output_context);
+    closeFile();
+  }
+  
+  active=false;
+}
+
+    
+void FileFrameFilter::activate(const char* fname, long int zerotime) {
+  std::unique_lock<std::mutex> lk(this->mutex);
+  if (active) {
+    deActivate_();
+  }
+  
+  filelogger.log(LogLevel::debug) << "FileFrameFilter :  activate : requested for " << fname << std::endl;
+  this->filename  =std::string(fname);
+  this->zerotime  =zerotime;
+  this->active    =true;
 }  
 
   
-
 void FileFrameFilter::deActivate() {
   std::unique_lock<std::mutex> lk(this->mutex);
-  int i;
   
-  if (active) {
-    av_write_trailer(output_context);
-    for(auto it=contexes.begin(); it!=contexes.end(); ++it) {
-      i=avcodec_close(*it);
-    }
-    avio_closep(&output_context->pb);
-    active=false;
-    avformat_free_context(output_context);
-  }
+  // std::cout << "FileFrameFilter: deActivate:" << std::endl;
+  deActivate_();
+  // std::cout << "FileFrameFilter: deActivate: bye" << std::endl;
 }
   
 

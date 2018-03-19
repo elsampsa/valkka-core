@@ -104,7 +104,9 @@ Frame::~Frame() {
   if (!avpkt) {
   }
   else {
+    // std::cout << "Frame: freeing AVPacket" << std::endl;
     av_free_packet(avpkt);
+    delete avpkt;
   }
 }
 
@@ -229,8 +231,8 @@ void Frame::fillPars() {
 void Frame::useAVPacket(long int pts) {
   if (!avpkt) {
     avpkt= new AVPacket();
-    av_init_packet(avpkt);
   }
+  av_init_packet(avpkt);
   
   avpkt->data =payload.data();
   avpkt->size =payload.size();

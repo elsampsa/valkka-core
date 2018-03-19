@@ -135,15 +135,21 @@ public:
 };
 
 
-/** Statuses for the ValkkaRTSPClient
+/** Status for the ValkkaRTSPClient
+ * 
+ * The problem:
+ * 
+ * When shutdownStream is called, the ValkkaRTSPClient will be reclaimed/annihilated (within the event loop).  If that has happened, we shouldn't touch it anymore..
+ * 
+ * If we have called shutdownStream outside the sendDESCRIBECommand etc. callback cascade that's registered in the live555 event loop, then the live555 event loop might try to access an annihilated client
  * 
  * @ingroup live_tag
  */
 enum class LiveStatus {
-  none,
-  pending,
-  alive,
-  closed
+  none,          ///< Client has not been initialized
+  pending,       ///< Client's been requested to send the describe command.  This might hang for several reasons: camera offline, internet connection lost, etc.  If we annihilate ValkkaRTSPClient, the callbacks in the event loop might still try to use it..  "pending" connections should be closed only at event loop exit
+  alive,         ///< Client has succesfully started playing
+  closed         ///< Client has been closed and Medium::close has been called on the MediaSession, etc.  This is done by shutdownStream (which sets livestatus to LiveStatus::closed).  ValkkaRTSPClient has been annihilated!
 };
 
 

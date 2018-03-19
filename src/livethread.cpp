@@ -116,8 +116,11 @@ SlotNumber Connection::getSlot() {
   return ctx.slot;
 };
 
-bool Connection::hasStopped() {
+bool Connection::isClosed() {
   return true;
+}
+
+void Connection::forceClose() {
 }
 
 
@@ -282,10 +285,13 @@ void RTSPConnection::reStartStreamIf() {
   }
 }
 
-bool RTSPConnection::hasStopped() {
+bool RTSPConnection::isClosed() { // not pending or playing
  return (livestatus==LiveStatus::closed or livestatus==LiveStatus::none); // either closed or not initialized at all
 }
 
+void RTSPConnection::forceClose() {
+  ValkkaRTSPClient::shutdownStream(client, 1);
+}
 
 
 //SDPConnection::SDPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter) : Connection(env, address, slot, framefilter, 0) {};
@@ -478,14 +484,24 @@ void LiveThread::handlePending() {
     if (connection->is_playing) { // this has been scheduled for termination, without calling stop stream
       connection->stopStream();
     }
-    if (connection->hasStopped()) {
-      livethreadlogger.log(LogLevel::crazy) << "LiveThread: handlePending: deleting a stopped stream at slot " << connection->getSlot() << std::endl;
+    if (connection->isClosed()) {
+      livethreadlogger.log(LogLevel::crazy) << "LiveThread: handlePending: deleting a closed stream at slot " << connection->getSlot() << std::endl;
       it=pending.erase(it);
       delete connection;
     }
     else {
       it++;
     }
+  }
+}
+
+
+void LiveThread::closePending() { // call only after handlePending
+  Connection* connection;
+  for (auto it=pending.begin(); it!=pending.end(); ++it) {
+    connection=*it;
+    connection->forceClose();
+    delete connection;
   }
 }
 
@@ -686,7 +702,7 @@ void LiveThread::deregisterStream(LiveConnectionContext &connection_ctx) {
       if (connection->is_playing) {
         connection->stopStream();
       }
-      if (!connection->hasStopped()) { // didn't stop .. queue for stopping
+      if (!connection->isClosed()) { // didn't close correctly .. queue for stopping
         pending.push_back(connection);
       }
       else {
@@ -785,16 +801,24 @@ void LiveThread::periodicTask(void* cdata) {
   
   // std::cout << "LiveThread: periodicTask: pending streams " << livethread->pending.size() << std::endl;
   
+  // stopCall => handleSignals => loop over deregisterStream => stopStream
+  // if isClosed, then delete the connection, otherwise put into the pending list
+  
   if (livethread->pending.empty() and livethread->exit_requested) {
     livethread->eventLoopWatchVariable=1;
+  }
+  else if (livethread->exit_requested) { // tried really hard to close everything in a clean way .. but sockets etc. might still be hanging 
+    livethreadlogger.log(LogLevel::crazy) << "LiveThread: periodicTask: closePending" << std::endl;
+    livethread->closePending(); // eh.. we really hope the eventloop just exits and does nothing else: some ValkkaRTSPClient pointers have been nulled and these might be used in the callbacks
+    livethread->eventLoopWatchVariable=1; 
   }
   
   if (!livethread->exit_requested) {
     livethread->checkAlive();
     livethread->handleSignals(); // WARNING: sending commands to live555 must be done within the event loop
-  }
   
-  livethread->scheduler->scheduleDelayedTask(Timeouts::livethread*1000,(TaskFunc*)(LiveThread::periodicTask),(void*)livethread); // re-schedule itself
+    livethread->scheduler->scheduleDelayedTask(Timeouts::livethread*1000,(TaskFunc*)(LiveThread::periodicTask),(void*)livethread); // re-schedule itself
+  }
 }
 
 

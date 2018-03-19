@@ -77,9 +77,11 @@ public: // <pyapi>
   ~FileFrameFilter();                                                     // <pyapi>
   
 protected:
-  bool active;
-  bool initialized;
+  bool active;                       ///< Writing to file has been requested (but not necessarily achieved..)
+  bool ready;                        ///< Got enough setup frames
+  bool initialized;                  ///< File was opened ok : contexes, streams and output_context reserved (should be freed at some point)
   long int mstimestamp0;             ///< Time of activation (i.e. when the recording started)
+  long int zerotime;                 ///< Start time set explicitly by the user
   bool zerotimeset;
   std::string filename;
   AVRational timebase;
@@ -87,19 +89,26 @@ protected:
   std::mutex              mutex;     ///< Mutex protecting the "active" boolean
   std::condition_variable condition; ///< Condition variable for the mutex
   
+  /*
   AVCodecContext                *av_codec_context;  ///< temp variable
   AVStream                      *av_stream;         ///< temp variable
+  */
+  
   std::vector<AVCodecContext*>  contexes;
   std::vector<AVStream*>        streams;
-  std::vector<Frame*>           setupframes;
   AVFormatContext               *output_context;
+  
+  std::vector<Frame*>           setupframes;
   
 protected:
   void go(Frame* frame);
+  void initFile();           ///< Open file, reserve contexes, streams, write preamble, set initialized=true if success
+  void closeFile();          ///< Close file, dealloc contexes, streams
+  void deActivate_();
   
 public: // API calls                                                                         // <pyapi>
   // setFileName(const char* fname); ///< Sets the output filename                           // <pyapi>
-  bool activate(const char* fname, long int zerotime=0);       ///< Starts streaming to disk // <pyapi>
+  void activate(const char* fname, long int zerotime=0);       ///< Request streaming to disk asap (when config frames have arrived) // <pyapi>
   void deActivate();                                           ///< Stop streaming to disk   // <pyapi>
 };                                                                                           // <pyapi>
 
