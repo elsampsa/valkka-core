@@ -26,7 +26,7 @@
  *  @file    doc.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief Extra doxygen documentation
  *
@@ -315,6 +315,8 @@
  * Sending frames happens roughly as follows:
  *
  *- LiveFifo has a reference to the associated LiveThread
+ * 
+ *- Let's remember that calls to LiveFifo::writeCopy are done outside the running LiveThread that's sending frames.  Typically by FifoFrameFilter.
  *
  *- LiveFifo::writeCopy calls LiveThread::triggerGotFrames which triggers an event using the scheduler and the triggerEvent method (this is the only allowed way to launch events outside the live555 event loop)
  *

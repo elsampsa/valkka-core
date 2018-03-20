@@ -26,7 +26,7 @@
  *  @file    fifo_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief Testing fifo classes.  Compile with "make tests" and run with valgrind
  *

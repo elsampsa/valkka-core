@@ -1,0 +1,8 @@
+<map id="LiveThread::readFrameFifoTask" name="LiveThread::readFrameFifoTask">
+<area shape="rect" id="node2" href="$classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4" title="Print a resumen of fifo and stack usage. " alt="" coords="273,5,417,32"/>
+<area shape="rect" id="node3" href="$classFrameFifo.html#a37e3264d8b8f8a787cd305c79e568645" title="Tell if fifo is empty. " alt="" coords="276,56,413,83"/>
+<area shape="rect" id="node4" href="$classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64" title="Pop a frame from the end of the fifo and return the frame to the reservoir stack. ..." alt="" coords="287,107,402,133"/>
+<area shape="rect" id="node5" href="$classLiveThread.html#a88b224ee73f6c63b4c073eb23351e806" title="Handle incoming frames. See Live streaming. " alt="" coords="260,157,429,184"/>
+<area shape="rect" id="node6" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="477,157,608,184"/>
+<area shape="rect" id="node7" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="656,157,752,184"/>
+</map>

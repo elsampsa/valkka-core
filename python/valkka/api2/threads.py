@@ -25,7 +25,7 @@ threads.py : api level 1 => api level 2 encapsulation for LiveThread and OpenGLT
 @file    threads.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.3.5 
+@version 0.3.6 
   
 @brief api level 1 => api level 2 encapsulation for LiveThread and OpenGLThread
 """
@@ -212,7 +212,7 @@ class OpenGLThread:
     # this is the "api-level 1" object.  Just a swig-wrapped cpp instance.
     self.core=valkka_core.OpenGLThread(self.name, self.n720p, self.n1080p, self.n1440p, self.n4K, self.msbuftime, self.affinity)
     
-    self.render_groups =[] # list of registered x windowses
+    self.render_groups =[] # list of registered x windows
     self.render_counts =[] # how many slots are mapped per each x window
     self.tokens        =[] # unique tokens identifying the slot => x window mappings
     self.token_to_group=[] # gives group corresponding to each token by token index

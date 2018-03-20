@@ -26,7 +26,7 @@
  *  @file    live.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  @brief Interface to live555
  * 
  *  Acknowledgements: Ross Finlayson for his advice

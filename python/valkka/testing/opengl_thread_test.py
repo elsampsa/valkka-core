@@ -25,7 +25,7 @@ opengl_thread_test.py : Cloning some of the stuff in "opengl_thread_test.cpp"
 @file    opengl_thread_test.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.3.5 
+@version 0.3.6 
   
 @brief Cloning some of the stuff in "opengl_thread_test.cpp"
 """

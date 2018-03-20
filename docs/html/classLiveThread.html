@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.3.5</span>
+   &#160;<span id="projectnumber">0.3.6</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -192,9 +192,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLiveThread.html#a8bf29dca7c0c50741bcbe1525dc78499">registerOutboundCall</a> (<a class="el" href="structLiveOutboundContext.html">LiveOutboundContext</a> &amp;outbound_ctx)</td></tr>
 <tr class="memdesc:a8bf29dca7c0c50741bcbe1525dc78499"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: register outbound stream // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:a8bf29dca7c0c50741bcbe1525dc78499"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe6a9223994d1079242102eb61794fcf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe6a9223994d1079242102eb61794fcf"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>deRegisterOutboundCall</b> (<a class="el" href="structLiveOutboundContext.html">LiveOutboundContext</a> &amp;outbound_ctx)</td></tr>
-<tr class="separator:abe6a9223994d1079242102eb61794fcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c8f86130eaa8c2c68898a2f74de03f2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c8f86130eaa8c2c68898a2f74de03f2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLiveThread.html#a3c8f86130eaa8c2c68898a2f74de03f2">deregisterOutboundCall</a> (<a class="el" href="structLiveOutboundContext.html">LiveOutboundContext</a> &amp;outbound_ctx)</td></tr>
+<tr class="memdesc:a3c8f86130eaa8c2c68898a2f74de03f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: deregister outbound stream // &lt;pyapi&gt; <br /></td></tr>
+<tr class="separator:a3c8f86130eaa8c2c68898a2f74de03f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c79ca363b7b578099303e8905dbb0a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1c79ca363b7b578099303e8905dbb0a4"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLiveThread.html#a1c79ca363b7b578099303e8905dbb0a4">stopCall</a> ()</td></tr>
 <tr class="memdesc:a1c79ca363b7b578099303e8905dbb0a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: stops the <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> // &lt;pyapi&gt; <br /></td></tr>
@@ -249,9 +250,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLiveThread.html#a3da513578a82adf0d121e6b134fd6f52">gotFramesEvent</a> (void *clientData)</td></tr>
 <tr class="memdesc:a3da513578a82adf0d121e6b134fd6f52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Triggered when an empty fifo gets a frame. Schedules readFrameFifoTask. See <a class="el" href="live_streaming_page.html">Live streaming</a>. <br /></td></tr>
 <tr class="separator:a3da513578a82adf0d121e6b134fd6f52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e68caeedbc0166262a833003059e147"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e68caeedbc0166262a833003059e147"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLiveThread.html#a2e68caeedbc0166262a833003059e147">readFrameFifoTask</a> (void *clientData)</td></tr>
-<tr class="memdesc:a2e68caeedbc0166262a833003059e147"><td class="mdescLeft">&#160;</td><td class="mdescRight">This task registers itself if there are frames in the fifo. <br /></td></tr>
+<tr class="memitem:a2e68caeedbc0166262a833003059e147"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLiveThread.html#a2e68caeedbc0166262a833003059e147">readFrameFifoTask</a> (void *clientData)</td></tr>
+<tr class="memdesc:a2e68caeedbc0166262a833003059e147"><td class="mdescLeft">&#160;</td><td class="mdescRight">This task registers itself if there are frames in the fifo.  <a href="#a2e68caeedbc0166262a833003059e147">More...</a><br /></td></tr>
 <tr class="separator:a2e68caeedbc0166262a833003059e147"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
@@ -264,6 +264,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLiveThread.html#a39ea8a235a429002345797a6ae900113">checkAlive</a> ()</td></tr>
 <tr class="memdesc:a39ea8a235a429002345797a6ae900113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by <a class="el" href="classLiveThread.html#a8b53c829a1a8ec8a004d9e0df3e5e6c8" title="Used to (re)schedule LiveThread methods into the live555 event loop. ">LiveThread::periodicTask</a>. <br /></td></tr>
 <tr class="separator:a39ea8a235a429002345797a6ae900113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1df392961ac29623d27a50ed4d81d986"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1df392961ac29623d27a50ed4d81d986"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLiveThread.html#a1df392961ac29623d27a50ed4d81d986">closePending</a> ()</td></tr>
+<tr class="memdesc:a1df392961ac29623d27a50ed4d81d986"><td class="mdescLeft">&#160;</td><td class="mdescRight">Force close all pending connections. <br /></td></tr>
+<tr class="separator:a1df392961ac29623d27a50ed4d81d986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a369dac81c6bff35ab2d8ecfd014f084c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a369dac81c6bff35ab2d8ecfd014f084c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLiveThread.html#a369dac81c6bff35ab2d8ecfd014f084c">handleSignals</a> ()</td></tr>
 <tr class="memdesc:a369dac81c6bff35ab2d8ecfd014f084c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle pending signals in the signals queue. Used by <a class="el" href="classLiveThread.html#a8b53c829a1a8ec8a004d9e0df3e5e6c8" title="Used to (re)schedule LiveThread methods into the live555 event loop. ">LiveThread::periodicTask</a>. <br /></td></tr>
@@ -400,9 +404,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>playStream</b> (<a cl
 <tr class="memitem:a668abb7b82d1b91ed3d90eac86596b7d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a668abb7b82d1b91ed3d90eac86596b7d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>registerOutbound</b> (<a class="el" href="structLiveOutboundContext.html">LiveOutboundContext</a> &amp;outbound_ctx)</td></tr>
 <tr class="separator:a668abb7b82d1b91ed3d90eac86596b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90f24f40397189ea71a298104db4b02a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a90f24f40397189ea71a298104db4b02a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>deRegisterOutbound</b> (<a class="el" href="structLiveOutboundContext.html">LiveOutboundContext</a> &amp;outbound_ctx)</td></tr>
-<tr class="separator:a90f24f40397189ea71a298104db4b02a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70675db8eeb6ba52a3e7bb71eaa24c55"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a70675db8eeb6ba52a3e7bb71eaa24c55"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>deregisterOutbound</b> (<a class="el" href="structLiveOutboundContext.html">LiveOutboundContext</a> &amp;outbound_ctx)</td></tr>
+<tr class="separator:a70675db8eeb6ba52a3e7bb71eaa24c55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfd3a093cafcbe625963fed79e104e70"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acfd3a093cafcbe625963fed79e104e70"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>stopStream</b> (<a class="el" href="structLiveConnectionContext.html">LiveConnectionContext</a> &amp;connection_ctx)</td></tr>
 <tr class="separator:acfd3a093cafcbe625963fed79e104e70"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -488,26 +492,29 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classLiveThread_ad3e0d8287d1db92b823cb0a195ada491_cgraph.png" border="0" usemap="#classLiveThread_ad3e0d8287d1db92b823cb0a195ada491_cgraph" alt=""/></div>
 <map name="classLiveThread_ad3e0d8287d1db92b823cb0a195ada491_cgraph" id="classLiveThread_ad3e0d8287d1db92b823cb0a195ada491_cgraph">
-<area shape="rect" id="node2" href="classLiveThread.html#a8b53c829a1a8ec8a004d9e0df3e5e6c8" title="Used to (re)schedule LiveThread methods into the live555 event loop. " alt="" coords="223,81,391,108"/>
-<area shape="rect" id="node6" href="classConnection.html#ae1c3d8e91e7b1c61fe25b6905de703ee" title="Return the slot number. " alt="" coords="729,157,867,184"/>
-<area shape="rect" id="node10" href="classLiveThread.html#a0a374111f6c52e81f9d2eb56eddc613b" title="For testing/debugging. " alt="" coords="213,208,402,235"/>
-<area shape="rect" id="node11" href="classLiveThread.html#a3af76255f7009cc8b0f298844651221e" title="For debugging. " alt="" coords="470,243,638,285"/>
-<area shape="rect" id="node15" href="classLiveThread.html#a3da513578a82adf0d121e6b134fd6f52" title="Triggered when an empty fifo gets a frame. Schedules readFrameFifoTask. See Live streaming. " alt="" coords="212,309,403,336"/>
-<area shape="rect" id="node19" href="classLiveThread.html#a1c79ca363b7b578099303e8905dbb0a4" title="API method: stops the LiveThread // &lt;pyapi&gt; " alt="" coords="236,360,379,387"/>
-<area shape="rect" id="node3" href="classLiveThread.html#ac550d907150700624d8dc410d50ba7ce" title="Try to close streams that were not properly closed (i.e. idling for the tcp socket while closing)..." alt="" coords="465,107,643,133"/>
-<area shape="rect" id="node7" href="classLiveThread.html#a39ea8a235a429002345797a6ae900113" title="Used by LiveThread::periodicTask. " alt="" coords="475,5,633,32"/>
-<area shape="rect" id="node9" href="classLiveThread.html#a369dac81c6bff35ab2d8ecfd014f084c" title="Handle pending signals in the signals queue. Used by LiveThread::periodicTask. " alt="" coords="467,56,641,83"/>
-<area shape="rect" id="node4" href="classConnection.html#a6a9401592f545c1be8de892afefada4b" title="Called from within the live555 event loop. " alt="" coords="717,107,879,133"/>
-<area shape="rect" id="node5" href="classConnection.html#afb9ef6ffffb25c7a819b36d10a92d084" title="Has the stream stopped or is it pending? " alt="" coords="715,56,881,83"/>
-<area shape="rect" id="node8" href="classConnection.html#a74e26cf62f8122f455e900a870bc11ba" title="Called from within the live555 event loop. " alt="" coords="705,5,891,32"/>
-<area shape="rect" id="node12" href="classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64" title="Pop a frame from the end of the fifo and return the frame to the reservoir stack. ..." alt="" coords="741,259,855,285"/>
-<area shape="rect" id="node13" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="939,259,1069,285"/>
-<area shape="rect" id="node14" href="classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="1117,259,1213,285"/>
-<area shape="rect" id="node16" href="classLiveThread.html#a2e68caeedbc0166262a833003059e147" title="This task registers itself if there are frames in the fifo. " alt="" coords="451,309,657,336"/>
-<area shape="rect" id="node17" href="classLiveThread.html#a88b224ee73f6c63b4c073eb23351e806" title="Handle incoming frames. See Live streaming. " alt="" coords="713,309,883,336"/>
-<area shape="rect" id="node18" href="classFrameFifo.html#a37e3264d8b8f8a787cd305c79e568645" title="Tell if fifo is empty. " alt="" coords="729,360,867,387"/>
-<area shape="rect" id="node20" href="classLiveThread.html#a047a9dce1f006bc7b729c58e0f65e700" title="Send a signal to the thread. " alt="" coords="475,360,633,387"/>
-<area shape="rect" id="node21" href="classThread.html#a4428ec86c8bc7da14b558f25fb723ce0" title="Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set Thread::has_thread to false. " alt="" coords="483,411,625,437"/>
+<area shape="rect" id="node2" href="classLiveThread.html#a8b53c829a1a8ec8a004d9e0df3e5e6c8" title="Used to (re)schedule LiveThread methods into the live555 event loop. " alt="" coords="223,157,391,184"/>
+<area shape="rect" id="node6" href="classConnection.html#ae1c3d8e91e7b1c61fe25b6905de703ee" title="Return the slot number. " alt="" coords="729,5,867,32"/>
+<area shape="rect" id="node12" href="classLiveThread.html#a0a374111f6c52e81f9d2eb56eddc613b" title="For testing/debugging. " alt="" coords="213,225,402,252"/>
+<area shape="rect" id="node13" href="classLiveThread.html#a3af76255f7009cc8b0f298844651221e" title="For debugging. " alt="" coords="470,269,638,310"/>
+<area shape="rect" id="node17" href="classLiveThread.html#a3da513578a82adf0d121e6b134fd6f52" title="Triggered when an empty fifo gets a frame. Schedules readFrameFifoTask. See Live streaming. " alt="" coords="212,340,403,367"/>
+<area shape="rect" id="node22" href="classLiveThread.html#a1c79ca363b7b578099303e8905dbb0a4" title="API method: stops the LiveThread // &lt;pyapi&gt; " alt="" coords="236,403,379,429"/>
+<area shape="rect" id="node3" href="classLiveThread.html#ac550d907150700624d8dc410d50ba7ce" title="Try to close streams that were not properly closed (i.e. idling for the tcp socket while closing)..." alt="" coords="465,56,643,83"/>
+<area shape="rect" id="node7" href="classLiveThread.html#a1df392961ac29623d27a50ed4d81d986" title="Force close all pending connections. " alt="" coords="468,157,640,184"/>
+<area shape="rect" id="node9" href="classLiveThread.html#a39ea8a235a429002345797a6ae900113" title="Used by LiveThread::periodicTask. " alt="" coords="475,208,633,235"/>
+<area shape="rect" id="node11" href="classLiveThread.html#a369dac81c6bff35ab2d8ecfd014f084c" title="Handle pending signals in the signals queue. Used by LiveThread::periodicTask. " alt="" coords="467,107,641,133"/>
+<area shape="rect" id="node4" href="classConnection.html#a6a9401592f545c1be8de892afefada4b" title="Stops stream and reclaims it resources. Called from within the live555 event loop. " alt="" coords="717,107,879,133"/>
+<area shape="rect" id="node5" href="classConnection.html#a261f8e241f8949f979a169753617db91" title="Have the streams resources been reclaimed after stopping it? " alt="" coords="725,56,871,83"/>
+<area shape="rect" id="node8" href="classConnection.html#a7215a1f954c4a517128a55a769d3f1c0" title="Normally, stopStream reclaims the resources. This one forces the delete. " alt="" coords="719,157,877,184"/>
+<area shape="rect" id="node10" href="classConnection.html#a74e26cf62f8122f455e900a870bc11ba" title="Called from within the live555 event loop. " alt="" coords="705,208,891,235"/>
+<area shape="rect" id="node14" href="classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64" title="Pop a frame from the end of the fifo and return the frame to the reservoir stack. ..." alt="" coords="741,309,855,336"/>
+<area shape="rect" id="node15" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="939,309,1069,336"/>
+<area shape="rect" id="node16" href="classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="1117,309,1213,336"/>
+<area shape="rect" id="node18" href="classLiveThread.html#a2e68caeedbc0166262a833003059e147" title="This task registers itself if there are frames in the fifo. " alt="" coords="451,352,657,379"/>
+<area shape="rect" id="node19" href="classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4" title="Print a resumen of fifo and stack usage. " alt="" coords="726,411,870,437"/>
+<area shape="rect" id="node20" href="classFrameFifo.html#a37e3264d8b8f8a787cd305c79e568645" title="Tell if fifo is empty. " alt="" coords="729,461,867,488"/>
+<area shape="rect" id="node21" href="classLiveThread.html#a88b224ee73f6c63b4c073eb23351e806" title="Handle incoming frames. See Live streaming. " alt="" coords="713,360,883,387"/>
+<area shape="rect" id="node23" href="classLiveThread.html#a047a9dce1f006bc7b729c58e0f65e700" title="Send a signal to the thread. " alt="" coords="475,453,633,480"/>
+<area shape="rect" id="node24" href="classThread.html#a4428ec86c8bc7da14b558f25fb723ce0" title="Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set Thread::has_thread to false. " alt="" coords="483,403,625,429"/>
 </map>
 </div>
 </p>
@@ -515,6 +522,50 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a2e68caeedbc0166262a833003059e147"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LiveThread::readFrameFifoTask </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>clientData</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This task registers itself if there are frames in the fifo. </p>
+<ul>
+<li></li>
+</ul>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classLiveThread_a2e68caeedbc0166262a833003059e147_cgraph.png" border="0" usemap="#classLiveThread_a2e68caeedbc0166262a833003059e147_cgraph" alt=""/></div>
+<map name="classLiveThread_a2e68caeedbc0166262a833003059e147_cgraph" id="classLiveThread_a2e68caeedbc0166262a833003059e147_cgraph">
+<area shape="rect" id="node2" href="classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4" title="Print a resumen of fifo and stack usage. " alt="" coords="273,5,417,32"/>
+<area shape="rect" id="node3" href="classFrameFifo.html#a37e3264d8b8f8a787cd305c79e568645" title="Tell if fifo is empty. " alt="" coords="276,56,413,83"/>
+<area shape="rect" id="node4" href="classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64" title="Pop a frame from the end of the fifo and return the frame to the reservoir stack. ..." alt="" coords="287,107,402,133"/>
+<area shape="rect" id="node5" href="classLiveThread.html#a88b224ee73f6c63b4c073eb23351e806" title="Handle incoming frames. See Live streaming. " alt="" coords="260,157,429,184"/>
+<area shape="rect" id="node6" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="477,157,608,184"/>
+<area shape="rect" id="node7" href="classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="656,157,752,184"/>
+</map>
+</div>
+</p>
+
+</div>
+</div>
 <a class="anchor" id="aad109e088d530cbba1115d48fbe05adf"></a>
 <div class="memitem">
 <div class="memproto">
@@ -545,9 +596,9 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classLiveThread_aad109e088d530cbba1115d48fbe05adf_cgraph.png" border="0" usemap="#classLiveThread_aad109e088d530cbba1115d48fbe05adf_cgraph" alt=""/></div>
 <map name="classLiveThread_aad109e088d530cbba1115d48fbe05adf_cgraph" id="classLiveThread_aad109e088d530cbba1115d48fbe05adf_cgraph">
-<area shape="rect" id="node2" href="classConnection.html#a6a9401592f545c1be8de892afefada4b" title="Called from within the live555 event loop. " alt="" coords="167,5,329,32"/>
-<area shape="rect" id="node3" href="classConnection.html#afb9ef6ffffb25c7a819b36d10a92d084" title="Has the stream stopped or is it pending? " alt="" coords="165,56,331,83"/>
-<area shape="rect" id="node4" href="classConnection.html#a91d704747e74e56e889c8c1aebace965" title="Called from within the live555 event loop. " alt="" coords="167,107,329,133"/>
+<area shape="rect" id="node2" href="classConnection.html#a6a9401592f545c1be8de892afefada4b" title="Stops stream and reclaims it resources. Called from within the live555 event loop. " alt="" coords="165,5,328,32"/>
+<area shape="rect" id="node3" href="classConnection.html#a261f8e241f8949f979a169753617db91" title="Have the streams resources been reclaimed after stopping it? " alt="" coords="173,56,320,83"/>
+<area shape="rect" id="node4" href="classConnection.html#a91d704747e74e56e889c8c1aebace965" title="Called from within the live555 event loop. " alt="" coords="165,107,328,133"/>
 </map>
 </div>
 </p>

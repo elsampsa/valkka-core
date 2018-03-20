@@ -1,5 +1,5 @@
 <map id="LiveThread::run" name="LiveThread::run">
-<area shape="rect" id="node2" href="$classConnection.html#a6a9401592f545c1be8de892afefada4b" title="Called from within the live555 event loop. " alt="" coords="167,5,329,32"/>
-<area shape="rect" id="node3" href="$classConnection.html#afb9ef6ffffb25c7a819b36d10a92d084" title="Has the stream stopped or is it pending? " alt="" coords="165,56,331,83"/>
-<area shape="rect" id="node4" href="$classConnection.html#a91d704747e74e56e889c8c1aebace965" title="Called from within the live555 event loop. " alt="" coords="167,107,329,133"/>
+<area shape="rect" id="node2" href="$classConnection.html#a6a9401592f545c1be8de892afefada4b" title="Stops stream and reclaims it resources. Called from within the live555 event loop. " alt="" coords="165,5,328,32"/>
+<area shape="rect" id="node3" href="$classConnection.html#a261f8e241f8949f979a169753617db91" title="Have the streams resources been reclaimed after stopping it? " alt="" coords="173,56,320,83"/>
+<area shape="rect" id="node4" href="$classConnection.html#a91d704747e74e56e889c8c1aebace965" title="Called from within the live555 event loop. " alt="" coords="165,107,328,133"/>
 </map>

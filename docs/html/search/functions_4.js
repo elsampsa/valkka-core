@@ -9,6 +9,7 @@ var searchData=
   ['findvars',['findVars',['../classShader.html#a736e7f2738dfda3d7f7ed9a935926086',1,'Shader::findVars()'],['../classYUVShader.html#a5ee5a884a1018b52d3d89fc459867ea9',1,'YUVShader::findVars()']]],
   ['flagisset',['flagIsSet',['../classSharedMemRingBuffer.html#a09d467d30d7688766f2b2dcab7f4cb41',1,'SharedMemRingBuffer']]],
   ['flush',['flush',['../classDecoderBase.html#afc1ab36bd02fbf71db66885dcb4aeb2b',1,'DecoderBase::flush()'],['../classDummyDecoder.html#a576b85d8abb55d47fa12b997bc8e4593',1,'DummyDecoder::flush()'],['../classDecoder.html#a9acf24b0d31c952470078c1ac1ec45d8',1,'Decoder::flush()']]],
+  ['forceclose',['forceClose',['../classConnection.html#a7215a1f954c4a517128a55a769d3f1c0',1,'Connection::forceClose()'],['../classRTSPConnection.html#a01624f7a575ce9776b3f7152be42f138',1,'RTSPConnection::forceClose()']]],
   ['forkframefilter',['ForkFrameFilter',['../classForkFrameFilter.html#adab702ac80f3e9df32b7ee16b7e34f8e',1,'ForkFrameFilter']]],
   ['forkframefilter3',['ForkFrameFilter3',['../classForkFrameFilter3.html#a9f5032976b29b798cc545d70ee4a1ebd',1,'ForkFrameFilter3']]],
   ['frame',['Frame',['../classFrame.html#ad2e5946cf41d4817e750500acf05d02b',1,'Frame']]],

@@ -26,7 +26,7 @@
  *  @file    live_streaming_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief Test the whole pipeline from LiveThread to AVThread and to OpenGLThread (without rendering)
  *  

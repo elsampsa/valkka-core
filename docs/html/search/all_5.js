@@ -23,6 +23,7 @@ var searchData=
   ['flagsema',['flagsema',['../classSharedMemRingBuffer.html#ae7906316dfb2620cf0b7bc17da83def9',1,'SharedMemRingBuffer']]],
   ['flagsema_5fname',['flagsema_name',['../classSharedMemRingBuffer.html#a932e5c59aea1575d8a17195ddd3e6085',1,'SharedMemRingBuffer']]],
   ['flush',['flush',['../classDecoderBase.html#afc1ab36bd02fbf71db66885dcb4aeb2b',1,'DecoderBase::flush()'],['../classDummyDecoder.html#a576b85d8abb55d47fa12b997bc8e4593',1,'DummyDecoder::flush()'],['../classDecoder.html#a9acf24b0d31c952470078c1ac1ec45d8',1,'Decoder::flush()']]],
+  ['forceclose',['forceClose',['../classConnection.html#a7215a1f954c4a517128a55a769d3f1c0',1,'Connection::forceClose()'],['../classRTSPConnection.html#a01624f7a575ce9776b3f7152be42f138',1,'RTSPConnection::forceClose()']]],
   ['forkframefilter',['ForkFrameFilter',['../classForkFrameFilter.html',1,'ForkFrameFilter'],['../classForkFrameFilter.html#adab702ac80f3e9df32b7ee16b7e34f8e',1,'ForkFrameFilter::ForkFrameFilter()']]],
   ['forkframefilter3',['ForkFrameFilter3',['../classForkFrameFilter3.html',1,'ForkFrameFilter3'],['../classForkFrameFilter3.html#a9f5032976b29b798cc545d70ee4a1ebd',1,'ForkFrameFilter3::ForkFrameFilter3()']]],
   ['format',['format',['../classTEX.html#a4599699bebef8598991ca3ed508ac4f9',1,'TEX']]],

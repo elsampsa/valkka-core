@@ -29,7 +29,7 @@
  *  @file    logging.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief Logging utilities
  *

@@ -28,7 +28,7 @@
  *  @file    livethread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief A live555 thread
  *
@@ -62,7 +62,7 @@ protected:
   
 public:
   void setLiveThread(void* live_thread);
-  virtual bool writeCopy(Frame* f, bool wait=false);
+  bool writeCopy(Frame* f, bool wait=false);
 };                                                        // <pyapi>
 
 
@@ -368,7 +368,7 @@ private: // internal
   void playStream       (LiveConnectionContext &connection_ctx);
   // outbound streams
   void registerOutbound    (LiveOutboundContext &outbound_ctx); 
-  void deRegisterOutbound  (LiveOutboundContext &outbound_ctx);
+  void deregisterOutbound  (LiveOutboundContext &outbound_ctx);
   // thread control
   void stopStream       (LiveConnectionContext &connection_ctx);
   
@@ -380,7 +380,7 @@ public: // *** C & Python API *** .. these routines go through the condvar/mutex
   void stopStreamCall       (LiveConnectionContext &connection_ctx); ///< API method: stops playing the stream and feeding frames       // <pyapi>
   // outbound streams
   void registerOutboundCall   (LiveOutboundContext &outbound_ctx);   ///< API method: register outbound stream                          // <pyapi>
-  void deRegisterOutboundCall (LiveOutboundContext &outbound_ctx);
+  void deregisterOutboundCall (LiveOutboundContext &outbound_ctx);   ///< API method: deregister outbound stream                        // <pyapi>
   // thread control
   void stopCall();                                                   ///< API method: stops the LiveThread                              // <pyapi>
   LiveFifo &getFifo();                                               ///< API method: get fifo for sending frames with live555          // <pyapi>

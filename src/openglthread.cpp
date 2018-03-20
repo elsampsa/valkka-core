@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -1018,7 +1018,7 @@ bool OpenGLThread::newRenderGroup(Window window_id) {
   reConfigWindow(window_id);
   child_id=window_id;
   
-  // child_id =getChildWindow(window_id); // X11 does not create nested windowses .. that's a job for the window manager, right?
+  // child_id =getChildWindow(window_id); // X11 does not create nested windows .. that's a job for the window manager, right?
   
   RenderGroup rg(display_id, glc, window_id, child_id, doublebuffer_flag); // window_id = RenderGroup index, child_id = actual window id
   render_groups.insert(std::pair<Window,RenderGroup>(window_id,rg));
@@ -1064,7 +1064,7 @@ int OpenGLThread::newRenderContext(SlotNumber n_slot, Window window_id, unsigned
     render_group->addContext(render_context);
     
     render_lists[n_slot].push_back(render_group); // render_lists[n_slot] == list of RenderGroup instances
-    // n_slot => render_lists[n_slot] => a list of RenderGroups, i.e. x windowses that the stream of this slot is streaming into    
+    // n_slot => render_lists[n_slot] => a list of RenderGroups, i.e. x windows that the stream of this slot is streaming into    
     opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContext: added new RenderContext" << std::endl;
     opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContext: render_list at slot " << n_slot << " now with size " << render_lists[n_slot].size() << std::endl;
     // render_lists[1].size()

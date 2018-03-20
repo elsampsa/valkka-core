@@ -28,7 +28,7 @@
  *  @file    frames.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief Frame definition, base class for FrameFilters
  *

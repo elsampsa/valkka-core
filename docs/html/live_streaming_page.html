@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.3.5</span>
+   &#160;<span id="projectnumber">0.3.6</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -96,6 +96,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Sending frames happens roughly as follows:</p>
 <ul>
 <li><a class="el" href="classLiveFifo.html" title="This is a special FrameFifo class for feeding frames into live555, i.e. ">LiveFifo</a> has a reference to the associated <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a></li>
+<li>Let's remember that calls to <a class="el" href="classLiveFifo.html#af1040c40ceafed60fe2d60a5f24baa9b" title="Take a frame &quot;ftmp&quot; from the stack, copy contents of &quot;f&quot; into &quot;ftmp&quot; and insert &quot;ftmp&quot; into the begin...">LiveFifo::writeCopy</a> are done outside the running <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> that's sending frames. Typically by <a class="el" href="classFifoFrameFilter.html" title="Passes frames to a multiprocessing fifo. ">FifoFrameFilter</a>.</li>
 <li><a class="el" href="classLiveFifo.html#af1040c40ceafed60fe2d60a5f24baa9b" title="Take a frame &quot;ftmp&quot; from the stack, copy contents of &quot;f&quot; into &quot;ftmp&quot; and insert &quot;ftmp&quot; into the begin...">LiveFifo::writeCopy</a> calls <a class="el" href="classLiveThread.html#a47a38d1355ad221b09c426eb5f4666a8" title="See Live streaming. ">LiveThread::triggerGotFrames</a> which triggers an event using the scheduler and the triggerEvent method (this is the only allowed way to launch events outside the live555 event loop)</li>
 <li>The triggered event corresponds to <a class="el" href="classLiveThread.html#a3da513578a82adf0d121e6b134fd6f52" title="Triggered when an empty fifo gets a frame. Schedules readFrameFifoTask. See Live streaming. ">LiveThread::gotFramesEvent</a></li>
 <li><a class="el" href="classLiveThread.html#a3da513578a82adf0d121e6b134fd6f52" title="Triggered when an empty fifo gets a frame. Schedules readFrameFifoTask. See Live streaming. ">LiveThread::gotFramesEvent</a> inserts a new (immediate) task to the live555 event loop, namely <a class="el" href="classLiveThread.html#a2e68caeedbc0166262a833003059e147" title="This task registers itself if there are frames in the fifo. ">LiveThread::readFrameFifoTask</a></li>

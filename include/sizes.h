@@ -29,7 +29,7 @@
  *  @file    sizes.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief Default payload sizes and other numerical constants
  *
@@ -39,7 +39,7 @@
 
 static const int VERSION_MAJOR = 0; // <pyapi>
 static const int VERSION_MINOR = 3; // <pyapi>
-static const int VERSION_PATCH = 5; // <pyapi>
+static const int VERSION_PATCH = 6; // <pyapi>
 
 
 namespace Timeouts { ///< Various thread timeouts in milliseconds

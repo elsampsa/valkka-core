@@ -26,7 +26,7 @@
  *  @file    live_thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief Testing the LiveThread class
  *  
@@ -443,7 +443,7 @@ void test_9() {
 
 void test_10() {
   const char* name = "@TEST: live_thread_test: test 10: ";
-  std::cout << name <<"** @@Sending frames between LiveThreads**" << std::endl;
+  std::cout << name <<"** @@Sending frames between LiveThreads: short time test **" << std::endl;
   
   if (!stream_1) {
     std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
@@ -454,7 +454,7 @@ void test_10() {
   // filtergraph:
   // (LiveThread:livethread) --> {InfoFrameFilter:info_filter) --> {FifoFrameFilter:fifo_filter} --> [LiveFifo:live_fifo] -->> (LiveThread:livethread2) 
   LiveThread  livethread("livethread");
-  LiveThread  livethread2("livethread2",20); // stack size for incoming fifo
+  LiveThread  livethread2("livethread2",5); // stack size for incoming fifo
   
   LiveFifo &live_fifo =livethread2.getFifo();
   FifoFrameFilter fifo_filter("in_live_filter",live_fifo);
@@ -476,9 +476,10 @@ void test_10() {
   livethread.registerStreamCall(ctx);
   livethread.playStreamCall(ctx);
   
-  sleep_for(120s);
+  sleep_for(5s);
   
   livethread.stopStreamCall(ctx);
+  // livethread2.deregisterOutboundCall(out_ctx); // TODO: handle dirty exit // remember: it's livethread2 !!!
   
   sleep_for(1s);
   
@@ -523,6 +524,54 @@ void test_11() {
   
   livethread.stopCall();
 }
+
+
+void test_12() {
+  const char* name = "@TEST: live_thread_test: test 12: ";
+  std::cout << name <<"** @@Sending frames between LiveThreads: long time test **" << std::endl;
+  
+  if (!stream_1) {
+    std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+    exit(2);
+  }
+  std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+  
+  // filtergraph:
+  // (LiveThread:livethread) --> {InfoFrameFilter:info_filter) --> {FifoFrameFilter:fifo_filter} --> [LiveFifo:live_fifo] -->> (LiveThread:livethread2) 
+  LiveThread  livethread("livethread");
+  LiveThread  livethread2("livethread2",200); // stack size for incoming fifo
+  
+  LiveFifo &live_fifo =livethread2.getFifo();
+  FifoFrameFilter fifo_filter("in_live_filter",live_fifo);
+  // BriefInfoFrameFilter info_filter("info_filter",&fifo_filter);
+  CountFrameFilter info_filter("info_filter",&fifo_filter);
+  
+  std::cout << "starting live threads" << std::endl;
+  livethread. startCall();
+  livethread2.startCall();
+  
+  sleep_for(1s);
+
+  LiveOutboundContext out_ctx = LiveOutboundContext(LiveConnectionType::sdp, std::string("224.1.168.91"), 2, 50000);
+  livethread2.registerOutboundCall(out_ctx);
+  
+  sleep_for(1s);
+  
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter);
+  livethread.registerStreamCall(ctx);
+  livethread.playStreamCall(ctx);
+  
+  sleep_for(120s);
+  
+  livethread.stopStreamCall(ctx);
+  
+  sleep_for(1s);
+  
+  std::cout << "stopping live thread" << std::endl;
+  livethread. stopCall();
+  livethread2.stopCall();
+}
+
 
 
 int main(int argc, char** argcv) {
@@ -587,6 +636,9 @@ int main(int argc, char** argcv) {
         break;
       case(11):
         test_11();
+        break;
+      case(12):
+        test_12();
         break;
       default:
         std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;

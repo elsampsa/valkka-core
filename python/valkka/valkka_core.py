@@ -1747,6 +1747,9 @@ class LiveThread(Thread):
     def registerOutboundCall(self, outbound_ctx):
         return _valkka_core.LiveThread_registerOutboundCall(self, outbound_ctx)
 
+    def deregisterOutboundCall(self, outbound_ctx):
+        return _valkka_core.LiveThread_deregisterOutboundCall(self, outbound_ctx)
+
     def stopCall(self):
         return _valkka_core.LiveThread_stopCall(self)
 

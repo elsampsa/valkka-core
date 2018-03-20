@@ -26,7 +26,7 @@
  *  @file    livethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief A live555 thread
  *
@@ -56,14 +56,26 @@ void LiveFifo::setLiveThread(void *live_thread) { // we need the LiveThread so w
 
 bool LiveFifo::writeCopy(Frame* f, bool wait) {
   bool do_notify=false;
+  bool ok=false;
   
-  if (isEmpty()) {
-    do_notify=true;
+  if (isEmpty()) { // triggerGotFrames => gotFramesEvent => readFrameFifoTask (this one re-registers itself if there are frames in the queue - if queue empty, must be re-registered here)
+    do_notify=true; 
   }
   
-  if (FrameFifo::writeCopy(f,wait) and do_notify) {
+  ok=FrameFifo::writeCopy(f,wait);
+  
+  ///*
+  if (ok and do_notify) {
     ((LiveThread*)live_thread)->triggerGotFrames();
   }
+  //*/
+  /*
+  if (ok) {
+    ((LiveThread*)live_thread)->triggerGotFrames();
+  }
+  */
+  
+  return ok;
   
   /*
   if (FrameFifo::writeCopy(f,wait)) {
@@ -508,8 +520,10 @@ void LiveThread::closePending() { // call only after handlePending
 
 void LiveThread::handleSignals() {
   std::unique_lock<std::mutex> lk(this->mutex);
-  LiveConnectionContext connection_ctx;
   unsigned short int i;
+  LiveConnectionContext connection_ctx;
+  LiveOutboundContext   out_ctx;
+        
   
   // if (signal_fifo.empty()) {return;}
   
@@ -518,10 +532,17 @@ void LiveThread::handleSignals() {
     
     switch (it->signal) {
       case Signals::exit:
+        
         for(i=0;i<=I_MAX_SLOTS;i++) { // stop and deregister all streams
           connection_ctx.slot=i;
           deregisterStream(connection_ctx);
         }
+        
+        for(i=0;i<=I_MAX_SLOTS;i++) { // stop and deregister all streams
+          out_ctx.slot=i;
+          deregisterOutbound(out_ctx);
+        }
+        
         // this->eventLoopWatchVariable=1;
         exit_requested=true;
         break;
@@ -543,7 +564,11 @@ void LiveThread::handleSignals() {
         this->registerOutbound(*(it->outbound_context));
         break;
       case Signals::deregister_outbound:
-        this->deRegisterOutbound(*(it->outbound_context));
+        // std::cout << "LiveThread : handleSignals : deregister_outbound" << std::endl;
+        this->deregisterOutbound(*(it->outbound_context));
+        break;
+      default:
+        std::cout << "LiveThread : handleSignals : unknown signal " << int(it->signal) << std::endl;
         break;
       }
   }
@@ -559,11 +584,15 @@ void LiveThread::handleFrame(Frame *f) { // handle an incoming frame ..
   Stream* stream;
   
   if (safeGetOutboundSlot(f->n_slot,outbound)>0) { // got frame
+#ifdef STREAM_SEND_DEBUG
     std::cout << "LiveThread : "<< this->name <<" : handleFrame : accept frame "<<*f << std::endl;
+#endif
     outbound->handleFrame(f); // recycling handled deeper in the code
   } 
   else {
+#ifdef STREAM_SEND_DEBUG
     std::cout << "LiveThread : "<< this->name <<" : handleFrame : discard frame "<<*f << std::endl;
+#endif
     infifo.recycle(f);
   }
 }
@@ -762,6 +791,7 @@ void LiveThread::registerOutbound(LiveOutboundContext &outbound_ctx) {
           // this->out_slots_[outbound_ctx.slot] = new SDPOutbound(*env, infifo, outbound_ctx.slot, outbound_ctx.address, outbound_ctx.portnum, outbound_ctx.ttl);
           this->out_slots_[outbound_ctx.slot] = new SDPOutbound(*env, infifo, outbound_ctx);
           livethreadlogger.log(LogLevel::debug) << "LiveThread: "<<name<<" registerOutbound : sdp stream registered at slot "  << outbound_ctx.slot << " with ptr " << this->out_slots_[outbound_ctx.slot] << std::endl;
+          //std::cout << "LiveThread : registerOutbound : " << this->out_slots_[2] << std::endl;
           break;
           
         default:
@@ -777,8 +807,10 @@ void LiveThread::registerOutbound(LiveOutboundContext &outbound_ctx) {
 }
 
 
-void LiveThread::deRegisterOutbound(LiveOutboundContext &outbound_ctx) {
+void LiveThread::deregisterOutbound(LiveOutboundContext &outbound_ctx) {
   Outbound* outbound;
+  //std::cout << "LiveThread : deregisterOutbound" << std::endl;
+  //std::cout << "LiveThread : deregisterOutbound : " << this->out_slots_[2] << std::endl;
   switch (safeGetOutboundSlot(outbound_ctx.slot,outbound)) {
     case -1: // out of range
       break;
@@ -853,7 +885,8 @@ void LiveThread::registerOutboundCall(LiveOutboundContext &outbound_ctx) {
 }
 
 
-void LiveThread::deRegisterOutboundCall(LiveOutboundContext &outbound_ctx) {
+void LiveThread::deregisterOutboundCall(LiveOutboundContext &outbound_ctx) {
+  // std::cout << "LiveThread : deregisterOutboundCall" << std::endl;
   SignalContext signal_ctx = {Signals::deregister_outbound, NULL, &outbound_ctx};
   sendSignal(signal_ctx);
 }
@@ -894,6 +927,9 @@ void LiveThread::frameArrivedEvent(void* clientData) {
 
 
 void LiveThread::gotFramesEvent(void* clientData) { // registers a periodic task to the event loop
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "LiveThread: gotFramesEvent " << std::endl;
+#endif
   LiveThread *thread = (LiveThread*)clientData;
   thread->scheduler->scheduleDelayedTask(0,(TaskFunc*)(LiveThread::readFrameFifoTask),(void*)thread); 
 }
@@ -902,21 +938,31 @@ void LiveThread::gotFramesEvent(void* clientData) { // registers a periodic task
 void LiveThread::readFrameFifoTask(void* clientData) {
   Frame* f;
   LiveThread *thread = (LiveThread*)clientData;
-  // this is the event identified by event_trigger_id_frame
-  // std::cout << "LiveThread : frameArrived : New frame has arrived!" << std::endl;
-  f=thread->infifo.read(); // this should not block..
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "LiveThread: readFrameFifoTask: read" << std::endl;
+  thread->infifo.diagnosis();
+#endif
+  if (thread->infifo.isEmpty()) { // this task has been scheduled too many times .. nothing yet to read from the fifo
+    std::cout << "LiveThread: readFrameFifoTask: underflow" << std::endl;
+    return; 
+  }
+  f=thread->infifo.read(); // this blocks
   thread->fc+=1;
+#ifdef STREAM_SEND_DEBUG
   std::cout << "LiveThread: readFrameFifoTask: frame count=" << thread->fc << " : " << *f << std::endl;
-  // std::cout << "LiveThread : frameArrived : frame :" << *f << std::endl;
+#endif
   
   thread->handleFrame(f);
   // thread->infifo.recycle(f); // recycling is handled deeper in the code
   
+  ///*
   if (thread->infifo.isEmpty()) { // no more frames for now ..
   }
   else {
     thread->scheduler->scheduleDelayedTask(0,(TaskFunc*)(LiveThread::readFrameFifoTask),(void*)thread); // re-registers itself
   }
+  //*/
+  
 }
 
 
@@ -927,6 +973,9 @@ void LiveThread::testTrigger() {
 
 
 void LiveThread::triggerGotFrames() {
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "LiveThread: triggerGotFrames" << std::endl;
+#endif
   // scheduler->triggerEvent(event_trigger_id_frame_arrived,(void*)(this));
   scheduler->triggerEvent(event_trigger_id_got_frames,(void*)(this)); 
 }

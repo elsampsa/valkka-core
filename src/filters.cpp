@@ -26,7 +26,7 @@
  *  @file    filters.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief Common frame filters.  The FrameFilter base class is defined in frames.h
  *

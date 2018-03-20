@@ -112,13 +112,19 @@ if    (fifo_diagnosis)
   message("FIFO DIAGNOSIS ENABLED")
 endif (fifo_diagnosis)
 
+option(stream_send_debug "stream_send_debug" OFF)
+if    (stream_send_debug)
+  add_definitions("-DSTREAM_SEND_DEBUG")
+  message("STREAM SEND DEBUG ENABLED")
+endif (stream_send_debug)
+
 
 
 # ****************************************************************
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "0") 
 SET(MINOR_VERSION "3") 
-SET(PATCH_VERSION "5") 
+SET(PATCH_VERSION "6") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
 # *** define build type: Debug or Release # now from the command line

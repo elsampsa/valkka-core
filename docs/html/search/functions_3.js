@@ -11,6 +11,7 @@ var searchData=
   ['delrendergroup',['delRenderGroup',['../classOpenGLThread.html#af5cc0544e52bd20b8664381490902c61',1,'OpenGLThread']]],
   ['delrendergroupcall',['delRenderGroupCall',['../classOpenGLThread.html#ac05c2be99cdeb614aac854d442995c45',1,'OpenGLThread']]],
   ['delshaders',['delShaders',['../classOpenGLThread.html#a7c421fdb80d8838ee63e5057e881d5d7',1,'OpenGLThread']]],
+  ['deregisteroutboundcall',['deregisterOutboundCall',['../classLiveThread.html#a3c8f86130eaa8c2c68898a2f74de03f2',1,'LiveThread']]],
   ['deregisterstreamcall',['deregisterStreamCall',['../classLiveThread.html#ad9c33d99f8aa561c67559744b9f3e4b0',1,'LiveThread']]],
   ['diagnosis',['diagnosis',['../classOpenGLFrameFifo.html#a363ab3a9c1254485af945fa28af5b32b',1,'OpenGLFrameFifo::diagnosis()'],['../classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4',1,'FrameFifo::diagnosis()']]],
   ['dogetnextframe',['doGetNextFrame',['../classBufferSource.html#a796bc84e5233c21c379a57f2a3b65e54',1,'BufferSource']]],

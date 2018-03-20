@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.3.5</span>
+   &#160;<span id="projectnumber">0.3.6</span>
    </div>
    <div id="projectbrief">Massive Video Streaming for Linux</div>
   </td>
@@ -127,10 +127,10 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#abe2eea52de2bd61e1880ebbe58d26f28">~FileFrameFilter</a> ()</td></tr>
 <tr class="memdesc:abe2eea52de2bd61e1880ebbe58d26f28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
 <tr class="separator:abe2eea52de2bd61e1880ebbe58d26f28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f7dfe3dba7d2e76be57541428f41a9e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f7dfe3dba7d2e76be57541428f41a9e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a4f7dfe3dba7d2e76be57541428f41a9e">activate</a> (const char *fname, long int zerotime=0)</td></tr>
-<tr class="memdesc:a4f7dfe3dba7d2e76be57541428f41a9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts streaming to disk // &lt;pyapi&gt; <br /></td></tr>
-<tr class="separator:a4f7dfe3dba7d2e76be57541428f41a9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c7fe5a052012e7004584880614da606"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c7fe5a052012e7004584880614da606"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a7c7fe5a052012e7004584880614da606">activate</a> (const char *fname, long int <a class="el" href="classFileFrameFilter.html#a00839527cea503618e524af668b24951">zerotime</a>=0)</td></tr>
+<tr class="memdesc:a7c7fe5a052012e7004584880614da606"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request streaming to disk asap (when config frames have arrived) // &lt;pyapi&gt; <br /></td></tr>
+<tr class="separator:a7c7fe5a052012e7004584880614da606"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f235a2732337ee2f18895f10ad86d29"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2f235a2732337ee2f18895f10ad86d29"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a2f235a2732337ee2f18895f10ad86d29">deActivate</a> ()</td></tr>
 <tr class="memdesc:a2f235a2732337ee2f18895f10ad86d29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop streaming to disk // &lt;pyapi&gt; <br /></td></tr>
@@ -154,19 +154,40 @@ Protected Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a8acd9381118999742bfb198c67cf4c14">go</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
 <tr class="memdesc:a8acd9381118999742bfb198c67cf4c14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does the actual filtering/modification to the <a class="el" href="classFrame.html" title="A universal frame class encapsulating all media formats. ">Frame</a>. Define in subclass. <br /></td></tr>
 <tr class="separator:a8acd9381118999742bfb198c67cf4c14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ee12c02c0865196551d4dc12428a06c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ee12c02c0865196551d4dc12428a06c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a1ee12c02c0865196551d4dc12428a06c">initFile</a> ()</td></tr>
+<tr class="memdesc:a1ee12c02c0865196551d4dc12428a06c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open file, reserve contexes, streams, write preamble, set initialized=true if success. <br /></td></tr>
+<tr class="separator:a1ee12c02c0865196551d4dc12428a06c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad22610b13629b7bb22cc31fb05820ed6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad22610b13629b7bb22cc31fb05820ed6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#ad22610b13629b7bb22cc31fb05820ed6">closeFile</a> ()</td></tr>
+<tr class="memdesc:ad22610b13629b7bb22cc31fb05820ed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Close file, dealloc contexes, streams. <br /></td></tr>
+<tr class="separator:ad22610b13629b7bb22cc31fb05820ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94955faa72f0117c8c4857779238bb4b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a94955faa72f0117c8c4857779238bb4b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>deActivate_</b> ()</td></tr>
+<tr class="separator:a94955faa72f0117c8c4857779238bb4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a0e6cdb3beb767afecbecf3daece1d62a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e6cdb3beb767afecbecf3daece1d62a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>active</b></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a0e6cdb3beb767afecbecf3daece1d62a">active</a></td></tr>
+<tr class="memdesc:a0e6cdb3beb767afecbecf3daece1d62a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writing to file has been requested (but not necessarily achieved..) <br /></td></tr>
 <tr class="separator:a0e6cdb3beb767afecbecf3daece1d62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22dd918962ce6cbbe0d989636a34d871"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22dd918962ce6cbbe0d989636a34d871"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a22dd918962ce6cbbe0d989636a34d871">ready</a></td></tr>
+<tr class="memdesc:a22dd918962ce6cbbe0d989636a34d871"><td class="mdescLeft">&#160;</td><td class="mdescRight">Got enough setup frames. <br /></td></tr>
+<tr class="separator:a22dd918962ce6cbbe0d989636a34d871"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a467e0826e241a4d3be511afd29d765cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a467e0826e241a4d3be511afd29d765cd"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>initialized</b></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a467e0826e241a4d3be511afd29d765cd">initialized</a></td></tr>
+<tr class="memdesc:a467e0826e241a4d3be511afd29d765cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">File was opened ok : contexes, streams and output_context reserved (should be freed at some point) <br /></td></tr>
 <tr class="separator:a467e0826e241a4d3be511afd29d765cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e86f037640ca34ecaf4bd8f7662c7cb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e86f037640ca34ecaf4bd8f7662c7cb"></a>
 long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a3e86f037640ca34ecaf4bd8f7662c7cb">mstimestamp0</a></td></tr>
 <tr class="memdesc:a3e86f037640ca34ecaf4bd8f7662c7cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time of activation (i.e. when the recording started) <br /></td></tr>
 <tr class="separator:a3e86f037640ca34ecaf4bd8f7662c7cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00839527cea503618e524af668b24951"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a00839527cea503618e524af668b24951"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a00839527cea503618e524af668b24951">zerotime</a></td></tr>
+<tr class="memdesc:a00839527cea503618e524af668b24951"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start time set explicitly by the user. <br /></td></tr>
+<tr class="separator:a00839527cea503618e524af668b24951"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b6f5482a1e4e1843b7cb6f6784f5705"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b6f5482a1e4e1843b7cb6f6784f5705"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>zerotimeset</b></td></tr>
 <tr class="separator:a1b6f5482a1e4e1843b7cb6f6784f5705"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,26 +205,18 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href
 std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a50e164464f08a8977e90d4fc6482fd5e">condition</a></td></tr>
 <tr class="memdesc:a50e164464f08a8977e90d4fc6482fd5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Condition variable for the mutex. <br /></td></tr>
 <tr class="separator:a50e164464f08a8977e90d4fc6482fd5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75728bfc8a9f0b8f01a303cae98ac08a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75728bfc8a9f0b8f01a303cae98ac08a"></a>
-AVCodecContext *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a75728bfc8a9f0b8f01a303cae98ac08a">av_codec_context</a></td></tr>
-<tr class="memdesc:a75728bfc8a9f0b8f01a303cae98ac08a"><td class="mdescLeft">&#160;</td><td class="mdescRight">temp variable <br /></td></tr>
-<tr class="separator:a75728bfc8a9f0b8f01a303cae98ac08a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f17054d0af686c8c5e21132d2b3b2fc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7f17054d0af686c8c5e21132d2b3b2fc"></a>
-AVStream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileFrameFilter.html#a7f17054d0af686c8c5e21132d2b3b2fc">av_stream</a></td></tr>
-<tr class="memdesc:a7f17054d0af686c8c5e21132d2b3b2fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">temp variable <br /></td></tr>
-<tr class="separator:a7f17054d0af686c8c5e21132d2b3b2fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a541567d2861041210a8a297331557cc0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a541567d2861041210a8a297331557cc0"></a>
 std::vector&lt; AVCodecContext * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>contexes</b></td></tr>
 <tr class="separator:a541567d2861041210a8a297331557cc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cca9a2a5f4cc6368b50e5d36b18ee3d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2cca9a2a5f4cc6368b50e5d36b18ee3d"></a>
 std::vector&lt; AVStream * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>streams</b></td></tr>
 <tr class="separator:a2cca9a2a5f4cc6368b50e5d36b18ee3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa08f9caaf47995c018f94137a889ef68"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa08f9caaf47995c018f94137a889ef68"></a>
-std::vector&lt; <a class="el" href="classFrame.html">Frame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>setupframes</b></td></tr>
-<tr class="separator:aa08f9caaf47995c018f94137a889ef68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9507b6f76e4e7a48f112b2187633369"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9507b6f76e4e7a48f112b2187633369"></a>
 AVFormatContext *&#160;</td><td class="memItemRight" valign="bottom"><b>output_context</b></td></tr>
 <tr class="separator:ab9507b6f76e4e7a48f112b2187633369"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa08f9caaf47995c018f94137a889ef68"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa08f9caaf47995c018f94137a889ef68"></a>
+std::vector&lt; <a class="el" href="classFrame.html">Frame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>setupframes</b></td></tr>
+<tr class="separator:aa08f9caaf47995c018f94137a889ef68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classFrameFilter"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classFrameFilter')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classFrameFilter.html">FrameFilter</a></td></tr>
 <tr class="memitem:a56531ed5f05cdce0d5ce3accea729aab inherit pro_attribs_classFrameFilter"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a56531ed5f05cdce0d5ce3accea729aab"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
@@ -216,7 +229,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td><
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Pipe stream into a matroska (mkv) file. </p>
 <p>This <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> should be connected to the live stream at all times: it observes the setup frames (FrameTypes::setup) and saves them internally.</p>
-<p>When the <a class="el" href="classFileFrameFilter.html#a4f7dfe3dba7d2e76be57541428f41a9e" title="Starts streaming to disk // &lt;pyapi&gt; ">FileFrameFilter::activate</a> method is called, it configures the files accordingly, and starts streaming into disk. </p>
+<p>When the <a class="el" href="classFileFrameFilter.html#a7c7fe5a052012e7004584880614da606" title="Request streaming to disk asap (when config frames have arrived) // &lt;pyapi&gt; ">FileFrameFilter::activate</a> method is called, it configures the files accordingly, and starts streaming into disk. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ad574ff26061537687aa1c9568b28dc09"></a>
 <div class="memitem">

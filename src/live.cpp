@@ -26,7 +26,7 @@
  *  @file    live.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.5 
+ *  @version 0.3.6 
  *  
  *  @brief Interface to live555
  *
@@ -55,8 +55,14 @@ BufferSource::~BufferSource() {
 
 
 void BufferSource::handleFrame(Frame* f) {
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "BufferSource : handleFrame" << std::endl;
+#endif
   internal_fifo.push_front(f);
   if (!active) { // time to activate and re-schedule doGetNextFrame
+#ifdef STREAM_SEND_DEBUG
+    std::cout << "BufferSource : evoking doGetNextFrame" << std::endl;
+#endif
     doGetNextFrame();
   }
 }
@@ -77,7 +83,6 @@ void BufferSource::doGetNextFrame() {
   use of discrete framer:
   http://lists.live555.com/pipermail/live-devel/2014-September/018686.html
   http://lists.live555.com/pipermail/live-devel/2011-November/014019.html
-  .. Ross getting annoyed:
   http://lists.live555.com/pipermail/live-devel/2016-January/019856.html
   
   this::doGetNextFrame => FramedSource::afterGetting(this) [resets fIsCurrentlyAwaitingData] => calls "AfterGettingFunc" callback (defined god-knows-where) => .. end up calling 
@@ -97,8 +102,16 @@ void BufferSource::doGetNextFrame() {
   unsigned fDurationInMicroseconds; // out
   */
   Frame* f;
+  unsigned fMaxSize_;
+  
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "BufferSource : doGetNextFrame : " << std::endl;
+#endif
   
   if (internal_fifo.empty()) {
+#ifdef STREAM_SEND_DEBUG
+    std::cout << "BufferSource : doGetNextFrame : fifo empty (1) " << std::endl;
+#endif
     active=false; // this method is not re-scheduled anymore .. must be called again.
     return;
   }
@@ -106,15 +119,29 @@ void BufferSource::doGetNextFrame() {
 
   f=internal_fifo.back(); // take the last element
   
-  fFrameSize         =(unsigned)f->payload.size()-offset;
+  fFrameSize =(unsigned)f->payload.size()-offset;
   
+  if (fMaxSize>=fFrameSize) { // unsigned numbers ..
+    fNumTruncatedBytes=0;
+  }
+  else {
+    fNumTruncatedBytes =fFrameSize-fMaxSize;
+    // fNumTruncatedBytes+=10; // stupid debugging
+  }
+  
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "BufferSource : doGetNextFrame : frame        " << *f << std::endl;
   std::cout << "BufferSource : doGetNextFrame : fMaxSize     " << fMaxSize << std::endl;
   std::cout << "BufferSource : doGetNextFrame : payload size " << f->payload.size() << std::endl;
   std::cout << "BufferSource : doGetNextFrame : fFrameSize   " << fFrameSize << std::endl;
+  std::cout << "BufferSource : doGetNextFrame : fNumTruncB   " << fNumTruncatedBytes << std::endl;
+  std::cout << "BufferSource : doGetNextFrame : payload      " << f->dumpPayload() << std::endl;
+#endif
+  
+  fFrameSize=fFrameSize-fNumTruncatedBytes;
   
   // memcpy(fTo, f->payload.data(), f->payload.size());
-  memcpy(fTo, f->payload.data()+offset, std::min(fFrameSize,fMaxSize));
-  fNumTruncatedBytes =std::min((unsigned)0,fFrameSize-fMaxSize);
+  memcpy(fTo, f->payload.data()+offset, fFrameSize);
   // fMaxSize  =f->payload.size();
   // fNumTruncatedBytes=0;
   
@@ -124,19 +151,40 @@ void BufferSource::doGetNextFrame() {
   // fPresentationTime.tv_sec   =(fMstimestamp/1000); // secs
   // fPresentationTime.tv_usec  =(fMstimestamp-fPresentationTime.tv_sec*1000)*1000; // microsecs
   // std::cout << "call_afterGetting: " << fPresentationTime.tv_sec << "." << fPresentationTime.tv_usec << " " << fFrameSize << "\n";
-  std::cout << "calling afterGetting\n";
-
+  
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "BufferSource : doGetNextFrame : recycle     " << *f << std::endl;
+#endif
   fifo.recycle(f); // return the frame to the main live555 incoming fifo
+#ifdef STREAM_SEND_DEBUG
+  fifo.diagnosis();
+#endif
   internal_fifo.pop_back();
   
-  if (internal_fifo.empty()) {
-    fDurationInMicroseconds = 0; // return immediately here and brake the re-scheduling
+  /*
+  if (fNumTruncatedBytes>0) {
+    active=false;
+    return;
   }
-  else { // approximate when this will be called again
+  */
+  
+  if (internal_fifo.empty()) {
+#ifdef STREAM_SEND_DEBUG
+    std::cout << "BufferSource : doGetNextFrame : fifo will be empty " << std::endl;
+#endif
     fDurationInMicroseconds = 0;
   }
+  else { // approximate when this will be called again
+#ifdef STREAM_SEND_DEBUG
+    std::cout << "BufferSource : doGetNextFrame : more frames in fifo " << std::endl;
+#endif
+    fDurationInMicroseconds = 0; // call again immediately
+  }
   
-  FramedSource::afterGetting(this);
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "BufferSource : doGetNextFrame : calling afterGetting\n";
+#endif
+  FramedSource::afterGetting(this); // will re-schedule BufferSource::doGetNextFrame()
 }
 
 
