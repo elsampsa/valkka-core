@@ -37,3 +37,5 @@ changetext
 python/valkka_core.i
 publish_lite.bash
 src/*.save
+git_tag.bash
+git_rm_tag.bash

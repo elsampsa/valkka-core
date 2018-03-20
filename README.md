@@ -54,13 +54,17 @@ Some key features of the Valkka library are:
 
 ## Features
 
-### Current stable version is 0.3.5
+### Current stable version is 0.3.6
+0.3.6 Version
+- Sending multicast works
+
+### Older versions
+
 0.3.5 Version : "10 x 1080p cameras running for a week"
 - Stable!  GPU direct memory access needed rubbing in the right way
 - Lots of fixes ..
 - Reading / writing from/to matroska container
 
-### Older versions
 
 0.3.0 Version name : "It was all about the vblank"
 - Several full-HD cameras now streaming OK

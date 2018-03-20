@@ -28,6 +28,15 @@ sed -i -r "s/VERSION_MAJOR(.*);/VERSION_MAJOR = $1;/g" include/sizes.h
 sed -i -r "s/VERSION_MINOR(.*);/VERSION_MINOR = $2;/g" include/sizes.h
 sed -i -r "s/VERSION_PATCH(.*);/VERSION_PATCH = $3;/g" include/sizes.h
 
+fs="git_tag.bash git_rm_tag.bash"
+for f in $fs
+do
+  # mod version numbers in git_tag.bash
+  sed -i -r "s/VERSION_MAJOR(.*);/VERSION_MAJOR=$1/g" $f
+  sed -i -r "s/VERSION_MINOR(.*);/VERSION_MINOR=$2/g" $f
+  sed -i -r "s/VERSION_PATCH(.*);/VERSION_PATCH=$3/g" $f
+done
+
 echo
 echo Updating docs
 echo
