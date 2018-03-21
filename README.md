@@ -5,7 +5,7 @@ The goal of this project is to provide a library for creating open source video 
 
 ## For the impatient
 
-Installation instructions, demo programs and API tutorial are available [here](https://elsampsa.github.io/valkka-examples/_build/html/intro.html)
+Installation instructions, demo programs and API tutorial are available [here](https://elsampsa.github.io/valkka-examples/)
 
 If you just want to use the API, no need to go further.
 

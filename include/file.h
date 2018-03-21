@@ -98,7 +98,9 @@ protected:
   std::vector<AVStream*>        streams;
   AVFormatContext               *output_context;
   
-  std::vector<Frame*>           setupframes;
+  // std::vector<Frame*>           setupframes;        ///< deep copies of the arrived setup frames
+  std::vector<Frame>            setupframes;        ///< deep copies of the arrived setup frames
+  Frame                         internal_frame;     ///< copy of the arrived frame and payload
   
 protected:
   void go(Frame* frame);

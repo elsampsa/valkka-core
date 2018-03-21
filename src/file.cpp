@@ -39,13 +39,23 @@ FileFrameFilter::FileFrameFilter(const char *name, FrameFilter *next) : FrameFil
   // two substreams per stream
   contexes.   resize(2,NULL);
   streams.    resize(2,NULL);
-  setupframes.resize(2,NULL);
+  // setupframes.resize(2,NULL);
+  setupframes.resize(2);
   timebase =av_make_q(1,1000); // we're using milliseconds
 }
 
 
 FileFrameFilter::~FileFrameFilter() {
+  Frame *frame;
   deActivate();
+  /*
+  for (auto it=setupframes.begin(); it!=setupframes.end(); it++) {
+    frame=*it;
+    if (frame!=NULL) {
+      delete frame;
+    }
+  }
+  */
 }
 
 
@@ -58,12 +68,15 @@ void FileFrameFilter::go(Frame* frame) {
       filelogger.log(LogLevel::fatal) << "FileFrameFilter : too many subsessions! " << std::endl;
     }
     else {
-      filelogger.log(LogLevel::debug) << "FileFrameFilter :  go : got setup frame " << std::endl;
-      setupframes[frame->subsession_index]=frame; 
+      filelogger.log(LogLevel::debug) << "FileFrameFilter :  go : got setup frame " << *frame << std::endl;
+      // setupframes[frame->subsession_index] = new Frame();
+      // *(setupframes[frame->subsession_index])=*frame; // deep copy of the frame
+      setupframes[frame->subsession_index]=*frame;
     }
   }
   else if (!ready) {
-    if (setupframes[0] != NULL) { // we have got at least one setupframe and after that, something else (payload)
+    // if (setupframes[0] != NULL) { // we have got at least one setupframe and after that, something else (payload)
+    if (setupframes[0].frametype != FrameType::none) { // we have got at least one setupframe and after that, something else (payload)
       ready=true;
     }
   }
@@ -86,8 +99,11 @@ void FileFrameFilter::go(Frame* frame) {
     filelogger.log(LogLevel::debug) << "FileFrameFilter : writing frame with mstimestamp " << dt << std::endl;
     //av_stream=streams[frame->subsession_index];
     
-    frame->useAVPacket(dt); // "mirror" data into AVPacket structure with a certain timestamp
-    av_interleaved_write_frame(output_context,frame->avpkt);
+    internal_frame =*frame; // deep copy of the frame
+    // frame->useAVPacket(dt); // "mirror" data into AVPacket structure with a certain timestamp
+    internal_frame.useAVPacket(dt); // "mirror" data into AVPacket structure with a certain timestamp
+    // av_interleaved_write_frame(output_context,frame->avpkt);
+    av_interleaved_write_frame(output_context,internal_frame.avpkt);
   }
   else {
     // std::cout << "FileFrameFilter: go: discarding frame" << std::endl;
@@ -122,24 +138,26 @@ void FileFrameFilter::initFile() {
   }
     
   // use the saved setup frames (if any) to set up the streams
-  Frame *frame; // alias
+  // Frame *frame; // alias
+  Frame frame;
   for (auto it=setupframes.begin(); it!=setupframes.end(); it++) {
    frame=*it;
-   if (!frame) {
+   // if (!frame) {
+   if (frame.frametype==FrameType::none) {
    }
    else { // got setupframe
-    switch ( (frame->setup_pars).frametype ) { // NEW_CODEC_DEV // when adding new codecs, make changes here: add relevant decoder per codec
+    switch ( (frame.setup_pars).frametype ) { // NEW_CODEC_DEV // when adding new codecs, make changes here: add relevant decoder per codec
       case FrameType::h264: // AV_CODEC_ID_H264
         codec_id =AV_CODEC_ID_H264;
-        filelogger.log(LogLevel::debug) << "FileFrameFilter :  initFile : Initializing H264 at index " << frame->subsession_index << std::endl;
+        filelogger.log(LogLevel::debug) << "FileFrameFilter :  initFile : Initializing H264 at index " << frame.subsession_index << std::endl;
         break;
       case FrameType::pcmu:
         codec_id =AV_CODEC_ID_PCM_MULAW;
-        filelogger.log(LogLevel::debug) << "FileFrameFilter :  initFile : Initializing PCMU at index " << frame->subsession_index << std::endl;
+        filelogger.log(LogLevel::debug) << "FileFrameFilter :  initFile : Initializing PCMU at index " << frame.subsession_index << std::endl;
         break;
       default:
         codec_id=AV_CODEC_ID_NONE;
-        filelogger.log(LogLevel::debug) << "FileFrameFilter :  initFile : Could not init subsession " << frame->subsession_index << std::endl;
+        filelogger.log(LogLevel::debug) << "FileFrameFilter :  initFile : Could not init subsession " << frame.subsession_index << std::endl;
         break;
       }
       // AVCodecContext* avcodec_alloc_context3(const AVCodec * codec)
@@ -161,8 +179,8 @@ void FileFrameFilter::initFile() {
         i=avcodec_parameters_from_context(av_stream->codecpar,av_codec_context);
         
         // std::cout << "FileFrameFilter : initFile : context and stream " << std::endl;
-        contexes[frame->subsession_index] =av_codec_context;
-        streams [frame->subsession_index] =av_stream;
+        contexes[frame.subsession_index] =av_codec_context;
+        streams [frame.subsession_index] =av_stream;
         initialized =true; // so, at least one substream init'd
       }
     } // got setupframe
