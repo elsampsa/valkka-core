@@ -28,16 +28,19 @@
  *  @file    avthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief FFmpeg decoding thread
  *
  */
 
-#include "sizes.h"
-#include "frames.h"
-#include "threads.h" 
-#include "decoders.h"
+#include "constant.h"
+#include "frame.h"
+#include "thread.h" 
+#include "decoder.h"
+#include "tools.h"
+#include "framefilter.h"
+
 
 
 /** A thread consuming frames and feeding them to various encoders
@@ -53,70 +56,52 @@
  */
 class AVThread : public Thread { // <pyapi>
   
-public:
-
-  /** Redefinition of characteristic signals for AVThread
-   * 
-   */
-  enum class Signals {
-    none,
-    exit,
-    on,  ///< turn decoding on 
-    off  ///< turn decoding off
-  };
-
-  
-  /** Redefinition of characteristic signal contexts (info that goes with the signal) for AVThread thread
-   *
-   * remember : Thread::SignalContext is not overwritten, only hidden
-   * 
-   */
-  struct SignalContext {
-    Signals signal;
-    // AVConnectionContext connection_context; // in the case we want pass more information
-  };
-
 
 public: // <pyapi>
   /** Default constructor
    * 
    * @param name              Name of the thread
-   * @param infifo            Incoming frames are consumed from here
    * @param outfilter         Outgoing frames are written here.  Outgoing frames may be of type FrameType::avframe
-   * @param core_id           Bind the decoding thread to cpu number core_id
-   * @param mstimetolerance   Drop frames if they are in milliseconds this much late
+   * @param fifo_ctx          Parametrization of the internal FrameFifo
    * 
    */
-  AVThread(const char* name, FrameFifo& infifo, FrameFilter& outfilter, int core_id=-1, long int mstimetolerance=0); // <pyapi>
+  AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx=FrameFifoContext()); // <pyapi>
   ~AVThread(); ///< Default destructor.  Calls AVThread::stopCall // <pyapi>
   
+protected: // frame input
+  FrameFifo               infifo;           ///< Incoming frames are read from here
+  FifoFrameFilter         infilter;         ///< Write incoming frames here
+  BlockingFifoFrameFilter infilter_block;   ///< Incoming frames can also be written here.  If stack runs out of frames, writing will block
+  
 protected:
-  FrameFifo&   infifo;                  ///< Incoming frames are read from here
   FrameFilter& outfilter;               ///< Outgoing, decoded frames are written here
-  std::vector<DecoderBase*> decoders;   ///< A vector/list of registered and instantiated decoders
+  std::vector<Decoder*> decoders;   ///< A vector/list of registered and instantiated decoders
   long int     mstimetolerance;         ///< Drop frames if they are in milliseconds this much late
   
 protected:
   bool is_decoding; ///< should currently decode or not
   
 protected: // Thread member redefinitions
-  std::deque<SignalContext> signal_fifo;   ///< Redefinition of signal fifo.  Signal fifo of Thread::SignalContext(s) is now hidden.
+  std::deque<AVSignalContext> signal_fifo;   ///< Redefinition of signal fifo.
   
 public: // redefined virtual functions
   void run();
   void preRun();
   void postRun();
-  void sendSignal(SignalContext signal_ctx); ///< Redefined : Thread::SignalContext has been changed to AVThread::SignalContext  
-
+  void sendSignal(AVSignalContext signal_ctx); ///< Redefined : Thread::SignalContext has been changed to AVThread::SignalContext
+  
+protected: 
+  FrameFifo &getFifo();
+  
 protected:
-  /*! @copydoc Thread::hangleSignals
-   */
   void handleSignals();
   
 public: // API <pyapi>
+  FifoFrameFilter &getFrameFilter();            // <pyapi>
+  FifoFrameFilter &getBlockingFrameFilter();    // <pyapi>
   void decodingOnCall();   ///< API method: enable decoding        // <pyapi>
   void decodingOffCall();  ///< API method: pause decoding         // <pyapi>
   void stopCall();         ///< API method: terminates the thread  // <pyapi>
 }; // <pyapi>
 
-#endif 
+#endif

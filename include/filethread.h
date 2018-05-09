@@ -1,3 +1,6 @@
+#ifndef filethread_HEADER_GUARD 
+#define filethread_HEADER_GUARD
+
 /*
  * filethread.h : A Thread handling files and sending frames to fifo
  * 
@@ -26,14 +29,15 @@
  *  @file    filethread.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief A Thread handling files and sending frames to fifo
  */ 
 
 
-#include "frames.h"
-#include "threads.h"
+#include "frame.h"
+#include "thread.h"
+#include "framefilter.h"
 #include "logging.h"
 #include "tools.h"
 
@@ -52,7 +56,7 @@ enum class FileState {                      // <pyapi>
 
 /** This class descibes the origin and state of a FileStream.
  * 
- * It's also used by FileThread::SignalContext to carry signal information.
+ * It's also used by FileSignalContext to carry signal information.
  * 
  * Two different constructors are provided, the one without arguments can be used to create "dummy" objects.
  * 
@@ -105,15 +109,14 @@ public:
   AVFormatContext     *input_context;
  
 public:
-  Frame       setupframe;             ///< Setup frame written to the filterchain
-  Frame       out_frame;              ///< This frame is written to the filterchain (i.e. to FileStream::ctx and there to FileContext::framefilter) 
+  SetupFrame  setupframe;             ///< Setup frame written to the filterchain
+  BasicFrame  out_frame;              ///< This frame is written to the filterchain (i.e. to FileStream::ctx and there to FileContext::framefilter) 
   long int    duration;               ///< Duration of the stream
   long int    reftime;                ///< Relation between the stream time and wallclock time.  See \ref timing
   long int    target_mstimestamp_;    ///< Where the stream would like to be (underscore means stream time)
   long int    frame_mstimestamp_;     ///< Timestamp of previous frame sent, -1 means there was no previous frame (underscore means stream time)
   FileState   state;                  ///< Decribes the FileStream state: errors, stopped, playing, etc.
   AVPacket    *avpkt;                 ///< Data for the next frame in ffmpeg AVPacket format
-  std::vector<FrameType> frame_types;
   
 public: // getters
   SlotNumber getSlot() {return ctx.slot;}
@@ -127,6 +130,31 @@ public:
   long int pullNextFrame();                    ///< Tries to achieve FileStream::target_mstimestamp_ . Sends frames whose timestamps are less than that to the filterchain (e.g. to FileContext::framefilter).  Returns timeout to the next frame.
 };
 
+
+/** Characteristic signals for the FileThread.
+* 
+* These signals map directly into methods with the same names
+* 
+*/
+enum class FileSignal {
+  none,
+  exit,                 
+  open_stream,
+  close_stream,
+  seek_stream,
+  play_stream,
+  stop_stream,
+  get_state            ///< query information about the stream
+};
+
+
+/** Identifies the information the signals FileSignal carry.  Encapsulates a FileContext instance.
+*
+*/
+struct FileSignalContext {
+  FileSignal  signal;
+  FileContext *file_context; ///< pointer, cause we have return values
+};
 
 
 /** This class in analogous to LiveThread, but it handles files instead of live streams.
@@ -143,31 +171,6 @@ public:
  */
 class FileThread : public Thread { // <pyapi>
 
-  /** Characteristic signals for the FileThread.
-   * 
-   * These signals map directly into methods with the same names
-   * 
-   */
-  enum class Signals {
-    none,
-    exit,                 
-    open_stream,
-    close_stream,
-    seek_stream,
-    play_stream,
-    stop_stream,
-    get_state            ///< query information about the stream
-  };
-  
-  /** Identifies the information the signals FileThread::Signals carry.  Encapsulates a FileContext instance.
-   *
-   */
-  struct SignalContext {
-    Signals     signal;
-    FileContext *file_context; ///< pointer, cause we have return values
-  };
-
-  
 public:                                                // <pyapi>
   /** Default constructor
    * 
@@ -175,12 +178,16 @@ public:                                                // <pyapi>
    * @param core_id       (optional) bind this thread to a specific processor
    * 
    */
-  FileThread(const char* name, int core_id=-1);        // <pyapi>
+  FileThread(const char* name, FrameFifoContext fifo_ctx=FrameFifoContext());        // <pyapi>
   /** Default destructor */
   ~FileThread();                                       // <pyapi>
   
+protected: // frame input // TODO: implement writing to files with FileThread
+  FrameFifo         infifo;     ///< A FrameFifo for incoming frames
+  FifoFrameFilter   infilter;   ///< A FrameFilter for writing incoming frames
+  
 protected: // redefinitions
-  std::deque<SignalContext> signal_fifo;    ///< Redefinition of signal fifo (Thread::signal_fifo is now hidden from usage) 
+  std::deque<FileSignalContext> signal_fifo;    ///< Redefinition of signal fifo (Thread::signal_fifo is now hidden from usage) 
   
 protected:
   std::vector<FileStream*> slots_;          ///< Slots: a vector of FileStream instances
@@ -200,8 +207,8 @@ public: // redefined virtual functions
   void run();
   void preRun();
   void postRun();
-  void sendSignal(SignalContext signal_ctx);         ///< Redefined : Thread::SignalContext has been changed to FileThread::SignalContext
-  void sendSignalAndWait(SignalContext signal_ctx);  ///< Redefined : Thread::SignalContext has been changed to FileThread::SignalContext
+  void sendSignal(FileSignalContext signal_ctx);         
+  void sendSignalAndWait(FileSignalContext signal_ctx);  
   
 protected:
   void handleSignals();
@@ -221,6 +228,7 @@ public: // *** C & Python API *** .. these routines go through the convar/mutex 
   void playFileStreamCall       (FileContext &file_ctx); ///< API method: starts playing the stream and feeding frames      // <pyapi>
   void stopFileStreamCall       (FileContext &file_ctx); ///< API method: stops playing the stream and feeding frames       // <pyapi>
   void stopCall();                                       ///< API method: stops the LiveThread                              // <pyapi>
+  FifoFrameFilter &getFrameFilter();                     ///< API method: get filter for sending frames with live555        // <pyapi>
 };                                                                                                                          // <pyapi>
 
-
+#endif

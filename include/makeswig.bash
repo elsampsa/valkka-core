@@ -3,7 +3,7 @@
 # extract everything that we want to expose in python
 #
 
-headers="frames.h filters.h queues.h threads.h livethread.h avthread.h openglthread.h sizes.h sharedmem.h avdep.h logging.h filethread.h file.h"
+headers="thread.h framefifo.h framefilter.h threadsignal.h livethread.h filethread.h fileframefilter.h avthread.h openglthread.h openglframefifo.h sharedmem.h logging.h constant.h avdep.h"
 
 for header in $headers
 do

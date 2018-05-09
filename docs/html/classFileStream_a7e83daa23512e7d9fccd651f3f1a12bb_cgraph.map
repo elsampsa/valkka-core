@@ -1,8 +1,0 @@
-<map id="FileStream::FileStream" name="FileStream::FileStream">
-<area shape="rect" id="node2" href="$classFrame.html#a4d1ea5d3a6d5c8d3bfc2481db4ba98f8" title="Set PTS in unix epoch millisecond timestamp. " alt="" coords="209,5,377,32"/>
-<area shape="rect" id="node3" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="648,107,815,133"/>
-<area shape="rect" id="node4" href="$classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="236,107,351,133"/>
-<area shape="rect" id="node6" href="$classFileStream.html#a2790fb16762a066b418d1d93653deddf" title="Seek to a desider stream time. " alt="" coords="233,157,354,184"/>
-<area shape="rect" id="node5" href="$classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="457,107,568,133"/>
-<area shape="rect" id="node7" href="$classFileStream.html#a8f6115df951a7e447cb349011844dcb3" title="Creates a correspondence with the current wallclock time and a desider stream time, by calculating FileStream::reftime. See Presention timing and playing. " alt="" coords="425,157,600,184"/>
-</map>

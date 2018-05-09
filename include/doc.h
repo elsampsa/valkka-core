@@ -26,7 +26,7 @@
  *  @file    doc.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief Extra doxygen documentation
  *
@@ -47,16 +47,12 @@
 /** @mainpage
  * 
  *
- * Valkka - Massive video streaming for linux
- * ------------------------------------------
+ * Valkka - OpenSource Video Management
+ * ------------------------------------
  *
- * The long-term goal of this project is to provide open source video surveillance, management and analysis (VSMA) systems in Linux environment, and to be able to create them with the combination of Python3 and Qt (i.e. PyQt).  The library has both Cpp and Python3 API (the latter is recommended).
+ * The long-term goal of this project is to provide open source video surveillance, management and analysis systems (VMSA) in Linux environment, and to be able to create them with the combination of Python3 and Qt (i.e. PyQt).  The library has both Cpp and Python3 API (the latter is recommended).
  *
- * Warning: If you simply want to use Valkka's python3 API, you're in the wrong place.  This doxygen generated documentation is for people who wan't to develop Valkka core library.  
- * 
- * For using Valkka API, just download the examples git repository and start coding in python.  Said that, however, you should read about \ref process_chart
- * 
- * 
+ * Warning: If you simply want to use Valkka's python3 API, you should start from <https://elsampsa.github.io/valkka-examples/>.
  * 
  * Authors
  * -------
@@ -197,6 +193,15 @@
  * - Processes read from mutex-protected fifos (base class for fifos is FrameFifo)
  * - Processes write into filters (base class FrameFilter)
  * 
+ * In practice, Thread classes manage their own internal FrameFifo and FifoFrameFilter instances, and things become simpler:
+ \verbatim
+ * (1.LiveThread:livethread) --> {2.TimestampFrameFilter:myfilter} -->> (3.AVThread:avthread) --> ...
+ \endverbatim
+ *
+ * An input framefilter can be requested with AVThread::getFrameFifo()
+ *
+ * LiveThread, AVThread and OpenGLThread constructors take a parameter that defines the stack/fifo combination (FrameFifoContext, OpenGLFrameFifoContext).
+ *
  * In the case of LiveThread, the API user passes a separate FrameFilter per each requested stream to LiveThread.  That FrameFilter then serves as a starting point for the filter chain.  The last filter in the chain is typically FifoFrameFilter, e.g. a filter that feeds the (modified/filtered) decoded frame to a fifo that is then being consumed by AVThread.
  * 
  * For more details, refer to examples, doxygen documentation and the source code itself.
@@ -210,13 +215,12 @@
                                    +--> {3.ForkFrameFilter:forkfilter}  
                                           |    |
                                           |    |
-        through filters, to filesystem <--+    +--> {4.FifoFrameFilter:fifofilter} --> [5.FrameFifo:framefifo] -->> (6.AVThread:avthread)
-                                                                                                                              |
-                                                                                                                              |
-                                                                                                                              +--> {7.ForkFrameFilter:forkfilter2}  
-                                                                                                                                            |    |                                                                                    
-                                                                                                                                            |    |
-                                   (10.OpenGLThread:openglthread) <<-- [9.OpenGLFrameFifo:gl_fifo] <-- {8.FifoFrameFilter:gl_in_filter}  <--+    +--> .. finally, to analyzing process
+        through filters, to filesystem <--+    +--->> (6.AVThread:avthread) ---------------------+
+                                                                                                 |
+                                                                                                 +--> {7.ForkFrameFilter:forkfilter2}  
+                                                                                                                  |    |                                                                                    
+                                                                                                                  |    |
+                                   (10.OpenGLThread:openglthread) <<----------------------------------------------+    +--> .. finally, to analyzing process
                               feeds the video into various X-windoses
   
  \endverbatim
@@ -340,7 +344,19 @@
  *  
  *- To summarize, the call chain looks like this: LiveThread::handleFrame => Outbound::handleFrame => Stream::handleFrame (transfers the frame from LiveFifo to BufferSource::internal_fifo) => BufferSource::handleFrame => FramedSource::afterGetting
  *
+ *- The Live555 filterchain looks like this:
+ \verbatim 
+ buffer_source  =new BufferSource(env, fifo, 0, 0, 4); // nalstamp offset: 4
+ terminal       =H264VideoStreamDiscreteFramer::createNew(env, buffer_source);
+ 
+ sink           = H264VideoRTPSink::createNew(env,rtpGroupsock, 96);
+
+ sink->startPlaying(*(terminal), this->afterPlaying, this);
+ \endverbatim
  *
+ *- Frames flow like this: 
+ *BufferSource => H264VideoStreamDiscreteFramer => H264VideoRTPSink
+ * 
  */
 
 

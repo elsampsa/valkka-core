@@ -69,7 +69,7 @@ ext_modules.append(ext)
 setup(
   name = "Valkka",
   # WARNING: the following line is modified by the "setver.bash" script
-  version = "0.3.6", 
+  version = "0.4.0", 
   install_requires = [
     'docutils>=0.3',
     'numpy>=1.14'

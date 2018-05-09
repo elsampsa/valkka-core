@@ -26,7 +26,7 @@
  *  @file    shmem_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief 
  *
@@ -174,8 +174,8 @@ void test_6() { // open two terminals.  Start this from first terminal and test_
   const char* name = "@TEST: shmem_test: test 6: ";
   std::cout << name <<"** @@Test ShmemFrameFilter **" << std::endl;
   
-  Frame *f = new Frame;
-  SharedMemFrameFilter shmem("testing", 10, 1024*1024*30);
+  BasicFrame *f = new BasicFrame;
+  ShmemFrameFilter shmem("testing", 10, 1024*1024*30);
   // SharedMemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout)
   
   int inp, cc, i, index;

@@ -25,7 +25,7 @@ basic1.py : Some more custom filterchain classes for different use cases
 @file    basic1.py
 @author  Sampsa Riikonen
 @date    2018
-@version 0.3.6 
+@version 0.4.0 
   
 @brief Some more custom filterchain classes for different use cases
 """
@@ -44,20 +44,25 @@ class BasicFilterchain1:
   
   ::
     
-    (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} --> [FrameFifo:av_fifo] -->> (AVThread:avthread) --> {FifoFrameFilter:gl_in_gilter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
+    (LiveThread:livethread) -->> (AVThread:avthread) -->> (OpenGLThread:glthread)
   
   i.e. the stream is decoded by an AVThread and sent to the OpenGLThread for presentation
   
   LiveConnectionContext and FileContext are managed by the user
   
-  Differet to BasicFilterChain: has a file context
-  
+  Different to BasicFilterChain: has a file context
   """
   
   parameter_defs={
     "openglthread" : OpenGLThread,
     "slot"         : int,
-    "fifolen"      : (int,10),
+    
+    # these are for the AVThread instance:
+    "n_basic"      : (int,20), # number of payload frames in the stack
+    "n_setup"      : (int,20), # number of setup frames in the stack
+    "n_signal"     : (int,20), # number of signal frames in the stack
+    "flush_when_full" : (bool, False), # clear fifo at overflow
+    
     "affinity"     : (int,-1),
     "msreconnect"  : (int,0),
     "verbose"      : (bool,False)
@@ -92,22 +97,19 @@ class BasicFilterchain1:
 
   def makeChain(self):
     """Create the filter chain
-    """
+    """    
+    self.gl_in_filter  =self.openglthread.getInput() # get input FrameFilter from OpenGLThread
     
-    self.gl_fifo         =self.openglthread.core.getFifo()
-    self.gl_in_filter    =core.FifoFrameFilter    ("gl_in_filter_"+self.idst,self.gl_fifo)
+    self.framefifo_ctx=core.FrameFifoContext()
+    self.framefifo_ctx.n_basic           =self.n_basic
+    self.framefifo_ctx.n_setup           =self.n_setup
+    self.framefifo_ctx.n_signal          =self.n_signal
+    self.framefifo_ctx.flush_when_full   =self.flush_when_full
+    
+    self.avthread      =core.AVThread("avthread_"+self.idst, self.gl_in_filter, self.framefifo_ctx)
+    self.avthread.setAffinity(self.affinity)
+    self.av_in_filter  =self.avthread.getFrameFilter() # get input FrameFilter from AVThread
 
-    self.av_fifo         =core.FrameFifo          ("av_fifo_"+self.idst,self.fifolen,True)        # FrameFifo is 10 frames long.  Payloads in the frames adapt automatically to the streamed data.  Clear fifo when saturated.
-
-    # [av_fifo] -->> (avthread) --> {gl_in_filter}
-    self.avthread        =core.AVThread           ("avthread_"+self.idst,            # name    
-                                                    self.av_fifo,          # read from
-                                                    self.gl_in_filter,     # write to
-                                                    self.affinity # thread affinity: -1 = no affinity, n = id of processor where the thread is bound
-                                                  ) 
-
-    self.av_in_filter    =core.FifoFrameFilter    ("av_in_filter_"+self.idst,   self.av_fifo)
-    # self.live_out_filter =core.InfoFrameFilter    ("live_out_filter"+self.idst,self.av_in_filter)
     
 
   def setLiveContext(self,address):
@@ -196,15 +198,13 @@ class ShmemFilterchain1(BasicFilterchain1):
   
   ::
   
-    (LiveThread:livethread) --> {InfoFrameFilter:live_out_filter} --> {FifoFrameFilter:av_in_filter} 
-    
-    --> [FrameFifo:av_fifo] -->> (AVThread:avthread) --+ 
+    (LiveThread:livethread) -->> (AVThread:avthread) --+ 
                                                        |   main branch
     {ForkFrameFilter: fork_filter} <-------------------+
                |
-      branch 1 +--> {FifoFrameFilter:gl_in_gilter} --> [OpenGLFrameFifo:gl_fifo] -->> (OpenGLThread:glthread)
+      branch 1 +-->> (OpenGLThread:glthread)
                |
-      branch 2 +--> {IntervalFrameFilter: interval_filter} --> {SwScaleFrameFilter: sws_filter} --> {SharedMemFrameFilter: shmem_filter}
+      branch 2 +--> {IntervalFrameFilter: interval_filter} --> {SwScaleFrameFilter: sws_filter} --> {RGBShmemFrameFilter: shmem_filter}
   
   
   * Frames are decoded in the main branch from H264 => YUV
@@ -238,54 +238,49 @@ class ShmemFilterchain1(BasicFilterchain1):
     """
     if (self.shmem_name==None):
       self.shmem_name ="shmemff"+self.idst
+    # print(self.pre,self.shmem_name)
     
-    # dimensions of the rgb image
-    # print(self.pre,"makeChain :",self.shmem_name)
-    self.n_bytes =self.shmem_image_dimensions[0]*self.shmem_image_dimensions[1]*3
+    # self.n_bytes =self.shmem_image_dimensions[0]*self.shmem_image_dimensions[1]*3
     n_buf   =self.shmem_ringbuffer_size
+    
+    # branch 1
+    self.gl_in_filter    =self.openglthread.getInput() # get input FrameFilter from OpenGLThread
     
     # branch 2
     # print(self.pre,"using shmem name",self.shmem_name)
-    # print(self.pre,self.shmem_name)
-    
-    self.shmem_filter    =core.SharedMemFrameFilter    (self.shmem_name, n_buf, self.n_bytes) # shmem id, cells, bytes per cell # TODO: fix std::size_t in the swig wrapper
-    # self.shmem_filter    =core.InfoFrameFilter         ("info"+self.idst) # debug
-    
-    # self.interval_filter =core.TimeIntervalFrameFilter ("interval_filter"+self.idst, self.shmem_image_interval, self.shmem_filter) # FIX
-    # self.sws_filter      =core.SwScaleFrameFilter      ("sws_filter"+self.idst, self.shmem_image_dimensions[0], self.shmem_image_dimensions[1], self.interval_filter) # FIX
+    # print(self.shmem_name)
+    self.shmem_filter    =core.RGBShmemFrameFilter  (self.shmem_name,  n_buf, self.shmem_image_dimensions[0], self.shmem_image_dimensions[1]) # shmem id, cells, width, height 
+    # self.shmem_filter    =core.InfoFrameFilter        ("info"+self.idst) # debug
     
     self.sws_filter      =core.SwScaleFrameFilter      ("sws_filter"+self.idst, self.shmem_image_dimensions[0], self.shmem_image_dimensions[1], self.shmem_filter)
     self.interval_filter =core.TimeIntervalFrameFilter ("interval_filter"+self.idst, self.shmem_image_interval, self.sws_filter)
     
-    # branch 1
-    self.gl_fifo         =self.openglthread.core.getFifo()
-    self.gl_in_filter    =core.FifoFrameFilter    ("gl_in_filter"+self.idst,self.gl_fifo)
-    
-    # fork
+    # fork: writes to branches 1 and 2
     # self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.sws_filter) # FIX
     self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.interval_filter)
     
     # main branch
-    # [av_fifo] -->> (avthread) --> {gl_in_filter}
-    self.av_fifo         =core.FrameFifo          ("av_fifo"+self.idst,self.fifolen,True)        # FrameFifo is 10 frames long.  Payloads in the frames adapt automatically to the streamed data.  Clear fifo when saturated
-    self.avthread        =core.AVThread           ("avthread"+self.idst,   # name    
-                                                    self.av_fifo,          # read from
-                                                    self.fork_filter,     # write to
-                                                    self.affinity # thread affinity: -1 = no affinity, n = id of processor where the thread is bound
-                                                  ) 
-    self.av_in_filter    =core.FifoFrameFilter    ("av_in_filter"+self.idst,   self.av_fifo)
-    # self.live_out_filter =core.InfoFrameFilter    ("live_out_filter"+self.idst,self.av_in_filter) # for printing out every encoded frame, enable this and disable the next line ..
-    self.live_out_filter =self.av_in_filter
-
-
+    self.framefifo_ctx=core.FrameFifoContext()
+    self.framefifo_ctx.n_basic           =self.n_basic
+    self.framefifo_ctx.n_setup           =self.n_setup
+    self.framefifo_ctx.n_signal          =self.n_signal
+    self.framefifo_ctx.flush_when_full   =self.flush_when_full
     
+    self.avthread      =core.AVThread("avthread_"+self.idst, self.fork_filter, self.framefifo_ctx) # AVThread writes to self.fork_filter
+    self.avthread.setAffinity(self.affinity)
+    self.av_in_filter  =self.avthread.getFrameFilter() # get input FrameFilter from AVThread
+    # self.av_in_filter is used by BasicFilterchain.createContext that passes self.av_in_filter to LiveThread
+    # # self.live_out_filter =core.InfoFrameFilter    ("live_out_filter"+self.idst,self.av_in_filter)
+
+
   def getShmemPars(self):
     """Returns shared mem name that should be used in the client process and the ringbuffer size
     """
     # SharedMemRingBuffer(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0, bool is_server=false); // <pyapi>
-    return self.shmem_name, self.shmem_ringbuffer_size, self.n_bytes
+    # return self.shmem_name, self.shmem_ringbuffer_size, self.n_bytes
+    return self.shmem_name, self.shmem_ringbuffer_size, self.shmem_image_dimensions
       
-      
+
 def test1():
   st=""" Test single live stream
   """
@@ -299,7 +294,7 @@ def test1():
   
   openglthread=OpenGLThread(
     name    ="mythread",
-    n1440p  =5,
+    n_1440p  =5,
     verbose =True
     )
   
@@ -334,7 +329,7 @@ def test2():
   
   openglthread=OpenGLThread(
     name    ="mythread",
-    n1440p  =5,
+    n_1440p  =5,
     verbose =True
     )
   
@@ -373,7 +368,7 @@ def test3():
   
   openglthread=OpenGLThread(
     name    ="mythread",
-    n1440p  =5,
+    n_1440p  =5,
     verbose =True
     )
   

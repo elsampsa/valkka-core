@@ -7,13 +7,15 @@
 %{ // this is prepended in the wapper-generated c(pp) file
 #define SWIG_FILE_WITH_INIT
 #include "X11/Xlib.h"
-#include "include/filters.h"
-#include "include/queues.h"
+#include "include/framefilter.h"
+#include "include/framefifo.h"
+#include "include/threadsignal.h"
 #include "include/livethread.h"
 #include "include/filethread.h"
-#include "include/file.h"
+#include "include/fileframefilter.h"
 #include "include/avthread.h"
 #include "include/openglthread.h"
+#include "include/openglframefifo.h"
 #include "include/sharedmem.h"
 #include "include/logging.h"
 #include <Python.h>
@@ -58,8 +60,5 @@ void ValkkaXInitThreads(void) {
 %}
 
 // next, expose what is necessary
-
-// extern Status XInitThreads(void);
-
 // autogenerate from this point on
 

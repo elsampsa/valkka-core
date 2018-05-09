@@ -1,11 +1,11 @@
-# Valkka - Massive video streaming for linux
+# Valkka - OpenSource Video Management for Linux
 
 ## Synopsis
-The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VSMAs) in Linux environment.  The idea is to be able create VSMA systems with graphical user interfaces (GUIs) using the combination of python3 and Qt (i.e. PyQt).
+The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VMSA) in Linux environment.  The idea is create VMSAs with graphical user interfaces (GUIs) using the combination of python3 and Qt (i.e. PyQt).
 
 ## For the impatient
 
-Installation instructions, demo programs and API tutorial are available [here](https://elsampsa.github.io/valkka-examples/)
+Installation instructions, demo programs and API tutorial are available [here](https://elsampsa.github.io/valkka-examples/) (you should read that first)
 
 If you just want to use the API, no need to go further.
 
@@ -13,7 +13,7 @@ If you are interested in the core development, keep on reading.
 
 ## Why this library?
 
-Lets take a look at a typical VSMA programming architecture problem:
+Lets take a look at a typical video management system architecture problem:
 - Stream H264 video from an IP camera using the RTSP protocol
 - Branch that stream, and direct it to (1) filesystem and (2) a decoder
 - From the decoder, branch the decoded YUV bitmap to (3-5):
@@ -23,9 +23,9 @@ Lets take a look at a typical VSMA programming architecture problem:
 - The media stream should be decoded once and only once
 - The program should be controllable through python3, with graphical interface based on Qt
 
-You might try to tackle this with some available stock media player libraries, but I'll promise, you wont get far..!
+You might try to tackle this with some available stock media player libraries, but I'll promise, you wont get far.
 
-Consider further that in a typical VSMA system you may have up to 60+ ip cameras plugged into the same server.  Servers should also work as a proxies, re-streaming the ip cameras to other servers.
+Consider further that in a typical VMSA you may have up to 60+ ip cameras plugged into the same server.  Servers should also work as a proxies, re-streaming the ip cameras to other servers.
 
 Using Valkka, you can instantiate threads, and define how media streams are branched and pipelined between those threads.  The underlying threads and mutex-protected queues are hidden from the developer that controls everything using a python3 API.  The process topology of the example case would look like this:
 
@@ -49,12 +49,17 @@ Some key features of the Valkka library are:
   - Arbitrary geometry transformations : think of fisheye spheres, etc.
   - And much more .. !
 - Two-level API.  Level 1 is simply swig-wrapped cpp.  Level 2 is higher level and makes development even easier.
-- For an overview of technical details, see [docu](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
+- For an overview of technical details, see [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
 
 
 ## Features
 
-### Current stable version is 0.3.6
+### Current stable version is 0.4.0
+
+0.4.0 Version : "The Rewrite"
+- A complete rewrite of the library
+- (documentation might lag a bit behind..)
+
 0.3.6 Version
 - Sending multicast works
 
@@ -64,7 +69,6 @@ Some key features of the Valkka library are:
 - Stable!  GPU direct memory access needed rubbing in the right way
 - Lots of fixes ..
 - Reading / writing from/to matroska container
-
 
 0.3.0 Version name : "It was all about the vblank"
 - Several full-HD cameras now streaming OK
@@ -91,7 +95,7 @@ Some key features of the Valkka library are:
 - A separate python3 Onvif module
 
 ### Very long term goals
-- A complete VSMA system
+- A complete video management & analysis system
 
 ## Compile yourself
 

@@ -26,7 +26,7 @@
  *  @file    logging.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  @brief   Logging with various log levels
  */ 
 
@@ -95,7 +95,7 @@ Logger threadlogger;
 Logger livethreadlogger;
 Logger avthreadlogger;
 Logger decoderlogger;
-Logger queuelogger;
+Logger fifologger;
 Logger opengllogger;
 Logger filelogger;
 Logger filethreadlogger;
@@ -109,7 +109,7 @@ void crazy_log_all() {
   livethreadlogger    .setLevel(LogLevel::crazy);
   avthreadlogger      .setLevel(LogLevel::crazy);
   decoderlogger       .setLevel(LogLevel::crazy);
-  queuelogger         .setLevel(LogLevel::crazy);
+  fifologger          .setLevel(LogLevel::crazy);
   opengllogger        .setLevel(LogLevel::crazy);
   filelogger          .setLevel(LogLevel::crazy);
   filethreadlogger    .setLevel(LogLevel::crazy);
@@ -124,7 +124,7 @@ void debug_log_all() {
   livethreadlogger    .setLevel(LogLevel::debug);
   avthreadlogger      .setLevel(LogLevel::debug);
   decoderlogger       .setLevel(LogLevel::debug);
-  queuelogger         .setLevel(LogLevel::debug);
+  fifologger          .setLevel(LogLevel::debug);
   opengllogger        .setLevel(LogLevel::debug);
   filelogger          .setLevel(LogLevel::debug);
   filethreadlogger    .setLevel(LogLevel::debug);
@@ -138,7 +138,7 @@ void normal_log_all() {
   livethreadlogger    .setLevel(LogLevel::normal);
   avthreadlogger      .setLevel(LogLevel::normal);
   decoderlogger       .setLevel(LogLevel::normal);
-  queuelogger         .setLevel(LogLevel::normal);
+  fifologger          .setLevel(LogLevel::normal);
   opengllogger        .setLevel(LogLevel::normal);
   filelogger          .setLevel(LogLevel::normal);
   filethreadlogger    .setLevel(LogLevel::normal);
@@ -152,7 +152,7 @@ void fatal_log_all() { // only critical / fatal msgs
   livethreadlogger    .setLevel(LogLevel::fatal);
   avthreadlogger      .setLevel(LogLevel::fatal);
   decoderlogger       .setLevel(LogLevel::fatal);
-  queuelogger         .setLevel(LogLevel::fatal);
+  fifologger          .setLevel(LogLevel::fatal);
   opengllogger        .setLevel(LogLevel::fatal);
   filelogger          .setLevel(LogLevel::fatal);
   filethreadlogger    .setLevel(LogLevel::fatal);

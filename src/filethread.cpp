@@ -26,7 +26,7 @@
  *  @file    filethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief  A thread sending frames from files
  */ 
@@ -71,30 +71,31 @@ FileStream::FileStream(FileContext &ctx) : ctx(ctx) {
   state=FileState::stop;
   duration=(long int)input_context->duration;
   
-  for(i=0;i<input_context->nb_streams;i++) {
-    frame_types.push_back(codec_id_to_frametype(input_context->streams[i]->codec->codec_id));
-  }
-  // send info frames:
   n=0;
-  for(auto it=frame_types.begin(); it!=frame_types.end(); ++it) {
-    setupframe.frametype=FrameType::setup; // this is a setup frame
-    setupframe.setup_pars.frametype=*it;   // what frame types are to be expected from this stream
-    setupframe.subsession_index=n;
-    setupframe.setMsTimestamp(getCurrentMsTimestamp());
-    setupframe.n_slot=ctx.slot;
+  for(i=0;i<input_context->nb_streams;i++) { // send setup frames describing the file contents
+    AVCodecID codec_id          =input_context->streams[i]->codec->codec_id;
+    AVMediaType media_type      =input_context->streams[avpkt->stream_index]->codec->codec_type;
+    setupframe.codec_id         =codec_id;
+    setupframe.media_type       =media_type;
+    setupframe.subsession_index =n;
+    setupframe.mstimestamp      =getCurrentMsTimestamp();
+    setupframe.n_slot           =ctx.slot;
     // send setup frame
+    std::cout << "FileStream: sending setup frame: " << setupframe << std::endl;
     ctx.framefilter->run(&setupframe);
     n++;
   }
+  
   reftime =0;
   seek(0);
-}
+} 
   
 
 FileStream::~FileStream() {
   avformat_close_input(&input_context);
   avformat_free_context(input_context);
   av_free_packet(avpkt);
+  delete avpkt;
 }
 
 
@@ -170,7 +171,7 @@ void FileStream::stop() {
 long int FileStream::update(long int mstimestamp) { // update the target time .. (only when playing)
   long int timeout;
   if (state==FileState::stop) {
-    return Timeouts::filethread;
+    return Timeout::filethread;
   }
   if (state==FileState::play or state==FileState::seek) { // when playing, target time changes ..
     target_mstimestamp_=mstimestamp-reftime;
@@ -180,7 +181,7 @@ long int FileStream::update(long int mstimestamp) { // update the target time ..
   /*
   if (state==FileState::seek and (frame_mstimestamp_>=target_mstimestamp_)) {
     state=FileState::stop;
-    timeout=Timeouts::filethread;
+    timeout=Timeout::filethread;
   }
   */
   
@@ -213,14 +214,19 @@ long int FileStream::pullNextFrame() {
   }
   else {
     // if frame_mstimestamp_==-1 .. there is no previous frame
-    out_frame.reset();
-    out_frame.n_slot=ctx.slot;
-    out_frame.fromAVPacket(avpkt); // copy payload, timestamp, stream index
-    out_frame.frametype=frame_types[avpkt->stream_index];
-    frame_mstimestamp_=out_frame.mstimestamp; // the timestamp in stream time of the current frame
+    AVCodecID   codec_id   =input_context->streams[avpkt->stream_index]->codec->codec_id;
+    AVMediaType media_type =input_context->streams[avpkt->stream_index]->codec->codec_type;
     
+    out_frame.reset();
+    out_frame.copyFromAVPacket(avpkt); // copy payload, timestamp, stream index
+    out_frame.n_slot    =ctx.slot;
+    out_frame.codec_id  =codec_id;
+    out_frame.media_type=media_type;
+    
+    frame_mstimestamp_=out_frame.mstimestamp; // the timestamp in stream time of the current frame
     // out_frame is in stream time.. let's fix that:
     out_frame.mstimestamp=frame_mstimestamp_+reftime;
+    
 #ifdef FILE_VERBOSE  
     std::cout << "FileStream: pullNextFrame: sending frame: " << out_frame << std::endl;
 #endif
@@ -230,7 +236,7 @@ long int FileStream::pullNextFrame() {
     i=av_read_frame(input_context, avpkt);
     if (i<0) {
       state=FileState::stop; // TODO: send an infoframe indicating that stream has finished
-      return Timeouts::filethread;
+      return Timeout::filethread;
     }
     if (((long int)avpkt->pts)<=frame_mstimestamp_) { // same timestamp!  recurse (typical for sequences: sps, pps, keyframe)
 #ifdef FILE_VERBOSE  
@@ -249,7 +255,7 @@ long int FileStream::pullNextFrame() {
 }
 
 
-FileThread::FileThread(const char* name, int core_id) : Thread(name, core_id) {
+FileThread::FileThread(const char* name, FrameFifoContext fifo_ctx) : Thread(name), infifo(name, fifo_ctx), infilter(name, &infifo) {
   this->slots_.resize(I_MAX_SLOTS+1,NULL);
 }
 
@@ -275,13 +281,13 @@ void FileThread::preRun() {}
 void FileThread::postRun() {}
 
 
-void FileThread::sendSignal(SignalContext signal_ctx) {
+void FileThread::sendSignal(FileSignalContext signal_ctx) {
   std::unique_lock<std::mutex> lk(this->mutex);
   this->signal_fifo.push_back(signal_ctx);
 }
 
 
-void FileThread::sendSignalAndWait(SignalContext signal_ctx) {
+void FileThread::sendSignalAndWait(FileSignalContext signal_ctx) {
   std::unique_lock<std::mutex> lk(this->mutex);
   this->signal_fifo.push_back(signal_ctx);
   while (!this->signal_fifo.empty()) {
@@ -309,29 +315,29 @@ void FileThread::handleSignals() {
   // if (signal_fifo.empty()) {return;} // nopes ..
   
   // handle pending signals from the signals fifo
-  for (std::deque<SignalContext>::iterator it = signal_fifo.begin(); it != signal_fifo.end(); ++it) { // it == pointer to the actual object (struct SignalContext)
+  for (std::deque<FileSignalContext>::iterator it = signal_fifo.begin(); it != signal_fifo.end(); ++it) { // it == pointer to the actual object (struct SignalContext)
     
     switch (it->signal) {
-      case Signals::exit:
+      case FileSignal::exit:
         for(i=0;i<=I_MAX_SLOTS;i++) { // stop and deregister all streams
           file_context.slot=i;
           this->closeFileStream(file_context);
         }
         this->loop=false;
         break;
-      case Signals::open_stream:
+      case FileSignal::open_stream:
         this->openFileStream(*(it->file_context));
         break;
-      case Signals::close_stream:
+      case FileSignal::close_stream:
         this->closeFileStream(*(it->file_context));
         break;
-      case Signals::seek_stream:
+      case FileSignal::seek_stream:
         this->seekFileStream(*(it->file_context));
         break;
-      case Signals::play_stream:
+      case FileSignal::play_stream:
         this->playFileStream(*(it->file_context));
         break;
-      case Signals::stop_stream:
+      case FileSignal::stop_stream:
         this->stopFileStream(*(it->file_context));
         break;
       }
@@ -356,11 +362,11 @@ void FileThread::run() {
   mstime    =getCurrentMsTimestamp();
   old_mstime=mstime;
   
-  // timeout=Timeouts::filethread;
+  // timeout=Timeout::filethread;
   reached=false;
   loop   =true;
   while(loop) {
-    timeout=Timeouts::filethread; // assume default timeout
+    timeout=Timeout::filethread; // assume default timeout
     // multiplexing file streams..
     // ideally, we'd like to have here a live555-type event loop..
     // i.e., no need to scan all active streams, but the the next frame from all
@@ -382,7 +388,7 @@ void FileThread::run() {
     std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
     
     mstime =getCurrentMsTimestamp();
-    if ( (mstime-old_mstime)>=Timeouts::openglthread ) {
+    if ( (mstime-old_mstime)>=Timeout::openglthread ) {
       
       
       handleSignals();
@@ -543,39 +549,44 @@ void FileThread::openFileStreamCall(FileContext &file_ctx) {
   FileState      status;          ///< outgoing: status of the file                               
   */
   
-  SignalContext signal_ctx = {Signals::open_stream, &file_ctx};
+  FileSignalContext signal_ctx = {FileSignal::open_stream, &file_ctx};
   sendSignalAndWait(signal_ctx);
   // std::cout << "FileThread : openFileStreamCall : status " << int(file_ctx.status) << std::endl;
 }
 
 void FileThread::closeFileStreamCall(FileContext &file_ctx) {
-  SignalContext signal_ctx = {Signals::close_stream, &file_ctx};
+  FileSignalContext signal_ctx = {FileSignal::close_stream, &file_ctx};
   sendSignal(signal_ctx);
 }
 
 void FileThread::seekFileStreamCall(FileContext &file_ctx) {
-  SignalContext signal_ctx = {Signals::seek_stream, &file_ctx};
+  FileSignalContext signal_ctx = {FileSignal::seek_stream, &file_ctx};
   // sendSignal(signal_ctx);
   sendSignalAndWait(signal_ctx); // go through the seeking .. count_streams_seeking is modified
 }
 
 void FileThread::playFileStreamCall(FileContext &file_ctx) {
-  SignalContext signal_ctx = {Signals::play_stream, &file_ctx};
+  FileSignalContext signal_ctx = {FileSignal::play_stream, &file_ctx};
   sendSignal(signal_ctx);
 }
 
 void FileThread::stopFileStreamCall(FileContext &file_ctx) {
-  SignalContext signal_ctx = {Signals::stop_stream, &file_ctx};
+  FileSignalContext signal_ctx = {FileSignal::stop_stream, &file_ctx};
   sendSignal(signal_ctx);
 }
 
 
 void FileThread::stopCall() {
   if (!this->has_thread) {return;}
-  SignalContext signal_ctx;
-  signal_ctx.signal=Signals::exit;
+  FileSignalContext signal_ctx;
+  signal_ctx.signal=FileSignal::exit;
   sendSignal(signal_ctx);
   this->closeThread();
   this->has_thread=false;
+}
+
+
+FifoFrameFilter &FileThread::getFrameFilter() {
+  return infilter;
 }
 

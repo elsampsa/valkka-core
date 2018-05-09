@@ -26,16 +26,16 @@
  *  @file    av_live_thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief Test producer (live thread) consumer (av thread)
  *
  */ 
 
-#include "queues.h"
+#include "framefifo.h"
 #include "livethread.h"
 #include "avthread.h"
-#include "filters.h"
+#include "framefilter.h"
 #include "logging.h"
 
 using namespace std::chrono_literals;
@@ -44,6 +44,14 @@ using std::this_thread::sleep_for;  // http://en.cppreference.com/w/cpp/thread/s
 const char* stream_1   =std::getenv("VALKKA_TEST_RTSP_1");
 const char* stream_2   =std::getenv("VALKKA_TEST_RTSP_2");
 const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
+
+
+// (LiveThread:livethread) --> {FrameFilter:info} --> {FifoFrameFilter:in_filter} -->> (AVThread:avthread) --> {InfoFrameFilter:decoded_info}
+InfoFrameFilter decoded_info("decoded");
+AVThread        avthread("avthread",decoded_info);
+FifoFrameFilter &in_filter = avthread.getFrameFilter(); // request framefilter from AVThread
+InfoFrameFilter out_filter("encoded",&in_filter);
+LiveThread      livethread("live");
 
 
 void test_1() {
@@ -56,21 +64,6 @@ void test_1() {
   }
   std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
   
-  // *************
-  // filtergraph:
-  // (LiveThread:livethread) --> {FrameFilter:info} --> {FifoFrameFilter:terminal} --> [FrameFifo:in_fifo] -->> (AVThread:avthread) --> {InfoFrameFilter:decoded_info}
-  
-  InfoFrameFilter decoded_info("decoded_info");
-
-  FrameFifo       in_fifo     ("in_fifo",10);                
-  AVThread        avthread    ("avthread",in_fifo,decoded_info);
-  
-  FifoFrameFilter terminal    ("terminal",in_fifo); 
-  InfoFrameFilter info        ("info",&terminal);       
-  LiveThread      livethread  ("livethread"); 
-  // *************
-  bool verbose;
-  
   std::cout << name << "starting threads" << std::endl;
   livethread.startCall();
   avthread.  startCall();
@@ -80,7 +73,7 @@ void test_1() {
   sleep_for(2s);
   
   std::cout << name << "registering stream" << std::endl;
-  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info); // Request livethread to write into filter info
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   
   sleep_for(1s);
@@ -88,7 +81,7 @@ void test_1() {
   std::cout << name << "playing stream !" << std::endl;
   livethread.playStreamCall(ctx);
   
-  sleep_for(3s);
+  sleep_for(10s);
   // sleep_for(604800s); //one week
   
   std::cout << name << "stopping threads" << std::endl;
@@ -96,7 +89,6 @@ void test_1() {
   // avthread.  stopCall();
   // AVThread destructor => Thread destructor => stopCall (Thread::stopCall or AVThread::stopCall ..?) .. in destructor, virtual methods are not called
   // 
-  
 }
 
 
@@ -110,48 +102,26 @@ void test_2() {
   }
   std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
   
-  // *************
-  // filtergraph:
-  // (LiveThread:livethread) --> {FrameFilter:info} --> {FifoFrameFilter:terminal} --> [FrameFifo:in_fifo] -->> (AVThread:avthread) --> {InfoFrameFilter:decoded_info}
-  
-  BriefInfoFrameFilter decoded_info("decoded_info");
-
-  FrameFifo       in_fifo     ("in_fifo",10);                
-  AVThread        avthread    ("avthread",in_fifo,decoded_info);
-  
-  FifoFrameFilter terminal    ("terminal",in_fifo); 
-  BriefInfoFrameFilter info        ("info",&terminal);
-  LiveThread      livethread  ("livethread"); 
-  // *************
-  bool verbose;
-  
   std::cout << name << "starting threads" << std::endl;
   livethread.startCall();
   avthread.  startCall();
 
   avthread.decodingOnCall();
   
-  sleep_for(2s);
-  
   std::cout << name << "registering stream" << std::endl;
-  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info); // Request livethread to write into filter info
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
-  
-  sleep_for(1s);
   
   std::cout << name << "playing stream !" << std::endl;
   livethread.playStreamCall(ctx);
   
-  // sleep_for(3s);
-  sleep_for(604800s); //one week
+  sleep_for(3s);
+  // sleep_for(604800s); //one week
   
   std::cout << name << "stopping threads" << std::endl;
-  livethread.stopCall();
-  // avthread.  stopCall();
-  // AVThread destructor => Thread destructor => stopCall (Thread::stopCall or AVThread::stopCall ..?) .. in destructor, virtual methods are not called
-  // 
-  
+  // livethread.stopCall(); // TODO: when not calling this .. valgrind says that LiveConnectionContext.msreconnect not initialized
 }
+
 
 
 void test_3() {
@@ -164,49 +134,7 @@ void test_3() {
   }
   std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
   
-  // *************
-  // filtergraph:
-  // (LiveThread:livethread) --> {FrameFilter:info} --> {FifoFrameFilter:terminal} --> [FrameFifo:in_fifo] -->> (AVThread:avthread) --> {InfoFrameFilter:decoded_info}
-  
-  BriefInfoFrameFilter decoded_info("decoded_info");
-
-  FrameFifo       in_fifo     ("in_fifo",1);                
-  AVThread        avthread    ("avthread",in_fifo,decoded_info);
-  
-  FifoFrameFilter terminal    ("terminal",in_fifo); 
-  BriefInfoFrameFilter info   ("info",&terminal);
-  LiveThread      livethread  ("livethread"); 
-  // *************
-  bool verbose;
-  
-  std::cout << name << "starting threads" << std::endl;
-  livethread.startCall();
-  avthread.  startCall();
-
-  avthread.decodingOnCall();
-  
-  sleep_for(2s);
-  
-  std::cout << name << "registering stream" << std::endl;
-  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info); // Request livethread to write into filter info
-  livethread.registerStreamCall(ctx);
-  
-  sleep_for(1s);
-  
-  std::cout << name << "playing stream !" << std::endl;
-  livethread.playStreamCall(ctx);
-  
-  // sleep_for(3s);
-  sleep_for(604800s); //one week
-  
-  std::cout << name << "stopping threads" << std::endl;
-  livethread.stopCall();
-  // avthread.  stopCall();
-  // AVThread destructor => Thread destructor => stopCall (Thread::stopCall or AVThread::stopCall ..?) .. in destructor, virtual methods are not called
-  // 
-  
-  
-  
+  // TODO
 }
 
 

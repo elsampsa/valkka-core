@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -35,9 +35,8 @@
  */ 
 
 #include "openglthread.h"
-#include "logging.h"
-#include "sizes.h"
 #include "tools.h"
+#include "logging.h"
 
 // WARNING: these define switches should be off (commented) by default
 // #define PRESENT_VERBOSE 1 // enable this for verbose output about queing and presenting the frames in OpenGLThread // @verbosity       
@@ -46,408 +45,8 @@
 
 // PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");  // Set the glxSwapInterval to 0, ie.
 
-std::ostream &operator<<(std::ostream &os, OpenGLSignalContext const &m) {
- return os << "<OpenGLSignalContext: slot="<<m.n_slot<<" x_window_id="<<m.x_window_id<<" z="<<m.z<<" render_context="<<m.render_ctx<<" success="<<m.success<<">";
-}
 
-
-OpenGLFrameFifo::OpenGLFrameFifo(unsigned short n_stack_720p, unsigned short n_stack_1080p, unsigned short n_stack_1440p, unsigned short n_stack_4K) : FrameFifo("open_gl",0), n_stack_720p(n_stack_720p), n_stack_1080p(n_stack_1080p), n_stack_1440p(n_stack_1440p), n_stack_4K(n_stack_4K), debug(false) {
-
-  FrameFifo::initReservoir(reservoir_720p,  n_stack_720p);
-  FrameFifo::initReservoir(reservoir_1080p, n_stack_1080p);
-  FrameFifo::initReservoir(reservoir_1440p, n_stack_1440p);
-  FrameFifo::initReservoir(reservoir_4K,    n_stack_4K);
-  // FrameFifo::initReservoir(reservoir_audio, n_stack_audio);
-  
-  FrameFifo::initStack(reservoir_720p,  stack_720p);
-  FrameFifo::initStack(reservoir_1080p, stack_1080p);
-  FrameFifo::initStack(reservoir_1440p, stack_1440p);
-  FrameFifo::initStack(reservoir_4K,    stack_4K);
-  // FrameFifo::initStack(reservoir_audio, stack_audio);
-  
-  // YUVPBO's will be reserved in OpenGLThread::preRun
-}
-
-
-OpenGLFrameFifo::~OpenGLFrameFifo() {
-  opengllogger.log(LogLevel::debug) << "OpenGLFrameFifo: destructor "<<std::endl;
-}
-
-
-Frame* OpenGLFrameFifo::getFrame(BitmapType bmtype) {
-  std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
-  return getFrame_(bmtype);
-}
-
-
-Frame* OpenGLFrameFifo::getFrame_(BitmapType bmtype) {
-  // .. no mutex protecting here!  This is used by writeCopy that is also mutex protected => stall
-  Frame* tmpframe;
-  std::deque<Frame*>* tmpstack; // alias
-  
-  switch(bmtype) {
-    case (BitmapPars::N720::type): {
-#ifdef LOAD_VERBOSE
-  std::cout << "OpenGLFrameFifo: getFrame_: returning 720p" << std::endl;
-#endif
-      tmpstack=&stack_720p;
-      break;
-    }
-    case (BitmapPars::N1080::type): {
-#ifdef LOAD_VERBOSE
-  std::cout << "OpenGLFrameFifo: getFrame_: returning 1080p" << std::endl;
-#endif
-      tmpstack=&stack_1080p;
-      break;
-    }
-    case (BitmapPars::N1440::type): {
-#ifdef LOAD_VERBOSE
-  std::cout << "OpenGLFrameFifo: getFrame_: returning 1440p" << std::endl;
-#endif
-      tmpstack=&stack_1440p;
-      break;
-    }
-    case (BitmapPars::N4K::type): {
-#ifdef LOAD_VERBOSE
-  std::cout << "OpenGLFrameFifo: getFrame_: returning 4K" << std::endl;
-#endif
-      tmpstack=&stack_4K;
-      break;
-    }
-    default: {
-      opengllogger.log(LogLevel::fatal) << "OpenGLFrameFifo: getFrame_: FATAL! No such bitmap type "<<bmtype<<std::endl;
-      return NULL;
-      break;
-    }
-  }
-  
-  if (tmpstack->empty()) {
-    opengllogger.log(LogLevel::fatal) << "OpenGLFrameFifo: getFrame_: OVERFLOW! No more frames in stack for bitmap type "<<bmtype<<std::endl;
-    return NULL;
-  }
-  
-  // tmpframe=(*tmpstack)[0]; // take a pointer to frame from the pre-allocated stack
-  tmpframe=tmpstack->front();
-  tmpstack->pop_front(); // .. remove that pointer from the stack
-  
-  return tmpframe;
-}
-
-
-/*
-Frame* OpenGLFrameFifo::getAudioFrame() {
-  std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
-  Frame* tmpframe;
-  if (stack_audio.empty()) {
-    opengllogger.log(LogLevel::fatal) << "OpenGLFrameFifo: getAudioFrame: OVERFLOW! No more frames in stack "<<std::endl;
-    return NULL;
-  }
-  tmpframe=stack_audio[0];  // take a pointer to frame from the pre-allocated stack
-  stack_audio.pop_front(); // .. remove that pointer from the stack
-  return tmpframe;
-}
-*/
-
-
-/*
-Frame* OpenGLFrameFifo::prepareFrame(Frame* frame) {
-  Frame* tmpframe=NULL;
-  
-#ifdef PRESENT_VERBOSE
-  std::cout << "OpenGLFrameFifo: prepareFrame:"<<std::endl;
-#endif
-  
-  tmpframe=getAudioFrame();
-  if (!tmpframe) {
-    opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: prepareFrame:  WARNING! Could not get frame from the stack"<<std::endl;
-    return NULL;
-  }
-  *tmpframe=*frame; // deep copy of the frame
-#ifdef PRESENT_VERBOSE
-  std::cout << "OpenGLFrameFifo: prepareFrame: bye"<<std::endl;
-#endif
-  
-  return tmpframe;
-}
-*/
-
-
-Frame* OpenGLFrameFifo::prepareAVFrame(Frame* frame) {// prepare a frame that is about to be inserted into the presentaton infifo
-  // Feed here only avframes and video!
-  
-  /*
-  if (frame->frametype!=FrameType::avframe) {
-    opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: prepareAVFrame: WARNING! Frame is not an avframe "<< *frame << std::endl; // << " " << int(frame->frametype) << " " << int(FrameType::avframe) << std::endl;
-    return NULL;
-  }
-  */
-  
-  Frame* tmpframe    =NULL;
-  GLsizei planesize_y =0;
-  GLsizei planesize_u =0;
-  GLsizei planesize_v =0;
-  
-  // frames that are pulled from the stacks have their yuvpbo attribute enabled 
-  if ( // ALLOWED PIXEL FORMATS // NEW_CODEC_DEV: is your pixel format supported?
-    frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUV420P  ||
-    frame->av_codec_context->pix_fmt==  AV_PIX_FMT_YUVJ420P
-  ) {
-    
-    planesize_y=(frame->av_frame->height)  *(frame->av_frame->linesize[0]);
-    planesize_u=(frame->av_frame->height/2)*(frame->av_frame->linesize[1]);
-    planesize_v=(frame->av_frame->height/2)*(frame->av_frame->linesize[2]);
-    
-    if      (planesize_y <= BitmapPars::N720::size)  { // frames obtained with getFrame will be recycled by the presentation routine
-      tmpframe=getFrame(BitmapPars::N720::type); // handling stacks with getFrame is mutex protected
-    }
-    else if (planesize_y <= BitmapPars::N1080::size) {
-      tmpframe=getFrame(BitmapPars::N1080::type);
-    }
-    else if (planesize_y <= BitmapPars::N1440::size) {
-      tmpframe=getFrame(BitmapPars::N1440::type);
-    }
-    else if (planesize_y <= BitmapPars::N4K::size)   {
-      tmpframe=getFrame(BitmapPars::N4K::type);
-    }
-    else {
-      opengllogger.log(LogLevel::fatal) << "OpenGLFrameFifo: prepareAVFrame:  WARNING! Could not get frame dimensions "<< *frame <<std::endl;
-      if (opengllogger.log_level>=LogLevel::normal) { reportStacks(); }
-      return NULL;
-    }
-    
-    if (!tmpframe) {
-      opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: prepareAVFrame:  WARNING! Could not get frame from the stack"<<std::endl;
-      return NULL;
-    }
-    
-    if (tmpframe->frametype!=FrameType::yuvframe) {
-      opengllogger.log(LogLevel::fatal) << "OpenGLFrameFifo: prepareAVFrame:  WARNING! frames in stack are not initialized to FrameType::yuvframe.  Did you forget to start OpenGLThread?"<<std::endl;
-      return NULL;
-    }
-    
-    // std::cout << "yuvpbo>"<<tmpframe->yuvpbo<<std::endl;
-    
-    frame->copyMeta(tmpframe); // timestamps, slots, etc.
-    (tmpframe->yuv_pars).pix_fmt =frame->av_codec_context->pix_fmt;
-    (tmpframe->yuv_pars).width   =frame->av_frame->linesize[0];
-    (tmpframe->yuv_pars).height  =frame->av_frame->height;
-    
-    // planesize =(frame->av_frame->height)*(frame->av_frame->linesize[0]);
-    
-#ifdef LOAD_VERBOSE
-    std::cout << "OpenGLFrameFifo: prepareAVFrame:  av_frame->height, av_frame->linesize[0], planesize "<< frame->av_frame->height << " " << frame->av_frame->linesize[0] << std::endl;
-    std::cout << "OpenGLFrameFifo: prepareAVFrame:  payload: "<< int(frame->av_frame->data[0][0]) << " " << int(frame->av_frame->data[1][0]) << " " << int(frame->av_frame->data[2][0]) << std::endl;
-#endif
-    
-    // std::cout << "yuvpbo->size>"<<tmpframe->yuvpbo->size<<std::endl;
-    
-    ///*
-    tmpframe->yuvpbo->upload(planesize_y,
-                            planesize_u,
-                            planesize_v,
-                            frame->av_frame->data[0],
-                            frame->av_frame->data[1],
-                            frame->av_frame->data[2]); // up to the GPU! :)
-    //*/
-                            
-    return tmpframe;
-  } //ALLOWED PIXEL FORMATS
-  else {
-    opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: pixel format "<< frame->av_codec_context->pix_fmt <<" not supported "<<std::endl;
-  }
-  return NULL;
-}
-
-
-bool OpenGLFrameFifo::writeCopy(Frame* f, bool wait) {
-  // One should feed here only:
-  // (a) frames of FrameType avframe, i.e. AVFrame bitmaps and with codec_type AVMEDIA_TYPE_VIDEO.  
-  //     sound frames should be dealed in some other place (i.e. alsa thread .. that will be implemented someday)
-  // (b) frames that represent configurations/commands to the opengl thread.  Will be specified later
-  
-  Frame* tmpframe=NULL;
-  long int dt;
-  
-  if (f->frametype==FrameType::avframe) { // NEW_CODEC_DEV // when adding new codecs: if the decoder you have implemented, returns Frames with avframe enabled, do some thinking here..
-    if (f->av_codec_context->codec_type==AVMEDIA_TYPE_VIDEO) { // only video .. audio should never end up here
-      tmpframe=prepareAVFrame(f);
-    }
-  }
-  else if (f->frametype==FrameType::glsetup) { // a generic command to OpenGLThread : to-be-specified
-  }
-    
-  if (!tmpframe) {
-    opengllogger.log(LogLevel::debug) << "OpenGLFrameFifo: writeCopy: WARNING! could not stage frame "<< *f <<std::endl;
-    return false;
-  }
-  
-#ifdef TIMING_VERBOSE
-  dt=(getCurrentMsTimestamp()-tmpframe->mstimestamp);
-  if (dt>100) {
-    std::cout << "OpenGLFrameFifo: writeCopy : timing : inserting frame " << dt << " ms late" << std::endl;
-  }
-#endif
-  
-  if (debug) {
-    opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: writeCopy: DEBUG MODE: recycling frame "<< *tmpframe <<std::endl;
-    recycle(tmpframe);
-    reportStacks();
-    return true;
-  }
-  
-  { // mutex protection from this point on
-    std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
-      
-    this->fifo.push_front(tmpframe);
-    ++(this->count);
-    
-#ifdef LOAD_VERBOSE
-    std::cout << "OpenGLFrameFifo: writeCopy: count=" << this->count << " frame="<<*tmpframe<<std::endl;
-#endif
-    
-#ifdef FIFO_VERBOSE
-    std::cout << "OpenGLFrameFifo: writeCopy: count=" << this->count <<std::endl;
-#endif
-    
-    this->condition.notify_one(); // after receiving 
-    return true;
-  }
-  
-}
-
-
-/* // just inherit
-Frame* OpenGLFrameFifo::read(unsigned short int mstimeout) {// Pop a frame from the end of the fifo and return the frame to the reservoir stack
-  return NULL;
-}
-*/
-
-
-void OpenGLFrameFifo::recycle(Frame* f) {// Return Frame f back into the stack.  Update target_size if necessary
-  std::unique_lock<std::mutex> lk(this->mutex);
-  std::deque<Frame*>* tmpstack;
-  
-  if (f->frametype==FrameType::yuvframe) {// recycle yuvframe
-    switch((f->yuv_pars).bmtype) {
-      case (BitmapPars::N720::type): {
-        tmpstack=&stack_720p;
-        break;
-      }
-      case (BitmapPars::N1080::type): {
-        tmpstack=&stack_1080p;
-        break;
-      }
-      case (BitmapPars::N1440::type): {
-        tmpstack=&stack_1440p;
-        break;
-      }
-      case (BitmapPars::N4K::type): {
-        tmpstack=&stack_4K;
-        break;
-      }
-      default: {
-        opengllogger.log(LogLevel::fatal) << "OpenGLFrameFifo: recycle: FATAL! No such bitmap type "<<(f->yuv_pars).bmtype<<std::endl;
-        break;
-      }
-    }
-  }
-  else { // recycle opengl command frames: to-be-specified
-    std::cout << "OpenGLFrameFifo: recycle: weird frame" << std::endl;
-    perror("OpenGLFrameFifo: recycle: weird frame");
-  }
-  
-  /*
-  else {// recycle any other type of frame (i.e. audio)
-    // opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: recycle: WARNING! None of the stacks accepts frame "<< *f <<std::endl;
-    tmpstack=&stack_audio;
-  }
-  */
-  
-#ifdef LOAD_VERBOSE
-  std::cout << "OpenGLFrameFifo: recycle: recycling frame "<<*f<<std::endl;
-#endif
-  // reportStacks_();
-  // f->yuvpbo=NULL; // just in case .. // NOT THIS! the reserved YUVPBO would get lost!
-  // std::cout << "1>>>"<<(*tmpstack).size()<<std::endl;
-  // (*tmpstack).push_front(f); 
-  
-  // tmpstack->push_front(f); // pop_front/push_front : use stack first in-first out fashion :  TODO: jitter when using this..!
-  tmpstack->push_back(f); // pop_front/push_back : use stack in first in-last out (cyclic) fashion
-  
-  // std::cout << "2>>>"<<(*tmpstack).size()<<std::endl;
-  // reportStacks_();
-}
-
-
-void OpenGLFrameFifo::reportStacks_() {
-  std::cout<<"OpenGLFrameFifo reportStacks: "<<std::endl;
-  std::cout<<"OpenGLFrameFifo reportStacks: "<<"Stack   Reservoir, Free Stack" <<std::endl;
-  std::cout<<"OpenGLFrameFifo reportStacks: "<< "720p    "<<reservoir_720p .size()<<", "<<stack_720p.  size() <<std::endl;
-  std::cout<<"OpenGLFrameFifo reportStacks: "<< "1080p   "<<reservoir_1080p.size()<<", "<<stack_1080p.size()  <<std::endl;
-  std::cout<<"OpenGLFrameFifo reportStacks: "<< "1440p   "<<reservoir_1440p.size()<<", "<<stack_1440p.size()  <<std::endl;
-  std::cout<<"OpenGLFrameFifo reportStacks: "<< "4K      "<<reservoir_4K   .size()<<", "<<stack_4K.   size()  <<std::endl;
-  // std::cout<<"OpenGLFrameFifo reportStacks: "<< "audio   "<<reservoir_audio.size()<<", "<<stack_audio.size()  <<std::endl;
-  std::cout<<"OpenGLFrameFifo reportStacks: "<<std::endl;
-}
-
-
-void OpenGLFrameFifo::dumpStack_() {
-  unsigned short int i=0;
-  queuelogger.log(LogLevel::normal) << "OpenGLFrameFifo: dumpStack>" << std::endl;
-  queuelogger.log(LogLevel::normal) << "OpenGLFrameFifo: 720p" << std::endl;
-  FrameFifo::dump(stack_720p);
-  queuelogger.log(LogLevel::normal) << "OpenGLFrameFifo: 1080p" << std::endl;
-  FrameFifo::dump(stack_1080p);
-  queuelogger.log(LogLevel::normal) << "OpenGLFrameFifo: 1440p" << std::endl;
-  FrameFifo::dump(stack_1440p);
-  queuelogger.log(LogLevel::normal) << "OpenGLFrameFifo: 4K" << std::endl;
-  FrameFifo::dump(stack_4K);
-  //queuelogger.log(LogLevel::normal) << "OpenGLFrameFifo: audio" << std::endl;
-  //FrameFifo::dump(stack_audio);
-  queuelogger.log(LogLevel::normal) << "OpenGLFrameFifo: <dumpStack" << std::endl;
-}
-
-
-void OpenGLFrameFifo::diagnosis_() {
-  std::cout << "FIFO: " <<  fifo.size() << " 720p: " << stack_720p.size() << " 1080p: " << stack_1080p.size() << " 1440p: " << stack_1440p.size() << " 4K: " << stack_4K.size() << std::endl; // << " audio: " << stack_audio.size() << std::endl;
-}
-
-
-void OpenGLFrameFifo::reportStacks() {
-  std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
-  reportStacks_();
-}
-
-
-void OpenGLFrameFifo::dumpStack() {
-  std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
-  dumpStack_();
-}
-
-void OpenGLFrameFifo::diagnosis() {
-  std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
-  diagnosis_();
-}
-  
-
-/*
-void OpenGLFrameFifo::checkOrder() {
-  std::unique_lock<std::mutex> lk(this->mutex);
-  long int mstimestamp=0;
-  std::cout << "paska" << std::endl;
-  for(auto it=fifo.begin(); it!=fifo.end(); ++it) {
-    std::cout << ">>>>" << (*it)->mstimestamp-mstimestamp << std::endl;
-    if ((*it)->mstimestamp>mstimestamp) {
-      std::cout << "OpenGLFrameFifo : checkOrder : Discontinuity in fifo! :" << (*it)->mstimestamp << " <= " << mstimestamp << std::endl;
-    }
-    mstimestamp=(*it)->mstimestamp;
-  }
-}
-*/
-
-
-
-SlotContext::SlotContext() : yuvtex(NULL), shader(NULL), active(false), codec_id(AV_CODEC_ID_NONE) {
+SlotContext::SlotContext() : yuvtex(NULL), shader(NULL), active(false), codec_id(AV_CODEC_ID_NONE), bmpars(BitmapPars()) {
 }
 
 
@@ -456,14 +55,14 @@ SlotContext::~SlotContext() {
 }
 
 
-void SlotContext::activate(GLsizei w, GLsizei h, YUVShader* shader) {//Allocate SlotContext::yuvtex and SlotContext::shader
+void SlotContext::activate(BitmapPars bmpars, YUVShader* shader) {//Allocate SlotContext::yuvtex and SlotContext::shader
   if (active) {
     deActivate();
   }
-  this->shader=shader;
-  opengllogger.log(LogLevel::crazy) << "SlotContext: activate: activating for w, h " << w << " " << h << " " << std::endl;
-  yuvtex=new YUVTEX(w, h); // valgrind_debug protected
-  // shader=new YUVShader(); // nopes..
+  this->bmpars =bmpars;
+  this->shader =shader;
+  opengllogger.log(LogLevel::crazy) << "SlotContext: activate: activating for w, h " <<bmpars.width << " " << bmpars.height << " " << std::endl;
+  yuvtex=new YUVTEX(bmpars); // valgrind_debug protected
   active=true;
 }
 
@@ -471,24 +70,25 @@ void SlotContext::activate(GLsizei w, GLsizei h, YUVShader* shader) {//Allocate 
 void SlotContext::deActivate() {//Deallocate
   active=false;
   if (yuvtex!=NULL) {delete yuvtex;}
-  // if (shader!=NULL) {delete shader;}
   yuvtex=NULL;
+  bmpars=BitmapPars();
+  // if (shader!=NULL) {delete shader;}
   // shader=NULL;
 }
 
 
-void SlotContext::loadTEX(YUVPBO* pbo, long int mstimestamp) {
+void SlotContext::loadYUVFrame(YUVFrame *yuvframe) {
 #ifdef PRESENT_VERBOSE
-  std::cout << "SlotContext: loadTEX: pbo: "<< *pbo <<std::endl;
+  std::cout << "SlotContext: loadYUVFrame: "<< *yuvframe <<std::endl;
 #endif
 #ifdef OPENGL_TIMING
-  if (mstimestamp<=prev_mstimestamp) { // check that we have fed the frames in correct order (per slot)
-    std::cout << "loadTEX: feeding frames in reverse order!" << std::endl;
+  if (yuvframe->mstimestamp<=prev_mstimestamp) { // check that we have fed the frames in correct order (per slot)
+    std::cout << "SlotContext: loadYUVFrame: feeding frames in reverse order!" << std::endl;
   }
-  prev_mstimestamp=mstimestamp
+  prev_mstimestamp=yuvframe->mstimestamp;
 #endif
   
-  loadYUVTEX(pbo, this->yuvtex); // valgrind_debug protected
+  yuvtex->loadYUVFrame(yuvframe); // from pbo to texture.  has valgrind_gpu_debug 
 }
   
 
@@ -602,7 +202,6 @@ bool RenderContext::activate() {
 }
 
 
-
 void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextures, bindParameters and bindVertexArray
   Shader* shader=slot_context.shader;
   
@@ -702,7 +301,10 @@ void RenderContext::bindVars() {// Upload other data to the GPU (say, transforma
     
   // calculate dimensions
   // (screeny/screenx) / (iy/ix)  =  screeny*ix / screenx*iy
-  r=float(wa.height*(yuvtex->w)) / float(wa.width*(yuvtex->h));
+  
+  const BitmapPars &bmpars =yuvtex->bmpars;
+  
+  r=float(wa.height*(bmpars.width)) / float(wa.width*(bmpars.height));
   if (r<1.){ // screen wider than image
     dy=1;
     dx=r;
@@ -908,13 +510,12 @@ void RenderGroup::render() {
 
 
 
-OpenGLThread::OpenGLThread(const char* name, unsigned short n720p, unsigned short n1080p, unsigned short n1440p, unsigned short n4K, unsigned msbuftime, int core_id) : Thread(name, core_id), infifo(n720p, n1080p, n1440p, n4K), msbuftime(msbuftime), debug(false) {
+OpenGLThread::OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx, unsigned msbuftime) : Thread(name), infifo(new OpenGLFrameFifo(fifo_ctx)), infilter(name,infifo), msbuftime(msbuftime), debug(false) {
   // So, what happens here..?
   // We create the OpenGLFrameFifo instance "infifo" at constructor time, and then pass "infifo" to AVFifoFrameFilter instance "framefilter" as a parameter
   // * framefilter (AVFifoFrameFilter) knows infifo
   // * infifo (OpenGLFrameFifo) has series of stacks 
-  // * The stacks are initialized by OpenGLThread at OpenGLThread::preRun() => OpenGLThread::reserveFrames()
-  // * .. there the Frame instances of stacks get their yuvpbo members initialized
+  // * The stacks are initialized by OpenGLThread at OpenGLThread::preRun()
   
   int i;
   for(i=0;i<=I_MAX_SLOTS;i++) {
@@ -943,6 +544,7 @@ OpenGLThread::OpenGLThread(const char* name, unsigned short n720p, unsigned shor
 
 OpenGLThread::~OpenGLThread() {// WARNING: deallocations shoud be in postRun, i.e. before thread join
   stopCall();
+  delete infifo;
   opengllogger.log(LogLevel::debug) << "OpenGLThread: destructor "<<std::endl;
 }
 
@@ -1115,35 +717,29 @@ void OpenGLThread::delRenderContexes() {
 
    
 
-void OpenGLThread::loadTEX(SlotNumber n_slot, YUVPBO* pbo, long int mstimestamp){// Load PBO to texture in slot n_slot
+void OpenGLThread::loadYUVFrame(SlotNumber n_slot, YUVFrame* yuvframe){// Load PBO textures in slot n_slot
   // if (!slotOk(n_slot)) {return 0;} // assume checked (this is for internal use only)
-  slots_[n_slot].loadTEX(pbo, mstimestamp);
+  slots_[n_slot].loadYUVFrame(yuvframe);
 }
   
 
-OpenGLFrameFifo& OpenGLThread::getFifo() {
-  return infifo;
+void OpenGLThread::activateSlot(SlotNumber i, YUVFrame* yuvframe) {
+  opengllogger.log(LogLevel::crazy) << "OpenGLThread: activateSlot: "<< *yuvframe << std::endl;
+  slots_[i].activate(yuvframe->bmpars, yuv_shader);
 }
 
 
-void OpenGLThread::activateSlot(SlotNumber i, YUVFramePars yuv_pars) {
-  GLsizei w, h;
-  opengllogger.log(LogLevel::crazy) << "OpenGLThread: activateSlot: "<<yuv_pars.bmtype<<" "<<yuv_pars.width<< " "<< yuv_pars.height << std::endl;
-  slots_[i].activate(yuv_pars.width, yuv_pars.height, yuv_shader);
-}
-
-
-void OpenGLThread::activateSlotIf(SlotNumber i, YUVFramePars yuv_pars) {
+void OpenGLThread::activateSlotIf(SlotNumber i, YUVFrame* yuvframe) {
   if (slots_[i].isActive()) {
-    if (yuv_pars.width==slots_[i].yuvtex->w and yuv_pars.height==slots_[i].yuvtex->h) { // nothings changed ..
+    if (yuvframe->bmpars.type==slots_[i].bmpars.type) { // The bitmap type of YUVFrame and YUVTEX are consistent
     }
     else {
       opengllogger.log(LogLevel::debug) << "OpenGLThread: activateSlotIf: texture dimensions changed: reactivate" << std::endl;
-      activateSlot(i, yuv_pars);
+      activateSlot(i, yuvframe);
     }
   } 
   else { // not activated => activate
-    activateSlot(i, yuv_pars);
+    activateSlot(i, yuvframe);
   }
 }
 
@@ -1172,7 +768,7 @@ void OpenGLThread::render(SlotNumber n_slot) {// Render all RenderGroup(s) depen
 }
 
 
-void OpenGLThread::dumpFifo() {
+void OpenGLThread::dumpPresFifo() {
   long int mstime=getCurrentMsTimestamp();
   long int rel_mstime;
   long int mstimestamp=9516360576679;
@@ -1195,7 +791,7 @@ void OpenGLThread::dumpFifo() {
 
 
 void OpenGLThread::diagnosis() {
-  infifo.diagnosis();
+  infifo->diagnosis(); // configuration etc. frames (not YUV Frames)
   std::cout << "PRESFIFO: " << presfifo.size() << std::endl;
 }
 
@@ -1328,28 +924,27 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
       if (present_frame) { // present_frame
         if (!slotOk(f->n_slot)) {//slot overflow, do nothing
         }
-        else if (f->frametype==FrameType::yuvframe) {// accepted frametype
+        else if (f->getFrameClass()==FrameClass::yuv) {// accepted frametype: yuv
+          YUVFrame *yuvframe = static_cast<YUVFrame*>(f);
 #if defined(PRESENT_VERBOSE) || defined(TIMING_VERBOSE)
-          // std::cout<<"OpenGLThread: handleFifo: PRESENTING " << *f << std::endl;
-          std::cout<<"OpenGLThread: handleFifo: PRESENTING " << rel_mstimestamp << " <"<< f->mstimestamp <<"> " << std::endl;
+          std::cout<<"OpenGLThread: handleFifo: PRESENTING " << rel_mstimestamp << " <"<< yuvframe->mstimestamp <<"> " << std::endl;
           if (it!=presfifo.rend()) {
             std::cout<<"OpenGLThread: handleFifo: NEXT       " << (*it)->mstimestamp-mstime_delta << " <"<< (*it)->mstimestamp <<"> " << std::endl;
           }
 #endif
           // if next frame was give too fast, scrap it
-          if (slotTimingOk(f->n_slot,mstime)) {
-            // activateSlotIf(f->n_slot, (f->yuv_pars).bmtype); // activate if not already active
-            activateSlotIf(f->n_slot, f->yuv_pars); // activate if not already active
+          if (slotTimingOk(yuvframe->n_slot,mstime)) {
+            activateSlotIf(yuvframe->n_slot, yuvframe); // activate if not already active
 #ifdef TIMING_VERBOSE
             reportCallTime(0);
 #endif
-            // f->yuv_pbo [YUVPBO] has already been uploaded to GPU.  Now it is loaded to the textures.
+            // yuv_frame's pbos have already been uploaded to GPU.  Now they're loaded to the texture
             // loadTEX uses slots_[], where each vector element is a SlotContext (=set of textures, a shader program)
-            loadTEX(f->n_slot, f->yuvpbo, f->mstimestamp); // timestamp is used only for debugging purposes ..
+            loadYUVFrame(yuvframe->n_slot, yuvframe); // timestamp is used only for debugging purposes ..
 #ifdef TIMING_VERBOSE
             reportCallTime(1);
 #endif
-            render(f->n_slot); // renders all render groups that depend on this slot.  A slot => RenderGroups (x window) => list of RenderContext => SlotContext (textures)
+            render(yuvframe->n_slot); // renders all render groups that depend on this slot.  A slot => RenderGroups (x window) => list of RenderContext => SlotContext (textures)
 #ifdef TIMING_VERBOSE
             reportCallTime(2);
 #endif
@@ -1357,17 +952,17 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
           else {
             opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: feeding frames too fast! dropping.." << std::endl;
           }
-        } // accepted frametype
+        } // accepted frametype: yuv
       }// present frame
-      infifo.recycle(f); // codec found or not, frame always recycled
+      infifo->recycle(f); // codec found or not, frame always recycled
     }// present or scrap
   }// while
   
   if (presfifo.empty()) {
 #ifdef PRESENT_VERBOSE
-    std::cout<<"OpenGLThread: handleFifo: empty! returning default " << Timeouts::openglthread << " ms timeout " << std::endl;
+    std::cout<<"OpenGLThread: handleFifo: empty! returning default " << Timeout::openglthread << " ms timeout " << std::endl;
 #endif
-    return Timeouts::openglthread;
+    return Timeout::openglthread;
   }
   else {
     f=presfifo.back();
@@ -1399,36 +994,36 @@ void OpenGLThread::run() {// Main execution loop
   
   loop=true;
   
-  timeout=Timeouts::openglthread;
+  timeout=Timeout::openglthread;
   while(loop) {
 #ifdef PRESENT_VERBOSE
     std::cout << "OpenGLThread: "<< this->name <<" : run : timeout = " << timeout << std::endl;
     // std::cout << "OpenGLThread: "<< this->name <<" : run : dumping fifo " << std::endl;
-    // infifo.dumpFifo();
-    // infifo.reportStacks(); 
+    // infifo->dumpFifo();
+    // infifo->reportStacks(); 
     // std::cout << "OpenGLThread: "<< this->name <<" : run : dumping fifo " << std::endl;
 #endif
     // std::cout << "OpenGLThread: run : read with timeout : " << timeout << std::endl;
-    f=infifo.read(timeout);
+    f=infifo->read(timeout);
     if (!f) { // TIMEOUT : either one seconds has passed, or it's about time to present the next frame..
       if (debug) {
       }
       else {
-        timeout=std::min(handleFifo(),Timeouts::openglthread); // present/discard frames and return timeout to the last frame.  Recycles frames.  Returns the timeout
+        timeout=std::min(handleFifo(),Timeout::openglthread); // present/discard frames and return timeout to the last frame.  Recycles frames.  Returns the timeout
         // std::cout << "OpenGLThread: run : no frame : timeout : " << timeout << std::endl;
       }
     } // TIMEOUT
-    else { // GOT FRAME // remember to apply infifo.recycle
+    else { // GOT FRAME // remember to apply infifo->recycle
       if (debug) {
         opengllogger.log(LogLevel::normal) << "OpenGLThread: "<< this->name <<" : run : DEBUG MODE! recycling received frame "<< *f << std::endl;
-        infifo.recycle(f);
-        infifo.reportStacks();
+        infifo->recycle(f);
+        infifo->dumpYUVStacks();
       }
       else {
-        timeout=std::min(insertFifo(f),Timeouts::openglthread); // insert frame into the presentation fifo, get timeout to the last frame in the presentation fifo
+        timeout=std::min(insertFifo(f),Timeout::openglthread); // insert frame into the presentation fifo, get timeout to the last frame in the presentation fifo
         // ..frame is now in the presentation fifo.. remember to recycle on handleFifo
         while (timeout==0) {
-          timeout=std::min(handleFifo(),Timeouts::openglthread);
+          timeout=std::min(handleFifo(),Timeout::openglthread);
         }
           
 #if defined(PRESENT_VERBOSE) || defined(TIMING_VERBOSE)
@@ -1442,7 +1037,7 @@ void OpenGLThread::run() {// Main execution loop
     mstime=getCurrentMsTimestamp();
     
     // if (difftime(timer,oldtimer)>=1) { // time to check the signals..
-    if ( (mstime-old_mstime)>=Timeouts::openglthread ) {
+    if ( (mstime-old_mstime)>=Timeout::openglthread ) {
       handleSignals();
       // oldtimer=timer;
       old_mstime=mstime;
@@ -1460,7 +1055,8 @@ void OpenGLThread::preRun() {// Called before entering the main execution loop, 
   swap_interval_at_startup=getSwapInterval(); // save the value of vsync at startup
   VSyncOff();
   makeShaders();
-  reserveFrames(); // calls glFinish
+  dummyframe =new YUVFrame(N720.type);
+  infifo->allocateYUV();
 }
 
 
@@ -1469,7 +1065,8 @@ void OpenGLThread::postRun() {// Called after the main execution loop exits, but
   for(std::vector<SlotContext>::iterator it=slots_.begin(); it!=slots_.end(); ++it) {
     it->deActivate(); // deletes textures
   }
-  releaseFrames(); // calls glFinish
+  delete dummyframe;
+  infifo->deallocateYUV();
   delShaders();
   closeGLX();
 }
@@ -1486,29 +1083,29 @@ void OpenGLThread::handleSignals() {
   // if (signal_fifo.empty()) {return;}
   
   // handle pending signals from the signals fifo
-  for (auto it = signal_fifo.begin(); it != signal_fifo.end(); ++it) { // it == pointer to the actual object (struct SignalContext)
+  for (auto it = signal_fifo.begin(); it != signal_fifo.end(); ++it) { // it == pointer to the actual object (struct OpenGLSignalContext)
     /* 
-    *(it) == SignalContext: members: signal, *ctx
+    *(it) == OpenGLSignalContext: members: signal, *ctx
     SlotNumber    n_slot;        // in: new_render_context
     Window        x_window_id;   // in: new_render_context, new_render_group, del_render_group
     unsigned int  z;             // in: new_render_context
     int           render_ctx;    // in: del_render_context, out: new_render_context
     */
     
-    // opengllogger.log(LogLevel::debug) << "OpenGLThread: handleSignals: signal->ctx="<< *(it->ctx) << std::endl; // Signals::exit does not need it->ctx ..
+    // opengllogger.log(LogLevel::debug) << "OpenGLThread: handleSignals: signal->ctx="<< *(it->ctx) << std::endl; // OpenGLSignal::exit does not need it->ctx ..
     
     switch (it->signal) {
-      case Signals::exit:
+      case OpenGLSignal::exit:
         opengllogger.log(LogLevel::debug) << "OpenGLThread: handleSignals: exit" << std::endl;
         loop=false;
         break;
         
-      case Signals::info:
+      case OpenGLSignal::info:
         reportRenderGroups();
         reportRenderList();
         break;
         
-      case Signals::new_render_group:     // newRenderCroupCall
+      case OpenGLSignal::new_render_group:     // newRenderCroupCall
         opengllogger.log(LogLevel::debug) << "OpenGLThread: handleSignals: new_render_group: "<< *(it->ctx) << std::endl;
         ok=newRenderGroup( (it->ctx)->x_window_id ); // Creates a RenderGroup and inserts it into OpenGLThread::render_groups
         if (!ok) {
@@ -1519,7 +1116,7 @@ void OpenGLThread::handleSignals() {
         }
         break;
         
-      case Signals::del_render_group:     // delRenderGroupCall
+      case OpenGLSignal::del_render_group:     // delRenderGroupCall
         opengllogger.log(LogLevel::debug) << "OpenGLThread: handleSignals: del_render_group" << std::endl;
         ok=delRenderGroup( (it->ctx)->x_window_id ); // Remove RenderGroup from OpenGLThread::render_groups
         if (!ok) {
@@ -1530,7 +1127,7 @@ void OpenGLThread::handleSignals() {
         }
         break;
         
-      case Signals::new_render_context:   // newRenderContextCall
+      case OpenGLSignal::new_render_context:   // newRenderContextCall
         opengllogger.log(LogLevel::debug) << "OpenGLThread: handleSignals: new_render_context" << std::endl;
         // (it->ctx)->render_ctx=9; // testing
         i=newRenderContext( (it->ctx)->n_slot, (it->ctx)->x_window_id, (it->ctx)->z);
@@ -1540,7 +1137,7 @@ void OpenGLThread::handleSignals() {
         (it->ctx)->render_ctx=i; // return value
         break;
         
-      case Signals::del_render_context:   // delRenderContextCall
+      case OpenGLSignal::del_render_context:   // delRenderContextCall
         opengllogger.log(LogLevel::debug) << "OpenGLThread: handleSignals: del_render_context" << std::endl;
         ok=delRenderContext((it->ctx)->render_ctx);
         if (!ok) {
@@ -1558,83 +1155,18 @@ void OpenGLThread::handleSignals() {
 }
 
 
-void OpenGLThread::sendSignal(SignalContext signal_ctx) {
+void OpenGLThread::sendSignal(OpenGLSignalContext signal_ctx) {
   std::unique_lock<std::mutex> lk(this->mutex);
   this->signal_fifo.push_back(signal_ctx);  
 }
 
 
-void OpenGLThread::sendSignalAndWait(SignalContext signal_ctx) {
+void OpenGLThread::sendSignalAndWait(OpenGLSignalContext signal_ctx) {
   std::unique_lock<std::mutex> lk(this->mutex);
   this->signal_fifo.push_back(signal_ctx);  
   while (!this->signal_fifo.empty()) {
     this->condition.wait(lk);
   }
-}
-
-
-void OpenGLThread::reserveFrames() {
-  dummyframe =new YUVPBO(BitmapPars::N720::type);
-  
-  for(auto it=infifo.reservoir_720p.begin(); it!=infifo.reservoir_720p.end(); ++it) {
-    opengllogger.log(LogLevel::crazy) << "OpenGLThread: reserveFrames: reserving YUVPBO with size "<< BitmapPars::N720::size << std::endl;
-    it->yuvpbo     =new YUVPBO(BitmapPars::N720::type);
-    it->frametype  =FrameType::yuvframe;
-    it->yuv_pars   ={BitmapPars::N720::type};
-  }
-  // dumpStack();
-  // return;
-  for(auto it=infifo.reservoir_1080p.begin(); it!=infifo.reservoir_1080p.end(); ++it) {
-    it->yuvpbo     =new YUVPBO(BitmapPars::N1080::type);
-    it->frametype  =FrameType::yuvframe;
-    it->yuv_pars   ={BitmapPars::N1080::type};
-  }
-  for(auto it=infifo.reservoir_1440p.begin(); it!=infifo.reservoir_1440p.end(); ++it) {
-    it->yuvpbo     =new YUVPBO(BitmapPars::N1440::type);
-    it->frametype  =FrameType::yuvframe;
-    it->yuv_pars   ={BitmapPars::N1440::type};
-  }
-  for(auto it=infifo.reservoir_4K.begin(); it!=infifo.reservoir_4K.end(); ++it) {
-    it->yuvpbo     =new YUVPBO(BitmapPars::N4K::type);
-    it->frametype  =FrameType::yuvframe;
-    it->yuv_pars   ={BitmapPars::N4K::type};
-  }
-#ifdef VALGRIND_GPU_DEBUG
-#else
-  glFinish();
-#endif
-  
-  /*
-  for(auto it=infifo.reservoir_audio.begin(); it!=infifo.reservoir_audio.end(); ++it) {
-    it->reserve(DEFAULT_PAYLOAD_SIZE_PCMU);
-  }
-  */
-}
-
-
-void OpenGLThread::releaseFrames() {
-  delete dummyframe;
-  
-  for(auto it=infifo.reservoir_720p.begin(); it!=infifo.reservoir_720p.end(); ++it) {
-    delete it->yuvpbo;
-    it->reset();
-  }
-  for(auto it=infifo.reservoir_1080p.begin(); it!=infifo.reservoir_1080p.end(); ++it) {
-    delete it->yuvpbo;
-    it->reset();
-  }
-  for(auto it=infifo.reservoir_1440p.begin(); it!=infifo.reservoir_1440p.end(); ++it) {
-    delete it->yuvpbo;
-    it->reset();
-  }
-  for(auto it=infifo.reservoir_4K.begin(); it!=infifo.reservoir_4K.end(); ++it) {
-    delete it->yuvpbo;
-    it->reset();
-  }
-#ifdef VALGRIND_GPU_DEBUG
-#else
-  glFinish();
-#endif
 }
 
 
@@ -1951,10 +1483,15 @@ void OpenGLThread::reportRenderList() {
 
 // API
 
+FifoFrameFilter &OpenGLThread::getFrameFilter() {
+  return infilter;
+}
+
+
 void OpenGLThread::stopCall() {
   if (!this->has_thread) {return;}
-  SignalContext signal_ctx;
-  signal_ctx.signal=Signals::exit;
+  OpenGLSignalContext signal_ctx;
+  signal_ctx.signal=OpenGLSignal::exit;
   sendSignal(signal_ctx);
   this->closeThread();
   this->has_thread=false;
@@ -1962,90 +1499,90 @@ void OpenGLThread::stopCall() {
 
 
 void OpenGLThread::infoCall() {
-  SignalContext signal_ctx;
+  OpenGLSignalContext signal_ctx;
   
-  signal_ctx.signal=Signals::info;
+  signal_ctx.signal=OpenGLSignal::info;
   sendSignal(signal_ctx);
 }
 
 
 bool OpenGLThread::newRenderGroupCall  (Window window_id) { // return value: render_ctx
-  OpenGLSignalContext ctx;
+  OpenGLSignalPars pars;
   
-  ctx.n_slot      =0;
-  ctx.x_window_id =window_id;
-  ctx.z           =0;
-  ctx.render_ctx  =0;
-  ctx.success     =false;
+  pars.n_slot      =0;
+  pars.x_window_id =window_id;
+  pars.z           =0;
+  pars.render_ctx  =0;
+  pars.success     =false;
   
-  opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderCroupCall: ctx="<< ctx <<std::endl;
+  opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderCroupCall: pars="<< pars <<std::endl;
   
-  SignalContext signal_ctx = {Signals::new_render_group, &ctx};
-  // eh.. we're passing pointer ctx .. but ctx goes null once we get out of context..!
-  // sendSignal(signal_ctx); // we must keep ctx alive, so use:
+  OpenGLSignalContext signal_ctx = {OpenGLSignal::new_render_group, &pars};
+  // eh.. we're passing pointer pars .. but pars goes null once we get out of context..!
+  // sendSignal(signal_ctx); // we must keep pars alive, so use:
   sendSignalAndWait(signal_ctx);
   
-  opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderCroupCall: return ctx="<< ctx <<std::endl;
-  return ctx.success;
+  opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderCroupCall: return pars="<< pars <<std::endl;
+  return pars.success;
 }
 
 
 bool OpenGLThread::delRenderGroupCall  (Window window_id) {
-  OpenGLSignalContext ctx;
+  OpenGLSignalPars pars;
   
-  ctx.n_slot      =0;
-  ctx.x_window_id =window_id;
-  ctx.z           =0;
-  ctx.render_ctx  =0;
-  ctx.success     =false;
+  pars.n_slot      =0;
+  pars.x_window_id =window_id;
+  pars.z           =0;
+  pars.render_ctx  =0;
+  pars.success     =false;
   
-  SignalContext signal_ctx = {Signals::del_render_group, &ctx};
+  OpenGLSignalContext signal_ctx = {OpenGLSignal::del_render_group, &pars};
   sendSignalAndWait(signal_ctx);
   
-  opengllogger.log(LogLevel::debug) << "OpenGLThread: delRenderCroupCall: return ctx="<< ctx <<std::endl;
-  return ctx.success;
+  opengllogger.log(LogLevel::debug) << "OpenGLThread: delRenderCroupCall: return pars="<< pars <<std::endl;
+  return pars.success;
 }
   
 
 int OpenGLThread::newRenderContextCall(SlotNumber slot, Window window_id, unsigned int z) {
-  OpenGLSignalContext ctx;
+  OpenGLSignalPars pars;
   
-  ctx.n_slot      =slot;
-  ctx.x_window_id =window_id;
-  ctx.z           =z;
-  ctx.render_ctx  =0; // return value
-  ctx.success     =false;
+  pars.n_slot      =slot;
+  pars.x_window_id =window_id;
+  pars.z           =z;
+  pars.render_ctx  =0; // return value
+  pars.success     =false;
   
-  SignalContext signal_ctx = {Signals::new_render_context, &ctx};
+  OpenGLSignalContext signal_ctx = {OpenGLSignal::new_render_context, &pars};
   sendSignalAndWait(signal_ctx);
   // there could be a mutex going in with the signal .. and then we wait for that mutex
   
-  opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContextCall: return ctx="<< ctx <<std::endl;
+  opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContextCall: return pars="<< pars <<std::endl;
   
   /* // TODO: check this!
-  if (!ctx.success) {
+  if (!pars.success) {
     return 0;
   }
   */
   
-  return ctx.render_ctx;
+  return pars.render_ctx;
 }
   
   
 bool OpenGLThread::delRenderContextCall(int id) {
-  OpenGLSignalContext ctx;
+  OpenGLSignalPars pars;
   
-  ctx.n_slot      =0;
-  ctx.x_window_id =0;
-  ctx.z           =0;
-  ctx.render_ctx  =id; // input
-  ctx.success     =false;
+  pars.n_slot      =0;
+  pars.x_window_id =0;
+  pars.z           =0;
+  pars.render_ctx  =id; // input
+  pars.success     =false;
   
-  SignalContext signal_ctx = {Signals::del_render_context, &ctx};
+  OpenGLSignalContext signal_ctx = {OpenGLSignal::del_render_context, &pars};
   sendSignalAndWait(signal_ctx);
 
-  opengllogger.log(LogLevel::debug) << "OpenGLThread: delRenderContextCall: return ctx="<< ctx <<std::endl;
-  return ctx.success;
+  opengllogger.log(LogLevel::debug) << "OpenGLThread: delRenderContextCall: return pars="<< pars <<std::endl;
+  return pars.success;
 }
 
 

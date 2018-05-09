@@ -123,8 +123,8 @@ endif (stream_send_debug)
 # ****************************************************************
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "0") 
-SET(MINOR_VERSION "3") 
-SET(PATCH_VERSION "6") 
+SET(MINOR_VERSION "4") 
+SET(PATCH_VERSION "0") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
 # *** define build type: Debug or Release # now from the command line
@@ -156,7 +156,8 @@ pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the la
 # TODO: python3
 
 # compiler flags
-add_compile_options("-std=c++14" "-pthread") #  ${GL_CFLAGS})
+# add_compile_options("-std=c++14" "-pthread") #  ${GL_CFLAGS})
+add_compile_options("-std=c++14") # .. -pthread required only at link time
 
 # [define library source files]
 file(GLOB SOURCES src/*.cpp)
@@ -176,6 +177,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${VERSION_STRING} SOVER
 target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS}) # ${PYTHON_INCLUDE_DIRS})
 # # target_link_libraries(${PROJECT_NAME} ${GL_LIBS})
 target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES} ${GLEW_LIBRARIES} ${ALSA_LIBRARIES})
+
+target_link_libraries(${PROJECT_NAME} "pthread")
+
 
 if(CUSTOM_BUILD) # [CUSTOM]
   message("USING CUSTOM COMPILED LIVE555 AND FFMPEG - GOOD")
@@ -253,10 +257,11 @@ endif(CUSTOM_BUILD)
 # *** test programs ***
 # use the script "test/list.bash" to update this list
 
-set(TESTNAMES "av_live_thread_test" "av_thread_test" "classes_test" "fifo_test" "file_test" "frames_test" "live_stream_check_test" "live_streaming_test" "live_thread_test" "log_test" "opengl_test" "opengl_thread_test" "render_test" "shmem_test" "swscale_test" "threads_test")
-
+# set(TESTNAMES)
+# set(TESTNAMES "av_live_thread_test" "av_thread_test" "classes_test" "fifo_test" "file_test" "frames_test" "live_stream_check_test" "live_streaming_test" "live_thread_test" "log_test" "opengl_test" "opengl_thread_test" "render_test" "shmem_test" "swscale_test" "threads_test")
 # set(TESTNAMES "shmem_test" "swscale_test")
 # set(TESTNAMES "file_test")
+set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test" "avthread_test" "av_live_thread_test" "openglframefifo_test" "openglthread_test" "live_av_openglthread_test" "live_av_shmem_test" "file_test" "filethread_test")
 
 
 add_custom_target(tests) # Note: without 'ALL'

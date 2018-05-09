@@ -26,7 +26,7 @@
  *  @file    live.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief Interface to live555
  *
@@ -37,248 +37,11 @@
  */
  
 #include "live.h"
-#include "sizes.h"
+#include "constant.h"
 #include "tools.h"
 #include "logging.h"
 
 #define SEND_PARAMETER_SETS // keep this always defined
-
-
-BufferSource::BufferSource(UsageEnvironment& env, FrameFifo &fifo, unsigned preferredFrameSize, unsigned playTimePerFrame, unsigned offset) : FramedSource(env), fifo(fifo), fPreferredFrameSize(preferredFrameSize), fPlayTimePerFrame(playTimePerFrame), offset(offset), active(true) {
-}
-
-BufferSource::~BufferSource() {
-  for(auto it=internal_fifo.begin(); it!=internal_fifo.end(); ++it) {
-    fifo.recycle(*it);
-  }
-}
-
-
-void BufferSource::handleFrame(Frame* f) {
-#ifdef STREAM_SEND_DEBUG
-  std::cout << "BufferSource : handleFrame" << std::endl;
-#endif
-  internal_fifo.push_front(f);
-  if (!active) { // time to activate and re-schedule doGetNextFrame
-#ifdef STREAM_SEND_DEBUG
-    std::cout << "BufferSource : evoking doGetNextFrame" << std::endl;
-#endif
-    doGetNextFrame();
-  }
-}
-
-
-void BufferSource::doGetNextFrame() {
-  /* // testing ..
-  std::cout << "doGetNextFrame!\n";
-  return;
-  */
-  
-  /*
-  http://lists.live555.com/pipermail/live-devel/2014-October/018768.html
-  
-  control flow:
-  http://www.live555.com/liveMedia/faq.html#control-flow
-  
-  use of discrete framer:
-  http://lists.live555.com/pipermail/live-devel/2014-September/018686.html
-  http://lists.live555.com/pipermail/live-devel/2011-November/014019.html
-  http://lists.live555.com/pipermail/live-devel/2016-January/019856.html
-  
-  this::doGetNextFrame => FramedSource::afterGetting(this) [resets fIsCurrentlyAwaitingData] => calls "AfterGettingFunc" callback (defined god-knows-where) => .. end up calling 
-  FramedSource::getNextFrame [this tilts if fIsCurrentlyAwaitingData is set]
-  http://lists.live555.com/pipermail/live-devel/2005-August/002995.html
-  
-  */
-  
-  /* // insight from "FramedSource.hh":
-  // The following variables are typically accessed/set by doGetNextFrame()
-  unsigned char* fTo; // in
-  unsigned fMaxSize; // in
-  
-  unsigned fFrameSize; // out
-  unsigned fNumTruncatedBytes; // out
-  struct timeval fPresentationTime; // out
-  unsigned fDurationInMicroseconds; // out
-  */
-  Frame* f;
-  unsigned fMaxSize_;
-  
-#ifdef STREAM_SEND_DEBUG
-  std::cout << "BufferSource : doGetNextFrame : " << std::endl;
-#endif
-  
-  if (internal_fifo.empty()) {
-#ifdef STREAM_SEND_DEBUG
-    std::cout << "BufferSource : doGetNextFrame : fifo empty (1) " << std::endl;
-#endif
-    active=false; // this method is not re-scheduled anymore .. must be called again.
-    return;
-  }
-  active=true; // this will be re-scheduled
-
-  f=internal_fifo.back(); // take the last element
-  
-  fFrameSize =(unsigned)f->payload.size()-offset;
-  
-  if (fMaxSize>=fFrameSize) { // unsigned numbers ..
-    fNumTruncatedBytes=0;
-  }
-  else {
-    fNumTruncatedBytes =fFrameSize-fMaxSize;
-    // fNumTruncatedBytes+=10; // stupid debugging
-  }
-  
-#ifdef STREAM_SEND_DEBUG
-  std::cout << "BufferSource : doGetNextFrame : frame        " << *f << std::endl;
-  std::cout << "BufferSource : doGetNextFrame : fMaxSize     " << fMaxSize << std::endl;
-  std::cout << "BufferSource : doGetNextFrame : payload size " << f->payload.size() << std::endl;
-  std::cout << "BufferSource : doGetNextFrame : fFrameSize   " << fFrameSize << std::endl;
-  std::cout << "BufferSource : doGetNextFrame : fNumTruncB   " << fNumTruncatedBytes << std::endl;
-  std::cout << "BufferSource : doGetNextFrame : payload      " << f->dumpPayload() << std::endl;
-#endif
-  
-  fFrameSize=fFrameSize-fNumTruncatedBytes;
-  
-  // memcpy(fTo, f->payload.data(), f->payload.size());
-  memcpy(fTo, f->payload.data()+offset, fFrameSize);
-  // fMaxSize  =f->payload.size();
-  // fNumTruncatedBytes=0;
-  
-  fPresentationTime=msToTimeval(f->mstimestamp); // timestamp to time struct
-  
-  // fDurationInMicroseconds = 0;
-  // fPresentationTime.tv_sec   =(fMstimestamp/1000); // secs
-  // fPresentationTime.tv_usec  =(fMstimestamp-fPresentationTime.tv_sec*1000)*1000; // microsecs
-  // std::cout << "call_afterGetting: " << fPresentationTime.tv_sec << "." << fPresentationTime.tv_usec << " " << fFrameSize << "\n";
-  
-#ifdef STREAM_SEND_DEBUG
-  std::cout << "BufferSource : doGetNextFrame : recycle     " << *f << std::endl;
-#endif
-  fifo.recycle(f); // return the frame to the main live555 incoming fifo
-#ifdef STREAM_SEND_DEBUG
-  fifo.diagnosis();
-#endif
-  internal_fifo.pop_back();
-  
-  /*
-  if (fNumTruncatedBytes>0) {
-    active=false;
-    return;
-  }
-  */
-  
-  if (internal_fifo.empty()) {
-#ifdef STREAM_SEND_DEBUG
-    std::cout << "BufferSource : doGetNextFrame : fifo will be empty " << std::endl;
-#endif
-    fDurationInMicroseconds = 0;
-  }
-  else { // approximate when this will be called again
-#ifdef STREAM_SEND_DEBUG
-    std::cout << "BufferSource : doGetNextFrame : more frames in fifo " << std::endl;
-#endif
-    fDurationInMicroseconds = 0; // call again immediately
-  }
-  
-#ifdef STREAM_SEND_DEBUG
-  std::cout << "BufferSource : doGetNextFrame : calling afterGetting\n";
-#endif
-  FramedSource::afterGetting(this); // will re-schedule BufferSource::doGetNextFrame()
-}
-
-
-Stream::Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl) : env(env), fifo(fifo) {
-  /*
-  UsageEnvironment& env;
-  RTPSink*          sink;
-  RTCPInstance*     rtcp;
-  FramedSource*     source;
-  Groupsock* rtpGroupsock;
-  Groupsock* rtcpGroupsock;
-  unsigned char cname[101];
-
-  BufferSource* buffer_source;
-  */
-  
-  // Create 'groupsocks' for RTP and RTCP:
-  struct in_addr destinationAddress;
-  //destinationAddress.s_addr = chooseRandomIPv4SSMAddress(*env);
-  destinationAddress.s_addr=our_inet_addr(adr.c_str());
-
-  Port rtpPort(portnum);
-  Port rtcpPort(portnum+1);
-
-  // Groupsock rtpGroupsock(this->env, destinationAddress, rtpPort, ttl);
-  this->rtpGroupsock  =new Groupsock(this->env, destinationAddress, rtpPort, ttl);
-  // this->rtpGroupsock->multicastSendOnly();
-  
-  int fd=this->rtpGroupsock->socketNum();
-  // increaseSendBufferTo(this->env,fd,this->nsocket); // TODO
-  
-  this->rtcpGroupsock =new Groupsock(this->env, destinationAddress, rtcpPort, ttl);
-  // this->rtcpGroupsock->multicastSendOnly();
-  // rtpGroupsock.multicastSendOnly(); // we're a SSM source
-  // Groupsock rtcpGroupsock(*env, destinationAddress, rtcpPort, ttl);
-  // rtcpGroupsock.multicastSendOnly(); // we're a SSM source
-
-  // Create a 'H264 Video RTP' sink from the RTP 'groupsock':
-  // OutPacketBuffer::maxSize = 100000;
-  
-  unsigned char CNAME[101];
-  gethostname((char*)CNAME, 100);
-  CNAME[100] = '\0'; // just in case ..
-  memcpy(this->cname,CNAME,101);
-}
-
-
-void Stream::handleFrame(Frame* f) {
-  buffer_source->handleFrame(f); // buffer source recycles the frame when ready
-}
-
-void Stream::startPlaying() {
-  sink->startPlaying(*(terminal), this->afterPlaying, this);
-}
-
-void Stream::afterPlaying(void *cdata) {
-  Stream* stream=(Stream*)cdata;
-  
-  stream->sink->stopPlaying();
-  // Medium::close(stream->buffer_source);
-}
-
-
-Stream::~Stream() {
-  Medium::close(buffer_source);
-  delete rtpGroupsock;
-  delete rtcpGroupsock;
-  delete buffer_source;
-}
-  
-
-  
-H264Stream::H264Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl) : Stream(env,fifo,adr,portnum,ttl) {
-  
-  buffer_source  =new BufferSource(env, fifo, 0, 0, 4); // nalstamp offset: 4
-  
-  // OutPacketBuffer::maxSize = this->npacket; // TODO
-  // http://lists.live555.com/pipermail/live-devel/2013-April/016816.html
-  
-  
-  sink = H264VideoRTPSink::createNew(env,rtpGroupsock, 96);
-  // this->rtcp      = RTCPInstance::createNew(this->env, this->rtcpGroupsock, 500,  this->cname, sink, NULL, True); // saturates the event loop!
-  terminal       =H264VideoStreamDiscreteFramer::createNew(env, buffer_source);
-}
-
-
-H264Stream::~H264Stream() {
-  // delete sink;
-  // delete terminal;
-  Medium::close(sink);
-  Medium::close(terminal);
-}
-
-
 
 // A function that outputs a string that identifies each stream (for debugging output).  Modify this if you wish:
 UsageEnvironment& operator<<(UsageEnvironment& env, const RTSPClient& rtspClient) {
@@ -691,39 +454,37 @@ FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter&
   if      (strcmp(codec_name,"H264")==0) { // NEW_CODEC_DEV // when adding new codecs, make changes here
     livelogger.log(LogLevel::debug) << "FrameSink: init H264 Frame"<<std::endl;
     // prepare payload frame
-    frame.frametype            =FrameType::h264; // this is h264
-    frame.subsession_index     =subsession_index;
-    frame.h264_pars.slice_type =0;
-    // frame.payload.resize(DEFAULT_PAYLOAD_SIZE_H264+4); // leave space for prepending 0001
-    setReceiveBuffer(DEFAULT_PAYLOAD_SIZE_H264); // sets nbuf
+    basicframe.media_type           =AVMEDIA_TYPE_VIDEO;
+    basicframe.codec_id             =AV_CODEC_ID_H264;
+    basicframe.subsession_index     =subsession_index;
     // prepare setup frame
-    setupframe.frametype=FrameType::setup; // this is a setup frame
-    setupframe.setup_pars.frametype=FrameType::h264; // what frame types are to be expected from this stream
-    // setupframe.setup_pars.subsession_index=subsession_index;
-    setupframe.subsession_index=subsession_index;
-    setupframe.setMsTimestamp(getCurrentMsTimestamp());
+    setupframe.media_type           =AVMEDIA_TYPE_VIDEO;
+    setupframe.codec_id             =AV_CODEC_ID_H264;   // what frame types are to be expected from this stream
+    setupframe.subsession_index     =subsession_index;
+    setupframe.mstimestamp          =getCurrentMsTimestamp();
     // send setup frame
     framefilter.run(&setupframe);
+    setReceiveBuffer(DEFAULT_PAYLOAD_SIZE_H264); // sets nbuf
   } 
   else if (strcmp(codec_name,"PCMU")==0) {
     livelogger.log(LogLevel::debug) << "FrameSink: init PCMU Frame"<<std::endl;
     // prepare payload frame
-    frame.frametype       =FrameType::pcmu;
-    frame.subsession_index=subsession_index; // pcmu
-    // frame.payload.resize(DEFAULT_PAYLOAD_SIZE_PCMU);
-    setReceiveBuffer(DEFAULT_PAYLOAD_SIZE_PCMU); // sets nbuf
+    basicframe.media_type           =AVMEDIA_TYPE_AUDIO;
+    basicframe.codec_id             =AV_CODEC_ID_PCM_MULAW;
+    basicframe.subsession_index     =subsession_index;
     // prepare setup frame
-    setupframe.frametype=FrameType::setup; // this is a setup frame
-    setupframe.setup_pars.frametype=FrameType::pcmu; // what frame types are to be expected from this stream
-    // setupframe.setup_pars.subsession_index=subsession_index;
-    setupframe.subsession_index=subsession_index;
-    setupframe.setMsTimestamp(getCurrentMsTimestamp());
+    setupframe.media_type           =AVMEDIA_TYPE_AUDIO;
+    setupframe.codec_id             =AV_CODEC_ID_PCM_MULAW;   // what frame types are to be expected from this stream
+    setupframe.subsession_index     =subsession_index;
+    setupframe.mstimestamp          =getCurrentMsTimestamp();
     // send setup frame
     framefilter.run(&setupframe);
   }
   else {
     livelogger.log(LogLevel::debug) << "FrameSink: WARNING: unknown codec "<<codec_name<<std::endl;
-    frame.frametype=FrameType::none;
+    basicframe.media_type           =AVMEDIA_TYPE_UNKNOWN;
+    basicframe.codec_id             =AV_CODEC_ID_NONE;
+    basicframe.subsession_index     =subsession_index;
     setReceiveBuffer(DEFAULT_PAYLOAD_SIZE); // sets nbuf
   }
   
@@ -731,7 +492,7 @@ FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter&
   sendParameterSets();
 #endif
   
-  livelogger.log(LogLevel::debug) << "FrameSink: constructor: internal_frame= "<< frame <<std::endl;
+  livelogger.log(LogLevel::debug) << "FrameSink: constructor: internal_frame= "<< basicframe <<std::endl;
 }
 
 FrameSink::~FrameSink() {
@@ -770,37 +531,20 @@ void FrameSink::afterGettingFrame(unsigned frameSize, unsigned numTruncatedBytes
   unsigned target_size=frameSize+numTruncatedBytes;
   // mstimestamp=presentationTime.tv_sec*1000+presentationTime.tv_usec/1000;
   // std::cout << "afterGettingFrame: mstimestamp=" << mstimestamp <<std::endl;
-  frame.setMsTimestamp(presentationTime.tv_sec*1000+presentationTime.tv_usec/1000);
-  frame.fillPars();
-  /*
-  std::cout << ">>nbuf="<<nbuf<<std::endl;
-  int cc=0;
-  for(auto it=frame.payload.begin(); it!=frame.payload.end(); ++it) {
-    std::cout << "a>>" << int(*it) << std::endl;
-    cc++;
-    if (cc>30) { break; }
-  }
+  basicframe.mstimestamp=(presentationTime.tv_sec*1000+presentationTime.tv_usec/1000);
+  basicframe.fillPars();
   
-  std::cout << ">>resizing to " << checkBufferSize(frameSize+numTruncatedBytes) << std::endl;
-  
-  cc=0;
-  for(auto it=frame.payload.begin(); it!=frame.payload.end(); ++it) {
-    std::cout << "b>>" << int(*it) << std::endl;
-    cc++;
-    if (cc>30) { break; }
-  }
-  */
-  frame.payload.resize(checkBufferSize(frameSize)); // set correct frame size .. now information about the packet length goes into the filter chain
+  basicframe.payload.resize(checkBufferSize(frameSize)); // set correct frame size .. now information about the packet length goes into the filter chain
   
   scs.setFrame(); // flag that indicates that we got a frame
-  framefilter.run(&frame); // starts the frame filter chain
+  framefilter.run(&basicframe); // starts the frame filter chain
   
   if (numTruncatedBytes>0) {// time to grow the buffer..
     livelogger.log(LogLevel::debug) << "FrameSink : growing reserved size to "<< target_size << " bytes" << std::endl;
     setReceiveBuffer(target_size);
   }
   
-  frame.payload.resize(frame.payload.capacity()); // recovers maximum size .. must set maximum size before letting live555 to write into the memory area
+  basicframe.payload.resize(basicframe.payload.capacity()); // recovers maximum size .. must set maximum size before letting live555 to write into the memory area
   
   // Then continue, to request the next frame of data:
   if (on) {continuePlaying();}
@@ -817,7 +561,7 @@ Boolean FrameSink::continuePlaying() {
 
 
 unsigned FrameSink::checkBufferSize(unsigned target_size) {// add something to the target_size, if needed (for H264, the nalstamp)
-   if (frame.frametype==FrameType::h264) {
+   if (basicframe.codec_id==AV_CODEC_ID_H264) {
      target_size+=nalstamp.size();
    }
    // target_size+=8; // receive extra mem to avoid ffmpeg decoder over-read // nopes!  This can screw up the decoder completely!
@@ -827,15 +571,15 @@ unsigned FrameSink::checkBufferSize(unsigned target_size) {// add something to t
 
 void FrameSink::setReceiveBuffer(unsigned target_size) {
   target_size=checkBufferSize(target_size); // correct buffer size to include nalstamp
-  frame.payload.resize(target_size);
-  if (frame.frametype==FrameType::h264) {
-    fReceiveBuffer=frame.payload.data()+nalstamp.size(); // pointer for the beginning of the payload (after the nalstamp)
-    nbuf=frame.payload.size()-nalstamp.size();           // size left for actual payload (without the prepending 0001)
-    std::copy(nalstamp.begin(),nalstamp.end(),frame.payload.begin());
+  basicframe.payload.resize(target_size);
+  if (basicframe.codec_id==AV_CODEC_ID_H264) {
+    fReceiveBuffer=basicframe.payload.data()+nalstamp.size(); // pointer for the beginning of the payload (after the nalstamp)
+    nbuf=basicframe.payload.size()-nalstamp.size();           // size left for actual payload (without the prepending 0001)
+    std::copy(nalstamp.begin(),nalstamp.end(),basicframe.payload.begin());
   }
   else {
-    fReceiveBuffer=frame.payload.data();
-    nbuf=frame.payload.size();
+    fReceiveBuffer=basicframe.payload.data();
+    nbuf=basicframe.payload.size();
   }
   // std::cout << ">>re-setting receive buffer "<<nbuf<<std::endl;
 }

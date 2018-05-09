@@ -1,3 +1,5 @@
+#ifndef openglthread_HEADER_GUARD
+#define openglthread_HEADER_GUARD
 /*
  * openglthread.h : The OpenGL thread for presenting frames and related data structures
  * 
@@ -26,80 +28,22 @@
  *  @file    openglthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
  */ 
 
-#include "opengl.h"
-#include "sizes.h"
-#include "threads.h"
-#include "shaders.h"
+#include "tex.h"
+#include "openglframefifo.h"
+#include "constant.h"
+#include "thread.h"
+#include "shader.h"
+#include "threadsignal.h"
+
 
 typedef void ( *PFNGLXSWAPINTERVALEXTPROC) (Display *dpy, GLXDrawable drawable, int interval);
-
-/** A FrameFifo with multiple stacks.  Created, managed and used by OpenGLThread.
- * 
- * This is a special FrameFifo class.  You should never instantiate it by yourself!  Instead, request it from OpenGLThread by calling OpenGLThread::getFifo (fifo's frames get properly initialized after OpenGLThread has been started and/or if OpenGLThread::preRun is called)
- *
- * Why not instantiate it by the API user?  The reason is simple: in order to construct an instance of OpenGLFrameFifo, we need to call various OpenGL routines, and in this library, all OpenGL calls are done by one, and only one thread, e.g. OpenGLThread.  
- * 
- * In detail, the pre-reserved frames we are warehousing in this object's stacks, have their Frame::frametype set to FrameType::yuvframe, and they are making use of the Frame::yuvpbo pointer.  Frame::yuvpbo are of the type YUVPBO, i.e. they present OpenGL Pixel Buffer Objects (PBOs), having direct memory access to the GPU memory.  And initializing OpenGL and reserving PBOs is done by the OpenGLThread.
- * 
- * In a typical situation, frames from AVThread are feeded, through FrameFilter(s) into OpenGLFrameFifo.  Decoded frames have typically have their Frame::frametype set to FrameType::avframe, indicating that the decoded frame is pointer by the Frame::av_frame pointer.  In such cases OpenGLFrameFifo then OpenGLFrameFifo::prepareAVFrame to upload the data from Frame::av_frame directly into GPU, using the %PBO(s).
- *  
- * @ingroup openglthread_tag
- * @ingroup queues_tag
- */
-class OpenGLFrameFifo : public FrameFifo { // <pyapi>
-  
-friend class OpenGLThread; // can manipulate reservoirs, stacks, etc.
-  
-public: // <pyapi>
-  /** Default constructor
-   * 
-   * @param n_stack_720p  Size of the frame reservoir for 720p
-   * @param n_stack_1080p Size of the frame reservoir for 1080p
-   * @param n_stack_1440p Size of the frame reservoir for 1440p
-   * @param n_stack_4K    Size of the frame reservoir for 4K
-   * 
-   */
-  OpenGLFrameFifo(unsigned short n_stack_720p, unsigned short n_stack_1080p, unsigned short n_stack_1440p, unsigned short n_stack_4K); // <pyapi>
-  /** Default destructor
-   */
-  ~OpenGLFrameFifo(); // <pyapi>
-  
-public:
-  Frame* getFrame_(BitmapType bmtype);               ///< Take a frame from a stack.  Not mutex protection.  Only for internal use
-  void reportStacks_();                              ///< Show stack usage.  No mutex protection
-  void dumpStack_();                                 ///< Dump the frames in the stack.  No mutex protection
-  void diagnosis_();
-  
-public: // mutex protected calls .. be carefull when calling mutex protected call inside a mutex protected call (always check mutex protected context)
-  // Frame* getAudioFrame();                            ///< Take a frame from the OpenGLFrameFifo::stack_audio stack
-  Frame* prepareFrame(Frame* frame);                 ///< Create a copy of frames other than FrameType::avframe
-  Frame* getFrame(BitmapType bmtype);                ///< Take a frame from a stack by bitmap type (uses OpenGLFrameFifo::getFrame_)
-  Frame* prepareAVFrame(Frame* frame);               ///< Chooses a frame from the stack, does GPU uploading for frames of the type FrameType::avframe
-  bool writeCopy(Frame* f, bool wait=false);         ///< Take a frame "ftmp" from a relevant stack, copy contents of "f" into "ftmp" (or do GPU uploading) and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").
-  void recycle(Frame* f);                            ///< Return Frame f back into the stack (relevant stack is chosen automatically)
-  void reportStacks();                               ///< Show stack usage
-  void dumpStack();                                  ///< Dump the frames in the stack
-  void diagnosis();
-  //void checkOrder();                                 ///< Check that frames are in chronological order (debugging only)
-  
-public: // setters
-  void debugOn() {debug=true;}
-  void debugOff(){debug=false;}
-  
-private:
-  bool               debug;
-  unsigned short     n_stack_720p,n_stack_1080p, n_stack_1440p, n_stack_4K; // , n_stack_audio;
-  std::deque<Frame*> stack_720p,  stack_1080p,   stack_1440p,   stack_4K; //   stack_audio;
-  std::vector<Frame> reservoir_720p, reservoir_1080p, reservoir_1440p, reservoir_4K; // reservoir_audio;
-}; // <pyapi>
-
-
+// typedef void ( *PFNGLXSWAPINTERVALEXTPROC) (Display *dpy, GLXDrawable drawable, int interval);
 
 /** Each Frame carries information about it's slot number in Frame::slot.  Slot number identifies the origin of the stream.  When the bitmap Frame arrives to OpenGLThread, each stream/slot requires:
  * 
@@ -119,6 +63,7 @@ public:
 public:  
   YUVTEX*      yuvtex;  ///< This could be a base class for different kinds of textures (now only YUVTEX)
   YUVShader*   shader;  ///< Base class for the chosen Shader for this slot.  Now always YUVShader
+  BitmapPars   bmpars;
   
 private:
   bool      active;     ///< Is acticated or not
@@ -128,9 +73,9 @@ private:
   long int  prev_mstimestamp; ///< for debugging: check if frames are fed in correct timestamp order
   
 public:
-  void activate(GLsizei w, GLsizei h, YUVShader* shader);   ///< Allocate SlotContext::yuvtex (for a frame of certain size) and SlotContext::shader.
+  void activate(BitmapPars bmpars, YUVShader* shader);   ///< Allocate SlotContext::yuvtex (for a frame of certain size) and SlotContext::shader.
   void deActivate();                                        ///< Deallocate textures
-  void loadTEX(YUVPBO* pbo, long int mstimestamp=0);        ///< Load bitmap from PBO to SlotContext::yuvtex
+  void loadYUVFrame(YUVFrame* yuvframe);                    ///< Load bitmap from YUVFrame to SlotContext::yuvtex
   
 public: // getters
   bool isActive() const {return active;}   ///< Check if active
@@ -190,7 +135,7 @@ public:
 // inline bool operator==(const RenderContext& lhs, const RenderContext& rhs){ return (lhs.getId()==rhs.getId()); }
 
 
-/** Group of bitmaps that are rendered into the same X-window.  A RenderGroup instance is indentified uniquely by an x-window id.  API user should **never** create this (use the API calls in OpenGLThread instead)
+/** Group of bitmaps that are rendered into the same X-window.  A RenderGroup instance is indentified uniquely by an x-window id.
  * 
  * @ingroup openglthread_tag
  */ 
@@ -221,7 +166,6 @@ public: // getters
   Window getWindowId() const {return window_id;}
   const std::list<RenderContext>& getRenderContexes() const {return render_contexes;}
   
-  
 public:
   std::list<RenderContext>::iterator getContext(int id); ///< Returns iterator at matched render context id
   bool addContext(RenderContext render_context);         ///< Add RenderContext to RenderGroup::render_contexes (with checking)
@@ -236,23 +180,6 @@ public:
    */
   void render();
 };
-
-
-
-/** Signal information for OpenGLThread
- * 
- * @ingroup openglthread_tag
- */
-struct OpenGLSignalContext {   // used by signals:                                
-  SlotNumber    n_slot;        ///< in: new_render_context                                         
-  Window        x_window_id;   ///< in: new_render_context, new_render_group, del_render_group     
-  unsigned int  z;             ///< in: new_render_context                                         
-  int           render_ctx;    ///< in: del_render_context, out: new_render_context                
-  bool          success;       ///< return value: was the call succesful?                          
-};                                                                                               
-
-
-std::ostream &operator<<(std::ostream &os, OpenGLSignalContext const &m);
 
 
 /** GLX extensions for controlling the vertical sync / framerate issue are a mess.  Hence this namespace.
@@ -283,42 +210,16 @@ public: // <pyapi>
   /** Default constructor
    * 
    * @param name          A name indentifying this thread
-   * @param n_stack_720p  Size of the frame reservoir for 720p
-   * @param n_stack_1080p Size of the frame reservoir for 1080p
-   * @param n_stack_1440p Size of the frame reservoir for 1440p
-   * @param n_stack_4K    Size of the frame reservoir for 4K
+   * @param fifo_ctx      Parameters for the internal OpenGLFrameFifo
    * @param msbuftime     Jitter buffer size in milliseconds (default=100 ms)
-   * @param core_id       Force thread affinity (default=-1 = no affinity)
-   * 
-   * n_stack parameters are used to initialize OpenGLFrameFifo.  When OpenGLThread is started (at OpenGLThread::preRun), OpenGLThread::reserveFrames is called.  OpenGLThread::reserveFrames then instantiates YUVPBO objects, that have direct memory access to GPU.  YUVPBO instances are attached to the Frame::yuvpbo pointer of frames in OpenGLFrameFifo's frame reservoirs.
    * 
    */
-  OpenGLThread(const char* name, unsigned short n720p=0, unsigned short n1080p=0, unsigned short n1440p=0, unsigned short n4K=0, unsigned msbuftime=100, int core_id=-1); // <pyapi>
+  OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx=OpenGLFrameFifoContext(), unsigned msbuftime=100); // <pyapi>
   virtual ~OpenGLThread(); ///< Virtual destructor // <pyapi>
   
-public:
-  /** List of possible signals for the thread
-   */
-  enum class Signals {
-    none,                 ///< null signal
-    exit,                 ///< exit
-    info,                 ///< used by API infoCall
-    new_render_group,     ///< used by API newRenderCroupCall
-    del_render_group,     ///< used by API delRenderGroupCall
-    new_render_context,   ///< used by API newRenderContextCall
-    del_render_context    ///< used by API delRenderContextCall
-  };
-  /** Encapsulates data sent by the signal
-   * 
-   * Has the enumerated signal from OpenGLThread::Signals class plus any other necessary data, represented by OpenGLSignalContext.
-   */
-  struct SignalContext {
-    Signals              signal; ///< The signal
-    OpenGLSignalContext  *ctx;   ///< Why pointers? .. we have return values here
-  };
-
 protected: // initialized at init list
-  OpenGLFrameFifo     infifo; ///< This thread reads from this communication fifo
+  OpenGLFrameFifo   *infifo;    ///< This thread reads from this communication fifo
+  FifoFrameFilter   infilter;   ///< A FrameFilter for writing incoming frames
     
 protected: // Shaders. Initialized by makeShaders. 
   // Future developments: create a shader instance (and a program) per each stream, etc..?
@@ -338,7 +239,7 @@ protected: // Variables related to X11 and GLX.  Initialized by initGLX.
   XVisualInfo*  vi;
   GLXFBConfig*  fbConfigs;
   Colormap      cmap;
-  YUVPBO        *dummyframe;    ///< A PBO membuf which we reserve from the GPU as the first membuf, but is never used (this stabilizes GPU direct memory access)
+  YUVFrame*     dummyframe; ///< A PBO membuf which we reserve from the GPU as the first membuf, but is never used (this stabilizes GPU direct memory access)
   
   std::vector<SlotContext>              slots_;        ///< index => SlotContext mapping (based on vector indices)
   std::map<Window, RenderGroup>         render_groups; ///< window_id => RenderGroup mapping.  RenderGroup objects are warehoused here.
@@ -349,7 +250,6 @@ private: // function pointers for glx extensions
   PFNGLXSWAPINTERVALEXTPROC     pglXSwapIntervalEXT;
   PFNGLXGETSWAPINTERVALMESAPROC pglXGetSwapIntervalMESA;
   PFNGLXSWAPINTERVALMESAPROC    pglXSwapIntervalMESA;
-  
   
 public: // methods for getting/setting the swap interval .. these choose the correct method to call
   unsigned                      swap_flavor;
@@ -377,34 +277,35 @@ public: // manipulate RenderContex(es)
   bool                delRenderContext(int id); ///< Runs through OpenGLThread::render_groups and removes indicated RenderContext
   
 public: // loading and rendering actions
-  void                loadTEX(SlotNumber n_slot, YUVPBO* pbo, long int mstimestamp=0); ///< Load PBO to texture in slot n_slot
+  void                loadYUVFrame(SlotNumber n_slot, YUVFrame *yuvframe); ///< Load PBO to texture in slot n_slot
   void                render(SlotNumber n_slot); ///< Render all RenderGroup(s) depending on slot n_slot
   
 public: // getter methods
   Display*            getDisplayId() {return display_id;}
   const GLXContext&   getGlc() {return glc;}
   const Window&       getRootId() {return root_id;}
+
   
-public: // API // <pyapi>
-  OpenGLFrameFifo&    getFifo(); ///< Retrieve the communication fifo  // <pyapi>
+//public:
+//  OpenGLFrameFifo&    getFifo();
   
 public: // setter methods
-  void                activateSlot   (SlotNumber i, YUVFramePars yuv_pars);
-  void                activateSlotIf (SlotNumber i, YUVFramePars yuv_pars); // Activate slot if it's not already active or if the texture has changed
+  void                activateSlot   (SlotNumber i, YUVFrame *yuvframe);
+  void                activateSlotIf (SlotNumber i, YUVFrame *yuvframe); // Activate slot if it's not already active or if the texture has changed
   bool                slotTimingOk   (SlotNumber n_slot, long int mstime);
   void                debugOn()  {debug=true;}
   void                debugOff() {debug=false;}
   
 public: // Thread variables
-  std::deque<SignalContext> signal_fifo;   ///< Redefinition of signal fifo.  Signal fifo of Thread::SignalContext(s) is now hidden.
+  std::deque<OpenGLSignalContext> signal_fifo;   ///< Redefinition of signal fifo.  Signal fifo of Thread::SignalContext(s) is now hidden.
   
 public: // Thread virtual methods
   void run();                                       ///< Main execution loop is defined here.
   void preRun();                                    ///< Called before entering the main execution loop, but after creating the thread.  Calls OpenGLThread::createShaders and OpenGLThread::reserveFrames
   void postRun();                                   ///< Called after the main execution loop exits, but before joining the thread
   void handleSignals();                             ///< From signals to methods 
-  void sendSignal(SignalContext signal_ctx);        ///< Send a signal to the thread 
-  void sendSignalAndWait(SignalContext signal_ctx); ///< Send a signal to the thread and wait all signals to be executed
+  void sendSignal(OpenGLSignalContext signal_ctx);        ///< Send a signal to the thread 
+  void sendSignalAndWait(OpenGLSignalContext signal_ctx); ///< Send a signal to the thread and wait all signals to be executed
   
 public: // methods, internal : initializing / closing .. but we might want to test these separately, keep public
   void initGLX();          ///< Connect to X11 server, init GLX direct rendering
@@ -418,8 +319,8 @@ public: // methods, internal : initializing / closing .. but we might want to te
   void releaseFrames();    ///< Deletes YUVPBO by calling Frame::reset
   
 protected: // internal methods
-  void dumpFifo();
-  void diagnosis();
+  void dumpPresFifo();  ///< Dump the presentation queue
+  void diagnosis();     ///< Dump presentation queue size and diagnosis output for infifo (YUVdiagnosis)
   void resetCallTime();
   void reportCallTime(unsigned i);        ///< How much time since handleFifo exited
   long unsigned insertFifo(Frame* f);     ///< Sorted insert: insert a timestamped frame into the fifo
@@ -436,13 +337,12 @@ public:  // reporting
   void reportRenderGroups();
   void reportRenderList();
   
-  void reportStacks() {infifo.reportStacks();}
-  void dumpStack()    {infifo.dumpStack();}
-  void dumpInFifo()   {infifo.dumpFifo();}
+  void dumpYUVStacks() {infifo->dumpYUVStacks();} ///< State of the YUV Frame stack
+  void YUVdiagnosis()  {infifo->YUVdiagnosis();}  ///< Brief resumen of the state of the YUV Frame stack
+  void dumpInFifo()    {infifo->dumpFifo();}      ///< Incoming fifo: here we have all kinds of frames, including YUVFrame(s)
   
 public: // testing 
-  Frame* getFrame(BitmapType bmtype) {return infifo.getFrame(bmtype);} ///< Get a frame from the OpenGLFrameFifo
-  void recycle(Frame* f)             {infifo.recycle(f);}               ///< Recycle a frame back to OpenGLFrameFifo
+  void recycle(Frame* f)             {infifo->recycle(f);}               ///< Recycle a frame back to OpenGLFrameFifo
   
 public: // for testing // <pyapi>
   Window     createWindow(bool map=true, bool show=false);          ///< Creates a new X window (for debugging/testing only) // <pyapi>
@@ -452,6 +352,8 @@ public: // for testing // <pyapi>
   Window     getChildWindow(Window parent_id);
   
 public: // API // <pyapi>
+  FifoFrameFilter &getFrameFilter();                           ///< API method: get filter for passing frames to this thread // <pyapi>
+  
   /** API call: stops the thread
    */
   void stopCall();                                             // <pyapi>
@@ -488,3 +390,4 @@ public: // API // <pyapi>
   bool delRenderContextCall(int id);                           // <pyapi>
 }; // <pyapi>
 
+#endif

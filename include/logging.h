@@ -29,7 +29,7 @@
  *  @file    logging.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief Logging utilities
  *
@@ -145,7 +145,7 @@ extern Logger threadlogger;
 extern Logger livethreadlogger;
 extern Logger avthreadlogger;
 extern Logger decoderlogger;
-extern Logger queuelogger;
+extern Logger fifologger;
 extern Logger opengllogger;
 extern Logger filelogger;
 extern Logger filethreadlogger;

@@ -1,3 +1,5 @@
+#ifndef sharedmem_HEADER_GUARD
+#define sharedmem_HEADER_GUARD
 /*
  * sharedmem.h : Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  * 
@@ -26,7 +28,7 @@
  *  @file    sharedmem.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  */ 
@@ -38,7 +40,7 @@
 #include <sys/stat.h>        /* For mode constants */
 #include <fcntl.h>           /* For O_* constants */
 #include <semaphore.h> // semaphores
-#include "filters.h"
+#include "framefilter.h"
 
 /** Shared memory segment with metadata (the segment size)
  * 
@@ -85,6 +87,7 @@ public:
   
 public:
   void        put(std::vector<uint8_t> &inp_payload); ///< Server: copy this vector into payload
+  void        putAVRGBFrame(AVRGBFrame *f);           ///< Copy from AVFrame->data directly
   std::size_t getSize();                              ///< Client: return metadata = the size of the payload (not the maximum size)
   bool        getClientState();                       ///< Was the shmem acquisition succesfull?
 };
@@ -115,7 +118,7 @@ public: // <pyapi>
    */
   SharedMemRingBuffer(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0, bool is_server=false); // <pyapi>
   /** Default destructor */
-  ~SharedMemRingBuffer(); // <pyapi>
+  virtual ~SharedMemRingBuffer(); // <pyapi>
 
 protected: // at constructor init list
   std::string  name;
@@ -167,14 +170,32 @@ public: // client side routines - call only from the client side // <pyapi>
 
 
 
-/** This FrameFilter writes frames into a shared memory buffer (SharedMemRingBuffer)
+/** SharedMemRingBuffer for AVRGBFrame.
+ * 
+ * @ingroup shmem_tag
+ */
+class SharedMemRingBufferRGB : public SharedMemRingBuffer { // <pyapi>
+
+public:                                                     // <pyapi>
+  /** Default ctor */
+  SharedMemRingBufferRGB(const char* name, int n_cells, int width, int height, int mstimeout=0, bool is_server=false); // <pyapi>
+  /** Default destructor */
+  ~SharedMemRingBufferRGB(); // <pyapi>
+  
+public:
+  void serverPushAVRGBFrame(AVRGBFrame *f);
+};                           // <pyapi>
+
+
+
+/** This FrameFilter writes frames into a SharedMemRingBuffer
  * 
  * @ingroup filters_tag
  * @ingroup shmem_tag
  */
-class SharedMemFrameFilter : public FrameFilter { // <pyapi> 
+class ShmemFrameFilter : public FrameFilter {                                               // <pyapi>
   
-public: // <pyapi>
+public:                                                                                     // <pyapi>
   /** Default constructor
    * 
    * Creates and initializes a SharedMemoryRingBuffer.  Frames fed into this FrameFilter are written into that buffer.
@@ -185,20 +206,43 @@ public: // <pyapi>
    * @param   mstimeout. Semaphore timeout wait for the ringbuffer
    * 
    */
-  SharedMemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0); // <pyapi>
+  ShmemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0);  // <pyapi>
 
-protected: // initialized at constructor
-  int                    n_cells;
-  std::size_t            n_bytes;
-  int                    mstimeout;
+protected: // initialized at constructor                                                  
+  //int                    n_cells;
+  //std::size_t            n_bytes;
+  //int                    mstimeout;
   SharedMemRingBuffer    shmembuf;
   
 protected:
-  void go(Frame* frame);
+  virtual void go(Frame* frame);
+  
+};                                                                                       // <pyapi>
+  
+
+
+/** Like ShmemFrameFilter.  Writes frames into SharedMemRingBufferRGB
+ * 
+ * @ingroup filters_tag
+ * @ingroup shmem_tag
+ */
+class RGBShmemFrameFilter : public FrameFilter { // <pyapi> 
+  
+public: // <pyapi>
+  /** Default constructor
+   */
+  RGBShmemFrameFilter(const char* name, int n_cells, int width, int height, int mstimeout=0); // <pyapi>
+  
+protected: // initialized at constructor                                                  
+  //int                    n_cells;
+  //int                    width;
+  //int                    height;
+  //int                    mstimeout;
+  SharedMemRingBufferRGB shmembuf;
+  
+protected:
+  virtual void go(Frame* frame);
   
 }; // <pyapi>
   
-  
-
-
-
+#endif

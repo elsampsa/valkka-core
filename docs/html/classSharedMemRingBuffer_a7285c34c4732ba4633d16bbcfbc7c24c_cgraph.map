@@ -1,5 +1,0 @@
-<map id="SharedMemRingBuffer::clientPull" name="SharedMemRingBuffer::clientPull">
-<area shape="rect" id="node2" href="$classSharedMemRingBuffer.html#a09d467d30d7688766f2b2dcab7f4cb41" title="Client: call this to see if there has been a ring&#45;buffer overflow. " alt="" coords="208,5,363,47"/>
-<area shape="rect" id="node4" href="$classSharedMemRingBuffer.html#a156b27e9e115f4c73c0e9992cb115ded" title="Client: call this after handling the ring&#45;buffer overflow. " alt="" coords="208,71,363,112"/>
-<area shape="rect" id="node3" href="$classSharedMemRingBuffer.html#a2d82b75607988d7aae119893483d4488" title="Used by SharedMemoryRingBuffer::flagIsSet() " alt="" coords="411,39,565,80"/>
-</map>

@@ -29,7 +29,7 @@
  *  @file    common.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief List of common header files
  *
@@ -62,6 +62,7 @@
 
 #include <map>
 #include <list>
+#include <deque>
 
 #include <chrono> 
 #include <thread>
@@ -73,6 +74,10 @@
 
 #include <mutex>
 #include <condition_variable>
+
+#include<GL/glew.h>
+#include<GL/glx.h>
+#include<GL/glxext.h>
 
 #endif
 

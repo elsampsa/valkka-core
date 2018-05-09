@@ -1,5 +1,5 @@
 /*
- * sharedmem.cpp :
+ * sharedmem.cpp : Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -26,14 +26,13 @@
  *  @file    sharedmem.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
- *  @brief 
+ *  @brief   Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  */ 
 
+#include "tools.h"
 #include "sharedmem.h"
-
-
 
 SharedMemSegment::SharedMemSegment(const char* name, std::size_t n_bytes, bool is_server) : name(name), n_bytes(n_bytes), is_server(is_server), client_state(false) {
   payload_name=std::string("/")+name+std::string("_valkka_payload");
@@ -153,6 +152,18 @@ void SharedMemSegment::put(std::vector<uint8_t> &inp_payload) {
   // std::cout << "SharedMemSegment: put: meta=" << *meta << std::endl;
   memcpy(payload, inp_payload.data(), *meta);
   // std::cout << "SharedMemSegment: put: payload now: " << int(payload[0]) << " " << int(payload[1]) << " " << int(payload[2]) << std::endl;
+}
+
+
+void SharedMemSegment::putAVRGBFrame(AVRGBFrame *f) { // copy from AVFrame->data directly
+  // FFmpeg libav rgb has everything in av_frame->data[0].  The number of bytes is av_frame->linesize[0]*av_frame->height.
+  AVFrame *av_frame =f->av_frame;
+  
+  // number of bytes:
+  *meta =std::min(std::size_t(av_frame->linesize[0]*av_frame->height), n_bytes);
+  
+  std::cout << "SharedMemSegment: putAVRGBFrame: copying " << *meta << " bytes from " << *f << std::endl;
+  memcpy(payload, av_frame->data[0], *meta);
 }
 
 
@@ -293,10 +304,14 @@ void SharedMemRingBuffer::serverPush(std::vector<uint8_t> &inp_payload) {
   
   i=sem_post(sema);
 }
-  
+
+
 
 bool SharedMemRingBuffer::clientPull(int &index_out, int &size_out) {
   int i;
+  
+  index_out =0;
+  size_out  =0;
   
   if (mstimeout==0) {
     while ((i = sem_wait(sema)) == -1 && errno == EINTR)
@@ -358,15 +373,67 @@ bool SharedMemRingBuffer::clientPull(int &index_out, int &size_out) {
 
 
 
-SharedMemFrameFilter::SharedMemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout) : FrameFilter(name,NULL), shmembuf(name, n_cells, n_bytes, mstimeout, true) {
+SharedMemRingBufferRGB::SharedMemRingBufferRGB(const char* name, int n_cells, int width, int height, int mstimeout, bool is_server) : SharedMemRingBuffer(name, n_cells, (std::size_t)(width*height*3), mstimeout, is_server) {
+}
+
+
+SharedMemRingBufferRGB::~SharedMemRingBufferRGB() {
+}
+
+
+void SharedMemRingBufferRGB::serverPushAVRGBFrame(AVRGBFrame *f) {
+  int i;
+    
+  if (getValue()>=n_cells) { // so, semaphore will overflow
+    zero();
+    std::cout << "RingBuffer: ServerPush: zeroed, value now="<<getValue()<<std::endl;
+    index=-1;
+    setFlag();
+    std::cout << "RingBuffer: ServerPush: OVERFLOW "<<std::endl;
+  }
+  
+  ++index;
+  if (index>=n_cells) {
+    index=0;
+  }
+  shmems[index]->putAVRGBFrame(f);
+  // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
+  
+  i=sem_post(sema);
+}
+
+
+
+ShmemFrameFilter::ShmemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout) : FrameFilter(name,NULL), shmembuf(name, n_cells, n_bytes, mstimeout, true) {
 }
   
 
-void SharedMemFrameFilter::go(Frame* frame) {
-  shmembuf.serverPush(frame->payload);
+void ShmemFrameFilter::go(Frame* frame) {
+  // shmembuf.serverPush(frame->payload); // this depends on the FrameClass this shmemfilter is supposed to manipulate
+  if (frame->getFrameClass()!=FrameClass::basic) {
+    std::cout << "ShmemFrameFilter: go: ERROR: BasicFrame required" << std::endl;
+    return;
+  }
+  BasicFrame *basic =static_cast<BasicFrame*>(frame);
+  shmembuf.serverPush(basic->payload);
 }
 
 
+//RGBShmemFrameFilter::RGBShmemFrameFilter(const char* name, int n_cells, int width, int height, int mstimeout) : ShmemFrameFilter(name, n_cells, width*height*3, mstimeout) {
+//}
+RGBShmemFrameFilter::RGBShmemFrameFilter(const char* name, int n_cells, int width, int height, int mstimeout) : FrameFilter(name,NULL), shmembuf(name, n_cells, width, height, mstimeout) {
+}
+
+
+void RGBShmemFrameFilter::go(Frame* frame) {
+  if (frame->getFrameClass()!=FrameClass::avrgb) {
+    std::cout << "BitmapShmemFrameFilter: go: ERROR: AVBitmapFrame required" << std::endl;
+    return;
+  }
+  AVRGBFrame *rgbframe =static_cast<AVRGBFrame*>(frame);
+  
+  shmembuf.serverPushAVRGBFrame(rgbframe);
+}
 
 
 

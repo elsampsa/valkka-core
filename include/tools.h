@@ -1,3 +1,6 @@
+#ifndef TOOLS_HEADER_GUARD 
+#define TOOLS_HEADER_GUARD
+
 /*
  * tools.h : Auxiliary routines
  * 
@@ -21,13 +24,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  *
  */
-#ifndef TOOLS 
-#define TOOLS
+
 /** 
  *  @file    tools.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
  *  @brief Auxiliary routines
  *
@@ -35,7 +37,7 @@
 
 
 #include "common.h"
-#include "sizes.h"
+#include "constant.h"
 #include "logging.h"
 
 int64_t NANOSEC_PER_SEC = 1000000000;

@@ -1,5 +1,0 @@
-<map id="LiveThread" name="LiveThread">
-<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="5,81,68,108"/>
-<area shape="rect" id="node3" href="$classLiveFifo.html" title="This is a special FrameFifo class for feeding frames into live555, i.e. " alt="" coords="92,81,160,108"/>
-<area shape="rect" id="node4" href="$classFrameFifo.html" title="A thread&#45;safe FrameFifo (first&#45;in&#45;first&#45;out) queue with thread&#45;safe methods for inserting and popping..." alt="" coords="85,5,167,32"/>
-</map>

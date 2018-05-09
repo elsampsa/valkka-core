@@ -1,9 +1,0 @@
-<map id="/home/sampsa/C/valkka/include/filters.h" name="/home/sampsa/C/valkka/include/filters.h">
-<area shape="rect" id="node2" href="$frames_8h.html" title="Frame definition, base class for FrameFilters. " alt="" coords="1176,95,1249,121"/>
-<area shape="rect" id="node40" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1299,169,1361,196"/>
-<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1155,319,1238,345"/>
-<area shape="rect" id="node29" href="$sizes_8h.html" title="Default payload sizes and other numerical constants. " alt="" coords="1165,244,1229,271"/>
-<area shape="rect" id="node30" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="405,169,473,196"/>
-<area shape="rect" id="node36" href="$opengl_8h.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="1049,169,1120,196"/>
-<area shape="rect" id="node41" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2119,319,2194,345"/>
-</map>

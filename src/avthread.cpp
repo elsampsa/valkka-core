@@ -26,16 +26,15 @@
  *  @file    avthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  @brief   FFmpeg decoding thread
  */ 
 
 #include "avthread.h"
 #include "logging.h"
-#include "tools.h"
 
-// AVThread::AVThread(const char* name, FrameFifo* infifo, FrameFilter& outfilter) : Thread(name), infifo(infifo), outfilter(outfilter), is_decoding(false) {
-AVThread::AVThread(const char* name, FrameFifo& infifo, FrameFilter& outfilter, int core_id, long int mstimetolerance) : Thread(name, core_id), infifo(infifo), outfilter(outfilter), mstimetolerance(mstimetolerance), is_decoding(false) {
+
+AVThread::AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) : Thread(name), outfilter(outfilter), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), is_decoding(false), mstimetolerance(0) {
   avthreadlogger.log(LogLevel::debug) << "AVThread : constructor : N_MAX_DECODERS ="<<int(N_MAX_DECODERS)<<std::endl;
   decoders.resize(int(N_MAX_DECODERS),NULL);
 }
@@ -44,8 +43,8 @@ AVThread::AVThread(const char* name, FrameFifo& infifo, FrameFilter& outfilter, 
 AVThread::~AVThread() {
   threadlogger.log(LogLevel::crazy) << "AVThread: destructor: "<< this->name <<std::endl;
   stopCall();
-  DecoderBase* decoder;
-  for (std::vector<DecoderBase*>::iterator it = decoders.begin(); it != decoders.end(); ++it) {
+  Decoder* decoder;
+  for (std::vector<Decoder*>::iterator it = decoders.begin(); it != decoders.end(); ++it) {
   decoder=*it;
   if (!decoder) {
     }
@@ -56,7 +55,6 @@ AVThread::~AVThread() {
 }
 
 
-
 void AVThread::run() {
   bool ok;
   bool got_frame;
@@ -64,7 +62,7 @@ void AVThread::run() {
   Frame* f;
   time_t timer;
   time_t oldtimer;
-  DecoderBase* decoder; // alias
+  Decoder* decoder; // alias
   long int dt;
   
   time(&timer);
@@ -72,8 +70,7 @@ void AVThread::run() {
   loop=true;
   
   while(loop) {
-    // f=infifo->read(1000);
-    f=infifo.read(Timeouts::avthread);
+    f=infifo.read(Timeout::avthread);
     if (!f) { // TIMEOUT
 #ifdef AVTHREAD_VERBOSE
       std::cout << "AVThread: "<< this->name <<" timeout expired!" << std::endl;
@@ -86,77 +83,111 @@ void AVThread::run() {
       subsession_index=f->subsession_index;
       // info frame    : init decoder
       // regular frame : make a copy
+      
       if (subsession_index>=decoders.size()) { // got frame: subsession_index too big
         avthreadlogger.log(LogLevel::fatal) << "AVThread: "<< this->name <<" : run : decoder slot overlow : "<<subsession_index<<"/"<<decoders.size()<< std::endl; // we can only have that many decoder for one stream
         infifo.recycle(f); // return frame to the stack - never forget this!
-      }
-      else if (f->frametype==FrameType::setup) { // got frame: DECODER INIT
+      } // got frame: subsession_index too big
+      
+      else if (f->getFrameClass()==FrameClass::setup) { // got frame: DECODER INIT
+        
         if (decoders[subsession_index]!=NULL) { // slot is occupied
           avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : decoder reinit " << std::endl;
           delete decoders[subsession_index];
           decoders[subsession_index]=NULL;
         }
+        
         // register a new decoder
-        avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : registering decoder to slot " <<subsession_index<< std::endl;
-        switch ( (f->setup_pars).frametype ) { // NEW_CODEC_DEV // when adding new codecs, make changes here: add relevant decoder per codec
-          case FrameType::h264:
-            decoders[subsession_index]=new VideoDecoder(AV_CODEC_ID_H264);
-            break;
-          case FrameType::pcmu:
-            decoders[subsession_index]=new DummyDecoder();
-            break;
-          default:
-            decoders[subsession_index]=new DummyDecoder();
-            break;
-        } // switch
-        infifo.recycle(f); // return frame to the stack - never forget this!
+        SetupFrame *setupframe = static_cast<SetupFrame*>(f);
+        avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : registering decoder for subsession " <<subsession_index<< std::endl;
+        
+        if (setupframe->media_type==AVMEDIA_TYPE_AUDIO) { // AUDIO
+          
+          switch (setupframe->codec_id) { // switch: audio codecs
+            case AV_CODEC_ID_PCM_MULAW:
+              decoders[subsession_index]=new DummyDecoder();
+              break;
+            default:
+              break;
+          
+          } // switch: audio codecs
+        } // AUDIO
+        else if (setupframe->media_type==AVMEDIA_TYPE_VIDEO) { // VIDEO
+          
+          switch (setupframe->codec_id) { // switch: video codecs
+            case AV_CODEC_ID_H264:
+              decoders[subsession_index]=new VideoDecoder(AV_CODEC_ID_H264);
+              break;
+            default:
+              break;
+          
+          } // switch: video codecs
+            
+        } // VIDEO
+        else { // UNKNOW MEDIA TYPE
+          decoders[subsession_index]=new DummyDecoder();
+        }
+        
+      infifo.recycle(f); // return frame to the stack - never forget this!
+      
+      
       } // got frame: DECODER INIT
+      
       else if (decoders[subsession_index]==NULL) { // woops, no decoder registered yet..
         avthreadlogger.log(LogLevel::normal) << "AVThread: "<< this->name <<" : run : no decoder registered for stream " << subsession_index << std::endl;
         infifo.recycle(f); // return frame to the stack - never forget this!
       }
-      else if (f->frametype==FrameType::none) { // void frame, do nothing
+      
+      else if (f->getFrameClass()==FrameClass::none) { // void frame, do nothing // TODO: BasicFrames are decoded, but some other frame classes might be passed as-is through the decoder (just copy them and pass)
         infifo.recycle(f); // return frame to the stack - never forget this!
       }
-      else if (is_decoding) { // decode
-        decoder=decoders[subsession_index]; // alias
-        // Take a local copy of the frame, return the original to the stack, and then start (the time consuming) decoding
-        decoder->in_frame = *f; // deep copy of the frame.  After performing the copy ..
-        infifo.recycle(f);      // .. return frame to the stack
-        // infifo->dumpStack();
-        if (decoder->pull()) { // of course, frame must be returned to stack and stack must be released, before doing anything time consuming (like decoding..)
-#ifdef AVTHREAD_VERBOSE
-          std::cout << "AVThread: "<< this->name <<" : run : decoder num " <<subsession_index<< " got frame " << std::endl;
-#endif
-          
-#ifdef OPENGL_TIMING
-          dt=(getCurrentMsTimestamp()-decoder->out_frame.mstimestamp);
-          if (dt>=500) {
-            std::cout << "AVThread: " << this->name <<" run: timing : decoder sending frame " << dt << " ms late" << std::endl;
-          }
-#endif
-          if (mstimetolerance>0) { // late frames can be dropped here, before their insertion to OpenGLThreads fifo
-            if ((getCurrentMsTimestamp()-decoder->out_frame.mstimestamp)<=mstimetolerance) {
-              outfilter.run(&(decoder->out_frame));
-            }
-            else {
-              avthreadlogger.log(LogLevel::debug) << "AVThread: not sending late frame " << decoder->out_frame << std::endl;
-            }
-          }
-          else { // no time tolerance defined
-            outfilter.run(&(decoder->out_frame));
-          }
-        }
-        else {
-#ifdef AVTHREAD_VERBOSE
-          std::cout << "AVThread: "<< this->name <<" : run : decoder num " <<subsession_index<< " no frame " << std::endl;
-#endif
-        }
-      } // decode
-      else { // some other case .. what that might be?
-        infifo.recycle(f);      // .. return frame to the stack
-      }
       
+      else if (f->getFrameClass()==FrameClass::basic) { // basic payload frame
+        BasicFrame *basicframe = static_cast<BasicFrame*>(f);
+      
+        if (is_decoding) { // decode
+          decoder=decoders[subsession_index]; // alias
+          // Take a local copy of the frame, return the original to the stack, and then start (the time consuming) decoding
+          // decoder->in_frame.copyFrom(basicframe); // deep copy of the BasicFrame.  After performing the copy ..
+          decoder->input(basicframe); // decoder takes as an input a Frame and makes a copy of it.  Decoder must check that it is the correct type
+          infifo.recycle(f); // .. return frame to the stack
+          // infifo->dumpStack();
+          if (decoder->pull()) { // decode
+#ifdef AVTHREAD_VERBOSE
+            std::cout << "AVThread: "<< this->name <<" : run : decoder num " <<subsession_index<< " got frame " << std::endl;
+#endif
+            
+#ifdef OPENGL_TIMING
+            // dt=(getCurrentMsTimestamp()-decoder->out_frame.mstimestamp);
+            dt=(getCurrentMsTimestamp()-decoder->getMsTimestamp());
+            if (dt>=500) {
+              std::cout << "AVThread: " << this->name <<" run: timing : decoder sending frame " << dt << " ms late" << std::endl;
+            }
+#endif
+            if (mstimetolerance>0) { // late frames can be dropped here, before their insertion to OpenGLThreads fifo
+              if ((getCurrentMsTimestamp()-decoder->getMsTimestamp())<=mstimetolerance) {
+                // outfilter.run(&(decoder->out_frame));
+                outfilter.run(decoder->output()); // returns a reference to a decoded frame
+              }
+              else {
+                avthreadlogger.log(LogLevel::debug) << "AVThread: not sending late frame " << *(decoder->output()) << std::endl;
+              }
+            }
+            else { // no time tolerance defined
+              //outfilter.run(&(decoder->out_frame));
+              outfilter.run(decoder->output()); // return a reference to a decoded frame
+            }
+          }
+          else {
+#ifdef AVTHREAD_VERBOSE
+            std::cout << "AVThread: "<< this->name <<" : run : decoder num " <<subsession_index<< " no frame " << std::endl;
+#endif
+          }
+        } // decode
+        else { // not decoding ..
+          infifo.recycle(f);      // .. return frame to the stack
+        }
+      } // basic payload frame
     } // GOT FRAME
     
     time(&timer);
@@ -184,7 +215,22 @@ void AVThread::postRun() {
 }
 
 
-void AVThread::sendSignal(SignalContext signal_ctx) {
+FifoFrameFilter &AVThread::getFrameFilter() {
+  return infilter;
+}
+
+
+FifoFrameFilter &AVThread::getBlockingFrameFilter() {
+  return (FifoFrameFilter&)infilter_block;
+}
+
+
+FrameFifo &AVThread::getFifo() {
+  return infifo;
+}
+
+
+void AVThread::sendSignal(AVSignalContext signal_ctx) {
   std::unique_lock<std::mutex> lk(this->mutex);
   this->signal_fifo.push_back(signal_ctx);
 }
@@ -198,16 +244,16 @@ void AVThread::handleSignals() {
   // if (signal_fifo.empty()) {return;}
   
   // handle pending signals from the signals fifo
-  for (std::deque<SignalContext>::iterator it = signal_fifo.begin(); it != signal_fifo.end(); ++it) { // it == pointer to the actual object (struct SignalContext)
+  for (auto it = signal_fifo.begin(); it != signal_fifo.end(); ++it) { // it == pointer to the actual object (struct SignalContext)
     
     switch (it->signal) {
-      case Signals::exit:
+      case AVSignal::exit:
         loop=false;
         break;
-      case Signals::on: // start decoding
+      case AVSignal::on: // start decoding
         is_decoding=true;
         break;
-      case Signals::off:  // stop decoding
+      case AVSignal::off:  // stop decoding
         is_decoding=false;
         break;
       }
@@ -219,15 +265,15 @@ void AVThread::handleSignals() {
 // API
 
 void AVThread::decodingOnCall() {
-  SignalContext signal_ctx;
-  signal_ctx.signal=Signals::on;
+  AVSignalContext signal_ctx;
+  signal_ctx.signal=AVSignal::on;
   sendSignal(signal_ctx);
 }
 
 
 void AVThread::decodingOffCall() {
-  SignalContext signal_ctx;
-  signal_ctx.signal=Signals::off;
+  AVSignalContext signal_ctx;
+  signal_ctx.signal=AVSignal::off;
   sendSignal(signal_ctx);
 }
   
@@ -235,8 +281,8 @@ void AVThread::decodingOffCall() {
 void AVThread::stopCall() {
   threadlogger.log(LogLevel::debug) << "AVThread: stopCall: "<< this->name <<std::endl;
   if (!this->has_thread) {return;}
-  SignalContext signal_ctx;
-  signal_ctx.signal=Signals::exit;
+  AVSignalContext signal_ctx;
+  signal_ctx.signal=AVSignal::exit;
   sendSignal(signal_ctx);
   this->closeThread();
   this->has_thread=false;

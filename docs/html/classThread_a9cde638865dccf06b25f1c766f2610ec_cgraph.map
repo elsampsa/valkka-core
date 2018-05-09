@@ -1,4 +1,0 @@
-<map id="Thread::stopCall" name="Thread::stopCall">
-<area shape="rect" id="node2" href="$classThread.html#a20db67a3ec14a198b5444f3214d6155d" title="Send a signal to the thread. " alt="" coords="175,5,310,32"/>
-<area shape="rect" id="node3" href="$classThread.html#a4428ec86c8bc7da14b558f25fb723ce0" title="Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set Thread::has_thread to false. " alt="" coords="172,56,313,83"/>
-</map>

@@ -2,7 +2,7 @@
 #define OPENGL_HEADER_GUARD
 
 /*
- * opengl.h : X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines
+ * opengl.h : OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -29,17 +29,14 @@
  *  @file    opengl.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  
- *  @brief X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines
+ *  @brief OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines
  *  
  */ 
 
-#include "common.h"
-#include "sizes.h"
-#include<GL/glew.h>
-#include<GL/glx.h>
-#include<GL/glxext.h>
+#include "frame.h"
+#include "constant.h"
 
 int is_glx_extension_supported(Display *dpy, const char *query);
 
@@ -67,102 +64,6 @@ namespace glx_attr { // https://stackoverflow.com/questions/11623451/static-vs-n
 };
 
 
-
-/** A Structure encapsulating an OpenGL %PBO (Pixel Buffer Object)
- * @ingroup openglthread_tag 
- */
-struct PBO {
-  GLuint   index;   ///< internal OpenGL/GPU index
-  GLsizei  size;    ///< payload max size
-  GLubyte* payload; ///< direct memory access (dma) memory address into GPU
-};
-
-
-/** Encapsulates OpenGL %PBOs (Pixel Buffer Objects) for a YUV420 image
- * @ingroup openglthread_tag 
- */
-class YUVPBO {
-  
-public:
-  /** Default constructor
-   * 
-   * @param size Size of Y plane in bytes.  Size of U and V planes is calculated
-   * \callgraph
-   */
-  YUVPBO(BitmapType bmtype);
-  ~YUVPBO(); ///< Default destructor
-  
-private:
-  void reserve();     ///< Reserve data on the GPU.  Used by the constructor only.
-  
-public:
-  BitmapType bmtype;
-  GLsizei    y_size;    ///< Size of Y plane in bytes.  Size of U and V planes is calculated
-  GLsizei    u_size;    ///< Size of U plane in bytes.
-  GLsizei    v_size;    ///< Size of V plane in bytes.
-  
-  GLuint   y_index;   ///< internal OpenGL/GPU index
-  GLuint   u_index;   ///< internal OpenGL/GPU index
-  GLuint   v_index;   ///< internal OpenGL/GPU index
-  
-  GLubyte* y_payload; ///< direct memory access (dma) memory address, returned by GPU
-  GLubyte* u_payload; ///< direct memory access (dma) memory address, returned by GPU
-  GLubyte* v_payload; ///< direct memory access (dma) memory address, returned by GPU
-  
-public:
-  void upload(GLsizei y_planesize, GLsizei u_planesize, GLsizei v_planesize, GLubyte* y, GLubyte* u, GLubyte* v); ///< Upload to GPU
-};
-
-
-
-/** A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids, etc.)
- * @ingroup openglthread_tag 
- */
-class TEX {
- 
-public:
-  /** Default constructor
-   * @param w pixmap width
-   * @param h pixmap height
-   * \callgraph
-   */
-  TEX(GLsizei w, GLsizei h);
-  virtual ~TEX();            ///< Default virtual destructor
-  
-public: // format, dimensions
-  GLint    internal_format;    ///< OpenGL internal format - this MUST be optimized!       
-  GLint    format;             ///< OpenGL format of the texture - this MUST be optimized!
-  GLsizei  w;                  ///< Width of the largest plane (Y)
-  GLsizei  h;                  ///< Height of the largest plane (Y)
-  
-public: // OpenGL reference data: indices
-  GLuint   index;     ///< OpenGL reference 
-};
-
-
-
-/** A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.)
- * 
- * @ingroup openglthread_tag 
- */
-class YUVTEX : public TEX {
-  
-public:
-  /** @copydoc TEX::TEX */
-  YUVTEX(GLsizei w, GLsizei h); 
-  ~YUVTEX(); ///< Default destructor
-  
-public:
-  GLuint  y_index;       ///< internal OpenGL/GPU index referring to Y texture;
-  GLuint  u_index;       ///< internal OpenGL/GPU index referring to U texture;
-  GLuint  v_index;       ///< internal OpenGL/GPU index referring to V texture;
-};
-
-
-std::ostream &operator<<(std::ostream &os, YUVPBO const &m);
-std::ostream &operator<<(std::ostream &os, YUVTEX const &m);
-
-
 /** @ingroup openglthread_tag 
  *@{*/
 
@@ -174,11 +75,6 @@ void getPBO(GLuint& index, GLsizei size, GLubyte*& payload); ///< Get PBO from t
 void releasePBO(GLuint* index, GLubyte* payload);
 
 void getTEX(GLuint& index, GLint internal_format, GLint format, GLsizei w, GLsizei h); ///< Get texture from the GPU
-
-// void loadYUVPBO(YUVPBO* pbo, GLsizei size, GLubyte* y, GLubyte* u, GLubyte* v); ///< Load data from pointer addresses to PBOs 
-void loadYUVTEX(YUVPBO* pbo, YUVTEX* tex); ///< Load data from PBOs to textures
-
-void peekYUVPBO(YUVPBO* pbo); ///< Print payload of a YUVPBO instance
 
 /** @}*/
 

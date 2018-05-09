@@ -1156,6 +1156,93 @@ getNumpyShmem = _valkka_core.getNumpyShmem
 def ValkkaXInitThreads():
     return _valkka_core.ValkkaXInitThreads()
 ValkkaXInitThreads = _valkka_core.ValkkaXInitThreads
+class Thread(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Thread, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Thread, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _valkka_core.delete_Thread
+    __del__ = lambda self: None
+
+    def setAffinity(self, i):
+        return _valkka_core.Thread_setAffinity(self, i)
+
+    def startCall(self):
+        return _valkka_core.Thread_startCall(self)
+
+    def stopCall(self):
+        return _valkka_core.Thread_stopCall(self)
+Thread_swigregister = _valkka_core.Thread_swigregister
+Thread_swigregister(Thread)
+
+class FrameFifoContext(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FrameFifoContext, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, FrameFifoContext, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _valkka_core.new_FrameFifoContext(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_setmethods__["n_basic"] = _valkka_core.FrameFifoContext_n_basic_set
+    __swig_getmethods__["n_basic"] = _valkka_core.FrameFifoContext_n_basic_get
+    if _newclass:
+        n_basic = _swig_property(_valkka_core.FrameFifoContext_n_basic_get, _valkka_core.FrameFifoContext_n_basic_set)
+    __swig_setmethods__["n_avpkt"] = _valkka_core.FrameFifoContext_n_avpkt_set
+    __swig_getmethods__["n_avpkt"] = _valkka_core.FrameFifoContext_n_avpkt_get
+    if _newclass:
+        n_avpkt = _swig_property(_valkka_core.FrameFifoContext_n_avpkt_get, _valkka_core.FrameFifoContext_n_avpkt_set)
+    __swig_setmethods__["n_avframe"] = _valkka_core.FrameFifoContext_n_avframe_set
+    __swig_getmethods__["n_avframe"] = _valkka_core.FrameFifoContext_n_avframe_get
+    if _newclass:
+        n_avframe = _swig_property(_valkka_core.FrameFifoContext_n_avframe_get, _valkka_core.FrameFifoContext_n_avframe_set)
+    __swig_setmethods__["n_yuvpbo"] = _valkka_core.FrameFifoContext_n_yuvpbo_set
+    __swig_getmethods__["n_yuvpbo"] = _valkka_core.FrameFifoContext_n_yuvpbo_get
+    if _newclass:
+        n_yuvpbo = _swig_property(_valkka_core.FrameFifoContext_n_yuvpbo_get, _valkka_core.FrameFifoContext_n_yuvpbo_set)
+    __swig_setmethods__["n_setup"] = _valkka_core.FrameFifoContext_n_setup_set
+    __swig_getmethods__["n_setup"] = _valkka_core.FrameFifoContext_n_setup_get
+    if _newclass:
+        n_setup = _swig_property(_valkka_core.FrameFifoContext_n_setup_get, _valkka_core.FrameFifoContext_n_setup_set)
+    __swig_setmethods__["n_signal"] = _valkka_core.FrameFifoContext_n_signal_set
+    __swig_getmethods__["n_signal"] = _valkka_core.FrameFifoContext_n_signal_get
+    if _newclass:
+        n_signal = _swig_property(_valkka_core.FrameFifoContext_n_signal_get, _valkka_core.FrameFifoContext_n_signal_set)
+    __swig_setmethods__["flush_when_full"] = _valkka_core.FrameFifoContext_flush_when_full_set
+    __swig_getmethods__["flush_when_full"] = _valkka_core.FrameFifoContext_flush_when_full_get
+    if _newclass:
+        flush_when_full = _swig_property(_valkka_core.FrameFifoContext_flush_when_full_get, _valkka_core.FrameFifoContext_flush_when_full_set)
+    __swig_destroy__ = _valkka_core.delete_FrameFifoContext
+    __del__ = lambda self: None
+FrameFifoContext_swigregister = _valkka_core.FrameFifoContext_swigregister
+FrameFifoContext_swigregister(FrameFifoContext)
+
+class FrameFifo(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FrameFifo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, FrameFifo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _valkka_core.new_FrameFifo(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_FrameFifo
+    __del__ = lambda self: None
+FrameFifo_swigregister = _valkka_core.FrameFifo_swigregister
+FrameFifo_swigregister(FrameFifo)
+
 class FrameFilter(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, FrameFilter, name, value)
@@ -1493,46 +1580,6 @@ class TimeIntervalFrameFilter(FrameFilter):
 TimeIntervalFrameFilter_swigregister = _valkka_core.TimeIntervalFrameFilter_swigregister
 TimeIntervalFrameFilter_swigregister(TimeIntervalFrameFilter)
 
-class SwScaleFrameFilter(FrameFilter):
-    __swig_setmethods__ = {}
-    for _s in [FrameFilter]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, SwScaleFrameFilter, name, value)
-    __swig_getmethods__ = {}
-    for _s in [FrameFilter]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, SwScaleFrameFilter, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, name, target_width, target_height, next=None):
-        this = _valkka_core.new_SwScaleFrameFilter(name, target_width, target_height, next)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _valkka_core.delete_SwScaleFrameFilter
-    __del__ = lambda self: None
-SwScaleFrameFilter_swigregister = _valkka_core.SwScaleFrameFilter_swigregister
-SwScaleFrameFilter_swigregister(SwScaleFrameFilter)
-
-class FrameFifo(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, FrameFifo, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, FrameFifo, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, name, n_stack, clear_when_filled=False):
-        this = _valkka_core.new_FrameFifo(name, n_stack, clear_when_filled)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _valkka_core.delete_FrameFifo
-    __del__ = lambda self: None
-FrameFifo_swigregister = _valkka_core.FrameFifo_swigregister
-FrameFifo_swigregister(FrameFifo)
-
 class FifoFrameFilter(FrameFilter):
     __swig_setmethods__ = {}
     for _s in [FrameFilter]:
@@ -1577,25 +1624,27 @@ class BlockingFifoFrameFilter(FrameFilter):
 BlockingFifoFrameFilter_swigregister = _valkka_core.BlockingFifoFrameFilter_swigregister
 BlockingFifoFrameFilter_swigregister(BlockingFifoFrameFilter)
 
-class Thread(_object):
+class SwScaleFrameFilter(FrameFilter):
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Thread, name, value)
+    for _s in [FrameFilter]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SwScaleFrameFilter, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, Thread, name)
-
-    def __init__(self, *args, **kwargs):
-        raise AttributeError("No constructor defined")
+    for _s in [FrameFilter]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, SwScaleFrameFilter, name)
     __repr__ = _swig_repr
-    __swig_destroy__ = _valkka_core.delete_Thread
+
+    def __init__(self, name, target_width, target_height, next=None):
+        this = _valkka_core.new_SwScaleFrameFilter(name, target_width, target_height, next)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_SwScaleFrameFilter
     __del__ = lambda self: None
-
-    def startCall(self):
-        return _valkka_core.Thread_startCall(self)
-
-    def stopCall(self):
-        return _valkka_core.Thread_stopCall(self)
-Thread_swigregister = _valkka_core.Thread_swigregister
-Thread_swigregister(Thread)
+SwScaleFrameFilter_swigregister = _valkka_core.SwScaleFrameFilter_swigregister
+SwScaleFrameFilter_swigregister(SwScaleFrameFilter)
 
 class LiveFifo(FrameFifo):
     __swig_setmethods__ = {}
@@ -1608,8 +1657,8 @@ class LiveFifo(FrameFifo):
     __getattr__ = lambda self, name: _swig_getattr(self, LiveFifo, name)
     __repr__ = _swig_repr
 
-    def __init__(self, name, n_stack):
-        this = _valkka_core.new_LiveFifo(name, n_stack)
+    def __init__(self, name, ctx):
+        this = _valkka_core.new_LiveFifo(name, ctx)
         try:
             self.this.append(this)
         except Exception:
@@ -1723,8 +1772,8 @@ class LiveThread(Thread):
     __getattr__ = lambda self, name: _swig_getattr(self, LiveThread, name)
     __repr__ = _swig_repr
 
-    def __init__(self, name, n_stack=0, core_id=-1):
-        this = _valkka_core.new_LiveThread(name, n_stack, core_id)
+    def __init__(self, *args):
+        this = _valkka_core.new_LiveThread(*args)
         try:
             self.this.append(this)
         except Exception:
@@ -1753,193 +1802,14 @@ class LiveThread(Thread):
     def stopCall(self):
         return _valkka_core.LiveThread_stopCall(self)
 
-    def getFifo(self):
-        return _valkka_core.LiveThread_getFifo(self)
+    def getFrameFilter(self):
+        return _valkka_core.LiveThread_getFrameFilter(self)
+
+    def setRTSPServer(self, portnum=8554):
+        return _valkka_core.LiveThread_setRTSPServer(self, portnum)
 LiveThread_swigregister = _valkka_core.LiveThread_swigregister
 LiveThread_swigregister(LiveThread)
 
-class AVThread(Thread):
-    __swig_setmethods__ = {}
-    for _s in [Thread]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, AVThread, name, value)
-    __swig_getmethods__ = {}
-    for _s in [Thread]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, AVThread, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, name, infifo, outfilter, core_id=-1, mstimetolerance=0):
-        this = _valkka_core.new_AVThread(name, infifo, outfilter, core_id, mstimetolerance)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _valkka_core.delete_AVThread
-    __del__ = lambda self: None
-
-    def decodingOnCall(self):
-        return _valkka_core.AVThread_decodingOnCall(self)
-
-    def decodingOffCall(self):
-        return _valkka_core.AVThread_decodingOffCall(self)
-
-    def stopCall(self):
-        return _valkka_core.AVThread_stopCall(self)
-AVThread_swigregister = _valkka_core.AVThread_swigregister
-AVThread_swigregister(AVThread)
-
-class OpenGLFrameFifo(FrameFifo):
-    __swig_setmethods__ = {}
-    for _s in [FrameFifo]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, OpenGLFrameFifo, name, value)
-    __swig_getmethods__ = {}
-    for _s in [FrameFifo]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, OpenGLFrameFifo, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, n_stack_720p, n_stack_1080p, n_stack_1440p, n_stack_4K):
-        this = _valkka_core.new_OpenGLFrameFifo(n_stack_720p, n_stack_1080p, n_stack_1440p, n_stack_4K)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _valkka_core.delete_OpenGLFrameFifo
-    __del__ = lambda self: None
-OpenGLFrameFifo_swigregister = _valkka_core.OpenGLFrameFifo_swigregister
-OpenGLFrameFifo_swigregister(OpenGLFrameFifo)
-
-class OpenGLThread(Thread):
-    __swig_setmethods__ = {}
-    for _s in [Thread]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, OpenGLThread, name, value)
-    __swig_getmethods__ = {}
-    for _s in [Thread]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, OpenGLThread, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, name, n720p=0, n1080p=0, n1440p=0, n4K=0, msbuftime=100, core_id=-1):
-        this = _valkka_core.new_OpenGLThread(name, n720p, n1080p, n1440p, n4K, msbuftime, core_id)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _valkka_core.delete_OpenGLThread
-    __del__ = lambda self: None
-
-    def getFifo(self):
-        return _valkka_core.OpenGLThread_getFifo(self)
-
-    def createWindow(self, map=True, show=False):
-        return _valkka_core.OpenGLThread_createWindow(self, map, show)
-
-    def makeCurrent(self, window_id):
-        return _valkka_core.OpenGLThread_makeCurrent(self, window_id)
-
-    def getVsyncAtStartup(self):
-        return _valkka_core.OpenGLThread_getVsyncAtStartup(self)
-
-    def stopCall(self):
-        return _valkka_core.OpenGLThread_stopCall(self)
-
-    def infoCall(self):
-        return _valkka_core.OpenGLThread_infoCall(self)
-
-    def newRenderGroupCall(self, window_id):
-        return _valkka_core.OpenGLThread_newRenderGroupCall(self, window_id)
-
-    def delRenderGroupCall(self, window_id):
-        return _valkka_core.OpenGLThread_delRenderGroupCall(self, window_id)
-
-    def newRenderContextCall(self, slot, window_id, z):
-        return _valkka_core.OpenGLThread_newRenderContextCall(self, slot, window_id, z)
-
-    def delRenderContextCall(self, id):
-        return _valkka_core.OpenGLThread_delRenderContextCall(self, id)
-OpenGLThread_swigregister = _valkka_core.OpenGLThread_swigregister
-OpenGLThread_swigregister(OpenGLThread)
-
-class SharedMemRingBuffer(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, SharedMemRingBuffer, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, SharedMemRingBuffer, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, name, n_cells, n_bytes, mstimeout=0, is_server=False):
-        this = _valkka_core.new_SharedMemRingBuffer(name, n_cells, n_bytes, mstimeout, is_server)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _valkka_core.delete_SharedMemRingBuffer
-    __del__ = lambda self: None
-
-    def getValue(self):
-        return _valkka_core.SharedMemRingBuffer_getValue(self)
-
-    def getClientState(self):
-        return _valkka_core.SharedMemRingBuffer_getClientState(self)
-
-    def clientPull(self, index_out, size_out):
-        return _valkka_core.SharedMemRingBuffer_clientPull(self, index_out, size_out)
-SharedMemRingBuffer_swigregister = _valkka_core.SharedMemRingBuffer_swigregister
-SharedMemRingBuffer_swigregister(SharedMemRingBuffer)
-cvar = _valkka_core.cvar
-VERSION_MAJOR = cvar.VERSION_MAJOR
-VERSION_MINOR = cvar.VERSION_MINOR
-VERSION_PATCH = cvar.VERSION_PATCH
-
-class SharedMemFrameFilter(FrameFilter):
-    __swig_setmethods__ = {}
-    for _s in [FrameFilter]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, SharedMemFrameFilter, name, value)
-    __swig_getmethods__ = {}
-    for _s in [FrameFilter]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, SharedMemFrameFilter, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, name, n_cells, n_bytes, mstimeout=0):
-        this = _valkka_core.new_SharedMemFrameFilter(name, n_cells, n_bytes, mstimeout)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _valkka_core.delete_SharedMemFrameFilter
-    __del__ = lambda self: None
-SharedMemFrameFilter_swigregister = _valkka_core.SharedMemFrameFilter_swigregister
-SharedMemFrameFilter_swigregister(SharedMemFrameFilter)
-
-
-def ffmpeg_av_register_all():
-    return _valkka_core.ffmpeg_av_register_all()
-ffmpeg_av_register_all = _valkka_core.ffmpeg_av_register_all
-
-def ffmpeg_av_log_set_level(level):
-    return _valkka_core.ffmpeg_av_log_set_level(level)
-ffmpeg_av_log_set_level = _valkka_core.ffmpeg_av_log_set_level
-
-def crazy_log_all():
-    return _valkka_core.crazy_log_all()
-crazy_log_all = _valkka_core.crazy_log_all
-
-def debug_log_all():
-    return _valkka_core.debug_log_all()
-debug_log_all = _valkka_core.debug_log_all
-
-def normal_log_all():
-    return _valkka_core.normal_log_all()
-normal_log_all = _valkka_core.normal_log_all
-
-def fatal_log_all():
-    return _valkka_core.fatal_log_all()
-fatal_log_all = _valkka_core.fatal_log_all
 
 _valkka_core.FileState_none_swigconstant(_valkka_core)
 FileState_none = _valkka_core.FileState_none
@@ -2012,8 +1882,8 @@ class FileThread(Thread):
     __getattr__ = lambda self, name: _swig_getattr(self, FileThread, name)
     __repr__ = _swig_repr
 
-    def __init__(self, name, core_id=-1):
-        this = _valkka_core.new_FileThread(name, core_id)
+    def __init__(self, *args):
+        this = _valkka_core.new_FileThread(*args)
         try:
             self.this.append(this)
         except Exception:
@@ -2038,6 +1908,9 @@ class FileThread(Thread):
 
     def stopCall(self):
         return _valkka_core.FileThread_stopCall(self)
+
+    def getFrameFilter(self):
+        return _valkka_core.FileThread_getFrameFilter(self)
 FileThread_swigregister = _valkka_core.FileThread_swigregister
 FileThread_swigregister(FileThread)
 
@@ -2069,6 +1942,284 @@ class FileFrameFilter(FrameFilter):
 FileFrameFilter_swigregister = _valkka_core.FileFrameFilter_swigregister
 FileFrameFilter_swigregister(FileFrameFilter)
 
+class AVThread(Thread):
+    __swig_setmethods__ = {}
+    for _s in [Thread]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AVThread, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Thread]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, AVThread, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _valkka_core.new_AVThread(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_AVThread
+    __del__ = lambda self: None
+
+    def getFrameFilter(self):
+        return _valkka_core.AVThread_getFrameFilter(self)
+
+    def getBlockingFrameFilter(self):
+        return _valkka_core.AVThread_getBlockingFrameFilter(self)
+
+    def decodingOnCall(self):
+        return _valkka_core.AVThread_decodingOnCall(self)
+
+    def decodingOffCall(self):
+        return _valkka_core.AVThread_decodingOffCall(self)
+
+    def stopCall(self):
+        return _valkka_core.AVThread_stopCall(self)
+AVThread_swigregister = _valkka_core.AVThread_swigregister
+AVThread_swigregister(AVThread)
+
+class OpenGLThread(Thread):
+    __swig_setmethods__ = {}
+    for _s in [Thread]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, OpenGLThread, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Thread]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, OpenGLThread, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _valkka_core.new_OpenGLThread(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_OpenGLThread
+    __del__ = lambda self: None
+
+    def createWindow(self, map=True, show=False):
+        return _valkka_core.OpenGLThread_createWindow(self, map, show)
+
+    def makeCurrent(self, window_id):
+        return _valkka_core.OpenGLThread_makeCurrent(self, window_id)
+
+    def getVsyncAtStartup(self):
+        return _valkka_core.OpenGLThread_getVsyncAtStartup(self)
+
+    def getFrameFilter(self):
+        return _valkka_core.OpenGLThread_getFrameFilter(self)
+
+    def stopCall(self):
+        return _valkka_core.OpenGLThread_stopCall(self)
+
+    def infoCall(self):
+        return _valkka_core.OpenGLThread_infoCall(self)
+
+    def newRenderGroupCall(self, window_id):
+        return _valkka_core.OpenGLThread_newRenderGroupCall(self, window_id)
+
+    def delRenderGroupCall(self, window_id):
+        return _valkka_core.OpenGLThread_delRenderGroupCall(self, window_id)
+
+    def newRenderContextCall(self, slot, window_id, z):
+        return _valkka_core.OpenGLThread_newRenderContextCall(self, slot, window_id, z)
+
+    def delRenderContextCall(self, id):
+        return _valkka_core.OpenGLThread_delRenderContextCall(self, id)
+OpenGLThread_swigregister = _valkka_core.OpenGLThread_swigregister
+OpenGLThread_swigregister(OpenGLThread)
+
+class OpenGLFrameFifoContext(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, OpenGLFrameFifoContext, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, OpenGLFrameFifoContext, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        this = _valkka_core.new_OpenGLFrameFifoContext()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_setmethods__["n_720p"] = _valkka_core.OpenGLFrameFifoContext_n_720p_set
+    __swig_getmethods__["n_720p"] = _valkka_core.OpenGLFrameFifoContext_n_720p_get
+    if _newclass:
+        n_720p = _swig_property(_valkka_core.OpenGLFrameFifoContext_n_720p_get, _valkka_core.OpenGLFrameFifoContext_n_720p_set)
+    __swig_setmethods__["n_1080p"] = _valkka_core.OpenGLFrameFifoContext_n_1080p_set
+    __swig_getmethods__["n_1080p"] = _valkka_core.OpenGLFrameFifoContext_n_1080p_get
+    if _newclass:
+        n_1080p = _swig_property(_valkka_core.OpenGLFrameFifoContext_n_1080p_get, _valkka_core.OpenGLFrameFifoContext_n_1080p_set)
+    __swig_setmethods__["n_1440p"] = _valkka_core.OpenGLFrameFifoContext_n_1440p_set
+    __swig_getmethods__["n_1440p"] = _valkka_core.OpenGLFrameFifoContext_n_1440p_get
+    if _newclass:
+        n_1440p = _swig_property(_valkka_core.OpenGLFrameFifoContext_n_1440p_get, _valkka_core.OpenGLFrameFifoContext_n_1440p_set)
+    __swig_setmethods__["n_4K"] = _valkka_core.OpenGLFrameFifoContext_n_4K_set
+    __swig_getmethods__["n_4K"] = _valkka_core.OpenGLFrameFifoContext_n_4K_get
+    if _newclass:
+        n_4K = _swig_property(_valkka_core.OpenGLFrameFifoContext_n_4K_get, _valkka_core.OpenGLFrameFifoContext_n_4K_set)
+    __swig_setmethods__["n_setup"] = _valkka_core.OpenGLFrameFifoContext_n_setup_set
+    __swig_getmethods__["n_setup"] = _valkka_core.OpenGLFrameFifoContext_n_setup_get
+    if _newclass:
+        n_setup = _swig_property(_valkka_core.OpenGLFrameFifoContext_n_setup_get, _valkka_core.OpenGLFrameFifoContext_n_setup_set)
+    __swig_setmethods__["n_signal"] = _valkka_core.OpenGLFrameFifoContext_n_signal_set
+    __swig_getmethods__["n_signal"] = _valkka_core.OpenGLFrameFifoContext_n_signal_get
+    if _newclass:
+        n_signal = _swig_property(_valkka_core.OpenGLFrameFifoContext_n_signal_get, _valkka_core.OpenGLFrameFifoContext_n_signal_set)
+    __swig_setmethods__["flush_when_full"] = _valkka_core.OpenGLFrameFifoContext_flush_when_full_set
+    __swig_getmethods__["flush_when_full"] = _valkka_core.OpenGLFrameFifoContext_flush_when_full_get
+    if _newclass:
+        flush_when_full = _swig_property(_valkka_core.OpenGLFrameFifoContext_flush_when_full_get, _valkka_core.OpenGLFrameFifoContext_flush_when_full_set)
+    __swig_destroy__ = _valkka_core.delete_OpenGLFrameFifoContext
+    __del__ = lambda self: None
+OpenGLFrameFifoContext_swigregister = _valkka_core.OpenGLFrameFifoContext_swigregister
+OpenGLFrameFifoContext_swigregister(OpenGLFrameFifoContext)
+
+class OpenGLFrameFifo(FrameFifo):
+    __swig_setmethods__ = {}
+    for _s in [FrameFifo]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, OpenGLFrameFifo, name, value)
+    __swig_getmethods__ = {}
+    for _s in [FrameFifo]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, OpenGLFrameFifo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _valkka_core.new_OpenGLFrameFifo(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_OpenGLFrameFifo
+    __del__ = lambda self: None
+OpenGLFrameFifo_swigregister = _valkka_core.OpenGLFrameFifo_swigregister
+OpenGLFrameFifo_swigregister(OpenGLFrameFifo)
+
+class SharedMemRingBuffer(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SharedMemRingBuffer, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SharedMemRingBuffer, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, n_cells, n_bytes, mstimeout=0, is_server=False):
+        this = _valkka_core.new_SharedMemRingBuffer(name, n_cells, n_bytes, mstimeout, is_server)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_SharedMemRingBuffer
+    __del__ = lambda self: None
+
+    def getValue(self):
+        return _valkka_core.SharedMemRingBuffer_getValue(self)
+
+    def getClientState(self):
+        return _valkka_core.SharedMemRingBuffer_getClientState(self)
+
+    def clientPull(self, index_out, size_out):
+        return _valkka_core.SharedMemRingBuffer_clientPull(self, index_out, size_out)
+SharedMemRingBuffer_swigregister = _valkka_core.SharedMemRingBuffer_swigregister
+SharedMemRingBuffer_swigregister(SharedMemRingBuffer)
+
+class SharedMemRingBufferRGB(SharedMemRingBuffer):
+    __swig_setmethods__ = {}
+    for _s in [SharedMemRingBuffer]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SharedMemRingBufferRGB, name, value)
+    __swig_getmethods__ = {}
+    for _s in [SharedMemRingBuffer]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, SharedMemRingBufferRGB, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, n_cells, width, height, mstimeout=0, is_server=False):
+        this = _valkka_core.new_SharedMemRingBufferRGB(name, n_cells, width, height, mstimeout, is_server)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_SharedMemRingBufferRGB
+    __del__ = lambda self: None
+SharedMemRingBufferRGB_swigregister = _valkka_core.SharedMemRingBufferRGB_swigregister
+SharedMemRingBufferRGB_swigregister(SharedMemRingBufferRGB)
+
+class ShmemFrameFilter(FrameFilter):
+    __swig_setmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ShmemFrameFilter, name, value)
+    __swig_getmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ShmemFrameFilter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, n_cells, n_bytes, mstimeout=0):
+        this = _valkka_core.new_ShmemFrameFilter(name, n_cells, n_bytes, mstimeout)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_ShmemFrameFilter
+    __del__ = lambda self: None
+ShmemFrameFilter_swigregister = _valkka_core.ShmemFrameFilter_swigregister
+ShmemFrameFilter_swigregister(ShmemFrameFilter)
+
+class RGBShmemFrameFilter(FrameFilter):
+    __swig_setmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RGBShmemFrameFilter, name, value)
+    __swig_getmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, RGBShmemFrameFilter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, n_cells, width, height, mstimeout=0):
+        this = _valkka_core.new_RGBShmemFrameFilter(name, n_cells, width, height, mstimeout)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_RGBShmemFrameFilter
+    __del__ = lambda self: None
+RGBShmemFrameFilter_swigregister = _valkka_core.RGBShmemFrameFilter_swigregister
+RGBShmemFrameFilter_swigregister(RGBShmemFrameFilter)
+
+
+def crazy_log_all():
+    return _valkka_core.crazy_log_all()
+crazy_log_all = _valkka_core.crazy_log_all
+
+def debug_log_all():
+    return _valkka_core.debug_log_all()
+debug_log_all = _valkka_core.debug_log_all
+
+def normal_log_all():
+    return _valkka_core.normal_log_all()
+normal_log_all = _valkka_core.normal_log_all
+
+def fatal_log_all():
+    return _valkka_core.fatal_log_all()
+fatal_log_all = _valkka_core.fatal_log_all
+
+def ffmpeg_av_register_all():
+    return _valkka_core.ffmpeg_av_register_all()
+ffmpeg_av_register_all = _valkka_core.ffmpeg_av_register_all
+
+def ffmpeg_av_log_set_level(level):
+    return _valkka_core.ffmpeg_av_log_set_level(level)
+ffmpeg_av_log_set_level = _valkka_core.ffmpeg_av_log_set_level
 # This file is compatible with both classic and new-style classes.
 
+cvar = _valkka_core.cvar
+VERSION_MAJOR = cvar.VERSION_MAJOR
+VERSION_MINOR = cvar.VERSION_MINOR
+VERSION_PATCH = cvar.VERSION_PATCH
 

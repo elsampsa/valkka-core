@@ -1,3 +1,5 @@
+#ifndef live_HEADER_GUARD
+#define live_HEADER_GUARD
 /*
  * live.h : Interface to live555
  * 
@@ -26,7 +28,7 @@
  *  @file    live.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.3.6 
+ *  @version 0.4.0 
  *  @brief Interface to live555
  * 
  *  Acknowledgements: Ross Finlayson for his advice
@@ -34,8 +36,9 @@
  */
 
 #include "livedep.h"
-#include "frames.h"
-#include "queues.h"
+#include "frame.h"
+#include "framefifo.h"
+#include "framefilter.h"
 #include "logging.h"
 
 UsageEnvironment& operator<<(UsageEnvironment& env, const RTSPClient& rtspClient);       ///< A function that outputs a string that identifies each stream (for debugging output).
@@ -44,95 +47,6 @@ Logger& operator<<(Logger& logger, const RTSPClient& rtspClient);               
 Logger& operator<<(Logger& logger, const MediaSubsession& subsession);                   ///< A function that outputs a string that identifies each subsession (for debugging output).
 void usage(UsageEnvironment& env, char const* progName);
 
-
-
-/** Implements a FramedSource for sending frames.  See \ref live_streaming_page
- * 
- * @ingroup live_tag
- */
-class BufferSource: public FramedSource {
-
-public:
-  /** Default constructor
-   * 
-   * @param env    Identifies the live555 event loop
-   * @param fifo   See BufferSource::fifo
-   * 
-   */
-  BufferSource(UsageEnvironment &env, FrameFifo &fifo, unsigned preferredFrameSize =0, unsigned playTimePerFrame =0, unsigned offset=0);
-  virtual ~BufferSource();
-  
-private:
-  virtual void doGetNextFrame();  ///< All the fun happens here
-  
-private:
-  FrameFifo &fifo;                ///< Frames are being read from here.  This reference leads all the way down to LiveThread::fifo
-  unsigned  fPreferredFrameSize;
-  unsigned  fPlayTimePerFrame;
-  unsigned  offset;
-  
-public:
-  std::deque<Frame*> internal_fifo;
-  bool      active;             ///< If set, doGetNextFrame is currently re-scheduled
-  
-public:
-  void handleFrame(Frame* f);   ///< Copies a Frame from BufferSource::fifo into BufferSource::internal_fifo.  Sets BufferSource::active
-  
-};
-
-
-/** An outbound Stream
- * 
- * In the live555 API, there are filterchains as well.  These end to a sink, while the sink queries frames from the source.
- * 
- * Here the source is Stream::buffer_source (BufferSource) and the final sink is Stream::terminal.  Frames are fed with FrameFifo s into BufferSource.  If BufferSource has frames in it's BufferSource::internal_fifo, it will pass a frame down the live555 filterchain.
- * 
- * @ingroup live_tag
- */
-class Stream {
-  
-public:
-  /** Default constructor
-   * 
-   * @param env      Identifies the live555 event loop
-   * @param fifo     See Stream::fifo
-   * @param adr      Target address for sending the stream
-   * @param portnum  Start port number for sending the stream
-   * @param ttl      Packet time-to-live
-   * 
-   */
-  Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl=255);
-  /** Default destructor */
-  virtual ~Stream();
-  
-protected:
-  UsageEnvironment  &env;   ///< Identifies the live555 event loop
-  FrameFifo         &fifo;  ///< Frames are read from here.  This reference leads all the way down to LiveThread::fifo
-  
-  RTPSink           *sink;  ///< Live555 class: queries frames from terminal
-  RTCPInstance      *rtcp;
-  
-  Groupsock  *rtpGroupsock;
-  Groupsock  *rtcpGroupsock;
-  unsigned char cname[101];
-  
-  BufferSource *buffer_source;   
-  FramedSource *terminal;        ///< The final sink in the live555 filterchain
-  
-public:
-  void handleFrame(Frame *f);
-  void startPlaying();
-  static void afterPlaying(void* cdata);
-};
-
-
-class H264Stream : public Stream {
- 
-public:
-  H264Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl=255);
-  ~H264Stream();
-    
-};
 
 
 /** Status for the ValkkaRTSPClient
@@ -283,8 +197,8 @@ private:
   MediaSubsession&  fSubsession;
   char*             fStreamId;
   FrameFilter&      framefilter;
-  Frame             setupframe; ///< This frame is used to send subsession information
-  Frame             frame;      ///< Data is being copied into this frame
+  SetupFrame        setupframe;  ///< This frame is used to send subsession information
+  BasicFrame        basicframe;  ///< Data is being copied into this frame
   int               subsession_index;
 
 public: // getters & setters
@@ -294,5 +208,4 @@ public:
   bool on;
 };
 
-
-
+#endif

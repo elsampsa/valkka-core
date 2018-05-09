@@ -1,4 +1,0 @@
-<map id="BufferSource::BufferSource" name="BufferSource::BufferSource">
-<area shape="rect" id="node2" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="236,5,367,32"/>
-<area shape="rect" id="node3" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Resets frame to FrameType::none, nulls Frame::av_frame, Frame::av_codec_context and Frame::yuvpbo..." alt="" coords="415,5,511,32"/>
-</map>

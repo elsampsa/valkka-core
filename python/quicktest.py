@@ -5,11 +5,14 @@ from valkka.valkka_core import *
 print("Version ",VERSION_MAJOR,".",VERSION_MINOR,".",VERSION_PATCH)
 
 live =LiveThread("live")
-inp  =FrameFifo("fifo",10)
+inp  =FrameFifo("fifo")
 ff   =FifoFrameFilter("fifo",inp)
 out  =DummyFrameFilter("dummy")
-av   =AVThread("av",inp,out)
+av   =AVThread("av",out)
 gl   =OpenGLThread("gl")
+
+av_in =av.getFrameFilter();
+gl_in =gl.getFrameFilter();
 
 ctx=LiveConnectionContext()
 print("test: LiveConnectionContext.request_multicast =",ctx.request_multicast)

@@ -25,7 +25,7 @@ __init__.py : Valkka python bindings module constructor
 @file    __init__.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.3.6 
+@version 0.4.0 
   
 @brief Valkka python bindings module constructor
 
