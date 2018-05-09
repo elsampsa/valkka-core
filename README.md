@@ -1,7 +1,7 @@
 # Valkka - OpenSource Video Management for Linux
 
 ## Synopsis
-The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VMSA) in Linux environment.  The idea is create VMSAs with graphical user interfaces (GUIs) using the combination of python3 and Qt (i.e. PyQt).
+The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VMAs) in Linux environment.  The idea is create VMA systems with graphical user interfaces (GUIs) using the combination of python3 and Qt (i.e. PyQt).
 
 ## For the impatient
 
@@ -25,7 +25,7 @@ Lets take a look at a typical video management system architecture problem:
 
 You might try to tackle this with some available stock media player libraries, but I'll promise, you wont get far.
 
-Consider further that in a typical VMSA you may have up to 60+ ip cameras plugged into the same server.  Servers should also work as a proxies, re-streaming the ip cameras to other servers.
+Consider further that in a typical VMA system you may have up to 60+ ip cameras plugged into the same server.  Servers should also work as a proxies, re-streaming the ip cameras to other servers.
 
 Using Valkka, you can instantiate threads, and define how media streams are branched and pipelined between those threads.  The underlying threads and mutex-protected queues are hidden from the developer that controls everything using a python3 API.  The process topology of the example case would look like this:
 

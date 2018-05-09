@@ -50,7 +50,7 @@
  * Valkka - OpenSource Video Management
  * ------------------------------------
  *
- * The long-term goal of this project is to provide open source video surveillance, management and analysis systems (VMSA) in Linux environment, and to be able to create them with the combination of Python3 and Qt (i.e. PyQt).  The library has both Cpp and Python3 API (the latter is recommended).
+ * The long-term goal of this project is to provide open source video surveillance, management and analysis systems (VMAs) in Linux environment, and to be able to create them with the combination of Python3 and Qt (i.e. PyQt).  The library has both Cpp and Python3 API (the latter is recommended).
  *
  * Warning: If you simply want to use Valkka's python3 API, you should start from <https://elsampsa.github.io/valkka-examples/>.
  * 
