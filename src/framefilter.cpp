@@ -50,10 +50,12 @@ void FrameFilter::run(Frame* frame) {
 
 // subclass like this:
 DummyFrameFilter::DummyFrameFilter(const char* name, bool verbose, FrameFilter* next) : FrameFilter(name,next), verbose(verbose) {
+  // std::cout << ">>>>>>" << verbose << std::endl;
 }
   
 void DummyFrameFilter::go(Frame* frame) { 
   if (verbose) {
+    // std::cout << "DummyFrameFilter : "<< this->name << " " << verbose << " : got frame : " << *(frame) << std::endl;
     std::cout << "DummyFrameFilter : "<< this->name << " : got frame : " << *(frame) << std::endl;
   }
 }

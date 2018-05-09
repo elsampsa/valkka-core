@@ -686,6 +686,11 @@ LiveThread::~LiveThread() {
   
   bool deleted =env->reclaim(); // ok.. this works.  I forgot to close the RTSPServer !
   livethreadlogger.log(LogLevel::crazy) << "LiveThread: deleted BasicUsageEnvironment?: " << deleted << std::endl;
+  
+  if (!deleted) {
+    livethreadlogger.log(LogLevel::normal) << "LiveThread: WARNING: could not delete BasicUsageEnvironment" << std::endl;
+  }
+  
   /* // can't do this .. the destructor is protected
   if (!deleted) { // die, you bastard!
     delete env;

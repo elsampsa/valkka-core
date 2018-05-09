@@ -261,7 +261,7 @@ endif(CUSTOM_BUILD)
 # set(TESTNAMES "av_live_thread_test" "av_thread_test" "classes_test" "fifo_test" "file_test" "frames_test" "live_stream_check_test" "live_streaming_test" "live_thread_test" "log_test" "opengl_test" "opengl_thread_test" "render_test" "shmem_test" "swscale_test" "threads_test")
 # set(TESTNAMES "shmem_test" "swscale_test")
 # set(TESTNAMES "file_test")
-set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test" "avthread_test" "av_live_thread_test" "openglframefifo_test" "openglthread_test" "live_av_openglthread_test" "live_av_shmem_test" "file_test" "filethread_test")
+set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test" "avthread_test" "av_live_thread_test" "openglframefifo_test" "openglthread_test" "live_av_openglthread_test" "live_av_shmem_test" "file_test" "filethread_test" "filethread_test0")
 
 
 add_custom_target(tests) # Note: without 'ALL'

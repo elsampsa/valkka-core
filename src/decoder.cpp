@@ -122,7 +122,7 @@ void AVDecoder::flush() {
 
 
 
-VideoDecoder::VideoDecoder(AVCodecID av_codec_id) : AVDecoder(av_codec_id), width(width), height(height) { // , av_pixel_format(AV_PIX_FMT_NONE) {
+VideoDecoder::VideoDecoder(AVCodecID av_codec_id) : AVDecoder(av_codec_id), width(0), height(0) { // , av_pixel_format(AV_PIX_FMT_NONE) {
   // out_frame is AVBitmapFrame
   /*
   // decoder slow down simulation

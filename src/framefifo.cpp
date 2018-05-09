@@ -195,6 +195,7 @@ void FrameFifo::recycle_(Frame* f) {
 void FrameFifo::recycle(Frame* f) {
   std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
   recycle_(f);
+  ready_condition.notify_one();
 }
 
 

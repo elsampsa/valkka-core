@@ -129,14 +129,14 @@ void test_2() {
 
 
 void test_3() {
-  const char* name = "@TEST: file_test: test 5: ";
+  const char* name = "@TEST: file_test: test 3: ";
   std::cout << name <<"** @@Stream from FileThread to AVThread and OpenGLThread. Seek, play, stop, etc.**" << std::endl;
   int i;
   
   std::cout << "starting threads" << std::endl;
   glthread.   startCall();
-  filethread.startCall();
   avthread.   startCall();
+  filethread. startCall();
   
   avthread.  decodingOnCall();
   
@@ -157,52 +157,34 @@ void test_3() {
   std::cout << "got file status" << int(ctx.status) << std::endl;
   
   // sleep_for(2s);
-  
-  std::cout << "seeking stream" << std::endl;
-  
-  // ctx.seektime_=2000;
-  ctx.seektime_=10000;
-  // ctx.seektime_=20000;
-  // ctx.seektime_=30000;
-  
-  filethread.seekFileStreamCall(ctx);
-  
-  sleep_for(3s);
-  std::cout << "\nPLAY\n";
-  
+
+  std::cout << "\nPLAY\n";  
   filethread.playFileStreamCall(ctx);
+  sleep_for(10s);
   
-  sleep_for(5s);
-  std::cout << "\nSTOP\n";
-  
-  filethread.stopFileStreamCall(ctx);
-  
-  sleep_for(5s);
   std::cout << "\nSEEK\n";
-  
-  ctx.seektime_=1000;
+  ctx.seektime_=2000;
   filethread.seekFileStreamCall(ctx);
   
+  std::cout << "\nSTOP\n";
+  filethread.stopFileStreamCall(ctx);
   sleep_for(3s);
-  std::cout << "\nPLAY\n";
   
+  std::cout << "\nPLAY\n";  
   filethread.playFileStreamCall(ctx);
+  sleep_for(5s);
   
-  sleep_for(3s);
   std::cout << "stopping threads" << std::endl;
-  
-  // glthread.delRenderContextCall(i);
-  // glthread.delRenderGroupCall(window_id); // TODO: what happends if you forget these..?  fix!  // TODO: what happens if file unavailable? fix!
   
   avthread.   stopCall();
   filethread. stopCall();
-  glthread.   stopCall(); // TODO: print warning if you try to re-start a thread!
-  
+  // avthread.   stopCall();
+  glthread.   stopCall();  
 }
 
 
 void test_4() {
-  const char* name = "@TEST: file_test: test 6: ";
+  const char* name = "@TEST: file_test: test 4: ";
   std::cout << name <<"** @@Stream from FileThread to AVThread and OpenGLThread.  Two streams.  Seek, play, stop, etc.**" << std::endl;
   int i, i2;
   
@@ -292,7 +274,7 @@ void test_4() {
 
 
 void test_5() {
-  const char* name = "@TEST: file_test: test 7: ";
+  const char* name = "@TEST: file_test: test 5: ";
   std::cout << name <<"** @@Stream from FileThread to AVThread and OpenGLThread. Seek and play. **" << std::endl;
   int i;
   
@@ -350,6 +332,59 @@ void test_5() {
   glthread.   stopCall(); // TODO: print warning if you try to re-start a thread!
 }
 
+
+void test_6() {
+  const char* name = "@TEST: file_test: test 6: ";
+  std::cout << name <<"** @@Stream from FileThread to AVThread. Seek, play, stop, etc.**" << std::endl;
+  int i;
+  
+  std::cout << "starting threads" << std::endl;
+  glthread.   startCall();
+  avthread.   startCall();
+  filethread. startCall();
+  
+  avthread.  decodingOnCall();
+  
+  Window window_id  =glthread.createWindow();
+  glthread.makeCurrent(window_id);
+  
+  glthread.newRenderGroupCall(window_id);
+  i =glthread.newRenderContextCall(1, window_id,  0);
+  
+  std::cout << "new x window "<<window_id<<std::endl;
+  
+  // sleep_for(2s);
+  
+  std::cout << "registering stream" << std::endl;
+  FileContext ctx=FileContext("kokkelis.mkv", 1, &info_filter); // 0, &duration, &mstimestamp); // filename, slot, framefilter, start seek, etc.
+  filethread.openFileStreamCall(ctx);
+  
+  std::cout << "got file status" << int(ctx.status) << std::endl;
+  
+  // sleep_for(2s);
+
+  std::cout << "\nPLAY\n";  
+  filethread.playFileStreamCall(ctx);
+  sleep_for(10s);
+  
+  std::cout << "\nSEEK\n";
+  ctx.seektime_=2000;
+  filethread.seekFileStreamCall(ctx);
+  
+  std::cout << "\nSTOP\n";
+  filethread.stopFileStreamCall(ctx);
+  sleep_for(3s);
+  
+  std::cout << "\nPLAY\n";  
+  filethread.playFileStreamCall(ctx);
+  sleep_for(5s);
+  
+  std::cout << "stopping threads" << std::endl;
+  
+  filethread. stopCall();
+  avthread.   stopCall();
+  glthread.   stopCall();
+}
 
 
 

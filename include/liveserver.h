@@ -35,6 +35,8 @@
  */ 
 
 
+// TODO!  There is no way to close these suckers with Medium::close().  Then BasicUsageEnvironment can't be reclaimed at we get a (minor) memory leak upon exit.
+
 #include "livedep.h"
 #include "framefifo.h"
 #include "frame.h"

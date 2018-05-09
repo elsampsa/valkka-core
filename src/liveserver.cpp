@@ -185,7 +185,7 @@ void BufferSource::doGetNextFrame() {
 }
 
 
-Stream::Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl) : env(env), fifo(fifo) {
+Stream::Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl) : env(env), fifo(fifo), buffer_source(NULL) {
   /*
   UsageEnvironment& env;
   RTPSink*          sink;
@@ -233,22 +233,25 @@ void Stream::handleFrame(Frame* f) {
   buffer_source->handleFrame(f); // buffer source recycles the frame when ready
 }
 
+
 void Stream::startPlaying() {
   sink->startPlaying(*(terminal), this->afterPlaying, this);
 }
 
+
 void Stream::afterPlaying(void *cdata) {
+  std::cout << "Stream: afterPlaying" << std::endl;
   Stream* stream=(Stream*)cdata;
   stream->sink->stopPlaying();
-  // Medium::close(stream->buffer_source);
+  Medium::close(stream->terminal);
 }
 
 
 Stream::~Stream() {
-  Medium::close(buffer_source);
-  delete rtpGroupsock;
-  delete rtcpGroupsock;
-  delete buffer_source;
+  // Medium::close(buffer_source); // no effect if buffer_source==NULL.  not here!  See ~H264Stream
+  // delete rtpGroupsock; // nopes
+  // delete rtcpGroupsock; // nopes
+  //delete buffer_source;
 }
 
 
@@ -273,15 +276,17 @@ H264Stream::H264Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string
   // http://lists.live555.com/pipermail/live-devel/2013-April/016816.html
   sink = H264VideoRTPSink::createNew(env,rtpGroupsock, 96);
   // this->rtcp      = RTCPInstance::createNew(this->env, this->rtcpGroupsock, 500,  this->cname, sink, NULL, True); // saturates the event loop!
-  terminal       =H264VideoStreamDiscreteFramer::createNew(env, buffer_source);
+  terminal       =H264VideoStreamDiscreteFramer::createNew(env, (FramedSource*)buffer_source);
 }
 
 
 H264Stream::~H264Stream() {
   // delete sink;
   // delete terminal;
-  Medium::close(sink);
-  Medium::close(terminal);
+  // Medium::close(sink); // nopes
+  // Medium::close(buffer_source); // nopes, because ..
+  // Medium::close(terminal); // .. this should close buffer_source as well
+  this->afterPlaying(this);
 }
 
 

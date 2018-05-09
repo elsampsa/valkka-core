@@ -58,7 +58,7 @@ SharedMemSegment:: ~SharedMemSegment() {
 
 
 void SharedMemSegment::serverInit() {
-  int fd, fd_, r, r_;
+  int fd, fd_, r, r_; 
   
   shm_unlink(payload_name.c_str()); // just in case..
   shm_unlink(meta_name.c_str());
@@ -421,7 +421,7 @@ void ShmemFrameFilter::go(Frame* frame) {
 
 //RGBShmemFrameFilter::RGBShmemFrameFilter(const char* name, int n_cells, int width, int height, int mstimeout) : ShmemFrameFilter(name, n_cells, width*height*3, mstimeout) {
 //}
-RGBShmemFrameFilter::RGBShmemFrameFilter(const char* name, int n_cells, int width, int height, int mstimeout) : FrameFilter(name,NULL), shmembuf(name, n_cells, width, height, mstimeout) {
+RGBShmemFrameFilter::RGBShmemFrameFilter(const char* name, int n_cells, int width, int height, int mstimeout) : FrameFilter(name,NULL), shmembuf(name, n_cells, width, height, mstimeout, true) {
 }
 
 

@@ -193,11 +193,11 @@ long int FileStream::pullNextFrame() {
   long int dt;
   int i;
 #ifdef FILE_VERBOSE  
-  std::cout << "pullNextFrame:                     " <<  std::endl;
-  std::cout << "pullNextFrame: reftime            : " << reftime << std::endl;
-  std::cout << "pullNextFrame: target_mstimestamp_: " << target_mstimestamp_ << std::endl;   
-  std::cout << "pullNextFrame: frame_mstimestamp_ : " << frame_mstimestamp_ << std::endl;          // frame, stream time
-  std::cout << "pullNextFrame:                     " << std::endl;
+  std::cout << "FileStream: pullNextFrame:                     " <<  std::endl;
+  std::cout << "FileStream: pullNextFrame: reftime            : " << reftime << std::endl;
+  std::cout << "FileStream: pullNextFrame: target_mstimestamp_: " << target_mstimestamp_ << std::endl;   
+  std::cout << "FileStream: pullNextFrame: frame_mstimestamp_ : " << frame_mstimestamp_ << std::endl;          // frame, stream time
+  std::cout << "FileStream: pullNextFrame:                     " << std::endl;
 #endif
   
   // target time has been reached if ..
@@ -208,7 +208,7 @@ long int FileStream::pullNextFrame() {
   dt=frame_mstimestamp_-target_mstimestamp_;
   if ( dt>0 ) { // so, this has been called in vain.. must wait still
 #ifdef FILE_VERBOSE  
-    std::cout << "pullNextFrame: return timeout " << dt << std::endl;
+    std::cout << "FileStream: pullNextFrame: return timeout " << dt << std::endl;
 #endif
     return dt;
   }
@@ -291,7 +291,7 @@ void FileThread::sendSignalAndWait(FileSignalContext signal_ctx) {
   std::unique_lock<std::mutex> lk(this->mutex);
   this->signal_fifo.push_back(signal_ctx);
   while (!this->signal_fifo.empty()) {
-    this->condition.wait(lk);
+    this->condition.wait(lk); // lock is atomically released..
   }
 }
 
@@ -383,14 +383,15 @@ void FileThread::run() {
       */
     }
 #ifdef FILE_VERBOSE  
-    std::cout << "run: timeout: " << timeout << std::endl;
+    std::cout << "FileThread: run: timeout: " << timeout << std::endl;
 #endif
     std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
     
     mstime =getCurrentMsTimestamp();
     if ( (mstime-old_mstime)>=Timeout::openglthread ) {
-      
-      
+#ifdef FILE_VERBOSE  
+      std::cout << "FileThread: run: calling handleSignals: " << timeout << std::endl;
+#endif
       handleSignals();
       old_mstime=mstime;
     }

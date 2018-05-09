@@ -145,7 +145,7 @@ void AVThread::run() {
       else if (f->getFrameClass()==FrameClass::basic) { // basic payload frame
         BasicFrame *basicframe = static_cast<BasicFrame*>(f);
       
-        if (is_decoding) { // decode
+        if (is_decoding) { // is decoding
           decoder=decoders[subsession_index]; // alias
           // Take a local copy of the frame, return the original to the stack, and then start (the time consuming) decoding
           // decoder->in_frame.copyFrom(basicframe); // deep copy of the BasicFrame.  After performing the copy ..
@@ -177,17 +177,23 @@ void AVThread::run() {
               //outfilter.run(&(decoder->out_frame));
               outfilter.run(decoder->output()); // return a reference to a decoded frame
             }
-          }
+          } // decode
           else {
 #ifdef AVTHREAD_VERBOSE
             std::cout << "AVThread: "<< this->name <<" : run : decoder num " <<subsession_index<< " no frame " << std::endl;
 #endif
           }
-        } // decode
+        } // is decoding
         else { // not decoding ..
           infifo.recycle(f);      // .. return frame to the stack
         }
       } // basic payload frame
+      
+      else { // all other possible cases ..
+        std::cout << "AVThread: wtf?" << std::endl;
+        infifo.recycle(f);
+      }
+      
     } // GOT FRAME
     
     time(&timer);

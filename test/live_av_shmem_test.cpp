@@ -1,5 +1,5 @@
 /*
- * live_av_shmem_test.cpp :
+ * live_av_shmem_test.cpp : Test shmem and swscaling
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -28,7 +28,7 @@
  *  @date    2017
  *  @version 0.4.0 
  *  
- *  @brief 
+ *  @brief   Test shmem and swscaling
  *
  */ 
 
@@ -78,18 +78,18 @@ void test_1() {
 
   avthread.decodingOnCall();
   
-  sleep_for(2s);
+  //sleep_for(2s);
   
   std::cout << name << "registering stream" << std::endl;
   LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   
-  sleep_for(1s);
+  // sleep_for(1s);
   
   std::cout << name << "playing stream !" << std::endl;
   livethread.playStreamCall(ctx);
   
-  sleep_for(3s);
+  sleep_for(5s);
   // sleep_for(604800s); //one week
   
   std::cout << name << "stopping threads" << std::endl;
@@ -129,13 +129,13 @@ void test_2() {
 
   avthread.decodingOnCall();
   
-  sleep_for(2s);
+  // sleep_for(2s);
   
   std::cout << name << "registering stream" << std::endl;
   LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);
   
-  sleep_for(1s);
+  // sleep_for(1s);
   
   std::cout << name << "playing stream !" << std::endl;
   livethread.playStreamCall(ctx);
