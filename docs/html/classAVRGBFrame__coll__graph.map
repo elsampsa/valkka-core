@@ -1,0 +1,6 @@
+<map id="AVRGBFrame" name="AVRGBFrame">
+<area shape="rect" id="node2" href="$classAVBitmapFrame.html" title="Decoded YUV/RGB frame in FFMpeg format. " alt="" coords="95,171,214,197"/>
+<area shape="rect" id="node3" href="$classAVMediaFrame.html" title="Decoded Frame in FFmpeg format. " alt="" coords="5,81,117,108"/>
+<area shape="rect" id="node4" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="32,5,91,32"/>
+<area shape="rect" id="node5" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. " alt="" coords="141,81,232,108"/>
+</map>

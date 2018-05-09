@@ -1,0 +1,12 @@
+<map id="/home/sampsa/C/valkka/include/sharedmem.h" name="/home/sampsa/C/valkka/include/sharedmem.h">
+<area shape="rect" id="node2" href="$common_8h.html" title="List of common header files. " alt="" coords="1193,468,1276,495"/>
+<area shape="rect" id="node37" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1220,95,1311,121"/>
+<area shape="rect" id="node38" href="$frame_8h.html" title="Frame classes. " alt="" coords="1232,244,1299,271"/>
+<area shape="rect" id="node49" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1122,169,1206,196"/>
+<area shape="rect" id="node39" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1341,319,1409,345"/>
+<area shape="rect" id="node40" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1433,319,1535,345"/>
+<area shape="rect" id="node41" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1193,393,1276,420"/>
+<area shape="rect" id="node42" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1597,319,1665,345"/>
+<area shape="rect" id="node48" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="1194,319,1265,345"/>
+<area shape="rect" id="node50" href="$logging_8h.html" title="Logging utilities. " alt="" coords="96,468,171,495"/>
+</map>

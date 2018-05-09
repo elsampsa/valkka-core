@@ -1,0 +1,8 @@
+<map id="SwScaleFrameFilter" name="SwScaleFrameFilter">
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="5,247,93,273"/>
+<area shape="rect" id="node3" href="$classAVRGBFrame.html" title="Decoded RGB frame in FFMpeg format. " alt="" coords="171,247,277,273"/>
+<area shape="rect" id="node4" href="$classAVBitmapFrame.html" title="Decoded YUV/RGB frame in FFMpeg format. " alt="" coords="165,171,283,197"/>
+<area shape="rect" id="node5" href="$classAVMediaFrame.html" title="Decoded Frame in FFmpeg format. " alt="" coords="75,81,187,108"/>
+<area shape="rect" id="node6" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="101,5,160,32"/>
+<area shape="rect" id="node7" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. " alt="" coords="211,81,301,108"/>
+</map>

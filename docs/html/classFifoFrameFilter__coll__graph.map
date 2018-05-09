@@ -1,0 +1,5 @@
+<map id="FifoFrameFilter" name="FifoFrameFilter">
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="5,95,93,121"/>
+<area shape="rect" id="node3" href="$classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack. " alt="" coords="171,95,253,121"/>
+<area shape="rect" id="node4" href="$structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo. " alt="" coords="149,5,275,32"/>
+</map>

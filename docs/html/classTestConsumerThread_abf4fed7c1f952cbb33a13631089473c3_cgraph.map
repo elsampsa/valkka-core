@@ -1,0 +1,7 @@
+<map id="TestConsumerThread::run" name="TestConsumerThread::run">
+<area shape="rect" id="node2" href="$classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64" title="Pop a frame from the end of the fifo and return the frame to the reservoir stack. ..." alt="" coords="243,5,357,32"/>
+<area shape="rect" id="node3" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Like FrameFifo::recycle_ but with mutex protection. " alt="" coords="235,56,365,83"/>
+<area shape="rect" id="node6" href="$classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4" title="Print a resumen of fifo and stack usage. " alt="" coords="228,107,372,133"/>
+<area shape="rect" id="node4" href="$classFrameFifo.html#a5cd4bd7b55780c158d7ee8beeb99cfc2" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="420,56,559,83"/>
+<area shape="rect" id="node5" href="$classFrame.html#ac1f39d349213eafc858e44b7292d54d4" title="Returns the subclass frame type. See Frame::frameclass. " alt="" coords="607,56,763,83"/>
+</map>

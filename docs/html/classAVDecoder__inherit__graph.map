@@ -1,0 +1,4 @@
+<map id="AVDecoder" name="AVDecoder">
+<area shape="rect" id="node3" href="$classVideoDecoder.html" title="Video decoder using FFmpeg/libav. " alt="" coords="5,155,109,181"/>
+<area shape="rect" id="node2" href="$classDecoder.html" title="A Virtual class for decoders. " alt="" coords="22,5,93,32"/>
+</map>

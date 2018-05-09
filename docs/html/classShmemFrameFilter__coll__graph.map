@@ -1,0 +1,4 @@
+<map id="ShmemFrameFilter" name="ShmemFrameFilter">
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="5,5,93,32"/>
+<area shape="rect" id="node3" href="$classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. " alt="" coords="171,5,325,32"/>
+</map>

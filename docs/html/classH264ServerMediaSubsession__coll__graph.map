@@ -1,0 +1,6 @@
+<map id="H264ServerMediaSubsession" name="H264ServerMediaSubsession">
+<area shape="rect" id="node2" href="$classValkkaServerMediaSubsession.html" title="ValkkaServerMediaSubsession" alt="" coords="203,273,405,300"/>
+<area shape="rect" id="node4" href="$classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack. " alt="" coords="367,95,449,121"/>
+<area shape="rect" id="node6" href="$classBufferSource.html" title="Implements a FramedSource for sending frames. " alt="" coords="259,184,357,211"/>
+<area shape="rect" id="node5" href="$structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo. " alt="" coords="345,5,471,32"/>
+</map>

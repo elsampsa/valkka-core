@@ -1,0 +1,4 @@
+<map id="Outbound" name="Outbound">
+<area shape="rect" id="node2" href="$classRTSPOutbound.html" title="Sending a stream using the on&#45;demand rtsp server. " alt="" coords="5,80,120,107"/>
+<area shape="rect" id="node3" href="$classSDPOutbound.html" title="Sending a stream without rtsp negotiation (i.e. " alt="" coords="144,80,251,107"/>
+</map>

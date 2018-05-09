@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="5,81,64,108"/>
+<area shape="rect" id="node2" href="$classAVMediaFrame.html" title="Decoded Frame in FFmpeg format. " alt="" coords="112,5,224,32"/>
+<area shape="rect" id="node5" href="$classBasicFrame.html" title="Custom payload Frame. " alt="" coords="122,56,214,83"/>
+<area shape="rect" id="node6" href="$classSetupFrame.html" title="Setup frame for decoders. " alt="" coords="121,107,215,133"/>
+<area shape="rect" id="node7" href="$classYUVFrame.html" title="A GPU YUV frame. " alt="" coords="125,157,211,184"/>
+<area shape="rect" id="node3" href="$classAVBitmapFrame.html" title="Decoded YUV/RGB frame in FFMpeg format. " alt="" coords="272,5,391,32"/>
+<area shape="rect" id="node4" href="$classAVRGBFrame.html" title="Decoded RGB frame in FFMpeg format. " alt="" coords="439,5,545,32"/>
+</map>
