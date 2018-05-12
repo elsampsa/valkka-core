@@ -1,4 +1,4 @@
-# Valkka - OpenSource Video Management for Linux
+# Valkka - OpenSource Video Surveillance and Management for Linux
 
 ## Synopsis
 The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VMAs) in Linux environment.  The idea is create VMA systems with graphical user interfaces (GUIs) using the combination of python3 and Qt (i.e. PyQt).

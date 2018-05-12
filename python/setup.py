@@ -61,34 +61,71 @@ library_dirs      =[]
 
 sources           =["valkka_core.i"]
 
+runtime_library_dirs =["$ORIGIN"] # https://stackoverflow.com/questions/9795793/shared-library-dependencies-with-distutils
+
 ext_modules=[]
-ext=Extension("_valkka_core",sources=sources,include_dirs=include_dirs,extra_compile_args=extra_compile_args,extra_link_args=extra_link_args,libraries=libraries,swig_opts=swig_opts,library_dirs=library_dirs)
+ext=Extension("_valkka_core",sources=sources,include_dirs=include_dirs,extra_compile_args=extra_compile_args,extra_link_args=extra_link_args,libraries=libraries,swig_opts=swig_opts,library_dirs=library_dirs,runtime_library_dirs=runtime_library_dirs)
 ext_modules.append(ext)
 
+here = os.path.abspath(os.path.dirname(__file__))
+try:
+  f=open(os.path.join(here, 'PYPI.rst'),encoding='utf-8')
+except:
+  print("could not open PYPI.rst")
+  long_description=""
+else:
+  long_description = f.read()
+  f.close()
+  
 # https://setuptools.readthedocs.io/en/latest/setuptools.html#basic-use
 setup(
-  name = "Valkka",
+  name = "valkka",
+  
   # WARNING: the following line is modified by the "setver.bash" script
-  version = "0.4.0", 
+  version = "0.4.1", 
+  
   install_requires = [
     'docutils>=0.3',
     'numpy>=1.14'
+    'PyQt5>=5.10',
+    'imutils>=0.4'
     ],
   packages = find_packages(),
   # scripts = ['say_hello.py'],
 
   include_package_data=True, # conclusion: NEVER forget this : files get included but not installed
-
-  # "package_data" keyword is a practical joke: use MANIFEST.in instead
+  # note: the "package_data" keyword is a practical joke: use MANIFEST.in instead
   
   # metadata for upload to PyPI
-  author = "Sampsa Riikonen",
-  author_email = "sampsa.riikonen@iki.fi",
-  description = "Valkka python API",
-  license = "LGPLv3+",
-  # keywords = "hello world example examples",
-  # url = "http://example.com/HelloWorld/",   # project home page, if any
-
-  # could also include long_description, download_url, classifiers, etc.
+  author           = "Sampsa Riikonen",
+  author_email     = "sampsa.riikonen@iki.fi",
+  description      = "OpenSource Video Surveillance and Management for Linux",
+  long_description =long_description,
+  # long_description_content_type='text/markdown', # this does not work
+  license          = "AGPLv3+",
+  url              = "https://github.com/elsampsa/valkka-core",   # project home page, if any
+  keywords         = "video surveillance vision camera streaming live",
+  classifiers      =[  # Optional
+    # How mature is this project? Common values are
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
+    'Development Status :: 3 - Alpha',
+    # Indicate who your project is intended for
+    'Intended Audience :: Developers',
+    'Operating System :: POSIX :: Linux',
+    'Topic :: Multimedia :: Video',
+    # Pick your license as you wish
+    'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
+    # Specify the Python versions you support here. In particular, ensure
+    # that you indicate whether you support Python 2, Python 3 or both.
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
+  ],
+  project_urls={
+    'Tutorial': 'https://elsampsa.github.io/valkka-examples/'
+  },
   ext_modules=ext_modules
 )
