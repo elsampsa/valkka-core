@@ -23,11 +23,18 @@ Run the script "make_links.bash".  Now the setup script can find the valkka head
 
 Before compiling, we must inform the linker where the "libValkka.so" is.  If you are using system-wide (1), linker should find it automatically.  If you're doing custom-compiled, run first "source test_env.bash" in your relevant build directory (it sets the "LD_LIBRARY_PATH" environment variable that we use here also in link time)
 
-Run the "compile3.bash" script (this also calls the script "make_swig_file.bash" that extracts required parts from valkka header files to build the python interface).
+Next, depending on your python version, run 
+
+- compile34.bash for Python3.4
+- compile35.bash for Python3.5
+
+(these scripts also call the script "make_swig_file.bash" that extracts required parts from valkka header files to build the python interface).
+
+[If you want to build packages for different python versions (other than the default python3.x of your system), you need to manage several versions of python.  See my answer to this SO question: https://stackoverflow.com/questions/2812520/pip-dealing-with-multiple-python-versions/50319252#50319252 ]
 
 After this, you should have the files "valkka_core.py" and "_valkka_core.py" in the "valkka/" directory.
 
-(between successive "compile3.bash" runs, you might want to run the "clean.bash" script)
+(between successive "compile3x.bash" runs, you might want to run the "clean.bash" script)
 
 ### Create the python package
 
@@ -51,4 +58,5 @@ from valkka.valkka_core import *
 If it can't find "libValkka.so" you did not install libValkka correctly or did not set your LD_LIBRARY_PATH
 
 Run also the "quicktest.py" in this directory to check that everything is in place (i.e that swig generated all relevant constructors, etc.)
+
 
