@@ -40,6 +40,10 @@ static const int VERSION_MAJOR = 0; // <pyapi>
 static const int VERSION_MINOR = 3; // <pyapi>
 static const int VERSION_PATCH = 6; // <pyapi>
 
+static const unsigned DEFAULT_OPENGLTHREAD_BUFFERING_TIME  = 300;   // in milliseconds // <pyapi>
+static const bool DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL        = false; // <pyapi>
+static const bool DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL  = false; // <pyapi>
+static const long int DEFAULT_TIMESTAMP_RESET_TIME         = 60000; // <pyapi>
 
 namespace Timeout { ///< Various thread timeouts in milliseconds
   const static long unsigned thread       =250; // Timeout::thread
@@ -51,15 +55,14 @@ namespace Timeout { ///< Various thread timeouts in milliseconds
 
 
 enum PayloadSizes {
-  DEFAULT_PAYLOAD_SIZE            = 1024,    ///< Default buffer size in Live555 for h264
+  DEFAULT_PAYLOAD_SIZE            = 1024,    ///< Default buffer size in Live555 for h264 // debug
+  
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024*100, ///< Default buffer size in Live555 for h264
-  DEFAULT_PAYLOAD_SIZE_H264       = 1024*300, ///< Default buffer size in Live555 for h264 // debug
+  DEFAULT_PAYLOAD_SIZE_H264       = 1024*300, ///< Default buffer size in Live555 for h264 
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024*10,  ///< Default buffer size in Live555 for h264 // debug
-  // DEFAULT_PAYLOAD_SIZE_H264       = 1024, // use this small value for debugging
+  // DEFAULT_PAYLOAD_SIZE_H264       = 1024, // use this small value for debugging (( debug
+  
   DEFAULT_PAYLOAD_SIZE_PCMU       = 1024,    ///< Default buffer size in Live555 for pcmu
-  DEFAULT_FRAME_FIFO_PAYLOAD_SIZE = 1024*300,  ///< Fifo buffers are this size by default
-  // DEFAULT_FRAME_FIFO_PAYLOAD_SIZE = 1024*300  ///< Fifo buffers are this size by default // debug
-  // DEFAULT_PAYLOAD_SIZE_H264       = 1024*10,  ///< Fifo buffers are this size by default // debug
 };
 
 enum MaxSizes {

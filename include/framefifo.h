@@ -42,7 +42,7 @@
  * @ingroup queues_tag
  */
 struct FrameFifoContext {                                                                                                                                       // <pyapi>
-  FrameFifoContext() : n_basic(20), n_avpkt(0), n_avframe(0), n_yuvpbo(0), n_setup(20), n_signal(20), flush_when_full(false) {}                                 // <pyapi>
+  FrameFifoContext() : n_basic(20), n_avpkt(0), n_avframe(0), n_yuvpbo(0), n_setup(20), n_signal(20), flush_when_full(DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL) {}     // <pyapi>
   FrameFifoContext(int n_basic, int n_avpkt, int n_avframe, int n_yuvpbo, int n_setup, int n_signal, bool flush_when_full) :                                    // <pyapi>
   n_basic(n_basic), n_avpkt(n_avpkt), n_avframe(n_avframe), n_yuvpbo(n_yuvpbo), n_setup(n_setup), n_signal(n_signal), flush_when_full(flush_when_full) {}       // <pyapi>
   int n_basic;     ///< data at payload                                                                                                                         // <pyapi>

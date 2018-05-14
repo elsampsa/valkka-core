@@ -51,10 +51,12 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 OpenGLThread    glthread("gl_thread");
 FifoFrameFilter &gl_in_filter = glthread.getFrameFilter();
-InfoFrameFilter decoded_info("decoded",&gl_in_filter);
+// InfoFrameFilter decoded_info("decoded",&gl_in_filter);
+DummyFrameFilter decoded_info("decoded",false,&gl_in_filter); // non-verbose
 AVThread        avthread("avthread",decoded_info);
 FifoFrameFilter &in_filter = avthread.getFrameFilter(); // request framefilter from AVThread
-InfoFrameFilter out_filter("encoded",&in_filter);
+// InfoFrameFilter out_filter("encoded",&in_filter);
+DummyFrameFilter out_filter("decoded",false,&in_filter); // non-verbose
 LiveThread      livethread("live");
 
 
@@ -137,6 +139,8 @@ void test_3() {
   
   std::cout << name << "starting threads" << std::endl;
   
+  // avthread.  setTimeTolerance(10); // 10 milliseconds // just testing ..
+  
   // start glthread and create a window
   glthread.  startCall();
   Window window_id=glthread.createWindow();
@@ -160,7 +164,8 @@ void test_3() {
   i=glthread.newRenderContextCall(2, window_id, 0);
   std::cout << "got render context id "<<i<<std::endl;
   
-  sleep_for(10s);
+  // sleep_for(10s);
+  sleep_for(120s);
   // sleep_for(604800s); //one week
   
   // del render group & context

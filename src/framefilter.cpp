@@ -34,6 +34,7 @@
 #include "framefilter.h"
 #include "tools.h"
 
+// #define TIMESTAMPFILTER_DEBUG // keep this commented
 
 FrameFilter::FrameFilter(const char* name, FrameFilter* next) : name(name), next(next) {
 };
@@ -219,7 +220,6 @@ void TimestampFrameFilter::go(Frame* frame) {
 }
 
 
-
 TimestampFrameFilter2::TimestampFrameFilter2(const char* name, FrameFilter* next, long int msdiff_max) : FrameFilter(name,next), msdiff_max(msdiff_max), mstime_delta(0), savedtimestamp(0) {
 }
 
@@ -227,7 +227,7 @@ TimestampFrameFilter2::TimestampFrameFilter2(const char* name, FrameFilter* next
 void TimestampFrameFilter2::go(Frame* frame) {
   long int ctime, corrected, diff;
   
-  if ( (frame->mstimestamp-savedtimestamp)>600000 ) {
+  if ( (frame->mstimestamp-savedtimestamp)>DEFAULT_TIMESTAMP_RESET_TIME) { // reset the correction once in a minute
     mstime_delta=0;
     savedtimestamp=frame->mstimestamp;
 #ifdef TIMESTAMPFILTER_DEBUG

@@ -43,7 +43,7 @@
  * @ingroup openglthread_tag
  */
 struct OpenGLFrameFifoContext {                                                                                                     // <pyapi>
-  OpenGLFrameFifoContext() : n_720p(20), n_1080p(20), n_1440p(20), n_4K(20), n_setup(20), n_signal(20), flush_when_full(false) {};  // <pyapi>
+  OpenGLFrameFifoContext() : n_720p(20), n_1080p(20), n_1440p(20), n_4K(20), n_setup(20), n_signal(20), flush_when_full(DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL) {};  // <pyapi>
   int n_720p;                                                                                                                       // <pyapi>
   int n_1080p;                                                                                                                      // <pyapi>
   int n_1440p;                                                                                                                      // <pyapi>

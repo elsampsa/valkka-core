@@ -66,7 +66,7 @@ public: // <pyapi>
    * 
    */
   AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx=FrameFifoContext()); // <pyapi>
-  ~AVThread(); ///< Default destructor.  Calls AVThread::stopCall // <pyapi>
+  ~AVThread(); ///< Default destructor.  Calls AVThread::stopCall                                   // <pyapi>
   
 protected: // frame input
   FrameFifo               infifo;           ///< Incoming frames are read from here
@@ -99,6 +99,7 @@ protected:
 public: // API <pyapi>
   FifoFrameFilter &getFrameFilter();            // <pyapi>
   FifoFrameFilter &getBlockingFrameFilter();    // <pyapi>
+  void setTimeTolerance(long int mstol);    ///< API method: decoder will scrap late frames that are mstol milliseconds late.  Call before starting the thread. // <pyapi>
   void decodingOnCall();   ///< API method: enable decoding        // <pyapi>
   void decodingOffCall();  ///< API method: pause decoding         // <pyapi>
   void stopCall();         ///< API method: terminates the thread  // <pyapi>

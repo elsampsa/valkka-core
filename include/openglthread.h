@@ -214,7 +214,7 @@ public: // <pyapi>
    * @param msbuftime     Jitter buffer size in milliseconds (default=100 ms)
    * 
    */
-  OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx=OpenGLFrameFifoContext(), unsigned msbuftime=100); // <pyapi>
+  OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx=OpenGLFrameFifoContext(), unsigned msbuftime=DEFAULT_OPENGLTHREAD_BUFFERING_TIME); // <pyapi>
   virtual ~OpenGLThread(); ///< Virtual destructor // <pyapi>
   
 protected: // initialized at init list

@@ -231,6 +231,11 @@ FifoFrameFilter &AVThread::getBlockingFrameFilter() {
 }
 
 
+void AVThread::setTimeTolerance(long int mstol) {
+  mstimetolerance=mstol;
+}
+
+
 FrameFifo &AVThread::getFifo() {
   return infifo;
 }

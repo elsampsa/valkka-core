@@ -60,10 +60,10 @@ Some key features of the Valkka library are:
 - A complete rewrite of the library
 - (documentation might lag a bit behind..)
 
+### Older versions
+
 0.3.6 Version
 - Sending multicast works
-
-### Older versions
 
 0.3.5 Version : "10 x 1080p cameras running for a week"
 - Stable!  GPU direct memory access needed rubbing in the right way
