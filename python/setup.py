@@ -1,9 +1,20 @@
 from setuptools import setup, Extension, find_packages
+from setuptools.command.install import install
 import subprocess
 import os
 import copy
 import sys
 import numpy
+
+"""
+class CustomInstallCommand(install):
+  # Customized setuptools install command
+  def run(self):
+    print("Custom install command")
+    # self.skip_build=True
+    #print(dir(self))
+    install.run(self)
+"""
 
 custom_compilation=True   # using header and .so files that you have provided (including locally compiled libValkka.so)
 # custom_compilation=False  # using system-wide installed header and .so files (including system-wide installed libValkka.so)
@@ -64,8 +75,33 @@ sources           =["valkka_core.i"]
 runtime_library_dirs =["$ORIGIN"] # https://stackoverflow.com/questions/9795793/shared-library-dependencies-with-distutils
 
 ext_modules=[]
+
 ext=Extension("_valkka_core",sources=sources,include_dirs=include_dirs,extra_compile_args=extra_compile_args,extra_link_args=extra_link_args,libraries=libraries,swig_opts=swig_opts,library_dirs=library_dirs,runtime_library_dirs=runtime_library_dirs)
 ext_modules.append(ext)
+
+"""
+Now follows a HACK that requires some explanation..
+
+1) At the build stage, we want setuptools to include ext_modules and compile them
+
+2) At the packaging stage (python3 setup.py sdist) we want setuptools to include a setup.py into the package that has no knowledge of ext_modules ..
+.. this way we avoid building the binary libraries at the installation stage (done typically with pip), at the end-users linux box
+
+The line after this comment section is modded using sed at the different stages of building the package
+
+Why all this?
+
+* There's no way we can build whole libValkka from scratch at the end-users linux box
+* .whl distributions are over-sensitive to the python 3.x version (3.4, 3.5, 3.6, etc.) because they package python bytecode
+* .. they shouldn't be sensitive to that, but instead sensitive simply to the architecture (i686 vs. x86_64, etc.)
+* We need a binary package where the python part can be python source, but there are binary, pre-compiled .so files.   There seems to be no way of handling this in the current python packaging system.
+
+An alternative solution would be ..
+
+* End-user install separately .deb that has libValkka.so.0 and the necessary header files
+* .. after that, this can be built at the end-users linux box
+"""
+# ext_modules=[] # SWITCH
 
 here = os.path.abspath(os.path.dirname(__file__))
 try:
@@ -79,10 +115,14 @@ else:
   
 # https://setuptools.readthedocs.io/en/latest/setuptools.html#basic-use
 setup(
+  #cmdclass={
+  #  'install': CustomInstallCommand,
+  #  },
+  
   name = "valkka",
   
   # WARNING: the following line is modified by the "setver.bash" script
-  version = "0.4.1", 
+  version = "0.4.2", 
   
   install_requires = [
     'docutils>=0.3',

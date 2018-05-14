@@ -38,7 +38,18 @@ After this, you should have the files "valkka_core.py" and "_valkka_core.py" in 
 
 ### Create the python package
 
-Just run "makepkg3.bash".  After that you have a python ".whl" file which you can install with "pip3 install filename.whl"
+Here we have several options for different distribution strategies:
+
+1. *makesourcekg3.bash*
+  This creates a traditional source package.  When you run install on a package created by this script, it tries to compile the cpp extensions.  The scenario for this one is, that you have installed libValkka.so.x from a debian package and that the header files necessary for compilation are in place - and that the setup.py finds them (say, with pkg-config).  Not functional at the moment.
+
+2. *makefakesourcepkg3.bash*
+  All the python code is in source format (.py).  Precompiled shared libraries are copied into the package.  Works only at a system where the package was compiled (in my case, x86_64 based on Ubuntu 16.04 LTS), or in a very similar one (same versions of all fundamental libraries)
+
+3. *makewhlpk3.bash*
+  Binary package with python bytecode - so it's very sensitive to the exact python version, etc.
+
+Strategy (1) is the healthiest one.  However, it requires .deb packages for various linux distros and were just in the alpha version, so  **for the moment, use (2).**
 
 # Developers
 
