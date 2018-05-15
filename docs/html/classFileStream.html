@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.4.0</span>
+   &#160;<span id="projectnumber">0.4.3</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -119,9 +119,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7e83daa23512e7d9fccd651f3f1a12bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a7e83daa23512e7d9fccd651f3f1a12bb">FileStream</a> (<a class="el" href="structFileContext.html">FileContext</a> &amp;<a class="el" href="classFileStream.html#a6b7d4aa732ab99459d323e8d248df6b9">ctx</a>)</td></tr>
 <tr class="memdesc:a7e83daa23512e7d9fccd651f3f1a12bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a7e83daa23512e7d9fccd651f3f1a12bb">More...</a><br /></td></tr>
 <tr class="separator:a7e83daa23512e7d9fccd651f3f1a12bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c410d9531313aa1fc924bbd77cd4781"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c410d9531313aa1fc924bbd77cd4781"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a3c410d9531313aa1fc924bbd77cd4781">~FileStream</a> ()</td></tr>
-<tr class="memdesc:a3c410d9531313aa1fc924bbd77cd4781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
+<tr class="memitem:a3c410d9531313aa1fc924bbd77cd4781"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a3c410d9531313aa1fc924bbd77cd4781">~FileStream</a> ()</td></tr>
+<tr class="memdesc:a3c410d9531313aa1fc924bbd77cd4781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor.  <a href="#a3c410d9531313aa1fc924bbd77cd4781">More...</a><br /></td></tr>
 <tr class="separator:a3c410d9531313aa1fc924bbd77cd4781"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ecbef13fabdcdeae69f48a49bd0ece9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8ecbef13fabdcdeae69f48a49bd0ece9"></a>
 SlotNumber&#160;</td><td class="memItemRight" valign="bottom"><b>getSlot</b> ()</td></tr>
@@ -146,9 +145,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#ab47343c0697fa713205673a95ef0d845">update</a> (long int mstimestamp)</td></tr>
 <tr class="memdesc:ab47343c0697fa713205673a95ef0d845"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to achieve mstimestamp: calculates <a class="el" href="classFileStream.html#adef0251c398077a62bb9b5074a4c1a7e" title="Where the stream would like to be (underscore means stream time) ">FileStream::target_mstimestamp_</a> and calls pullNextFrame. Returns the timeout for the next frame. <br /></td></tr>
 <tr class="separator:ab47343c0697fa713205673a95ef0d845"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab67ac1fec72625ac9c358f50b8a5665"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aab67ac1fec72625ac9c358f50b8a5665"></a>
-long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#aab67ac1fec72625ac9c358f50b8a5665">pullNextFrame</a> ()</td></tr>
-<tr class="memdesc:aab67ac1fec72625ac9c358f50b8a5665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to achieve <a class="el" href="classFileStream.html#adef0251c398077a62bb9b5074a4c1a7e" title="Where the stream would like to be (underscore means stream time) ">FileStream::target_mstimestamp_</a> . Sends frames whose timestamps are less than that to the filterchain (e.g. to <a class="el" href="structFileContext.html#a0aef136b3defe8a09f072c866e306c77" title="incoming: the frames are feeded into this FrameFilter // &lt;pyapi&gt; ">FileContext::framefilter</a>). Returns timeout to the next frame. <br /></td></tr>
+<tr class="memitem:aab67ac1fec72625ac9c358f50b8a5665"><td class="memItemLeft" align="right" valign="top">long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#aab67ac1fec72625ac9c358f50b8a5665">pullNextFrame</a> ()</td></tr>
+<tr class="memdesc:aab67ac1fec72625ac9c358f50b8a5665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to achieve <a class="el" href="classFileStream.html#adef0251c398077a62bb9b5074a4c1a7e" title="Where the stream would like to be (underscore means stream time) ">FileStream::target_mstimestamp_</a> . Sends frames whose timestamps are less than that to the filterchain (e.g. to <a class="el" href="structFileContext.html#a0aef136b3defe8a09f072c866e306c77" title="incoming: the frames are feeded into this FrameFilter // &lt;pyapi&gt; ">FileContext::framefilter</a>). Returns timeout to the next frame.  <a href="#aab67ac1fec72625ac9c358f50b8a5665">More...</a><br /></td></tr>
 <tr class="separator:aab67ac1fec72625ac9c358f50b8a5665"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -160,6 +158,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a9fb0a03ed8cc2cc9b88a746ff2791d08"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9fb0a03ed8cc2cc9b88a746ff2791d08"></a>
 AVFormatContext *&#160;</td><td class="memItemRight" valign="bottom"><b>input_context</b></td></tr>
 <tr class="separator:a9fb0a03ed8cc2cc9b88a746ff2791d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae30eb963175a6c8213ff5f7b6fd8c904"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae30eb963175a6c8213ff5f7b6fd8c904"></a>
+std::vector&lt; AVBitStreamFilterContext * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>filters</b></td></tr>
+<tr class="separator:ae30eb963175a6c8213ff5f7b6fd8c904"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a707a1b9b6aae925d14a2f345c97fc70a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a707a1b9b6aae925d14a2f345c97fc70a"></a>
 <a class="el" href="classSetupFrame.html">SetupFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileStream.html#a707a1b9b6aae925d14a2f345c97fc70a">setupframe</a></td></tr>
 <tr class="memdesc:a707a1b9b6aae925d14a2f345c97fc70a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup frame written to the filterchain. <br /></td></tr>
@@ -227,6 +228,9 @@ AVPacket *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href
   </table>
   </dd>
 </dl>
+<ul>
+<li></li>
+</ul>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -239,6 +243,63 @@ Here is the call graph for this function:</div>
 <area shape="rect" id="node4" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="411,27,521,54"/>
 <area shape="rect" id="node5" href="classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761" title="Default constructor. " alt="" coords="385,78,547,105"/>
 <area shape="rect" id="node7" href="classFileStream.html#a8f6115df951a7e447cb349011844dcb3" title="Creates a correspondence with the current wallclock time and a desider stream time, by calculating FileStream::reftime. See Presention timing and playing. " alt="" coords="379,129,553,155"/>
+</map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a3c410d9531313aa1fc924bbd77cd4781"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">FileStream::~FileStream </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default destructor. </p>
+<ul>
+<li>// let's not use memleaking bitstream filters </li>
+</ul>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="aab67ac1fec72625ac9c358f50b8a5665"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long int FileStream::pullNextFrame </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tries to achieve <a class="el" href="classFileStream.html#adef0251c398077a62bb9b5074a4c1a7e" title="Where the stream would like to be (underscore means stream time) ">FileStream::target_mstimestamp_</a> . Sends frames whose timestamps are less than that to the filterchain (e.g. to <a class="el" href="structFileContext.html#a0aef136b3defe8a09f072c866e306c77" title="incoming: the frames are feeded into this FrameFilter // &lt;pyapi&gt; ">FileContext::framefilter</a>). Returns timeout to the next frame. </p>
+<ul>
+<li></li>
+</ul>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classFileStream_aab67ac1fec72625ac9c358f50b8a5665_cgraph.png" border="0" usemap="#classFileStream_aab67ac1fec72625ac9c358f50b8a5665_cgraph" alt=""/></div>
+<map name="classFileStream_aab67ac1fec72625ac9c358f50b8a5665_cgraph" id="classFileStream_aab67ac1fec72625ac9c358f50b8a5665_cgraph">
+<area shape="rect" id="node2" href="classBasicFrame.html#a46280fb4f30a90920a48efb401f18f61" title="Reset the internal data. " alt="" coords="276,5,405,32"/>
+<area shape="rect" id="node4" href="classBasicFrame.html#a0c72986010d87f12f37d05f18998380c" title="Copy data from AVPacket structure. " alt="" coords="232,56,449,83"/>
+<area shape="rect" id="node5" href="classBasicFrame.html#a5067fbad84e4862c5cdc95d8c90cdb58" title="Copy data from AVPacket structure. " alt="" coords="233,107,448,133"/>
+<area shape="rect" id="node6" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="283,157,398,184"/>
+<area shape="rect" id="node3" href="classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Reset the internal data. " alt="" coords="531,5,627,32"/>
+<area shape="rect" id="node7" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="523,132,634,159"/>
+<area shape="rect" id="node8" href="classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761" title="Default constructor. " alt="" coords="497,183,660,209"/>
 </map>
 </div>
 </p>

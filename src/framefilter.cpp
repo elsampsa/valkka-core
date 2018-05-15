@@ -26,7 +26,7 @@
  *  @file    framefilter.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.0 
+ *  @version 0.4.3 
  *  
  *  @brief 
  */ 
@@ -455,14 +455,14 @@ void SwScaleFrameFilter::go(Frame* frame) { // do the scaling
     else {
       sws_freeContext(sws_ctx);
     }
-    std::cout << "SwScaleFrameFilter: go: get context: " << std::endl;
-    std::cout << "SwScaleFrameFilter: go: get context: w, h "  << width << " " << height << std::endl;
+    // std::cout << "SwScaleFrameFilter: go: get context: " << std::endl;
+    // std::cout << "SwScaleFrameFilter: go: get context: w, h "  << width << " " << height << std::endl;
     sws_ctx =sws_getContext(width, height, (AVPixelFormat)(input_frame->format), target_width, target_height, AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
   }
   
   sws_scale(sws_ctx, (const uint8_t * const*)input_frame->data, input_frame->linesize, 0, input_frame->height, output_frame->data, output_frame->linesize);
   
-  std::cout << "SwScaleFrameFilter: go: output frame: " << outputframe << std::endl;
+  // std::cout << "SwScaleFrameFilter: go: output frame: " << outputframe << std::endl;
   
   if (output_frame->width>0 and output_frame->height>0) {
     outputframe.copyMetaFrom(frame);

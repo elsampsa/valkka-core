@@ -1,0 +1,9 @@
+<map id="FileStream::pullNextFrame" name="FileStream::pullNextFrame">
+<area shape="rect" id="node2" href="$classBasicFrame.html#a46280fb4f30a90920a48efb401f18f61" title="Reset the internal data. " alt="" coords="276,5,405,32"/>
+<area shape="rect" id="node4" href="$classBasicFrame.html#a0c72986010d87f12f37d05f18998380c" title="Copy data from AVPacket structure. " alt="" coords="232,56,449,83"/>
+<area shape="rect" id="node5" href="$classBasicFrame.html#a5067fbad84e4862c5cdc95d8c90cdb58" title="Copy data from AVPacket structure. " alt="" coords="233,107,448,133"/>
+<area shape="rect" id="node6" href="$classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="283,157,398,184"/>
+<area shape="rect" id="node3" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Reset the internal data. " alt="" coords="531,5,627,32"/>
+<area shape="rect" id="node7" href="$classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="523,132,634,159"/>
+<area shape="rect" id="node8" href="$classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761" title="Default constructor. " alt="" coords="497,183,660,209"/>
+</map>

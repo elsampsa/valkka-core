@@ -29,7 +29,7 @@
  *  @file    frame.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.0 
+ *  @version 0.4.3 
  *  
  *  @brief   Frame classes
  */ 
@@ -180,6 +180,7 @@ public: // codec-dependent functions
 public:
   void fillAVPacket(AVPacket *avpkt);      ///< Copy payload to AVPacket structure
   void copyFromAVPacket(AVPacket *avpkt);  ///< Copy data from AVPacket structure
+  void filterFromAVPacket(AVPacket *avpkt, AVCodecContext *codec_ctx, AVBitStreamFilterContext *filter);  ///< Copy data from AVPacket structure
 };
 
 

@@ -1,15 +1,16 @@
 <map id="FileThread::run" name="FileThread::run">
-<area shape="rect" id="node2" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="595,24,761,51"/>
-<area shape="rect" id="node3" href="$classFileStream.html#ab47343c0697fa713205673a95ef0d845" title="Tries to achieve mstimestamp: calculates FileStream::target_mstimestamp_ and calls pullNextFrame..." alt="" coords="163,151,295,178"/>
-<area shape="rect" id="node11" href="$classFileStream.html#a2790fb16762a066b418d1d93653deddf" title="Seek to a desider stream time. " alt="" coords="168,50,289,76"/>
-<area shape="rect" id="node13" href="$classFileStream.html#ae1f929f6ac1a57fbb980ef49380dcc17" title="Start playing the stream. " alt="" coords="170,100,287,127"/>
-<area shape="rect" id="node14" href="$classFileStream.html#a2d6ae46a63ddc7067184ab66df1276d6" title="Stop playing the strem. " alt="" coords="169,202,288,228"/>
-<area shape="rect" id="node4" href="$classFileStream.html#aab67ac1fec72625ac9c358f50b8a5665" title="Tries to achieve FileStream::target_mstimestamp_ . Sends frames whose timestamps are less than that t..." alt="" coords="343,151,521,178"/>
-<area shape="rect" id="node5" href="$classBasicFrame.html#a46280fb4f30a90920a48efb401f18f61" title="Reset the internal data. " alt="" coords="613,100,743,127"/>
-<area shape="rect" id="node7" href="$classBasicFrame.html#a0c72986010d87f12f37d05f18998380c" title="Copy data from AVPacket structure. " alt="" coords="569,151,787,178"/>
-<area shape="rect" id="node8" href="$classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="621,202,735,228"/>
-<area shape="rect" id="node6" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Reset the internal data. " alt="" coords="868,100,964,127"/>
-<area shape="rect" id="node9" href="$classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="861,176,971,203"/>
-<area shape="rect" id="node10" href="$classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761" title="Default constructor. " alt="" coords="835,227,997,254"/>
-<area shape="rect" id="node12" href="$classFileStream.html#a8f6115df951a7e447cb349011844dcb3" title="Creates a correspondence with the current wallclock time and a desider stream time, by calculating FileStream::reftime. See Presention timing and playing. " alt="" coords="345,50,519,76"/>
+<area shape="rect" id="node2" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="595,10,761,36"/>
+<area shape="rect" id="node3" href="$classFileStream.html#ab47343c0697fa713205673a95ef0d845" title="Tries to achieve mstimestamp: calculates FileStream::target_mstimestamp_ and calls pullNextFrame..." alt="" coords="163,162,295,188"/>
+<area shape="rect" id="node12" href="$classFileStream.html#a2790fb16762a066b418d1d93653deddf" title="Seek to a desider stream time. " alt="" coords="168,60,289,87"/>
+<area shape="rect" id="node14" href="$classFileStream.html#ae1f929f6ac1a57fbb980ef49380dcc17" title="Start playing the stream. " alt="" coords="170,111,287,138"/>
+<area shape="rect" id="node15" href="$classFileStream.html#a2d6ae46a63ddc7067184ab66df1276d6" title="Stop playing the strem. " alt="" coords="169,212,288,239"/>
+<area shape="rect" id="node4" href="$classFileStream.html#aab67ac1fec72625ac9c358f50b8a5665" title="Tries to achieve FileStream::target_mstimestamp_ . Sends frames whose timestamps are less than that t..." alt="" coords="343,162,521,188"/>
+<area shape="rect" id="node5" href="$classBasicFrame.html#a46280fb4f30a90920a48efb401f18f61" title="Reset the internal data. " alt="" coords="613,86,743,112"/>
+<area shape="rect" id="node7" href="$classBasicFrame.html#a0c72986010d87f12f37d05f18998380c" title="Copy data from AVPacket structure. " alt="" coords="569,136,787,163"/>
+<area shape="rect" id="node8" href="$classBasicFrame.html#a5067fbad84e4862c5cdc95d8c90cdb58" title="Copy data from AVPacket structure. " alt="" coords="571,187,785,214"/>
+<area shape="rect" id="node9" href="$classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="621,238,735,264"/>
+<area shape="rect" id="node6" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Reset the internal data. " alt="" coords="868,86,964,112"/>
+<area shape="rect" id="node10" href="$classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="861,212,971,239"/>
+<area shape="rect" id="node11" href="$classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761" title="Default constructor. " alt="" coords="835,263,997,290"/>
+<area shape="rect" id="node13" href="$classFileStream.html#a8f6115df951a7e447cb349011844dcb3" title="Creates a correspondence with the current wallclock time and a desider stream time, by calculating FileStream::reftime. See Presention timing and playing. " alt="" coords="345,60,519,87"/>
 </map>

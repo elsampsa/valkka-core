@@ -26,7 +26,7 @@
  *  @file    decoders.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.0 
+ *  @version 0.4.3 
  *  @brief   FFmpeg decoders
  */ 
 

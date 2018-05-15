@@ -26,7 +26,7 @@
  *  @file    filethread_test0.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.0 
+ *  @version 0.4.3 
  *  
  *  @brief Test file input
  *
@@ -91,6 +91,7 @@ void test_1() {
   filethread.playFileStreamCall(ctx);
   sleep_for(10s);
   
+  /*
   std::cout << "\nSEEK\n";
   ctx.seektime_=2000;
   filethread.seekFileStreamCall(ctx);
@@ -102,11 +103,23 @@ void test_1() {
   std::cout << "\nPLAY\n";  
   filethread.playFileStreamCall(ctx);
   sleep_for(5s);
+  */
   
   std::cout << "stopping threads" << std::endl;
   
   filethread. stopCall();
   avthread.   stopCall();  
+}
+
+
+void test_2() {
+  const char* name = "@TEST: file_test: test 2: ";
+  std::cout << name <<"** @@Pull all packets from a file using TestFileStream**" << std::endl;
+  int i;
+  
+  TestFileStream stream =TestFileStream("kokkelis.mkv");
+  
+  stream.pull();
 }
 
 
@@ -145,10 +158,10 @@ int main(int argc, char** argcv) {
       case(1):
         test_1();
         break;
-      /*
       case(2):
         test_2();
         break;
+      /*
       case(3):
         test_3();
         break;

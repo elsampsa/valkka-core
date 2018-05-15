@@ -26,7 +26,7 @@
  *  @file    frame.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.0 
+ *  @version 0.4.3 
  *  
  *  @brief 
  */ 
@@ -183,8 +183,8 @@ void BasicFrame::fillH264Pars() {
 
 
 void BasicFrame::fillAVPacket(AVPacket *avpkt) {
-  avpkt->data         =payload.data();
-  avpkt->size         =payload.size();
+  avpkt->data         =payload.data(); // +4; that four is just for debugging..
+  avpkt->size         =payload.size(); // -4;
   avpkt->stream_index =subsession_index;
 
   if (codec_id==AV_CODEC_ID_H264 and h264_pars.slice_type==H264SliceType::sps) { // we assume that frames always come in the following sequence: sps, pps, i, etc.
@@ -215,6 +215,28 @@ void BasicFrame::copyFromAVPacket(AVPacket *pkt) {
   mstimestamp=(long int)pkt->pts;
 }
 
+
+void BasicFrame::filterFromAVPacket(AVPacket *pkt, AVCodecContext *codec_ctx, AVBitStreamFilterContext *filter) {
+  int out_size;
+  uint8_t *out;
+  
+  av_bitstream_filter_filter(
+    filter,
+    codec_ctx,
+    NULL,
+    &out,
+    &out_size,
+    pkt->data,
+    pkt->size,
+    pkt->flags & AV_PKT_FLAG_KEY
+  );
+  
+  payload.resize(out_size);
+  std::cout << "BasicFrame: filterFromAVPacket: " << out_size << " " << (long unsigned)(out) << std::endl; 
+  memcpy(payload.data(),out,out_size);
+  subsession_index=pkt->stream_index;
+  mstimestamp=(long int)pkt->pts;
+}
 
 
 SetupFrame::SetupFrame() : Frame() {

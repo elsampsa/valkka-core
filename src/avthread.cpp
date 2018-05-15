@@ -26,7 +26,7 @@
  *  @file    avthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.0 
+ *  @version 0.4.3 
  *  @brief   FFmpeg decoding thread
  */ 
 
@@ -134,7 +134,7 @@ void AVThread::run() {
       } // got frame: DECODER INIT
       
       else if (decoders[subsession_index]==NULL) { // woops, no decoder registered yet..
-        avthreadlogger.log(LogLevel::normal) << "AVThread: "<< this->name <<" : run : no decoder registered for stream " << subsession_index << std::endl;
+        avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : no decoder registered for stream " << subsession_index << std::endl;
         infifo.recycle(f); // return frame to the stack - never forget this!
       }
       

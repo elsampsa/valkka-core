@@ -24,9 +24,9 @@ sed -i -r "s/SET\(PATCH_VERSION (.*)/SET(PATCH_VERSION \"$3\") /g" CMakeLists.tx
 sed -i -r "s/PROJECT_NUMBER(.*)/PROJECT_NUMBER = \"$1.$2.$3\"/g" docs/config
 
 # mod version numbers in sizes.h
-sed -i -r "s/VERSION_MAJOR(.*);/VERSION_MAJOR = $1;/g" include/sizes.h
-sed -i -r "s/VERSION_MINOR(.*);/VERSION_MINOR = $2;/g" include/sizes.h
-sed -i -r "s/VERSION_PATCH(.*);/VERSION_PATCH = $3;/g" include/sizes.h
+sed -i -r "s/VERSION_MAJOR(.*);/VERSION_MAJOR = $1;/g" include/constant.h
+sed -i -r "s/VERSION_MINOR(.*);/VERSION_MINOR = $2;/g" include/constant.h
+sed -i -r "s/VERSION_PATCH(.*);/VERSION_PATCH = $3;/g" include/constant.h
 
 fs="git_tag.bash git_rm_tag.bash"
 for f in $fs

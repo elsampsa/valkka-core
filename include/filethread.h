@@ -29,7 +29,7 @@
  *  @file    filethread.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.4.0 
+ *  @version 0.4.3 
  *  
  *  @brief A Thread handling files and sending frames to fifo
  */ 
@@ -80,6 +80,26 @@ struct FileContext {                                                            
 };                                                                                                 // <pyapi>
 
 
+// TODO: still ugly memory leaks with the bitstream filter.  Use this class to test things.
+class TestFileStream {
+  public:
+  /** Default constructor
+   * 
+   * @param ctx : A FileContext instance describing the stream
+   */
+  TestFileStream(const char* filename);
+  ~TestFileStream(); ///< Default destructor
+  
+public:
+  AVFormatContext     *input_context;
+ 
+public:
+  AVPacket *avpkt;                 ///< Data for the next frame in ffmpeg AVPacket format
+  AVBitStreamFilterContext *annexb;
+  void     pull();                   
+};
+
+
 /** This class in analogous to the Connection class in live streams.  Instances of this class are placed in slots in FileThread.
  * 
  * This class "keeps the books" for each file stream, in particular:
@@ -107,7 +127,8 @@ public:
 public:
   FileContext         &ctx;           ///< FileContext describing this stream
   AVFormatContext     *input_context;
- 
+  std::vector<AVBitStreamFilterContext*> filters;
+  
 public:
   SetupFrame  setupframe;             ///< Setup frame written to the filterchain
   BasicFrame  out_frame;              ///< This frame is written to the filterchain (i.e. to FileStream::ctx and there to FileContext::framefilter) 

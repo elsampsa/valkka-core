@@ -26,7 +26,7 @@
  *  @file    sharedmem.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.0 
+ *  @version 0.4.3 
  *  
  *  @brief   Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  */ 
@@ -162,7 +162,7 @@ void SharedMemSegment::putAVRGBFrame(AVRGBFrame *f) { // copy from AVFrame->data
   // number of bytes:
   *meta =std::min(std::size_t(av_frame->linesize[0]*av_frame->height), n_bytes);
   
-  std::cout << "SharedMemSegment: putAVRGBFrame: copying " << *meta << " bytes from " << *f << std::endl;
+  // std::cout << "SharedMemSegment: putAVRGBFrame: copying " << *meta << " bytes from " << *f << std::endl;
   memcpy(payload, av_frame->data[0], *meta);
 }
 

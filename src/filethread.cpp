@@ -26,12 +26,122 @@
  *  @file    filethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.0 
+ *  @version 0.4.3 
  *  
  *  @brief  A thread sending frames from files
  */ 
 
 #include "filethread.h"
+
+
+TestFileStream::TestFileStream(const char* filename) {
+  // https://stackoverflow.com/questions/23404403/need-to-convert-h264-stream-from-annex-b-format-to-avcc-format
+  // https://stackoverflow.com/questions/11543839/h-264-conversion-with-ffmpeg-from-a-rtp-stream
+  // https://ffmpeg.org/pipermail/libav-user/2014-July/007143.html
+  // "you don't have to create a codec context, instead must use the codec context in AVFormatContext::streams[idx]::codec" .. wtf?
+  int i;
+  unsigned short n;
+  
+  // avpkt =NULL;
+  avpkt= new AVPacket();
+  // av_new_packet(avpkt,1024*1024*10); // 10 MB
+  // av_init_packet(avpkt);
+  
+  // return;
+  
+  // https://ffmpeg.org/doxygen/trunk/group__lavf__decoding.html#ga31d601155e9035d5b0e7efedc894ee49
+  input_context=NULL;
+  i=avformat_open_input(&input_context, filename, av_find_input_format("matroska"), NULL);
+  
+  // return;
+  
+  // i=avformat_open_input(&input_context, filename, NULL, NULL);
+  
+  if (i<0) {
+    std::cout << "TestFileStream : my_avformat_open_input: got nothing from file "<< filename << std::endl;
+    return;
+  }
+  else {
+    std::cout << "TestFileStream : got " << i << " " << input_context << std::endl;
+  }
+  
+  if (avformat_find_stream_info(input_context, NULL) < 0) { // this ****er reserves and AVPacket and sometimes does not free it properly => memleak .. actually, this happens only, when using av_read_frame afterwards in pull().
+    std::cout << "TestFileStream: Could not find stream information" << std::endl;
+  }
+  
+  /*
+  for(i=0;i<input_context->nb_streams;i++) { // send setup frames describing the file contents
+    AVCodecID codec_id          =input_context->streams[i]->codec->codec_id;
+    AVMediaType media_type      =input_context->streams[avpkt->stream_index]->codec->codec_type;
+    std::cout << "TestFileStream: codec_id, media_type: " << int(codec_id) << " " << int(media_type) << std::endl;
+  }
+  */
+  
+  annexb = av_bitstream_filter_init("h264_mp4toannexb");
+} 
+  
+
+TestFileStream::~TestFileStream() {
+  std::cout << "TestFileStream: dtor" << std::endl;
+  // avformat_free_context(input_context);
+  
+  avformat_close_input(&input_context); // according to examples, this should be enough..
+  
+  // return;
+  av_bitstream_filter_close(annexb);
+  
+  // av_free_packet(avpkt);
+  // delete avpkt;
+  av_packet_unref(avpkt);
+  delete avpkt;
+}
+
+
+void TestFileStream::pull() {
+  int i;
+  int out_size;
+  uint8_t *out;
+  
+  std::cout << "TestFileStream: pull:                     " <<  std::endl;
+  
+  // return;
+  
+  /*
+  AVCodecID   codec_id   =input_context->streams[avpkt->stream_index]->codec->codec_id;
+  AVMediaType media_type =input_context->streams[avpkt->stream_index]->codec->codec_type;
+  */
+  
+  i=1;
+  while(i>=0) {
+    i=av_read_frame(input_context, avpkt); // MEMLEAK : this likes to re-reserve the avpkt which creates a memleak
+    if (i>=0) {
+      std::cout << "TestFileStream: pull: payload= " << int(avpkt->data[0]) << " " << int(avpkt->data[1]) << " " << int(avpkt->data[2]) << " " << int(avpkt->data[3])  << " " << int(avpkt->data[4]) << " " << int(avpkt->data[5]) << " (total " << avpkt->size << " bytes)" << std::endl;
+      
+      /*
+      av_bitstream_filter_filter( // horrible memory leaks when using the filter - this bitstream filter is useless crap
+        annexb,
+        input_context->streams[0]->codec,
+        NULL,
+        &out,
+        &out_size,
+        avpkt->data,
+        avpkt->size,
+        avpkt->flags & AV_PKT_FLAG_KEY
+      );
+      */
+      ///*
+      avpkt->data[0]=0;
+      avpkt->data[1]=0;
+      avpkt->data[2]=0;
+      avpkt->data[3]=1;
+      out=avpkt->data;
+      //*/
+      
+      std::cout << "TestFileStream: pull: filtered payload= " << int(out[0]) << " " << int(out[1]) << " " << int(out[2]) << " " << int(out[3])  << " " << int(out[4]) << " " << int(out[5]) << " (total " << avpkt->size << " bytes)" << std::endl;
+    }
+  }
+}
+
 
 // FileStream::FileStream(std::string filename, SlotNumber slot, FrameFilter& framefilter) : filename(filename), slot(slot), framefilter(framefilter) {
 FileStream::FileStream(FileContext &ctx) : ctx(ctx) {
@@ -39,7 +149,7 @@ FileStream::FileStream(FileContext &ctx) : ctx(ctx) {
   unsigned short n;
   
   avpkt= new AVPacket();
-  av_init_packet(avpkt);
+  av_init_packet(avpkt); 
   
   // https://ffmpeg.org/doxygen/trunk/group__lavf__decoding.html#ga31d601155e9035d5b0e7efedc894ee49
   input_context=NULL;
@@ -74,15 +184,23 @@ FileStream::FileStream(FileContext &ctx) : ctx(ctx) {
   n=0;
   for(i=0;i<input_context->nb_streams;i++) { // send setup frames describing the file contents
     AVCodecID codec_id          =input_context->streams[i]->codec->codec_id;
-    AVMediaType media_type      =input_context->streams[avpkt->stream_index]->codec->codec_type;
+    AVMediaType media_type      =input_context->streams[i]->codec->codec_type;
     setupframe.codec_id         =codec_id;
     setupframe.media_type       =media_type;
     setupframe.subsession_index =n;
     setupframe.mstimestamp      =getCurrentMsTimestamp();
     setupframe.n_slot           =ctx.slot;
     // send setup frame
-    std::cout << "FileStream: sending setup frame: " << setupframe << std::endl;
+    // std::cout << "FileStream: sending setup frame: " << setupframe << std::endl;
     ctx.framefilter->run(&setupframe);
+    ///*
+    if (codec_id==AV_CODEC_ID_H264) { // TODO: check if this is in AVCC or Annex B (how?)
+      filters.push_back(av_bitstream_filter_init("h264_mp4toannexb"));
+    }
+    else {
+      filters.push_back(NULL);
+    }
+    // */
     n++;
   }
   
@@ -93,9 +211,17 @@ FileStream::FileStream(FileContext &ctx) : ctx(ctx) {
 
 FileStream::~FileStream() {
   avformat_close_input(&input_context);
-  avformat_free_context(input_context);
-  av_free_packet(avpkt);
+  // avformat_free_context(input_context); // not required
+  // av_free_packet(avpkt); // dprecated
+  av_packet_unref(avpkt);
   delete avpkt;
+  ///* // let's not use memleaking bitstream filters
+  for (auto it=filters.begin(); it!=filters.end(); it++) {
+    if (*it!=NULL) {
+      av_bitstream_filter_close(*it);
+    }
+  }
+  //*/
 }
 
 
@@ -212,13 +338,46 @@ long int FileStream::pullNextFrame() {
 #endif
     return dt;
   }
+  else if (!(avpkt->data)) {
+#ifdef FILE_VERBOSE  
+  std::cout << "FileStream: pullNextFrame: no avpkt!" << std::endl;
+#endif
+  }
   else {
     // if frame_mstimestamp_==-1 .. there is no previous frame
-    AVCodecID   codec_id   =input_context->streams[avpkt->stream_index]->codec->codec_id;
-    AVMediaType media_type =input_context->streams[avpkt->stream_index]->codec->codec_type;
+    AVCodecContext*     codec_ctx  =input_context->streams[avpkt->stream_index]->codec;
+    const int           &index      =avpkt->stream_index;
+    const AVCodecID     &codec_id   =codec_ctx->codec_id;
+    const AVMediaType   &media_type =codec_ctx->codec_type;
+    uint8_t*            data        =avpkt->data;
     
     out_frame.reset();
-    out_frame.copyFromAVPacket(avpkt); // copy payload, timestamp, stream index
+    
+    ///*
+    if (!filters[index]) { // no filters for this codec
+      out_frame.copyFromAVPacket(avpkt);
+    }
+    else { // there's a filter .. 
+      if ( (codec_id==AV_CODEC_ID_H264) and (avpkt->size>=4) and (data[0]==0 and data[1]==0 and data[2]==0) ) { // must be annex b .. no need to use the filter
+        out_frame.copyFromAVPacket(avpkt);
+      }
+      else { // use the filter
+        out_frame.filterFromAVPacket(avpkt,codec_ctx,filters[index]);
+      }
+    }
+    //*/
+    
+    /*
+    if ( (codec_id==AV_CODEC_ID_H264) ) { // check for the h264 the stream type
+      if (avpkt->size>=4 and (data[0]==0 and data[1]==0 and data[2]==0) ) { // this is annex b format ok
+      }
+      else if (avpkt->size>=4) { // to annex b
+        data[0]=0; data[1]=0; data[2]=0; data[3]=1; // seems not to be this easy..
+      }
+    }
+    out_frame.copyFromAVPacket(avpkt);
+    */
+      
     out_frame.n_slot    =ctx.slot;
     out_frame.codec_id  =codec_id;
     out_frame.media_type=media_type;
