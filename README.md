@@ -54,13 +54,16 @@ Some key features of the Valkka library are:
 
 ## Features
 
-### Current stable version is 0.4.0
+### Current stable version is 0.4.2
+
+0.4.2 Version
+- Now reads acc in addition to annex b h264
+
+### Older versions
 
 0.4.0 Version : "The Rewrite"
 - A complete rewrite of the library
 - (documentation might lag a bit behind..)
-
-### Older versions
 
 0.3.6 Version
 - Sending multicast works
