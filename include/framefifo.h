@@ -28,7 +28,7 @@
  *  @file    framefifo.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.3 
+ *  @version 0.4.4 
  *  
  *  @brief   Thread safe system of fifo and a stack
  */ 
@@ -86,7 +86,8 @@ protected: // mutex synchro
   std::condition_variable ready_condition;  ///< The Event/Flag for FrameFifo::ready_mutex
     
 protected:
-  virtual void recycle_(Frame* f);                        ///< Return Frame f back into the stack.  Update target_size if necessary
+  virtual void recycle_(Frame* f);  ///< Return Frame f back into the stack.  Update target_size if necessary
+  virtual void recycleAll_();       ///< Recycle all frames back to the stack
   
 public:
   virtual bool writeCopy(Frame* f, bool wait=false);     ///< Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").  The size of "ftmp" is also checked and set to target_size, if necessary.  If wait is set to true, will wait until there are frames available in the stack.

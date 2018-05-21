@@ -29,7 +29,7 @@
  *  @file    liveserver.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.3 
+ *  @version 0.4.4 
  *  
  *  @brief   Live555 interface for server side: streaming to udp sockets directly or by using an on-demand rtsp server
  */ 
@@ -56,7 +56,7 @@ public:
    * @param fifo   See BufferSource::fifo
    * 
    */
-  BufferSource(UsageEnvironment &env, FrameFifo &fifo, unsigned preferredFrameSize =0, unsigned playTimePerFrame =0, unsigned offset=0);
+  BufferSource(UsageEnvironment &env, FrameFifo &fifo, Boolean &canary, unsigned preferredFrameSize =0, unsigned playTimePerFrame =0, unsigned offset=0);
   virtual ~BufferSource();
   
 private:
@@ -64,6 +64,7 @@ private:
   
 private:
   FrameFifo &fifo;                ///< Frames are being read from here.  This reference leads all the way down to LiveThread::fifo
+  Boolean   &canary;              ///< If this instance of BufferSource get's annihilated, kill the canary (set it to false)
   unsigned  fPreferredFrameSize;
   unsigned  fPlayTimePerFrame;
   unsigned  offset;
@@ -115,6 +116,7 @@ protected:
   
   BufferSource *buffer_source;   ///< Reserved in the child classes (depends on the payload type)
   FramedSource *terminal;        ///< The final sink in the live555 filterchain
+  Boolean      source_alive;   ///< A canary variable that tells us if live555 event loop has closed the buffer_source
   
 public:
   void handleFrame(Frame *f);
@@ -135,6 +137,10 @@ protected:
   // u_int64_t fFileSize; // if known
   BufferSource *buffer_source;  ///< Reserved in the child classes (depends on the payload type)
   FrameFifo    &fifo;
+  Boolean      source_alive;   ///< A canary variable that tells us if live555 event loop has closed the buffer_source
+  
+protected:
+  virtual void setDoneFlag() =0; ///< call before removing this from the server .. informs the extra inner event loop (if any)
   
 public:
   void handleFrame(Frame *f);   ///< Puts a frame into the buffer_source
@@ -150,6 +156,10 @@ public:
   void checkForAuxSDPLine1();
   void afterPlayingDummy1();
 
+protected:
+  static void afterPlayingDummy(void* clientData);
+  static void checkForAuxSDPLine(void* clientData);
+  
 protected:
   H264ServerMediaSubsession(UsageEnvironment& env, FrameFifo &fifo, Boolean reuseFirstSource); // called only by createNew();
   virtual ~H264ServerMediaSubsession();

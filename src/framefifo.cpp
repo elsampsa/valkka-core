@@ -26,7 +26,7 @@
  *  @file    framefifo.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.3 
+ *  @version 0.4.4 
  *  
  *  @brief 
  */ 
@@ -114,7 +114,7 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) {
     else {
       fifologger.log(LogLevel::fatal) << "FrameFifo: "<<name<<" writeCopy: OVERFLOW! No more frames in stack.  Frame="<<(*f)<<std::endl;
       if (ctx.flush_when_full) {
-        recycleAll();
+        recycleAll_();
       }
       return false;
     }
@@ -199,13 +199,18 @@ void FrameFifo::recycle(Frame* f) {
 }
 
 
-void FrameFifo::recycleAll() { // move all frames from fifo to stack
-  std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+void FrameFifo::recycleAll_() { // move all frames from fifo to stack
   auto it=fifo.begin();
   while (it!=fifo.end()) {
     recycle_(*it); // return to stack
     it=fifo.erase(it); // and erase from the fifo
   }
+}
+
+
+void FrameFifo::recycleAll() { // move all frames from fifo to stack
+  std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+  recycleAll_();
 }
 
 

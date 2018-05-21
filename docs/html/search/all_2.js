@@ -1,6 +1,7 @@
 var searchData=
 [
   ['callswaptime',['callswaptime',['../classOpenGLThread.html#ad24a551f833274b53c53d99183c98c1f',1,'OpenGLThread']]],
+  ['canary',['canary',['../classBufferSource.html#ab807118e6c625c82092b4b95006035e0',1,'BufferSource']]],
   ['checkalive',['checkAlive',['../classLiveThread.html#a39ea8a235a429002345797a6ae900113',1,'LiveThread']]],
   ['checkbuffersize',['checkBufferSize',['../classFrameSink.html#ab1d5c7e50bcdd2463f2e384c300d578f',1,'FrameSink']]],
   ['child_5fid',['child_id',['../classRenderGroup.html#a6eb2340dba794074fdd91bfb912241a7',1,'RenderGroup']]],

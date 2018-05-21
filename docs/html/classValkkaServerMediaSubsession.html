@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.4.3</span>
+   &#160;<span id="projectnumber">0.4.4</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -93,7 +93,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classValkkaServerMediaSubsession-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">ValkkaServerMediaSubsession Class Reference</div>  </div>
+<div class="title">ValkkaServerMediaSubsession Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="dynheader">
@@ -127,6 +127,10 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a3eafe2209104a35b6a96bed9615c019f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3eafe2209104a35b6a96bed9615c019f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ValkkaServerMediaSubsession</b> (UsageEnvironment &amp;env, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;fifo, Boolean reuseFirstSource)</td></tr>
 <tr class="separator:a3eafe2209104a35b6a96bed9615c019f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20faf5acc0a166986249f11cfeb6621c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a20faf5acc0a166986249f11cfeb6621c"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaServerMediaSubsession.html#a20faf5acc0a166986249f11cfeb6621c">setDoneFlag</a> ()=0</td></tr>
+<tr class="memdesc:a20faf5acc0a166986249f11cfeb6621c"><td class="mdescLeft">&#160;</td><td class="mdescRight">call before removing this from the server .. informs the extra inner event loop (if any) <br /></td></tr>
+<tr class="separator:a20faf5acc0a166986249f11cfeb6621c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -137,6 +141,10 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a7041dcde85a535d10fbc0424b113d310"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7041dcde85a535d10fbc0424b113d310"></a>
 <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>fifo</b></td></tr>
 <tr class="separator:a7041dcde85a535d10fbc0424b113d310"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40c93db49c8364ea71b22288c3a5eab4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a40c93db49c8364ea71b22288c3a5eab4"></a>
+Boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaServerMediaSubsession.html#a40c93db49c8364ea71b22288c3a5eab4">source_alive</a></td></tr>
+<tr class="memdesc:a40c93db49c8364ea71b22288c3a5eab4"><td class="mdescLeft">&#160;</td><td class="mdescRight">A canary variable that tells us if live555 event loop has closed the buffer_source. <br /></td></tr>
+<tr class="separator:a40c93db49c8364ea71b22288c3a5eab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="liveserver_8h_source.html">liveserver.h</a></li>

@@ -10,5 +10,5 @@ var searchData=
   ['bmpars',['bmpars',['../classAVBitmapFrame.html#abf28ea9afbbfed6591ec7f753f161748',1,'AVBitmapFrame']]],
   ['briefinfoframefilter',['BriefInfoFrameFilter',['../classBriefInfoFrameFilter.html',1,'']]],
   ['buffer_5fsource',['buffer_source',['../classStream.html#a79b7e99786a5e067c83e3bba9c970300',1,'Stream::buffer_source()'],['../classValkkaServerMediaSubsession.html#a58436868b0bf1b5816cc4b04fca0e790',1,'ValkkaServerMediaSubsession::buffer_source()']]],
-  ['buffersource',['BufferSource',['../classBufferSource.html',1,'BufferSource'],['../classBufferSource.html#a814a533eb701d314be971fcd6e9695bb',1,'BufferSource::BufferSource()']]]
+  ['buffersource',['BufferSource',['../classBufferSource.html',1,'BufferSource'],['../classBufferSource.html#a335c1e436af283fb8ba8bef6f260fc34',1,'BufferSource::BufferSource()']]]
 ];

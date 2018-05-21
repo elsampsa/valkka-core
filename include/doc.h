@@ -26,7 +26,7 @@
  *  @file    doc.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.3 
+ *  @version 0.4.4 
  *  
  *  @brief Extra doxygen documentation
  *
@@ -300,6 +300,7 @@
  * 
  * Some notes on receiving/sending live streams
  * 
+ * 
  * Receiving streams
  * -----------------
  * 
@@ -310,6 +311,7 @@
  *- ValkkaRTSPClient has the target FrameFilter where the frames are being fed.  ValkkaRTSPClient::livestatus is a reference to a shared variable that is used by LiveThread::periodicTask to see if the client is alive or if it's been destroyed (calling the destructor happens within live555 callback chains) .. this part is a bit cumbersome, so fresh ideas are welcome.
  * 
  *- Signaling with the "outside world" is done by a periodic live555 task LiveThread::periodicTask that reads the signals sent from outside the thread (see LiveThread::handleSignals) 
+ * 
  * 
  * Sending streams
  * ---------------
@@ -357,6 +359,21 @@
  *- Frames flow like this: 
  *BufferSource => H264VideoStreamDiscreteFramer => H264VideoRTPSink
  * 
+ *
+ * RTSP Server
+ * -----------
+ *
+ * Some misc. observations / code walkthrough:
+ *
+ * - Inheritance:  H264ServerMediaSubsession => ValkkaServerMediaSubsession => OnDemandServerMediaSubsession 
+ * - H264ServerMediaSubsession is placed into LiveThread::server (which is RTSPServer instance)
+ * - H264ServerMediaSubsession::createNewStreamSource is called from OnDemandServerMediaSubsession::sdpLines when a DESCRIBE request is done on the RTSPServer
+ * - OnDemandServerMediaSubsession::closeStreamSource calls Medium::close on inputsource it obtained from H264ServerMediaSubsession::createNewStreamSource, when TEARDOWN is issued on the RTSPServer.
+ * - .. this basically closes our BufferSource instance (that's using a fifo), so we need to check if BufferSource has been destructed
+ * - .. this is done using a reference variable that's given to BufferSource (ValkkaServerMediaSubsession::source_alive).  That variable is checked before calling BufferSource::handleFrame.
+ * - There is a tricky inner event loop that generates sps/pps info into the sdp string at H264ServerMediaSubsession::getAuxSDPLine .. (as this has been hacked from H264VideoFileServerMediaSubsession).  That can get stuck sometimes (!)
+ * - Media sessions can be removed from the server with RTSPServer::removeServerMediaSession(media_session)
+ *
  */
 
 

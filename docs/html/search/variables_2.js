@@ -1,6 +1,7 @@
 var searchData=
 [
   ['callswaptime',['callswaptime',['../classOpenGLThread.html#ad24a551f833274b53c53d99183c98c1f',1,'OpenGLThread']]],
+  ['canary',['canary',['../classBufferSource.html#ab807118e6c625c82092b4b95006035e0',1,'BufferSource']]],
   ['child_5fid',['child_id',['../classRenderGroup.html#a6eb2340dba794074fdd91bfb912241a7',1,'RenderGroup']]],
   ['client',['client',['../classRTSPConnection.html#a9dab1076ce4f68c3f1ed49a59492bea5',1,'RTSPConnection']]],
   ['client_5fstate',['client_state',['../classSharedMemSegment.html#a2f86047ecf873beef440a1c122bbbceb',1,'SharedMemSegment']]],

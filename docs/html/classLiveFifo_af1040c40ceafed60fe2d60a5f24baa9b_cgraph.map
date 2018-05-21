@@ -2,7 +2,7 @@
 <area shape="rect" id="node2" href="$classFrameFifo.html#a37e3264d8b8f8a787cd305c79e568645" title="Tell if fifo is empty. " alt="" coords="193,15,331,42"/>
 <area shape="rect" id="node3" href="$classFrameFifo.html#a01765bd79b616a2425ba84d94a15d737" title="Take a frame &quot;ftmp&quot; from the stack, copy contents of &quot;f&quot; into &quot;ftmp&quot; and insert &quot;ftmp&quot; into the begin..." alt="" coords="188,66,336,92"/>
 <area shape="rect" id="node4" href="$classFrame.html#ac1f39d349213eafc858e44b7292d54d4" title="Returns the subclass frame type. See Frame::frameclass. " alt="" coords="785,15,941,42"/>
-<area shape="rect" id="node5" href="$classFrameFifo.html#a094d025e259aef84c8d3d4b76c0076eb" title="Recycle all frames from fifo back to stack (make a &quot;flush&quot;) " alt="" coords="394,40,541,67"/>
+<area shape="rect" id="node5" href="$classFrameFifo.html#a19ee8ecdc30a39af3f584ba403bb932f" title="Recycle all frames back to the stack. " alt="" coords="391,40,544,67"/>
 <area shape="rect" id="node7" href="$classFrame.html#a5128f5398690581f541eb9cc3a1c8432" title="Copies data to this frame from a frame of the same type (also metadata) " alt="" coords="405,91,530,118"/>
 <area shape="rect" id="node8" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="384,142,551,168"/>
 <area shape="rect" id="node6" href="$classFrameFifo.html#a5cd4bd7b55780c158d7ee8beeb99cfc2" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="599,40,737,67"/>

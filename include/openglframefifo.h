@@ -28,7 +28,7 @@
  *  @file    openglthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.3 
+ *  @version 0.4.4 
  *  
  *  @brief FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU
  *
@@ -89,8 +89,8 @@ protected:
   YUVFrame* prepareAVBitmapFrame(AVBitmapFrame* frame);    ///< Tries to get a YUVFrame with correct bitmap dimensions from the stack.  If success, returns pointer to the YUVFrame, otherwise NULL
   
 public: // redefined virtual
-  virtual bool writeCopy(Frame* f, bool wait=false);     ///< Redefined, but uses FrameFifo::writeCopy
-  virtual void recycle_(Frame* f);                       ///< Redefined, but uses FrameFifo::recycle_
+  virtual bool writeCopy(Frame* f, bool wait=false);     ///< Redefined. Uses FrameFifo::writeCopy.  Separates configuration frames and YUVFrames.
+  virtual void recycle_(Frame* f);                       ///< Redefined. Uses FrameFifo::recycle_. Separates configuration frames and YUVFrames.
   
 public:
   void allocateYUV();     ///< Allocate YUVFrame's .. must be done after OpenGLThread has been started

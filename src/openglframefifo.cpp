@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.3 
+ *  @version 0.4.4 
  *  
  *  @brief FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU
  *
@@ -104,7 +104,7 @@ void OpenGLFrameFifo::allocateYUV() {
   
 
 void OpenGLFrameFifo::deallocateYUV() {
-  recycleAll();
+  // recycleAll(); // nopes .. this is for BasicFrame, etc.
   
 #define deallocate_reservoir_yuv(PARNAME) {\
   YUVReservoir &reservoir=yuv_reservoirs[PARNAME.type];\

@@ -26,7 +26,7 @@
  *  @file    live_thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.3 
+ *  @version 0.4.4 
  *  
  *  @brief Testing the LiveThread class
  *  
@@ -476,14 +476,18 @@ void test_10() {
   
   sleep_for(5s);
   
-  livethread.stopStreamCall(ctx);
+  // livethread.stopStreamCall(ctx);
   // livethread2.deregisterOutboundCall(out_ctx); // TODO: handle dirty exit // remember: it's livethread2 !!!
   
-  sleep_for(1s);
+  // sleep_for(1s);
   
   std::cout << "stopping live thread" << std::endl;
+  
+  // commenting both of these (in addition to all other close calls) will result in the runtime environment going crazy
+  // .. because we're closing framefilters that are still in use by some processes..?
+  // we should close processes from start-to-end.  Processes have internal framefilters..!
   livethread. stopCall();
-  livethread2.stopCall();
+  // livethread2.stopCall();
 }
 
 

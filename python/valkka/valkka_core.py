@@ -1156,6 +1156,10 @@ getNumpyShmem = _valkka_core.getNumpyShmem
 def ValkkaXInitThreads():
     return _valkka_core.ValkkaXInitThreads()
 ValkkaXInitThreads = _valkka_core.ValkkaXInitThreads
+
+def setLiveOutPacketBuffermaxSize(i):
+    return _valkka_core.setLiveOutPacketBuffermaxSize(i)
+setLiveOutPacketBuffermaxSize = _valkka_core.setLiveOutPacketBuffermaxSize
 class Thread(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Thread, name, value)
@@ -1968,6 +1972,9 @@ class AVThread(Thread):
     def getBlockingFrameFilter(self):
         return _valkka_core.AVThread_getBlockingFrameFilter(self)
 
+    def setTimeTolerance(self, mstol):
+        return _valkka_core.AVThread_setTimeTolerance(self, mstol)
+
     def decodingOnCall(self):
         return _valkka_core.AVThread_decodingOnCall(self)
 
@@ -2222,4 +2229,8 @@ cvar = _valkka_core.cvar
 VERSION_MAJOR = cvar.VERSION_MAJOR
 VERSION_MINOR = cvar.VERSION_MINOR
 VERSION_PATCH = cvar.VERSION_PATCH
+DEFAULT_OPENGLTHREAD_BUFFERING_TIME = cvar.DEFAULT_OPENGLTHREAD_BUFFERING_TIME
+DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL = cvar.DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL
+DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL = cvar.DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL
+DEFAULT_TIMESTAMP_RESET_TIME = cvar.DEFAULT_TIMESTAMP_RESET_TIME
 

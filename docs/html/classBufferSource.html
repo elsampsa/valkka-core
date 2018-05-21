@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.4.3</span>
+   &#160;<span id="projectnumber">0.4.4</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -119,9 +119,9 @@ Collaboration diagram for BufferSource:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a814a533eb701d314be971fcd6e9695bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html#a814a533eb701d314be971fcd6e9695bb">BufferSource</a> (UsageEnvironment &amp;env, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;<a class="el" href="classBufferSource.html#a7d307d4aa8b7b95b84dfe5a26d674229">fifo</a>, unsigned preferredFrameSize=0, unsigned playTimePerFrame=0, unsigned offset=0)</td></tr>
-<tr class="memdesc:a814a533eb701d314be971fcd6e9695bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a814a533eb701d314be971fcd6e9695bb">More...</a><br /></td></tr>
-<tr class="separator:a814a533eb701d314be971fcd6e9695bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a335c1e436af283fb8ba8bef6f260fc34"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html#a335c1e436af283fb8ba8bef6f260fc34">BufferSource</a> (UsageEnvironment &amp;env, <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;<a class="el" href="classBufferSource.html#a7d307d4aa8b7b95b84dfe5a26d674229">fifo</a>, Boolean &amp;<a class="el" href="classBufferSource.html#ab807118e6c625c82092b4b95006035e0">canary</a>, unsigned preferredFrameSize=0, unsigned playTimePerFrame=0, unsigned offset=0)</td></tr>
+<tr class="memdesc:a335c1e436af283fb8ba8bef6f260fc34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a335c1e436af283fb8ba8bef6f260fc34">More...</a><br /></td></tr>
+<tr class="separator:a335c1e436af283fb8ba8bef6f260fc34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04cb4018658d080aec540054e5936761"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a04cb4018658d080aec540054e5936761"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html#a04cb4018658d080aec540054e5936761">handleFrame</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
 <tr class="memdesc:a04cb4018658d080aec540054e5936761"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> from <a class="el" href="classBufferSource.html#a7d307d4aa8b7b95b84dfe5a26d674229" title="Frames are being read from here. This reference leads all the way down to LiveThread::fifo. ">BufferSource::fifo</a> into <a class="el" href="classBufferSource.html#a33a2baa22bce4df04bd78d7a0a7e5cce" title="Internal fifo BasicFrame, i.e. payload frames. ">BufferSource::internal_fifo</a>. Sets <a class="el" href="classBufferSource.html#af2891d20315d560f9e30924d1be25557" title="If set, doGetNextFrame is currently re-scheduled. ">BufferSource::active</a>. Checks that FrameClass is <a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aaf17aaabc20bfe045075927934fed52d2" title="data at payload ">FrameClass::basic</a>. <br /></td></tr>
@@ -151,6 +151,10 @@ Private Attributes</h2></td></tr>
 <a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html#a7d307d4aa8b7b95b84dfe5a26d674229">fifo</a></td></tr>
 <tr class="memdesc:a7d307d4aa8b7b95b84dfe5a26d674229"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frames are being read from here. This reference leads all the way down to LiveThread::fifo. <br /></td></tr>
 <tr class="separator:a7d307d4aa8b7b95b84dfe5a26d674229"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab807118e6c625c82092b4b95006035e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab807118e6c625c82092b4b95006035e0"></a>
+Boolean &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBufferSource.html#ab807118e6c625c82092b4b95006035e0">canary</a></td></tr>
+<tr class="memdesc:ab807118e6c625c82092b4b95006035e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">If this instance of <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> get's annihilated, kill the canary (set it to false) <br /></td></tr>
+<tr class="separator:ab807118e6c625c82092b4b95006035e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1f33e4578c36c4f92818a8186430bec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1f33e4578c36c4f92818a8186430bec"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>fPreferredFrameSize</b></td></tr>
 <tr class="separator:ad1f33e4578c36c4f92818a8186430bec"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,7 +169,7 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>offset</b></td></
 <div class="textblock"><p>Implements a FramedSource for sending frames. </p>
 <p>See <a class="el" href="live_streaming_page.html">Live streaming</a> </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a814a533eb701d314be971fcd6e9695bb"></a>
+<a class="anchor" id="a335c1e436af283fb8ba8bef6f260fc34"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -180,6 +184,12 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>offset</b></td></
           <td></td>
           <td class="paramtype"><a class="el" href="classFrameFifo.html">FrameFifo</a> &amp;&#160;</td>
           <td class="paramname"><em>fifo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Boolean &amp;&#160;</td>
+          <td class="paramname"><em>canary</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -219,8 +229,8 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>offset</b></td></
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classBufferSource_a814a533eb701d314be971fcd6e9695bb_cgraph.png" border="0" usemap="#classBufferSource_a814a533eb701d314be971fcd6e9695bb_cgraph" alt=""/></div>
-<map name="classBufferSource_a814a533eb701d314be971fcd6e9695bb_cgraph" id="classBufferSource_a814a533eb701d314be971fcd6e9695bb_cgraph">
+<div class="center"><img src="classBufferSource_a335c1e436af283fb8ba8bef6f260fc34_cgraph.png" border="0" usemap="#classBufferSource_a335c1e436af283fb8ba8bef6f260fc34_cgraph" alt=""/></div>
+<map name="classBufferSource_a335c1e436af283fb8ba8bef6f260fc34_cgraph" id="classBufferSource_a335c1e436af283fb8ba8bef6f260fc34_cgraph">
 <area shape="rect" id="node2" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Like FrameFifo::recycle_ but with mutex protection. " alt="" coords="236,5,367,32"/>
 <area shape="rect" id="node3" href="classFrameFifo.html#a5cd4bd7b55780c158d7ee8beeb99cfc2" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="415,5,553,32"/>
 <area shape="rect" id="node4" href="classFrame.html#ac1f39d349213eafc858e44b7292d54d4" title="Returns the subclass frame type. See Frame::frameclass. " alt="" coords="601,5,757,32"/>

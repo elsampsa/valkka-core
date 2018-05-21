@@ -26,7 +26,7 @@
  *  @file    server.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.3 
+ *  @version 0.4.4 
  *  
  *  @brief   Live555 interface for server side: streaming to udp sockets directly or by using an on-demand rtsp server
  */ 
@@ -35,22 +35,31 @@
 #include "liveserver.h"
 
 
-BufferSource::BufferSource(UsageEnvironment& env, FrameFifo &fifo, unsigned preferredFrameSize, unsigned playTimePerFrame, unsigned offset) : FramedSource(env), fifo(fifo), fPreferredFrameSize(preferredFrameSize), fPlayTimePerFrame(playTimePerFrame), offset(offset), active(true) {
+BufferSource::BufferSource(UsageEnvironment& env, FrameFifo &fifo, Boolean &canary, unsigned preferredFrameSize, unsigned playTimePerFrame, unsigned offset) : FramedSource(env), fifo(fifo), canary(canary), fPreferredFrameSize(preferredFrameSize), fPlayTimePerFrame(playTimePerFrame), offset(offset), active(true) {
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "BufferSource: constructor!" << std::endl;
+#endif
+  canary=true;
 }
 
 BufferSource::~BufferSource() {
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "BufferSource: destructor!" << std::endl;
+#endif
   for(auto it=internal_fifo.begin(); it!=internal_fifo.end(); ++it) {
     fifo.recycle(*it);
   }
+  
+  canary=false;
 }
 
 
 void BufferSource::handleFrame(Frame* f) {
 #ifdef STREAM_SEND_DEBUG
-  std::cout << "BufferSource : handleFrame" << std::endl;
+  std::cout << "BufferSource : handleFrame: " << *f << std::endl;
 #endif
   
-  if (f->getFrameClass()!=FrameClass::basic) { // just accept BasicFrame's
+  if (f->getFrameClass()!=FrameClass::basic) { // just accept BasicFrame(s)
     fifo.recycle(f);
     return;
   }
@@ -185,7 +194,7 @@ void BufferSource::doGetNextFrame() {
 }
 
 
-Stream::Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl) : env(env), fifo(fifo), buffer_source(NULL) {
+Stream::Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl) : env(env), fifo(fifo), buffer_source(NULL), source_alive(false) {
   /*
   UsageEnvironment& env;
   RTPSink*          sink;
@@ -256,8 +265,18 @@ Stream::~Stream() {
 
 
 
-ValkkaServerMediaSubsession::ValkkaServerMediaSubsession(UsageEnvironment& env, FrameFifo &fifo, Boolean reuseFirstSource) : OnDemandServerMediaSubsession(env, reuseFirstSource), fifo(fifo) {
+ValkkaServerMediaSubsession::ValkkaServerMediaSubsession(UsageEnvironment& env, FrameFifo &fifo, Boolean reuseFirstSource) : OnDemandServerMediaSubsession(env, reuseFirstSource), fifo(fifo), source_alive(false), buffer_source(NULL) {  
 }
+/*
+See OnDemandServerMediaSubsession::deleteStream, closeStreamSource, etc.
+
+OnDemandServerMediaSubsession is given to the RTSPServer instance.  The RTSPServer acts on the OnDemandServerMediaSubsession instances and calls
+their ..
+
+  - createNewStreamSource (called by sdpLines)
+  - when teardown has been received, call deleteStream => closeStreamSource => calls Medium::close on the inputsource (that was obtained through call on createNewSource)
+*/
+
 
 
 ValkkaServerMediaSubsession::~ValkkaServerMediaSubsession() {
@@ -265,13 +284,25 @@ ValkkaServerMediaSubsession::~ValkkaServerMediaSubsession() {
 
 
 void ValkkaServerMediaSubsession::handleFrame(Frame *f) {
-  buffer_source->handleFrame(f); // buffer source recycles the frame when ready
+  if (!buffer_source) {
+    std::cout << "ValkkaServerMediaSubsession: no buffer_source created yet!" << std::endl;
+    fifo.recycle(f);
+  }
+  else if (!source_alive) {
+    std::cout << "ValkkaServerMediaSubsession: buffer source been annihilated!" << std::endl;
+    fifo.recycle(f);
+    buffer_source=NULL;
+    setDoneFlag();
+  }
+  else {
+    buffer_source->handleFrame(f); // buffer source recycles the frame when ready
+  }
 }
 
 
   
 H264Stream::H264Stream(UsageEnvironment &env, FrameFifo &fifo, const std::string adr, unsigned short int portnum, const unsigned char ttl) : Stream(env,fifo,adr,portnum,ttl) {
-  buffer_source  =new BufferSource(env, fifo, 0, 0, 4); // nalstamp offset: 4  
+  buffer_source  =new BufferSource(env, fifo, source_alive, 0, 0, 4); // nalstamp offset: 4  
   // OutPacketBuffer::maxSize = this->npacket; // TODO
   // http://lists.live555.com/pipermail/live-devel/2013-April/016816.html
   sink = H264VideoRTPSink::createNew(env,rtpGroupsock, 96);
@@ -296,17 +327,20 @@ H264ServerMediaSubsession* H264ServerMediaSubsession::createNew(UsageEnvironment
 }
 
 
-H264ServerMediaSubsession::H264ServerMediaSubsession(UsageEnvironment& env, FrameFifo &fifo, Boolean reuseFirstSource) : ValkkaServerMediaSubsession(env, fifo, reuseFirstSource),
-  fAuxSDPLine(NULL), fDoneFlag(0), fDummyRTPSink(NULL) {
+H264ServerMediaSubsession::H264ServerMediaSubsession(UsageEnvironment& env, FrameFifo &fifo, Boolean reuseFirstSource) : ValkkaServerMediaSubsession(env, fifo, reuseFirstSource), fAuxSDPLine(NULL), fDoneFlag(0), fDummyRTPSink(NULL) {
 }
 
 
 H264ServerMediaSubsession::~H264ServerMediaSubsession() {
-  delete[] fAuxSDPLine;
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "H264ServerMediaSubsession: destructor!" << std::endl;
+#endif
+  if (fAuxSDPLine!=NULL) { delete[] fAuxSDPLine; }
+  // delete buffer_source; // deleted, cause OnDemandServerMediaSubsession::closeStreamSource
 }
 
 
-static void afterPlayingDummy(void* clientData) {
+void H264ServerMediaSubsession::afterPlayingDummy(void* clientData) {
   H264ServerMediaSubsession* subsess = (H264ServerMediaSubsession*)clientData;
   subsess->afterPlayingDummy1();
 }
@@ -317,16 +351,28 @@ void H264ServerMediaSubsession::afterPlayingDummy1() {
   envir().taskScheduler().unscheduleDelayedTask(nextTask());
   // Signal the event loop that we're done:
   setDoneFlag();
+  Medium::close(buffer_source);
+  buffer_source =NULL;
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "H264ServerMediaSubsession: afterPlayingDummy1: deleted buffer_source" << std::endl;
+#endif
 }
 
 
-static void checkForAuxSDPLine(void* clientData) {
+void H264ServerMediaSubsession::checkForAuxSDPLine(void* clientData) {
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "H264ServerMediaSubsession: checkForAuxSDPLine" << std::endl;
+#endif
   H264ServerMediaSubsession* subsess = (H264ServerMediaSubsession*)clientData;
   subsess->checkForAuxSDPLine1();
 }
 
 
 void H264ServerMediaSubsession::checkForAuxSDPLine1() {
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "H264ServerMediaSubsession: checkForAuxSDPLine1" << std::endl;
+#endif
+  
   nextTask() = NULL;
 
   char const* dasl;
@@ -348,6 +394,11 @@ void H264ServerMediaSubsession::checkForAuxSDPLine1() {
 
 
 char const* H264ServerMediaSubsession::getAuxSDPLine(RTPSink* rtpSink, FramedSource* inputSource) {
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "H264ServerMediaSubsession: getAuxSDPLine" << std::endl;
+#endif
+  // return ""; // TODO: on some occasions this will recurse for ever.. fix.  How to call setDoneFlag from the main program level where we can only access the OnDemandMediaServerSession-derived instance
+  
   if (fAuxSDPLine != NULL) return fAuxSDPLine; // it's already been set up (for a previous client)
 
   if (fDummyRTPSink == NULL) { // we're not already setting it up for another, concurrent stream
@@ -363,24 +414,35 @@ char const* H264ServerMediaSubsession::getAuxSDPLine(RTPSink* rtpSink, FramedSou
     checkForAuxSDPLine(this);
   }
 
-  envir().taskScheduler().doEventLoop(&fDoneFlag);
+  envir().taskScheduler().doEventLoop(&fDoneFlag); // tricky **it! yet another event loop.. just for reading the first bytes of the stream to generate an sdp string..
 
   return fAuxSDPLine;
 }
 
 
 FramedSource* H264ServerMediaSubsession::createNewStreamSource(unsigned /*clientSessionId*/, unsigned& estBitrate) {
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "H264ServerMediaSubsession: createNewStreamSource" << std::endl;
+#endif
   estBitrate = 500; // kbps, estimate
 
   // Create the video source:
-  buffer_source  =new BufferSource(envir(), fifo, 0, 0, 4); // nalstamp offset: 4
+  // buffer_source  =new BufferSource(envir(), fifo, 0, 0, 4); // nalstamp offset: 4
+  buffer_source  =new BufferSource(envir(), fifo, source_alive, 0, 0, 0); // OnDemandServerMediaSubsession derived classes need the NAL stamp ..
   
   // Create a framer for the Video Elementary Stream:
   return H264VideoStreamFramer::createNew(envir(), buffer_source);
+  
+  // what's going on here..?
+  // OnDemandServerMediaSubsession::sdpLines() calls this method .. creates a dummy RTSPSink and derives from there the sdp string .. wtf?
 }
 
 
 RTPSink* H264ServerMediaSubsession ::createNewRTPSink(Groupsock* rtpGroupsock, unsigned char rtpPayloadTypeIfDynamic, FramedSource* /*inputSource*/) {
+#ifdef STREAM_SEND_DEBUG
+  std::cout << "H264ServerMediaSubsession: createNewRTPSink" << std::endl;
+#endif
+  
   return H264VideoRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);
 }
 

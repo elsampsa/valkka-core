@@ -29,7 +29,7 @@
  *  @file    filethread.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.4.3 
+ *  @version 0.4.4 
  *  
  *  @brief A Thread handling files and sending frames to fifo
  */ 

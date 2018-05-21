@@ -28,7 +28,7 @@
  *  @file    decoder.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.3 
+ *  @version 0.4.4 
  *  
  *  @brief FFmpeg decoders
  * 
@@ -121,6 +121,7 @@ public:
   AVCodec*        av_codec;          ///< FFmpeg internal data structure
   
 public:
+  // needs virtual void output, virtual void pull 
   virtual void flush();  
 };
 

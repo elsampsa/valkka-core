@@ -11,6 +11,7 @@ var searchData=
   ['serverinit',['serverInit',['../classSharedMemSegment.html#ab01c29a08c53b75a2ebd1b9722dba7b4',1,'SharedMemSegment']]],
   ['serverpush',['serverPush',['../classSharedMemRingBuffer.html#af8bec32b4a67cf6e2aa2865db379525a',1,'SharedMemRingBuffer']]],
   ['setaffinity',['setAffinity',['../classThread.html#a40787163eb868a2fc0eba23dfd4cd395',1,'Thread']]],
+  ['setdoneflag',['setDoneFlag',['../classValkkaServerMediaSubsession.html#a20faf5acc0a166986249f11cfeb6621c',1,'ValkkaServerMediaSubsession::setDoneFlag()'],['../classH264ServerMediaSubsession.html#ab3cf0c105ce5a4f0ecfc3bd0c696954b',1,'H264ServerMediaSubsession::setDoneFlag()']]],
   ['setflag',['setFlag',['../classSharedMemRingBuffer.html#ad27804902351c02aa666ca4c3febc824',1,'SharedMemRingBuffer']]],
   ['setreceivebuffer',['setReceiveBuffer',['../classFrameSink.html#a7aee4296fc78897eef60a9b1149e24f8',1,'FrameSink']]],
   ['setrefmstime',['setRefMstime',['../classFileStream.html#a8f6115df951a7e447cb349011844dcb3',1,'FileStream']]],

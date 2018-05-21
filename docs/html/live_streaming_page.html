@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.4.3</span>
+   &#160;<span id="projectnumber">0.4.4</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -115,7 +115,19 @@ sink           = H264VideoRTPSink::createNew(env,rtpGroupsock, 96);
 
 sink-&gt;startPlaying(*(terminal), this-&gt;afterPlaying, this);
 </pre></li>
-<li>Frames flow like this: <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> =&gt; H264VideoStreamDiscreteFramer =&gt; H264VideoRTPSink </li>
+<li>Frames flow like this: <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> =&gt; H264VideoStreamDiscreteFramer =&gt; H264VideoRTPSink</li>
+</ul>
+<h2>RTSP Server </h2>
+<p>Some misc. observations / code walkthrough:</p>
+<ul>
+<li>Inheritance: <a class="el" href="classH264ServerMediaSubsession.html">H264ServerMediaSubsession</a> =&gt; <a class="el" href="classValkkaServerMediaSubsession.html">ValkkaServerMediaSubsession</a> =&gt; OnDemandServerMediaSubsession</li>
+<li><a class="el" href="classH264ServerMediaSubsession.html">H264ServerMediaSubsession</a> is placed into LiveThread::server (which is RTSPServer instance)</li>
+<li>H264ServerMediaSubsession::createNewStreamSource is called from OnDemandServerMediaSubsession::sdpLines when a DESCRIBE request is done on the RTSPServer</li>
+<li>OnDemandServerMediaSubsession::closeStreamSource calls Medium::close on inputsource it obtained from H264ServerMediaSubsession::createNewStreamSource, when TEARDOWN is issued on the RTSPServer.</li>
+<li>.. this basically closes our <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> instance (that's using a fifo), so we need to check if <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> has been destructed</li>
+<li>.. this is done using a reference variable that's given to <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> (<a class="el" href="classValkkaServerMediaSubsession.html#a40c93db49c8364ea71b22288c3a5eab4" title="A canary variable that tells us if live555 event loop has closed the buffer_source. ">ValkkaServerMediaSubsession::source_alive</a>). That variable is checked before calling <a class="el" href="classBufferSource.html#a04cb4018658d080aec540054e5936761" title="Copies a Frame from BufferSource::fifo into BufferSource::internal_fifo. Sets BufferSource::active. Checks that FrameClass is FrameClass::basic. ">BufferSource::handleFrame</a>.</li>
+<li>There is a tricky inner event loop that generates sps/pps info into the sdp string at H264ServerMediaSubsession::getAuxSDPLine .. (as this has been hacked from H264VideoFileServerMediaSubsession). That can get stuck sometimes (!)</li>
+<li>Media sessions can be removed from the server with RTSPServer::removeServerMediaSession(media_session) </li>
 </ul>
 </div></div><!-- contents -->
 <!-- start footer part -->

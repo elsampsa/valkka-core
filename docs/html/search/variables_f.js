@@ -16,6 +16,7 @@ var searchData=
   ['slot_5fcontext',['slot_context',['../classRenderContext.html#a6e4acba0baff973f7bc00bd9ba572d9b',1,'RenderContext']]],
   ['slot_5ftimes',['slot_times',['../classOpenGLThread.html#a18f06a368d98552334fcb4b6c72a3f24',1,'OpenGLThread']]],
   ['slots_5f',['slots_',['../classFileThread.html#a1620a1f1113a68d9f1dfae025b6cb672',1,'FileThread::slots_()'],['../classLiveThread.html#a5155714795cf205ccb18b852076ebe60',1,'LiveThread::slots_()'],['../classOpenGLThread.html#a1e532a9d09d7ee772bceb69b00591c59',1,'OpenGLThread::slots_()']]],
+  ['source_5falive',['source_alive',['../classStream.html#aba24c9a45e98758b31f574a7fbb8c460',1,'Stream::source_alive()'],['../classValkkaServerMediaSubsession.html#a40c93db49c8364ea71b22288c3a5eab4',1,'ValkkaServerMediaSubsession::source_alive()']]],
   ['stacks',['stacks',['../classFrameFifo.html#acd979060b24d854989b9721de42a7ca5',1,'FrameFifo']]],
   ['start_5fcondition',['start_condition',['../classThread.html#a7d9732ab4852c250f4fbfc5dd5356de2',1,'Thread']]],
   ['start_5fmutex',['start_mutex',['../classThread.html#a3fe753fa03016d016345c1171b123828',1,'Thread']]],

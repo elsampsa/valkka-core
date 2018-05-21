@@ -26,7 +26,7 @@
  *  @file    livethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.3 
+ *  @version 0.4.4 
  *  
  *  @brief A live555 thread
  *
@@ -554,8 +554,17 @@ void RTSPOutbound::reinit() {
   */
   // this should do the trick .. ?
   if (media_session!=NULL) {
-    Medium::close(media_session);
-    media_session=NULL;
+#ifdef STREAM_SEND_DEBUG
+    std::cout << "RTSPOutbound: reinit: closing media_session" << std::endl;
+#endif
+    // Medium::close(media_session); // NOT like this!
+    // media_session->setDoneFlag(); // that tricky inner event loop.. // nopes .. that would be the subsession
+    // TODO: create ServerMediaSubsessionIterator and call setDoneFlag for each subsession
+    server.removeServerMediaSession(media_session); // this is the correct way..
+    // media_session=NULL;
+#ifdef STREAM_SEND_DEBUG
+    std::cout << "RTSPOutbound: reinit: media_session closed" << std::endl;
+#endif
   }
   
   for (auto it=media_subsessions.begin(); it!=media_subsessions.end(); ++it) {
@@ -582,6 +591,9 @@ void RTSPOutbound::handleFrame(Frame *f) {
     } // REINIT
     
     if (at_setup==false) { // INIT
+#ifdef STREAM_SEND_DEBUG
+      std::cout << "RTSPOutbound: handleFrame: creating ServerMediaSession" << std::endl;
+#endif
       // create Session
       char const* descriptionString ="Session streamed by Valkka";
       char const* stream_name       ="Stream"; // TODO: add more info
@@ -597,9 +609,26 @@ void RTSPOutbound::handleFrame(Frame *f) {
     
     switch (setupframe->codec_id) { // NEW_CODEC_DEV // when adding new codecs, make changes here: add relevant stream per codec
       case AV_CODEC_ID_H264:
-        media_subsessions[subsession_index]=H264ServerMediaSubsession::createNew(env, fifo, true); //re-use-first-source = true
+#ifdef STREAM_SEND_DEBUG
+      std::cout << "RTSPOutbound: handleFrame: creating H264ServerMediaSubsession" << std::endl;
+#endif
+        media_subsessions[subsession_index]=H264ServerMediaSubsession::createNew(env, fifo, false); //last: re-use-first-source
         media_session->addSubsession(media_subsessions[subsession_index]); 
         break;
+      
+      /*
+      char const* streamName = "h264ESVideoTest";
+      char const* inputFileName = "test.264";
+      ServerMediaSession* sms
+        = ServerMediaSession::createNew(*env, streamName, streamName,
+                                        descriptionString);
+      sms->addSubsession(H264VideoFileServerMediaSubsession
+                        ::createNew(*env, inputFileName, reuseFirstSource));
+      rtspServer->addServerMediaSession(sms);
+
+      announceStream(rtspServer, sms, streamName, inputFileName);
+      */
+        
       default:
         //TODO: implement VoidStream
         break;
@@ -609,12 +638,24 @@ void RTSPOutbound::handleFrame(Frame *f) {
   }
   else { // PAYLOAD FRAME
     if (at_setup) { // CLOSE SETUP
-    // ** do whatever necessary to close up the setup
+#ifdef STREAM_SEND_DEBUG
+      std::cout << "RTSPOutbound: handleFrame: closing setup: subsession_index=" << subsession_index << std::endl;
+#endif
+      // ** do whatever necessary to close up the setup
       server.addServerMediaSession(media_session);
       setup_ok=true; 
+      at_setup=false;
+#ifdef STREAM_SEND_DEBUG
+      char* url = server.rtspURL(media_session);
+      std::cout << "RTSPOutbound: handleFrame: stream address: " << url << std::endl;
+      delete[] url;
+#endif
     } // CLOSE SETUP
     
     if (setup_ok==false) {
+#ifdef STREAM_SEND_DEBUG
+      std::cout << "RTSPOutbound: handleFrame: got payload but never setup: subsession_index=" << subsession_index << std::endl;
+#endif
       // ** setup has not been started yet .. write an error message?
       fifo.recycle(f); // return frame to the stack - never forget this!
     }
@@ -628,6 +669,11 @@ void RTSPOutbound::handleFrame(Frame *f) {
     }
     else {
       // ** write payload
+#ifdef STREAM_SEND_DEBUG
+      std::cout << "RTSPOutbound: handleFrame: payload=" << *f << std::endl;
+#endif
+      
+      //TODO: we don't know what live555 event loop has been up to.. it may have closed the whole subsession..!
       media_subsessions[subsession_index]->handleFrame(f);
     }
   } // PAYLOAD FRAME

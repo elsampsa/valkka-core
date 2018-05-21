@@ -1,6 +1,7 @@
 # Valkka - OpenSource Video Surveillance and Management for Linux
 
 ## Synopsis
+
 The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VMAs) in Linux environment.  The idea is create VMA systems with graphical user interfaces (GUIs) using the combination of python3 and Qt (i.e. PyQt).
 
 ## For the impatient
@@ -13,6 +14,8 @@ If you are interested in the core development, keep on reading.
 
 ## Why this library?
 
+Valkka is *not* your browser-based-javacsript-node.js-cloud toy.  We're writing a library for building large ip camera systems in LAN (or virtual-LAN / VPS) environments, capable of doing simultaneously massive live video streaming, surveillance, recording and machine vision.
+
 Lets take a look at a typical video management system architecture problem:
 - Stream H264 video from an IP camera using the RTSP protocol
 - Branch that stream, and direct it to (1) filesystem and (2) a decoder
@@ -21,7 +24,7 @@ Lets take a look at a typical video management system architecture problem:
   - (4) A Fullscreen X-window on screen 1
   - (5) To a smaller X-window on screen 2
 - The media stream should be decoded once and only once
-- The program should be controllable through python3, with graphical interface based on Qt
+- Graphical interface should be based on a solid GUI desktop framework (say, Qt or GTK)
 
 You might try to tackle this with some available stock media player libraries, but I'll promise, you wont get far.
 
@@ -37,7 +40,7 @@ Using Valkka, you can instantiate threads, and define how media streams are bran
                   +--> Filesystem          +------> [OpenGLThread] -- > X window system
              
 Some key features of the Valkka library are:
-- Python3 API: create process topologies from python3 only.
+- Python3 API: create process topologies from Python3.
 - Develop sleek graphical interfaces fast with PyQt.
 - The library itself runs purely in C++.  No python Global Interpreter Lock (GIL) problems here.
 - Connections to streaming devices (IP cameras, SDP files) are done using the Live555 media streaming library
@@ -52,11 +55,13 @@ Some key features of the Valkka library are:
 - For an overview of technical details, see [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
 
 
-## Features
+## Versions and Features
 
-### Current stable version is 0.4.2
+We're currently at alpha
 
-0.4.2 Version
+### Current stable version is 0.4.3
+
+0.4.3 Version
 - Now reads acc in addition to annex b h264
 
 ### Older versions
@@ -142,9 +147,6 @@ Creating the python3 interface: go to "python/" directory and read there "README
 
 Want to modify and develop further Valkka source code?  Your effort is needed.  You should start by reading some of the cpp documentation.
 
-- Found a bug?  Send a message or a patch here or to Valkka [google group](https://groups.google.com/forum/#!forum/valkka)
-- Want to implement a new feature?  Create your own development branch.  We will merge it once you have ran the tests (refer to "README_TESTS" in your build directory)
-
 ## Resources
 
 1. Discussion threads:
@@ -152,15 +154,14 @@ Want to modify and develop further Valkka source code?  Your effort is needed.  
   - [GLX / OpenGL Rendering](https://www.opengl.org/discussion_boards/showthread.php/200394-glxSwapBuffers-and-glxMakeCurrent-when-streaming-to-multiple-X-windowses)
 
 2. Doxygen generated [documentation](https://elsampsa.github.io/valkka-core/)
-3. Google [group](https://groups.google.com/forum/#!forum/valkka)
-4. The examples [repository](https://github.com/elsampsa/valkka-examples)
+3. The examples [repository](https://github.com/elsampsa/valkka-examples)
 
 ## Authors
 Sampsa Riikonen (core programming, opengl shader programming, python programming)
 
-Marco Eranko (testing)
-
 Petri Eranko (financing, testing)
+
+Marco Eranko (testing)
 
 Markus Kaukonen (opengl shader programming, testing)
 
