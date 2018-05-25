@@ -29,7 +29,7 @@
  *  @file    opengl.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.4 
+ *  @version 0.4.5 
  *  
  *  @brief OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines
  *  
@@ -37,6 +37,10 @@
 
 #include "frame.h"
 #include "constant.h"
+//#include<GL/glew.h>
+//#include<GL/glx.h>
+//#include<GL/glxext.h>
+
 
 int is_glx_extension_supported(Display *dpy, const char *query);
 

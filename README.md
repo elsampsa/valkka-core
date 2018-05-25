@@ -14,7 +14,7 @@ If you are interested in the core development, keep on reading.
 
 ## Why this library?
 
-Valkka is *not* your browser-based-javacsript-node.js-cloud toy.  We're writing a library for building large ip camera systems in LAN (or virtual-LAN / VPS) environments, capable of doing simultaneously massive live video streaming, surveillance, recording and machine vision.
+Valkka is *not* your browser-based-javacsript-node.js-cloud toy.  We're writing a library for building large ip camera systems in LAN (or virtual-LAN / VPN) environments, capable of doing simultaneously massive live video streaming, surveillance, recording and machine vision.
 
 Lets take a look at a typical video management system architecture problem:
 - Stream H264 video from an IP camera using the RTSP protocol
@@ -59,12 +59,15 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.4.3
+### Current stable version is 0.4.4
+
+0.4.4 Version
+- RTSP server works
+
+### Older versions
 
 0.4.3 Version
 - Now reads acc in addition to annex b h264
-
-### Older versions
 
 0.4.0 Version : "The Rewrite"
 - A complete rewrite of the library

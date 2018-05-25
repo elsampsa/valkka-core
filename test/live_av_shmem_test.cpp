@@ -26,7 +26,7 @@
  *  @file    live_av_shmem_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.4 
+ *  @version 0.4.5 
  *  
  *  @brief   Test shmem and swscaling
  *

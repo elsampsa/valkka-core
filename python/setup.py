@@ -122,7 +122,7 @@ setup(
   name = "valkka",
   
   # WARNING: the following line is modified by the "setver.bash" script
-  version = "0.4.4", 
+  version = "0.4.5", 
   
   install_requires = [
     'docutils>=0.3',

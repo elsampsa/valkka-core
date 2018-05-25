@@ -26,7 +26,7 @@
  *  @file    livethread_rtsp_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.4.4 
+ *  @version 0.4.5 
  *  
  *  @brief 
  *
@@ -68,7 +68,7 @@ void test_1() {
   
   sleep_for(1s);
 
-  LiveOutboundContext out_ctx = LiveOutboundContext(LiveConnectionType::rtsp, std::string("224.1.168.91"), 2, 50000);
+  LiveOutboundContext out_ctx = LiveOutboundContext(LiveConnectionType::rtsp, std::string("kokkelis"), 2, 0); 
   livethread2.registerOutboundCall(out_ctx);
   
   sleep_for(1s);
@@ -105,7 +105,7 @@ void test_2() {
   
   sleep_for(1s);
 
-  LiveOutboundContext out_ctx = LiveOutboundContext(LiveConnectionType::rtsp, std::string("224.1.168.91"), 2, 50000);
+  LiveOutboundContext out_ctx = LiveOutboundContext(LiveConnectionType::rtsp, std::string("kokkelis"), 2, 50000); // ffplay rtsp://localhost:8554/kokkelis
   livethread2.registerOutboundCall(out_ctx);
   
   sleep_for(1s);
@@ -155,7 +155,7 @@ void test_3() {
   
   sleep_for(1s);
 
-  LiveOutboundContext out_ctx = LiveOutboundContext(LiveConnectionType::rtsp, std::string("224.1.168.91"), 2, 50000);
+  LiveOutboundContext out_ctx = LiveOutboundContext(LiveConnectionType::rtsp, std::string("kokkelis"), 2, 0); // ffplay rtsp://localhost:8554/kokkelis
   livethread2.registerOutboundCall(out_ctx);
   
   sleep_for(1s);

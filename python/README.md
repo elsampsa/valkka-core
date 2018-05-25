@@ -1,5 +1,5 @@
 
-# Packaging
+# Packaging for Python
 
 ## Building the Python3 bindings
 
@@ -19,9 +19,9 @@ You might want to create the bindings by (1) using system-wide installed header 
 
 Go to directory "ext/" and run there scripts "ln_ffmpeg.bash" and "ln_live.bash".  Now the setup script can find ffmpeg and live555 header files.
 
-Run the script "make_links.bash".  Now the setup script can find the valkka header files.
+Run in this directory "make_links.bash".  Now the setup script can find the valkka header files.
 
-Before compiling, we must inform the linker where the "libValkka.so" is.  If you are using system-wide (1), linker should find it automatically.  If you're doing custom-compiled, run first "source test_env.bash" in your relevant build directory (it sets the "LD_LIBRARY_PATH" environment variable that we use here also in link time)
+Before compiling, we must inform the linker where the "libValkka.so" is.  If you are using system-wide (1), linker should find it automatically.  If you're doing custom-compiled, run first "source test_env.bash" in your build directory (it sets the "LD_LIBRARY_PATH" environment variable that we use here also in link time)
 
 Next, depending on your python version, run 
 
@@ -43,13 +43,18 @@ Here we have several options for different distribution strategies:
 1. *makesourcekg3.bash*
   This creates a traditional source package.  When you run install on a package created by this script, it tries to compile the cpp extensions.  The scenario for this one is, that you have installed libValkka.so.x from a debian package and that the header files necessary for compilation are in place - and that the setup.py finds them (say, with pkg-config).  Not functional at the moment.
 
-2. *makefakesourcepkg3.bash*
-  All the python code is in source format (.py).  Precompiled shared libraries are copied into the package.  Works only at a system where the package was compiled (in my case, x86_64 based on Ubuntu 16.04 LTS), or in a very similar one (same versions of all fundamental libraries)
+2. *makecontainedpkg3.bash*
+  This creates a "self-contained" package with all necessary binary files.  Python code is in source format (.py), while two binary files, the Valkka shared library (valkka/libValkka.so.N) and pre-compiled Valkka python bindings (valkka/_valkka_core.so) are included in the package.  
+  Works only at a system where the package was compiled (in my case, x86_64 based on Ubuntu 16.04 LTS), or in a very similar one (same versions of all fundamental libraries).
+  You need to keep a softlink to your compiled libValkka.so.N in the valkka/ directory
 
-3. *makewhlpk3.bash*
-  Binary package with python bytecode - so it's very sensitive to the exact python version, etc.
+3. *makebindingpkg3.bash*
+  This version includes only the python bindings (valkka/_valkka_core.so), not libValkka (which you have to install, say, from a debian package)
 
-Strategy (1) is the healthiest one.  However, it requires .deb packages for various linux distros and were just in the alpha version, so  **for the moment, use (2).**
+4. *makewhlpk3.bash*
+  Like (3), but a traditional python binary package - very sensitive to the exact python version, etc.
+
+Strategy (1) is the healthiest one.  However, it requires the installation of a deb package (too much effort for some people nowadays) and were just in the alpha version, so  **for the moment, use (2).**  (btw, that's what you get from PyPi).  Remember to "cleandist.bash" between successive make*pkg3.bash runs.
 
 # Developers
 

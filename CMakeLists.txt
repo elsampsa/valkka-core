@@ -124,7 +124,7 @@ endif (stream_send_debug)
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "0") 
 SET(MINOR_VERSION "4") 
-SET(PATCH_VERSION "4") 
+SET(PATCH_VERSION "5") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
 # *** define build type: Debug or Release # now from the command line
@@ -329,24 +329,38 @@ SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "")
 # SET(CPACK_PACKAGE_INSTALL_DIRECTORY "dir") # don't use
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib) # install the shared library
-install(DIRECTORY "${CMAKE_SOURCE_DIR}/include" DESTINATION valkka FILES_MATCHING PATTERN "*.h") # install header files
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/include" DESTINATION include/valkka FILES_MATCHING PATTERN "*.h") # install header files
 # The install command: https://cmake.org/cmake/help/v3.0/command/install.html
 
+# Cmake's INSTALL command is totally cryptic
+# what the INSTALL command (maybe) does ..
+# .. it takes the last bit of DIRECTORY and puts matched files into DESTINATION/last_bit
+
+# Cmake manual:
+# "The last component of each directory name is appended to the destination directory but a trailing slash may be used to avoid this because it leaves the last component empty."
+# fair enough! :)
+
 if(CUSTOM_BUILD) # include header files ..
-  # install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION include/valkka FILES_MATCHING PATTERN "*.h")
+  install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/" DESTINATION include/valkka FILES_MATCHING PATTERN "*.h")
+  
   # install(DIRECTORY "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include" DESTINATION include/valkka FILES_MATCHING PATTERN "*.hh")
-  install(DIRECTORY "${LIVE555_ROOT}/liveMedia/include" DESTINATION valkka/liveMedia FILES_MATCHING PATTERN "*.h*")
-  install(DIRECTORY "${LIVE555_ROOT}/groupsock/include" DESTINATION valkka/groupsock FILES_MATCHING PATTERN "*.h*")
-  install(DIRECTORY "${LIVE555_ROOT}/BasicUsageEnvironment/include" DESTINATION valkka/BasicUsageEnvironment FILES_MATCHING PATTERN "*.h*")
-  install(DIRECTORY "${LIVE555_ROOT}/UsageEnvironment/include" DESTINATION valkka/UsageEnvironment FILES_MATCHING PATTERN "*.h*")
+  
+  install(DIRECTORY "${LIVE555_ROOT}/liveMedia/include"               DESTINATION include/valkka/liveMedia             FILES_MATCHING PATTERN "*.h*")
+  install(DIRECTORY "${LIVE555_ROOT}/groupsock/include"               DESTINATION include/valkka/groupsock             FILES_MATCHING PATTERN "*.h*")
+  install(DIRECTORY "${LIVE555_ROOT}/BasicUsageEnvironment/include"   DESTINATION include/valkka/BasicUsageEnvironment FILES_MATCHING PATTERN "*.h*")
+  install(DIRECTORY "${LIVE555_ROOT}/UsageEnvironment/include"        DESTINATION include/valkka/UsageEnvironment      FILES_MATCHING PATTERN "*.h*")
+  
+  # install(DIRECTORY "${LIVE555_ROOT}"        DESTINATION include/valkka FILES_MATCHING PATTERN "*.h*") # does the right thing .. why? ****ing CMake
   
   # include header files if someone want's to use the cpp API.  Must take care thought, that the API user uses the correct header files (i.e. these, instead of some other versions)
-  install(DIRECTORY "${FFMPEG_ROOT}/libavfilter" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h") # don't really need this ..
-  install(DIRECTORY "${FFMPEG_ROOT}/libavformat" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h")
-  install(DIRECTORY "${FFMPEG_ROOT}/libavcodec" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h")
-  install(DIRECTORY "${FFMPEG_ROOT}/libavutil" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h")
-  install(DIRECTORY "${FFMPEG_ROOT}/libswscale" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h")
-  install(DIRECTORY "${FFMPEG_ROOT}/libswresample" DESTINATION valkka/ffmpeg FILES_MATCHING PATTERN "*.h")
+  install(DIRECTORY "${FFMPEG_ROOT}/libavfilter"   DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h") # don't really need this ..
+  install(DIRECTORY "${FFMPEG_ROOT}/libavformat"   DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
+  install(DIRECTORY "${FFMPEG_ROOT}/libavcodec"    DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
+  install(DIRECTORY "${FFMPEG_ROOT}/libavutil"     DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
+  install(DIRECTORY "${FFMPEG_ROOT}/libswscale"    DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
+  install(DIRECTORY "${FFMPEG_ROOT}/libswresample" DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
+  
+  # install(DIRECTORY "${FFMPEG_ROOT}" DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
   
   # when compiling on my linux box, I use:
   # -I/home/sampsa/live555/live/UsageEnvironment/include

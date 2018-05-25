@@ -26,7 +26,7 @@
  *  @file    livethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.4 
+ *  @version 0.4.5 
  *  
  *  @brief A live555 thread
  *
@@ -596,7 +596,7 @@ void RTSPOutbound::handleFrame(Frame *f) {
 #endif
       // create Session
       char const* descriptionString ="Session streamed by Valkka";
-      char const* stream_name       ="Stream"; // TODO: add more info
+      char const* stream_name       =ctx.address.c_str();
       media_session = ServerMediaSession::createNew(env, stream_name, stream_name, descriptionString);
       at_setup=true;
     } // INIT
@@ -1022,6 +1022,7 @@ void LiveThread::deregisterStream(LiveConnectionContext &connection_ctx) {
         delete connection;
       }
       this->slots_[connection_ctx.slot]=NULL; // case 1
+      break;
   } // switch
 }
 
@@ -1083,6 +1084,8 @@ void LiveThread::registerOutbound(LiveOutboundContext &outbound_ctx) {
             this->out_slots_[outbound_ctx.slot] = new RTSPOutbound(*env, *server, infifo, outbound_ctx);
             livethreadlogger.log(LogLevel::debug) << "LiveThread: "<<name<<" registerOutbound : rtsp stream registered at slot "  << outbound_ctx.slot << " with ptr " << this->out_slots_[outbound_ctx.slot] << std::endl;
           }
+          break;
+          
         default:
           livethreadlogger.log(LogLevel::normal) << "LiveThread: "<<name<<" registerOutbound : no such LiveConnectionType" << std::endl;
           break;
@@ -1111,6 +1114,7 @@ void LiveThread::deregisterOutbound(LiveOutboundContext &outbound_ctx) {
       // TODO: what else?
       delete outbound;
       this->out_slots_[outbound_ctx.slot]=NULL;
+      break;
   }
 }
 

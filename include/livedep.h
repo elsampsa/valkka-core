@@ -26,7 +26,7 @@
  *  @file    livedep.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.4 
+ *  @version 0.4.5 
  *  
  *  @brief List of common header files
  *

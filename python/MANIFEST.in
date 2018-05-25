@@ -1,2 +1,2 @@
 include valkka/_valkka_core.so
-include valkka/libValkka.so.0
+# include valkka/libValkka.so.*

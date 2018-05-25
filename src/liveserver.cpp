@@ -26,7 +26,7 @@
  *  @file    server.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.4 
+ *  @version 0.4.5 
  *  
  *  @brief   Live555 interface for server side: streaming to udp sockets directly or by using an on-demand rtsp server
  */ 
@@ -285,11 +285,15 @@ ValkkaServerMediaSubsession::~ValkkaServerMediaSubsession() {
 
 void ValkkaServerMediaSubsession::handleFrame(Frame *f) {
   if (!buffer_source) {
+#ifdef STREAM_SEND_DEBUG
     std::cout << "ValkkaServerMediaSubsession: no buffer_source created yet!" << std::endl;
+#endif
     fifo.recycle(f);
   }
   else if (!source_alive) {
+#ifdef STREAM_SEND_DEBUG
     std::cout << "ValkkaServerMediaSubsession: buffer source been annihilated!" << std::endl;
+#endif
     fifo.recycle(f);
     buffer_source=NULL;
     setDoneFlag();
