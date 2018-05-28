@@ -271,8 +271,25 @@ class OpenGLThread:
     return window_id
   
 
+  def newRenderGroup(self,window_id):
+    return self.core.newRenderGroupCall(window_id)
+  
+  
+  def delRenderGroup(self,window_id):
+    return self.core.delRenderGroupCall(window_id)
+  
+  
+  def newRenderContextCall(self,slot,window_id,z=0):
+    return self.core.newRenderContextCall(slot, window_id, z) # returns token
+  
+  
+  def delRenderContext(self,token):
+    return self.core.delRenderContextCall(token)
+  
+  
   def connect(self,slot=0,window_id=0):
     """Returns a unique token identifying the slot => x-window mapping.  Returns 0 if mapping failed.
+    TODO: self.core (i.e. the cpp wrapped OpenGLThread already does accounting.. do we really need double accounting of render groups / contexes here ..?
     """
     if (slot==0):
       raise(AssertionError("valid slot number missing"))

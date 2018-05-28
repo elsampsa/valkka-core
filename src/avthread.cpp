@@ -157,11 +157,10 @@ void AVThread::run() {
             std::cout << "AVThread: "<< this->name <<" : run : decoder num " <<subsession_index<< " got frame " << std::endl;
 #endif
             
-#ifdef OPENGL_TIMING
-            // dt=(getCurrentMsTimestamp()-decoder->out_frame.mstimestamp);
+#ifdef PROFILE_TIMING
             dt=(getCurrentMsTimestamp()-decoder->getMsTimestamp());
-            if (dt>=500) {
-              std::cout << "AVThread: " << this->name <<" run: timing : decoder sending frame " << dt << " ms late" << std::endl;
+            if (dt>=300) {
+              std::cout << "[PROFILE_TIMING] AVThread: " << this->name <<" run: decoder sending frame " << dt << " ms late" << std::endl;
             }
 #endif
             if (mstimetolerance>0) { // late frames can be dropped here, before their insertion to OpenGLThreads fifo

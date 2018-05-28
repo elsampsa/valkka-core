@@ -537,6 +537,14 @@ void FrameSink::afterGettingFrame(unsigned frameSize, unsigned numTruncatedBytes
   basicframe.payload.resize(checkBufferSize(frameSize)); // set correct frame size .. now information about the packet length goes into the filter chain
   
   scs.setFrame(); // flag that indicates that we got a frame
+  
+#ifdef PROFILE_TIMING
+  long int dt=(getCurrentMsTimestamp()-basicframe.mstimestamp);
+  if (dt>=50) {
+    std::cout << "[PROFILE_TIMING] FrameSink: afterGettingFrame: sending frame " << dt << " ms late" << std::endl;
+  }
+#endif
+  
   framefilter.run(&basicframe); // starts the frame filter chain
   
   if (numTruncatedBytes>0) {// time to grow the buffer..

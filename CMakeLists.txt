@@ -1,5 +1,5 @@
 # Cmake file for Valkka library
-# (C) 2017 Sampsa Riikonen
+# (C) 2017, 2018 Sampsa Riikonen
 #
 # cmake .
 # make
@@ -118,6 +118,11 @@ if    (stream_send_debug)
   message("STREAM SEND DEBUG ENABLED")
 endif (stream_send_debug)
 
+option(profile_timing "profile_timing" OFF)
+if    (profile_timing)
+  add_definitions("-DPROFILE_TIMING")
+  message("PROFILE TIMING ENABLED")
+endif (profile_timing)
 
 
 # ****************************************************************
