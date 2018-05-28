@@ -254,6 +254,17 @@ void TimestampFrameFilter2::go(Frame* frame) {
 #ifdef TIMESTAMPFILTER_DEBUG
   std::cout << "TimestampFrameFilter2: go: final frame->mstimestamp " << frame->mstimestamp << std::endl;
 #endif
+  
+  
+#ifdef PROFILE_TIMING
+  long int dt=(ctime-frame->mstimestamp);
+  // std::cout << "[PROFILE_TIMING] FrameSink: afterGettingFrame: sending frame at " << dt << " ms" << std::endl;
+  if (dt>=50) {
+    std::cout << "[PROFILE_TIMING] TimestampFrameFilter2: go : sending frame " << dt << " ms late" << std::endl;
+  }
+#endif
+
+  
 }
 
 

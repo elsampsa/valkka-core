@@ -159,6 +159,7 @@ void AVThread::run() {
             
 #ifdef PROFILE_TIMING
             dt=(getCurrentMsTimestamp()-decoder->getMsTimestamp());
+            // std::cout << "[PROFILE_TIMING] AVThread: " << this->name <<" run: decoder sending frame at " << dt << " ms" << std::endl;
             if (dt>=300) {
               std::cout << "[PROFILE_TIMING] AVThread: " << this->name <<" run: decoder sending frame " << dt << " ms late" << std::endl;
             }
@@ -175,6 +176,14 @@ void AVThread::run() {
             else { // no time tolerance defined
               //outfilter.run(&(decoder->out_frame));
               outfilter.run(decoder->output()); // return a reference to a decoded frame
+#ifdef PROFILE_TIMING
+              dt=(getCurrentMsTimestamp()-decoder->getMsTimestamp());
+              // std::cout << "[PROFILE_TIMING] AVThread: " << this->name <<" run: decoder sending frame at " << dt << " ms" << std::endl;
+              if (dt>=300) {
+                std::cout << "[PROFILE_TIMING] AVThread: " << this->name <<" run: AFTER sending frame " << dt << " ms late" << std::endl;
+                // during the filterchain run, YUV frame is uploaded to GPU
+              }
+#endif
             }
           } // decode
           else {
