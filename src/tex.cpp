@@ -39,6 +39,7 @@
 #include "tools.h"
 
 
+// TEX::TEX(BitmapPars bmpars) :  bmpars(bmpars), source_bmpars(bmpars), index(0), format(0) {
 TEX::TEX(BitmapPars bmpars) :  bmpars(bmpars), index(0), format(0) {
 }
   
@@ -90,11 +91,13 @@ YUVTEX::~YUVTEX() {
  * 
  */
 void YUVTEX::loadYUVFrame(YUVFrame *yuvframe) {
-  if (bmpars.type!=yuvframe->bmpars.type) {
+  if (bmpars.type!=yuvframe->source_bmpars.type) {
     opengllogger.log(LogLevel::fatal) << "YUVTEX: loadYUVFrame: FATAL: inconsistent YUVFrame and TEX types!" << std::endl;
     exit(5);
   }
   
+  // bmpars are the bitmap parameters for this texture
+  // they correspond to YUVFrame->source_bmpars
   
 #ifdef LOAD_VERBOSE
   std::cout << std::endl << "YUVTEX: loadYUVFrame: frame: " << *yuvframe << std::endl;
@@ -151,7 +154,8 @@ void YUVTEX::loadYUVFrame(YUVFrame *yuvframe) {
     std::cout << "YUVTEX: loadYUVFrame: timing : " << mstime-swaptime << std::endl;
   }
 #endif
-  
+
+  // source_bmpars=yuvframe->source_bmpars; // copy the actual bitmap dimensions
 }
   
   

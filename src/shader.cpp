@@ -94,7 +94,8 @@ const char* YUVShader::vertex_shader () { return
 "{\n"
 // "  gl_Position = vec4(position, 1.0f) * vec4(scaling,1.0f,1.0f);\n"
 "  gl_Position = transform * vec4(position, 1.0f);\n"
-"  TexCoord = vec2(texcoord.x, 1.0 - texcoord.y);\n"
+"  //TexCoord = vec2(texcoord.x, 1.0 - texcoord.y);\n"
+"  TexCoord = vec2(texcoord.x, texcoord.y);\n"
 "}\n";
 }
 
@@ -147,8 +148,9 @@ const char* YUVShader::fragment_shader  () { return
 " // \n"
 "void main()\n"
 "{\n"
-" //      color = texture(ourTexture1, TexCoord); \n"
-"   colour = mytexture2D(TexCoord); \n"
+" // colour = texture(ourTexture1, TexCoord); \n"
+" colour = mytexture2D(TexCoord); \n"
+" // colour = texture(texy, TexCoord); \n" // debug (skip yuv=>rgb)
 "}\n";
 }
 

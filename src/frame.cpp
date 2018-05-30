@@ -483,7 +483,7 @@ void YUVFrame::reserve() {
   } else {ok=false;}
   
   if (!ok) {
-    opengllogger.log(LogLevel::fatal) << "YUVFrame: reserve: WARNING: could not get GPU ram (out of memory?) "<<std::endl;
+    // opengllogger.log(LogLevel::fatal) << "YUVFrame: reserve: WARNING: could not get GPU ram (out of memory?) "<<std::endl;
     perror("YUVFrame: reserve: WARNING: could not get GPU ram (out of memory?)");
   }
   
@@ -542,7 +542,7 @@ void YUVFrame::fromAVBitmapFrame(AVBitmapFrame *bmframe) {
   
   av_image_copy_plane(
     y_payload,
-    bmpars.y_linesize, // for pre-reserved YUVFrames, width = linesize 
+    source_bmpars.y_width, // This is consistent what we're doing later on with the textures ..
     y_source,
     source_bmpars.y_linesize, // bmframe linesize >= bframe width
     source_bmpars.y_width,
@@ -551,7 +551,7 @@ void YUVFrame::fromAVBitmapFrame(AVBitmapFrame *bmframe) {
   
   av_image_copy_plane(
     u_payload,
-    bmpars.u_linesize,
+    source_bmpars.u_width,
     u_source,
     source_bmpars.u_linesize, // bmframe linesize >= bframe width
     source_bmpars.u_width,
@@ -560,12 +560,14 @@ void YUVFrame::fromAVBitmapFrame(AVBitmapFrame *bmframe) {
   
   av_image_copy_plane(
     v_payload,
-    bmpars.v_linesize,
+    source_bmpars.v_width,
     v_source,
     source_bmpars.v_linesize, // bmframe linesize >= bframe width
     source_bmpars.v_width,
     source_bmpars.v_height
   );
+  
+  // std::cout << this->dumpPayload() << std::endl;
   
   copyMetaFrom(bmframe);
   

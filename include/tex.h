@@ -55,7 +55,8 @@ public:
   virtual ~TEX();            ///< Default virtual destructor
   
 public: // format, dimensions
-  BitmapPars bmpars;
+  BitmapPars bmpars;             ///< Max bitmap dimensions (pre-reserved)
+  // BitmapPars source_bmpars;      ///< Bitmap true dimensions
   GLint      internal_format;    ///< OpenGL internal format 
   GLint      format;             ///< OpenGL format of the texture
   

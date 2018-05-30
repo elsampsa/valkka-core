@@ -4,7 +4,10 @@ import subprocess
 import os
 import copy
 import sys
-import numpy
+try:
+  import numpy
+except:
+  print("WARNING: could not import numpy")
 
 """
 class CustomInstallCommand(install):
@@ -36,7 +39,10 @@ except Exception as e:
 
 include_dirs       =[]
 include_dirs      +=["include"]
-include_dirs      +=[numpy.get_include()]
+try:
+  include_dirs      +=[numpy.get_include()]
+except:
+  print("WARNING: can't use numpy")
 
 if (custom_compilation):
   include_dirs    +=custom_live555_include_dirs

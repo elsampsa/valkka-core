@@ -149,11 +149,18 @@ bool RenderContext::activate() {
   };
   transform_size=sizeof(GLfloat)*transform.size();
   
+  // Let's define the vertices!
+  // If you look at the vertex shader programs, you'll see that ..
+  // .. we just make a single transform with a 4d matrix
+  // At RenderGroup::render there is glViewPort call.  This means that there will be one matrix multiplication by the OpenGL rendering pipeline
+  // .. before that multiplication, the vertex coordinates must be in normalized device coordinates (NDCs), i.e. from -1 to 1 in all dimensions
+  // see here: http://www.songho.ca/opengl/gl_transform.html
+  
+  /* normalized device coordinates
   vertices =std::array<GLfloat,20>{
-    /* Positions          Texture Coords
-       Shader class references:
-       "position"        "texcoord"
-    */
+    //Positions          Texture Coords
+    //Shader class references:
+    //"position"        "texcoord"
     1.0f,  1.0f, 0.0f,   1.0f, 1.0f, // Top Right
     1.0f, -1.0f, 0.0f,   1.0f, 0.0f, // Bottom Right
    -1.0f, -1.0f, 0.0f,   0.0f, 0.0f, // Bottom Left
@@ -165,6 +172,39 @@ bool RenderContext::activate() {
     0, 1, 3, // First Triangle
     1, 2, 3  // Second Triangle
   };
+  */
+  
+  /* fooling around ..
+  // this version works .. order does not matter, as long there is correspondence between position and texcoord
+  vertices =std::array<GLfloat,20>{
+    //Positions          Texture Coords
+    //Shader class references:
+    //"position"        "texcoord"
+    0.0f,  0.0f, 0.0f,   0.0f, 0.0f, // bottom left
+    0.0f,  1.0f, 0.0f,   0.0f, 1.0f, // top left 
+    1.0f,  1.0f, 0.0f,   1.0f, 1.0f, // top right
+    1.0f,  0.0f, 0.0f,   1.0f, 0.0f  // bottom right
+  };
+  vertices_size=sizeof(GLfloat)*vertices.size();
+  */
+  
+  // normalized device coordinates and correct ffff%&#!!! flipping of the image
+  vertices =std::array<GLfloat,20>{
+    //Positions          Texture Coords
+    //Shader class references:
+    //"position"        "texcoord"
+   -1.0f, -1.0f, 0.0f,   0.0f, 1.0f, // bottom left
+   -1.0f,  1.0f, 0.0f,   0.0f, 0.0f, // top left 
+    1.0f,  1.0f, 0.0f,   1.0f, 0.0f, // top right
+    1.0f, -1.0f, 0.0f,   1.0f, 1.0f  // bottom right
+  };
+  vertices_size=sizeof(GLfloat)*vertices.size();
+  
+  indices =std::array<GLuint,6>{  // Note that we start from 0!
+    0, 1, 2, // First Triangle
+    2, 3, 0  // Second Triangle
+  };
+  
   indices_size=sizeof(GLuint)*indices.size();
   
   // std::cout << "SIZEOF: " << sizeof(vertices) << " " << vertices_size << std::endl; // eh.. its the same
@@ -297,19 +337,87 @@ void RenderContext::bindVars() {// Upload other data to the GPU (say, transforma
   YUVTEX *yuvtex    = (YUVTEX*)(slot_context.yuvtex);
   
   XWindowAttributes& wa=x_window_attr; // shorthand
-  GLfloat r, dx, dy;
+  GLfloat r, dx, dy, dx2, dy2;
     
   // calculate dimensions
   // (screeny/screenx) / (iy/ix)  =  screeny*ix / screenx*iy
   
-  const BitmapPars &bmpars =yuvtex->bmpars;
+  const BitmapPars &bmpars =yuvtex->bmpars; // pre-reserved bitmap dimensions
+  // const BitmapPars &source_bmpars =yuvtex->source_bmpars; // actual bitmap dimensions
   
+  // std::cout << "RenderContext: bindVars: w0, h0 = " << bmpars.width <<", "<< bmpars.height<<" "<< std::endl;
+  // std::cout << "RenderContext: bindVars: w, h   = " << source_bmpars.width <<", "<<source_bmpars.height<<" "<< std::endl;
+  
+  /* glViewPort expects everything to be in the L scale (where L is the scale of the reserved bitmap)
+  
+  NOTE: Actually, we don't need this if we keep the image and bitmap size the same (which is the only sane way of doing this..)
+  
+  __________L_________
+  _l_
+      ______d__________    
+  xxxx----------------.
+                      (scale center)  
+  
+  ----- = reserved bitmap
+  xxxxx = true bitmap (part of the reserved)
+  L     = size of reserved bitmap
+  l     = size of true bitmap
+  d     = distance of true bitmap from the scale center
+  
+  Scale it with (l/L) => now true bitmap size will be the size of the reserved bitmap (just what glViewport wants)
+  
+  d = (L-l)*(L/l) = (L/l-1) L
+  
+  In scale (expected by glViewPort) of L that's (L/l-1)
+  */
+  
+  /* Scaling in general ..
+  fixed scaling     unscale       desired scale
+  [win.w/bm.w]   * (bm.w/win.w) * k
+  
+  We can't change the fixed scaling part (that's dictated by OpenGLViewPort
+  */
+  
+  // L/l
+  
+  /*
+  dx=float(bmpars.width) /float(source_bmpars.width);
+  dy=float(bmpars.height)/float(source_bmpars.height);
+  
+  transform[12]=dx-1.0;
+  transform[13]=-dy+1.0;
+  */
+  // std::cout << "RenderContext: bindVars: dx, dy = " << dx << ", " << dy << std::endl;
+  
+
+  // keep aspect ratio, clip image.  TODO: should be able to choose between clipping and black borders.
+  //
   r=float(wa.height*(bmpars.width)) / float(wa.width*(bmpars.height));
-  if (r<1.){ // screen wider than image
+  if (r<1.){ // screen form: wider than image // keep width, scale up height
+    dy=1/r;
+    dx=1;
+  }
+  else if (r>1.) { // screen form: taller than image // keep height, scale up width
+    dx=r;
+    dy=1;
+  }
+  else {
+    dx=1;
+    dy=1;
+  }
+
+  /*
+  // correct aspect ratio, no missing picture.  Black borders on the image
+  // bm.w/bm.h > win.w/win.h    (lhs > 1, rhs < 1)   (**)
+  // => dx=1, scale dy with  (bm.h/win.h)*(win.w/bm.w)  (remove scale, put a new one)  
+  //
+  r=float(wa.height*(bmpars.width)) / float(wa.width*(bmpars.height));
+  if (r<1.){ // screen form: wider than image
     dy=1;
     dx=r;
   }
-  else if (r>1.) { // screen taller than image
+  
+  else if (r>1.) { // screen form: taller than image (**)
     dx=1;
     dy=1/r;
   }
@@ -317,13 +425,16 @@ void RenderContext::bindVars() {// Upload other data to the GPU (say, transforma
     dx=1;
     dy=1;
   }
+  */
+  
   
 #ifdef RENDER_VERBOSE
   std::cout << "RenderContext: bindVars: dx, dy = " << dx <<" "<<dy<<" "<< std::endl;
 #endif  
   // /* // test..
-  transform[0]=dx;
-  transform[5]=dy;  
+  transform[0]  =dx;
+  transform[5]  =dy;
+  
   // */
   /*
   transform= {
@@ -725,13 +836,14 @@ void OpenGLThread::loadYUVFrame(SlotNumber n_slot, YUVFrame* yuvframe){// Load P
 
 void OpenGLThread::activateSlot(SlotNumber i, YUVFrame* yuvframe) {
   opengllogger.log(LogLevel::crazy) << "OpenGLThread: activateSlot: "<< *yuvframe << std::endl;
-  slots_[i].activate(yuvframe->bmpars, yuv_shader);
+  // slots_[i].activate(yuvframe->bmpars, yuv_shader);
+  slots_[i].activate(yuvframe->source_bmpars, yuv_shader);
 }
 
 
 void OpenGLThread::activateSlotIf(SlotNumber i, YUVFrame* yuvframe) {
   if (slots_[i].isActive()) {
-    if (yuvframe->bmpars.type==slots_[i].bmpars.type) { // The bitmap type of YUVFrame and YUVTEX are consistent
+    if (yuvframe->source_bmpars.type==slots_[i].bmpars.type) { // The bitmap type of YUVFrame and YUVTEX are consistent
     }
     else {
       opengllogger.log(LogLevel::debug) << "OpenGLThread: activateSlotIf: texture dimensions changed: reactivate" << std::endl;
@@ -1055,7 +1167,8 @@ void OpenGLThread::preRun() {// Called before entering the main execution loop, 
   swap_interval_at_startup=getSwapInterval(); // save the value of vsync at startup
   VSyncOff();
   makeShaders();
-  dummyframe =new YUVFrame(N720.type);
+  dummyframe =new YUVFrame(N720);
+  glFinish();
   infifo->allocateYUV();
 }
 
@@ -1065,8 +1178,8 @@ void OpenGLThread::postRun() {// Called after the main execution loop exits, but
   for(std::vector<SlotContext>::iterator it=slots_.begin(); it!=slots_.end(); ++it) {
     it->deActivate(); // deletes textures
   }
-  delete dummyframe;
   infifo->deallocateYUV();
+  delete dummyframe;
   delShaders();
   closeGLX();
 }

@@ -115,6 +115,7 @@ void OpenGLFrameFifo::deallocateYUV() {
   deallocate_reservoir_yuv(N1080);
   deallocate_reservoir_yuv(N1440);
   deallocate_reservoir_yuv(N4K);
+  
 #ifdef VALGRIND_GPU_DEBUG
 #else
   glFinish();

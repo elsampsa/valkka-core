@@ -239,7 +239,7 @@ protected: // Variables related to X11 and GLX.  Initialized by initGLX.
   XVisualInfo*  vi;
   GLXFBConfig*  fbConfigs;
   Colormap      cmap;
-  YUVFrame*     dummyframe; ///< A PBO membuf which we reserve from the GPU as the first membuf, but is never used (this stabilizes GPU direct memory access)
+  YUVFrame*     dummyframe; ///< A PBO membuf which we reserve from the GPU as the first membuf, but is never used
   
   std::vector<SlotContext>              slots_;        ///< index => SlotContext mapping (based on vector indices)
   std::map<Window, RenderGroup>         render_groups; ///< window_id => RenderGroup mapping.  RenderGroup objects are warehoused here.
@@ -277,7 +277,7 @@ public: // manipulate RenderContex(es)
   bool                delRenderContext(int id); ///< Runs through OpenGLThread::render_groups and removes indicated RenderContext
   
 public: // loading and rendering actions
-  void                loadYUVFrame(SlotNumber n_slot, YUVFrame *yuvframe); ///< Load PBO to texture in slot n_slot
+  void                loadYUVFrame(SlotNumber n_slot, YUVFrame *yuvframe); ///< Load PBO to texture in OpenGLThread::slots_[n_slot]
   void                render(SlotNumber n_slot); ///< Render all RenderGroup(s) depending on slot n_slot
   
 public: // getter methods

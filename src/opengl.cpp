@@ -158,7 +158,8 @@ void getPBO(GLuint& index, GLsizei size, GLubyte*& payload) { // modify pointer 
   // WARNING! load openGL extensions before using this! (i.e., use OpenGLThread.preRun)
   glGenBuffers(1, &index);
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, index);
-  glBufferData(GL_PIXEL_UNPACK_BUFFER, size, 0, GL_STREAM_DRAW); // reserve n_payload bytes to index/handle pbo_id
+  // glBufferData(GL_PIXEL_UNPACK_BUFFER, size, 0, GL_STREAM_DRAW); // reserve n_payload bytes to index/handle pbo_id
+  glBufferData(GL_PIXEL_UNPACK_BUFFER, size, 0, GL_DYNAMIC_DRAW); // reserve n_payload bytes to index/handle pbo_id // this should be better ..
   
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0); // unbind (not mandatory)
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, index); // rebind (not mandatory)
@@ -187,8 +188,14 @@ void getTEX(GLuint& index, GLint internal_format, GLint format, GLsizei w, GLsiz
   glGenTextures(1, &index);
   
   glBindTexture(GL_TEXTURE_2D, index);
+  
+  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  
+  // faster?  makes more sense anyway
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
   glTexImage2D(GL_TEXTURE_2D, 0, internal_format, w, h, 0, format, GL_UNSIGNED_BYTE, 0); // no upload, just reserve 
   glBindTexture(GL_TEXTURE_2D, 0); // unbind
 }
