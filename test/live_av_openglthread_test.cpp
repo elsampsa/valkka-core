@@ -141,6 +141,8 @@ void test_3() {
   
   // avthread.  setTimeTolerance(10); // 10 milliseconds // just testing ..
   
+  glthread.setStaticTexFile("1.yuv");
+  
   // start glthread and create a window
   glthread.  startCall();
   Window window_id=glthread.createWindow();

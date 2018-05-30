@@ -92,7 +92,7 @@ void SlotContext::loadYUVFrame(YUVFrame *yuvframe) {
 }
   
 
-RenderContext::RenderContext(const SlotContext &slot_context, unsigned int z) : slot_context(slot_context), z(z), active(false) {
+RenderContext::RenderContext(const SlotContext &slot_context, YUVTEX *statictex, unsigned int z) : slot_context(slot_context), statictex(statictex), z(z), active(false) {
   // https://learnopengl.com/#!Getting-started/Textures
   // https://www.khronos.org/opengl/wiki/Vertex_Specification
   // https://gamedev.stackexchange.com/questions/86125/what-is-the-relationship-between-glvertexattribpointer-index-and-glsl-location
@@ -304,7 +304,14 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
 
 void RenderContext::bindTextures() {// Associate textures with the shader program.  Uses parameters from Shader reference.
   YUVShader *shader = (YUVShader*)(slot_context.shader); // shorthand
-  YUVTEX *yuvtex    = (YUVTEX*)   (slot_context.yuvtex);
+  const YUVTEX *yuvtex;
+  
+  if (true) { // everything's ok, use the YUVTEX in the SlotContext
+    yuvtex    = (YUVTEX*)(slot_context.yuvtex);
+  }
+  else { // no frame has been received for a while .. show the static texture instead
+    yuvtex    = statictex;
+  }
   
 #ifdef RENDER_VERBOSE
   std::cout << "RenderContext: bindTextures: indices y, u, v = " << yuvtex->y_index <<" "<< yuvtex->u_index <<" "<< yuvtex->v_index << std::endl;
@@ -315,6 +322,12 @@ void RenderContext::bindTextures() {// Associate textures with the shader progra
   
 #ifdef VALGRIND_GPU_DEBUG
 #else
+  
+  // TODO: so.. RenderContext uses SlotContext's yuvtex..  If no frames is reserved in N millisecons, SlotContext::yuvtex could point
+  // to an auxiliary texture (with, say, the Valkka logo)
+  // that aux texture could be a static member of the SlotContext class ..?
+  // nopes .. use method SlotContext::setStaticTEX
+  
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, yuvtex->y_index);
   glUniform1i(shader->texy, 0); // pass variable to shader
@@ -326,6 +339,7 @@ void RenderContext::bindTextures() {// Associate textures with the shader progra
   glActiveTexture(GL_TEXTURE2);
   glBindTexture(GL_TEXTURE_2D, yuvtex->v_index);
   glUniform1i(shader->texv, 2); // pass variable to shader
+  
 #endif
 }
 
@@ -334,7 +348,14 @@ void RenderContext::bindVars() {// Upload other data to the GPU (say, transforma
   // eh.. now we're doing this on each "sweep" .. we could give a callback to RenderGroup that would do the uploading of transformatio matrix
   // .. on the other hand, its not that much data (compared to bitmaps) !
   YUVShader *shader = (YUVShader*)(slot_context.shader); // shorthand
-  YUVTEX *yuvtex    = (YUVTEX*)(slot_context.yuvtex);
+  const YUVTEX *yuvtex;
+  
+  if (true) { // everything's ok, use the YUVTEX in the SlotContext
+    yuvtex    = (YUVTEX*)(slot_context.yuvtex);
+  }
+  else { // no frame has been received for a while .. show the static texture instead
+    yuvtex    = statictex;
+  }
   
   XWindowAttributes& wa=x_window_attr; // shorthand
   GLfloat r, dx, dy, dx2, dy2;
@@ -621,7 +642,7 @@ void RenderGroup::render() {
 
 
 
-OpenGLThread::OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx, unsigned msbuftime) : Thread(name), infifo(new OpenGLFrameFifo(fifo_ctx)), infilter(name,infifo), msbuftime(msbuftime), debug(false) {
+OpenGLThread::OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx, unsigned msbuftime) : Thread(name), infifo(new OpenGLFrameFifo(fifo_ctx)), infilter(name,infifo), msbuftime(msbuftime), debug(false), static_texture_file("") {
   // So, what happens here..?
   // We create the OpenGLFrameFifo instance "infifo" at constructor time, and then pass "infifo" to AVFifoFrameFilter instance "framefilter" as a parameter
   // * framefilter (AVFifoFrameFilter) knows infifo
@@ -773,7 +794,7 @@ int OpenGLThread::newRenderContext(SlotNumber n_slot, Window window_id, unsigned
   
   if (hasRenderGroup(window_id)) {
     RenderGroup* render_group= &render_groups.at(window_id); // reference to a RenderGroup corresponding to window_id
-    RenderContext render_context(slot_context,z); // the brand new RenderContext
+    RenderContext render_context(slot_context,statictex,z); // the brand new RenderContext
     render_group->addContext(render_context);
     
     render_lists[n_slot].push_back(render_group); // render_lists[n_slot] == list of RenderGroup instances
@@ -1169,6 +1190,8 @@ void OpenGLThread::preRun() {// Called before entering the main execution loop, 
   makeShaders();
   dummyframe =new YUVFrame(N720);
   glFinish();
+  statictex =new YUVTEX(N720);
+  readStaticTex();
   infifo->allocateYUV();
 }
 
@@ -1181,6 +1204,7 @@ void OpenGLThread::postRun() {// Called after the main execution loop exits, but
   infifo->deallocateYUV();
   delete dummyframe;
   delShaders();
+  delete statictex;
   closeGLX();
 }
 
@@ -1598,6 +1622,68 @@ void OpenGLThread::reportRenderList() {
 
 FifoFrameFilter &OpenGLThread::getFrameFilter() {
   return infilter;
+}
+
+
+void OpenGLThread::setStaticTexFile(const char* fname) {
+  static_texture_file=std::string(fname);
+}
+
+
+void OpenGLThread::readStaticTex() {
+  using std::ios;
+  using std::ifstream;
+
+  if (static_texture_file==std::string("")) { // no file defined
+    return;
+  }
+  
+  GLubyte*  buffer;
+  int       size, ysize;
+  ifstream  file;
+  
+  file.open(static_texture_file.c_str(),ios::in|ios::binary|ios::ate);
+  size = file.tellg();
+  buffer = new GLubyte[size];
+
+  file.seekg(0,ios::beg);
+  file.read((char*)buffer,size);
+
+  file.close();
+  
+  ysize=(size*2)/3; // size of the biggest plane (Y)
+  
+  if (ysize!=statictex->bmpars.y_size) {
+    std::cout << "OpenGLThread: readStaticTex: WARNING!  Could not read static texture from " << static_texture_file <<".  It should be 720p YUV" << std::endl;
+  }
+  else {
+  
+    /*
+    std::cout << "size="<<size<<" ysize="<<ysize<<std::endl;
+    int i;
+    for(i=0;i<size;i++) {
+      std::cout << (unsigned) buffer[i] << " ";
+    }
+    // return 0;
+    */
+    
+    //Y=buffer;
+    //U=buffer+ysize;
+    //V=buffer+ysize+ysize/4;
+    
+    /*
+    for(i=0;i<std::min(ysize,20);i++) {
+      std::cout << U[i] << " ";
+    }
+    std::cout << std::endl;
+    */
+    
+    // std::cout << "read "<<size<<" bytes"<<std::endl;
+    
+    statictex->loadYUV(buffer,buffer+ysize,buffer+ysize+ysize/4);
+    
+    delete buffer;
+  }
 }
 
 

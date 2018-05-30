@@ -83,8 +83,39 @@ YUVTEX::~YUVTEX() {
 #endif
 }
   
-
   
+/** Load texture from memory buffers
+ * 
+ * 
+ */
+void YUVTEX::loadYUV(const GLubyte* Y, const GLubyte* U, const GLubyte* V) {
+  // y
+  glBindTexture(GL_TEXTURE_2D, y_index); // this is the texture we will manipulate
+  glTexImage2D(GL_TEXTURE_2D, 0, format, bmpars.y_width, bmpars.y_height, 0, format, GL_UNSIGNED_BYTE, Y);
+  // glBindTexture(GL_TEXTURE_2D, 0); 
+  
+  /*
+  std::cout << "YUVTEX: loadYUV: y_index =" << y_index << std::endl;
+  int i;
+  for(i=0;i<100;i++) {
+    std::cout << (unsigned) Y[i] << " ";
+  }
+  */
+  
+  // u
+  glBindTexture(GL_TEXTURE_2D, u_index); // this is the texture we will manipulate
+  glTexImage2D(GL_TEXTURE_2D, 0, format, bmpars.u_width, bmpars.u_height, 0, format, GL_UNSIGNED_BYTE, U);
+  // glBindTexture(GL_TEXTURE_2D, 0); 
+  
+  // v
+  glBindTexture(GL_TEXTURE_2D, v_index); // this is the texture we will manipulate
+  glTexImage2D(GL_TEXTURE_2D, 0, format, bmpars.v_width, bmpars.v_height, 0, format, GL_UNSIGNED_BYTE, V);
+  // glBindTexture(GL_TEXTURE_2D, 0); 
+  
+  glFinish();
+}
+  
+
 /** Copy pixel buffer object to texture
  * 
  * Texture and YUVFrame are assumed to have the same dimensions

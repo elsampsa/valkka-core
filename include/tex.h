@@ -83,7 +83,8 @@ public:
   GLuint  v_index;       ///< internal OpenGL/GPU index referring to V texture;
   
 public:
-  void loadYUVFrame(YUVFrame *yuvframe);  ///< Transfer from YUVFrame's PBO's to textures
+  void loadYUV(const GLubyte* Y, const GLubyte* U, const GLubyte* V); ///< Load YUV from memory buffers
+  void loadYUVFrame(YUVFrame *yuvframe);            ///< Transfer from YUVFrame's PBO's to textures
 };
 
 std::ostream &operator<<(std::ostream &os, YUVTEX const &m);

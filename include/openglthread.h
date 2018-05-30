@@ -97,7 +97,7 @@ public:
    * @param z            Stacking order (for "video-in-video")
    * 
    */
-  RenderContext(const SlotContext& slot_context, unsigned int z=0);
+  RenderContext(const SlotContext& slot_context, YUVTEX* statictex, unsigned int z=0);
   virtual ~RenderContext(); ///< Default virtual destructor
   
 public: // Initialized at constructor init list or at constructor
@@ -113,6 +113,9 @@ public: // Initialized at RenderContext::init
   std::array<GLfloat,16> transform; ///< data of the transformation matrix
   std::array<GLfloat,20> vertices;  ///< data of the vertex buffer object
   std::array<GLuint, 6>  indices;   ///< data of the element buffer object
+  
+public:
+  YUVTEX* statictex; ///< A static texture to be shown on the screen if no video is received
   
 public:
   XWindowAttributes x_window_attr;  ///< X window size, etc.
@@ -230,6 +233,10 @@ protected: // Shaders. Initialized by makeShaders.
   YUVShader*    yuv_shader; ///< Initialized by OpenGLThread::makeShaders
   RGBShader*    rgb_shader; ///< Initialized by OpenGLThread::makeShaders
   
+protected: 
+  YUVTEX*       statictex;           ///< Texture to be shown when there is no stream
+  std::string   static_texture_file; ///< Name of the file where statictex is
+  
 protected: // Variables related to X11 and GLX.  Initialized by initGLX.
   Display*      display_id;
   bool          doublebuffer_flag;
@@ -324,6 +331,7 @@ protected: // internal methods
   void resetCallTime();
   void reportCallTime(unsigned i);        ///< How much time since handleFifo exited
   long unsigned insertFifo(Frame* f);     ///< Sorted insert: insert a timestamped frame into the fifo
+  void readStaticTex();                   ///< Reads a static texture that's shown on a window when no stream is received.  Uses OpenGLThread::static_texture_file
   
   /** Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation
    * 
@@ -353,6 +361,7 @@ public: // for testing // <pyapi>
   
 public: // API // <pyapi>
   FifoFrameFilter &getFrameFilter();                           ///< API method: get filter for passing frames to this thread // <pyapi>
+  void setStaticTexFile(const char* fname);                    ///< API method: set a file where the static texture (yuv image that's shown when no stream is received) is read from // <pyapi>
   
   /** API call: stops the thread
    */
