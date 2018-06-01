@@ -619,7 +619,17 @@ void YUVFrame::reset() {
   Frame::reset();
   source_bmpars =BitmapPars();
 }
+
+
+
+SignalFrame::SignalFrame() : Frame(), opengl_signal_ctx(), av_signal_ctx() {
+  mstimestamp =getCurrentMsTimestamp();
+}
   
-  
+SignalFrame::~SignalFrame() {
+}
+
+
+frame_essentials(FrameClass::signal, SignalFrame);
 
 

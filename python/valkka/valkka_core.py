@@ -2018,6 +2018,9 @@ class OpenGLThread(Thread):
     def getFrameFilter(self):
         return _valkka_core.OpenGLThread_getFrameFilter(self)
 
+    def setStaticTexFile(self, fname):
+        return _valkka_core.OpenGLThread_setStaticTexFile(self, fname)
+
     def stopCall(self):
         return _valkka_core.OpenGLThread_stopCall(self)
 
@@ -2223,8 +2226,36 @@ ffmpeg_av_register_all = _valkka_core.ffmpeg_av_register_all
 def ffmpeg_av_log_set_level(level):
     return _valkka_core.ffmpeg_av_log_set_level(level)
 ffmpeg_av_log_set_level = _valkka_core.ffmpeg_av_log_set_level
-# This file is compatible with both classic and new-style classes.
+class TestThread(Thread):
+    __swig_setmethods__ = {}
+    for _s in [Thread]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, TestThread, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Thread]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, TestThread, name)
+    __repr__ = _swig_repr
 
+    def __init__(self, name):
+        this = _valkka_core.new_TestThread(name)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_TestThread
+    __del__ = lambda self: None
+
+    def setCallback(self, pobj):
+        return _valkka_core.TestThread_setCallback(self, pobj)
+
+    def stopCall(self):
+        return _valkka_core.TestThread_stopCall(self)
+
+    def addCall(self):
+        return _valkka_core.TestThread_addCall(self)
+TestThread_swigregister = _valkka_core.TestThread_swigregister
+TestThread_swigregister(TestThread)
 cvar = _valkka_core.cvar
 VERSION_MAJOR = cvar.VERSION_MAJOR
 VERSION_MINOR = cvar.VERSION_MINOR
@@ -2233,4 +2264,7 @@ DEFAULT_OPENGLTHREAD_BUFFERING_TIME = cvar.DEFAULT_OPENGLTHREAD_BUFFERING_TIME
 DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL = cvar.DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL
 DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL = cvar.DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL
 DEFAULT_TIMESTAMP_RESET_TIME = cvar.DEFAULT_TIMESTAMP_RESET_TIME
+
+# This file is compatible with both classic and new-style classes.
+
 

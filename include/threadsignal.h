@@ -104,7 +104,8 @@ enum class OpenGLSignal {
   */
 struct OpenGLSignalContext {
   OpenGLSignal      signal;   ///< The signal
-  OpenGLSignalPars  *ctx;     ///< Why pointers? .. we have return values here
+  // OpenGLSignalPars  *pars;     ///< Why pointers? .. we have return values here // nopes .. not anymore
+  OpenGLSignalPars  pars;
 };
 
 

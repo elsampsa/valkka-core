@@ -114,7 +114,7 @@ We're currently at alpha
 
 You need (at least):
 
-    sudo apt-get install yasm git swig python3-pip cmake libx11-dev libglew-dev libasound2-dev pkg-config
+    sudo apt-get install yasm git swig python3-pip cmake libx11-dev libglew-dev libasound2-dev pkg-config python3-dev
 
 Install also the following python packages:
     

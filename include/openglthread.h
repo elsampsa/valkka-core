@@ -57,29 +57,43 @@ typedef void ( *PFNGLXSWAPINTERVALEXTPROC) (Display *dpy, GLXDrawable drawable, 
 class SlotContext {
  
 public:
-  SlotContext();  ///< Default constructor
+  SlotContext(YUVTEX *statictex, YUVShader *shader);  ///< Default constructor
   ~SlotContext(); ///< Default destructor
   
 public:  
-  YUVTEX*      yuvtex;  ///< This could be a base class for different kinds of textures (now only YUVTEX)
-  YUVShader*   shader;  ///< Base class for the chosen Shader for this slot.  Now always YUVShader
+  YUVTEX*      yuvtex;      ///< This could be a base class for different kinds of textures (now only YUVTEX)
+  YUVTEX*      statictex; ///< A static texture to be shown on the screen if no video is received
+  YUVShader*   shader;      ///< Base class for the chosen Shader for this slot.  Now always YUVShader
   BitmapPars   bmpars;
-  
+  long int     lastmstime;  ///< Last millisecond timestamp when this slot received a frame
+    
 private:
-  bool      active;     ///< Is acticated or not
-  AVCodecID codec_id  ; ///< FFmpeg codec id
+  uint      ref_count;
+  bool      active;     ///< Is activated or not.  Active = has received a setup frame
+  bool      is_dead;    ///< Has received frames or not for a while ?
+  AVCodecID codec_id;   ///< FFmpeg codec id
   
 private:
   long int  prev_mstimestamp; ///< for debugging: check if frames are fed in correct timestamp order
   
 public:
-  void activate(BitmapPars bmpars, YUVShader* shader);   ///< Allocate SlotContext::yuvtex (for a frame of certain size) and SlotContext::shader.
+  // void activate(BitmapPars bmpars, YUVShader* shader);      ///< Allocate SlotContext::yuvtex (for a frame of certain size) and SlotContext::shader.
+  void activate(BitmapPars bmpars);                         ///< Allocate SlotContext::yuvtex (for a frame of certain size)
   void deActivate();                                        ///< Deallocate textures
   void loadYUVFrame(YUVFrame* yuvframe);                    ///< Load bitmap from YUVFrame to SlotContext::yuvtex
-  
+  YUVTEX* getTEX();                                         ///< Returns the relevant texture set (static or live)
+  bool manageTimer(long int mstime);                        ///< Updates SlotContext::lastmstime.  Returns false if too little time has passed since receiving the last frame
+  void checkIfDead(long int mstime);                        ///< Compares SlotContext::lastmstime to mstime and changes the state of SlotContext::is_dead
+  bool isPending(long int mstime);                          ///< Compares SlotContext::lastmstime to mstime and returns true of a treshold is met (if last frame was received long time ago)
+    
 public: // getters
+  bool isUsed()   const {return ref_count>0;}
   bool isActive() const {return active;}   ///< Check if active
+  bool isDead()   const {return is_dead;}
   
+public: // setters
+  void inc_ref_count() {ref_count++;}
+  void dec_ref_count() {ref_count--;}
 };
 
 
@@ -97,16 +111,16 @@ public:
    * @param z            Stacking order (for "video-in-video")
    * 
    */
-  RenderContext(const SlotContext& slot_context, YUVTEX* statictex, unsigned int z=0);
+  RenderContext(SlotContext& slot_context, int id, unsigned int z=0);
   virtual ~RenderContext(); ///< Default virtual destructor
   
 public: // Initialized at constructor init list or at constructor
-  const SlotContext& slot_context; ///< Knows relevant Shader and YUVTEX
+  SlotContext& slot_context;       ///< Knows relevant Shader and YUVTEX
   const unsigned int z;            ///< Stacking order
-  bool active;
+  // bool active;
   int id;                          ///< A unique id identifying this render context
   
-public: // Initialized at RenderContext::init
+private: // Initialized at RenderContext::init that calls RenderContext::activate
   GLuint        VAO;     ///< id of the vertex array object
   GLuint        VBO;     ///< id of the vertex buffer object
   GLuint        EBO;     ///< id of the element buffer object
@@ -114,20 +128,19 @@ public: // Initialized at RenderContext::init
   std::array<GLfloat,20> vertices;  ///< data of the vertex buffer object
   std::array<GLuint, 6>  indices;   ///< data of the element buffer object
   
-public:
-  YUVTEX* statictex; ///< A static texture to be shown on the screen if no video is received
-  
+private:
+  void activate();   ///< Init VAO, VBO, etc.
+    
 public:
   XWindowAttributes x_window_attr;  ///< X window size, etc.
   
 public: // getters
-  int getId() const {return id;}    ///< Returns the unique id of this render context
-  bool isActive() {return active;}
-  
+  int getId() const {return id;}        ///< Returns the unique id of this render context
+  // bool isActive() {return active;}   ///< Legacy.  Now, if instantiated, is active!
   
 public:
-  bool activate();        ///< Activate this RenderContext (now it can render)
-  bool activateIf();      ///< Try to activate if not active already
+  // bool activate();        ///< Activate this RenderContext (now it can render).  Legacy
+  // bool activateIf();      ///< Try to activate if not active already. Legacy
   void render(XWindowAttributes x_window_attr);  ///< Does the actual drawing of the bitmap
   void bindTextures();    ///< Associate textures with the shader program.  Uses parameters from Shader reference.
   void bindVars();        ///< Upload other data to the GPU (say, transformation matrix).  Uses parameters from Shader reference.
@@ -249,9 +262,10 @@ protected: // Variables related to X11 and GLX.  Initialized by initGLX.
   YUVFrame*     dummyframe; ///< A PBO membuf which we reserve from the GPU as the first membuf, but is never used
   
   std::vector<SlotContext>              slots_;        ///< index => SlotContext mapping (based on vector indices)
+  // std::map<SlotNumber, SlotContext>     slots_;        ///< SlotNumber => SlotContext mapping TODO: start using this in the future
   std::map<Window, RenderGroup>         render_groups; ///< window_id => RenderGroup mapping.  RenderGroup objects are warehoused here.
   std::vector<std::list<RenderGroup*>>  render_lists;  ///< Each vector element corresponds to a slot.  Each list inside a vector element has pointers to RenderGroups to be rendered.
-  std::vector<long int>                 slot_times;    ///< Save last time OpenGL was fed with a frame for this slot
+  // std::map<SlotNumber,std::list<RenderGroup*>>  render_lists;  ///< TODO: start using this in the future
   
 private: // function pointers for glx extensions
   PFNGLXSWAPINTERVALEXTPROC     pglXSwapIntervalEXT;
@@ -280,12 +294,14 @@ public: // manipulate RenderGroup(s)
   bool                delRenderGroup(Window window_id); ///< Remove RenderGroup from OpenGLThread::render_groups
   
 public: // manipulate RenderContex(es)
-  int                 newRenderContext(SlotNumber slot, Window window_id, unsigned int z); ///< Creates a new render context
+  // int                 newRenderContext(SlotNumber slot, Window window_id, unsigned int z); ///< Creates a new render context
+  void                newRenderContext(SlotNumber slot, Window window_id, int id, unsigned int z); ///< Creates a new render context
   bool                delRenderContext(int id); ///< Runs through OpenGLThread::render_groups and removes indicated RenderContext
   
 public: // loading and rendering actions
   void                loadYUVFrame(SlotNumber n_slot, YUVFrame *yuvframe); ///< Load PBO to texture in OpenGLThread::slots_[n_slot]
   void                render(SlotNumber n_slot); ///< Render all RenderGroup(s) depending on slot n_slot
+  void                checkSlots(long int mstime);
   
 public: // getter methods
   Display*            getDisplayId() {return display_id;}
@@ -296,10 +312,13 @@ public: // getter methods
 //public:
 //  OpenGLFrameFifo&    getFifo();
   
-public: // setter methods
+public: // slot methods
+  bool                slotUsed       (SlotNumber i);
   void                activateSlot   (SlotNumber i, YUVFrame *yuvframe);
   void                activateSlotIf (SlotNumber i, YUVFrame *yuvframe); // Activate slot if it's not already active or if the texture has changed
-  bool                slotTimingOk   (SlotNumber n_slot, long int mstime);
+  bool                manageSlotTimer(SlotNumber i, long int mstime);
+  
+public: // setter methods
   void                debugOn()  {debug=true;}
   void                debugOff() {debug=false;}
   
@@ -310,6 +329,7 @@ public: // Thread virtual methods
   void run();                                       ///< Main execution loop is defined here.
   void preRun();                                    ///< Called before entering the main execution loop, but after creating the thread.  Calls OpenGLThread::createShaders and OpenGLThread::reserveFrames
   void postRun();                                   ///< Called after the main execution loop exits, but before joining the thread
+  void handleSignal(OpenGLSignalContext &signal_ctx);
   void handleSignals();                             ///< From signals to methods 
   void sendSignal(OpenGLSignalContext signal_ctx);        ///< Send a signal to the thread 
   void sendSignalAndWait(OpenGLSignalContext signal_ctx); ///< Send a signal to the thread and wait all signals to be executed

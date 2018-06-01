@@ -575,8 +575,8 @@
  * - OpenGLThread::loadTEX 
  *     - loadYUVTEX 
  *         - glBindBufferARB, glBindTexture, glTexSubImage2D 
- * - OpenGLThread::render 
- *     - OpenGLThread::render_lists = list of RenderGroup (s) 
+ * - OpenGLThread::render (SlotNumber n_slot)
+ *     - OpenGLThread::render_lists = list of RenderGroup (s) per slot
  *         - RenderGroup::render glXMakeCurrent, XGetWindowAttributes, glViewport, glClear 
  *             - RenderGroup::render_contexes = list of RenderContext (s) 
  *               - RenderContext::render 

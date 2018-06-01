@@ -40,7 +40,7 @@
 #include "constant.h"
 #include "avdep.h"
 #include "opengl.h"
-
+#include "tools.h"
 
 // Macros for making getFrameClass and copyFrom
 #define frame_essentials(CLASSNAME, CLASS) \
@@ -114,6 +114,8 @@ public:
 public: // frame essentials : must be defined for each frame subclass
   virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type (also metadata)
+  
+public: // redefined virtual
   virtual void print(std::ostream& os) const; ///< Produces frame output
   virtual std::string dumpPayload();          ///< Dumps internal payload data
   virtual void dumpPayloadToFile(std::ofstream& fout); ///< Dumps internal payload data into a file
@@ -156,6 +158,8 @@ public:
 public: // frame essentials
   virtual FrameClass getFrameClass();         ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);            ///< Copies data to this frame from a frame of the same type
+  
+public: // redefined virtual
   virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
   virtual std::string dumpPayload();
   virtual void dumpPayloadToFile(std::ofstream& fout);
@@ -201,6 +205,8 @@ public:
 public: // frame essentials
   virtual FrameClass getFrameClass();         ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);            ///< Copies data to this frame from a frame of the same type
+  
+public: // redefined virtual
   virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
   virtual void reset();              ///< Reset the internal data
   
@@ -227,6 +233,8 @@ public:
 public: // frame essentials
   virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
+  
+public: // redefined virtual
   virtual std::string dumpPayload();
   virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
   virtual void reset();              ///< Reset the internal data
@@ -261,6 +269,8 @@ public:
 public: // frame essentials
   virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
+  
+public: // redefined virtual
   virtual std::string dumpPayload();
   virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
   virtual void reset();              ///< Reset the internal data
@@ -290,9 +300,11 @@ public:
   AVRGBFrame();
   virtual ~AVRGBFrame();
   
-public:
+public: // frame essentials
   virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
+  
+public: // redefined virtual
   virtual std::string dumpPayload();
   virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
 };
@@ -366,6 +378,8 @@ private:
 public: // frame essentials
   virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
+  
+public: // redefined virtual
   virtual std::string dumpPayload();
   virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
   virtual void reset();
@@ -381,6 +395,23 @@ typedef std::deque <Frame*>  Fifo;
 
 typedef std::vector<YUVFrame*>  YUVReservoir;
 typedef std::deque <YUVFrame*>  YUVStack;
+
+
+
+class SignalFrame : public Frame {
+
+public:
+  SignalFrame();           ///< Default ctor
+  virtual ~SignalFrame();  ///< Default virtual dtor
+
+public:
+  OpenGLSignalContext   opengl_signal_ctx;
+  AVSignalContext       av_signal_ctx;
+  
+public:
+  virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
+  virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
+};
 
 
 #endif

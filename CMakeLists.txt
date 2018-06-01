@@ -157,8 +157,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 pkg_search_module(X11 REQUIRED x11)
 pkg_search_module(GLEW REQUIRED glew)
 pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the latest ffmpeg
-# pkg_search_module(PYTHON REQUIRED python3)
-# TODO: python3
+pkg_search_module(PYTHON REQUIRED python3)
 
 # compiler flags
 # add_compile_options("-std=c++14" "-pthread") #  ${GL_CFLAGS})
@@ -179,9 +178,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC include)
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${VERSION_STRING} SOVERSION ${MAJOR_VERSION})
 
 # [add openGL dependencies]
-target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS}) # ${PYTHON_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 # # target_link_libraries(${PROJECT_NAME} ${GL_LIBS})
-target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES} ${GLEW_LIBRARIES} ${ALSA_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES} ${GLEW_LIBRARIES} ${ALSA_LIBRARIES} ${PYTHON_LIBRARIES})
 
 target_link_libraries(${PROJECT_NAME} "pthread")
 
