@@ -1,3 +1,5 @@
 <map id="OpenGLThread::delRenderGroupCall" name="OpenGLThread::delRenderGroupCall">
-<area shape="rect" id="node2" href="$classOpenGLThread.html#aaea16d4cc2c882df0a168cc1a1770984" title="Send a signal to the thread and wait all signals to be executed. " alt="" coords="288,5,471,47"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="288,31,403,57"/>
+<area shape="rect" id="node3" href="$classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="477,5,587,32"/>
+<area shape="rect" id="node4" href="$classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761" title="Default constructor. " alt="" coords="451,56,613,83"/>
 </map>

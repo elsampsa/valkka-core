@@ -1,11 +1,12 @@
 <map id="/home/sampsa/C/valkka/include/thread.h" name="/home/sampsa/C/valkka/include/thread.h">
-<area shape="rect" id="node2" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1676,95,1760,121"/>
-<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1239,393,1322,420"/>
-<area shape="rect" id="node33" href="$frame_8h.html" title="Frame classes. " alt="" coords="1685,169,1751,196"/>
-<area shape="rect" id="node44" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2466,393,2541,420"/>
-<area shape="rect" id="node34" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1777,244,1845,271"/>
-<area shape="rect" id="node35" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1556,244,1659,271"/>
-<area shape="rect" id="node36" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1677,319,1759,345"/>
-<area shape="rect" id="node37" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1340,244,1408,271"/>
-<area shape="rect" id="node43" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="1683,244,1753,271"/>
+<area shape="rect" id="node2" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1513,95,1597,121"/>
+<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1285,393,1367,420"/>
+<area shape="rect" id="node33" href="$frame_8h.html" title="Frame classes. " alt="" coords="1522,169,1589,196"/>
+<area shape="rect" id="node45" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2465,393,2539,420"/>
+<area shape="rect" id="node34" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1999,244,2067,271"/>
+<area shape="rect" id="node35" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1460,244,1563,271"/>
+<area shape="rect" id="node36" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1470,319,1553,345"/>
+<area shape="rect" id="node37" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1907,244,1975,271"/>
+<area shape="rect" id="node43" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="1365,244,1436,271"/>
+<area shape="rect" id="node44" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1638,244,1699,271"/>
 </map>

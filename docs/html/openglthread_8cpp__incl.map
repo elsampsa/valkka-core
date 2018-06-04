@@ -1,18 +1,18 @@
 <map id="/home/sampsa/C/valkka/src/openglthread.cpp" name="/home/sampsa/C/valkka/src/openglthread.cpp">
-<area shape="rect" id="node2" href="$openglthread_8h.html" title="FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU. " alt="" coords="1904,95,2011,121"/>
-<area shape="rect" id="node47" href="$logging_8h.html" title="Logging utilities. " alt="" coords="1040,543,1115,569"/>
-<area shape="rect" id="node50" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1216,468,1277,495"/>
-<area shape="rect" id="node3" href="$tex_8h.html" title="Handling OpenGL textures. " alt="" coords="1927,319,1977,345"/>
-<area shape="rect" id="node36" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1926,468,2029,495"/>
-<area shape="rect" id="node37" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="2025,543,2108,569"/>
-<area shape="rect" id="node44" href="$openglframefifo_8h_source.html" title="openglframefifo.h" alt="" coords="1797,169,1920,196"/>
-<area shape="rect" id="node48" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1647,244,1716,271"/>
-<area shape="rect" id="node49" href="$shader_8h_source.html" title="shader.h" alt="" coords="2293,543,2365,569"/>
-<area shape="rect" id="node4" href="$frame_8h.html" title="Frame classes. " alt="" coords="1756,393,1823,420"/>
-<area shape="rect" id="node43" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="1831,468,1902,495"/>
-<area shape="rect" id="node5" href="$common_8h.html" title="List of common header files. " alt="" coords="1324,617,1407,644"/>
-<area shape="rect" id="node35" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1687,468,1755,495"/>
-<area shape="rect" id="node38" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1595,468,1663,495"/>
-<area shape="rect" id="node45" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1740,244,1831,271"/>
-<area shape="rect" id="node46" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1639,319,1723,345"/>
+<area shape="rect" id="node2" href="$openglthread_8h.html" title="FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU. " alt="" coords="1693,95,1800,121"/>
+<area shape="rect" id="node44" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="2140,468,2201,495"/>
+<area shape="rect" id="node45" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2265,543,2340,569"/>
+<area shape="rect" id="node3" href="$tex_8h.html" title="Handling OpenGL textures. " alt="" coords="1525,319,1576,345"/>
+<area shape="rect" id="node36" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1615,468,1718,495"/>
+<area shape="rect" id="node37" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1309,543,1392,569"/>
+<area shape="rect" id="node46" href="$openglframefifo_8h_source.html" title="openglframefifo.h" alt="" coords="1587,169,1709,196"/>
+<area shape="rect" id="node49" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1899,244,1968,271"/>
+<area shape="rect" id="node50" href="$shader_8h_source.html" title="shader.h" alt="" coords="2393,543,2465,569"/>
+<area shape="rect" id="node4" href="$frame_8h.html" title="Frame classes. " alt="" coords="1795,393,1861,420"/>
+<area shape="rect" id="node43" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="1521,468,1591,495"/>
+<area shape="rect" id="node5" href="$common_8h.html" title="List of common header files. " alt="" coords="1327,617,1409,644"/>
+<area shape="rect" id="node35" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1886,468,1954,495"/>
+<area shape="rect" id="node38" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1794,468,1862,495"/>
+<area shape="rect" id="node47" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1784,244,1875,271"/>
+<area shape="rect" id="node48" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1891,319,1975,345"/>
 </map>

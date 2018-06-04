@@ -3,6 +3,7 @@ var searchData=
   ['mainrun',['mainRun',['../classThread.html#adfeea499c4cc16c4c70eb8449bbee548',1,'Thread']]],
   ['makecurrent',['makeCurrent',['../classOpenGLThread.html#a6337f5a97ff1a71134200565b354d2d7',1,'OpenGLThread']]],
   ['makeshaders',['makeShaders',['../classOpenGLThread.html#af2c27197566dfc1f2fa894342f22d6df',1,'OpenGLThread']]],
+  ['managetimer',['manageTimer',['../classSlotContext.html#a5770bc010ad9635abcb6952b1c422750',1,'SlotContext']]],
   ['maxsizes',['MaxSizes',['../constant_8h.html#a6c4e963f010722ebbda0faf1583989bb',1,'constant.h']]],
   ['media_5ftype',['media_type',['../classBasicFrame.html#ac97acb7471526e6807e386dcf5b9e8e0',1,'BasicFrame::media_type()'],['../classAVMediaFrame.html#a90e4bd52b819e23cc0b93012d27f865d',1,'AVMediaFrame::media_type()']]],
   ['mediatype',['MediaType',['../codec_8h.html#a1499e9f8a76cb81b43b7a4b0dbe7e44a',1,'codec.h']]],

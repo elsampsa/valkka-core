@@ -59,12 +59,18 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.4.4
+### Current stable version is 0.4.5
+
+0.4.5 Version
+- Background texture when no stream is coming through
+- Weird bitmap sizes work
+- TestThread class for sending (PyQt) signals from cpp
+- etc.
+
+### Older versions
 
 0.4.4 Version
 - RTSP server works
-
-### Older versions
 
 0.4.3 Version
 - Now reads acc in addition to annex b h264

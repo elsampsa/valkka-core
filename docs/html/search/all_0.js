@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['activate',['activate',['../classFileFrameFilter.html#a7c7fe5a052012e7004584880614da606',1,'FileFrameFilter::activate()'],['../classSlotContext.html#a65c0c12cb0fc180a8c2693aca1866561',1,'SlotContext::activate()'],['../classRenderContext.html#ab424a17333f5584d4e86b40e3f403a88',1,'RenderContext::activate()']]],
-  ['activateif',['activateIf',['../classRenderContext.html#aa3ac12468a3a1476dab206130327ab5a',1,'RenderContext']]],
+  ['activate',['activate',['../classFileFrameFilter.html#a7c7fe5a052012e7004584880614da606',1,'FileFrameFilter::activate()'],['../classSlotContext.html#a35460fe19f7826d08307ffe39e71c5d3',1,'SlotContext::activate()'],['../classRenderContext.html#a9d35f8024f738cf73b99697487ef173a',1,'RenderContext::activate()']]],
   ['active',['active',['../classFileFrameFilter.html#a0e6cdb3beb767afecbecf3daece1d62a',1,'FileFrameFilter::active()'],['../classBufferSource.html#af2891d20315d560f9e30924d1be25557',1,'BufferSource::active()'],['../classSlotContext.html#a950b167cf90911ed67a8af57730347e9',1,'SlotContext::active()']]],
   ['active_5fslots',['active_slots',['../classFileThread.html#a38e115da765b12cb03bc52208b079fa8',1,'FileThread']]],
   ['addcontext',['addContext',['../classRenderGroup.html#a307689d413e200c783b6a8ed3d24df21',1,'RenderGroup']]],

@@ -3,7 +3,7 @@
 <area shape="rect" id="node3" href="$tools_8h.html#a9cec5da1c89d2e3965b8156b366280a1" title="Checks the slot number range. " alt="" coords="305,37,365,64"/>
 <area shape="rect" id="node4" href="$classFrame.html#ac1f39d349213eafc858e44b7292d54d4" title="Returns the subclass frame type. See Frame::frameclass. " alt="" coords="701,189,857,216"/>
 <area shape="rect" id="node5" href="$classOpenGLThread.html#a4473e951ddb16921d4119a90594bfc5f" title="How much time since handleFifo exited. " alt="" coords="234,88,437,115"/>
-<area shape="rect" id="node6" href="$classOpenGLThread.html#ab52f1dd7644e3ad26c8c96f58fcdf4f6" title="Load PBO to texture in slot n_slot. " alt="" coords="232,189,439,216"/>
+<area shape="rect" id="node6" href="$classOpenGLThread.html#ab52f1dd7644e3ad26c8c96f58fcdf4f6" title="Load PBO to texture in OpenGLThread::slots_[n_slot]. " alt="" coords="232,189,439,216"/>
 <area shape="rect" id="node7" href="$classOpenGLThread.html#a9c52452ac81f91999cf8487d9796a1f0" title="Render all RenderGroup(s) depending on slot n_slot. " alt="" coords="258,240,413,267"/>
 <area shape="rect" id="node8" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Like FrameFifo::recycle_ but with mutex protection. " alt="" coords="270,291,401,317"/>
 <area shape="rect" id="node9" href="$classFrameFifo.html#a5cd4bd7b55780c158d7ee8beeb99cfc2" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="501,240,639,267"/>

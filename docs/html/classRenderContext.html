@@ -90,6 +90,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classRenderContext-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">RenderContext Class Reference<div class="ingroups"><a class="el" href="group__openglthread__tag.html">opengl</a></div></div>  </div>
@@ -105,7 +107,7 @@ Collaboration diagram for RenderContext:</div>
 <div class="dyncontent">
 <div class="center"><img src="classRenderContext__coll__graph.png" border="0" usemap="#RenderContext_coll__map" alt="Collaboration graph"/></div>
 <map name="RenderContext_coll__map" id="RenderContext_coll__map">
-<area shape="rect" id="node2" href="classSlotContext.html" title="Each Frame carries information about it&#39;s slot number in Frame::slot. " alt="" coords="55,273,145,300"/>
+<area shape="rect" id="node2" href="classSlotContext.html" title="Each Frame carries information about it&#39;s slot number in Frame::slot. " alt="" coords="55,288,145,315"/>
 <area shape="rect" id="node3" href="structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. " alt="" coords="5,5,96,32"/>
 <area shape="rect" id="node5" href="classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids..." alt="" coords="67,95,115,121"/>
 <area shape="rect" id="node4" href="classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.) " alt="" coords="62,184,138,211"/>
@@ -116,9 +118,9 @@ Collaboration diagram for RenderContext:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a358139d51db9666aaaf09f6b28bd665e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a358139d51db9666aaaf09f6b28bd665e">RenderContext</a> (const <a class="el" href="classSlotContext.html">SlotContext</a> &amp;<a class="el" href="classRenderContext.html#a6e4acba0baff973f7bc00bd9ba572d9b">slot_context</a>, unsigned int <a class="el" href="classRenderContext.html#a81a26c3d4f4abd4cdeed8e547bbd9a48">z</a>=0)</td></tr>
-<tr class="memdesc:a358139d51db9666aaaf09f6b28bd665e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a358139d51db9666aaaf09f6b28bd665e">More...</a><br /></td></tr>
-<tr class="separator:a358139d51db9666aaaf09f6b28bd665e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12b99c4871313fc8f6f4de2691849bef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a12b99c4871313fc8f6f4de2691849bef">RenderContext</a> (<a class="el" href="classSlotContext.html">SlotContext</a> &amp;<a class="el" href="classRenderContext.html#ae9d4ab6aa733037e541ecefd08c596b4">slot_context</a>, int <a class="el" href="classRenderContext.html#a6fe8ab0f148804646fa587716b91dba6">id</a>, unsigned int <a class="el" href="classRenderContext.html#a81a26c3d4f4abd4cdeed8e547bbd9a48">z</a>=0)</td></tr>
+<tr class="memdesc:a12b99c4871313fc8f6f4de2691849bef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a12b99c4871313fc8f6f4de2691849bef">More...</a><br /></td></tr>
+<tr class="separator:a12b99c4871313fc8f6f4de2691849bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af37b6cf5a4e99e9865a76fcfcbe12ef5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af37b6cf5a4e99e9865a76fcfcbe12ef5"></a>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#af37b6cf5a4e99e9865a76fcfcbe12ef5">~RenderContext</a> ()</td></tr>
 <tr class="memdesc:af37b6cf5a4e99e9865a76fcfcbe12ef5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default virtual destructor. <br /></td></tr>
@@ -127,17 +129,6 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#ac7be212a8a6f5345346d1d37b90f6744">getId</a> () const </td></tr>
 <tr class="memdesc:ac7be212a8a6f5345346d1d37b90f6744"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the unique id of this render context. <br /></td></tr>
 <tr class="separator:ac7be212a8a6f5345346d1d37b90f6744"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2208eb766efc7e4ab2e9e6c5694559e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2208eb766efc7e4ab2e9e6c5694559e0"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isActive</b> ()</td></tr>
-<tr class="separator:a2208eb766efc7e4ab2e9e6c5694559e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab424a17333f5584d4e86b40e3f403a88"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab424a17333f5584d4e86b40e3f403a88"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#ab424a17333f5584d4e86b40e3f403a88">activate</a> ()</td></tr>
-<tr class="memdesc:ab424a17333f5584d4e86b40e3f403a88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activate this <a class="el" href="classRenderContext.html" title="Encapsulates data for rendering a single bitmap: vertex array object (VAO), vertex buffer object (VBO...">RenderContext</a> (now it can render) <br /></td></tr>
-<tr class="separator:ab424a17333f5584d4e86b40e3f403a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3ac12468a3a1476dab206130327ab5a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3ac12468a3a1476dab206130327ab5a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#aa3ac12468a3a1476dab206130327ab5a">activateIf</a> ()</td></tr>
-<tr class="memdesc:aa3ac12468a3a1476dab206130327ab5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to activate if not active already. <br /></td></tr>
-<tr class="separator:aa3ac12468a3a1476dab206130327ab5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1670d468447d7fa71085e7d482bdf2a8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1670d468447d7fa71085e7d482bdf2a8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a1670d468447d7fa71085e7d482bdf2a8">render</a> (XWindowAttributes <a class="el" href="classRenderContext.html#a3e0a39c93825918a48e4fb19211320ff">x_window_attr</a>)</td></tr>
 <tr class="memdesc:a1670d468447d7fa71085e7d482bdf2a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does the actual drawing of the bitmap. <br /></td></tr>
@@ -157,21 +148,32 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a6e4acba0baff973f7bc00bd9ba572d9b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e4acba0baff973f7bc00bd9ba572d9b"></a>
-const <a class="el" href="classSlotContext.html">SlotContext</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a6e4acba0baff973f7bc00bd9ba572d9b">slot_context</a></td></tr>
-<tr class="memdesc:a6e4acba0baff973f7bc00bd9ba572d9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Knows relevant <a class="el" href="classShader.html" title="A general purpose shader class. ">Shader</a> and <a class="el" href="classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.) ">YUVTEX</a>. <br /></td></tr>
-<tr class="separator:a6e4acba0baff973f7bc00bd9ba572d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9d4ab6aa733037e541ecefd08c596b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae9d4ab6aa733037e541ecefd08c596b4"></a>
+<a class="el" href="classSlotContext.html">SlotContext</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#ae9d4ab6aa733037e541ecefd08c596b4">slot_context</a></td></tr>
+<tr class="memdesc:ae9d4ab6aa733037e541ecefd08c596b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Knows relevant <a class="el" href="classShader.html" title="A general purpose shader class. ">Shader</a> and <a class="el" href="classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.) ">YUVTEX</a>. <br /></td></tr>
+<tr class="separator:ae9d4ab6aa733037e541ecefd08c596b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81a26c3d4f4abd4cdeed8e547bbd9a48"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a81a26c3d4f4abd4cdeed8e547bbd9a48"></a>
 const unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a81a26c3d4f4abd4cdeed8e547bbd9a48">z</a></td></tr>
 <tr class="memdesc:a81a26c3d4f4abd4cdeed8e547bbd9a48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stacking order. <br /></td></tr>
 <tr class="separator:a81a26c3d4f4abd4cdeed8e547bbd9a48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada5ab9a5165a81345be56f663944125b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ada5ab9a5165a81345be56f663944125b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>active</b></td></tr>
-<tr class="separator:ada5ab9a5165a81345be56f663944125b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fe8ab0f148804646fa587716b91dba6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6fe8ab0f148804646fa587716b91dba6"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a6fe8ab0f148804646fa587716b91dba6">id</a></td></tr>
 <tr class="memdesc:a6fe8ab0f148804646fa587716b91dba6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A unique id identifying this render context. <br /></td></tr>
 <tr class="separator:a6fe8ab0f148804646fa587716b91dba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e0a39c93825918a48e4fb19211320ff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e0a39c93825918a48e4fb19211320ff"></a>
+XWindowAttributes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a3e0a39c93825918a48e4fb19211320ff">x_window_attr</a></td></tr>
+<tr class="memdesc:a3e0a39c93825918a48e4fb19211320ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">X window size, etc. <br /></td></tr>
+<tr class="separator:a3e0a39c93825918a48e4fb19211320ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a9d35f8024f738cf73b99697487ef173a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9d35f8024f738cf73b99697487ef173a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a9d35f8024f738cf73b99697487ef173a">activate</a> ()</td></tr>
+<tr class="memdesc:a9d35f8024f738cf73b99697487ef173a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init VAO, VBO, etc. <br /></td></tr>
+<tr class="separator:a9d35f8024f738cf73b99697487ef173a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
 <tr class="memitem:a63c13d3eb0094f635ee251e436bc5815"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a63c13d3eb0094f635ee251e436bc5815"></a>
 GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a63c13d3eb0094f635ee251e436bc5815">VAO</a></td></tr>
 <tr class="memdesc:a63c13d3eb0094f635ee251e436bc5815"><td class="mdescLeft">&#160;</td><td class="mdescRight">id of the vertex array object <br /></td></tr>
@@ -196,23 +198,25 @@ std::array&lt; GLfloat, 20 &gt;&#160;</td><td class="memItemRight" valign="botto
 std::array&lt; GLuint, 6 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a26a91a0379dfe078a70e6ddbebaf3a83">indices</a></td></tr>
 <tr class="memdesc:a26a91a0379dfe078a70e6ddbebaf3a83"><td class="mdescLeft">&#160;</td><td class="mdescRight">data of the element buffer object <br /></td></tr>
 <tr class="separator:a26a91a0379dfe078a70e6ddbebaf3a83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e0a39c93825918a48e4fb19211320ff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e0a39c93825918a48e4fb19211320ff"></a>
-XWindowAttributes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a3e0a39c93825918a48e4fb19211320ff">x_window_attr</a></td></tr>
-<tr class="memdesc:a3e0a39c93825918a48e4fb19211320ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">X window size, etc. <br /></td></tr>
-<tr class="separator:a3e0a39c93825918a48e4fb19211320ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Encapsulates data for rendering a single bitmap: vertex array object (VAO), vertex buffer object (VBO), vertice coordinates, transformation matrix, etc. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a358139d51db9666aaaf09f6b28bd665e"></a>
+<a class="anchor" id="a12b99c4871313fc8f6f4de2691849bef"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">RenderContext::RenderContext </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classSlotContext.html">SlotContext</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classSlotContext.html">SlotContext</a> &amp;&#160;</td>
           <td class="paramname"><em>slot_context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -240,10 +244,9 @@ XWindowAttributes&#160;</td><td class="memItemRight" valign="bottom"><a class="e
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classRenderContext_a358139d51db9666aaaf09f6b28bd665e_cgraph.png" border="0" usemap="#classRenderContext_a358139d51db9666aaaf09f6b28bd665e_cgraph" alt=""/></div>
-<map name="classRenderContext_a358139d51db9666aaaf09f6b28bd665e_cgraph" id="classRenderContext_a358139d51db9666aaaf09f6b28bd665e_cgraph">
-<area shape="rect" id="node2" href="classRenderContext.html#ab424a17333f5584d4e86b40e3f403a88" title="Activate this RenderContext (now it can render) " alt="" coords="260,5,424,32"/>
-<area shape="rect" id="node3" href="classSlotContext.html#ab98be03117a7f96e524fa665a0567446" title="Check if active. " alt="" coords="472,5,619,32"/>
+<div class="center"><img src="classRenderContext_a12b99c4871313fc8f6f4de2691849bef_cgraph.png" border="0" usemap="#classRenderContext_a12b99c4871313fc8f6f4de2691849bef_cgraph" alt=""/></div>
+<map name="classRenderContext_a12b99c4871313fc8f6f4de2691849bef_cgraph" id="classRenderContext_a12b99c4871313fc8f6f4de2691849bef_cgraph">
+<area shape="rect" id="node2" href="classRenderContext.html#a9d35f8024f738cf73b99697487ef173a" title="Init VAO, VBO, etc. " alt="" coords="260,5,424,32"/>
 </map>
 </div>
 </p>

@@ -1,14 +1,14 @@
 <map id="/home/sampsa/C/valkka/src/sharedmem.cpp" name="/home/sampsa/C/valkka/src/sharedmem.cpp">
-<area shape="rect" id="node2" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="409,393,471,420"/>
-<area shape="rect" id="node35" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="689,95,791,121"/>
+<area shape="rect" id="node2" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="445,393,507,420"/>
+<area shape="rect" id="node35" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="480,95,581,121"/>
 <area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1160,543,1243,569"/>
 <area shape="rect" id="node33" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="581,468,664,495"/>
 <area shape="rect" id="node34" href="$logging_8h.html" title="Logging utilities. " alt="" coords="121,543,196,569"/>
-<area shape="rect" id="node41" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="963,169,1053,196"/>
-<area shape="rect" id="node42" href="$frame_8h.html" title="Frame classes. " alt="" coords="757,319,824,345"/>
-<area shape="rect" id="node50" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="626,244,710,271"/>
+<area shape="rect" id="node41" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="753,169,844,196"/>
+<area shape="rect" id="node42" href="$frame_8h.html" title="Frame classes. " alt="" coords="708,319,775,345"/>
+<area shape="rect" id="node50" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="574,244,658,271"/>
 <area shape="rect" id="node43" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1193,393,1261,420"/>
-<area shape="rect" id="node44" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="739,393,842,420"/>
-<area shape="rect" id="node45" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="875,393,943,420"/>
-<area shape="rect" id="node49" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="593,393,663,420"/>
+<area shape="rect" id="node44" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="734,393,837,420"/>
+<area shape="rect" id="node45" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="870,393,938,420"/>
+<area shape="rect" id="node49" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="587,393,658,420"/>
 </map>

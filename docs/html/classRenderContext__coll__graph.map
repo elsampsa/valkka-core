@@ -1,5 +1,5 @@
 <map id="RenderContext" name="RenderContext">
-<area shape="rect" id="node2" href="$classSlotContext.html" title="Each Frame carries information about it&#39;s slot number in Frame::slot. " alt="" coords="55,273,145,300"/>
+<area shape="rect" id="node2" href="$classSlotContext.html" title="Each Frame carries information about it&#39;s slot number in Frame::slot. " alt="" coords="55,288,145,315"/>
 <area shape="rect" id="node3" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. " alt="" coords="5,5,96,32"/>
 <area shape="rect" id="node5" href="$classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids..." alt="" coords="67,95,115,121"/>
 <area shape="rect" id="node4" href="$classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.) " alt="" coords="62,184,138,211"/>

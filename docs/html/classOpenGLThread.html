@@ -117,18 +117,20 @@ Collaboration diagram for OpenGLThread:</div>
 <div class="center"><img src="classOpenGLThread__coll__graph.png" border="0" usemap="#OpenGLThread_coll__map" alt="Collaboration graph"/></div>
 <map name="OpenGLThread_coll__map" id="OpenGLThread_coll__map">
 <area shape="rect" id="node2" href="classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="5,199,68,225"/>
-<area shape="rect" id="node3" href="classYUVFrame.html" title="A GPU YUV frame. " alt="" coords="92,199,179,225"/>
-<area shape="rect" id="node4" href="classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="17,95,75,121"/>
-<area shape="rect" id="node5" href="structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. " alt="" coords="99,95,190,121"/>
-<area shape="rect" id="node6" href="classRGBShader.html" title="RGBShader" alt="" coords="203,199,295,225"/>
-<area shape="rect" id="node7" href="classShader.html" title="A general purpose shader class. " alt="" coords="245,95,308,121"/>
-<area shape="rect" id="node14" href="classYUVShader.html" title="YUVShader" alt="" coords="319,199,410,225"/>
-<area shape="rect" id="node8" href="classFifoFrameFilter.html" title="Passes frames to a multiprocessing fifo. " alt="" coords="435,199,545,225"/>
-<area shape="rect" id="node9" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="339,95,427,121"/>
-<area shape="rect" id="node10" href="classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack. " alt="" coords="505,95,587,121"/>
-<area shape="rect" id="node12" href="classOpenGLFrameFifo.html" title="A FrameFifo managed and used by OpenGLThread. " alt="" coords="569,199,699,225"/>
-<area shape="rect" id="node11" href="structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo. " alt="" coords="483,5,609,32"/>
-<area shape="rect" id="node13" href="structOpenGLFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for an OpenGLFrameFifo. " alt="" coords="611,95,785,121"/>
+<area shape="rect" id="node3" href="classYUVFrame.html" title="A GPU YUV frame. " alt="" coords="73,109,160,136"/>
+<area shape="rect" id="node4" href="classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="63,5,122,32"/>
+<area shape="rect" id="node5" href="structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. " alt="" coords="181,5,271,32"/>
+<area shape="rect" id="node15" href="classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids..." alt="" coords="237,109,285,136"/>
+<area shape="rect" id="node6" href="classRGBShader.html" title="RGBShader" alt="" coords="323,199,415,225"/>
+<area shape="rect" id="node7" href="classShader.html" title="A general purpose shader class. " alt="" coords="361,109,424,136"/>
+<area shape="rect" id="node16" href="classYUVShader.html" title="YUVShader" alt="" coords="439,199,530,225"/>
+<area shape="rect" id="node8" href="classFifoFrameFilter.html" title="Passes frames to a multiprocessing fifo. " alt="" coords="555,199,665,225"/>
+<area shape="rect" id="node9" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="455,109,543,136"/>
+<area shape="rect" id="node10" href="classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack. " alt="" coords="621,109,703,136"/>
+<area shape="rect" id="node12" href="classOpenGLFrameFifo.html" title="A FrameFifo managed and used by OpenGLThread. " alt="" coords="689,199,819,225"/>
+<area shape="rect" id="node11" href="structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo. " alt="" coords="599,5,725,32"/>
+<area shape="rect" id="node13" href="structOpenGLFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for an OpenGLFrameFifo. " alt="" coords="727,109,901,136"/>
+<area shape="rect" id="node14" href="classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.) " alt="" coords="223,199,299,225"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -163,22 +165,25 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#af5cc0544e52bd20b8664381490902c61">delRenderGroup</a> (Window window_id)</td></tr>
 <tr class="memdesc:af5cc0544e52bd20b8664381490902c61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove <a class="el" href="classRenderGroup.html" title="Group of bitmaps that are rendered into the same X-window. ">RenderGroup</a> from <a class="el" href="classOpenGLThread.html#adc39f4a0676a56524c58d3517df97fdb" title="window_id =&gt; RenderGroup mapping. RenderGroup objects are warehoused here. ">OpenGLThread::render_groups</a>. <br /></td></tr>
 <tr class="separator:af5cc0544e52bd20b8664381490902c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f1a43d931ed5a43c4894a51f1484bd8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5f1a43d931ed5a43c4894a51f1484bd8"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a5f1a43d931ed5a43c4894a51f1484bd8">newRenderContext</a> (SlotNumber slot, Window window_id, unsigned int z)</td></tr>
-<tr class="memdesc:a5f1a43d931ed5a43c4894a51f1484bd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new render context. <br /></td></tr>
-<tr class="separator:a5f1a43d931ed5a43c4894a51f1484bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac999e4b38de0e978cbc96c4ac3496d29"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac999e4b38de0e978cbc96c4ac3496d29"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ac999e4b38de0e978cbc96c4ac3496d29">newRenderContext</a> (SlotNumber slot, Window window_id, int id, unsigned int z)</td></tr>
+<tr class="memdesc:ac999e4b38de0e978cbc96c4ac3496d29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new render context. <br /></td></tr>
+<tr class="separator:ac999e4b38de0e978cbc96c4ac3496d29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3996cf6c20676fd6c5f3103f4d723627"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3996cf6c20676fd6c5f3103f4d723627"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a3996cf6c20676fd6c5f3103f4d723627">delRenderContext</a> (int id)</td></tr>
 <tr class="memdesc:a3996cf6c20676fd6c5f3103f4d723627"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs through <a class="el" href="classOpenGLThread.html#adc39f4a0676a56524c58d3517df97fdb" title="window_id =&gt; RenderGroup mapping. RenderGroup objects are warehoused here. ">OpenGLThread::render_groups</a> and removes indicated <a class="el" href="classRenderContext.html" title="Encapsulates data for rendering a single bitmap: vertex array object (VAO), vertex buffer object (VBO...">RenderContext</a>. <br /></td></tr>
 <tr class="separator:a3996cf6c20676fd6c5f3103f4d723627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab52f1dd7644e3ad26c8c96f58fcdf4f6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab52f1dd7644e3ad26c8c96f58fcdf4f6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ab52f1dd7644e3ad26c8c96f58fcdf4f6">loadYUVFrame</a> (SlotNumber n_slot, <a class="el" href="classYUVFrame.html">YUVFrame</a> *yuvframe)</td></tr>
-<tr class="memdesc:ab52f1dd7644e3ad26c8c96f58fcdf4f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load PBO to texture in slot n_slot. <br /></td></tr>
+<tr class="memdesc:ab52f1dd7644e3ad26c8c96f58fcdf4f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load PBO to texture in <a class="el" href="classOpenGLThread.html#a1e532a9d09d7ee772bceb69b00591c59" title="index =&gt; SlotContext mapping (based on vector indices) ">OpenGLThread::slots_</a>[n_slot]. <br /></td></tr>
 <tr class="separator:ab52f1dd7644e3ad26c8c96f58fcdf4f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c52452ac81f91999cf8487d9796a1f0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9c52452ac81f91999cf8487d9796a1f0"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a9c52452ac81f91999cf8487d9796a1f0">render</a> (SlotNumber n_slot)</td></tr>
 <tr class="memdesc:a9c52452ac81f91999cf8487d9796a1f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render all <a class="el" href="classRenderGroup.html" title="Group of bitmaps that are rendered into the same X-window. ">RenderGroup(s)</a> depending on slot n_slot. <br /></td></tr>
 <tr class="separator:a9c52452ac81f91999cf8487d9796a1f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e0e9c33ecf41f96c807109399d6324b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1e0e9c33ecf41f96c807109399d6324b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>checkSlots</b> (long int mstime)</td></tr>
+<tr class="separator:a1e0e9c33ecf41f96c807109399d6324b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97a7eb64a9cfaa8fefef206846dc8df6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a97a7eb64a9cfaa8fefef206846dc8df6"></a>
 Display *&#160;</td><td class="memItemRight" valign="bottom"><b>getDisplayId</b> ()</td></tr>
 <tr class="separator:a97a7eb64a9cfaa8fefef206846dc8df6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -188,15 +193,18 @@ const GLXContext &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get
 <tr class="memitem:a1ed8598c9b8acf5ae02637aedd4518d9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ed8598c9b8acf5ae02637aedd4518d9"></a>
 const Window &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getRootId</b> ()</td></tr>
 <tr class="separator:a1ed8598c9b8acf5ae02637aedd4518d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3401b066b8cf98a8c6966847e9255d8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae3401b066b8cf98a8c6966847e9255d8"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>slotUsed</b> (SlotNumber i)</td></tr>
+<tr class="separator:ae3401b066b8cf98a8c6966847e9255d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e00a0188c3ca8e8576bc311475d382f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e00a0188c3ca8e8576bc311475d382f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>activateSlot</b> (SlotNumber i, <a class="el" href="classYUVFrame.html">YUVFrame</a> *yuvframe)</td></tr>
 <tr class="separator:a7e00a0188c3ca8e8576bc311475d382f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a757a5a463baf4661592ccda4748e049e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a757a5a463baf4661592ccda4748e049e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>activateSlotIf</b> (SlotNumber i, <a class="el" href="classYUVFrame.html">YUVFrame</a> *yuvframe)</td></tr>
 <tr class="separator:a757a5a463baf4661592ccda4748e049e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3bb68a137ac8a44bd17c847928a6a8a0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3bb68a137ac8a44bd17c847928a6a8a0"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>slotTimingOk</b> (SlotNumber n_slot, long int mstime)</td></tr>
-<tr class="separator:a3bb68a137ac8a44bd17c847928a6a8a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d0c052b6cac8ec2d3deef4ef7f96a4f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d0c052b6cac8ec2d3deef4ef7f96a4f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>manageSlotTimer</b> (SlotNumber i, long int mstime)</td></tr>
+<tr class="separator:a2d0c052b6cac8ec2d3deef4ef7f96a4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82e82dbaec5fa6c62bd7dd79916c485c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a82e82dbaec5fa6c62bd7dd79916c485c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>debugOn</b> ()</td></tr>
 <tr class="separator:a82e82dbaec5fa6c62bd7dd79916c485c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -215,6 +223,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a475f0e7a05bc5ec5bb4b89131a6a7d9e">postRun</a> ()</td></tr>
 <tr class="memdesc:a475f0e7a05bc5ec5bb4b89131a6a7d9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the main execution loop exits, but before joining the thread. <br /></td></tr>
 <tr class="separator:a475f0e7a05bc5ec5bb4b89131a6a7d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1ef5d4da67e174bb017b492d05b445a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1ef5d4da67e174bb017b492d05b445a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>handleSignal</b> (<a class="el" href="structOpenGLSignalContext.html">OpenGLSignalContext</a> &amp;signal_ctx)</td></tr>
+<tr class="separator:ae1ef5d4da67e174bb017b492d05b445a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6872b09bc58e2ccacfb15e71bf5a961e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6872b09bc58e2ccacfb15e71bf5a961e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a6872b09bc58e2ccacfb15e71bf5a961e">handleSignals</a> ()</td></tr>
 <tr class="memdesc:a6872b09bc58e2ccacfb15e71bf5a961e"><td class="mdescLeft">&#160;</td><td class="mdescRight">From signals to methods. <br /></td></tr>
@@ -309,6 +320,10 @@ Window&#160;</td><td class="memItemRight" valign="bottom"><b>getChildWindow</b> 
 <a class="el" href="classFifoFrameFilter.html">FifoFrameFilter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#aec91256bd35c861e076e514d16b09693">getFrameFilter</a> ()</td></tr>
 <tr class="memdesc:aec91256bd35c861e076e514d16b09693"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: get filter for passing frames to this thread // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:aec91256bd35c861e076e514d16b09693"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ba9d6cf06e8c9582c02265f67b88722"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2ba9d6cf06e8c9582c02265f67b88722"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a2ba9d6cf06e8c9582c02265f67b88722">setStaticTexFile</a> (const char *fname)</td></tr>
+<tr class="memdesc:a2ba9d6cf06e8c9582c02265f67b88722"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: set a file where the static texture (yuv image that's shown when no stream is received) is read from // &lt;pyapi&gt; <br /></td></tr>
+<tr class="separator:a2ba9d6cf06e8c9582c02265f67b88722"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c556c232d541bb7d5345b7164bc95e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c556c232d541bb7d5345b7164bc95e9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a3c556c232d541bb7d5345b7164bc95e9">stopCall</a> ()</td></tr>
 <tr class="memdesc:a3c556c232d541bb7d5345b7164bc95e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">API call: stops the thread. <br /></td></tr>
@@ -387,6 +402,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 long unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a1ca155ce98922acce2b36b08acddeedc">insertFifo</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
 <tr class="memdesc:a1ca155ce98922acce2b36b08acddeedc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sorted insert: insert a timestamped frame into the fifo. <br /></td></tr>
 <tr class="separator:a1ca155ce98922acce2b36b08acddeedc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5fa1ccccde49f578cdbdb6bdc545b4a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5fa1ccccde49f578cdbdb6bdc545b4a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ab5fa1ccccde49f578cdbdb6bdc545b4a">readStaticTex</a> ()</td></tr>
+<tr class="memdesc:ab5fa1ccccde49f578cdbdb6bdc545b4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a static texture that's shown on a window when no stream is received. Uses <a class="el" href="classOpenGLThread.html#a9dc68aa21b7c94337731ca2681cb0e39" title="Name of the file where statictex is. ">OpenGLThread::static_texture_file</a>. <br /></td></tr>
+<tr class="separator:ab5fa1ccccde49f578cdbdb6bdc545b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3c205644b06c34f4bb44e6cdc7b8e88"><td class="memItemLeft" align="right" valign="top">long unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ae3c205644b06c34f4bb44e6cdc7b8e88">handleFifo</a> ()</td></tr>
 <tr class="memdesc:ae3c205644b06c34f4bb44e6cdc7b8e88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation.  <a href="#ae3c205644b06c34f4bb44e6cdc7b8e88">More...</a><br /></td></tr>
 <tr class="separator:ae3c205644b06c34f4bb44e6cdc7b8e88"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -421,6 +440,14 @@ Protected Attributes</h2></td></tr>
 <a class="el" href="classRGBShader.html">RGBShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a90252ffb0155a3c5d300ea645b313dde">rgb_shader</a></td></tr>
 <tr class="memdesc:a90252ffb0155a3c5d300ea645b313dde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialized by <a class="el" href="classOpenGLThread.html#af2c27197566dfc1f2fa894342f22d6df" title="Compile shaders. ">OpenGLThread::makeShaders</a>. <br /></td></tr>
 <tr class="separator:a90252ffb0155a3c5d300ea645b313dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe7059e3939683420e41964c8d020bc1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe7059e3939683420e41964c8d020bc1"></a>
+<a class="el" href="classYUVTEX.html">YUVTEX</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#afe7059e3939683420e41964c8d020bc1">statictex</a></td></tr>
+<tr class="memdesc:afe7059e3939683420e41964c8d020bc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Texture to be shown when there is no stream. <br /></td></tr>
+<tr class="separator:afe7059e3939683420e41964c8d020bc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dc68aa21b7c94337731ca2681cb0e39"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9dc68aa21b7c94337731ca2681cb0e39"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a9dc68aa21b7c94337731ca2681cb0e39">static_texture_file</a></td></tr>
+<tr class="memdesc:a9dc68aa21b7c94337731ca2681cb0e39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the file where statictex is. <br /></td></tr>
+<tr class="separator:a9dc68aa21b7c94337731ca2681cb0e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3530218897cbfab7775a514badbcd37"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac3530218897cbfab7775a514badbcd37"></a>
 Display *&#160;</td><td class="memItemRight" valign="bottom"><b>display_id</b></td></tr>
 <tr class="separator:ac3530218897cbfab7775a514badbcd37"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -447,7 +474,7 @@ Colormap&#160;</td><td class="memItemRight" valign="bottom"><b>cmap</b></td></tr
 <tr class="separator:afd203350dbf66e92d1a2f4b605840e87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e98178bf6e41cb643fa33e8cafcd9c7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e98178bf6e41cb643fa33e8cafcd9c7"></a>
 <a class="el" href="classYUVFrame.html">YUVFrame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a8e98178bf6e41cb643fa33e8cafcd9c7">dummyframe</a></td></tr>
-<tr class="memdesc:a8e98178bf6e41cb643fa33e8cafcd9c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">A PBO membuf which we reserve from the GPU as the first membuf, but is never used (this stabilizes GPU direct memory access) <br /></td></tr>
+<tr class="memdesc:a8e98178bf6e41cb643fa33e8cafcd9c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">A PBO membuf which we reserve from the GPU as the first membuf, but is never used. <br /></td></tr>
 <tr class="separator:a8e98178bf6e41cb643fa33e8cafcd9c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e532a9d09d7ee772bceb69b00591c59"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1e532a9d09d7ee772bceb69b00591c59"></a>
 std::vector&lt; <a class="el" href="classSlotContext.html">SlotContext</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a1e532a9d09d7ee772bceb69b00591c59">slots_</a></td></tr>
@@ -461,10 +488,6 @@ std::map&lt; Window, <a class="el" href="classRenderGroup.html">RenderGroup</a> 
 std::vector&lt; std::list&lt; <a class="el" href="classRenderGroup.html">RenderGroup</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a643ac63c87b6754a135d5e6f09d41d0e">render_lists</a></td></tr>
 <tr class="memdesc:a643ac63c87b6754a135d5e6f09d41d0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Each vector element corresponds to a slot. Each list inside a vector element has pointers to RenderGroups to be rendered. <br /></td></tr>
 <tr class="separator:a643ac63c87b6754a135d5e6f09d41d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18f06a368d98552334fcb4b6c72a3f24"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a18f06a368d98552334fcb4b6c72a3f24"></a>
-std::vector&lt; long int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a18f06a368d98552334fcb4b6c72a3f24">slot_times</a></td></tr>
-<tr class="memdesc:a18f06a368d98552334fcb4b6c72a3f24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save last time OpenGL was fed with a frame for this slot. <br /></td></tr>
-<tr class="separator:a18f06a368d98552334fcb4b6c72a3f24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd95b01df8ebaf9cae08e13d4ba87cda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd95b01df8ebaf9cae08e13d4ba87cda"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#abd95b01df8ebaf9cae08e13d4ba87cda">msbuftime</a></td></tr>
 <tr class="memdesc:abd95b01df8ebaf9cae08e13d4ba87cda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buffering time in milliseconds. <br /></td></tr>
@@ -632,7 +655,9 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classOpenGLThread_a828e9b1045354ee6083edcb68142e9ec_cgraph.png" border="0" usemap="#classOpenGLThread_a828e9b1045354ee6083edcb68142e9ec_cgraph" alt=""/></div>
 <map name="classOpenGLThread_a828e9b1045354ee6083edcb68142e9ec_cgraph" id="classOpenGLThread_a828e9b1045354ee6083edcb68142e9ec_cgraph">
-<area shape="rect" id="node2" href="classOpenGLThread.html#aaea16d4cc2c882df0a168cc1a1770984" title="Send a signal to the thread and wait all signals to be executed. " alt="" coords="300,5,483,47"/>
+<area shape="rect" id="node2" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="300,31,415,57"/>
+<area shape="rect" id="node3" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="489,5,599,32"/>
+<area shape="rect" id="node4" href="classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761" title="Default constructor. " alt="" coords="463,56,625,83"/>
 </map>
 </div>
 </p>
@@ -666,7 +691,9 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classOpenGLThread_ac05c2be99cdeb614aac854d442995c45_cgraph.png" border="0" usemap="#classOpenGLThread_ac05c2be99cdeb614aac854d442995c45_cgraph" alt=""/></div>
 <map name="classOpenGLThread_ac05c2be99cdeb614aac854d442995c45_cgraph" id="classOpenGLThread_ac05c2be99cdeb614aac854d442995c45_cgraph">
-<area shape="rect" id="node2" href="classOpenGLThread.html#aaea16d4cc2c882df0a168cc1a1770984" title="Send a signal to the thread and wait all signals to be executed. " alt="" coords="288,5,471,47"/>
+<area shape="rect" id="node2" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="288,31,403,57"/>
+<area shape="rect" id="node3" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="477,5,587,32"/>
+<area shape="rect" id="node4" href="classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761" title="Default constructor. " alt="" coords="451,56,613,83"/>
 </map>
 </div>
 </p>
@@ -706,7 +733,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" id="node3" href="tools_8h.html#a9cec5da1c89d2e3965b8156b366280a1" title="Checks the slot number range. " alt="" coords="305,37,365,64"/>
 <area shape="rect" id="node4" href="classFrame.html#ac1f39d349213eafc858e44b7292d54d4" title="Returns the subclass frame type. See Frame::frameclass. " alt="" coords="701,189,857,216"/>
 <area shape="rect" id="node5" href="classOpenGLThread.html#a4473e951ddb16921d4119a90594bfc5f" title="How much time since handleFifo exited. " alt="" coords="234,88,437,115"/>
-<area shape="rect" id="node6" href="classOpenGLThread.html#ab52f1dd7644e3ad26c8c96f58fcdf4f6" title="Load PBO to texture in slot n_slot. " alt="" coords="232,189,439,216"/>
+<area shape="rect" id="node6" href="classOpenGLThread.html#ab52f1dd7644e3ad26c8c96f58fcdf4f6" title="Load PBO to texture in OpenGLThread::slots_[n_slot]. " alt="" coords="232,189,439,216"/>
 <area shape="rect" id="node7" href="classOpenGLThread.html#a9c52452ac81f91999cf8487d9796a1f0" title="Render all RenderGroup(s) depending on slot n_slot. " alt="" coords="258,240,413,267"/>
 <area shape="rect" id="node8" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Like FrameFifo::recycle_ but with mutex protection. " alt="" coords="270,291,401,317"/>
 <area shape="rect" id="node9" href="classFrameFifo.html#a5cd4bd7b55780c158d7ee8beeb99cfc2" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="501,240,639,267"/>
@@ -793,7 +820,9 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classOpenGLThread_aa1604bd2f368ac82b690713993472dcc_cgraph.png" border="0" usemap="#classOpenGLThread_aa1604bd2f368ac82b690713993472dcc_cgraph" alt=""/></div>
 <map name="classOpenGLThread_aa1604bd2f368ac82b690713993472dcc_cgraph" id="classOpenGLThread_aa1604bd2f368ac82b690713993472dcc_cgraph">
-<area shape="rect" id="node2" href="classOpenGLThread.html#aaea16d4cc2c882df0a168cc1a1770984" title="Send a signal to the thread and wait all signals to be executed. " alt="" coords="307,5,489,47"/>
+<area shape="rect" id="node2" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="307,31,421,57"/>
+<area shape="rect" id="node3" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="495,5,606,32"/>
+<area shape="rect" id="node4" href="classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761" title="Default constructor. " alt="" coords="469,56,632,83"/>
 </map>
 </div>
 </p>
@@ -827,7 +856,9 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classOpenGLThread_aa836bb0e21ad549dd78f4d6e5adfa7ff_cgraph.png" border="0" usemap="#classOpenGLThread_aa836bb0e21ad549dd78f4d6e5adfa7ff_cgraph" alt=""/></div>
 <map name="classOpenGLThread_aa836bb0e21ad549dd78f4d6e5adfa7ff_cgraph" id="classOpenGLThread_aa836bb0e21ad549dd78f4d6e5adfa7ff_cgraph">
-<area shape="rect" id="node2" href="classOpenGLThread.html#aaea16d4cc2c882df0a168cc1a1770984" title="Send a signal to the thread and wait all signals to be executed. " alt="" coords="296,5,479,47"/>
+<area shape="rect" id="node2" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="296,31,411,57"/>
+<area shape="rect" id="node3" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="485,5,595,32"/>
+<area shape="rect" id="node4" href="classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761" title="Default constructor. " alt="" coords="459,56,621,83"/>
 </map>
 </div>
 </p>

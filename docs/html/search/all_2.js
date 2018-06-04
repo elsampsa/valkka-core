@@ -1,9 +1,13 @@
 var searchData=
 [
+  ['cachinggateframefilter',['CachingGateFrameFilter',['../classCachingGateFrameFilter.html',1,'']]],
   ['callswaptime',['callswaptime',['../classOpenGLThread.html#ad24a551f833274b53c53d99183c98c1f',1,'OpenGLThread']]],
   ['canary',['canary',['../classBufferSource.html#ab807118e6c625c82092b4b95006035e0',1,'BufferSource']]],
+  ['channel0',['channel0',['../classSwitch.html#a8d920c5d1ed7018b7b2245e6d0e9580a',1,'Switch']]],
+  ['channel1',['channel1',['../classSwitch.html#ae587c8198032898555121a72ec3993db',1,'Switch']]],
   ['checkalive',['checkAlive',['../classLiveThread.html#a39ea8a235a429002345797a6ae900113',1,'LiveThread']]],
   ['checkbuffersize',['checkBufferSize',['../classFrameSink.html#ab1d5c7e50bcdd2463f2e384c300d578f',1,'FrameSink']]],
+  ['checkifdead',['checkIfDead',['../classSlotContext.html#ac8cf39535fc3599cd626c09823c2aa69',1,'SlotContext']]],
   ['child_5fid',['child_id',['../classRenderGroup.html#a6eb2340dba794074fdd91bfb912241a7',1,'RenderGroup']]],
   ['clearflag',['clearFlag',['../classSharedMemRingBuffer.html#a156b27e9e115f4c73c0e9992cb115ded',1,'SharedMemRingBuffer']]],
   ['client',['client',['../classRTSPConnection.html#a9dab1076ce4f68c3f1ed49a59492bea5',1,'RTSPConnection']]],
@@ -31,13 +35,13 @@ var searchData=
   ['continueaftersetup',['continueAfterSETUP',['../classValkkaRTSPClient.html#a63d8924c7eec17b05b150bb6272df565',1,'ValkkaRTSPClient']]],
   ['continueplaying',['continuePlaying',['../classFrameSink.html#a8510cb04286c99b04111e33c55a0d8fd',1,'FrameSink']]],
   ['contributing',['Contributing',['../contributing.html',1,'']]],
-  ['copyfrom',['copyFrom',['../classFrame.html#a5128f5398690581f541eb9cc3a1c8432',1,'Frame::copyFrom()'],['../classBasicFrame.html#a1951c50cb53e6c33a310de8d966c70b6',1,'BasicFrame::copyFrom()'],['../classSetupFrame.html#ae85d994166f83781333415914de450f4',1,'SetupFrame::copyFrom()'],['../classAVMediaFrame.html#a508d808e2ad81fe6674c478e9ea5c885',1,'AVMediaFrame::copyFrom()'],['../classAVBitmapFrame.html#a06c12ed6d73c5e7e0a543b6595ebb77d',1,'AVBitmapFrame::copyFrom()'],['../classAVRGBFrame.html#a9d1d4a8f432c82bf412ff06153823cca',1,'AVRGBFrame::copyFrom()'],['../classYUVFrame.html#a16d5b0fb61be88ac4792ca5635944d7c',1,'YUVFrame::copyFrom()']]],
+  ['copyfrom',['copyFrom',['../classFrame.html#a5128f5398690581f541eb9cc3a1c8432',1,'Frame::copyFrom()'],['../classBasicFrame.html#a1951c50cb53e6c33a310de8d966c70b6',1,'BasicFrame::copyFrom()'],['../classSetupFrame.html#ae85d994166f83781333415914de450f4',1,'SetupFrame::copyFrom()'],['../classAVMediaFrame.html#a508d808e2ad81fe6674c478e9ea5c885',1,'AVMediaFrame::copyFrom()'],['../classAVBitmapFrame.html#a06c12ed6d73c5e7e0a543b6595ebb77d',1,'AVBitmapFrame::copyFrom()'],['../classAVRGBFrame.html#a9d1d4a8f432c82bf412ff06153823cca',1,'AVRGBFrame::copyFrom()'],['../classYUVFrame.html#a16d5b0fb61be88ac4792ca5635944d7c',1,'YUVFrame::copyFrom()'],['../classSignalFrame.html#a1b91a2c122367b5d9abba36a49ab70de',1,'SignalFrame::copyFrom()']]],
   ['copyfromavpacket',['copyFromAVPacket',['../classBasicFrame.html#a0c72986010d87f12f37d05f18998380c',1,'BasicFrame']]],
   ['copymetafrom',['copyMetaFrom',['../classFrame.html#a94c53ebcfa6464e67aa91078b2289240',1,'Frame']]],
   ['countframefilter',['CountFrameFilter',['../classCountFrameFilter.html',1,'']]],
   ['createnew',['createNew',['../classValkkaRTSPClient.html#a64807d6aa0069fff04bad1d10bb567b7',1,'ValkkaRTSPClient::createNew()'],['../classFrameSink.html#a86a4b5de6746d32a975dc883ee42f89d',1,'FrameSink::createNew()']]],
   ['createwindow',['createWindow',['../classOpenGLThread.html#ac98e61740bebef33797dc05f5f7a82fe',1,'OpenGLThread']]],
-  ['ctx',['ctx',['../classFileStream.html#a6b7d4aa732ab99459d323e8d248df6b9',1,'FileStream::ctx()'],['../classFrameFifo.html#ab6d88bd74b419961219af1a25931664f',1,'FrameFifo::ctx()'],['../classConnection.html#a5c17423073e0eae31f3f6d6d9eba8a93',1,'Connection::ctx()'],['../classOutbound.html#a34295a795ac5b6e23f4a7ef165564821',1,'Outbound::ctx()'],['../structOpenGLSignalContext.html#a783df241aa5b1728c3188c8f298ae6c6',1,'OpenGLSignalContext::ctx()']]],
+  ['ctx',['ctx',['../classFileStream.html#a6b7d4aa732ab99459d323e8d248df6b9',1,'FileStream::ctx()'],['../classFrameFifo.html#ab6d88bd74b419961219af1a25931664f',1,'FrameFifo::ctx()'],['../classConnection.html#a5c17423073e0eae31f3f6d6d9eba8a93',1,'Connection::ctx()'],['../classOutbound.html#a34295a795ac5b6e23f4a7ef165564821',1,'Outbound::ctx()']]],
   ['code_20walkthrough_3a_20rendering',['Code walkthrough: rendering',['../pipeline.html',1,'']]],
   ['code_20walkthrough_3a_20opengl',['Code walkthrough: OpenGL',['../pipeline2.html',1,'']]]
 ];

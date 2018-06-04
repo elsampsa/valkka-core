@@ -26,6 +26,7 @@ var searchData=
   ['doc_2eh',['doc.h',['../doc_8h.html',1,'']]],
   ['dogetnextframe',['doGetNextFrame',['../classBufferSource.html#a796bc84e5233c21c379a57f2a3b65e54',1,'BufferSource']]],
   ['doublebuffer_5fflag',['doublebuffer_flag',['../classRenderGroup.html#a5299bce3ce130b4f4e8bad5db4be3637',1,'RenderGroup']]],
+  ['doublegate',['DoubleGate',['../classDoubleGate.html',1,'']]],
   ['dummydecoder',['DummyDecoder',['../classDummyDecoder.html',1,'']]],
   ['dummyframe',['dummyframe',['../classOpenGLThread.html#a8e98178bf6e41cb643fa33e8cafcd9c7',1,'OpenGLThread']]],
   ['dummyframefilter',['DummyFrameFilter',['../classDummyFrameFilter.html',1,'']]],

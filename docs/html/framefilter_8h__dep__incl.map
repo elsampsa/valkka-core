@@ -2,16 +2,18 @@
 <area shape="rect" id="node2" href="$avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="5,95,169,136"/>
 <area shape="rect" id="node4" href="$fileframefilter_8h_source.html" title="/home/sampsa/C/valkka\l/include/fileframefilter.h" alt="" coords="193,95,357,136"/>
 <area shape="rect" id="node5" href="$filethread_8h.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="381,95,545,136"/>
-<area shape="rect" id="node7" href="$live_8h.html" title="Interface to live555. " alt="" coords="621,95,785,136"/>
-<area shape="rect" id="node8" href="$livethread_8h.html" title="A live555 thread. " alt="" coords="471,184,635,225"/>
-<area shape="rect" id="node11" href="$openglframefifo_8h_source.html" title="/home/sampsa/C/valkka\l/include/openglframefifo.h" alt="" coords="810,95,981,136"/>
-<area shape="rect" id="node14" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="1005,95,1169,136"/>
-<area shape="rect" id="node16" href="$framefilter_8cpp.html" title="/home/sampsa/C/valkka\l/src/framefilter.cpp" alt="" coords="1193,95,1357,136"/>
+<area shape="rect" id="node7" href="$framefilterset_8h.html" title="Classes using several framefilters. " alt="" coords="569,95,733,136"/>
+<area shape="rect" id="node9" href="$live_8h.html" title="Interface to live555. " alt="" coords="809,95,973,136"/>
+<area shape="rect" id="node10" href="$livethread_8h.html" title="A live555 thread. " alt="" coords="689,184,853,225"/>
+<area shape="rect" id="node13" href="$openglframefifo_8h_source.html" title="/home/sampsa/C/valkka\l/include/openglframefifo.h" alt="" coords="998,95,1169,136"/>
+<area shape="rect" id="node16" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="1193,95,1357,136"/>
+<area shape="rect" id="node18" href="$framefilter_8cpp.html" title="/home/sampsa/C/valkka\l/src/framefilter.cpp" alt="" coords="1381,95,1545,136"/>
 <area shape="rect" id="node3" href="$avthread_8cpp.html" title="FFmpeg decoding thread. " alt="" coords="5,184,169,225"/>
-<area shape="rect" id="node6" href="$filethread_8cpp.html" title="A thread sending frames from files. " alt="" coords="283,184,447,225"/>
-<area shape="rect" id="node10" href="$live_8cpp.html" title="Interface to live555. " alt="" coords="659,184,823,225"/>
-<area shape="rect" id="node9" href="$livethread_8cpp.html" title="A live555 thread. " alt="" coords="471,273,635,315"/>
-<area shape="rect" id="node12" href="$openglthread_8h.html" title="FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU. " alt="" coords="847,184,1011,225"/>
-<area shape="rect" id="node13" href="$openglthread_8cpp.html" title="FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU. " alt="" coords="847,273,1011,315"/>
-<area shape="rect" id="node15" href="$sharedmem_8cpp.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="1035,184,1199,225"/>
+<area shape="rect" id="node6" href="$filethread_8cpp.html" title="A thread sending frames from files. " alt="" coords="313,184,477,225"/>
+<area shape="rect" id="node8" href="$framefilterset_8cpp.html" title="Classes using several framefilters. " alt="" coords="501,184,665,225"/>
+<area shape="rect" id="node12" href="$live_8cpp.html" title="Interface to live555. " alt="" coords="877,184,1041,225"/>
+<area shape="rect" id="node11" href="$livethread_8cpp.html" title="A live555 thread. " alt="" coords="689,273,853,315"/>
+<area shape="rect" id="node14" href="$openglthread_8h.html" title="FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU. " alt="" coords="1065,184,1229,225"/>
+<area shape="rect" id="node15" href="$openglthread_8cpp.html" title="FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU. " alt="" coords="1065,273,1229,315"/>
+<area shape="rect" id="node17" href="$sharedmem_8cpp.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="1253,184,1417,225"/>
 </map>

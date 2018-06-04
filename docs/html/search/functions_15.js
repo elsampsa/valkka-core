@@ -25,6 +25,7 @@ var searchData=
   ['_7esharedmemringbuffer',['~SharedMemRingBuffer',['../classSharedMemRingBuffer.html#aed3935561cba74230a9b63c724578f5d',1,'SharedMemRingBuffer']]],
   ['_7esharedmemringbufferrgb',['~SharedMemRingBufferRGB',['../classSharedMemRingBufferRGB.html#a229ed4b5319d9760ad29dda07784807d',1,'SharedMemRingBufferRGB']]],
   ['_7esharedmemsegment',['~SharedMemSegment',['../classSharedMemSegment.html#aa2a20b7e8c3ae2b53a5c6791f6e3d552',1,'SharedMemSegment']]],
+  ['_7esignalframe',['~SignalFrame',['../classSignalFrame.html#afa85165b6466fba20b1b739d877d40b0',1,'SignalFrame']]],
   ['_7eslotcontext',['~SlotContext',['../classSlotContext.html#a8bcbfd51a2d82232bda48446a7548d33',1,'SlotContext']]],
   ['_7estream',['~Stream',['../classStream.html#a6dc4517a9e6a87abb662fcd14c2ea969',1,'Stream']]],
   ['_7estreamclientstate',['~StreamClientState',['../classStreamClientState.html#a1fefa83d07bfd67ceecd059c947a6cec',1,'StreamClientState']]],

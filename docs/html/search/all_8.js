@@ -19,12 +19,14 @@ var searchData=
   ['internal_5ffifo',['internal_fifo',['../classBufferSource.html#a33a2baa22bce4df04bd78d7a0a7e5cce',1,'BufferSource']]],
   ['internal_5fformat',['internal_format',['../classTEX.html#af92e5ff19cfc2cb92a0f254df8261a89',1,'TEX']]],
   ['internal_5fframe',['internal_frame',['../classFileFrameFilter.html#ae194f3ba442f81df294648c988a122a8',1,'FileFrameFilter']]],
+  ['is_5fdead',['is_dead',['../classSlotContext.html#ab260ec18646750f25ff49ff3f5817767',1,'SlotContext']]],
   ['is_5fdecoding',['is_decoding',['../classAVThread.html#a2a41b87694feafc97697f0e1debba396',1,'AVThread']]],
   ['is_5fglx_5fextension_5fsupported',['is_glx_extension_supported',['../opengl_8h.html#a69229b2aeb3a32e79cfd7f19fe1edf51',1,'is_glx_extension_supported(Display *dpy, const char *query):&#160;opengl.cpp'],['../opengl_8cpp.html#a69229b2aeb3a32e79cfd7f19fe1edf51',1,'is_glx_extension_supported(Display *dpy, const char *query):&#160;opengl.cpp']]],
   ['is_5fserver',['is_server',['../classSharedMemSegment.html#afa1992fa63c3da6d26c2d65975ec17c3',1,'SharedMemSegment::is_server()'],['../classSharedMemRingBuffer.html#a4816abf3d49033b084ce8a458c855707',1,'SharedMemRingBuffer::is_server()']]],
   ['isactive',['isActive',['../classSlotContext.html#ab98be03117a7f96e524fa665a0567446',1,'SlotContext']]],
   ['isclosed',['isClosed',['../classConnection.html#a261f8e241f8949f979a169753617db91',1,'Connection::isClosed()'],['../classRTSPConnection.html#ad9ffc91bbb8866bf7ad8588be16a9324',1,'RTSPConnection::isClosed()']]],
   ['isempty',['isEmpty',['../classFrameFifo.html#a37e3264d8b8f8a787cd305c79e568645',1,'FrameFifo::isEmpty()'],['../classRenderGroup.html#ac87250ee2becf66758815bd6c8f1f527',1,'RenderGroup::isEmpty()']]],
+  ['ispending',['isPending',['../classSlotContext.html#a9f9c1f818b2f8b60c18d5552923e4ca0',1,'SlotContext']]],
   ['iter',['iter',['../classStreamClientState.html#aa21b46179817152e71673078ef8b1861',1,'StreamClientState']]],
   ['iterator',['Iterator',['../classEnum_1_1Iterator.html',1,'Enum']]]
 ];

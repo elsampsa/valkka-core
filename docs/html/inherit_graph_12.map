@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo. " alt="" coords="5,5,132,32"/>
+<area shape="rect" id="node1" href="$classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack. " alt="" coords="5,31,87,57"/>
+<area shape="rect" id="node2" href="$classLiveFifo.html" title="This is a special FrameFifo class for feeding frames into live555, i.e. " alt="" coords="165,5,233,32"/>
+<area shape="rect" id="node3" href="$classOpenGLFrameFifo.html" title="A FrameFifo managed and used by OpenGLThread. " alt="" coords="135,56,264,83"/>
 </map>
