@@ -923,8 +923,17 @@ void OpenGLThread::activateSlot(SlotNumber i, YUVFrame* yuvframe) {
 
 
 void OpenGLThread::activateSlotIf(SlotNumber i, YUVFrame* yuvframe) {
-  if (slots_[i].isActive()) {
-    if (yuvframe->source_bmpars.type==slots_[i].bmpars.type) { // The bitmap type of YUVFrame and YUVTEX are consistent
+#ifdef PRESENT_VERBOSE
+  std::cout << "OpenGLThread: activateSlotIf: i=" << i << std::endl;
+#endif  
+
+  if (slots_[i].isActive()) { // we're banging on this for each reserved frame .. is this efficient?
+    if (
+      yuvframe->source_bmpars.type       ==slots_[i].bmpars.type
+      and yuvframe->source_bmpars.height ==slots_[i].bmpars.height 
+      and yuvframe->source_bmpars.width  ==slots_[i].bmpars.width
+      ) 
+    { // The bitmap type of YUVFrame and YUVTEX are consistent
     }
     else {
       opengllogger.log(LogLevel::debug) << "OpenGLThread: activateSlotIf: texture dimensions changed: reactivate" << std::endl;
@@ -1158,8 +1167,8 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
             reportCallTime(0);
 #endif
             // yuv_frame's pbos have already been uploaded to GPU.  Now they're loaded to the texture
-            // loadTEX uses slots_[], where each vector element is a SlotContext (=set of textures, a shader program)
-            loadYUVFrame(yuvframe->n_slot, yuvframe); // timestamp is used only for debugging purposes ..
+            // loadTEX uses slots_[], where each vector element is a SlotContext (=set of textures and a shader program)
+            loadYUVFrame(yuvframe->n_slot, yuvframe);
 #ifdef TIMING_VERBOSE
             reportCallTime(1);
 #endif

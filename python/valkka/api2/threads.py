@@ -212,7 +212,8 @@ class OpenGLThread:
     "flush_when_full" : (bool, False),
     "msbuftime"  : (int, 100),   
     "affinity"   : (int, -1),
-    "verbose"    : (bool, False)
+    "verbose"    : (bool, False),
+    "background" : (str, getDataFile("valkka_bw_logo.yuv"))
     }
 
   
@@ -234,6 +235,7 @@ class OpenGLThread:
     
     self.core =valkka_core.OpenGLThread("glthread", self.gl_ctx, self.msbuftime);
     self.core.setAffinity(self.affinity)
+    self.core.setStaticTexFile(self.background)
     
     self.input_filter=self.core.getFrameFilter()
     

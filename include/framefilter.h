@@ -304,6 +304,34 @@ public:                     // <pyapi>
   void noConfigFrames();    // <pyapi>
 };                                                                   // <pyapi>
 
+
+/** Caches SetupFrame s
+ * 
+ * Like GateFrameFilter, but caches SetupFrame s and re-emits them always when the gate is activated
+ * 
+ */
+class CachingGateFrameFilter : public FrameFilter {                   // <pyapi> 
+ 
+public:                                                               // <pyapi>
+  CachingGateFrameFilter(const char* name, FrameFilter* next=NULL);   // <pyapi>
+  
+protected:
+  bool        on;
+  std::mutex  mutex;
+  SetupFrame  setupframe;
+  bool        got_setup;
+  
+protected: 
+  void run(Frame* frame);
+  void go(Frame* frame);
+  
+public:                     // <pyapi>
+  void set();               // <pyapi>
+  void unSet();             // <pyapi>
+};                                                                   // <pyapi>
+
+
+
 /** Changes the slot number of the Frame
  *
  * Mutex-protected (calls to SetSlotFrameFilter::setSlot happen during streaming)

@@ -1537,6 +1537,34 @@ class GateFrameFilter(FrameFilter):
 GateFrameFilter_swigregister = _valkka_core.GateFrameFilter_swigregister
 GateFrameFilter_swigregister(GateFrameFilter)
 
+class CachingGateFrameFilter(FrameFilter):
+    __swig_setmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CachingGateFrameFilter, name, value)
+    __swig_getmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CachingGateFrameFilter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, next=None):
+        this = _valkka_core.new_CachingGateFrameFilter(name, next)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def set(self):
+        return _valkka_core.CachingGateFrameFilter_set(self)
+
+    def unSet(self):
+        return _valkka_core.CachingGateFrameFilter_unSet(self)
+    __swig_destroy__ = _valkka_core.delete_CachingGateFrameFilter
+    __del__ = lambda self: None
+CachingGateFrameFilter_swigregister = _valkka_core.CachingGateFrameFilter_swigregister
+CachingGateFrameFilter_swigregister(CachingGateFrameFilter)
+
 class SetSlotFrameFilter(FrameFilter):
     __swig_setmethods__ = {}
     for _s in [FrameFilter]:
@@ -2264,6 +2292,60 @@ DEFAULT_OPENGLTHREAD_BUFFERING_TIME = cvar.DEFAULT_OPENGLTHREAD_BUFFERING_TIME
 DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL = cvar.DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL
 DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL = cvar.DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL
 DEFAULT_TIMESTAMP_RESET_TIME = cvar.DEFAULT_TIMESTAMP_RESET_TIME
+
+class Switch(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Switch, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Switch, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, next=None):
+        this = _valkka_core.new_Switch(name, next)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_Switch
+    __del__ = lambda self: None
+
+    def setChannel(self, i):
+        return _valkka_core.Switch_setChannel(self, i)
+
+    def getCurrentChannel(self):
+        return _valkka_core.Switch_getCurrentChannel(self)
+
+    def getInputChannel(self, i):
+        return _valkka_core.Switch_getInputChannel(self, i)
+Switch_swigregister = _valkka_core.Switch_swigregister
+Switch_swigregister(Switch)
+
+class DoubleGate(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DoubleGate, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, DoubleGate, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, next=None, next2=None):
+        this = _valkka_core.new_DoubleGate(name, next, next2)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_DoubleGate
+    __del__ = lambda self: None
+
+    def setChannel(self, i):
+        return _valkka_core.DoubleGate_setChannel(self, i)
+
+    def getCurrentChannel(self):
+        return _valkka_core.DoubleGate_getCurrentChannel(self)
+
+    def getInputChannel(self, i):
+        return _valkka_core.DoubleGate_getInputChannel(self, i)
+DoubleGate_swigregister = _valkka_core.DoubleGate_swigregister
+DoubleGate_swigregister(DoubleGate)
 
 # This file is compatible with both classic and new-style classes.
 

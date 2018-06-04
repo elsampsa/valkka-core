@@ -317,6 +317,41 @@ void GateFrameFilter::noConfigFrames() {
 }
 
 
+
+CachingGateFrameFilter::CachingGateFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next), on(false), setupframe(), got_setup(false) {
+}
+  
+void CachingGateFrameFilter::go(Frame* frame) {
+}
+
+void CachingGateFrameFilter::run(Frame* frame) {
+  std::unique_lock<std::mutex> lk(mutex);
+  this->go(frame); // manipulate frame
+  if (!next) {return;}
+  if (on) { // passes all frames if flag is set
+    (this->next)->run(frame);
+  }
+  if (frame->getFrameClass()==FrameClass::setup) {
+    got_setup=true;
+    setupframe = *(static_cast<SetupFrame*>(frame)); // create a cached copy of the SetupFrame
+  }
+}
+  
+void CachingGateFrameFilter::set() {
+  std::unique_lock<std::mutex> lk(mutex);
+  on=true;
+  if (got_setup) {
+    (this->next)->run(&setupframe); // emit the cached setupframe always when the gate is activated
+  }
+}
+
+void CachingGateFrameFilter::unSet() {
+  std::unique_lock<std::mutex> lk(mutex);
+  on=false;
+}
+
+
+
 SetSlotFrameFilter::SetSlotFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next), n_slot(0) {
 }
 

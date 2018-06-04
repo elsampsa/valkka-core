@@ -1,2 +1,3 @@
 include valkka/_valkka_core.so
+include valkka/api2/data/valkka_bw_logo.yuv
 # include valkka/libValkka.so.*

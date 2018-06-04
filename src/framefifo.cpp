@@ -80,6 +80,7 @@ FrameFifo::~FrameFifo() {
   
   delete_reservoir(basic);
   delete_reservoir(setup);
+  delete_reservoir(signal);
   
   /*
   Reservoir &reservoir=reservoirs[FrameClass::basic]; // alias
