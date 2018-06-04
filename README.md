@@ -59,9 +59,9 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.4.5
+### Current stable version is 0.4.6
 
-0.4.5 Version
+0.4.6 Version
 - Background texture when no stream is coming through
 - Weird bitmap sizes work
 - TestThread class for sending (PyQt) signals from cpp
