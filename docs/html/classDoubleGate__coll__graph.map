@@ -1,0 +1,6 @@
+<map id="DoubleGate" name="DoubleGate">
+<area shape="rect" id="node2" href="$classCachingGateFrameFilter.html" title="Caches SetupFrame s. " alt="" coords="66,171,230,197"/>
+<area shape="rect" id="node3" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="5,81,93,108"/>
+<area shape="rect" id="node4" href="$classSetupFrame.html" title="Setup frame for decoders. " alt="" coords="171,81,264,108"/>
+<area shape="rect" id="node5" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="188,5,247,32"/>
+</map>
