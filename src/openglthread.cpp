@@ -96,6 +96,7 @@ void SlotContext::loadYUVFrame(YUVFrame *yuvframe) {
 
 bool SlotContext::manageTimer(long int mstime) {
   if ( (mstime-lastmstime) <=10 ) {
+    opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: feeding frames too fast, dropping, dt=" << (mstime-lastmstime) << std::endl;
     lastmstime=mstime;
     return false;
   }
@@ -1046,7 +1047,15 @@ long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
   90  80  70  60  50  40  30  20  10
   
   see also the comments in OpenGLThread::handleFifo()
+  
+  Let's take a closer look at this .. "_" designates another camera, so here
+  we have frames from two different cameras:
+  
+  90_ 85 80_ 71 70_  60_ 60 51 50_ 40 40_ 31 30_ 22_ 20  15_ 10
+  
+  incoming 39                            |
   */
+  
   bool inserted=false;
   long int rel_mstimestamp;
   
@@ -1178,7 +1187,7 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
 #endif
           }
           else {
-            opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: feeding frames too fast! dropping.." << std::endl;
+            // opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: feeding frames too fast! dropping.." << std::endl; // printed by manageSlotTimer => manageTimer
           }
         } // accepted frametype: yuv
       }// present frame

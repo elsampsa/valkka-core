@@ -589,6 +589,37 @@
  *                   - glBindVertexArray, glDrawElements, glBindVertexArray 
  *             - glXSwapBuffers 
  * 
+ * SlotContext manages textures: 
+ *                                   
+ * - SlotContext::yuvtex
+ * - SlotContext::statictex
+ * 
+ * Several RenderContext instances (i.e. mappings) can refer to the same SlotContext.
+ * 
+ * This way we can map the same texture into several x-windows and also into "picture-in-picture" schemes.  Let's state this idea graphically:
+ * 
+ *\verbatim 
+ * 
+ * 
+ * 
+ *                                        (RenderGroup 1 = x window 1)
+ *                                        +------------+
+ *                                        |+-----+     |
+ *                                        ||     |     |  ("map slot 1 to RenderGroup 1")
+ *                  +--- RenderContext---->|     |     |
+ *                  |                     |+-----+     |
+ * SlotContext -----+                     +------------+
+ *                  |                     
+ *                  |                     +------------+
+ *                  +-- RenderContext---->|            |  ("map slot 1 to RenderGroup 2")
+ *                                        |            |
+ *                                        |            |
+ *                                        |            |
+ *                                        +------------+
+ *                                        (RenderGroup 2 = x window 2) 
+ * 
+ *\endverbatim 
+ * 
  */
 
 
