@@ -79,6 +79,14 @@ enum class LiveConnectionType { // <pyapi>
   sdp                           // <pyapi>
 };                              // <pyapi>
 
+
+enum class TimeCorrectionType { // <pyapi>
+  none,                         // <pyapi>
+  smart,                        // <pyapi>
+  dummy                         // <pyapi>
+};                              // <pyapi>
+
+
 /** Identifies a stream and encapsulates information about the type of connection the user is requesting to LiveThread.  LiveConnectionContext is also included in LiveThread::SignalContext, i.e. it carries the signal information to LiveThread (for the thread signaling system, see \ref threading_tag).
   * 
   * (A side note: this class is not nested inside the LiveThread class for one simple reason: swig does not like nested classes, so it would make it harder to create Python bindings)
@@ -94,7 +102,8 @@ struct LiveConnectionContext {                                                  
   LiveConnectionContext(LiveConnectionType ct, std::string address, SlotNumber slot,                  // <pyapi>
                         FrameFilter* framefilter) :                                                   // <pyapi>
   connection_type(ct), address(address), slot(slot), framefilter(framefilter), msreconnect(0),        // <pyapi>
-  request_multicast(false), request_tcp(false)                                                        // <pyapi>
+  request_multicast(false), request_tcp(false), recv_buffer_size(0), reordering_time(0),              // <pyapi>
+  time_correction(TimeCorrectionType::smart)                                                          // <pyapi>
   {}                                                                                                  // <pyapi>
   /** Dummy constructor : remember to set member values by hand */
   LiveConnectionContext() :                                                                           // <pyapi>
@@ -108,6 +117,9 @@ struct LiveConnectionContext {                                                  
   long unsigned int  msreconnect;       ///< If stream has delivered nothing during this many milliseconds, reconnect // <pyapi>
   bool               request_multicast; ///< Request multicast in the rtsp negotiation or not         // <pyapi>
   bool               request_tcp;       ///< Request interleaved rtsp streaming or not                // <pyapi>
+  unsigned           recv_buffer_size;  ///< Operating system ringbuffer size for incoming socket     // <pyapi>
+  unsigned           reordering_time;   ///< Live555 packet reordering treshold time (microsecs)      // <pyapi>
+  TimeCorrectionType time_correction;   ///< How to perform frame timestamp correction                // <pyapi>
 };                                                                                                    // <pyapi>
 
 
@@ -192,8 +204,12 @@ protected:
   // internal framefilter chain.. if we'd like to modify the frames before they are passed to the API user
   // more framefilters could be generated here and initialized in the constructor init list
   // the starting filter should always be named as "inputfilter" .. this is where Live555 writes the frames
-  TimestampFrameFilter2   timestampfilter; ///< Internal framefilter: correct timestamp
-  SlotFrameFilter         inputfilter;     ///< Internal framefilter: set slot number
+  // TimestampFrameFilter2   timestampfilter; ///< Internal framefilter: correct timestamp
+  // SlotFrameFilter         inputfilter;     ///< Internal framefilter: set slot number
+  
+  FrameFilter*            timestampfilter;
+  FrameFilter*            inputfilter;
+  
   long int                frametimer;      ///< Measures time when the last frame was received
   
 public:

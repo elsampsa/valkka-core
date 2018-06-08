@@ -99,6 +99,7 @@ Connection::Connection(UsageEnvironment& env, const std::string address, SlotNum
 #endif
 */
 
+/*
 #ifdef TIMESTAMP_CORRECTOR
 // filterchain: {FrameFilter: inputfilter} --> {TimestampFrameFilter: timestampfilter} --> {FrameFilter: framefilter}
 Connection::Connection(UsageEnvironment& env, LiveConnectionContext& ctx) : env(env), ctx(ctx), is_playing(false), frametimer(0), timestampfilter("timestamp_filter",ctx.framefilter), inputfilter("input_filter",ctx.slot,&timestampfilter)
@@ -111,9 +112,31 @@ Connection::Connection(UsageEnvironment& env, LiveConnectionContext& ctx) : env(
     livethreadlogger.log(LogLevel::fatal) << "Connection: constructor: your requested reconnection time is less than equal to the LiveThread timeout.  You will get problems" << std::endl;
   }  
 };
+*/
+
+
+Connection::Connection(UsageEnvironment& env, LiveConnectionContext& ctx) : env(env), ctx(ctx), is_playing(false), frametimer(0) {
+  if       (ctx.time_correction==TimeCorrectionType::none) {
+    // no timestamp correction: LiveThread --> {SlotFrameFilter: inputfilter} --> ctx.framefilter
+    timestampfilter = new TimestampFrameFilter2("timestampfilter",NULL);
+    inputfilter     = new SlotFrameFilter("input_filter",ctx.slot,ctx.framefilter);
+  }
+  else if  (ctx.time_correction==TimeCorrectionType::dummy) {
+    // smart timestamp correction:  LiveThread --> {SlotFrameFilter: inputfilter} --> {TimestampFrameFilter2: timestampfilter} --> ctx.framefilter
+    timestampfilter = new DummyTimestampFrameFilter("dummy_timestamp_filter",ctx.framefilter);
+    inputfilter     = new SlotFrameFilter("input_filter",ctx.slot,timestampfilter);
+  }
+  else { // smart corrector
+    // brute-force timestamp correction: LiveThread --> {SlotFrameFilter: inputfilter} --> {DummyTimestampFrameFilter: timestampfilter} --> ctx.framefilter
+    timestampfilter = new TimestampFrameFilter2("smart_timestamp_filter",ctx.framefilter);
+    inputfilter     = new SlotFrameFilter("input_filter",ctx.slot,timestampfilter);
+  }
+}
 
 
 Connection::~Connection() {
+  delete timestampfilter;
+  delete inputfilter;
 };
 
 void Connection::reStartStream() {
@@ -245,11 +268,11 @@ void RTSPConnection::playStream() {
     livestatus=LiveStatus::pending;
     frametimer=0;
     livethreadlogger.log(LogLevel::crazy) << "RTSPConnection : playStream" << std::endl;
-    client=ValkkaRTSPClient::createNew(env, ctx.address, inputfilter, &livestatus);
-    if (ctx.request_multicast) { client->requestMulticast(); }
-    if (ctx.request_tcp) { client->requestTCP(); }
-    client->setRecvBufferSize(1024*1024*2); // 2 MB
-    client->setReorderingTime(1000000); // in microsecs
+    client=ValkkaRTSPClient::createNew(env, ctx.address, *inputfilter, &livestatus);
+    if (ctx.request_multicast)   { client->requestMulticast(); }
+    if (ctx.request_tcp)         { client->requestTCP(); }
+    if (ctx.recv_buffer_size>0)  { client->setRecvBufferSize(ctx.recv_buffer_size); }
+    if (ctx.reordering_time>0)   { client->setReorderingTime(ctx.reordering_time); } // WARNING: in microseconds!
     livethreadlogger.log(LogLevel::debug) << "RTSPConnection : playStream : name " << client->name() << std::endl;
     client->sendDescribeCommand(ValkkaRTSPClient::continueAfterDESCRIBE);
   }
@@ -407,7 +430,7 @@ void SDPConnection :: playStream() {
       // subsession->sink = DummySink::createNew(*env, *subsession, filename);
       env << "Creating data sink for subsession \"" << *scs->subsession << "\" \n";
       // subsession->sink= FrameSink::createNew(env, *subsession, inputfilter, cc, ctx.address.c_str());
-      scs->subsession->sink= FrameSink::createNew(env, *scs, inputfilter, ctx.address.c_str());
+      scs->subsession->sink= FrameSink::createNew(env, *scs, *inputfilter, ctx.address.c_str());
       if (scs->subsession->sink == NULL)
       {
         env << "Failed to create a data sink for the \"" << *scs->subsession << "\" subsession: " << env.getResultMsg() << "\n";

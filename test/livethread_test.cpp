@@ -99,6 +99,14 @@ void test_2() {
   sleep_for(2s);
   
   LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1);
+  
+  // ctx.time_correction =TimeCorrectionType::none;
+  // ctx.time_correction =TimeCorrectionType::dummy;
+  // default time correction is smart
+  
+  // ctx.recv_buffer_size=1024*1024*2;  // Operating system ringbuffer size for incoming socket
+  // ctx.reordering_time =100000;       // Live555 packet reordering treshold time (microsecs)
+  
   livethread.registerStreamCall(ctx);  
   livethread.playStreamCall(ctx);
   

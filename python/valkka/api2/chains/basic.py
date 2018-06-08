@@ -63,7 +63,11 @@ class BasicFilterchain:
     
     "affinity"     : (int,-1),
     "verbose"      : (bool,False),
-    "msreconnect"  : (int,0)
+    "msreconnect"  : (int,0),
+    
+    "time_correction"   : None,    # Timestamp correction type: TimeCorrectionType_none, TimeCorrectionType_dummy, or TimeCorrectionType_smart (default)
+    "recv_buffer_size"  : (int,0), # Operating system socket ringbuffer size in bytes # 0 means default
+    "reordering_mstime" : (int,0)  # Reordering buffer time for Live555 packets in MILLIseconds # 0 means default
     }
   
   
@@ -130,6 +134,18 @@ class BasicFilterchain:
     self.ctx.framefilter=self.av_in_filter
     
     self.ctx.msreconnect=self.msreconnect
+    
+    # some extra parameters
+    """
+    // ctx.time_correction =TimeCorrectionType::none;
+    // ctx.time_correction =TimeCorrectionType::dummy;
+    // default time correction is smart
+    // ctx.recv_buffer_size=1024*1024*2;  // Operating system ringbuffer size for incoming socket
+    // ctx.reordering_time =100000;       // Live555 packet reordering treshold time (microsecs)
+    """
+    if (self.time_correction!=None): self.ctx.time_correction =self.time_correction
+    self.ctx.recv_buffer_size =self.recv_buffer_size
+    self.ctx.reordering_time  =self.reordering_mstime*1000 # from millisecs to microsecs
     
     # send the information about the stream to LiveThread
     self.livethread.registerStream(self.ctx)

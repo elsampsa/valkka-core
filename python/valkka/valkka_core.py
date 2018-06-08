@@ -1481,6 +1481,28 @@ class TimestampFrameFilter2(FrameFilter):
 TimestampFrameFilter2_swigregister = _valkka_core.TimestampFrameFilter2_swigregister
 TimestampFrameFilter2_swigregister(TimestampFrameFilter2)
 
+class DummyTimestampFrameFilter(FrameFilter):
+    __swig_setmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DummyTimestampFrameFilter, name, value)
+    __swig_getmethods__ = {}
+    for _s in [FrameFilter]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, DummyTimestampFrameFilter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, name, next=None):
+        this = _valkka_core.new_DummyTimestampFrameFilter(name, next)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _valkka_core.delete_DummyTimestampFrameFilter
+    __del__ = lambda self: None
+DummyTimestampFrameFilter_swigregister = _valkka_core.DummyTimestampFrameFilter_swigregister
+DummyTimestampFrameFilter_swigregister(DummyTimestampFrameFilter)
+
 class RepeatH264ParsFrameFilter(FrameFilter):
     __swig_setmethods__ = {}
     for _s in [FrameFilter]:
@@ -1709,6 +1731,15 @@ LiveConnectionType_rtsp = _valkka_core.LiveConnectionType_rtsp
 
 _valkka_core.LiveConnectionType_sdp_swigconstant(_valkka_core)
 LiveConnectionType_sdp = _valkka_core.LiveConnectionType_sdp
+
+_valkka_core.TimeCorrectionType_none_swigconstant(_valkka_core)
+TimeCorrectionType_none = _valkka_core.TimeCorrectionType_none
+
+_valkka_core.TimeCorrectionType_smart_swigconstant(_valkka_core)
+TimeCorrectionType_smart = _valkka_core.TimeCorrectionType_smart
+
+_valkka_core.TimeCorrectionType_dummy_swigconstant(_valkka_core)
+TimeCorrectionType_dummy = _valkka_core.TimeCorrectionType_dummy
 class LiveConnectionContext(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, LiveConnectionContext, name, value)
@@ -1750,6 +1781,18 @@ class LiveConnectionContext(_object):
     __swig_getmethods__["request_tcp"] = _valkka_core.LiveConnectionContext_request_tcp_get
     if _newclass:
         request_tcp = _swig_property(_valkka_core.LiveConnectionContext_request_tcp_get, _valkka_core.LiveConnectionContext_request_tcp_set)
+    __swig_setmethods__["recv_buffer_size"] = _valkka_core.LiveConnectionContext_recv_buffer_size_set
+    __swig_getmethods__["recv_buffer_size"] = _valkka_core.LiveConnectionContext_recv_buffer_size_get
+    if _newclass:
+        recv_buffer_size = _swig_property(_valkka_core.LiveConnectionContext_recv_buffer_size_get, _valkka_core.LiveConnectionContext_recv_buffer_size_set)
+    __swig_setmethods__["reordering_time"] = _valkka_core.LiveConnectionContext_reordering_time_set
+    __swig_getmethods__["reordering_time"] = _valkka_core.LiveConnectionContext_reordering_time_get
+    if _newclass:
+        reordering_time = _swig_property(_valkka_core.LiveConnectionContext_reordering_time_get, _valkka_core.LiveConnectionContext_reordering_time_set)
+    __swig_setmethods__["time_correction"] = _valkka_core.LiveConnectionContext_time_correction_set
+    __swig_getmethods__["time_correction"] = _valkka_core.LiveConnectionContext_time_correction_get
+    if _newclass:
+        time_correction = _swig_property(_valkka_core.LiveConnectionContext_time_correction_get, _valkka_core.LiveConnectionContext_time_correction_set)
     __swig_destroy__ = _valkka_core.delete_LiveConnectionContext
     __del__ = lambda self: None
 LiveConnectionContext_swigregister = _valkka_core.LiveConnectionContext_swigregister

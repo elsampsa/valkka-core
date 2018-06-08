@@ -263,8 +263,17 @@ void TimestampFrameFilter2::go(Frame* frame) {
     std::cout << "[PROFILE_TIMING] TimestampFrameFilter2: go : sending frame " << dt << " ms late" << std::endl;
   }
 #endif
-
   
+}
+
+
+
+DummyTimestampFrameFilter::DummyTimestampFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next) {
+}
+
+
+void DummyTimestampFrameFilter::go(Frame* frame) {
+  frame->mstimestamp=getCurrentMsTimestamp();
 }
 
 

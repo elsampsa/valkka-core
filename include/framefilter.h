@@ -254,6 +254,18 @@ protected:
 };                                                                        // <pyapi>
 
 
+/** Substitute timestamps with the time they arrive to the client.
+ * @ingroup filters_tag
+ */
+class DummyTimestampFrameFilter : public FrameFilter {                    // <pyapi>
+  
+public:                                                                   // <pyapi>
+  DummyTimestampFrameFilter(const char* name, FrameFilter* next=NULL);    // <pyapi>
+
+protected: 
+  void go(Frame* frame);
+};                                                                        // <pyapi>
+
 
 /** For H264, some cameras don't send sps and pps packets again before every keyframe.  In that case, this filter sends sps and pps before each keyframe.
  * 
