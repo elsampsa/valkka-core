@@ -62,8 +62,8 @@ We're currently at alpha
 ### Current stable version is 0.4.7
 
 0.4.7 Version
- - Can change receiving socket size and Live555 reordering buffer
- - etc.
+- Can change receiving socket size and Live555 reordering buffer
+- etc.
 
 ### Older versions
 
