@@ -96,7 +96,7 @@ void SlotContext::loadYUVFrame(YUVFrame *yuvframe) {
 
 bool SlotContext::manageTimer(long int mstime) {
   if ( (mstime-lastmstime) <=10 ) {
-    opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: feeding frames too fast, dropping, dt=" << (mstime-lastmstime) << std::endl;
+    opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: feeding frames too fast, dropping, dt=" << (mstime-lastmstime) << std::endl; // if negative, frames would have been fed in reverse order
     lastmstime=mstime;
     return false;
   }
@@ -124,6 +124,16 @@ bool SlotContext::isPending(long int mstime) {
 
 
 YUVTEX* SlotContext::getTEX() {
+  
+  /* // testing ..
+  if (active) {
+    return yuvtex;
+  }
+  else {
+    return statictex;
+  }
+  */
+  
   if (is_dead) {
     return statictex;
   }
@@ -929,7 +939,9 @@ void OpenGLThread::activateSlotIf(SlotNumber i, YUVFrame* yuvframe) {
 #endif  
 
   if (slots_[i].isActive()) { // we're banging on this for each reserved frame .. is this efficient?
-    if (
+#ifdef NO_SLOT_REACTIVATION
+#else
+    if ( // check if slot should be reactivated
       yuvframe->source_bmpars.type       ==slots_[i].bmpars.type
       and yuvframe->source_bmpars.height ==slots_[i].bmpars.height 
       and yuvframe->source_bmpars.width  ==slots_[i].bmpars.width
@@ -940,6 +952,7 @@ void OpenGLThread::activateSlotIf(SlotNumber i, YUVFrame* yuvframe) {
       opengllogger.log(LogLevel::debug) << "OpenGLThread: activateSlotIf: texture dimensions changed: reactivate" << std::endl;
       activateSlot(i, yuvframe);
     }
+#endif
   } 
   else { // not activated => activate
     activateSlot(i, yuvframe);
@@ -948,6 +961,7 @@ void OpenGLThread::activateSlotIf(SlotNumber i, YUVFrame* yuvframe) {
 
 
 bool OpenGLThread::manageSlotTimer(SlotNumber i, long int mstime) {
+  // return true; // WARNING: just a test
   return slots_[i].manageTimer(mstime);
 }
 
