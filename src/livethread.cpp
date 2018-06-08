@@ -248,6 +248,8 @@ void RTSPConnection::playStream() {
     client=ValkkaRTSPClient::createNew(env, ctx.address, inputfilter, &livestatus);
     if (ctx.request_multicast) { client->requestMulticast(); }
     if (ctx.request_tcp) { client->requestTCP(); }
+    client->setRecvBufferSize(1024*1024*2); // 2 MB
+    client->setReorderingTime(1000000); // in microsecs
     livethreadlogger.log(LogLevel::debug) << "RTSPConnection : playStream : name " << client->name() << std::endl;
     client->sendDescribeCommand(ValkkaRTSPClient::continueAfterDESCRIBE);
   }

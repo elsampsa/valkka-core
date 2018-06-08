@@ -131,10 +131,14 @@ public:
   LiveStatus* livestatus;       ///< This points to a variable that is being used by LiveThread to inform about the stream state
   
 public: // some extra parameters and their setters
-  bool request_multicast; ///< Request multicast during rtsp negotiation
-  bool request_tcp;       ///< Request interleaved streaming over tcp
-  void requestMulticast() {this->request_multicast=true;}
-  void requestTCP()       {this->request_tcp=true;}
+  bool     request_multicast; ///< Request multicast during rtsp negotiation
+  bool     request_tcp;       ///< Request interleaved streaming over tcp
+  unsigned recv_buffer_size;  ///< Operating system ringbuffer size for incoming socket
+  unsigned reordering_time;   ///< Live555 packet reordering treshold time (microsecs)
+  void     requestMulticast()               {this->request_multicast=true;}
+  void     requestTCP()                     {this->request_tcp=true;}
+  void     setRecvBufferSize(unsigned i)    {this->recv_buffer_size=i;}
+  void     setReorderingTime(unsigned i)    {this->reordering_time=i;}
   
 public: 
   // Response handlers
@@ -146,9 +150,7 @@ public:
   static void subsessionAfterPlaying(void* clientData); ///< Called when a stream's subsession (e.g., audio or video substream) ends
   static void subsessionByeHandler(void* clientData);   ///< Called when a RTCP "BYE" is received for a subsession
   static void streamTimerHandler(void* clientData);     ///< Called at the end of a stream's expected duration (if the stream has not already signaled its end using a RTCP "BYE")
-
   static void setupNextSubsession(RTSPClient* rtspClient); ///< Used to iterate through each stream's 'subsessions', setting up each one
-
   static void shutdownStream(RTSPClient* rtspClient, int exitCode = 1); ///< Used to shut down and close a stream (including its "RTSPClient" object):
   
 };

@@ -75,8 +75,9 @@ ValkkaRTSPClient* ValkkaRTSPClient::createNew(UsageEnvironment& env, const std::
   return new ValkkaRTSPClient(env, rtspURL, framefilter, livestatus, verbosityLevel, applicationName, tunnelOverHTTPPortNum);
 }
 
-ValkkaRTSPClient::ValkkaRTSPClient(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum) : RTSPClient(env, rtspURL.c_str(), verbosityLevel, applicationName, tunnelOverHTTPPortNum, -1), framefilter(framefilter), livestatus(livestatus), request_multicast(false), request_tcp(false) {
+ValkkaRTSPClient::ValkkaRTSPClient(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum) : RTSPClient(env, rtspURL.c_str(), verbosityLevel, applicationName, tunnelOverHTTPPortNum, -1), framefilter(framefilter), livestatus(livestatus), request_multicast(false), request_tcp(false), recv_buffer_size(0), reordering_time(0) {
 }
+
 
 ValkkaRTSPClient::~ValkkaRTSPClient() {
 }
@@ -159,6 +160,20 @@ void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
         }
         livelogger.log(LogLevel::debug) << ")\n";
 
+        // adjust receive buffer size and reordering treshold time if requested
+        if (scs.subsession->rtpSource() != NULL) {
+          if (client->reordering_time>0) {
+            scs.subsession->rtpSource()->setPacketReorderingThresholdTime(client->reordering_time);
+            livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: packet reordering time now " << client->reordering_time << " microseconds " << std::endl;
+          }
+          if (client->recv_buffer_size>0) {
+            int socketNum = scs.subsession->rtpSource()->RTPgs()->socketNum();
+            unsigned curBufferSize = getReceiveBufferSize(env, socketNum);
+            unsigned newBufferSize = setReceiveBufferTo  (env, socketNum, client->recv_buffer_size);
+            livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: receiving socket size changed from " << curBufferSize << " to " << newBufferSize << std::endl;
+          }
+        }
+        
         // Continue setting up this subsession, by sending a RTSP "SETUP" command:
         rtspClient->sendSetupCommand(*scs.subsession, continueAfterSETUP, False, client->request_tcp, client->request_multicast);
         

@@ -1,0 +1,8 @@
+# use this in your 
+# /etc/syscntl.conf
+# after that, run
+# sudo sysctl -p
+#
+vm.swappiness = 1
+net.core.wmem_max=2097152
+net.core.rmem_max=2097152
