@@ -59,15 +59,19 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.4.6
+### Current stable version is 0.4.7
+
+0.4.7 Version
+ - Can change receiving socket size and Live555 reordering buffer
+ - etc.
+
+### Older versions
 
 0.4.6 Version
 - Background texture when no stream is coming through
 - Weird bitmap sizes work
 - TestThread class for sending (PyQt) signals from cpp
 - etc.
-
-### Older versions
 
 0.4.4 Version
 - RTSP server works

@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.4.6</span>
+   &#160;<span id="projectnumber">0.4.7</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -125,6 +125,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>requestMulticast</b> 
 <tr class="memitem:a938ba40ebc1d7cf03963efecc4ef625c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a938ba40ebc1d7cf03963efecc4ef625c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>requestTCP</b> ()</td></tr>
 <tr class="separator:a938ba40ebc1d7cf03963efecc4ef625c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9fee5ab09155fc3b79272a2ec6b73fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af9fee5ab09155fc3b79272a2ec6b73fd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setRecvBufferSize</b> (unsigned i)</td></tr>
+<tr class="separator:af9fee5ab09155fc3b79272a2ec6b73fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33b90994a645c21f172deb183fc4e411"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a33b90994a645c21f172deb183fc4e411"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setReorderingTime</b> (unsigned i)</td></tr>
+<tr class="separator:a33b90994a645c21f172deb183fc4e411"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -185,6 +191,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaRTSPClient.html#a96f3a27dd341aadca8298bc4a282b780">request_tcp</a></td></tr>
 <tr class="memdesc:a96f3a27dd341aadca8298bc4a282b780"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request interleaved streaming over tcp. <br /></td></tr>
 <tr class="separator:a96f3a27dd341aadca8298bc4a282b780"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3b90c9a669882feae28a6f7b55bcb94"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3b90c9a669882feae28a6f7b55bcb94"></a>
+unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaRTSPClient.html#ad3b90c9a669882feae28a6f7b55bcb94">recv_buffer_size</a></td></tr>
+<tr class="memdesc:ad3b90c9a669882feae28a6f7b55bcb94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operating system ringbuffer size for incoming socket. <br /></td></tr>
+<tr class="separator:ad3b90c9a669882feae28a6f7b55bcb94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0aa2d620225ca2099bba0dfa3bd7a56"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0aa2d620225ca2099bba0dfa3bd7a56"></a>
+unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaRTSPClient.html#af0aa2d620225ca2099bba0dfa3bd7a56">reordering_time</a></td></tr>
+<tr class="memdesc:af0aa2d620225ca2099bba0dfa3bd7a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Live555 packet reordering treshold time (microsecs) <br /></td></tr>
+<tr class="separator:af0aa2d620225ca2099bba0dfa3bd7a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
