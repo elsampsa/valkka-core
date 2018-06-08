@@ -408,7 +408,7 @@ void SDPConnection :: playStream() {
   session = MediaSession::createNew(env, sdp.c_str());
   if (session == NULL)
   {
-    env << "Failed to create a MediaSession object from the SDP description: " << env.getResultMsg() << "\n";
+    env << "SDPConnection: Failed to create a MediaSession object from the SDP description: " << env.getResultMsg() << "\n";
     return;
   }
   
@@ -422,22 +422,36 @@ void SDPConnection :: playStream() {
   {
     if (!scs->subsession->initiate(0))
     {
-      env << "Failed to initiate the \"" << *scs->subsession << "\" subsession: " << env.getResultMsg() << "\n";
+      env << "SDPConnection: Failed to initiate the \"" << *scs->subsession << "\" subsession: " << env.getResultMsg() << "\n";
       // ok=false;
     }
     else
     {
       // subsession->sink = DummySink::createNew(*env, *subsession, filename);
-      env << "Creating data sink for subsession \"" << *scs->subsession << "\" \n";
+      env << "SDPConnection: Creating data sink for subsession \"" << *scs->subsession << "\" \n";
       // subsession->sink= FrameSink::createNew(env, *subsession, inputfilter, cc, ctx.address.c_str());
       scs->subsession->sink= FrameSink::createNew(env, *scs, *inputfilter, ctx.address.c_str());
       if (scs->subsession->sink == NULL)
       {
-        env << "Failed to create a data sink for the \"" << *scs->subsession << "\" subsession: " << env.getResultMsg() << "\n";
+        env << "SDPConnection: Failed to create a data sink for the \"" << *scs->subsession << "\" subsession: " << env.getResultMsg() << "\n";
         // ok=false;
       }
       else
       {
+        // adjust receive buffer size and reordering treshold time if requested
+        if (scs->subsession->rtpSource() != NULL) {
+          if (ctx.reordering_time>0) {
+            scs->subsession->rtpSource()->setPacketReorderingThresholdTime(ctx.reordering_time);
+            livelogger.log(LogLevel::normal) << "SDPConnection:  packet reordering time now " << ctx.reordering_time << " microseconds " << std::endl;
+          }
+          if (ctx.recv_buffer_size>0) {
+            int socketNum = scs->subsession->rtpSource()->RTPgs()->socketNum();
+            unsigned curBufferSize = getReceiveBufferSize(env, socketNum);
+            unsigned newBufferSize = setReceiveBufferTo  (env, socketNum, ctx.recv_buffer_size);
+            livelogger.log(LogLevel::normal) << "SDPConnection:  receiving socket size changed from " << curBufferSize << " to " << newBufferSize << std::endl;
+          }
+        }
+        
         scs->subsession->sink->startPlaying(*scs->subsession->rtpSource(), NULL, NULL);
       }
     }
