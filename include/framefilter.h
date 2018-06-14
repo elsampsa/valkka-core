@@ -224,7 +224,7 @@ protected:
 class TimestampFrameFilter : public FrameFilter {                         // <pyapi>
   
 public:                                                                   // <pyapi>
-  TimestampFrameFilter(const char* name, FrameFilter* next=NULL, long int msdiff_max=200);  // <pyapi>
+  TimestampFrameFilter(const char* name, FrameFilter* next=NULL, long int msdiff_max=TIMESTAMP_CORRECT_TRESHOLD);  // <pyapi>
     
 protected:
   long int mstime_delta;
@@ -242,7 +242,7 @@ protected:
 class TimestampFrameFilter2 : public FrameFilter {                        // <pyapi>
   
 public:                                                                   // <pyapi>
-  TimestampFrameFilter2(const char* name, FrameFilter* next=NULL, long int msdiff_max=200);  // <pyapi>
+  TimestampFrameFilter2(const char* name, FrameFilter* next=NULL, long int msdiff_max=TIMESTAMP_CORRECT_TRESHOLD);  // <pyapi>
     
 protected:
   long int mstime_delta;

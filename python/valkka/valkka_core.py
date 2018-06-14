@@ -1448,8 +1448,8 @@ class TimestampFrameFilter(FrameFilter):
     __getattr__ = lambda self, name: _swig_getattr(self, TimestampFrameFilter, name)
     __repr__ = _swig_repr
 
-    def __init__(self, name, next=None, msdiff_max=200):
-        this = _valkka_core.new_TimestampFrameFilter(name, next, msdiff_max)
+    def __init__(self, *args):
+        this = _valkka_core.new_TimestampFrameFilter(*args)
         try:
             self.this.append(this)
         except Exception:
@@ -1470,8 +1470,8 @@ class TimestampFrameFilter2(FrameFilter):
     __getattr__ = lambda self, name: _swig_getattr(self, TimestampFrameFilter2, name)
     __repr__ = _swig_repr
 
-    def __init__(self, name, next=None, msdiff_max=200):
-        this = _valkka_core.new_TimestampFrameFilter2(name, next, msdiff_max)
+    def __init__(self, *args):
+        this = _valkka_core.new_TimestampFrameFilter2(*args)
         try:
             self.this.append(this)
         except Exception:
@@ -2335,6 +2335,7 @@ DEFAULT_OPENGLTHREAD_BUFFERING_TIME = cvar.DEFAULT_OPENGLTHREAD_BUFFERING_TIME
 DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL = cvar.DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL
 DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL = cvar.DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL
 DEFAULT_TIMESTAMP_RESET_TIME = cvar.DEFAULT_TIMESTAMP_RESET_TIME
+TIMESTAMP_CORRECT_TRESHOLD = cvar.TIMESTAMP_CORRECT_TRESHOLD
 
 class Switch(_object):
     __swig_setmethods__ = {}

@@ -44,6 +44,8 @@ static const unsigned DEFAULT_OPENGLTHREAD_BUFFERING_TIME  = 300;   // in millis
 static const bool DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL        = false; // <pyapi>
 static const bool DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL  = false; // <pyapi>
 static const long int DEFAULT_TIMESTAMP_RESET_TIME         = 60000; // <pyapi>
+static const long int TIMESTAMP_CORRECT_TRESHOLD           = 30000; // <pyapi> // timestamp correctors start correcting timestamps if they are this much off (in milliseconds)
+
 
 namespace Timeout { ///< Various thread timeouts in milliseconds
   const static long unsigned thread       =250; // Timeout::thread
