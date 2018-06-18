@@ -81,6 +81,8 @@ Logger& Logger::operator<<(StandardEndLine manip)
 {
   // call the function, but we cannot return it's value
   // if (current_level<=log_level or current_special_level==special_level) {
+  // std::cout << "Logger: log_level=" << log_level << std::endl;
+  
   if (current_level<=log_level) {
     manip(std::cout);
   }
@@ -99,6 +101,19 @@ Logger fifologger;
 Logger opengllogger;
 Logger filelogger;
 Logger filethreadlogger;
+
+
+extern void setLogLevel_framelogger(int level)      { framelogger.setLevel(level); };
+extern void setLogLevel_filterlogger(int level)     { filterlogger.setLevel(level); };     
+extern void setLogLevel_livelogger(int level)       { livelogger.setLevel(level); };    
+extern void setLogLevel_threadlogger(int level)     { threadlogger.setLevel(level); };     
+extern void setLogLevel_livethreadlogger(int level) { livethreadlogger.setLevel(level); };    
+extern void setLogLevel_avthreadlogger(int level)   { avthreadlogger.setLevel(level); };     
+extern void setLogLevel_decoderlogger(int level)    { decoderlogger.setLevel(level); };     
+extern void setLogLevel_fifologger(int level)       { fifologger.setLevel(level); };     
+extern void setLogLevel_opengllogger(int level)     { opengllogger.setLevel(level); };     
+extern void setLogLevel_filelogger(int level)       { filelogger.setLevel(level); };     
+extern void setLogLevel_filethreadlogger(int level) { filethreadlogger.setLevel(level); };
 
 
 void crazy_log_all() {

@@ -137,12 +137,15 @@ void test_3() {
   }
   std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
   
+  setLogLevel_livelogger(LogLevel::crazy);
+  
   // filtergraph:
   // (LiveThread:livethread) --> {BriefInfoFrameFilter:dummyfilter1)   
   LiveThread livethread("livethread");
   
-  InfoFrameFilter dummyfilter1("info");
+  // InfoFrameFilter dummyfilter1("info");
   // BriefInfoFrameFilter dummyfilter1("info");
+  DummyFrameFilter dummyfilter1("info",false,NULL);
   
   std::cout << "starting live thread" << std::endl;
   livethread.startCall();
@@ -151,7 +154,7 @@ void test_3() {
   livethread.registerStreamCall(ctx);  
   livethread.playStreamCall(ctx);
   
-  sleep_for(10s);
+  sleep_for(5s);
 
   std::cout << "stopping live thread" << std::endl;
   

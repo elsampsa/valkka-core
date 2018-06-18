@@ -30,11 +30,11 @@ logging.py : Interface to cpp-level logging
 @brief Interface to cpp-level logging
 """
 
+# can't get the namespace from cpp (logging.h) with swig, so redefine here
 loglevel_silent =0
 loglevel_normal =1
 loglevel_debug  =2
 loglevel_crazy  =3
-
 
 from valkka import valkka_core as core
 
@@ -58,6 +58,14 @@ def setValkkaLogLevel(i=loglevel_normal):
     
   else:
     raise(AssertionError("Invalid loglevel"))
+
+
+"""
+Individual loggers can be set like this:
+
+core.setLogLevel_livelogger(loglevel_crazy);
+
+"""
   
 
 def test1():

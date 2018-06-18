@@ -51,8 +51,3 @@ from valkka.valkka_core import VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH
 
 __version__=str(VERSION_MAJOR)+"."+str(VERSION_MINOR)+"."+str(VERSION_PATCH)
 
-
-
-
-
-

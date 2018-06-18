@@ -150,6 +150,18 @@ extern Logger opengllogger;
 extern Logger filelogger;
 extern Logger filethreadlogger;
 
+extern void setLogLevel_framelogger(int level);          // <pyapi>
+extern void setLogLevel_filterlogger(int level);         // <pyapi>
+extern void setLogLevel_livelogger(int level);           // <pyapi>
+extern void setLogLevel_threadlogger(int level);         // <pyapi>
+extern void setLogLevel_livethreadlogger(int level);     // <pyapi>
+extern void setLogLevel_avthreadlogger(int level);       // <pyapi>
+extern void setLogLevel_decoderlogger(int level);        // <pyapi>
+extern void setLogLevel_fifologger(int level);           // <pyapi>
+extern void setLogLevel_opengllogger(int level);         // <pyapi>
+extern void setLogLevel_filelogger(int level);           // <pyapi>
+extern void setLogLevel_filethreadlogger(int level);     // <pyapi>
+
 extern void crazy_log_all();   // <pyapi>
 extern void debug_log_all();   // <pyapi>
 extern void normal_log_all();  // <pyapi>

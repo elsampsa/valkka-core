@@ -2274,6 +2274,50 @@ RGBShmemFrameFilter_swigregister = _valkka_core.RGBShmemFrameFilter_swigregister
 RGBShmemFrameFilter_swigregister(RGBShmemFrameFilter)
 
 
+def setLogLevel_framelogger(level):
+    return _valkka_core.setLogLevel_framelogger(level)
+setLogLevel_framelogger = _valkka_core.setLogLevel_framelogger
+
+def setLogLevel_filterlogger(level):
+    return _valkka_core.setLogLevel_filterlogger(level)
+setLogLevel_filterlogger = _valkka_core.setLogLevel_filterlogger
+
+def setLogLevel_livelogger(level):
+    return _valkka_core.setLogLevel_livelogger(level)
+setLogLevel_livelogger = _valkka_core.setLogLevel_livelogger
+
+def setLogLevel_threadlogger(level):
+    return _valkka_core.setLogLevel_threadlogger(level)
+setLogLevel_threadlogger = _valkka_core.setLogLevel_threadlogger
+
+def setLogLevel_livethreadlogger(level):
+    return _valkka_core.setLogLevel_livethreadlogger(level)
+setLogLevel_livethreadlogger = _valkka_core.setLogLevel_livethreadlogger
+
+def setLogLevel_avthreadlogger(level):
+    return _valkka_core.setLogLevel_avthreadlogger(level)
+setLogLevel_avthreadlogger = _valkka_core.setLogLevel_avthreadlogger
+
+def setLogLevel_decoderlogger(level):
+    return _valkka_core.setLogLevel_decoderlogger(level)
+setLogLevel_decoderlogger = _valkka_core.setLogLevel_decoderlogger
+
+def setLogLevel_fifologger(level):
+    return _valkka_core.setLogLevel_fifologger(level)
+setLogLevel_fifologger = _valkka_core.setLogLevel_fifologger
+
+def setLogLevel_opengllogger(level):
+    return _valkka_core.setLogLevel_opengllogger(level)
+setLogLevel_opengllogger = _valkka_core.setLogLevel_opengllogger
+
+def setLogLevel_filelogger(level):
+    return _valkka_core.setLogLevel_filelogger(level)
+setLogLevel_filelogger = _valkka_core.setLogLevel_filelogger
+
+def setLogLevel_filethreadlogger(level):
+    return _valkka_core.setLogLevel_filethreadlogger(level)
+setLogLevel_filethreadlogger = _valkka_core.setLogLevel_filethreadlogger
+
 def crazy_log_all():
     return _valkka_core.crazy_log_all()
 crazy_log_all = _valkka_core.crazy_log_all

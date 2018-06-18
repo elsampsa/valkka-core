@@ -384,7 +384,7 @@ void ValkkaRTSPClient::shutdownStream(RTSPClient* rtspClient, int exitCode) {
     }
   }
 
-  livelogger.log(LogLevel::debug) << *rtspClient << "Closing the stream.\n";
+  livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: " << *rtspClient << " closing the stream.\n";
   *livestatus=LiveStatus::closed;
   Medium::close(rtspClient);
   // Note that this will also cause this stream's "StreamClientState" structure to get reclaimed.
