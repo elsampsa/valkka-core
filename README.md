@@ -59,13 +59,16 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.4.7
+### Current stable version is 0.5.0
+
+0.5.0 Version : "Halfway to Beta"
+- Live rendering very solid
+
+### Older versions
 
 0.4.7 Version
 - Can change receiving socket size and Live555 reordering buffer
 - etc.
-
-### Older versions
 
 0.4.6 Version
 - Background texture when no stream is coming through
@@ -87,7 +90,7 @@ We're currently at alpha
 - Sending multicast works
 
 0.3.5 Version : "10 x 1080p cameras running for a week"
-- Stable!  GPU direct memory access needed rubbing in the right way
+- Stable!  GPU direct memory access needed rubbing in the right way (..or did it?)
 - Lots of fixes ..
 - Reading / writing from/to matroska container
 
