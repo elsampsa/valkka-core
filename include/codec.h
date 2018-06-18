@@ -28,7 +28,7 @@
  *  @file    codec.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.7 
+ *  @version 0.5.0 
  *  
  *  @brief   Codec definitions (slightly outdated)
  */ 

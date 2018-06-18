@@ -26,7 +26,7 @@
  *  @file    framefilterset.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.4.7 
+ *  @version 0.5.0 
  *  
  *  @brief   Classes using several framefilters
  */ 

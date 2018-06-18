@@ -26,7 +26,7 @@
  *  @file    filethread_test0.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.4.7 
+ *  @version 0.5.0 
  *  
  *  @brief Test file input
  *
