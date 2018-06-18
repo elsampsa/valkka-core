@@ -198,7 +198,8 @@ bool VideoDecoder::pull() {
     out_frame.av_pixel_format=new_pixel_format;
     out_frame.update(); // uses av_frame and out_frame.av_pixel_format
   }
-  out_frame.copyMetaFrom(&in_frame); // after this, the AVBitmapFrame instance is ready to go..
+  out_frame.copyMetaFrom(&in_frame);  // after this, the AVBitmapFrame instance is ready to go..
+  // out_frame.mstimestamp =av_frame->pts; // timestamp is now the presentation timestamp given by the decoder .. uh-oh need to convert from time_base units of AVStream
   
 /*
 #ifdef AV_REALLOC
