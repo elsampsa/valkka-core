@@ -42,3 +42,15 @@ git_rm_tag.bash
 python/valkka/libValkka.so.*
 python/valkka.egg-info
 ROADMAP
+pitch.txt
+python/legacy
+build_dir
+include/legacy
+legacy
+python/valkka/valkka_core_wrap.cpp
+python/valkka/*.so.*
+ext/*.tar.gz
+ext/ffmpeg
+ext/live
+debian/tmp
+include/valkka_core.i

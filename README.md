@@ -127,41 +127,37 @@ We're currently at alpha
 
 You need (at least):
 
-    sudo apt-get install yasm git swig python3-pip cmake libx11-dev libglew-dev libasound2-dev pkg-config python3-dev
-
-Install also the following python packages:
-    
-    pip3 install --upgrade ipython numpy 
+    sudo apt-get install yasm git swig cmake pkg-config libx11-dev libglew-dev libasound2-dev python3-dev python3-numpy python3-setuptools python3-pip ipython3
     
 ### Compile
 
-You have two options (A, B):
+This just got a lot easier: the same CMake file is used to compile the library, generate python wrappings and to compile the wrappings (no more python setup scripts)
 
-A. Using your custom-compiled / home-brewn Live555 and FFmpeg.  This is recommended.
-  - Download and compile Live555 and FFmpeg libraries
-  - The script "lib/run_config_3_4_.bash" will help you to compile a stripped-down version of FFmpeg 3.4 libraries
-  - Read the comments in "lib/ln_live.bash" and "lib/ln_ffmpeg.bash"
-  - Use those scripts to create softlinks to the library files
-  - NEW: script "aux/valkka_builder.bash" has it all (however, you should not launch it before reading/studying it).
+First, download live and ffmpeg
 
-B. Using system-wide installed (i.e. with apt-get) shared libraries and header files
-  - Just edit your run_cmake.bash accordingly (below)
+    cd ext
+    ./download_live.bash
+    ./download_ffmpeg.bash
+    cd ..
 
-Next, launch "./new_build.bash buildname", where buildname is a name you wish to tag your build with
+Next, proceed in building live555, ffmpeg and valkka 
+    
+    make -f debian/rules clean
+    make -f debian/rules build
+    
+Finally, create a debian package with
 
-Go to the newly created build directory and there:
-  - Read "README_BUILD" and "README_TESTS"
-  - Edit "run_cmake.bash"
-  - Finally, run it with "./run_cmake.bash"
-  - Do "source test_env.bash"
-  - .. and now you should be able to run the test programs
-  - Debian package can be created simply with "make package"
+    make -f debian/rules package
+    
+You can install the package to your system with
 
-Creating the python3 interface: go to "python/" directory and read there "README.md"
-
+    cd build_dir
+    dpkg -i Valkka-*.deb
+    sudo apt-get -fy install
+    
 ### Contribute
 
-Want to modify and develop further Valkka source code?  Your effort is needed.  You should start by reading some of the cpp documentation.
+Want to modify and develop further Valkka source code?  You should start by reading some of the cpp documentation.
 
 ## Resources
 

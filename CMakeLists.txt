@@ -12,26 +12,11 @@ find_package(PkgConfig REQUIRED)
 project(Valkka)
 
 # **** INPUT VARIABLES ****
-option(custom_build "custom_build" ON )
-option(use_shared   "use_shared"   OFF)
 option(ffmpeg_root  "ffmpeg_root"  "")
 option(live555_root "live555_root" "")
 
 SET(FFMPEG_ROOT ${ffmpeg_root})
 SET(LIVE555_ROOT ${live555_root})
-
-if    (custom_build)
-  SET(CUSTOM_BUILD "TRUE")
-else  (custom_build)
-  SET(CUSTOM_BUILD "FALSE")
-endif (custom_build)
-
-if    (use_shared)
-  SET(USE_SHARED "TRUE")
-else  (use_shared)
-  SET(USE_SHARED "FALSE")
-endif (use_shared)
-
 
 # debug/verbosity switches: generate with "tools/cmake/gen_opts.py"
 option(valgrind_gpu_debug "valgrind_gpu_debug" OFF)
@@ -136,14 +121,6 @@ set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 # set(CMAKE_BUILD_TYPE Debug)
 # set(CMAKE_BUILD_TYPE Release)
 
-# *** define if live555 and ffmpeg are .. # now from the command line
-# set(CUSTOM_BUILD "TRUE") # .. custom-compiled **RECOMMENDED**  You might have to edit the library versions: see tag [LIBRARY_VERSIONS]
-# set(CUSTOM_BUILD "FALSE") # .. system-wide installed header and .so files (i.e. with "apt-get install ..")
-
-# *** if you are using custom compiled, choose either .. # now from the command line
-# set(USE_SHARED "TRUE") # .. dependencies of Valkka (live555 and ffmpeg) are found from other dynamic libraries 
-# set(USE_SHARED "FALSE") # .. live555 and ffmpeg are baked into Valkka as static libraries **RECOMMENDED**
-
 # ****************************************************************
 
 # [some directory definitions]
@@ -159,12 +136,18 @@ pkg_search_module(GLEW REQUIRED glew)
 pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the latest ffmpeg
 pkg_search_module(PYTHON REQUIRED python3)
 
+execute_process(COMMAND python3 -c "from distutils import sysconfig; print(sysconfig.get_python_lib(),end='')" OUTPUT_VARIABLE PYTHON_DIR)
+message("PYTHON INSTALL DIR : " ${PYTHON_DIR})
+execute_process(COMMAND python3 -c "import numpy; print(numpy.get_include())" OUTPUT_VARIABLE NUMPY_INCLUDE_DIR)
+message("PYTHON NUMPY HEADER FILES IN : " ${NUMPY_INCLUDE_DIR})
+
 # compiler flags
 # add_compile_options("-std=c++14" "-pthread") #  ${GL_CFLAGS})
 add_compile_options("-std=c++14") # .. -pthread required only at link time
 
 # [define library source files]
 file(GLOB SOURCES src/*.cpp)
+file(GLOB SWIGBASE include/valkka.i.base)
 
 # [we're compiling a library here..]
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
@@ -181,87 +164,75 @@ set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${VERSION_STRING} SOVER
 target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 # # target_link_libraries(${PROJECT_NAME} ${GL_LIBS})
 target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES} ${GLEW_LIBRARIES} ${ALSA_LIBRARIES} ${PYTHON_LIBRARIES})
-
 target_link_libraries(${PROJECT_NAME} "pthread")
 
+message("LIVE555 ROOT: ${LIVE555_ROOT}")
+message("FFMPEG  ROOT: ${FFMPEG_ROOT}")
 
-if(CUSTOM_BUILD) # [CUSTOM]
-  message("USING CUSTOM COMPILED LIVE555 AND FFMPEG - GOOD")
-  message("LIVE555 ROOT: ${LIVE555_ROOT}")
-  message("FFMPEG  ROOT: ${FFMPEG_ROOT}")
-  # include_directories("include/ext/liveMedia" "include/ext/groupsock" "include/ext/BasicUsageEnvironment" "include/ext/UsageEnvironment")
-  # include_directories("include/ext")
-  # target_include_directories(${PROJECT_NAME} PUBLIC "include/ext/liveMedia" "include/ext/groupsock" "include/ext/BasicUsageEnvironment" "include/ext/UsageEnvironment")
-  # target_include_directories(${PROJECT_NAME} PUBLIC "include/ext")
-  # # now defined from command line:
-  target_include_directories(${PROJECT_NAME} PUBLIC "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include")
-  target_include_directories(${PROJECT_NAME} PUBLIC "${FFMPEG_ROOT}")
+target_include_directories(${PROJECT_NAME} PUBLIC "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include")
+target_include_directories(${PROJECT_NAME} PUBLIC "${FFMPEG_ROOT}") # ffmpeg header files are referred in the code with the directory name
   
-  # target_link_libraries(${PROJECT_NAME} "-Llib")
-  # link_directories("-Llib")
-  target_link_libraries(${PROJECT_NAME} "-L${CMAKE_CURRENT_SOURCE_DIR}/lib")
-  
-  # .. now the include directories have the correct absolute paths
-  if(USE_SHARED) # custom-compiled shared libraries [LIBRARY_VERSIONS]
-    message("USING EXTERNAL SHARED DEPENDENCIES FOR LIVE555 AND FFMPEG - ARE YOU SURE?")
-    target_link_libraries(${PROJECT_NAME} ":libliveMedia.so.52" ":libgroupsock.so.8" ":libBasicUsageEnvironment.so.1" ":libUsageEnvironment.so.3") # live555
-    target_link_libraries(${PROJECT_NAME} ":libavcodec.so.57" ":libavformat.so.57" ":libavutil.so.55" ":libswscale.so.4") # ffmpeg
-    # set(LIVE_LIBS   "-l:libliveMedia.so.52 -l:libgroupsock.so.8 -l:libBasicUsageEnvironment.so.1 -l:libUsageEnvironment.so.3") # live555
-    # set(FFMPEG_LIBS "-l:libavcodec.so.57  -l:libavformat.so.57  -l:libavutil.so.55 -l:libswscale.so.4") # ffmpeg
-  else(USE_SHARED) # custom-compiled static libraries
-    message("USING STATICALLY COMPILED LIVE555 AND FFMPEG - GOOD")
-    # target_link_libraries(${PROJECT_NAME} "vda") # could this fix the missing "vaUnmapBuffer", etc. crap?
-    target_link_libraries(${PROJECT_NAME} "rt")
-    target_link_libraries(${PROJECT_NAME} "-Wl,--allow-multiple-definition" "-Wl,-Bsymbolic" "-Wl,--start-group" "-Wl,--whole-archive")
-    target_link_libraries(${PROJECT_NAME} ":libliveMedia.a" ":libgroupsock.a" ":libBasicUsageEnvironment.a" ":libUsageEnvironment.a")
-    # target_link_libraries(${PROJECT_NAME} ":libavdevice.a" ":libavfilter.a" ":libavformat.a" ":libavcodec.a" ":libavutil.a" ":libswscale.a" ":libswresample.a")
-    target_link_libraries(${PROJECT_NAME} ":libavfilter.a" ":libavformat.a" ":libavcodec.a" ":libavutil.a" ":libswscale.a" ":libswresample.a")
-    target_link_libraries(${PROJECT_NAME} "-Wl,--no-whole-archive" "-Wl,--end-group")
+target_link_libraries(${PROJECT_NAME} "-L${LIVE555_ROOT}/liveMedia" "-L${LIVE555_ROOT}/groupsock" "-L${LIVE555_ROOT}/BasicUsageEnvironment" "-L${LIVE555_ROOT}/UsageEnvironment")
+target_link_libraries(${PROJECT_NAME} "-L${FFMPEG_ROOT}/libavfilter" "-L${FFMPEG_ROOT}/libavformat" "-L${FFMPEG_ROOT}/libavcodec" "-L${FFMPEG_ROOT}/libavutil" "-L${FFMPEG_ROOT}/libswscale" "-L${FFMPEG_ROOT}/libswresample")
     
-    # add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND "objcopy" ARGS "-N" "vaUnmapBuffer" $<TARGET_FILE:${PROJECT_NAME}>)
-                   
-  endif(USE_SHARED)
+# target_link_libraries(${PROJECT_NAME} "vda") # could this fix the missing "vaUnmapBuffer", etc. crap?
+target_link_libraries(${PROJECT_NAME} "rt")
+target_link_libraries(${PROJECT_NAME} "-Wl,--allow-multiple-definition" "-Wl,-Bsymbolic" "-Wl,--start-group" "-Wl,--whole-archive")
 
-else(CUSTOM_BUILD) # system-provided shared libraries
-  message("USING SYSTEM PROVIDED SHARED LIBRARIES FOR LIVE555 AND FFMPEG - ARE YOU SURE?")
-  # live555:
-  #exec_program(pkg-config ARGS --cflags live555 OUTPUT_VARIABLE LIVE_CFLAGS)
-  #exec_program(pkg-config ARGS --libs live555 OUTPUT_VARIABLE LIVE_LIBS)
-  # ffmpeg:
-  #exec_program(pkg-config ARGS --cflags libavcodec libavformat libavutil libswscale OUTPUT_VARIABLE FFMPEG_CFLAGS)
-  #exec_program(pkg-config ARGS --libs libavcodec libavformat libavutil libswscale OUTPUT_VARIABLE FFMPEG_LIBS)
-  
-  # # ** how to add the -I switches for from exec_program => pkg-config ..?
-  # # add_compile_options(${LIVE_CFLAGS} ${FFMPEG_CFLAGS}) # -I switches through compile options here.. # does not work ..?
-  # set(CMAKE_CXX_FLAGS "-std=c++14 -pthread ${LIVE_CFLAGS} ${FFMPEG_CFLAGS} ${GL_CFLAGS}") # .. so let's do it like this
-  # # like this:
-  # # target_include_directories(${PROJECT_NAME} PUBLIC ${LIVE_CFLAGS} ${FFMPEG_CFLAGS}) # nopes ..
-  # target_link_libraries(${PROJECT_NAME} ${FFMPEG_LIBS} ${LIVE_LIBS})
-  
-  pkg_search_module(LIVE555 REQUIRED live555)
-  pkg_search_module(LIBAVCODEC REQUIRED libavcodec)
-  pkg_search_module(LIBAVFORMAT REQUIRED libavformat)
-  pkg_search_module(LIBAVUTIL REQUIRED libavutil)
-  pkg_search_module(LIBSWSCALE REQUIRED libswscale)
-  
-  target_include_directories(${PROJECT_NAME} PUBLIC ${LIVE555_INCLUDE_DIRS})
-  target_include_directories(${PROJECT_NAME} PUBLIC ${LIBAVCODEC_INCLUDE_DIRS})
-  target_include_directories(${PROJECT_NAME} PUBLIC ${LIBAVFORMAT_INCLUDE_DIRS})
-  target_include_directories(${PROJECT_NAME} PUBLIC ${LIBAVUTIL_INCLUDE_DIRS})
-  target_include_directories(${PROJECT_NAME} PUBLIC ${LIBSWSCALE_INCLUDE_DIRS})
-  
-  target_link_libraries(${PROJECT_NAME} ${LIVE555_LIBRARIES})
-  target_link_libraries(${PROJECT_NAME} ${LIBAVCODEC_LIBRARIES})
-  target_link_libraries(${PROJECT_NAME} ${LIBAVFORMAT_LIBRARIES})
-  target_link_libraries(${PROJECT_NAME} ${LIBAVUTIL_LIBRARIES})
-  target_link_libraries(${PROJECT_NAME} ${LIBSWSCALE_LIBRARIES})
-  
-endif(CUSTOM_BUILD)
+target_link_libraries(${PROJECT_NAME} ":libliveMedia.a" ":libgroupsock.a" ":libBasicUsageEnvironment.a" ":libUsageEnvironment.a")
+target_link_libraries(${PROJECT_NAME} ":libavfilter.a" ":libavformat.a" ":libavcodec.a" ":libavutil.a" ":libswscale.a" ":libswresample.a")
+
+target_link_libraries(${PROJECT_NAME} "-Wl,--no-whole-archive" "-Wl,--end-group")
+    
+# add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND "objcopy" ARGS "-N" "vaUnmapBuffer" $<TARGET_FILE:${PROJECT_NAME}>)
+
+# *** (SWIG, 1-3) SWIG PYTHON INTERFACE ***
+
+# *** (SWIG, 1) Generate SWIG interface file from the header files ***
+add_custom_target(
+  swig_file ALL
+  COMMAND ./makeswig.bash
+  COMMENT GENERATING_SWIG 
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/include
+)
+
+# *** (SWIG, 2) Generate cpp wrappers for python using SWIG ***
+add_custom_command(
+  TARGET swig_file
+  POST_BUILD
+  COMMENT SWIGGING
+  COMMAND swig -python -c++ -I/usr/include -o ${CMAKE_SOURCE_DIR}/python/valkka/valkka_core_wrap.cpp -outdir ${CMAKE_SOURCE_DIR}/python/valkka ${CMAKE_SOURCE_DIR}/include/valkka_core.i
+)
+# add_custom_target(python_wrapper ALL DEPENDS ${CMAKE_SOURCE_DIR}/python/valkka/valkka_core_wrap.cpp) # a target node that corresponds to "valkka_core_wrap.cpp"
+# add_dependencies(python_wrapper swig_file) # .. that target node depends on the swig_file target node
+
+# *** (SWIG, 3) Compile the cpp-wrapped python code ***
+add_library(valkka_core SHARED ${CMAKE_SOURCE_DIR}/python/valkka/valkka_core_wrap.cpp)
+target_include_directories(valkka_core PUBLIC include)
+target_include_directories(valkka_core PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
+target_include_directories(valkka_core PUBLIC "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include")
+target_include_directories(valkka_core PUBLIC "${FFMPEG_ROOT}") # ffmpeg header files are referred in the code with the directory name
+target_include_directories(valkka_core PUBLIC "${NUMPY_INCLUDE_DIR}") # ffmpeg header files are referred in the code with the directory name
+
+target_link_libraries(valkka_core "Valkka.so")
+target_link_libraries(valkka_core "-L${CMAKE_CURRENT_BINARY_DIR}/lib")
+
+set_target_properties(valkka_core PROPERTIES VERSION ${VERSION_STRING} SOVERSION ${MAJOR_VERSION})
+set_target_properties(valkka_core PROPERTIES PREFIX "")
+set_target_properties(valkka_core PROPERTIES OUTPUT_NAME "_valkka_core")
+set_target_properties(valkka_core PROPERTIES SUFFIX ".so")
+set_target_properties(valkka_core PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/python/valkka)
+# # original commands
+
+# # compile:
+# x86_64-linux-gnu-gcc -pthread -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -g -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -fPIC -I/home/sampsa/.local/lib/python3.5/site-packages/numpy/core/include -I/usr/include/python3.5m -c valkka_core_wrap.cpp -o build/temp.linux-x86_64-3.5/valkka_core_wrap.o -fPIC -std=c++14
+
+# # link:
+# x86_64-linux-gnu-g++ -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-Bsymbolic-functions -Wl,-z,relro -g -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 build/temp.linux-x86_64-3.5/valkka_core_wrap.o -L/home/sampsa/C/valkka/build_dir/lib -lValkka -o build/lib.linux-x86_64-3.5/_valkka_core.cpython-35m-x86_64-linux-gnu.so
 
 # *** test programs ***
 # use the script "test/list.bash" to update this list
 
-# set(TESTNAMES)
 # set(TESTNAMES "av_live_thread_test" "av_thread_test" "classes_test" "fifo_test" "file_test" "frames_test" "live_stream_check_test" "live_streaming_test" "live_thread_test" "log_test" "opengl_test" "opengl_thread_test" "render_test" "shmem_test" "swscale_test" "threads_test")
 # set(TESTNAMES "shmem_test" "swscale_test")
 # set(TESTNAMES "file_test")
@@ -272,20 +243,9 @@ add_custom_target(tests) # Note: without 'ALL'
 foreach( testname ${TESTNAMES} )
   add_executable(${testname} "test/${testname}.cpp") # Note: without 'ALL'
   target_include_directories(${testname} PUBLIC "include")
-  
-  if(CUSTOM_BUILD)
-    # target_include_directories(${testname} PUBLIC "include/ext/liveMedia" "include/ext/groupsock" "include/ext/BasicUsageEnvironment" "include/ext/UsageEnvironment")
-    # target_include_directories(${testname} PUBLIC "include/ext")
-    target_include_directories(${testname} PUBLIC "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include")
-    target_include_directories(${testname} PUBLIC "${FFMPEG_ROOT}")
-  else(CUSTOM_BUILD)
-    target_include_directories(${testname} PUBLIC ${LIVE555_INCLUDE_DIRS})
-    target_include_directories(${testname} PUBLIC ${LIBAVCODEC_INCLUDE_DIRS})
-    target_include_directories(${testname} PUBLIC ${LIBAVFORMAT_INCLUDE_DIRS})
-    target_include_directories(${testname} PUBLIC ${LIBAVUTIL_INCLUDE_DIRS})
-    target_include_directories(${testname} PUBLIC ${LIBSWSCALE_INCLUDE_DIRS})
-  endif(CUSTOM_BUILD)  
-  
+  target_include_directories(${testname} PUBLIC "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include")
+  target_include_directories(${testname} PUBLIC "${FFMPEG_ROOT}")
+
   # target_include_directories(${testname} PUBLIC ${PYTHON_INCLUDE_DIRS})
   # target_link_libraries(${testname} ${PYTHON_LIBRARIES})
   
@@ -344,42 +304,45 @@ install(DIRECTORY "${CMAKE_SOURCE_DIR}/include" DESTINATION include/valkka FILES
 # "The last component of each directory name is appended to the destination directory but a trailing slash may be used to avoid this because it leaves the last component empty."
 # fair enough! :)
 
-if(CUSTOM_BUILD) # include header files ..
-  install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/" DESTINATION include/valkka FILES_MATCHING PATTERN "*.h")
-  
-  # install(DIRECTORY "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include" DESTINATION include/valkka FILES_MATCHING PATTERN "*.hh")
-  
-  install(DIRECTORY "${LIVE555_ROOT}/liveMedia/include"               DESTINATION include/valkka/liveMedia             FILES_MATCHING PATTERN "*.h*")
-  install(DIRECTORY "${LIVE555_ROOT}/groupsock/include"               DESTINATION include/valkka/groupsock             FILES_MATCHING PATTERN "*.h*")
-  install(DIRECTORY "${LIVE555_ROOT}/BasicUsageEnvironment/include"   DESTINATION include/valkka/BasicUsageEnvironment FILES_MATCHING PATTERN "*.h*")
-  install(DIRECTORY "${LIVE555_ROOT}/UsageEnvironment/include"        DESTINATION include/valkka/UsageEnvironment      FILES_MATCHING PATTERN "*.h*")
-  
-  # install(DIRECTORY "${LIVE555_ROOT}"        DESTINATION include/valkka FILES_MATCHING PATTERN "*.h*") # does the right thing .. why? ****ing CMake
-  
-  # include header files if someone want's to use the cpp API.  Must take care thought, that the API user uses the correct header files (i.e. these, instead of some other versions)
-  install(DIRECTORY "${FFMPEG_ROOT}/libavfilter"   DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h") # don't really need this ..
-  install(DIRECTORY "${FFMPEG_ROOT}/libavformat"   DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
-  install(DIRECTORY "${FFMPEG_ROOT}/libavcodec"    DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
-  install(DIRECTORY "${FFMPEG_ROOT}/libavutil"     DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
-  install(DIRECTORY "${FFMPEG_ROOT}/libswscale"    DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
-  install(DIRECTORY "${FFMPEG_ROOT}/libswresample" DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
-  
-  # install(DIRECTORY "${FFMPEG_ROOT}" DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
-  
-  # when compiling on my linux box, I use:
-  # -I/home/sampsa/live555/live/UsageEnvironment/include
-  # -I/home/sampsa/ffmpeg/ffmpeg_git_lgpl 
-  #
-  # with cpp api, should use
-  # -I/usr/valkka/include/
-  # -I/usr/valkka/BasicUsageEnvironment/include/
-  # .. etc. for live555
-  # -I/usr/valkka/ffmpeg/
-  #
-  # however, if combined with "-I/usr/include", there might be other versions of the same header files in "/usr/include/" TODO: think about this..
-  #
-  
-endif(CUSTOM_BUILD)
+# include header files ..
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/" DESTINATION include/valkka FILES_MATCHING PATTERN "*.h")
+
+# install(DIRECTORY "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include" DESTINATION include/valkka FILES_MATCHING PATTERN "*.hh")
+
+install(DIRECTORY "${LIVE555_ROOT}/liveMedia/include"               DESTINATION include/valkka/liveMedia             FILES_MATCHING PATTERN "*.h*")
+install(DIRECTORY "${LIVE555_ROOT}/groupsock/include"               DESTINATION include/valkka/groupsock             FILES_MATCHING PATTERN "*.h*")
+install(DIRECTORY "${LIVE555_ROOT}/BasicUsageEnvironment/include"   DESTINATION include/valkka/BasicUsageEnvironment FILES_MATCHING PATTERN "*.h*")
+install(DIRECTORY "${LIVE555_ROOT}/UsageEnvironment/include"        DESTINATION include/valkka/UsageEnvironment      FILES_MATCHING PATTERN "*.h*")
+
+# install(DIRECTORY "${LIVE555_ROOT}"        DESTINATION include/valkka FILES_MATCHING PATTERN "*.h*") # does the right thing .. why? ****ing CMake
+
+# include header files if someone want's to use the cpp API.  Must take care thought, that the API user uses the correct header files (i.e. these, instead of some other versions)
+install(DIRECTORY "${FFMPEG_ROOT}/libavfilter"   DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h") # don't really need this ..
+install(DIRECTORY "${FFMPEG_ROOT}/libavformat"   DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY "${FFMPEG_ROOT}/libavcodec"    DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY "${FFMPEG_ROOT}/libavutil"     DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY "${FFMPEG_ROOT}/libswscale"    DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY "${FFMPEG_ROOT}/libswresample" DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
+
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.py")
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.so*")
+
+
+
+# install(DIRECTORY "${FFMPEG_ROOT}" DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
+
+# when compiling on my linux box, I use:
+# -I/home/sampsa/live555/live/UsageEnvironment/include
+# -I/home/sampsa/ffmpeg/ffmpeg_git_lgpl 
+#
+# with cpp api, should use
+# -I/usr/valkka/include/
+# -I/usr/valkka/BasicUsageEnvironment/include/
+# .. etc. for live555
+# -I/usr/valkka/ffmpeg/
+#
+# however, if combined with "-I/usr/include", there might be other versions of the same header files in "/usr/include/" TODO: think about this..
+#
 
 # TODO: how to configure pkg-config when installing this .deb package?
 # something like this..?

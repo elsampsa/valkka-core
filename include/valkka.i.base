@@ -7,19 +7,19 @@
 %{ // this is prepended in the wapper-generated c(pp) file
 #define SWIG_FILE_WITH_INIT
 #include "X11/Xlib.h"
-#include "include/framefilter.h"
-#include "include/framefifo.h"
-#include "include/threadsignal.h"
-#include "include/livethread.h"
-#include "include/filethread.h"
-#include "include/fileframefilter.h"
-#include "include/avthread.h"
-#include "include/openglthread.h"
-#include "include/openglframefifo.h"
-#include "include/sharedmem.h"
-#include "include/logging.h"
-#include "include/testthread.h"
-#include "include/framefilterset.h"
+#include "framefilter.h"
+#include "framefifo.h"
+#include "threadsignal.h"
+#include "livethread.h"
+#include "filethread.h"
+#include "fileframefilter.h"
+#include "avthread.h"
+#include "openglthread.h"
+#include "openglframefifo.h"
+#include "sharedmem.h"
+#include "logging.h"
+#include "testthread.h"
+#include "framefilterset.h"
 #include <Python.h>
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 // #define PY_ARRAY_UNIQUE_SYMBOL shmem_array_api

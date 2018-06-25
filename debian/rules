@@ -1,0 +1,47 @@
+#!/usr/bin/make -f
+
+# we need absolute paths because of CMake ..
+MAINDIR   = $(PWD)
+EXTDIR    = $(PWD)/ext
+BUILDDIR  = $(PWD)/build_dir
+LIVEDIR   = $(PWD)/ext/live
+FFMPEGDIR = $(PWD)/ext/ffmpeg
+
+# secondly called by launchpad
+# this called from the main dir, i.e. by "debuild" => make -f debian/rules clean;build;etc
+# that -DCMAKE_INSTALL_PREFIX creates an install script for CMake itself
+build:
+	cd $(LIVEDIR); make -j 2
+	cd $(FFMPEGDIR); make -j 2
+	mkdir -p $(BUILDDIR);
+	cd $(BUILDDIR); cmake -Dlive555_root=$(LIVEDIR) -Dffmpeg_root=$(FFMPEGDIR) -DCMAKE_INSTALL_PREFIX=$(MAINDIR)/debian/tmp/usr $(MAINDIR)
+	make -C $(BUILDDIR)
+
+	
+# thirdly called by launchpad
+binary: binary-indep binary-arch
+
+binary-indep:
+	# nothing to be done
+
+# cmake runs the install script it generated at build stage
+binary-arch:
+	cd $(BUILDDIR); cmake -P cmake_install.cmake
+	mkdir debian/tmp/DEBIAN
+	dpkg-gencontrol -pvalkka
+	dpkg --build debian/tmp ..
+
+# firstly called by launchpad
+clean:
+	rm -f build
+	rm -rf $(BUILDDIR)
+	cd $(EXTDIR); ./configure_live.bash
+	cd $(EXTDIR); ./configure_ffmpeg.bash
+	cd $(LIVEDIR); make clean
+	cd $(FFMPEGDIR); make clean
+
+# this is for people building valkka from scratch
+package:
+	make -C $(BUILDDIR) package
+
+.PHONY: binary binary-arch binary-indep clean

@@ -1,0 +1,12 @@
+Source: valkka
+Section: devel
+Priority: optional
+Maintainer: Sampsa Riikonen <sampsa.riikonen@iki.fi>
+Build-Depends: cmake, build-essential
+Homepage: http://www.iki.fi/sampsa.riikonen
+
+Package: valkka
+Architecture: any
+Depends: 
+Description: Valkka
+ OpenSource Video Management for Linux
