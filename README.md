@@ -133,7 +133,7 @@ You need (at least):
 
 This just got a lot easier: the same CMake file is used to compile the library, generate python wrappings and to compile the wrappings (no more python setup scripts)
 
-First, download live and ffmpeg
+First, download live555 and ffmpeg
 
     cd ext
     ./download_live.bash
@@ -157,7 +157,7 @@ You can install the package to your system with
     
 ### Development environment
     
-If you need more fine-grained control over the build process, create a separate build directory and copy the contents of the directory *tools/build* there.  Read and edit *run_cmake.bash* and *README_BUILD*.  Now you can toggle various debug/verbosity switches, define custom location for live555 and ffmpeg, etc.  After creating this custom build, you should run
+If you need more fine-grained control over the build process, create a separate build directory and copy the contents of the directory *tools/build* there.  Read and edit *run_cmake.bash* and *README_BUILD*.  Now you can toggle various debug/verbosity switches, define custom location for live555 and ffmpeg, etc.  After creating the custom build, you should run
 
     source test_env.bash
 
