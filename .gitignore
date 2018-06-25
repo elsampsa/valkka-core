@@ -54,3 +54,4 @@ ext/ffmpeg
 ext/live
 debian/tmp
 include/valkka_core.i
+python/valkka/valkka_core.py

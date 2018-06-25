@@ -52,7 +52,7 @@ Some key features of the Valkka library are:
   - Arbitrary geometry transformations : think of fisheye spheres, etc.
   - And much more .. !
 - Two-level API.  Level 1 is simply swig-wrapped cpp.  Level 2 is higher level and makes development even easier.
-- For an overview of technical details, see [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
+- For more technical details, see [documentation](https://elsampsa.github.io/valkka-core/).  If you are just using the python3 API, you should read at least the "Library Architecture" section.
 
 
 ## Versions and Features
@@ -155,9 +155,18 @@ You can install the package to your system with
     dpkg -i Valkka-*.deb
     sudo apt-get -fy install
     
-### Contribute
+### Development environment
+    
+If you need more fine-grained control over the build process, create a separate build directory and copy the contents of the directory *tools/build* there.  Read and edit *run_cmake.bash* and *README_BUILD*.  Now you can toggle various debug/verbosity switches, define custom location for live555 and ffmpeg, etc.  After creating this custom build, you should run
 
-Want to modify and develop further Valkka source code?  You should start by reading some of the cpp documentation.
+    source test_env.bash
+
+in your custom build directory.  You still need to inform the python interpreter about the location of the bindings.  In the main valkka directory, do:
+
+    cd python
+    source test_env.bash
+    
+And you're all set.  Now you have a terminal that finds both libValkka and the python3 bindings
 
 ## Resources
 

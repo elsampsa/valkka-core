@@ -141,6 +141,15 @@ message("PYTHON INSTALL DIR : " ${PYTHON_DIR})
 execute_process(COMMAND python3 -c "import numpy; print(numpy.get_include())" OUTPUT_VARIABLE NUMPY_INCLUDE_DIR)
 message("PYTHON NUMPY HEADER FILES IN : " ${NUMPY_INCLUDE_DIR})
 
+execute_process(
+  COMMAND ./makeswig.bash
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/include
+)
+
+execute_process(
+  COMMAND swig -python -c++ -I/usr/include -o ${CMAKE_SOURCE_DIR}/python/valkka/valkka_core_wrap.cpp -outdir ${CMAKE_SOURCE_DIR}/python/valkka ${CMAKE_SOURCE_DIR}/include/valkka_core.i
+)
+
 # compiler flags
 # add_compile_options("-std=c++14" "-pthread") #  ${GL_CFLAGS})
 add_compile_options("-std=c++14") # .. -pthread required only at link time
@@ -186,25 +195,29 @@ target_link_libraries(${PROJECT_NAME} "-Wl,--no-whole-archive" "-Wl,--end-group"
     
 # add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND "objcopy" ARGS "-N" "vaUnmapBuffer" $<TARGET_FILE:${PROJECT_NAME}>)
 
+
+
+# WARNING: this is code generation..!  No sense to do it here.  All code should be generated at the cmake configuration stage .. look for the execute_process commands up there
+#
 # *** (SWIG, 1-3) SWIG PYTHON INTERFACE ***
-
+#
+#
+#
 # *** (SWIG, 1) Generate SWIG interface file from the header files ***
-add_custom_target(
-  swig_file ALL
-  COMMAND ./makeswig.bash
-  COMMENT GENERATING_SWIG 
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/include
-)
-
+#add_custom_target(
+#  swig_file ALL
+#  COMMAND ./makeswig.bash
+#  COMMENT GENERATING_SWIG 
+#  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/include
+#)
+#
 # *** (SWIG, 2) Generate cpp wrappers for python using SWIG ***
-add_custom_command(
-  TARGET swig_file
-  POST_BUILD
-  COMMENT SWIGGING
-  COMMAND swig -python -c++ -I/usr/include -o ${CMAKE_SOURCE_DIR}/python/valkka/valkka_core_wrap.cpp -outdir ${CMAKE_SOURCE_DIR}/python/valkka ${CMAKE_SOURCE_DIR}/include/valkka_core.i
-)
-# add_custom_target(python_wrapper ALL DEPENDS ${CMAKE_SOURCE_DIR}/python/valkka/valkka_core_wrap.cpp) # a target node that corresponds to "valkka_core_wrap.cpp"
-# add_dependencies(python_wrapper swig_file) # .. that target node depends on the swig_file target node
+#add_custom_command(
+#  TARGET swig_file
+#  POST_BUILD
+#  COMMENT SWIGGING
+#  COMMAND swig -python -c++ -I/usr/include -o ${CMAKE_SOURCE_DIR}/python/valkka/valkka_core_wrap.cpp -outdir ${CMAKE_SOURCE_DIR}/python/valkka ${CMAKE_SOURCE_DIR}/include/valkka_core.i
+#)
 
 # *** (SWIG, 3) Compile the cpp-wrapped python code ***
 add_library(valkka_core SHARED ${CMAKE_SOURCE_DIR}/python/valkka/valkka_core_wrap.cpp)
@@ -326,8 +339,8 @@ install(DIRECTORY "${FFMPEG_ROOT}/libswresample" DESTINATION include/valkka   FI
 
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.py")
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.so*")
-
-
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.png")
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.yuv")
 
 # install(DIRECTORY "${FFMPEG_ROOT}" DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
 
