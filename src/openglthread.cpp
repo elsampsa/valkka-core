@@ -1788,7 +1788,22 @@ void OpenGLThread::readStaticTex() {
   ifstream  file;
   
   file.open(static_texture_file.c_str(),ios::in|ios::binary|ios::ate);
+  
+  if (file.is_open()) {
+  }
+  else {
+    std::cout << "OpenGLThread: readStaticTex: could not open file " << static_texture_file << std::endl;
+    return;
+  }
+  
   size = file.tellg();
+  if (size>0) {
+  }
+  else {
+    std::cout << "OpenGLThread: readStaticTex: corrupt file " << static_texture_file << std::endl;
+    return;
+  }
+  
   buffer = new GLubyte[size];
 
   file.seekg(0,ios::beg);
