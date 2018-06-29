@@ -136,10 +136,21 @@ pkg_search_module(GLEW REQUIRED glew)
 pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the latest ffmpeg
 pkg_search_module(PYTHON REQUIRED python3)
 
+message("*** PYTHON INTERFACE ***")
 execute_process(COMMAND python3 -c "from distutils import sysconfig; print(sysconfig.get_python_lib(),end='')" OUTPUT_VARIABLE PYTHON_DIR)
-message("PYTHON INSTALL DIR : " ${PYTHON_DIR})
+message("PYTHON INSTALL DIR           : " ${PYTHON_DIR})
 execute_process(COMMAND python3 -c "import numpy; print(numpy.get_include())" OUTPUT_VARIABLE NUMPY_INCLUDE_DIR)
 message("PYTHON NUMPY HEADER FILES IN : " ${NUMPY_INCLUDE_DIR})
+# pip3 install: (1.14.5)
+# /home/sampsa/.local/lib/python3.5/site-packages/numpy/__init__.py
+# pip3 install as sudo:
+# /usr/local/lib/python3.5/dist-packages/numpy/__init__.py
+# apt-get install python3-numpy: (1.11)
+# /usr/lib/python3/dist-packages/numpy/__init__.py
+#
+# pip3 install pyqt5 imutils
+# 
+
 
 execute_process(
   COMMAND ./makeswig.bash
@@ -288,8 +299,8 @@ SET(CPACK_PACKAGE_VERSION "${VERSION_STRING}")
 
 SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MY_ARCH})
 
-# SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.1-6), libgcc1 (>= 1:3.4.2-12)") 
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0)") # ubuntu 16
+# The dependencies: keep these consistent with debian/control
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libpython3.5(>= 3.5.2), libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0), python3-numpy") # ubuntu 16
 
 #
 # objdump -p libValkka.so

@@ -127,7 +127,7 @@ We're currently at alpha
 
 You need (at least):
 
-    sudo apt-get install yasm git swig cmake pkg-config libx11-dev libglew-dev libasound2-dev python3-dev python3-numpy python3-setuptools python3-pip ipython3
+    sudo apt-get install yasm cmake build-essential pkg-config swig libglew-dev mesa-common-dev libstdc++-5-dev python3-dev python3-numpy libasound2-dev
     
 ### Compile
 
