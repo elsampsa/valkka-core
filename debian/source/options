@@ -1,9 +1,9 @@
 tar-ignore = ".git"
-tar-ignore = "*.bash"
+tar-ignore = "./*.bash"
 tar-ignore = "ROADMAP"
 tar-ignore = "TODO"
 tar-ignore = "python/legacy/*"
-tar-ignore = "*.txt"
+tar-ignore = "./*.txt"
 tar-ignore = ".gitignore"
 tar-ignore = "legacy/*"
 tar-ignore = "docs/*"
@@ -15,5 +15,3 @@ tar-ignore = "ext/*.tar.gz"
 tar-ignore = "debian/tmp"
 tar-ignore = "include/legacy/*"
 tar-ignore = "debian/files"
-
-

@@ -10,7 +10,7 @@ Installation instructions, demo programs and API tutorial are available [here](h
 
 If you just want to use the API, no need to go further.
 
-If you are interested in the core development, keep on reading.
+If you are interested in compiling Valkka yourself or even help us with the core development, keep on reading.
 
 ## Why this library?
 
@@ -120,6 +120,16 @@ We're currently at alpha
 
 ### Very long term goals
 - A complete video management & analysis system
+
+## Installing
+
+Binary packages and their Python3 bindings are provided for latest Ubuntu distributions.  Subscribe to our repository with: 
+
+    sudo apt-add repository ppa:sampsa-riikonen/valkka
+    
+and then do:
+    
+    sudo apt-get install valkka
 
 ## Compile yourself
 
