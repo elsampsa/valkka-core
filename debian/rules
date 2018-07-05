@@ -1,17 +1,18 @@
 #!/usr/bin/make -f
 
 # we need absolute paths because of CMake ..
-#MAINDIR   = $(PWD)
-#EXTDIR    = $(MAINDIR)/ext
-#BUILDDIR  = $(MAINDIR)/build_dir
-#LIVEDIR   = $(MAINDIR)/ext/live
-#FFMPEGDIR = $(MAINDIR)/ext/ffmpeg
+MAINDIR   = $(PWD)
+EXTDIR    = $(MAINDIR)/ext
+BUILDDIR  = $(MAINDIR)/build_dir
+LIVEDIR   = $(MAINDIR)/ext/live
+FFMPEGDIR = $(MAINDIR)/ext/ffmpeg
 
-MAINDIR   = ..
-EXTDIR    = ext
-BUILDDIR  = build_dir
-LIVEDIR   = ext/live
-FFMPEGDIR = ext/ffmpeg
+# this wont work .. (cant find live and ffmpeg dirs)
+#MAINDIR   = ..
+#EXTDIR    = ext
+#BUILDDIR  = build_dir
+#LIVEDIR   = ext/live
+#FFMPEGDIR = ext/ffmpeg
 
 
 # secondly called by launchpad
