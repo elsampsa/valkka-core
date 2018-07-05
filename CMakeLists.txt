@@ -300,7 +300,9 @@ SET(CPACK_PACKAGE_VERSION "${VERSION_STRING}")
 SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MY_ARCH})
 
 # The dependencies: keep these consistent with debian/control
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libpython3.5(>= 3.5.2), libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0), python3-numpy") # ubuntu 16
+# SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libpython3.5(>= 3.5.2), libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0), python3-numpy") # ubuntu 16
+# NEW: Avoid version numbers, use "utils" packages to imply a dependency, for example, to libglew (without hardcoding the version number into the package name)
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libpython3.5, libgcc1, mesa-utils, libstdc++6, glew-utils, python3-numpy")
 
 #
 # objdump -p libValkka.so

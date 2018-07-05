@@ -2,11 +2,12 @@ Source: valkka
 Section: libs
 Priority: optional
 Maintainer: Sampsa Riikonen <sampsa.riikonen@iki.fi>
-Build-Depends: yasm, cmake, build-essential, pkg-config, swig, libglew-dev, mesa-common-dev, libstdc++-5-dev, python3-dev, python3-numpy, libasound2-dev
+Build-Depends: yasm, cmake, pkg-config, swig, libglew-dev, mesa-common-dev, libstdc++-5-dev, python3-dev, python3-numpy, libasound2-dev
+Standards-Version: 3.9.7
 Homepage: http://www.iki.fi/sampsa.riikonen
 
 Package: valkka
 Architecture: any
-Depends: libpython3.5(>= 3.5.2), libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0), python3-numpy
+Depends: libpython3.5, libgcc1, mesa-utils, libstdc++6, glew-utils, python3-numpy
 Description: Valkka
  OpenSource Video Management for Linux
