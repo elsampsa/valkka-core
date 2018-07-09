@@ -1,4 +1,10 @@
-valkka (0.5.0-0ubuntu1-xenialppa4) xenial; urgency=low
+valkka (0.5.0-0ubuntu1-bionicppa6) bionic; urgency=low
+
+  * Initial upload for bionic
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Thu, 21 Jun 2018 20:32:17 +0200
+
+valkka (0.5.0-0ubuntu1-xenialppa6) xenial; urgency=low
 
   * Initial upload!
 

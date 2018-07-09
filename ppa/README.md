@@ -13,15 +13,15 @@ The directories used in make are all relative to the valkka main dir
 
 Binary packages and their Python3 bindings are provided for latest Ubuntu distributions.  Subscribe to our repository with: 
 
-    sudo apt-add repository ppa:sampsa-riikonen/valkka
+    sudo apt-add-repository ppa:sampsa-riikonen/valkka
+    sudo apt-get update
     
 and then do:
-    
-    sudo apt-get install valkka
  
+    sudo apt-get install valkka
+
 ## Updating ppa
  
-
 At valkka main directory, do:
  
     clear; debuild -S -sa
@@ -31,8 +31,14 @@ At the upper level directory, do:
     dput ppa:sampsa-riikonen/valkka <source.changes> 
 
 The resulting tar.gz archive can be unpacked and tested (i.e. with make -f etc.)
- 
- 
+  
+## Removing
+
+If you want to de-subscribe from our repo, do:
+
+    sudo apt-get install ppa-purge
+    sudo ppa-purge ppa:sampsa-riikonen/valkka
+
 ## Packages for various Ubuntu distros
 
 The first line of file debian/changelog must be edited for each one separately:
@@ -56,6 +62,11 @@ https://askubuntu.com/questions/30145/ppa-packaging-having-versions-of-packages-
 ## Problems
 
 It seems that the *i386* build could not find sys.h.  Added build-essential etc. to the build-depends field, see [here](https://ubuntuforums.org/showthread.php?t=1922575)
+
+That does not help to seem either:
+
+    The following packages have unmet dependencies:
+    sbuild-build-depends-valkka-dummy : Depends: libc6-dev-i386 but it is not installable
 
 ## Resources
 

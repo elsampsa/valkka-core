@@ -137,7 +137,8 @@ pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the la
 pkg_search_module(PYTHON REQUIRED python3)
 
 message("*** PYTHON INTERFACE ***")
-execute_process(COMMAND python3 -c "from distutils import sysconfig; print(sysconfig.get_python_lib(),end='')" OUTPUT_VARIABLE PYTHON_DIR)
+# execute_process(COMMAND python3 -c "from distutils import sysconfig; print(sysconfig.get_python_lib(),end='')" OUTPUT_VARIABLE PYTHON_DIR)
+set(PYTHON_DIR "lib/python3/dist-packages") # just hard-code it
 message("PYTHON INSTALL DIR           : " ${PYTHON_DIR})
 execute_process(COMMAND python3 -c "import numpy; print(numpy.get_include())" OUTPUT_VARIABLE NUMPY_INCLUDE_DIR)
 message("PYTHON NUMPY HEADER FILES IN : " ${NUMPY_INCLUDE_DIR})
@@ -150,7 +151,6 @@ message("PYTHON NUMPY HEADER FILES IN : " ${NUMPY_INCLUDE_DIR})
 #
 # pip3 install pyqt5 imutils
 # 
-
 
 execute_process(
   COMMAND ./makeswig.bash
@@ -205,8 +205,6 @@ target_link_libraries(${PROJECT_NAME} ":libavfilter.a" ":libavformat.a" ":libavc
 target_link_libraries(${PROJECT_NAME} "-Wl,--no-whole-archive" "-Wl,--end-group")
     
 # add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND "objcopy" ARGS "-N" "vaUnmapBuffer" $<TARGET_FILE:${PROJECT_NAME}>)
-
-
 
 # WARNING: this is code generation..!  No sense to do it here.  All code should be generated at the cmake configuration stage .. look for the execute_process commands up there
 #
@@ -350,6 +348,7 @@ install(DIRECTORY "${FFMPEG_ROOT}/libavutil"     DESTINATION include/valkka   FI
 install(DIRECTORY "${FFMPEG_ROOT}/libswscale"    DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY "${FFMPEG_ROOT}/libswresample" DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
 
+# TODO: change from absolute to relative dir
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.py")
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.so*")
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.png")

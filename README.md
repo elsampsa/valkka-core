@@ -125,7 +125,8 @@ We're currently at alpha
 
 Binary packages and their Python3 bindings are provided for latest Ubuntu distributions.  Subscribe to our repository with: 
 
-    sudo apt-add repository ppa:sampsa-riikonen/valkka
+    sudo apt-add-repository ppa:sampsa-riikonen/valkka
+    sudo apt-get update
     
 and then do:
     
@@ -137,7 +138,7 @@ and then do:
 
 You need (at least):
 
-    sudo apt-get install build-essential libc6-dev-i386 libc6-dev yasm cmake pkg-config swig libglew-dev mesa-common-dev libstdc++-5-dev python3-dev python3-numpy libasound2-dev
+    sudo apt-get install build-essential libc6-dev yasm cmake pkg-config swig libglew-dev mesa-common-dev libstdc++-5-dev python3-dev python3-numpy libasound2-dev
     
     
 ### Compile
