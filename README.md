@@ -121,15 +121,15 @@ We're currently at alpha
 ### Very long term goals
 - A complete video management & analysis system
 
-## Installing [COMING ONLINE SOON]
+## Installing
 
 Binary packages and their Python3 bindings are provided for latest Ubuntu distributions.  Subscribe to our repository with: 
 
     sudo apt-add-repository ppa:sampsa-riikonen/valkka
-    sudo apt-get update
     
 and then do:
     
+    sudo apt-get update
     sudo apt-get install valkka
 
 ## Compile yourself
@@ -139,7 +139,6 @@ and then do:
 You need (at least):
 
     sudo apt-get install build-essential libc6-dev yasm cmake pkg-config swig libglew-dev mesa-common-dev libstdc++-5-dev python3-dev python3-numpy libasound2-dev
-    
     
 ### Compile
 
