@@ -144,7 +144,13 @@ You need (at least):
 
 This just got a lot easier: the same CMake file is used to compile the library, generate python wrappings and to compile the wrappings (no more python setup scripts)
 
-First, download live555 and ffmpeg
+Valkka uses numerical python (numpy) C API and needs the numpy C headers at the build process.  Be aware of the numpy version and header files being used in your setup.  You can check this with:
+
+    ./pythoncheck.bash
+    
+We recommend that you use a "globally" installed numpy (from the debian *python3-numpy* package) instead of a "locally" installed one (installed with pip3 install).  When using your compiled Valkka distribution, the numpy version you're loading at runtime must match the version that was used at the build time.
+
+Next, download live555 and ffmpeg
 
     cd ext
     ./download_live.bash
