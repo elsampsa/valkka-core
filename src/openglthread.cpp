@@ -706,7 +706,7 @@ void RenderGroup::render() {
 
 
 
-OpenGLThread::OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx, unsigned msbuftime) : Thread(name), infifo(new OpenGLFrameFifo(fifo_ctx)), infilter(name,infifo), msbuftime(msbuftime), debug(false), static_texture_file("") {
+OpenGLThread::OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx, unsigned msbuftime, const char* x_connection) : Thread(name), infifo(new OpenGLFrameFifo(fifo_ctx)), infilter(name,infifo), msbuftime(msbuftime), x_connection(x_connection), debug(false), static_texture_file("") {
   // So, what happens here..?
   // We create the OpenGLFrameFifo instance "infifo" at constructor time, and then pass "infifo" to AVFifoFrameFilter instance "framefilter" as a parameter
   // * framefilter (AVFifoFrameFilter) knows infifo
@@ -1457,9 +1457,15 @@ void OpenGLThread::initGLX() {
   int numReturned;
   
   // initial connection to the xserver
-  this->display_id = XOpenDisplay(NULL);
+  if (x_connection==std::string("")) {
+    this->display_id = XOpenDisplay(NULL);
+  }
+  else {
+    this->display_id = XOpenDisplay(x_connection.c_str());
+  }
   if (this->display_id == NULL) {
-    opengllogger.log(LogLevel::fatal) << "OpenGLThtead: initGLX: cannot connect to X server" << std::endl;
+    opengllogger.log(LogLevel::fatal) << "OpenGLThtead: initGLX: cannot connect to X server " << x_connection << std::endl;
+    exit(2);
   }
   
   // glx frame buffer configuration [GLXFBConfig * list of GLX frame buffer configuration parameters] => consistent visual [XVisualInfo] parameters for the X-window

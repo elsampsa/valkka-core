@@ -1,3 +1,9 @@
+valkka (0.5.0-0ubuntu1-bionicppa7) bionic; urgency=low
+
+  * Corrected upload for bionic
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Tue, 17 Jul 2018 18:50:00 +0200
+
 valkka (0.5.0-0ubuntu1-bionicppa6) bionic; urgency=low
 
   * Initial upload for bionic

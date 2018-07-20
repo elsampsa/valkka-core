@@ -49,7 +49,10 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 // (LiveThread:livethread) --> {FrameFilter:info} --> {FifoFrameFilter:in_filter} -->> (AVThread:avthread) --> {InfoFrameFilter:decoded_info} -->> (OpenGLThread:glthread)
 
-OpenGLThread    glthread("gl_thread");
+// OpenGLThread    glthread("gl_thread");
+OpenGLThread    glthread("gl_thread", OpenGLFrameFifoContext(), DEFAULT_OPENGLTHREAD_BUFFERING_TIME, ":0.0");
+// OpenGLThread    glthread("gl_thread", OpenGLFrameFifoContext(), DEFAULT_OPENGLTHREAD_BUFFERING_TIME, ":1.0"); // nopes .. only one connection allowed?
+
 FifoFrameFilter &gl_in_filter = glthread.getFrameFilter();
 // InfoFrameFilter decoded_info("decoded",&gl_in_filter);
 DummyFrameFilter decoded_info("decoded",false,&gl_in_filter); // non-verbose

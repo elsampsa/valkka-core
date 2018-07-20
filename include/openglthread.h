@@ -230,12 +230,13 @@ public: // <pyapi>
    * @param msbuftime     Jitter buffer size in milliseconds (default=100 ms)
    * 
    */
-  OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx=OpenGLFrameFifoContext(), unsigned msbuftime=DEFAULT_OPENGLTHREAD_BUFFERING_TIME); // <pyapi>
+  OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx=OpenGLFrameFifoContext(), unsigned msbuftime=DEFAULT_OPENGLTHREAD_BUFFERING_TIME, const char* x_connection=""); // <pyapi>
   virtual ~OpenGLThread(); ///< Virtual destructor // <pyapi>
   
 protected: // initialized at init list
-  OpenGLFrameFifo   *infifo;    ///< This thread reads from this communication fifo
-  FifoFrameFilter   infilter;   ///< A FrameFilter for writing incoming frames
+  OpenGLFrameFifo   *infifo;      ///< This thread reads from this communication fifo
+  FifoFrameFilter   infilter;     ///< A FrameFilter for writing incoming frames
+  std::string       x_connection; ///< X-server connection string (i.e. ":0.0", ":0.1", etc.    
     
 protected: // Shaders. Initialized by makeShaders. 
   // Future developments: create a shader instance (and a program) per each stream, etc..?
