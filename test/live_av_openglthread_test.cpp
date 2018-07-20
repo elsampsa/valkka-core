@@ -51,6 +51,7 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 // OpenGLThread    glthread("gl_thread");
 OpenGLThread    glthread("gl_thread", OpenGLFrameFifoContext(), DEFAULT_OPENGLTHREAD_BUFFERING_TIME, ":0.0");
+// OpenGLThread    glthread("gl_thread", OpenGLFrameFifoContext(), DEFAULT_OPENGLTHREAD_BUFFERING_TIME, ":0.1"); // test seconds x-screen .. this actually works! :)
 // OpenGLThread    glthread("gl_thread", OpenGLFrameFifoContext(), DEFAULT_OPENGLTHREAD_BUFFERING_TIME, ":1.0"); // nopes .. only one connection allowed?
 
 FifoFrameFilter &gl_in_filter = glthread.getFrameFilter();

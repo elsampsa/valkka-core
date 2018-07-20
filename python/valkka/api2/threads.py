@@ -202,7 +202,7 @@ class OpenGLThread:
   # OpenGLThread(const char* name, unsigned short n720p=0, unsigned short n1080p=0, unsigned short n1440p=0, unsigned short n4K=0, unsigned msbuftime=100, int core_id=-1);
 
   parameter_defs={
-    "name"       : (str,"live_thread"),
+    "name"       : (str,"gl_thread"),
     "n_720p"     : (int, 20),
     "n_1080p"    : (int, 20),
     "n_1440p"    : (int, 0),
@@ -213,7 +213,8 @@ class OpenGLThread:
     "msbuftime"  : (int, 100),   
     "affinity"   : (int, -1),
     "verbose"    : (bool, False),
-    "background" : (str, getDataFile("valkka_bw_logo.yuv"))
+    "background" : (str, getDataFile("valkka_bw_logo.yuv")),
+    "x_connection" : (str,"")
     }
 
   
@@ -233,7 +234,8 @@ class OpenGLThread:
     self.gl_ctx.n_signal  =self.n_signal
     self.gl_ctx.flush_when_full =self.flush_when_full
     
-    self.core =valkka_core.OpenGLThread("glthread", self.gl_ctx, self.msbuftime);
+    # OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx=OpenGLFrameFifoContext(), unsigned msbuftime=DEFAULT_OPENGLTHREAD_BUFFERING_TIME, const char* x_connection="");
+    self.core =valkka_core.OpenGLThread(self.name, self.gl_ctx, self.msbuftime, self.x_connection);
     self.core.setAffinity(self.affinity)
     self.core.setStaticTexFile(self.background)
     
