@@ -165,6 +165,52 @@ public:
 };                                                                          // <pyapi>
 
 
+/** Replicates frame flow to arbitrary number of outputs
+ * 
+ * - Terminals are added after the instance has been created
+ *
+ * @ingroup filters_tag 
+ */
+class ForkFrameFilterN : public FrameFilter {                             // <pyapi>
+  
+public:                                                                   // <pyapi>
+  /** Default ctor
+   * 
+   * @param name  Name identifying this FrameFilter
+   * 
+   */
+  ForkFrameFilterN(const char* name);                                     // <pyapi>
+  /** Default virtual dtor
+   */
+  virtual ~ForkFrameFilterN();                                            // <pyapi>
+  
+protected:
+  std::mutex  mutex;
+  std::map<std::string,FrameFilter*> framefilters;  ///< nametag to connecting FrameFilter mapping
+  
+protected:
+  void go(Frame* frame);
+  
+public:
+  void run(Frame* frame); ///< called by other FrameFilter(s)
+  
+public:                                                                   // <pyapi>
+  /** Connect a new terminal FrameFilter.  Tag the connection with a name.
+   * 
+   * @param tag     Nametag for this connection
+   * @param filter  FrameFilter for the connection
+   * 
+   */
+  bool connect    (const char* tag, FrameFilter* filter);                 // <pyapi>
+  /** Disconnect a connection tagged with a name
+   * 
+   * @param tag     Nametag for this connection
+   * 
+   */
+  bool disconnect (const char* tag);                                      // <pyapi>
+};                                                                         // <pyapi>
+
+
 
 
 /** Sets the frame slot value

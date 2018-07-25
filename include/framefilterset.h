@@ -40,16 +40,19 @@
  * 
  * The idea is this:
  * 
+ * \verbatim
  *  filter_chain_0 ----> +--------+
  *                       |        |
  *                       | Switch | -----> output_filter_chain
  *                       |        |
  *  filter_chain_1 ----> +--------+
+ * \endverbatim
  * 
  * - The start filter of output_filter_chain is given as a parameter to Switch constructor
  * - Input FrameFilter pointers are obtained by calling Switch::getInputChannel(i), where i=0 or 1.
  * - Switch chooses between active input chains by calling setChannel(i), where i=0 or 1
  * 
+ * @ingroup filters_tag
  */
 class Switch {                                       // <pyapi>
   
@@ -81,20 +84,21 @@ public:                                             // <pyapi>
  * 
  * The idea is this:
  * 
+ * \verbatim
  *  filter_chain_0 ----> +--------+ ----> output_filter_chain0
  *                       | Double |
  *                       | Gate   | 
  *                       |        |
  *  filter_chain_1 ----> +--------+ ----> output_filter_chain1
+ * \endverbatim
  * 
  * - Only one output_filter_chain is active at a time
  * - Start filters of output_filter_chains are given as parameters to DoubleGate constructor
  * - Input FrameFilter pointers are obtained by calling Switch::getInputChannel(i), where i=0 or 1.
  * - Switch chooses between chains by calling setChannel(i), where i=0 or 1
  * 
+ * @ingroup filters_tag
  */
-
-
 class DoubleGate {                                   // <pyapi>
   
 public:                                              // <pyapi>

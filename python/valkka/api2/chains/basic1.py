@@ -36,7 +36,7 @@ import random
 from valkka import valkka_core as core # so, everything that has .core, refers to the api1 level (i.e. swig wrapped cpp code)
 from valkka.api2.threads import LiveThread, OpenGLThread, FileThread # api2 versions of the thread classes
 from valkka.api2.tools import parameterInitCheck, typeCheck
-pre_mod="valkka.api2.chains: "
+pre_mod="valkka.api2.chains.basic1 : "
 
 
 class BasicFilterchain1:

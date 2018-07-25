@@ -142,6 +142,60 @@ void ForkFrameFilter3::go(Frame* frame) {
 
 
 
+ForkFrameFilterN::ForkFrameFilterN(const char* name) : FrameFilter(name, NULL) {
+}
+
+
+ForkFrameFilterN::~ForkFrameFilterN() {
+}
+
+
+void ForkFrameFilterN::run(Frame* frame) {
+  std::unique_lock<std::mutex> lk(mutex); // mutex protected .. so that if user is adding new terminals, this wont crash
+  for (auto it=framefilters.begin(); it!=framefilters.end(); it++) {
+    it->second->run(frame);
+  }
+}
+
+
+bool ForkFrameFilterN::connect(const char* tag, FrameFilter* filter) {
+  // std::map<std::string,FrameFilter*> framefilters;
+  std::unique_lock<std::mutex> lk(mutex);
+  std::string nametag(tag);
+  
+  auto it=framefilters.find(nametag);
+  
+  if (it!=framefilters.end()) {
+    filterlogger.log(LogLevel::fatal) << "ForkFrameFilterN : connect : key "<<  nametag << " already used " << std::endl;
+    return false;
+  }
+  
+  framefilters.insert(it, std::pair<std::string,FrameFilter*>(nametag,filter));
+  return true;
+}
+
+
+bool ForkFrameFilterN::disconnect(const char* tag) {
+  std::unique_lock<std::mutex> lk(mutex);
+  std::string nametag(tag);
+  
+  auto it=framefilters.find(nametag);
+  
+  if (it==framefilters.end()) {
+    filterlogger.log(LogLevel::fatal) << "ForkFrameFilterN : disconnect : key "<<  nametag << " does not exist " << std::endl;
+    return false;
+  }
+  
+  framefilters.erase(it);
+  return true;
+}
+
+
+void ForkFrameFilterN::go(Frame* frame) { // dummy virtual function
+}
+
+
+
 SlotFrameFilter::SlotFrameFilter(const char* name, SlotNumber n_slot, FrameFilter* next) : FrameFilter(name,next), n_slot(n_slot) {
 }
     
