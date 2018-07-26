@@ -35,8 +35,8 @@
  *  
  */ 
 
-#include<GL/glew.h>
-#include<GL/glx.h>
+// #include<GL/glew.h>
+// #include<GL/glx.h>
 #include "common.h"
 
 /** A general purpose shader class.  Subclass for, say:

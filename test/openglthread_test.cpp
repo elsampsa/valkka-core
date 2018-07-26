@@ -76,18 +76,27 @@ void test_3() {
   OpenGLThread gl_thread1("gl_thread1",OpenGLFrameFifoContext(), DEFAULT_OPENGLTHREAD_BUFFERING_TIME, ":0.0");
   OpenGLThread gl_thread2("gl_thread2",OpenGLFrameFifoContext(), DEFAULT_OPENGLTHREAD_BUFFERING_TIME, ":0.1");
   
+  // OpenGLThread gl_thread1("gl_thread1");
+  
   /*
   gl_thread1.startCall();
   gl_thread1.stopCall();
+  
+  // OpenGLThread gl_thread2("gl_thread2",OpenGLFrameFifoContext(), DEFAULT_OPENGLTHREAD_BUFFERING_TIME, ":0.1");
+  // OpenGLThread gl_thread2("gl_thread2",OpenGLFrameFifoContext(), DEFAULT_OPENGLTHREAD_BUFFERING_TIME, ":0.0");
+  
+  // OpenGLThread gl_thread2("gl_thread2");
   
   gl_thread2.startCall();
   gl_thread2.stopCall();
   */
   
+  ///*
   gl_thread1.startCall();
   gl_thread2.startCall();
   gl_thread1.stopCall();;
   gl_thread2.stopCall();
+  //*/
 }
 
 

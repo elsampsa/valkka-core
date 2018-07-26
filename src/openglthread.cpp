@@ -1574,6 +1574,19 @@ void OpenGLThread::closeGLX() {
 
 
 void OpenGLThread::loadExtensions() {
+  ///*
+  this->makeCurrent(this->root_id); // a context must be made current before glew works..
+  
+  glewExperimental = GL_TRUE;
+  GLenum err = glewInit();
+  if (GLEW_OK != err) {
+    // Problem: glewInit failed, something is seriously wrong.
+    opengllogger.log(LogLevel::fatal) << "OpenGLThread: loadExtensions: ERROR: " << glewGetErrorString(err) <<std::endl;
+    perror("Valkka: OpenGLThread: loadExtensions: ERROR:");
+    exit(2);
+  }
+  
+  /*
   if (GLEW_ARB_pixel_buffer_object) {
     opengllogger.log(LogLevel::debug) << "OpenGLThread: loadExtensions: PBO extension already loaded" <<std::endl;
     return;
@@ -1581,25 +1594,31 @@ void OpenGLThread::loadExtensions() {
   else {
     opengllogger.log(LogLevel::crazy) << "OpenGLThread: loadExtensions: Will load PBO extension" <<std::endl;
   }
+  */
   
+  /*
   this->makeCurrent(this->root_id); // a context must be made current before glew works..
   
   glewExperimental = GL_TRUE;
   GLenum err = glewInit();
   if (GLEW_OK != err) {
-  /* Problem: glewInit failed, something is seriously wrong. */
+  // Problem: glewInit failed, something is seriously wrong.
   opengllogger.log(LogLevel::fatal) << "OpenGLThread: loadExtensions: ERROR: " << glewGetErrorString(err) <<std::endl;  
   }
-  else {
-    if (GLEW_ARB_pixel_buffer_object) {
+  */
+  //else {
+  if (GLEW_ARB_pixel_buffer_object) {
     opengllogger.log(LogLevel::debug) << "OpenGLThread: loadExtensions:  PBO extension found! :)"<<std::endl;
-    }
-    else {
-      opengllogger.log(LogLevel::fatal) << "OpenGLThread: loadExtensions: WARNING: PBO extension not found! :("<<std::endl;
-    }
   }
+  else {
+    opengllogger.log(LogLevel::fatal) << "OpenGLThread: loadExtensions: ERROR: PBO extension not found! :("<<std::endl;
+    perror("Valkka: OpenGLThread: loadExtensions: ERROR: PBO extension not found!");
+    exit(2);
+  }
+  //}
+  //*/
   
-  // load glx extensions
+  // load some glx extensions "manually"
   ///*
   if (is_glx_extension_supported(display_id, "GLX_EXT_swap_control")) {
       std::cout << "GLX_EXT_swap_control" << std::endl;
