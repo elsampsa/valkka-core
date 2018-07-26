@@ -61,10 +61,13 @@ We're currently at alpha
 
 ### Current stable version is 0.5.0
 
-0.5.0 Version : "Halfway to Beta"
-- Live rendering very solid
+0.5.1 Version : "Videowalls"
+- Multi-GPU works
 
 ### Older versions
+
+0.5.0 Version : "Halfway to Beta"
+- Live rendering very solid
 
 0.4.7 Version
 - Can change receiving socket size and Live555 reordering buffer
