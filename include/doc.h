@@ -26,7 +26,7 @@
  *  @file    doc.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.0 
+ *  @version 0.5.1 
  *  
  *  @brief Extra doxygen documentation
  *

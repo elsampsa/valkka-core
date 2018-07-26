@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.5.0</span>
+   &#160;<span id="projectnumber">0.5.1</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -161,7 +161,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <tr class="even"><td class="entry"><a class="el" href="classOpenGLThread.html#aa1604bd2f368ac82b690713993472dcc">newRenderContextCall</a>(SlotNumber slot, Window window_id, unsigned int z)</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classOpenGLThread.html#a5849a1a786b6f109d149943b4cbcec9b">newRenderGroup</a>(Window window_id)</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classOpenGLThread.html#aa836bb0e21ad549dd78f4d6e5adfa7ff">newRenderGroupCall</a>(Window window_id)</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="classOpenGLThread.html#a29be81a20e26cf192a67fefec8bd83ee">OpenGLThread</a>(const char *name, OpenGLFrameFifoContext fifo_ctx=OpenGLFrameFifoContext(), unsigned msbuftime=DEFAULT_OPENGLTHREAD_BUFFERING_TIME)</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classOpenGLThread.html#aaeec8606dfeaf140096170cfc9fa594f">OpenGLThread</a>(const char *name, OpenGLFrameFifoContext fifo_ctx=OpenGLFrameFifoContext(), unsigned msbuftime=DEFAULT_OPENGLTHREAD_BUFFERING_TIME, const char *x_connection=&quot;&quot;)</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>pglXGetSwapIntervalMESA</b> (defined in <a class="el" href="classOpenGLThread.html">OpenGLThread</a>)</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>pglXSwapIntervalEXT</b> (defined in <a class="el" href="classOpenGLThread.html">OpenGLThread</a>)</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>pglXSwapIntervalMESA</b> (defined in <a class="el" href="classOpenGLThread.html">OpenGLThread</a>)</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
@@ -206,10 +206,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <tr><td class="entry"><a class="el" href="classThread.html#a75562198fb720fa088a13dfaa650e741">thread_attr</a></td><td class="entry"><a class="el" href="classThread.html">Thread</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>vi</b> (defined in <a class="el" href="classOpenGLThread.html">OpenGLThread</a>)</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
   <tr><td class="entry"><a class="el" href="classOpenGLThread.html#ab01f7e3f4d5ef02e5c9db3db6071cb01">VSyncOff</a>()</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classOpenGLThread.html#ab4704fdd9c8cc5279bddf526a9eb7946">yuv_shader</a></td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classOpenGLThread.html#a4770ad084ab77edb44bbf3f064efa9ff">YUVdiagnosis</a>()</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classOpenGLThread.html#a2e717cf423eb5e219cbce12615739d53">~OpenGLThread</a>()</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">~Thread</a>()</td><td class="entry"><a class="el" href="classThread.html">Thread</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classOpenGLThread.html#aada09c6f2a9e4bda4302c035bc025154">x_connection</a></td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classOpenGLThread.html#ab4704fdd9c8cc5279bddf526a9eb7946">yuv_shader</a></td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classOpenGLThread.html#a4770ad084ab77edb44bbf3f064efa9ff">YUVdiagnosis</a>()</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classOpenGLThread.html#a2e717cf423eb5e219cbce12615739d53">~OpenGLThread</a>()</td><td class="entry"><a class="el" href="classOpenGLThread.html">OpenGLThread</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">~Thread</a>()</td><td class="entry"><a class="el" href="classThread.html">Thread</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -1,17 +1,17 @@
 <map id="/home/sampsa/C/valkka/include/openglthread.h" name="/home/sampsa/C/valkka/include/openglthread.h">
-<area shape="rect" id="node2" href="$tex_8h.html" title="Handling OpenGL textures. " alt="" coords="1357,244,1408,271"/>
-<area shape="rect" id="node35" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1118,393,1221,420"/>
-<area shape="rect" id="node36" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1221,468,1304,495"/>
-<area shape="rect" id="node46" href="$openglframefifo_8h_source.html" title="openglframefifo.h" alt="" coords="1425,95,1548,121"/>
-<area shape="rect" id="node49" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1097,169,1167,196"/>
-<area shape="rect" id="node50" href="$shader_8h_source.html" title="shader.h" alt="" coords="2103,468,2175,495"/>
-<area shape="rect" id="node3" href="$frame_8h.html" title="Frame classes. " alt="" coords="1297,319,1364,345"/>
-<area shape="rect" id="node43" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="1491,393,1562,420"/>
-<area shape="rect" id="node4" href="$common_8h.html" title="List of common header files. " alt="" coords="1221,543,1304,569"/>
-<area shape="rect" id="node34" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1297,393,1365,420"/>
-<area shape="rect" id="node37" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="635,393,703,420"/>
-<area shape="rect" id="node44" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1032,393,1093,420"/>
-<area shape="rect" id="node45" href="$logging_8h.html" title="Logging utilities. " alt="" coords="95,543,169,569"/>
-<area shape="rect" id="node47" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1260,169,1351,196"/>
-<area shape="rect" id="node48" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1086,244,1170,271"/>
+<area shape="rect" id="node2" href="$tex_8h.html" title="Handling OpenGL textures. " alt="" coords="1245,244,1296,271"/>
+<area shape="rect" id="node35" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1422,393,1525,420"/>
+<area shape="rect" id="node36" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1269,468,1352,495"/>
+<area shape="rect" id="node46" href="$openglframefifo_8h_source.html" title="openglframefifo.h" alt="" coords="1309,95,1432,121"/>
+<area shape="rect" id="node49" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1051,169,1120,196"/>
+<area shape="rect" id="node50" href="$shader_8h_source.html" title="shader.h" alt="" coords="1600,319,1672,345"/>
+<area shape="rect" id="node3" href="$frame_8h.html" title="Frame classes. " alt="" coords="1156,319,1223,345"/>
+<area shape="rect" id="node43" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="1275,393,1346,420"/>
+<area shape="rect" id="node4" href="$common_8h.html" title="List of common header files. " alt="" coords="1175,543,1257,569"/>
+<area shape="rect" id="node34" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1131,393,1199,420"/>
+<area shape="rect" id="node37" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="618,393,686,420"/>
+<area shape="rect" id="node44" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1045,393,1107,420"/>
+<area shape="rect" id="node45" href="$logging_8h.html" title="Logging utilities. " alt="" coords="92,543,167,569"/>
+<area shape="rect" id="node47" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1144,169,1235,196"/>
+<area shape="rect" id="node48" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1043,244,1127,271"/>
 </map>
