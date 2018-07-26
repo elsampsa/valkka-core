@@ -69,10 +69,25 @@ void test_2() {
 
 
 void test_3() {
-  
   const char* name = "@TEST: openglthread_test: test 3: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+  std::cout << name <<"** @@Start OpenGLThread for two separate X-screens/GPUs **" << std::endl;
   
+  // OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx=OpenGLFrameFifoContext(), unsigned msbuftime=DEFAULT_OPENGLTHREAD_BUFFERING_TIME, const char* x_connection=""); // <pyapi>
+  OpenGLThread gl_thread1("gl_thread1",OpenGLFrameFifoContext(), DEFAULT_OPENGLTHREAD_BUFFERING_TIME, ":0.0");
+  OpenGLThread gl_thread2("gl_thread2",OpenGLFrameFifoContext(), DEFAULT_OPENGLTHREAD_BUFFERING_TIME, ":0.1");
+  
+  /*
+  gl_thread1.startCall();
+  gl_thread1.stopCall();
+  
+  gl_thread2.startCall();
+  gl_thread2.stopCall();
+  */
+  
+  gl_thread1.startCall();
+  gl_thread2.startCall();
+  gl_thread1.stopCall();;
+  gl_thread2.stopCall();
 }
 
 

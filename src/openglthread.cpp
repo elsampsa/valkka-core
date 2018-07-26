@@ -1452,7 +1452,19 @@ void OpenGLThread::sendSignalAndWait(OpenGLSignalContext signal_ctx) {
 }
 
 
-void OpenGLThread::initGLX() {  
+void OpenGLThread::initGLX() {
+    
+  /*
+  Some info about old-style/new-style context creation, multi-gpu systems, etc.
+  
+  https://stackoverflow.com/questions/30358693/creating-seperate-context-for-each-gpu-while-having-one-display-monitor
+  http://on-demand.gputechconf.com/gtc/2012/presentations/S0353-Programming-Multi-GPUs-for-Scalable-Rendering.pdf
+  https://www.khronos.org/opengl/wiki/Tutorial:_OpenGL_3.0_Context_Creation_(GLX)
+  
+  
+  
+  */
+    
   // GLXFBConfig *fbConfigs;
   int numReturned;
   
