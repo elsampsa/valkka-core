@@ -45,6 +45,8 @@
 
 // PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");  // Set the glxSwapInterval to 0, ie.
 
+typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, Bool, const int*);
+
 
 SlotContext::SlotContext(YUVTEX *statictex, YUVShader* shader) : statictex(statictex), shader(shader), yuvtex(NULL), active(false), codec_id(AV_CODEC_ID_NONE), bmpars(BitmapPars()), lastmstime(0), is_dead(true), ref_count(0) {
 }
@@ -1460,9 +1462,6 @@ void OpenGLThread::initGLX() {
   https://stackoverflow.com/questions/30358693/creating-seperate-context-for-each-gpu-while-having-one-display-monitor
   http://on-demand.gputechconf.com/gtc/2012/presentations/S0353-Programming-Multi-GPUs-for-Scalable-Rendering.pdf
   https://www.khronos.org/opengl/wiki/Tutorial:_OpenGL_3.0_Context_Creation_(GLX)
-  
-  
-  
   */
     
   // GLXFBConfig *fbConfigs;
@@ -1504,7 +1503,24 @@ void OpenGLThread::initGLX() {
 
 #ifdef VALGRIND_GPU_DEBUG
 #else
-  this->glc=glXCreateNewContext(this->display_id,this->fbConfigs[0],GLX_RGBA_TYPE,NULL,True);
+
+  // get the glXCreateContextAttribsARB function from the driver .. we create here a local pointer to the function
+  glXCreateContextAttribsARBProc glXCreateContextAttribsARB = 0;
+  glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)
+           glXGetProcAddress( (const GLubyte *) "glXCreateContextAttribsARB" );
+
+  // the old way of creating a context
+  // this->glc=glXCreateNewContext(this->display_id,this->fbConfigs[0],GLX_RGBA_TYPE,NULL,True);
+  
+  int context_attribs[] = {
+    GLX_CONTEXT_MAJOR_VERSION, 3,
+    GLX_CONTEXT_MINOR_VERSION, 0,
+    //GLX_CONTEXT_FLAGS_ARB        , GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+    None
+  };
+  
+  this->glc=glXCreateContextAttribsARB(this->display_id, this->fbConfigs[0], 0, true, context_attribs);
+  
   if (!this->glc) {
     opengllogger.log(LogLevel::fatal) << "OpenGLThread: initGLX: FATAL! Could not create glx context"<<std::endl; 
     exit(2);

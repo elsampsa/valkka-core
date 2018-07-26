@@ -36,6 +36,9 @@
 
 #include "common.h"
 
+#define GLX_CONTEXT_MAJOR_VERSION       0x2091
+#define GLX_CONTEXT_MINOR_VERSION       0x2092
+
 static const int VERSION_MAJOR = 0; // <pyapi>
 static const int VERSION_MINOR = 5; // <pyapi>
 static const int VERSION_PATCH = 0; // <pyapi>
@@ -144,46 +147,6 @@ static const BitmapPars N720  (1,1280,720, 2,2);
 static const BitmapPars N1080 (2,1920,1080,2,2);
 static const BitmapPars N1440 (3,2560,1440,2,2);
 static const BitmapPars N4K   (4,4032,3000,2,2);
-
-
-
-
-
-/*
-namespace BitmapPars {
-  const static BitmapType notype     =0;
-  
-  namespace N720 {
-    const static BitmapType type     =1; // like enum class
-    const static unsigned w          =1280;
-    const static unsigned h          =720;
-    const static unsigned size       =1280*720;
-    const static unsigned yuvsize    =1280*720*3/2;
- };
- namespace N1080 {
-    const static BitmapType type     =2; 
-    const static unsigned w          =1920;
-    const static unsigned h          =1080;
-    const static unsigned size       =1920*1080; 
-    // 1280*960 uses this .. takes a frame from stack with YUVPBO .. y_size, u_size, v_size = 1920*1080, etc.
-    const static unsigned yuvsize    =1920*1080*3/2;
- };
- namespace N1440 {
-    const static BitmapType type     =3; 
-    const static unsigned w          =2560;
-    const static unsigned h          =1440;
-    const static unsigned size       =2560*1440;
-    const static unsigned yuvsize    =2560*1440*3/2;
- };
- namespace N4K {
-    const static BitmapType type     =4; 
-    const static unsigned w          =4032;
-    const static unsigned h          =3000;
-    const static unsigned size       =4032*3000;
-    const static unsigned yuvsize    =4032*3000*3/2;
- }; 
-};
-*/
 
 static const std::vector<uint8_t> nalstamp = {0,0,0,1};
 
