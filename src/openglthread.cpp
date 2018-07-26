@@ -1509,6 +1509,11 @@ void OpenGLThread::initGLX() {
   glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)
            glXGetProcAddress( (const GLubyte *) "glXCreateContextAttribsARB" );
 
+  if (!glXCreateContextAttribsARB) {
+    opengllogger.log(LogLevel::fatal) << "OpenGLThread: initGLX: FATAL! Could not create glx context: your running an old version of OpenGL"<<std::endl; 
+    exit(2);
+  }
+           
   // the old way of creating a context
   // this->glc=glXCreateNewContext(this->display_id,this->fbConfigs[0],GLX_RGBA_TYPE,NULL,True);
   
