@@ -1,3 +1,15 @@
+valkka (0.5.1-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * Multi-GPU working allright
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Thu, 26 Jul 2018 16:12:56 +0300
+
+valkka (0.5.1-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * Multi-GPU working allright
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Thu, 26 Jul 2018 16:12:56 +0300
+
 valkka (0.5.0-0ubuntu1-bionicppa7) bionic; urgency=low
 
   * Corrected upload for bionic
