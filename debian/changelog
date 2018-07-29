@@ -1,3 +1,21 @@
+valkka (0.5.1-0ubuntu1-bionicppa2) bionic; urgency=low
+
+  * Multi-GPU working allright.  Fixed live555 compilation and re-configured PPA for multiple architectures
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Sun, 29 Jul 2018 20:50:23 +0300
+
+valkka (0.5.1-0ubuntu1-xenialppa2) xenial; urgency=low
+
+  * Multi-GPU working allright.  Fixed live555 compilation and re-configured PPA for multiple architectures
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Sun, 29 Jul 2018 20:50:23 +0300
+
+valkka (0.5.1-0ubuntu1-cosmicppa3) cosmic; urgency=low
+
+  * Testing multiple build architectures in ubuntu cosmic cuttlefish.  ppa1: amd64 and i386 ok. ppa2: test ARMv7 Hard Float (armhf) ok. ppa3: ARMv8 ok
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Sun, 29 Jul 2018 19:22:25 +0300
+
 valkka (0.5.1-0ubuntu1-bionicppa1) bionic; urgency=low
 
   * Multi-GPU working allright
