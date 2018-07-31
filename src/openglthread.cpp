@@ -1058,6 +1058,7 @@ long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
   ///*
   // handle special (signal) frames here
   if (f->getFrameClass()==FrameClass::signal) {
+    std::cout << "OpenGLThread: insertFifo: SignalFrame" << std::endl;
     SignalFrame *signalframe = static_cast<SignalFrame*>(f);
     handleSignal(signalframe->opengl_signal_ctx);
     // recycle(f); // wtf is this.  Why there is no compiler warning!?
@@ -1065,6 +1066,7 @@ long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
     return 0;
   }
   //*/
+  // f->getFrameClass();
   
   
   /*
@@ -1946,22 +1948,23 @@ bool OpenGLThread::newRenderGroupCall  (Window window_id) { // return value: ren
   
   opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderCroupCall: pars="<< pars <<std::endl;
   
-  // new
+  
+  /* // new
   SignalFrame f = SignalFrame();
   // f.opengl_signal_ctx = {OpenGLSignal::new_render_group, &pars};
   f.opengl_signal_ctx = {OpenGLSignal::new_render_group, pars};
   infilter.run(&f); // FifoFrameFilter => OpenGLFrameFifo => FrameFifo::writeCopy => |thread border|  => run : infifo.read => insertFifo (i.e. put into presentation queue (or not))
   pars.success =true;
-  
-  /* // old
-  OpenGLSignalContext signal_ctx = {OpenGLSignal::del_render_group, &pars};
-  // eh.. we're passing pointer pars .. but pars goes null once we get out of context..!
-  // sendSignal(signal_ctx); // we must keep pars alive, so use:
-  sendSignalAndWait(signal_ctx);
-  
-  opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderCroupCall: return pars="<< pars <<std::endl;
   */
-  return pars.success;
+  
+  // /* // old
+  OpenGLSignalContext signal_ctx = {OpenGLSignal::new_render_group, pars};
+  sendSignalAndWait(signal_ctx);
+  opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderCroupCall: return pars="<< pars <<std::endl;
+  // */
+  
+  // return pars.success;
+  return true;
 }
 
 
