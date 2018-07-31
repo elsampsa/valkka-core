@@ -328,8 +328,65 @@ void test_5() {
 void test_6() {
   
   const char* name = "@TEST: live_av_openglthread_test: test 6: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+  std::cout << name <<"** @@Send one stream to several windows **" << std::endl;
   
+  if (!stream_1) {
+    std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+    exit(2);
+  }
+  std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+  
+  std::cout << name << "starting threads" << std::endl;
+  
+  // avthread.  setTimeTolerance(10); // 10 milliseconds // just testing ..
+  
+  // glthread.setStaticTexFile("1.yuv");
+  
+  // start glthread and create a window
+  glthread.  startCall();
+  
+  // start av and live threads
+  avthread.  startCall();
+  livethread.startCall();
+  avthread.  decodingOnCall(); // don't forget this ..
+  sleep_for(2s);
+  
+  std::cout << name << "registering stream" << std::endl;
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
+  livethread.registerStreamCall(ctx);
+  std::cout << name << "playing stream !" << std::endl;
+  
+  std::vector<Window> windows;
+  int n=2;
+  int i;
+  
+  for(i=0;i<=n;i++) {
+    std::cout << i << std::endl;
+    Window window_id=glthread.createWindow();
+    glthread.makeCurrent(window_id);
+    std::cout << "new x window "<<window_id<<std::endl;
+    windows.push_back(window_id);
+  }
+  
+  sleep_for(1s);
+  
+  for(auto it=windows.begin(); it!=windows.end(); it++) {
+    // create render group & context
+    glthread.newRenderGroupCall(*it);
+    int ii=glthread.newRenderContextCall(2, *it, 0);
+    std::cout << "got render context id "<<ii<<std::endl;
+  }
+  
+  livethread.playStreamCall(ctx);
+  
+  sleep_for(10s);
+  // sleep_for(120s);
+  // sleep_for(604800s); //one week
+  
+  std::cout << name << "stopping threads" << std::endl;
+  livethread.stopCall();
+  avthread.  stopCall();
+  glthread.  stopCall();  
 }
 
 

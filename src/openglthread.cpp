@@ -598,6 +598,13 @@ std::list<RenderContext>::iterator RenderGroup::getContext(int id) {
 
 
 bool RenderGroup::addContext(RenderContext render_context) {
+  
+  /*
+  render_contexes.push_back(render_context); 
+  return true;
+  */
+  
+  ///*
   if (getContext(render_context.getId())==render_contexes.end()) {
     render_contexes.push_back(render_context); 
     return true;
@@ -605,6 +612,7 @@ bool RenderGroup::addContext(RenderContext render_context) {
   else { // there is a RenderContext with the same id here..
     return false;
   }
+  //*/
 }
 
 
@@ -1047,13 +1055,16 @@ void OpenGLThread::reportCallTime(unsigned i) {
 
 long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
   
+  ///*
   // handle special (signal) frames here
   if (f->getFrameClass()==FrameClass::signal) {
     SignalFrame *signalframe = static_cast<SignalFrame*>(f);
     handleSignal(signalframe->opengl_signal_ctx);
-    recycle(f);
+    // recycle(f); // wtf is this.  Why there is no compiler warning!?
+    infifo->recycle(f);
     return 0;
   }
+  //*/
   
   
   /*
@@ -1513,9 +1524,6 @@ void OpenGLThread::initGLX() {
     opengllogger.log(LogLevel::fatal) << "OpenGLThread: initGLX: FATAL! Could not create glx context: your running an old version of OpenGL"<<std::endl; 
     exit(2);
   }
-           
-  // the old way of creating a context
-  // this->glc=glXCreateNewContext(this->display_id,this->fbConfigs[0],GLX_RGBA_TYPE,NULL,True);
   
   int context_attribs[] = {
     GLX_CONTEXT_MAJOR_VERSION, 3,
@@ -1525,6 +1533,9 @@ void OpenGLThread::initGLX() {
   };
   
   this->glc=glXCreateContextAttribsARB(this->display_id, this->fbConfigs[0], 0, true, context_attribs);
+  
+  // the old way of creating a context
+  // this->glc=glXCreateNewContext(this->display_id,this->fbConfigs[0],GLX_RGBA_TYPE,NULL,True);
   
   if (!this->glc) {
     opengllogger.log(LogLevel::fatal) << "OpenGLThread: initGLX: FATAL! Could not create glx context"<<std::endl; 
@@ -1991,14 +2002,15 @@ int OpenGLThread::newRenderContextCall(SlotNumber slot, Window window_id, unsign
   pars.render_ctx  =std::rand(); // create the value here
   pars.success     =false;
   
+  /*
   // new
   SignalFrame f = SignalFrame();
-  // f.opengl_signal_ctx = {OpenGLSignal::new_render_context, &pars};
   f.opengl_signal_ctx = {OpenGLSignal::new_render_context, pars};
   infilter.run(&f);
+  */
   
-  /* // old
-  OpenGLSignalContext signal_ctx = {OpenGLSignal::new_render_context, &pars};
+  // /* // old
+  OpenGLSignalContext signal_ctx = {OpenGLSignal::new_render_context, pars};
   sendSignalAndWait(signal_ctx);
   // there could be a mutex going in with the signal .. and then we wait for that mutex
   
@@ -2008,7 +2020,7 @@ int OpenGLThread::newRenderContextCall(SlotNumber slot, Window window_id, unsign
   //if (!pars.success) {
   //  return 0;
   //}
-  */
+  // */
   
   return pars.render_ctx;
 }
