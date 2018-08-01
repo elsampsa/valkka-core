@@ -26,7 +26,7 @@
  *  @file    avthread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.1 
+ *  @version 0.5.2 
  *  
  *  @brief Test class AVThread
  *

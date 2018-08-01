@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.5.1</span>
+   &#160;<span id="projectnumber">0.5.2</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -398,9 +398,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>resetCallTime</b> ()<
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a4473e951ddb16921d4119a90594bfc5f">reportCallTime</a> (unsigned i)</td></tr>
 <tr class="memdesc:a4473e951ddb16921d4119a90594bfc5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much time since handleFifo exited. <br /></td></tr>
 <tr class="separator:a4473e951ddb16921d4119a90594bfc5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ca155ce98922acce2b36b08acddeedc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ca155ce98922acce2b36b08acddeedc"></a>
-long unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a1ca155ce98922acce2b36b08acddeedc">insertFifo</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
-<tr class="memdesc:a1ca155ce98922acce2b36b08acddeedc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sorted insert: insert a timestamped frame into the fifo. <br /></td></tr>
+<tr class="memitem:a1ca155ce98922acce2b36b08acddeedc"><td class="memItemLeft" align="right" valign="top">long unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a1ca155ce98922acce2b36b08acddeedc">insertFifo</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
+<tr class="memdesc:a1ca155ce98922acce2b36b08acddeedc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sorted insert: insert a timestamped frame into the fifo.  <a href="#a1ca155ce98922acce2b36b08acddeedc">More...</a><br /></td></tr>
 <tr class="separator:a1ca155ce98922acce2b36b08acddeedc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5fa1ccccde49f578cdbdb6bdc545b4a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5fa1ccccde49f578cdbdb6bdc545b4a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ab5fa1ccccde49f578cdbdb6bdc545b4a">readStaticTex</a> ()</td></tr>
@@ -753,6 +752,48 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a class="anchor" id="a1ca155ce98922acce2b36b08acddeedc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">long unsigned OpenGLThread::insertFifo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classFrame.html">Frame</a> *&#160;</td>
+          <td class="paramname"><em>f</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sorted insert: insert a timestamped frame into the fifo. </p>
+<ul>
+<li></li>
+</ul>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classOpenGLThread_a1ca155ce98922acce2b36b08acddeedc_cgraph.png" border="0" usemap="#classOpenGLThread_a1ca155ce98922acce2b36b08acddeedc_cgraph" alt=""/></div>
+<map name="classOpenGLThread_a1ca155ce98922acce2b36b08acddeedc_cgraph" id="classOpenGLThread_a1ca155ce98922acce2b36b08acddeedc_cgraph">
+<area shape="rect" id="node2" href="classFrame.html#ac1f39d349213eafc858e44b7292d54d4" title="Returns the subclass frame type. See Frame::frameclass. " alt="" coords="627,5,783,32"/>
+<area shape="rect" id="node3" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Like FrameFifo::recycle_ but with mutex protection. " alt="" coords="243,31,374,57"/>
+<area shape="rect" id="node5" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="225,81,392,108"/>
+<area shape="rect" id="node4" href="classFrameFifo.html#a5cd4bd7b55780c158d7ee8beeb99cfc2" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="440,31,579,57"/>
+</map>
+</div>
+</p>
+
+</div>
+</div>
 <a class="anchor" id="a5fbb85f85279c8910037df79a2d394f0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -861,6 +902,9 @@ Here is the call graph for this function:</div>
   </table>
   </dd>
 </dl>
+<ul>
+<li>// new </li>
+</ul>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>

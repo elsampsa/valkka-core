@@ -59,12 +59,15 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.5.0
+### Current stable version is 0.5.2
+
+0.5.2 Version
+- Weird regression here: segfault with intel gfx drivers with 5+ streams.  Problem with the latest intel driver?
+
+### Older versions
 
 0.5.1 Version : "Videowalls"
 - Multi-GPU works
-
-### Older versions
 
 0.5.0 Version : "Halfway to Beta"
 - Live rendering very solid

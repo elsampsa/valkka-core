@@ -28,7 +28,7 @@
  *  @file    framefifo.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.1 
+ *  @version 0.5.2 
  *  
  *  @brief   Thread safe system of fifo and a stack
  */ 
