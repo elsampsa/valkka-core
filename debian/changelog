@@ -1,3 +1,9 @@
+valkka (0.5.2-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * Fixed a small bug: smart timestamp correction is again the default.  Weird regression with intel drivers: multiple streams (5+) crash.
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Wed, 01 Aug 2018 11:29:25 +0300
+
 valkka (0.5.1-0ubuntu1-bionicppa2) bionic; urgency=low
 
   * Multi-GPU working allright.  Fixed live555 compilation and re-configured PPA for multiple architectures

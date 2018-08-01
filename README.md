@@ -62,6 +62,7 @@ We're currently at alpha
 ### Current stable version is 0.5.2
 
 0.5.2 Version
+- Fixed a small bug: smart timestamp correction is again the default
 - Weird regression here: segfault with intel gfx drivers with 5+ streams.  Problem with the latest intel driver?
 
 ### Older versions
