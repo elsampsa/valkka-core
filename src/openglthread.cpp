@@ -82,6 +82,7 @@ void SlotContext::deActivate() {//Deallocate
 
 
 void SlotContext::loadYUVFrame(YUVFrame *yuvframe) {
+  // return;
 #ifdef PRESENT_VERBOSE
   std::cout << "SlotContext: loadYUVFrame: "<< *yuvframe <<std::endl;
 #endif
@@ -1058,10 +1059,10 @@ long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
   ///*
   // handle special (signal) frames here
   if (f->getFrameClass()==FrameClass::signal) {
-    std::cout << "OpenGLThread: insertFifo: SignalFrame" << std::endl;
+    // std::cout << "OpenGLThread: insertFifo: SignalFrame" << std::endl;
     SignalFrame *signalframe = static_cast<SignalFrame*>(f);
     handleSignal(signalframe->opengl_signal_ctx);
-    // recycle(f); // wtf is this.  Why there is no compiler warning!?
+    // recycle(f); // alias
     infifo->recycle(f);
     return 0;
   }
@@ -1287,6 +1288,8 @@ void OpenGLThread::run() {// Main execution loop
       }
       else {
         timeout=std::min(insertFifo(f),Timeout::openglthread); // insert frame into the presentation fifo, get timeout to the last frame in the presentation fifo
+        // timeout=Timeout::openglthread;
+        
         // ..frame is now in the presentation fifo.. remember to recycle on handleFifo
         while (timeout==0) {
           timeout=std::min(handleFifo(),Timeout::openglthread);
@@ -1949,19 +1952,19 @@ bool OpenGLThread::newRenderGroupCall  (Window window_id) { // return value: ren
   opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderCroupCall: pars="<< pars <<std::endl;
   
   
-  /* // new
+  ///* // new
   SignalFrame f = SignalFrame();
   // f.opengl_signal_ctx = {OpenGLSignal::new_render_group, &pars};
   f.opengl_signal_ctx = {OpenGLSignal::new_render_group, pars};
   infilter.run(&f); // FifoFrameFilter => OpenGLFrameFifo => FrameFifo::writeCopy => |thread border|  => run : infifo.read => insertFifo (i.e. put into presentation queue (or not))
   pars.success =true;
-  */
+  //*/
   
-  // /* // old
+  /* // old
   OpenGLSignalContext signal_ctx = {OpenGLSignal::new_render_group, pars};
   sendSignalAndWait(signal_ctx);
   opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderCroupCall: return pars="<< pars <<std::endl;
-  // */
+  */
   
   // return pars.success;
   return true;
@@ -2005,25 +2008,20 @@ int OpenGLThread::newRenderContextCall(SlotNumber slot, Window window_id, unsign
   pars.render_ctx  =std::rand(); // create the value here
   pars.success     =false;
   
-  /*
+  // /*
   // new
   SignalFrame f = SignalFrame();
   f.opengl_signal_ctx = {OpenGLSignal::new_render_context, pars};
   infilter.run(&f);
-  */
+  // */
   
-  // /* // old
+  /* // old
   OpenGLSignalContext signal_ctx = {OpenGLSignal::new_render_context, pars};
   sendSignalAndWait(signal_ctx);
   // there could be a mutex going in with the signal .. and then we wait for that mutex
   
   opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContextCall: return pars="<< pars <<std::endl;
-  
-  // TODO: check this!
-  //if (!pars.success) {
-  //  return 0;
-  //}
-  // */
+  */
   
   return pars.render_ctx;
 }

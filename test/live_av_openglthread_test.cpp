@@ -357,7 +357,7 @@ void test_6() {
   std::cout << name << "playing stream !" << std::endl;
   
   std::vector<Window> windows;
-  int n=2;
+  int n=5;
   int i;
   
   for(i=0;i<=n;i++) {
