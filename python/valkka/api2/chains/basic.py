@@ -144,6 +144,7 @@ class BasicFilterchain:
     // ctx.reordering_time =100000;       // Live555 packet reordering treshold time (microsecs)
     """
     if (self.time_correction!=None): self.ctx.time_correction =self.time_correction
+    # self.time_correction=core.TimeCorrectionType_smart # default ..
     self.ctx.recv_buffer_size =self.recv_buffer_size
     self.ctx.reordering_time  =self.reordering_mstime*1000 # from millisecs to microsecs
     
@@ -241,6 +242,9 @@ class ShmemFilterchain(BasicFilterchain):
     # fork: writes to branches 1 and 2
     # self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.sws_filter) # FIX
     self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,self.interval_filter)
+    # self.fork_filter     =core.ForkFrameFilter         ("fork_filter"+self.idst,self.gl_in_filter,None)
+    # self.fork_filter=self.gl_in_filter # debugging
+    
     
     # main branch
     self.framefifo_ctx=core.FrameFifoContext()

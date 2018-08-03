@@ -90,6 +90,7 @@ void OpenGLFrameFifo::allocateYUV() {
 }
 
   // Mother class FrameFifo has reservoirs[FrameClass:setup], reservoir[FrameClass::signal]
+  // allocate_reservoir_and_stack_yuv(N1080, gl_ctx.n_1080p); // test: reverse allocation order
   allocate_reservoir_and_stack_yuv(N720,  gl_ctx.n_720p);
   allocate_reservoir_and_stack_yuv(N1080, gl_ctx.n_1080p);
   allocate_reservoir_and_stack_yuv(N1440, gl_ctx.n_1440p);

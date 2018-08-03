@@ -108,7 +108,7 @@ struct LiveConnectionContext {                                                  
   /** Dummy constructor : remember to set member values by hand */
   LiveConnectionContext() :                                                                           // <pyapi>
   connection_type(LiveConnectionType::none), address(""), slot(0), framefilter(NULL), msreconnect(0), // <pyapi>
-  request_multicast(false), request_tcp(false)                                                        // <pyapi>
+  request_multicast(false), request_tcp(false),time_correction(TimeCorrectionType::smart)             // <pyapi>
   {}                                                                                                  // <pyapi>
   LiveConnectionType connection_type;   ///< Identifies the connection type                           // <pyapi>
   std::string        address;           ///< Stream address                                           // <pyapi>

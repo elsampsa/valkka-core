@@ -1,3 +1,21 @@
+valkka (0.5.2-0ubuntu1-bionicppa2) bionic; urgency=low
+
+  * Fixed a small bug: smart timestamp correction is again the default.  Weird regression with intel drivers: multiple streams (5+) crash.
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Fri, 03 Aug 2018 18:05:42 +0300
+
+valkka (0.5.2-0ubuntu1-xenialppa2) xenial; urgency=low
+
+  * Fixed a small bug: smart timestamp correction is again the default.  Weird regression with intel drivers: multiple streams (5+) crash.
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Fri, 03 Aug 2018 18:05:42 +0300
+
+valkka (0.5.2-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * Fixed a small bug: smart timestamp correction is again the default.  Weird regression with intel drivers: multiple streams (5+) crash.
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Wed, 01 Aug 2018 11:29:25 +0300
+
 valkka (0.5.2-0ubuntu1-xenialppa1) xenial; urgency=low
 
   * Fixed a small bug: smart timestamp correction is again the default.  Weird regression with intel drivers: multiple streams (5+) crash.
