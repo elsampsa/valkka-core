@@ -38,6 +38,7 @@
 #include "frame.h"
 #include "opengl.h"
 #include "constant.h"
+#include "macro.h"
 
 
 /** A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids, etc.)
@@ -51,9 +52,12 @@ public:
    * @param height pixmap height
    * \callgraph
    */
-  TEX(BitmapPars bmpars);
-  virtual ~TEX();            ///< Default virtual destructor
-  
+  TEX(BitmapPars bmpars);        ///< Default ctor
+  virtual ~TEX();                ///< Default virtual destructor
+  ban_copy_ctor(TEX);
+  ban_copy_asm(TEX);
+
+
 public: // format, dimensions
   BitmapPars bmpars;             ///< Max bitmap dimensions (pre-reserved)
   // BitmapPars source_bmpars;      ///< Bitmap true dimensions
@@ -76,6 +80,9 @@ public:
   /** @copydoc TEX::TEX */
   YUVTEX(BitmapPars bmpars); 
   ~YUVTEX(); ///< Default destructor
+  YUVTEX(const YUVTEX &f) : TEX(f) notice_ban_copy_ctor();
+  //ban_copy_ctor(YUVTEX); // must call TEX in the init list ..
+  ban_copy_asm(YUVTEX);
   
 public:
   GLuint  y_index;       ///< internal OpenGL/GPU index referring to Y texture;

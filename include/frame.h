@@ -41,22 +41,7 @@
 #include "avdep.h"
 #include "opengl.h"
 #include "tools.h"
-
-// Macros for making getFrameClass and copyFrom
-#define frame_essentials(CLASSNAME, CLASS) \
-FrameClass CLASS::getFrameClass() {\
-  return CLASSNAME;\
-};\
-void CLASS::copyFrom(Frame *f) {\
-  CLASS *cf;\
-  cf=dynamic_cast<CLASS*>(f);\
-  if (!cf) {\
-    perror("FATAL : invalid cast at copyFrom");\
-    exit(5);\
-  }\
-  *this =*(cf);\
-};\
-
+#include "macro.h"
 
 
 /** Enumeration of Frame classes used by Valkka
@@ -110,10 +95,14 @@ class Frame {
 public:
   Frame(); ///< Default ctor
   virtual ~Frame(); ///< Default virtual dtor
+  frame_essentials(FrameClass::none,Frame);
+  /*Frame(const Frame &f); ///< Default copy ctor
+  
   
 public: // frame essentials : must be defined for each frame subclass
   virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type (also metadata)
+  */
   
 public: // redefined virtual
   virtual void print(std::ostream& os) const; ///< Produces frame output
@@ -154,10 +143,13 @@ class BasicFrame : public Frame {
 public:
   BasicFrame(); ///< Default ctor
   virtual ~BasicFrame(); ///< Default virtual dtor
+  frame_essentials(FrameClass::basic, BasicFrame);
+  /*BasicFrame(const BasicFrame &f); ///< Default copy ctor
   
 public: // frame essentials
   virtual FrameClass getFrameClass();         ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);            ///< Copies data to this frame from a frame of the same type
+  */
   
 public: // redefined virtual
   virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
@@ -201,10 +193,14 @@ class SetupFrame : public Frame {
 public:
   SetupFrame(); ///< Default ctor
   virtual ~SetupFrame(); ///< Default virtual dtor
+  frame_essentials(FrameClass::setup,SetupFrame);
+  /*
+  SetupFrame(const SetupFrame &f); ///< Default copy ctor
   
 public: // frame essentials
   virtual FrameClass getFrameClass();         ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);            ///< Copies data to this frame from a frame of the same type
+  */
   
 public: // redefined virtual
   virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
@@ -229,10 +225,13 @@ class AVMediaFrame : public Frame {
 public:
   AVMediaFrame(); ///< Default ctor
   virtual ~AVMediaFrame(); ///< Default virtual dtor
+  frame_essentials(FrameClass::avmedia,AVMediaFrame);
+  /*AVMediaFrame(const AVMediaFrame &f); ///< Default copy ctor
   
 public: // frame essentials
   virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
+  */
   
 public: // redefined virtual
   virtual std::string dumpPayload();
@@ -265,10 +264,14 @@ class AVBitmapFrame : public AVMediaFrame {
 public:
   AVBitmapFrame(); ///< Default ctor
   virtual ~AVBitmapFrame(); ///< Default virtual dtor
+  frame_essentials(FrameClass::avbitmap, AVBitmapFrame);
+  /*
+  AVBitmapFrame(const AVBitmapFrame &f); ///< Default copy ctor
   
 public: // frame essentials
   virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
+  */
   
 public: // redefined virtual
   virtual std::string dumpPayload();
@@ -299,10 +302,14 @@ class AVRGBFrame : public AVBitmapFrame {
 public:
   AVRGBFrame();
   virtual ~AVRGBFrame();
+  frame_essentials(FrameClass::avrgb,AVRGBFrame);
+  /*
+  AVRGBFrame(const AVRGBFrame &f); ///< Default copy ctor
   
 public: // frame essentials
   virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
+  */
   
 public: // redefined virtual
   virtual std::string dumpPayload();
@@ -356,10 +363,20 @@ class YUVFrame : public Frame {
 public:
   YUVFrame(BitmapPars bmpars); ///< Default ctor
   virtual ~YUVFrame(); ///< Default virtual dtor
+  frame_essentials(FrameClass::yuv,YUVFrame);
+  /*
+  YUVFrame(const YUVFrame &f); ///< Default copy ctor
+  
+public: // frame essentials
+  virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
+  virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
 
+  */
+  
 public: // variables filled at constructor time
   BitmapPars bmpars;        // the maximum, pre-reserved size
   BitmapPars source_bmpars; // the actual size of the image
+  
   
 private:
   void reserve();     ///< Reserve data on the GPU.  Used by the constructor only.
@@ -374,10 +391,6 @@ private:
   GLubyte* y_payload; ///< direct memory access memory address, returned by GPU
   GLubyte* u_payload; ///< direct memory access memory address, returned by GPU
   GLubyte* v_payload; ///< direct memory access memory address, returned by GPU
-
-public: // frame essentials
-  virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
-  virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
   
 public: // redefined virtual
   virtual std::string dumpPayload();
@@ -403,14 +416,19 @@ class SignalFrame : public Frame {
 public:
   SignalFrame();           ///< Default ctor
   virtual ~SignalFrame();  ///< Default virtual dtor
+  frame_essentials(FrameClass::signal,SignalFrame);
+  /*
+  SignalFrame(const SignalFrame &f); ///< Default copy ctor
+  
+public:
+  virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
+  virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
+  */
 
 public:
   OpenGLSignalContext   opengl_signal_ctx;
   AVSignalContext       av_signal_ctx;
   
-public:
-  virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
-  virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
 };
 
 

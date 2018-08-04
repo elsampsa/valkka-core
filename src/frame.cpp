@@ -43,7 +43,7 @@ Frame::~Frame() {
 }
  
  
-frame_essentials(FrameClass::none, Frame);
+//frame_essentials(FrameClass::none, Frame);
 /*
 FrameClass Frame::getFrameClass() {
   return FrameClass::none;
@@ -104,7 +104,7 @@ BasicFrame::~BasicFrame() {
 }
 
 
-frame_essentials(FrameClass::basic, BasicFrame);
+//frame_essentials(FrameClass::basic, BasicFrame);
 /* // that macro expands to..
 
 FrameClass BasicFrame::getFrameClass() {
@@ -247,7 +247,7 @@ SetupFrame::SetupFrame() : Frame() {
 SetupFrame::~SetupFrame() {
 }
 
-frame_essentials(FrameClass::setup, SetupFrame);
+//frame_essentials(FrameClass::setup, SetupFrame);
 
 void SetupFrame::print(std::ostream &os) const {
   os << "<SetupFrame: timestamp="<<mstimestamp<<" subsession_index="<<subsession_index<<" slot="<<n_slot<<" / ";  //<<std::endl;
@@ -275,7 +275,7 @@ AVMediaFrame::~AVMediaFrame() {
 }
 
 
-frame_essentials(FrameClass::avmedia, AVMediaFrame);
+//frame_essentials(FrameClass::avmedia, AVMediaFrame);
 
 
 void AVMediaFrame::print(std::ostream& os) const {
@@ -308,7 +308,7 @@ AVBitmapFrame::~AVBitmapFrame() {
 }
 
 
-frame_essentials(FrameClass::avbitmap, AVBitmapFrame);
+//frame_essentials(FrameClass::avbitmap, AVBitmapFrame);
   
 
 std::string AVBitmapFrame::dumpPayload() {
@@ -389,7 +389,7 @@ AVRGBFrame::~AVRGBFrame() {
 }
 
 
-frame_essentials(FrameClass::avrgb, AVRGBFrame);
+//frame_essentials(FrameClass::avrgb, AVRGBFrame);
  
   
 std::string AVRGBFrame::dumpPayload() {
@@ -423,7 +423,7 @@ AVAudioFrame::~AVAudioFrame() {
 }
 
 
-frame_essentials(FrameClass::avaudio, AVAudioFrame);
+//frame_essentials(FrameClass::avaudio, AVAudioFrame);
 
 
 std::string AVAudioFrame::dumpPayload() {
@@ -461,7 +461,7 @@ YUVFrame::~YUVFrame() {
   release();
 }
 
-frame_essentials(FrameClass::yuv, YUVFrame);
+//frame_essentials(FrameClass::yuv, YUVFrame);
 
 
 void YUVFrame::reserve() {
@@ -630,6 +630,6 @@ SignalFrame::~SignalFrame() {
 }
 
 
-frame_essentials(FrameClass::signal, SignalFrame);
+//frame_essentials(FrameClass::signal, SignalFrame);
 
 

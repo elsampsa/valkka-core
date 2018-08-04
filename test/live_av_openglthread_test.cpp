@@ -358,8 +358,10 @@ void test_6() {
   
   std::vector<Window> windows;
   int n=5;
+  // int n=1;
   int i;
   
+  // /* // context per window
   for(i=0;i<=n;i++) {
     std::cout << i << std::endl;
     Window window_id=glthread.createWindow();
@@ -376,6 +378,49 @@ void test_6() {
     int ii=glthread.newRenderContextCall(2, *it, 0);
     std::cout << "got render context id "<<ii<<std::endl;
   }
+  // */
+  
+  
+  
+  /* // all contexes to same window
+  Window window_id=glthread.createWindow();
+  glthread.newRenderGroupCall(window_id);
+  
+  for(i=0; i<=n; i++) {
+    int ii=glthread.newRenderContextCall(2, window_id, 0);
+    std::cout << "got render context id "<<ii<<std::endl;
+  }
+  */
+  
+  
+  
+  /* // various tests
+  for(i=0;i<=n;i++) {
+    std::cout << i << std::endl;
+    Window window_id=glthread.createWindow();
+    glthread.makeCurrent(window_id);
+    std::cout << "new x window "<<window_id<<std::endl;
+    windows.push_back(window_id);
+  }
+  
+  sleep_for(1s);
+  
+  for(auto it=windows.begin(); it!=windows.end(); it++) {
+    // create render group
+    glthread.newRenderGroupCall(*it);
+    sleep_for(1s);
+  }
+  
+  for(auto it=windows.begin(); it!=windows.end(); it++) {
+    // create render context
+    // int ii=glthread.newRenderContextCall(2, *it, 0); // same slot // crasssh
+    int ii=glthread.newRenderContextCall(3, *it, 0); // dead slot // crasssh
+    // int ii=glthread.newRenderContextCall(3, 9999, 0); // fake render groups (windows) => render context discarded
+    std::cout << "got render context id "<<ii<<std::endl;
+    sleep_for(1s);
+  }
+  */
+  
   
   livethread.playStreamCall(ctx);
   

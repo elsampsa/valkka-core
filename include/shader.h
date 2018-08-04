@@ -38,6 +38,7 @@
 // #include<GL/glew.h>
 // #include<GL/glx.h>
 #include "common.h"
+#include "macro.h"
 
 /** A general purpose shader class.  Subclass for, say:
  * 
@@ -55,6 +56,8 @@ public:
    */
   Shader();
   virtual ~Shader(); ///< Default destructor
+  ban_copy_ctor(Shader);
+  ban_copy_asm(Shader);
 
 protected: // functions that return shader programs
   virtual const char* vertex_shader()     =0;

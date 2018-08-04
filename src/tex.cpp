@@ -43,10 +43,9 @@
 TEX::TEX(BitmapPars bmpars) :  bmpars(bmpars), index(0), format(0) {
 }
   
-
 TEX::~TEX() {
 }
-  
+
 
   
 YUVTEX::YUVTEX(BitmapPars bmpars) : TEX(bmpars), y_index(0), u_index(0), v_index(0) {

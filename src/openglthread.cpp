@@ -148,7 +148,7 @@ YUVTEX* SlotContext::getTEX() {
 
 
 // RenderContext::RenderContext(SlotContext &slot_context, YUVTEX *statictex, unsigned int z) : slot_context(slot_context), statictex(statictex), z(z), active(false) {
-RenderContext::RenderContext(SlotContext &slot_context, int id, unsigned int z) : slot_context(slot_context), id(id), z(z) {
+RenderContext::RenderContext(SlotContext *slot_context, int id, unsigned int z) : slot_context(slot_context), id(id), z(z) {
   // https://learnopengl.com/#!Getting-started/Textures
   // https://www.khronos.org/opengl/wiki/Vertex_Specification
   // https://gamedev.stackexchange.com/questions/86125/what-is-the-relationship-between-glvertexattribpointer-index-and-glsl-location
@@ -162,19 +162,21 @@ RenderContext::RenderContext(SlotContext &slot_context, int id, unsigned int z) 
   id=time.tv_sec*1000+time.tv_usec/1000;
   */
   // id = std::rand();
-  slot_context.inc_ref_count();
+  slot_context->inc_ref_count();
   activate();
 }
 
 
 RenderContext::~RenderContext() {
+  slot_context->dec_ref_count();
+  // return;
 #ifdef VALGRIND_GPU_DEBUG
 #else
+  // TODO: WARNING: we're managing a GPU resource here.  Know what you're doing
   glDeleteBuffers(1, &VAO);
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &EBO);
 #endif
-  slot_context.dec_ref_count();
 }
 
 
@@ -198,7 +200,7 @@ void RenderContext::activate() {
   // so, slot context has been properly initialized => we have Shader instance
   active=true;
   */
-  Shader* shader=slot_context.shader; // assume the shaders dont change (practically always YUV)
+  Shader* shader=slot_context->shader; // assume the shaders dont change (practically always YUV)
   struct timeval time;
   unsigned int transform_size, vertices_size, indices_size;
   
@@ -304,7 +306,7 @@ void RenderContext::activate() {
 
 
 void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextures, bindParameters and bindVertexArray
-  Shader* shader=slot_context.shader;
+  Shader* shader=slot_context->shader;
   
 // in the old code:
 // shader->use() .. copy from pbo to tex .. makeCurrent .. glViewport, glClear .. bindVertex, drawelements, unbind vertex array
@@ -356,9 +358,9 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
 
 
 void RenderContext::bindTextures() {// Associate textures with the shader program.  Uses parameters from Shader reference.
-  YUVShader *shader = (YUVShader*)(slot_context.shader); // shorthand
+  YUVShader *shader = (YUVShader*)(slot_context->shader); // shorthand
   // const YUVTEX *yuvtex;
-  const YUVTEX *yuvtex =slot_context.getTEX(); // returns the relevant texture (static or live)
+  const YUVTEX *yuvtex =slot_context->getTEX(); // returns the relevant texture (static or live)
   
 /*
   if (slot_context.isDead()) { // no frame has been received for a while .. show the static texture instead
@@ -407,9 +409,9 @@ void RenderContext::bindTextures() {// Associate textures with the shader progra
 void RenderContext::bindVars() {// Upload other data to the GPU (say, transformation matrix).  Uses parameters from Shader reference.
   // eh.. now we're doing this on each "sweep" .. we could give a callback to RenderGroup that would do the uploading of transformatio matrix
   // .. on the other hand, its not that much data (compared to bitmaps) !
-  YUVShader *shader = (YUVShader*)(slot_context.shader); // shorthand
+  YUVShader *shader = (YUVShader*)(slot_context->shader); // shorthand
   // const YUVTEX *yuvtex;
-  const YUVTEX *yuvtex =slot_context.getTEX(); // returns the relevant texture (static or live)
+  const YUVTEX *yuvtex =slot_context->getTEX(); // returns the relevant texture (static or live)
   
   /*
   if (slot_context.isDead()) { // no frame has been received for a while .. show the static texture instead
@@ -587,10 +589,10 @@ RenderGroup::~RenderGroup() {
 }
 
 
-std::list<RenderContext>::iterator RenderGroup::getContext(int id) {
-  std::list<RenderContext>::iterator it;
+std::list<RenderContext*>::iterator RenderGroup::getContext(int id) {
+  std::list<RenderContext*>::iterator it;
   for(it=render_contexes.begin(); it!=render_contexes.end(); ++it) {
-    if (it->getId()==id) {
+    if ((*it)->getId()==id) {
       return it;
     }
   }
@@ -598,7 +600,7 @@ std::list<RenderContext>::iterator RenderGroup::getContext(int id) {
 }
 
 
-bool RenderGroup::addContext(RenderContext render_context) {
+bool RenderGroup::addContext(RenderContext *render_context) {
   
   /*
   render_contexes.push_back(render_context); 
@@ -606,7 +608,7 @@ bool RenderGroup::addContext(RenderContext render_context) {
   */
   
   ///*
-  if (getContext(render_context.getId())==render_contexes.end()) {
+  if (getContext(render_context->getId())==render_contexes.end()) {
     render_contexes.push_back(render_context); 
     return true;
   }
@@ -617,15 +619,15 @@ bool RenderGroup::addContext(RenderContext render_context) {
 }
 
 
-bool RenderGroup::delContext(int id) {
-  std::list<RenderContext>::iterator it = getContext(id);
+RenderContext* RenderGroup::delContext(int id) {
+  std::list<RenderContext*>::iterator it = getContext(id);
   if (it==render_contexes.end()) {
-    return false;
+    return NULL;
   }
   else {
     render_contexes.erase(it); // this drives the compiler mad.. it starts moving stuff in the container..?
     // render_contexes.pop_back(); // this is ok..
-    return true;
+    return (*it);
   }
 }
 
@@ -674,8 +676,8 @@ void RenderGroup::render() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear the screen and the depth buffer
 #endif
   
-  for(std::list<RenderContext>::iterator it=render_contexes.begin(); it!=render_contexes.end(); ++it) {
-    it->render(x_window_attr);
+  for(auto it=render_contexes.begin(); it!=render_contexes.end(); ++it) {
+    (*it)->render(x_window_attr);
   }
   
 #ifdef OPENGL_TIMING
@@ -851,28 +853,40 @@ bool OpenGLThread::delRenderGroup(Window window_id) {
 }
 
 
-// int OpenGLThread::newRenderContext(SlotNumber n_slot, Window window_id, unsigned int z) {
 void OpenGLThread::newRenderContext(SlotNumber n_slot, Window window_id, int id, unsigned int z) {
   // if (!slotOk(n_slot)) {return 0;}
   if (!slotOk(n_slot)) {return;}
   
-  SlotContext& slot_context=slots_[n_slot]; // take a reference to the relevant SlotContext
+  // SlotContext& slot_context=slots_[n_slot]; // take a reference to the relevant SlotContext // debug ok
+  SlotContext *slot_context=slots_[n_slot];
+  
+  // hasRenderGroup(window_id); // debug ok
   
   if (hasRenderGroup(window_id)) {
-    RenderGroup* render_group= &render_groups.at(window_id); // reference to a RenderGroup corresponding to window_id
-    RenderContext render_context(slot_context, id, z); // the brand new RenderContext
-    render_group->addContext(render_context);
-    render_lists[n_slot].push_back(render_group); // render_lists[n_slot] == list of RenderGroup instances
-    // n_slot => render_lists[n_slot] => a list of RenderGroups, i.e. x windows that the stream of this slot is streaming into    
-    opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContext: added new RenderContext" << std::endl;
-    opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContext: render_list at slot " << n_slot << " now with size " << render_lists[n_slot].size() << std::endl;
-    // render_lists[1].size()
+    RenderGroup* render_group= &render_groups.at(window_id); // reference to a RenderGroup corresponding to window_id // debug ok
     
-    // reportSlots();
+    RenderContext* render_context = new RenderContext(slot_context, id, z);
     
-    // return render_context.getId();
+    // RenderContext render_context(slot_context, id, z); // the brand new RenderContext // WARNING: this RenderContext goes out of scope and its destructor will be called
+    // the instance of RenderContext created here will be deleted once you go out of scope .. and its destructor will be called, deleting its VAO, VBO, etc.
+    // however, it's inserted into render_lists .. it should probably be reference counted..
+    
+    if (render_group->addContext(render_context)) {
+      render_lists[n_slot].push_back(render_group); // render_lists[n_slot] == list of RenderGroup instances // a frame with slot number n_slot arrives => update render_group
+      // n_slot => render_lists[n_slot] => a list of RenderGroups, i.e. x windows that the stream of this slot is streaming into    
+      opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContext: added new RenderContext" << std::endl;
+      opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContext: render_list at slot " << n_slot << " now with size " << render_lists[n_slot].size() << std::endl;
+      // render_lists[1].size()
+      // reportSlots();
+      // reportRenderList();
+      // return render_context.getId();
+    }
+    else {
+      opengllogger.log(LogLevel::fatal) << "OpenGLThread: newRenderContext: FATAL: could not add render context " << id << std::endl;
+    }
   }
   else {
+    opengllogger.log(LogLevel::fatal) << "OpenGLThread: newRenderContext: FATAL: no such render group " << window_id << std::endl;
     // return 0;
   }
 }
@@ -882,9 +896,13 @@ bool OpenGLThread::delRenderContext(int id) {
   bool removed=false;
   
   for(std::map<Window,RenderGroup>::iterator it=render_groups.begin(); it!=render_groups.end(); ++it) {
-    if ((it->second).delContext(id)) {
+    RenderContext *render_context= (it->second).delContext(id);
+    if (! render_context ) {
       opengllogger.log(LogLevel::debug) << "OpenGLThread: delRenderContext: removed context " << id << std::endl;
       removed=true;
+    }
+    else {
+      delete render_context;
     }
   }
   
@@ -916,7 +934,7 @@ void OpenGLThread::delRenderContexes() {
 
 void OpenGLThread::loadYUVFrame(SlotNumber n_slot, YUVFrame* yuvframe){// Load PBO textures in slot n_slot
   // if (!slotOk(n_slot)) {return 0;} // assume checked (this is for internal use only)
-  slots_[n_slot].loadYUVFrame(yuvframe);
+  slots_[n_slot]->loadYUVFrame(yuvframe);
 }
   
 
@@ -932,7 +950,7 @@ bool slotUsed(SlotNumber i) {
 */
 
 bool OpenGLThread::slotUsed(SlotNumber i) {
- return slots_[i].isUsed();
+ return slots_[i]->isUsed();
 }
   
 
@@ -940,7 +958,7 @@ void OpenGLThread::activateSlot(SlotNumber i, YUVFrame* yuvframe) {
   opengllogger.log(LogLevel::crazy) << "OpenGLThread: activateSlot: "<< *yuvframe << std::endl;
   // slots_[i].activate(yuvframe->bmpars, yuv_shader);
   // slots_[i].activate(yuvframe->source_bmpars, yuv_shader);
-  slots_[i].activate(yuvframe->source_bmpars);
+  slots_[i]->activate(yuvframe->source_bmpars);
 }
 
 
@@ -949,13 +967,13 @@ void OpenGLThread::activateSlotIf(SlotNumber i, YUVFrame* yuvframe) {
   std::cout << "OpenGLThread: activateSlotIf: i=" << i << std::endl;
 #endif  
 
-  if (slots_[i].isActive()) { // we're banging on this for each reserved frame .. is this efficient?
+  if (slots_[i]->isActive()) { // we're banging on this for each reserved frame .. is this efficient?
 #ifdef NO_SLOT_REACTIVATION
 #else
     if ( // check if slot should be reactivated
-      yuvframe->source_bmpars.type       ==slots_[i].bmpars.type
-      and yuvframe->source_bmpars.height ==slots_[i].bmpars.height 
-      and yuvframe->source_bmpars.width  ==slots_[i].bmpars.width
+      yuvframe->source_bmpars.type       ==slots_[i]->bmpars.type
+      and yuvframe->source_bmpars.height ==slots_[i]->bmpars.height 
+      and yuvframe->source_bmpars.width  ==slots_[i]->bmpars.width
       ) 
     { // The bitmap type of YUVFrame and YUVTEX are consistent
     }
@@ -973,7 +991,7 @@ void OpenGLThread::activateSlotIf(SlotNumber i, YUVFrame* yuvframe) {
 
 bool OpenGLThread::manageSlotTimer(SlotNumber i, long int mstime) {
   // return true; // WARNING: just a test
-  return slots_[i].manageTimer(mstime);
+  return slots_[i]->manageTimer(mstime);
 }
 
 
@@ -991,17 +1009,17 @@ void OpenGLThread::checkSlots(long int mstime) {
   // iterate all slots
   int n_slot;
   for (n_slot=0; n_slot<slots_.size(); n_slot++) {
-    if (slots_[n_slot].isUsed()) { // is used
+    if (slots_[n_slot]->isUsed()) { // is used
 #ifdef PRESENT_VERBOSE
       std::cout << "OpenGLThread: checkSlots: slot " << n_slot << std::endl;
 #endif
-      slots_[n_slot].checkIfDead(mstime);  // SlotContext puts itself in "dead" state if it has not received frames for a while ..
+      slots_[n_slot]->checkIfDead(mstime);  // SlotContext puts itself in "dead" state if it has not received frames for a while ..
 #ifdef PRESENT_VERBOSE
-      if (slots_[n_slot].isDead()) {
+      if (slots_[n_slot]->isDead()) {
         std::cout << "OpenGLThread: checkSlots: slot " << n_slot << " is dead" << std::endl;
       }
 #endif
-      if (slots_[n_slot].isPending(mstime)) { // If no frame received for a while, re-render
+      if (slots_[n_slot]->isPending(mstime)) { // If no frame received for a while, re-render
 #ifdef PRESENT_VERBOSE
         std::cout << "OpenGLThread: checkSlots: slot " << n_slot << " is pending" << std::endl;
 #endif
@@ -1335,7 +1353,7 @@ void OpenGLThread::preRun() {// Called before entering the main execution loop, 
   
   int i;
   for(i=0;i<=I_MAX_SLOTS;i++) {
-    slots_.push_back(SlotContext(statictex,yuv_shader));
+    slots_.push_back(new SlotContext(statictex,yuv_shader));
     // std::cout << ">>"<<slots_.back().active<< " " << slots_[0].active << std::endl;
   }
   for(i=0;i<=I_MAX_SLOTS;i++) {
@@ -1349,8 +1367,8 @@ void OpenGLThread::preRun() {// Called before entering the main execution loop, 
 
 void OpenGLThread::postRun() {// Called after the main execution loop exits, but before joining the thread
   delRenderContexes();
-  for(std::vector<SlotContext>::iterator it=slots_.begin(); it!=slots_.end(); ++it) {
-    it->deActivate(); // deletes textures
+  for(auto it=slots_.begin(); it!=slots_.end(); ++it) {
+    (*it)->deActivate(); // deletes textures
   }
   infifo->deallocateYUV();
   delete dummyframe;
@@ -1788,8 +1806,8 @@ void OpenGLThread::reportSlots() {
   
   i=0;
   std::cout << "OpenGLThread: reportSlots: Activated slots:" << std::endl;
-  for(std::vector<SlotContext>::iterator it=slots_.begin(); it!=slots_.end(); ++it) {
-    if (it->isActive()) {
+  for(auto it=slots_.begin(); it!=slots_.end(); ++it) {
+    if ((*it)->isActive()) {
       std::cout << "OpenGLThread: reportSlots: ACTIVE "<<i<<std::endl;
     }
     i++;
@@ -1821,10 +1839,10 @@ void OpenGLThread::reportRenderList() {
         // std::cout << "OpenGLThread: reportRenderList:   x window id "<<(*it2)->getWindowId()<<" with "<<(*it2)->render_contexes.size() << " contexes "<<std::endl;
         std::cout << "OpenGLThread: reportRenderList:   x window id "<<(*it2)->getWindowId()<<std::endl;
         
-        std::list<RenderContext> render_contexes=(*it2)->getRenderContexes();
+        std::list<RenderContext*> render_contexes=(*it2)->getRenderContexes();
         
-        for (std::list<RenderContext>::iterator it3=render_contexes.begin(); it3!=render_contexes.end(); ++it3) {
-          std::cout << "OpenGLThread: reportRenderList:     * render context "<< it3->getId() << std::endl;
+        for (std::list<RenderContext*>::iterator it3=render_contexes.begin(); it3!=render_contexes.end(); ++it3) {
+          std::cout << "OpenGLThread: reportRenderList:     * render context "<< (*it3)->getId() << std::endl;
         } // render contexes
         
       } // render groups

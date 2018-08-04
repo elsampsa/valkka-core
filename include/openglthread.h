@@ -59,6 +59,8 @@ class SlotContext {
 public:
   SlotContext(YUVTEX *statictex, YUVShader *shader);  ///< Default constructor
   ~SlotContext(); ///< Default destructor
+  ban_copy_ctor(SlotContext);
+  ban_copy_asm(SlotContext);
   
 public:  
   YUVTEX*      yuvtex;      ///< This could be a base class for different kinds of textures (now only YUVTEX)
@@ -111,11 +113,13 @@ public:
    * @param z            Stacking order (for "video-in-video")
    * 
    */
-  RenderContext(SlotContext& slot_context, int id, unsigned int z=0);
+  RenderContext(SlotContext* slot_context, int id, unsigned int z=0);
   virtual ~RenderContext(); ///< Default virtual destructor
+  RenderContext(const RenderContext &f) : z(0) notice_ban_copy_ctor();
+  ban_copy_asm(RenderContext);
   
 public: // Initialized at constructor init list or at constructor
-  SlotContext& slot_context;       ///< Knows relevant Shader and YUVTEX
+  SlotContext* slot_context;       ///< Knows relevant Shader and YUVTEX
   const unsigned int z;            ///< Stacking order
   // bool active;
   int id;                          ///< A unique id identifying this render context
@@ -175,18 +179,18 @@ public:
   Window   window_id;     ///< X window id: render group id
   Window   child_id;      ///< X window id: rendering target
   bool     doublebuffer_flag; ///< Double buffer rendering or not?
-  std::list<RenderContext> render_contexes; ///< RenderContext instances in ascending z order.  User created rendercontexes are warehoused here
+  std::list<RenderContext*> render_contexes; ///< RenderContext instances in ascending z order.  User created rendercontexes are warehoused here
   XWindowAttributes x_window_attr;          ///< X window attributes
   
 public: // getters
   Window getWindowId() const {return window_id;}
-  const std::list<RenderContext>& getRenderContexes() const {return render_contexes;}
+  const std::list<RenderContext*>& getRenderContexes() const {return render_contexes;}
   
 public:
-  std::list<RenderContext>::iterator getContext(int id); ///< Returns iterator at matched render context id
-  bool addContext(RenderContext render_context);         ///< Add RenderContext to RenderGroup::render_contexes (with checking)
-  bool delContext(int id);                               ///< Remove RenderContext from RenderGroup::render_contexes (with checking)
-  bool isEmpty();                                        ///< Checks if there are any render contexes in the render_contexes list
+  std::list<RenderContext*>::iterator getContext(int id); ///< Returns iterator at matched render context id
+  bool addContext(RenderContext *render_context);         ///< Add RenderContext to RenderGroup::render_contexes (with checking)
+  RenderContext* delContext(int id);                      ///< Remove RenderContext from RenderGroup::render_contexes (with checking)
+  bool isEmpty();                                         ///< Checks if there are any render contexes in the render_contexes list
   /** Render everything in this group (i.e. in this x window)
    * 
    * - Set current x window to RenderGroup::window_id
@@ -262,7 +266,7 @@ protected: // Variables related to X11 and GLX.  Initialized by initGLX.
   Colormap      cmap;
   YUVFrame*     dummyframe; ///< A PBO membuf which we reserve from the GPU as the first membuf, but is never used
   
-  std::vector<SlotContext>              slots_;        ///< index => SlotContext mapping (based on vector indices)
+  std::vector<SlotContext*>              slots_;        ///< index => SlotContext mapping (based on vector indices) // WARNING: not they're pointers .. no copy_ctor ambiguity with std::vector
   // std::map<SlotNumber, SlotContext>     slots_;        ///< SlotNumber => SlotContext mapping TODO: start using this in the future
   std::map<Window, RenderGroup>         render_groups; ///< window_id => RenderGroup mapping.  RenderGroup objects are warehoused here.
   std::vector<std::list<RenderGroup*>>  render_lists;  ///< Each vector element corresponds to a slot.  Each list inside a vector element has pointers to RenderGroups to be rendered.

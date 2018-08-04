@@ -36,6 +36,7 @@
 #include "common.h"
 #include "frame.h"
 #include "logging.h"
+#include "macro.h"
 
 /** Describes the stack structure and fifo behaviour for a FrameFifo
  * 
@@ -70,7 +71,9 @@ class FrameFifo {                                                               
 public:                                                                                             // <pyapi>
   FrameFifo(const char *name, FrameFifoContext ctx =FrameFifoContext()); ///< Default ctor          // <pyapi>
   virtual ~FrameFifo();                                                  ///< Default virtual dtor  // <pyapi>
-
+  ban_copy_ctor(FrameFifo);
+  ban_copy_asm(FrameFifo);
+  
 protected:
   std::string      name;
   FrameFifoContext ctx;   ///< Parameters defining the stack and overflow behaviour
