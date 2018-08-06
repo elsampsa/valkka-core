@@ -26,7 +26,7 @@
  *  @file    live.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.2 
+ *  @version 0.5.3 
  *  
  *  @brief Interface to live555
  *

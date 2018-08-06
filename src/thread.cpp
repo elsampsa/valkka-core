@@ -26,7 +26,7 @@
  *  @file    thread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.2 
+ *  @version 0.5.3 
  *  
  *  @brief A class for multithreading, similar to Python's standard library "threading.Thread"
  */ 

@@ -28,7 +28,7 @@
  *  @file    framefilterset.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.5.2 
+ *  @version 0.5.3 
  *  
  *  @brief   Classes using several framefilters
  */ 
