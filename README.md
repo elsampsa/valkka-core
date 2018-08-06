@@ -192,6 +192,15 @@ in your custom build directory.  You still need to inform the python interpreter
     
 And you're all set.  Now you have a terminal that finds both libValkka and the python3 bindings
 
+### Semi-automated testing
+
+After having set up your development environment, made changes to the code and succesfully built Valkka, you should run the testsuite.  Valkka is tested by a series of small executables that are using the library, running under valgrind.  For some of the tests, valgrind can't be used, due to the GPU direct memory access.  For these tests, you should (i) run them without valgrind and see if you get video on-screen or (ii) compile valkka with the VALGRIND_DEBUG switch enabled and only after that, run them with valgrind.
+
+In your build directory, refer to the bash script *run_tests.bash*.  Its self-explanatory.
+
+Before running *run_tests.bash" you should edit and run the *set_test_streams.bash* that sets up your test cameras.
+
+
 ## Resources
 
 1. Discussion threads:

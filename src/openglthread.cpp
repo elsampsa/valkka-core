@@ -898,11 +898,13 @@ bool OpenGLThread::delRenderContext(int id) {
   for(std::map<Window,RenderGroup>::iterator it=render_groups.begin(); it!=render_groups.end(); ++it) {
     RenderContext *render_context= (it->second).delContext(id);
     if (! render_context ) {
-      opengllogger.log(LogLevel::debug) << "OpenGLThread: delRenderContext: removed context " << id << std::endl;
-      removed=true;
+      opengllogger.log(LogLevel::debug) << "OpenGLThread: delRenderContext: no such context " << id << std::endl;
+      removed=false;
     }
     else {
+      opengllogger.log(LogLevel::debug) << "OpenGLThread: delRenderContext: removed context " << id << std::endl;
       delete render_context;
+      removed=true;
     }
   }
   

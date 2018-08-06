@@ -59,7 +59,7 @@ LiveThread      livethread  ("livethread");
 
 void test_1() {
   const char* name = "@TEST: file_test: test 1: ";
-  std::cout << name <<"** @@Test FileFrameFilter **" << std::endl;
+  std::cout << name <<"** @@Test FileFrameFilter : produces kokkelis.mkv **" << std::endl;
   
   std::cout << name << "starting threads" << std::endl;
   livethread.startCall();
@@ -137,7 +137,7 @@ void test_2() {
 
 void test_3() {
   const char* name = "@TEST: file_test: test 3: ";
-  std::cout << name <<"** @@Test FileFrameFilter: activate, deActivate **" << std::endl;
+  std::cout << name <<"** @@Test FileFrameFilter: activate, deActivate : produces kokkelis.mkv **" << std::endl;
   
   std::cout << name << "starting threads" << std::endl;
   livethread.startCall();
@@ -179,7 +179,7 @@ void test_3() {
 
 void test_4() {
   const char* name = "@TEST: file_test: test 4: ";
-  std::cout << name <<"** @@Test FileFrameFilter: dirty close **" << std::endl;
+  std::cout << name <<"** @@Test FileFrameFilter: dirty close : produces kokkelis.mkv **" << std::endl;
   
   std::cout << name << "starting threads" << std::endl;
   livethread.startCall();

@@ -88,6 +88,8 @@ class RGBShader : public Shader {
 public:
   RGBShader();
   ~RGBShader();
+  ban_copy_ctor(RGBShader);
+  ban_copy_asm(RGBShader);
 
 protected: // functions that return shader programs
   const char* vertex_shader();
@@ -102,6 +104,8 @@ class YUVShader : public Shader {
 public:
   YUVShader();
   ~YUVShader();
+  ban_copy_ctor(YUVShader);
+  ban_copy_asm(YUVShader);
   
 public: // declare GLint variable references here with "* SHADER PROGRAM VAR"
   GLint  texy; ///< OpenGL VERTEX SHADER PROGRAM VAR : Y texture

@@ -94,7 +94,7 @@ void test_1() {
 
 void test_2() {
   const char* name = "@TEST: av_live_thread_test: test 2: ";
-  std::cout << name <<"** @@Send frames from live to av thread.  Long run **" << std::endl;
+  std::cout << name <<"** @@Send frames from live to av thread.  Short **" << std::endl;
   
   if (!stream_1) {
     std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
@@ -115,7 +115,7 @@ void test_2() {
   std::cout << name << "playing stream !" << std::endl;
   livethread.playStreamCall(ctx);
   
-  sleep_for(3s);
+  sleep_for(5s);
   // sleep_for(604800s); //one week
   
   std::cout << name << "stopping threads" << std::endl;
@@ -126,7 +126,7 @@ void test_2() {
 
 void test_3() {
   const char* name = "@TEST: av_live_thread_test: test 3: ";
-  std::cout << name <<"** @@Send frames from live to av thread.  Test effect of frames running out. **" << std::endl;
+  std::cout << name <<"** @@Send frames from live to av thread.  Test effect of frames running out. TODO **" << std::endl;
   
   if (!stream_1) {
     std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
@@ -139,6 +139,32 @@ void test_3() {
 
 
 void test_4() {
+  const char* name = "@TEST: av_live_thread_test: test 4: ";
+  std::cout << name <<"** @@Send frames from live to av thread.  Long run. **" << std::endl;
+  
+  if (!stream_1) {
+    std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+    exit(2);
+  }
+  std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+  
+  std::cout << name << "starting threads" << std::endl;
+  livethread.startCall();
+  avthread.  startCall();
+
+  avthread.decodingOnCall();
+  
+  std::cout << name << "registering stream" << std::endl;
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
+  livethread.registerStreamCall(ctx);
+  
+  std::cout << name << "playing stream !" << std::endl;
+  livethread.playStreamCall(ctx);
+  
+  // sleep_for(5s);
+  sleep_for(604800s); //one week
+  
+  std::cout << name << "stopping threads" << std::endl;
 }
 
 

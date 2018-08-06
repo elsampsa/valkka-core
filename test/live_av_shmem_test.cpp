@@ -140,7 +140,7 @@ void test_2() {
   std::cout << name << "playing stream !" << std::endl;
   livethread.playStreamCall(ctx);
   
-  sleep_for(30s);
+  sleep_for(10s);
   // sleep_for(604800s); //one week
   
   std::cout << name << "stopping threads" << std::endl;
@@ -150,7 +150,7 @@ void test_2() {
 
 void test_3() {
   const char* name = "@TEST: live_av_shmem_test: test 3: ";
-  std::cout << name <<"** @@Read RGB frame data from the shared memory.  Start this after starting test 2,**" << std::endl;
+  std::cout << name <<"** @@Read RGB frame data from the shared memory.  Start this after starting test 2.  Must be started separataly while the server-side is running**" << std::endl;
   
   SharedMemRingBufferRGB rb("rgb_shmem", 10, 100, 100, 1000, false);
   int index, n, ii;
