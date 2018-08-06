@@ -59,13 +59,17 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.5.2
+### Current stable version is 0.5.3
+
+0.5.3 Version
+- Woops .. there was no regression but a nasty bug with the use of stl containers
+- .. works fine now, after I followed the "rule of four" (ctor, dtor, copy-ctor and copy-assignment)
+
+### Older versions
 
 0.5.2 Version
 - Fixed a small bug: smart timestamp correction is again the default
 - Weird regression here: segfault with intel gfx drivers with 5+ streams.  Problem with the latest intel driver?
-
-### Older versions
 
 0.5.1 Version : "Videowalls"
 - Multi-GPU works
