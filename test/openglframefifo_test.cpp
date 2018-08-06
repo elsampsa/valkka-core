@@ -62,7 +62,9 @@ LiveThread       livethread("live");
 void test_1() {
   
   const char* name = "@TEST: openglframefifo_test: test 1: live => decoder => openglframefifo ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+  std::cout << name <<"** @@DESCRIPTION : TODO (broken test)**" << std::endl;
+  
+  return;
   
   if (!stream_1) {
     std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
