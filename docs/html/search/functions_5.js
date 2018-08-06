@@ -1,12 +1,11 @@
 var searchData=
 [
   ['getclientstate',['getClientState',['../classSharedMemSegment.html#a852c4898686ae1f6637fe92af1306428',1,'SharedMemSegment::getClientState()'],['../classSharedMemRingBuffer.html#aa5c5d30addf55288ea9228101be025c0',1,'SharedMemRingBuffer::getClientState()']]],
-  ['getcontext',['getContext',['../classRenderGroup.html#afc7646ed7cf20b3421e705e14fe684cf',1,'RenderGroup']]],
+  ['getcontext',['getContext',['../classRenderGroup.html#a0c0f7baf0581d27e5da078bc5a276bf0',1,'RenderGroup']]],
   ['getcurrentmstimestamp',['getCurrentMsTimestamp',['../tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f',1,'getCurrentMsTimestamp():&#160;tools.cpp'],['../tools_8cpp.html#a69a8d8c398f99883b5c1a22173d6b12f',1,'getCurrentMsTimestamp():&#160;tools.cpp']]],
   ['getflagvalue',['getFlagValue',['../classSharedMemRingBuffer.html#a2d82b75607988d7aae119893483d4488',1,'SharedMemRingBuffer']]],
-  ['getframeclass',['getFrameClass',['../classFrame.html#ac1f39d349213eafc858e44b7292d54d4',1,'Frame::getFrameClass()'],['../classBasicFrame.html#abeadcc4ab894da46bf4b90ea3160b189',1,'BasicFrame::getFrameClass()'],['../classSetupFrame.html#af774bf5ee7969d7747a8f72ac2ddfb65',1,'SetupFrame::getFrameClass()'],['../classAVMediaFrame.html#a0629998d9325eb51ba98f3cb42142176',1,'AVMediaFrame::getFrameClass()'],['../classAVBitmapFrame.html#a5a729df6bfe77c4f4b3b2d9f4fb4f45a',1,'AVBitmapFrame::getFrameClass()'],['../classAVRGBFrame.html#a661048fb80ea8c552957100ed9a37f3b',1,'AVRGBFrame::getFrameClass()'],['../classYUVFrame.html#ab35428aacb92c4677fce7bb0bafcc282',1,'YUVFrame::getFrameClass()'],['../classSignalFrame.html#afc56e51c98b59436f26588f847993b4a',1,'SignalFrame::getFrameClass()']]],
   ['getframefilter',['getFrameFilter',['../classFileThread.html#a81d71edab95b415a886f005d7c550c41',1,'FileThread::getFrameFilter()'],['../classLiveThread.html#aafb4e08b5bcf410add3e5a76cd05bda2',1,'LiveThread::getFrameFilter()'],['../classOpenGLThread.html#aec91256bd35c861e076e514d16b09693',1,'OpenGLThread::getFrameFilter()']]],
-  ['getid',['getId',['../classRenderContext.html#ac7be212a8a6f5345346d1d37b90f6744',1,'RenderContext']]],
+  ['getid',['getId',['../classRenderContext.html#ae3d7df65a8574085cbd3a8356d2d1bba',1,'RenderContext']]],
   ['getmsdiff',['getMsDiff',['../tools_8h.html#aa27a04704effaa56e5b25a9dea181026',1,'getMsDiff(timeval tv1, timeval tv2):&#160;tools.cpp'],['../tools_8cpp.html#aa27a04704effaa56e5b25a9dea181026',1,'getMsDiff(timeval tv1, timeval tv2):&#160;tools.cpp']]],
   ['getpbo',['getPBO',['../group__openglthread__tag.html#gab5f2ef19c7dfeb90c4dbed8d3826f06c',1,'getPBO(GLuint &amp;index, GLsizei size, GLubyte *&amp;payload):&#160;opengl.cpp'],['../opengl_8cpp.html#ab5f2ef19c7dfeb90c4dbed8d3826f06c',1,'getPBO(GLuint &amp;index, GLsizei size, GLubyte *&amp;payload):&#160;opengl.cpp']]],
   ['getrendergroup',['getRenderGroup',['../classOpenGLThread.html#a5e05efdbf311eb99fe2efe69b5abf585',1,'OpenGLThread']]],

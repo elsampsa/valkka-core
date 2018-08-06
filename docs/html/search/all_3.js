@@ -13,7 +13,7 @@ var searchData=
   ['default_5fpayload_5fsize_5fpcmu',['DEFAULT_PAYLOAD_SIZE_PCMU',['../constant_8h.html#ac54159dfcf89ea1a904276dc94cc7e8fa4b08cc20c22d29169dae8f4916a8c8c2',1,'constant.h']]],
   ['del_5frender_5fcontext',['del_render_context',['../group__openglthread__tag.html#ggaa7275dda16349b828b8c7e9672e3a2acadce72fa6b121efff751b854145d6be21',1,'threadsignal.h']]],
   ['del_5frender_5fgroup',['del_render_group',['../group__openglthread__tag.html#ggaa7275dda16349b828b8c7e9672e3a2aca63efc2659dca519d83c97336ce704f2d',1,'threadsignal.h']]],
-  ['delcontext',['delContext',['../classRenderGroup.html#aaa5fde72be9a7e901375203aa1c6abbe',1,'RenderGroup']]],
+  ['delcontext',['delContext',['../classRenderGroup.html#a1f2cb22022d4d3c1fba54caa3c7f5fac',1,'RenderGroup']]],
   ['delrendercontext',['delRenderContext',['../classOpenGLThread.html#a3996cf6c20676fd6c5f3103f4d723627',1,'OpenGLThread']]],
   ['delrendercontextcall',['delRenderContextCall',['../classOpenGLThread.html#a828e9b1045354ee6083edcb68142e9ec',1,'OpenGLThread']]],
   ['delrendergroup',['delRenderGroup',['../classOpenGLThread.html#af5cc0544e52bd20b8664381490902c61',1,'OpenGLThread']]],

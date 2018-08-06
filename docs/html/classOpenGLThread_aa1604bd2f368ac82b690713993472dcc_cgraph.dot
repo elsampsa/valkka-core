@@ -1,0 +1,13 @@
+digraph "OpenGLThread::newRenderContextCall"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node17 [label="OpenGLThread::newRenderContextCall",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node17 -> Node18 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node18 [label="FrameFilter::run",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6",tooltip="Calls this->go(Frame* frame) and then calls the this->next->run(Frame* frame) (if this->next != NULL)..."];
+  Node18 -> Node19 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node19 [label="FrameFilter::go",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af",tooltip="Does the actual filtering/modification to the Frame. Define in subclass. "];
+  Node18 -> Node20 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node20 [label="FrameFilter::FrameFilter",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761",tooltip="Default constructor. "];
+}
