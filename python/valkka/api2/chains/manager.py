@@ -1,7 +1,7 @@
 """
-basic2.py : Some basic classes encapsulating filter chains.  User must define the endpoints of the filterchains.
+manager.py : Managed filterchain classes.  Resources are managed hierarchically, decoding is turned off if its not required
 
- * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
@@ -22,12 +22,12 @@ basic2.py : Some basic classes encapsulating filter chains.  User must define th
  *
  */
 
-@file    basic.py
+@file    manage.py
 @author  Sampsa Riikonen
-@date    2017
+@date    2018
 @version 0.5.3 
   
-@brief Some basic classes encapsulating filter chains.  User must define the endpoints of the filterchains
+@brief   Managed filterchain classes.  Resources are managed hierarchically, decoding is turned off if its not required
 """
 
 import sys
@@ -36,20 +36,24 @@ import random
 from valkka import valkka_core as core # so, everything that has .core, refers to the api1 level (i.e. swig wrapped cpp code)
 from valkka.api2.threads import LiveThread, OpenGLThread # api2 versions of the thread classes
 from valkka.api2.tools import parameterInitCheck, typeCheck
-pre_mod="valkka.api2.chains.basic2 : "
+from valkka.api2.chains import ViewPort
+
+pre_mod="valkka.api2.chains.manage : "
 
 
-class OpenFilterchain:
+class ManagedFilterchain:
   """This class implements the following filterchain:
   
-  ::
-    
-    (LiveThread:livethread) -->> (AVThread:avthread) --> {ForkFrameFilterN:forkfilter}
-  
+  ::                                                                                      +-->
+                                                                                          |
+    (LiveThread:livethread) -->> (AVThread:avthread) --> {ForkFrameFilterN:fork_filter} --+-->
+                                                                                          |
+                                                                                          +-->
   """
   
   parameter_defs={
     "livethread"       : LiveThread,
+    "openglthreads"    : list,
     "address"          : str,
     "slot"             : int,
     
@@ -72,11 +76,18 @@ class OpenFilterchain:
   def __init__(self, **kwargs):
     self.pre=self.__class__.__name__+" : " # auxiliary string for debugging output
     parameterInitCheck(self.parameter_defs,kwargs,self) # check for input parameters, attach them to this instance as attributes
+    for openglthread in self.openglthreads:
+      assert(issubclass(openglthread.__class__,OpenGLThread))
     self.init()
     
     
   def init(self):
     self.idst=str(id(self))
+    
+    # init the manager
+    self.ports =[]
+    self.tokens_by_port={}
+    
     self.makeChain()
     self.createContext()
     self.startThreads()
@@ -113,12 +124,14 @@ class OpenFilterchain:
     self.av_in_filter  =self.avthread.getFrameFilter() # get input FrameFilter from AVThread
 
   
+  """
   def connect(self,name,framefilter):
     return self.fork_filter.connect(name,framefilter)
     
     
   def disconnect(self,name):
     return self.fork_filter.disconnect(name)
+  """
     
 
   def createContext(self):
@@ -182,7 +195,73 @@ class OpenFilterchain:
   def decodingOn(self):
     self.avthread.decodingOnCall()
 
+
+  def addViewPort(self,view_port):
+    assert(issubclass(view_port.__class__,ViewPort))
+    # ViewPort object is created by the widget .. and stays alive while the widget exists.
+    
+    window_id      =view_port.getWindowId()
+    x_screen_num   =view_port.getXScreenNum()
+    openglthread   =self.openglthreads[x_screen_num]
+    
+    if (view_port in self.ports):
+      # TODO: implement == etc. operators : compare window_id (and x_screen_num) .. nopes, if the object stays the same
+      self.delViewPort(view_port)
+  
+    # run through all ViewPort instances in self.ports to find the number of x-screen requests
+    n_x_screen_ports =self.getNumXscreenPorts(x_screen_num)
+    
+    if (n_x_screen_ports<1):
+      # this only in the first time : start sending frames to X screen number x_screen_num!
+      self.fork_filter.connect("openglthread_"+str(x_screen_num),openglthread.getInput())
+    
+    token=openglthread.connect(slot=self.slot,window_id=window_id) # send frames from this slot to correct openglthread and window_id
+    self.tokens_by_port[view_port]=token
+    
+    if (len(self.ports)<1):
+      # first request for this stream : time to start decoding!
+      self.avthread.decodingOn()
       
+    self.ports.append(view_port)
+      
+    
+  def delViewPort(self,view_port):
+    assert(issubclass(view_port.__class__,ViewPort))
+    
+    window_id      =view_port.getWindowId()
+    x_screen_num   =view_port.getXScreenNum()
+    openglthread   =self.openglthreads[x_screen_num]
+    
+    if (view_port not in self.ports):
+      print(self.pre,"delViewPort : FATAL : no such port", view_port)
+      return
+    
+    self.ports.remove(view_port) # remove this port from the list
+    token=self.tokens_by_port.pop(view_port) # remove the token associated to x-window output
+    openglthread.disconnect(token) # stop the slot => render context / x-window mapping associated to the token
+    
+    n_x_screen_ports =self.getNumXscreenPorts(x_screen_num)
+    
+    if (n_x_screen_ports<1):
+      # no need to send this stream to X Screen number x_screen_num
+      self.fork_filter.disconnect("openglthread_"+str(x_screen_num))
+    
+    if (len(self.ports)<1):
+      # no need to decode the stream anymore
+      self.avthread.decodingOff()
+    
+    
+  def getNumXscreenPorts(self,x_screen_num):
+    """Run through ViewPort's, count how many of them are using X screen number x_screen_num
+    """
+    sm=0
+    for view_port in self.ports:
+      if (issubclass(view_port.__class__,ViewPort)):
+        if (view_port.getXScreenNum()==x_screen_num):
+          sm+=1
+    return sm
+        
+    
 def main():
   pre=pre_mod+"main :"
   print(pre,"main: arguments: ",sys.argv)
@@ -195,3 +274,17 @@ def main():
   
 if (__name__=="__main__"):
   main()
+
+"""
+TODO:
+
+next steps:
+
+  - valkka-examples: 
+    - a more interactive test_studio program: create a window on-demand.  The window has "change x screen" and "set stream" buttons.  "set stream" opens a drop-down list of cameras.
+    - .. that'll be the last one of the simple test_studio programs: n x n grid views etc. and the gui management in general should be in a separate (proprietary) module
+
+
+"""
+
+

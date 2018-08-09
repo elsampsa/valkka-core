@@ -1,3 +1,15 @@
+valkka (0.5.3-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * Severe bug found and fixed by implementing the cpp rule-of-four
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Mon, 06 Aug 2018 17:23:03 +0300
+
+valkka (0.5.3-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * Sever bug found and fixed by implementing the cpp rule-of-four
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Mon, 06 Aug 2018 17:23:03 +0300
+
 valkka (0.5.2-0ubuntu1-bionicppa2) bionic; urgency=low
 
   * Fixed a small bug: smart timestamp correction is again the default.  Weird regression with intel drivers: multiple streams (5+) crash.
