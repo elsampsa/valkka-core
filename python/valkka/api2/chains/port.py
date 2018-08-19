@@ -40,7 +40,7 @@ pre_mod="valkka.api2.chains.port : "
 
 
 class BitmapPort:
-  """Generic Port class.  A "port" is something that requests bitmap (can be analyzer, video-on-screen, etc.)
+  """Generic Port class.  A "port" is something that requests bitmap stream (can be analyzer, video-on-screen, etc.)
   """
   
   def __init__(self):
@@ -74,14 +74,22 @@ class ViewPort(BitmapPort):
     parameterInitCheck(self.parameter_defs,kwargs,self) # check for input parameters, attach them to this instance as attributes
   
   
-  def getWindowId():
+  def getWindowId(self):
     return self.window_id
+
+
+  def setWindowId(self,id):
+    self.window_id=id
+
   
-  
-  def getXScreenNum():
+  def getXScreenNum(self):
     return self.x_screen_num
-  
-  
+
+  def setXScreenNum(self,n):
+    self.x_screen_num=n
+
+
+
   
 def test1():
   

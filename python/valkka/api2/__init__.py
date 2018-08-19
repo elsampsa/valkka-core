@@ -9,7 +9,7 @@ from valkka.api2.logging import *
 setValkkaLogLevel(loglevel_normal) # default for development # informs about frame drops
 # setValkkaLogLevel(loglevel_debug) # default for more serious development
 
-from valkka.api2.chains import BasicFilterchain, BasicFilterchain1, ShmemFilterchain, ShmemFilterchain1
+from valkka.api2.chains import BasicFilterchain, BasicFilterchain1, ShmemFilterchain, ShmemFilterchain1, ManagedFilterchain, ViewPort
 from valkka.api2.threads import LiveThread, FileThread, OpenGLThread, Namespace
 from valkka.api2.multiprocess import ValkkaProcess, ValkkaShmemRGBProcess, safe_select
 from valkka.api2.shmem import ShmemClient, ShmemRGBClient

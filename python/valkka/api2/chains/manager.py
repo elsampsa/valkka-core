@@ -36,7 +36,7 @@ import random
 from valkka import valkka_core as core # so, everything that has .core, refers to the api1 level (i.e. swig wrapped cpp code)
 from valkka.api2.threads import LiveThread, OpenGLThread # api2 versions of the thread classes
 from valkka.api2.tools import parameterInitCheck, typeCheck
-from valkka.api2.chains import ViewPort
+from valkka.api2.chains.port import ViewPort
 
 pre_mod="valkka.api2.chains.manage : "
 
@@ -46,9 +46,13 @@ class ManagedFilterchain:
   
   ::                                                                                      +-->
                                                                                           |
-    (LiveThread:livethread) -->> (AVThread:avthread) --> {ForkFrameFilterN:fork_filter} --+-->
+    (LiveThread:livethread) -->> (AVThread:avthread) --> {ForkFrameFilterN:fork_filter} --+-->  .. OpenGLTreads, RenderContexts
                                                                                           |
                                                                                           +-->
+
+  OpenGLThread(s) and stream connections to windows (RenderContexts) are created upon request.
+  Decoding at AVThread is turned on/off, depending if it is required downstream
+
   """
   
   parameter_defs={
@@ -220,7 +224,7 @@ class ManagedFilterchain:
     
     if (len(self.ports)<1):
       # first request for this stream : time to start decoding!
-      self.avthread.decodingOn()
+      self.avthread.decodingOnCall()
       
     self.ports.append(view_port)
       
@@ -248,7 +252,7 @@ class ManagedFilterchain:
     
     if (len(self.ports)<1):
       # no need to decode the stream anymore
-      self.avthread.decodingOff()
+      self.avthread.decodingOffCall()
     
     
   def getNumXscreenPorts(self,x_screen_num):
