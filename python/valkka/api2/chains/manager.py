@@ -208,6 +208,9 @@ class ManagedFilterchain:
     x_screen_num   =view_port.getXScreenNum()
     openglthread   =self.openglthreads[x_screen_num]
     
+    if (self.verbose):
+      print(self.pre,"addViewPort: view_port, window_id, x_screen_num", view_port, window_id, x_screen_num)
+    
     if (view_port in self.ports):
       # TODO: implement == etc. operators : compare window_id (and x_screen_num) .. nopes, if the object stays the same
       self.delViewPort(view_port)
@@ -217,6 +220,8 @@ class ManagedFilterchain:
     
     if (n_x_screen_ports<1):
       # this only in the first time : start sending frames to X screen number x_screen_num!
+      if (self.verbose):
+        print(self.pre,"addViewPort: start streaming to x-screen", x_screen_num)
       self.fork_filter.connect("openglthread_"+str(x_screen_num),openglthread.getInput())
     
     token=openglthread.connect(slot=self.slot,window_id=window_id) # send frames from this slot to correct openglthread and window_id
@@ -224,6 +229,8 @@ class ManagedFilterchain:
     
     if (len(self.ports)<1):
       # first request for this stream : time to start decoding!
+      if (self.verbose):
+        print(self.pre,"addViewPort: start decoding slot",self.slot)
       self.avthread.decodingOnCall()
       
     self.ports.append(view_port)
@@ -235,6 +242,9 @@ class ManagedFilterchain:
     window_id      =view_port.getWindowId()
     x_screen_num   =view_port.getXScreenNum()
     openglthread   =self.openglthreads[x_screen_num]
+    
+    if (self.verbose):
+      print(self.pre,"delViewPort: view_port, window_id, x_screen_num", view_port, window_id, x_screen_num)
     
     if (view_port not in self.ports):
       print(self.pre,"delViewPort : FATAL : no such port", view_port)
@@ -248,6 +258,9 @@ class ManagedFilterchain:
     
     if (n_x_screen_ports<1):
       # no need to send this stream to X Screen number x_screen_num
+      if (self.verbose):
+        print(self.pre,"delViewPort: removing stream from x-screen",x_screen_num)
+      
       self.fork_filter.disconnect("openglthread_"+str(x_screen_num))
     
     if (len(self.ports)<1):
@@ -263,6 +276,8 @@ class ManagedFilterchain:
       if (issubclass(view_port.__class__,ViewPort)):
         if (view_port.getXScreenNum()==x_screen_num):
           sm+=1
+    if (self.verbose):
+      print(self.pre,"getNumXscreenPorts: slot",self.slot,"serves",sm+1,"view ports")
     return sm
         
     
