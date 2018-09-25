@@ -65,8 +65,8 @@ class ViewPort(BitmapPort):
   """
   
   parameter_defs={
-    "window_id"       : int,
-    "x_screen_num"    : int
+    "window_id"       : (int,0),
+    "x_screen_num"    : (int,0)
     }
   
   def __init__(self, **kwargs):
