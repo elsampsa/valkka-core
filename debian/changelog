@@ -1,3 +1,15 @@
+valkka (0.5.4-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * Python API: a managed filterchain that handles streams on-demand between processes
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Tue, 25 Sep 2018 11:01:57 +0300
+
+valkka (0.5.4-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * Python API: a managed filterchain that handles streams on-demand between processes
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Tue, 25 Sep 2018 11:01:57 +0300
+
 valkka (0.5.3-0ubuntu1-xenialppa1) xenial; urgency=low
 
   * Severe bug found and fixed by implementing the cpp rule-of-four
