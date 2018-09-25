@@ -59,13 +59,16 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.5.3
+### Current stable version is 0.5.4
+
+0.5.4 Version
+- Python API-level 2 : A managed filterchain that handles streams on-demand between processes
+
+### Older versions
 
 0.5.3 Version
 - Woops .. there was no regression but a nasty bug with the use of stl containers
 - .. works fine now, after I followed the "rule of four" (ctor, dtor, copy-ctor and copy-assignment)
-
-### Older versions
 
 0.5.2 Version
 - Fixed a small bug: smart timestamp correction is again the default
