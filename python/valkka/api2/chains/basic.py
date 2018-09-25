@@ -25,7 +25,7 @@ basic.py : Some basic classes encapsulating filter chains
 @file    basic.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.5.3 
+@version 0.5.4 
   
 @brief Some basic classes encapsulating filter chains
 """

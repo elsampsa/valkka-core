@@ -28,7 +28,7 @@
  *  @file    enumiter.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.3 
+ *  @version 0.5.4 
  *  
  *  @brief   iterate over enum class
  */ 

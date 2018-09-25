@@ -25,7 +25,7 @@ manager.py : Managed filterchain classes.  Resources are managed hierarchically,
 @file    manage.py
 @author  Sampsa Riikonen
 @date    2018
-@version 0.5.3
+@version 0.5.4 
 
 @brief   Managed filterchain classes.  Resources are managed hierarchically, decoding is turned off if its not required
 """

@@ -26,7 +26,7 @@
  *  @file    openglframefifo_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.5.3 
+ *  @version 0.5.4 
  *  
  *  @brief 
  *
