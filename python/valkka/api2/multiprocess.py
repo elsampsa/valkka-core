@@ -102,10 +102,11 @@ class ValkkaProcess(Process):
     }
   
   
-  def __init__(self,name,**kwargs):
+  def __init__(self,name,affinity=-1,**kwargs):
     super().__init__()
     self.pre=self.__class__.__name__+" : "+name+" : " # auxiliary string for debugging output
     self.name                 = name
+    self.affinity             = affinity
     self.signal_in            = Event()
     self.signal_out           = Event()
     self.pipe, self.childpipe = Pipe() # communications pipe.  Frontend uses self.pipe, backend self.childpipe
@@ -123,7 +124,8 @@ class ValkkaProcess(Process):
   def preRun_(self):
     """After the fork, but before starting the process loop
     """
-    pass
+    if (self.affinity > -1):
+        os.system("taskset -p -c %d %d" % (self.affinity, os.getpid()))
     
     
   def postRun_(self):
@@ -283,8 +285,8 @@ class ValkkaShmemRGBProcess(ValkkaProcess):
     }
   
   
-  def __init__(self,name,**kwargs):
-    super().__init__(name)
+  def __init__(self,name,affinity=-1,**kwargs):
+    super().__init__(name,affinity)
     parameterInitCheck(ValkkaShmemRGBProcess.parameter_defs,kwargs,self) # check kwargs agains parameter_defs, attach ok'd parameters to this object as attributes
     typeCheck(self.image_dimensions[0],int)
     typeCheck(self.image_dimensions[1],int)
@@ -293,6 +295,7 @@ class ValkkaShmemRGBProcess(ValkkaProcess):
   def preRun_(self):
     """After the fork, but before starting the process loop
     """
+    super().preRun_()
     self.client=ShmemRGBClient(
       name        =self.memname,
       n_ringbuffer=self.n_ringbuffer,

@@ -90,7 +90,7 @@ class ManagedFilterchain:
         self.pre = self.__class__.__name__ + " : "
         # check for input parameters, attach them to this instance as
         # attributes
-        parameterInitCheck(self.parameter_defs, kwargs, self)
+        parameterInitCheck(ManagedFilterchain.parameter_defs, kwargs, self)
         generateGetters(self.parameter_defs, self)
 
         for openglthread in self.openglthreads:
@@ -140,7 +140,7 @@ class ManagedFilterchain:
         """Create the filter chain
         """
         self.fork_filter = core.ForkFrameFilterN("av_fork_at_slot_" + str(
-            self.slot))  # FrameFilter chains can attached to ForkFrameFilterN after it's been instantiated
+            self.slot))  # FrameFilter chains can be attached to ForkFrameFilterN after it's been instantiated
 
         self.framefifo_ctx = core.FrameFifoContext()
         self.framefifo_ctx.n_basic = self.n_basic
@@ -152,6 +152,7 @@ class ManagedFilterchain:
             "avthread_" + self.idst,
             self.fork_filter,
             self.framefifo_ctx)
+        if (self.verbose): print(self.pre,"binding AVThread to core", int(self.affinity))
         self.avthread.setAffinity(self.affinity)
         # get input FrameFilter from AVThread
         self.av_in_filter = self.avthread.getFrameFilter()
@@ -333,6 +334,126 @@ class ManagedFilterchain:
                 sm + 1,
                 "view ports")
         return sm
+
+
+
+class ManagedFilterchain2(ManagedFilterchain):
+    """This class implements the following filterchain:
+
+    ::    
+        main_branch:
+                                                                                              +-->
+                                                                                              |
+        (LiveThread:livethread) -->> (AVThread:avthread) --> {ForkFrameFilterN:fork_filter} --+-->  .. OpenGLTreads, RenderContexts
+                                                                                              |
+                                                                                              +-->  swscale_branch (connect on demand)
+
+        swscale_branch:
+         
+        {TimeIntervalFrameFilter:interval_filter} --> {SwScaleFrameFilter:sws_filter} --> {ForkFrameFilterN: sws_fork_filter}
+                                                                                                         |
+                                                                                            +------------+------------+             
+                                                                                            |            |            |
+                                                                                            
+                                                                                            on-demand RGBShmemFrameFilter(s)
+        
+    OpenGLThread(s) and stream connections to windows (RenderContexts) are created upon request.
+    Decoding at AVThread is turned on/off, depending if it is required downstream
+    """    
+    parameter_defs = {
+        "shmem_image_dimensions" : (tuple, (1920//4, 1080//4)),
+        "shmem_n_buffer"         : (int, 10),
+        "shmem_image_interval"   : (int, 1000)
+        }
+    parameter_defs.update(ManagedFilterchain.parameter_defs)
+    
+    
+    def __init__(self, **kwargs):
+        parameterInitCheck(ManagedFilterchain2.parameter_defs, kwargs, self)
+        kwargs.pop("shmem_image_dimensions")
+        kwargs.pop("shmem_n_buffer") 
+        kwargs.pop("shmem_image_interval")
+        super().__init__(**kwargs)
+    
+    
+    def init(self):
+        self.shmem_counter = 0
+        self.shmem_terminals = {}
+        self.width      = self.shmem_image_dimensions[0]
+        self.height     = self.shmem_image_dimensions[1]
+        super().init()
+        
+    
+    def makeChain(self):
+        """Create the filter chain
+        """
+        
+        # *** main_branch ***
+        self.fork_filter = core.ForkFrameFilterN("av_fork_at_slot_" + str(
+            self.slot))  # FrameFilter chains can be attached to ForkFrameFilterN after it's been instantiated
+
+        self.framefifo_ctx = core.FrameFifoContext()
+        self.framefifo_ctx.n_basic = self.n_basic
+        self.framefifo_ctx.n_setup = self.n_setup
+        self.framefifo_ctx.n_signal = self.n_signal
+        self.framefifo_ctx.flush_when_full = self.flush_when_full
+
+        self.avthread = core.AVThread(
+            "avthread_" + self.idst,
+            self.fork_filter,
+            self.framefifo_ctx)
+        if (self.verbose): print(self.pre,"binding AVThread to core", int(self.affinity))
+        self.avthread.setAffinity(self.affinity)
+        # get input FrameFilter from AVThread
+        self.av_in_filter = self.avthread.getFrameFilter()
+        
+        # *** swscale_branch ***
+        self.sws_fork_filter = core.ForkFrameFilterN("sws_fork_at_slot_" + str(self.slot))
+        self.sws_filter      = core.SwScaleFrameFilter("sws_filter", self.width, self.height, self.sws_fork_filter)
+        self.interval_filter = core.TimeIntervalFrameFilter("interval_filter", self.shmem_image_interval, self.sws_filter)
+
+
+    def getShmem(self):
+        """Returns the unique name identifying the shared mem and semaphores.  The name can be passed to the machine vision routines.
+        """
+        # if first time, connect main branch to swscale_branch
+        if (len(self.shmem_terminals)<1):
+            print(self.pre, "getShmem : connecting swscale_branch")
+            self.fork_filter.connect("swscale", self.interval_filter)
+        
+        shmem_name =self.idst + "_" + str(self.shmem_counter)
+        print(self.pre, "getShmem : reserving", shmem_name)
+        shmem_filter    =core.RGBShmemFrameFilter(shmem_name, self.shmem_n_buffer, self.width, self.height)
+        # shmem_filter    =core.BriefInfoFrameFilter(shmem_name) # a nice way for debugging to see of you are actually getting any frames here ..
+
+        self.shmem_terminals[shmem_name] = shmem_filter    
+        self.sws_fork_filter.connect(shmem_name, shmem_filter)
+    
+        return shmem_name 
+    
+        
+    def releaseShmem(self, shmem_name):
+        try:
+            self.shmem_terminals.pop(shmem_name)
+        except KeyError:
+            return
+        print(self.pre, "releaseShmem : releasing", shmem_name)
+        self.sws_fork_filter.disconnect(shmem_name)
+        
+        # if no more shmem requests, disconnect swscale_branch
+        if (len(self.shmem_terminals)==0): # that was the last one ..
+            print(self.pre, "getShmem : disconnecting swscale_branch")
+            self.fork_filter.disconnect("swscale")
+    
+    
+    """
+    Requesting stream for an analyzer:
+    
+    - Drag'n'drop for video visualization : separately and as usual
+    - Special derived VideoContainer class .. requests getShmem from the filterchain .. passes shmem_name to the analyzer
+    """
+    
+
 
 
 def main():
