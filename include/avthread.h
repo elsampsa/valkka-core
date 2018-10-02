@@ -28,7 +28,7 @@
  *  @file    avthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.4 
+ *  @version 0.6.0 
  *  
  *  @brief FFmpeg decoding thread
  *
@@ -102,7 +102,7 @@ public: // API <pyapi>
   void setTimeTolerance(long int mstol);    ///< API method: decoder will scrap late frames that are mstol milliseconds late.  Call before starting the thread. // <pyapi>
   void decodingOnCall();   ///< API method: enable decoding        // <pyapi>
   void decodingOffCall();  ///< API method: pause decoding         // <pyapi>
-  void stopCall();         ///< API method: terminates the thread  // <pyapi>
+  void requestStopCall();  ///< API method: Like Thread::stopCall() but does not block. // <pyapi>
 }; // <pyapi>
 
 #endif

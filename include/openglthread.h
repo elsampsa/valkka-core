@@ -28,7 +28,7 @@
  *  @file    openglthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.4 
+ *  @version 0.6.0 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -388,9 +388,9 @@ public: // API // <pyapi>
   FifoFrameFilter &getFrameFilter();                           ///< API method: get filter for passing frames to this thread // <pyapi>
   void setStaticTexFile(const char* fname);                    ///< API method: set a file where the static texture (yuv image that's shown when no stream is received) is read from // <pyapi>
   
-  /** API call: stops the thread
+  /** API call: Like Thread::stopCall() but does not block
    */
-  void stopCall();                                             // <pyapi>
+  void requestStopCall();                                             // <pyapi>
   
   /** API call: reports render groups and lists
    */

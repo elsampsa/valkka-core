@@ -28,7 +28,7 @@
  *  @file    livethread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.4 
+ *  @version 0.6.0 
  *  
  *  @brief A live555 thread
  *
@@ -444,7 +444,7 @@ public: // *** C & Python API *** .. these routines go through the condvar/mutex
   void registerOutboundCall   (LiveOutboundContext &outbound_ctx);   ///< API method: register outbound stream                          // <pyapi>
   void deregisterOutboundCall (LiveOutboundContext &outbound_ctx);   ///< API method: deregister outbound stream                        // <pyapi>
   // thread control
-  void stopCall();                                                   ///< API method: stops the LiveThread                              // <pyapi>
+  void requestStopCall();                                            ///< API method: Like Thread::stopCall() but does not block        // <pyapi>
   // LiveFifo &getFifo();                                            ///< API method: get fifo for sending frames with live555          // <pyapi>
   FifoFrameFilter &getFrameFilter();                                 ///< API method: get filter for sending frames with live555        // <pyapi>
   void setRTSPServer(int portnum=8554);                              ///< API method: activate the RTSP server at port portnum          // <pyapi>

@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.5.4</span>
+   &#160;<span id="projectnumber">0.6.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -135,7 +135,7 @@ Enumerations</h2></td></tr>
 <li><a class="el" href="classThread.html#aae90dfabab3e1776cf01a26e7ee3a620" title="Main execution loop is defined here. ">Thread::run()</a> uses Thread::handleSignal that delegates the request to one of <a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a>'s methods</li>
 </ol>
 <p>To make distinction between "front-end" (API) and "back-end" (internal) methods, the API method names should be designated with the ending "Call".</p>
-<p>The two API methods in the prototype class, <a class="el" href="classThread.html#a6c10e28af2524b3d5ca93ca9c0bea0ed" title="API method for the end-user of the thread: starts the thread. ">Thread::startCall</a> and <a class="el" href="classThread.html#a9cde638865dccf06b25f1c766f2610ec" title="API method for the end-user of the thread: stops the thread. ">Thread::stopCall</a> start and stop the thread, respectively.</p>
+<p>The two API methods in the prototype class, <a class="el" href="classThread.html#a6c10e28af2524b3d5ca93ca9c0bea0ed" title="API method: starts the thread. ">Thread::startCall</a> and <a class="el" href="classThread.html#a9cde638865dccf06b25f1c766f2610ec" title="API method: stops the thread. ">Thread::stopCall</a> start and stop the thread, respectively.</p>
 <p>When developing and debugging <a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> classes, one can write test programs like this:</p>
 <p><a class="el" href="classThread.html#ab862ff46c28cbc4673977d962623f0fa" title="Called before entering the main execution loop, but after creating the thread. ">Thread::preRun()</a>; <br />
  [call here thread's internal methods] <br />

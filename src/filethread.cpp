@@ -26,7 +26,7 @@
  *  @file    filethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.4 
+ *  @version 0.6.0 
  *  
  *  @brief  A thread sending frames from files
  */ 
@@ -736,14 +736,19 @@ void FileThread::stopFileStreamCall(FileContext &file_ctx) {
 }
 
 
-void FileThread::stopCall() {
-  if (!this->has_thread) {return;}
-  FileSignalContext signal_ctx;
-  signal_ctx.signal=FileSignal::exit;
-  sendSignal(signal_ctx);
-  this->closeThread();
-  this->has_thread=false;
+void FileThread::requestStopCall() {
+    threadlogger.log(LogLevel::crazy) << "FileThread: requestStopCall: "<< this->name <<std::endl;
+    if (!this->has_thread) { return; } // thread never started
+    if (stop_requested) { return; } // can be requested only once
+    stop_requested = true;
+  
+    FileSignalContext signal_ctx;
+    signal_ctx.signal=FileSignal::exit;
+  
+    threadlogger.log(LogLevel::crazy) << "FileThread: sending exit signal "<< this->name <<std::endl;
+    this->sendSignal(signal_ctx);
 }
+
 
 
 FifoFrameFilter &FileThread::getFrameFilter() {

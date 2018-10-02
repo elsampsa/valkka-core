@@ -28,7 +28,7 @@
  *  @file    thread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.4 
+ *  @version 0.6.0 
  *  
  *  @brief Base class for multithreading
  *
@@ -119,6 +119,8 @@ private:
 protected: // common variables of all Thread subclasses
   std::string  name;                     ///< Name of the thread
   bool         has_thread;               ///< true if thread has been started 
+  bool         stop_requested;
+  bool         thread_joined;
   
   std::mutex   start_mutex;                ///< Mutex protecting start_condition
   std::condition_variable start_condition; ///< Notified when the thread has been started
@@ -163,13 +165,28 @@ protected:
 public: // *** API ***                                                  // <pyapi>
   /** API method for setting the thread affinity.  Use before starting the thread */
   void setAffinity(int i);                                              // <pyapi>
-  /** API method for the end-user of the thread: starts the thread */
+  
+  /** API method: starts the thread */
   void startCall();                                                     // <pyapi>
-  /** API method for the end-user of the thread: stops the thread.
+  
+  /** API method: stops the thread.
    * If Thread::has_thread is true, sends exit signal to the thread and calls Thread::closeThread
+   * Waits until the thread is joined
    */
   virtual void stopCall();                                              // <pyapi>
+  
+  /** API method: stops the thread.  Like Thread::stopCall() but does not block.
+   * Waiting for the thread to join is done in Thread::waitStoppedCall()
+   */
+  virtual void requestStopCall();                                       // <pyapi>
+  
+  /** API method: waits until the thread is joined.  Use with Thread::requestStopCall
+   */
+  virtual void waitStopCall();                                          // <pyapi>
 };                                                                      // <pyapi>
+
+
+
 
 
 /**

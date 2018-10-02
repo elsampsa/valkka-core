@@ -26,7 +26,7 @@
  *  @file    thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.5.4 
+ *  @version 0.6.0 
  *  
  *  @brief Testing the Thread class using Test*Thread classes.  Compile with "make tests" and run with valgrind
  *
@@ -46,68 +46,68 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 
 void test_1() { // single producer, single consumer
-  const char* name = "@TEST: threads_test: test 1: ";
-  std::cout << name <<"** @@Consumer and producer **" << std::endl;
-  
-  bool start_consumer;
-  FrameFifoContext ctx =FrameFifoContext();
-
-  FrameFifo fifo("fifo",ctx);
-  // start_consumer=false;
-
-  start_consumer=true;
-
-  TestProducerThread producer("producer",&fifo);
-  TestConsumerThread consumer("consumer",&fifo);
-
-  producer.startCall();
-
-  sleep_for(3s); // enable this for first writing all frames and then reading them
-
-  if (start_consumer) { consumer.startCall(); }
-
-  sleep_for(3s);
-
-  producer.stopCall();
-  if (start_consumer) { consumer.stopCall(); }
-  
+    const char* name = "@TEST: threads_test: test 1: ";
+    std::cout << name <<"** @@Consumer and producer **" << std::endl;
+    
+    bool start_consumer;
+    FrameFifoContext ctx =FrameFifoContext();
+    
+    FrameFifo fifo("fifo",ctx);
+    // start_consumer=false;
+    
+    start_consumer=true;
+    
+    TestProducerThread producer("producer",&fifo);
+    TestConsumerThread consumer("consumer",&fifo);
+    
+    producer.startCall();
+    
+    sleep_for(3s); // enable this for first writing all frames and then reading them
+    
+    if (start_consumer) { consumer.startCall(); }
+    
+    sleep_for(3s);
+    
+    producer.stopCall();
+    if (start_consumer) { consumer.stopCall(); }
+    
 }
 
 
 void test_2() { // two producers, single consumer
-  const char* name = "@TEST: threads_test: test 2: ";
-  std::cout << name <<"** @@Consumer and producer 2 **" << std::endl;
-  
-  bool start_consumer, use2;
-  FrameFifoContext ctx =FrameFifoContext();
-  
-  FrameFifo fifo("fifo",ctx);
-
-  // use2=false;
-  use2=true;
-
-  // start_consumer=false;
-  start_consumer=true;
-
-  TestProducerThread producer ("producer1", &fifo, 1);
-  TestProducerThread producer2("producer2", &fifo, 2);
-  TestConsumerThread consumer ("consumer1", &fifo);
-
-  producer.startCall();
-  if (use2) {producer2.startCall();}
-
-  sleep_for(3s); // enable this for first writing all frames and then reading them
-
-  fifo.dumpFifo();
-
-  if (start_consumer) { consumer.startCall(); }
-
-  sleep_for(3s);
-
-  producer.stopCall();
-  if (use2) {producer2.stopCall();}
-  if (start_consumer) { consumer.stopCall(); }
-  
+    const char* name = "@TEST: threads_test: test 2: ";
+    std::cout << name <<"** @@Consumer and producer 2 **" << std::endl;
+    
+    bool start_consumer, use2;
+    FrameFifoContext ctx =FrameFifoContext();
+    
+    FrameFifo fifo("fifo",ctx);
+    
+    // use2=false;
+    use2=true;
+    
+    // start_consumer=false;
+    start_consumer=true;
+    
+    TestProducerThread producer ("producer1", &fifo, 1);
+    TestProducerThread producer2("producer2", &fifo, 2);
+    TestConsumerThread consumer ("consumer1", &fifo);
+    
+    producer.startCall();
+    if (use2) {producer2.startCall();}
+    
+    sleep_for(3s); // enable this for first writing all frames and then reading them
+    
+    fifo.dumpFifo();
+    
+    if (start_consumer) { consumer.startCall(); }
+    
+    sleep_for(3s);
+    
+    producer.stopCall();
+    if (use2) {producer2.stopCall();}
+    if (start_consumer) { consumer.stopCall(); }
+    
 }
 
 
@@ -124,54 +124,54 @@ void test_5() {
 
 
 int main(int argc, char** argcv) {
-  if (argc<2) {
-    std::cout << argcv[0] << " needs an integer argument.  Second interger argument (optional) is verbosity" << std::endl;
-  }
-  else {
-    
-    if  (argc>2) { // choose verbosity
-      switch (atoi(argcv[2])) {
-        case(0): // shut up
-          ffmpeg_av_log_set_level(0);
-          fatal_log_all();
-          break;
-        case(1): // normal
-          break;
-        case(2): // more verbose
-          ffmpeg_av_log_set_level(100);
-          debug_log_all();
-          break;
-        case(3): // extremely verbose
-          ffmpeg_av_log_set_level(100);
-          crazy_log_all();
-          break;
-        default:
-          std::cout << "Unknown verbosity level "<< atoi(argcv[2]) <<std::endl;
-          exit(1);
-          break;
-      }
+    if (argc<2) {
+        std::cout << argcv[0] << " needs an integer argument.  Second interger argument (optional) is verbosity" << std::endl;
     }
-    
-    switch (atoi(argcv[1])) { // choose test
-      case(1):
-        test_1();
-        break;
-      case(2):
-        test_2();
-        break;
-      case(3):
-        test_3();
-        break;
-      case(4):
-        test_4();
-        break;
-      case(5):
-        test_5();
-        break;
-      default:
-        std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;
+    else {
+        
+        if  (argc>2) { // choose verbosity
+            switch (atoi(argcv[2])) {
+                case(0): // shut up
+                    ffmpeg_av_log_set_level(0);
+                    fatal_log_all();
+                    break;
+                case(1): // normal
+                    break;
+                case(2): // more verbose
+                    ffmpeg_av_log_set_level(100);
+                    debug_log_all();
+                    break;
+                case(3): // extremely verbose
+                    ffmpeg_av_log_set_level(100);
+                    crazy_log_all();
+                    break;
+                default:
+                    std::cout << "Unknown verbosity level "<< atoi(argcv[2]) <<std::endl;
+                    exit(1);
+                    break;
+            }
+        }
+        
+        switch (atoi(argcv[1])) { // choose test
+            case(1):
+                test_1();
+                break;
+            case(2):
+                test_2();
+                break;
+            case(3):
+                test_3();
+                break;
+            case(4):
+                test_4();
+                break;
+            case(5):
+                test_5();
+                break;
+            default:
+                std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;
+        }
     }
-  }
 } 
 
 

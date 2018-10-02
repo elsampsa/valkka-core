@@ -29,7 +29,7 @@
  *  @file    filethread.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.5.4 
+ *  @version 0.6.0 
  *  
  *  @brief A Thread handling files and sending frames to fifo
  */ 
@@ -248,7 +248,7 @@ public: // *** C & Python API *** .. these routines go through the convar/mutex 
   void seekFileStreamCall       (FileContext &file_ctx); ///< API method: seek to a certain point                           // <pyapi>
   void playFileStreamCall       (FileContext &file_ctx); ///< API method: starts playing the stream and feeding frames      // <pyapi>
   void stopFileStreamCall       (FileContext &file_ctx); ///< API method: stops playing the stream and feeding frames       // <pyapi>
-  void stopCall();                                       ///< API method: stops the LiveThread                              // <pyapi>
+  void requestStopCall();                                ///< API method: Like Thread::stopCall() but does not block        // <pyapi>
   FifoFrameFilter &getFrameFilter();                     ///< API method: get filter for sending frames with live555        // <pyapi>
 };                                                                                                                          // <pyapi>
 

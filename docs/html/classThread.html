@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.5.4</span>
+   &#160;<span id="projectnumber">0.6.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -123,11 +123,17 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <tr class="separator:a40787163eb868a2fc0eba23dfd4cd395"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c10e28af2524b3d5ca93ca9c0bea0ed"><td class="memItemLeft" align="right" valign="top"><a id="a6c10e28af2524b3d5ca93ca9c0bea0ed"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a6c10e28af2524b3d5ca93ca9c0bea0ed">startCall</a> ()</td></tr>
-<tr class="memdesc:a6c10e28af2524b3d5ca93ca9c0bea0ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method for the end-user of the thread: starts the thread. <br /></td></tr>
+<tr class="memdesc:a6c10e28af2524b3d5ca93ca9c0bea0ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: starts the thread. <br /></td></tr>
 <tr class="separator:a6c10e28af2524b3d5ca93ca9c0bea0ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cde638865dccf06b25f1c766f2610ec"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a9cde638865dccf06b25f1c766f2610ec">stopCall</a> ()</td></tr>
-<tr class="memdesc:a9cde638865dccf06b25f1c766f2610ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method for the end-user of the thread: stops the thread.  <a href="#a9cde638865dccf06b25f1c766f2610ec">More...</a><br /></td></tr>
+<tr class="memdesc:a9cde638865dccf06b25f1c766f2610ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: stops the thread.  <a href="#a9cde638865dccf06b25f1c766f2610ec">More...</a><br /></td></tr>
 <tr class="separator:a9cde638865dccf06b25f1c766f2610ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a006c30f8d492854a15ba92dad2850a4c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a006c30f8d492854a15ba92dad2850a4c">requestStopCall</a> ()</td></tr>
+<tr class="memdesc:a006c30f8d492854a15ba92dad2850a4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: stops the thread.  <a href="#a006c30f8d492854a15ba92dad2850a4c">More...</a><br /></td></tr>
+<tr class="separator:a006c30f8d492854a15ba92dad2850a4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ecff37449db3af69888738f73c8fd04"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a0ecff37449db3af69888738f73c8fd04">waitStopCall</a> ()</td></tr>
+<tr class="memdesc:a0ecff37449db3af69888738f73c8fd04"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: waits until the thread is joined.  <a href="#a0ecff37449db3af69888738f73c8fd04">More...</a><br /></td></tr>
+<tr class="separator:a0ecff37449db3af69888738f73c8fd04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -156,6 +162,12 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a9e604c94f8ee52771ffbc1dac03b93ad">has_thread</a></td></tr>
 <tr class="memdesc:a9e604c94f8ee52771ffbc1dac03b93ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if thread has been started <br /></td></tr>
 <tr class="separator:a9e604c94f8ee52771ffbc1dac03b93ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21da00055e123e0e179d7f5dc028a2af"><td class="memItemLeft" align="right" valign="top"><a id="a21da00055e123e0e179d7f5dc028a2af"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>stop_requested</b></td></tr>
+<tr class="separator:a21da00055e123e0e179d7f5dc028a2af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1aed0998a866f41d85fc96fd0ed104cf"><td class="memItemLeft" align="right" valign="top"><a id="a1aed0998a866f41d85fc96fd0ed104cf"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>thread_joined</b></td></tr>
+<tr class="separator:a1aed0998a866f41d85fc96fd0ed104cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fe753fa03016d016345c1171b123828"><td class="memItemLeft" align="right" valign="top"><a id="a3fe753fa03016d016345c1171b123828"></a>
 std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a3fe753fa03016d016345c1171b123828">start_mutex</a></td></tr>
 <tr class="memdesc:a3fe753fa03016d016345c1171b123828"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting start_condition. <br /></td></tr>
@@ -251,7 +263,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><div class="memdoc">
 
 <p>Destructor:<b>not</b> virtual. </p>
-<p>Each subclass needs to invoke it's own <a class="el" href="classThread.html#a9cde638865dccf06b25f1c766f2610ec" title="API method for the end-user of the thread: stops the thread. ">Thread::stopCall()</a> method </p>
+<p>Each subclass needs to invoke it's own <a class="el" href="classThread.html#a9cde638865dccf06b25f1c766f2610ec" title="API method: stops the thread. ">Thread::stopCall()</a> method </p>
 
 </div>
 </div>
@@ -286,6 +298,36 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a006c30f8d492854a15ba92dad2850a4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a006c30f8d492854a15ba92dad2850a4c">&#9670;&nbsp;</a></span>requestStopCall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Thread::requestStopCall </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>API method: stops the thread. </p>
+<p>Like <a class="el" href="classThread.html#a9cde638865dccf06b25f1c766f2610ec" title="API method: stops the thread. ">Thread::stopCall()</a> but does not block. Waiting for the thread to join is done in Thread::waitStoppedCall() </p>
+
+<p>Reimplemented in <a class="el" href="classLiveThread.html#af18285da99a99803709752d4de9e8187">LiveThread</a>, <a class="el" href="classOpenGLThread.html#a70bb2bc3a5eca8e123b2a503e53af4d6">OpenGLThread</a>, <a class="el" href="classFileThread.html#af78a7e11ac6e03e5abd18835b3dc4048">FileThread</a>, and <a class="el" href="classAVThread.html#a30ecda2fa05ce41f8c67af215d67eec7">AVThread</a>.</p>
+
+</div>
+</div>
 <a id="aae90dfabab3e1776cf01a26e7ee3a620"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aae90dfabab3e1776cf01a26e7ee3a620">&#9670;&nbsp;</a></span>run()</h2>
 
@@ -359,10 +401,54 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table>
 </div><div class="memdoc">
 
-<p>API method for the end-user of the thread: stops the thread. </p>
-<p>If <a class="el" href="classThread.html#a9e604c94f8ee52771ffbc1dac03b93ad" title="true if thread has been started ">Thread::has_thread</a> is true, sends exit signal to the thread and calls <a class="el" href="classThread.html#a4428ec86c8bc7da14b558f25fb723ce0" title="Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set Thread::has_thread to false. ">Thread::closeThread</a> </p>
+<p>API method: stops the thread. </p>
+<p>If <a class="el" href="classThread.html#a9e604c94f8ee52771ffbc1dac03b93ad" title="true if thread has been started ">Thread::has_thread</a> is true, sends exit signal to the thread and calls <a class="el" href="classThread.html#a4428ec86c8bc7da14b558f25fb723ce0" title="Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set Thread::has_thread to false. ">Thread::closeThread</a> Waits until the thread is joined </p>
 
-<p>Reimplemented in <a class="el" href="classLiveThread.html#a1c79ca363b7b578099303e8905dbb0a4">LiveThread</a>, <a class="el" href="classOpenGLThread.html#a3c556c232d541bb7d5345b7164bc95e9">OpenGLThread</a>, <a class="el" href="classFileThread.html#a5679e3170d0eb16dfe9bc9daacc08eab">FileThread</a>, <a class="el" href="classAVThread.html#a21e53aa7ebf43220791a3aa970ee794e">AVThread</a>, and <a class="el" href="classTestThread.html#a033b7a7cbf00c5f4e6d41c31677aa069">TestThread</a>.</p>
+<p>Reimplemented in <a class="el" href="classTestThread.html#a033b7a7cbf00c5f4e6d41c31677aa069">TestThread</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classThread_a9cde638865dccf06b25f1c766f2610ec_cgraph.png" border="0" usemap="#classThread_a9cde638865dccf06b25f1c766f2610ec_cgraph" alt=""/></div>
+<map name="classThread_a9cde638865dccf06b25f1c766f2610ec_cgraph" id="classThread_a9cde638865dccf06b25f1c766f2610ec_cgraph">
+<area shape="rect" id="node2" href="classThread.html#a20db67a3ec14a198b5444f3214d6155d" title="Send a signal to the thread. " alt="" coords="175,5,310,32"/>
+<area shape="rect" id="node3" href="classThread.html#a4428ec86c8bc7da14b558f25fb723ce0" title="Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set Thread::has_thread to false. " alt="" coords="172,56,313,83"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0ecff37449db3af69888738f73c8fd04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ecff37449db3af69888738f73c8fd04">&#9670;&nbsp;</a></span>waitStopCall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Thread::waitStopCall </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>API method: waits until the thread is joined. </p>
+<p>Use with <a class="el" href="classThread.html#a006c30f8d492854a15ba92dad2850a4c" title="API method: stops the thread. ">Thread::requestStopCall</a> </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classThread_a0ecff37449db3af69888738f73c8fd04_cgraph.png" border="0" usemap="#classThread_a0ecff37449db3af69888738f73c8fd04_cgraph" alt=""/></div>
+<map name="classThread_a0ecff37449db3af69888738f73c8fd04_cgraph" id="classThread_a0ecff37449db3af69888738f73c8fd04_cgraph">
+</map>
+</div>
 
 </div>
 </div>

@@ -32,7 +32,7 @@ var searchData=
   ['slotok',['slotOk',['../tools_8h.html#a9cec5da1c89d2e3965b8156b366280a1',1,'slotOk(SlotNumber n_slot):&#160;tools.cpp'],['../tools_8cpp.html#a9cec5da1c89d2e3965b8156b366280a1',1,'slotOk(SlotNumber n_slot):&#160;tools.cpp']]],
   ['startcall',['startCall',['../classThread.html#a6c10e28af2524b3d5ca93ca9c0bea0ed',1,'Thread']]],
   ['stop',['stop',['../classFileStream.html#a2d6ae46a63ddc7067184ab66df1276d6',1,'FileStream']]],
-  ['stopcall',['stopCall',['../classAVThread.html#a21e53aa7ebf43220791a3aa970ee794e',1,'AVThread::stopCall()'],['../classFileThread.html#a5679e3170d0eb16dfe9bc9daacc08eab',1,'FileThread::stopCall()'],['../classLiveThread.html#a1c79ca363b7b578099303e8905dbb0a4',1,'LiveThread::stopCall()'],['../classOpenGLThread.html#a3c556c232d541bb7d5345b7164bc95e9',1,'OpenGLThread::stopCall()'],['../classTestThread.html#a033b7a7cbf00c5f4e6d41c31677aa069',1,'TestThread::stopCall()'],['../classThread.html#a9cde638865dccf06b25f1c766f2610ec',1,'Thread::stopCall()']]],
+  ['stopcall',['stopCall',['../classTestThread.html#a033b7a7cbf00c5f4e6d41c31677aa069',1,'TestThread::stopCall()'],['../classThread.html#a9cde638865dccf06b25f1c766f2610ec',1,'Thread::stopCall()']]],
   ['stopfilestreamcall',['stopFileStreamCall',['../classFileThread.html#ac0d120c462141ee5980152f7ea714b87',1,'FileThread']]],
   ['stopstream',['stopStream',['../classConnection.html#a6a9401592f545c1be8de892afefada4b',1,'Connection::stopStream()'],['../classRTSPConnection.html#a838508f8324ea45942d38bed13b2ae3b',1,'RTSPConnection::stopStream()'],['../classSDPConnection.html#a65a59e581954bfaabe3abcdec4a31b11',1,'SDPConnection::stopStream()']]],
   ['stopstreamcall',['stopStreamCall',['../classLiveThread.html#ac87ccae312c2c5d14b3f0a9eea9dc4e1',1,'LiveThread']]],
