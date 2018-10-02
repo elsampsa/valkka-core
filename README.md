@@ -59,12 +59,15 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.5.4
+### Current stable version is 0.6.0
+
+0.6.0 Version
+- etc
+
+### Older versions
 
 0.5.4 Version
 - Python API-level 2 : A managed filterchain that handles streams on-demand between processes
-
-### Older versions
 
 0.5.3 Version
 - Woops .. there was no regression but a nasty bug with the use of stl containers
