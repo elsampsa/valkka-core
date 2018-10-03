@@ -28,7 +28,7 @@
  *  @file    constant.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.6.0 
+ *  @version 0.7.0 
  *  
  *  @brief   Constant/default values, version numbers
  */ 
@@ -40,7 +40,7 @@
 #define GLX_CONTEXT_MINOR_VERSION       0x2092
 
 static const int VERSION_MAJOR = 0; // <pyapi>
-static const int VERSION_MINOR = 6; // <pyapi>
+static const int VERSION_MINOR = 7; // <pyapi>
 static const int VERSION_PATCH = 0; // <pyapi>
 
 static const unsigned DEFAULT_OPENGLTHREAD_BUFFERING_TIME  = 300;   // in milliseconds // <pyapi>

@@ -25,10 +25,10 @@ include/tmp.i
 python/Valkka.egg-info
 python/build
 python/dist
-python/valkka_core.py
-python/valkka_core_wrap.py
-python/valkka/_valkka_core.so
-python/valkka_core_wrap.cpp
+python/valkka/core/valkka_core.py
+python/valkka/core/valkka_core_wrap.py
+python/valkka/core/_valkka_core.so
+python/valkka/core/valkka_core_wrap.cpp
 changetext.py
 publish.bash
 toolchain/

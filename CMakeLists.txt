@@ -113,7 +113,7 @@ endif (profile_timing)
 # ****************************************************************
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "0") 
-SET(MINOR_VERSION "6") 
+SET(MINOR_VERSION "7") 
 SET(PATCH_VERSION "0") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
@@ -158,7 +158,7 @@ execute_process(
 )
 
 execute_process(
-  COMMAND swig -python -c++ -I/usr/include -o ${CMAKE_SOURCE_DIR}/python/valkka/valkka_core_wrap.cpp -outdir ${CMAKE_SOURCE_DIR}/python/valkka ${CMAKE_SOURCE_DIR}/include/valkka_core.i
+  COMMAND swig -python -c++ -I/usr/include -o ${CMAKE_SOURCE_DIR}/python/valkka/core/valkka_core_wrap.cpp -outdir ${CMAKE_SOURCE_DIR}/python/valkka/core ${CMAKE_SOURCE_DIR}/include/valkka_core.i
 )
 
 # compiler flags
@@ -229,7 +229,7 @@ target_link_libraries(${PROJECT_NAME} "-Wl,--no-whole-archive" "-Wl,--end-group"
 #)
 
 # *** (SWIG, 3) Compile the cpp-wrapped python code ***
-add_library(valkka_core SHARED ${CMAKE_SOURCE_DIR}/python/valkka/valkka_core_wrap.cpp)
+add_library(valkka_core SHARED ${CMAKE_SOURCE_DIR}/python/valkka/core/valkka_core_wrap.cpp)
 target_include_directories(valkka_core PUBLIC include)
 target_include_directories(valkka_core PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 target_include_directories(valkka_core PUBLIC "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include")
@@ -243,7 +243,7 @@ set_target_properties(valkka_core PROPERTIES VERSION ${VERSION_STRING} SOVERSION
 set_target_properties(valkka_core PROPERTIES PREFIX "")
 set_target_properties(valkka_core PROPERTIES OUTPUT_NAME "_valkka_core")
 set_target_properties(valkka_core PROPERTIES SUFFIX ".so")
-set_target_properties(valkka_core PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/python/valkka)
+set_target_properties(valkka_core PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/python/valkka/core)
 # # original commands
 
 # # compile:

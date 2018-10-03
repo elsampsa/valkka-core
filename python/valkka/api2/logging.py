@@ -25,7 +25,7 @@ logging.py : Interface to cpp-level logging
 @file    logging.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.6.0 
+@version 0.7.0 
   
 @brief Interface to cpp-level logging
 """
@@ -36,7 +36,7 @@ loglevel_normal =1
 loglevel_debug  =2
 loglevel_crazy  =3
 
-from valkka import valkka_core as core
+from valkka import core
 
 def setFFmpegLogLevel(i):
   core.ffmpeg_av_log_set_level(i)

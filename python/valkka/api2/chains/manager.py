@@ -25,7 +25,7 @@ manager.py : Managed filterchain classes.  Resources are managed hierarchically,
 @file    manage.py
 @author  Sampsa Riikonen
 @date    2018
-@version 0.6.0 
+@version 0.7.0 
 
 @brief   Managed filterchain classes.  Resources are managed hierarchically, decoding is turned off if its not required
 """
@@ -35,7 +35,7 @@ import time
 import random
 # so, everything that has .core, refers to the api1 level (i.e. swig
 # wrapped cpp code)
-from valkka import valkka_core as core
+from valkka import core
 # api2 versions of the thread classes
 from valkka.api2.threads import LiveThread, OpenGLThread
 from valkka.api2.tools import parameterInitCheck, typeCheck, generateGetters

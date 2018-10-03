@@ -25,11 +25,11 @@ shmem.py : Encapsulation for Valkka's cpp shared memory client
 @file    shmem.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.6.0 
+@version 0.7.0 
   
 @brief   Encapsulation for Valkka's cpp shared memory client
 """
-from valkka import valkka_core
+from valkka import core
 from valkka.api2.tools import *
 
 pre_mod="valkka.api2.shmem: "
@@ -59,22 +59,22 @@ class ShmemClient:
     self.pre=self.__class__.__name__+" : " # auxiliary string for debugging output
     parameterInitCheck(ShmemClient.parameter_defs,kwargs,self) # check kwargs agains parameter_defs, attach ok'd parameters to this object as attributes
 
-    self.index_p =valkka_core.new_intp()
-    self.isize_p =valkka_core.new_intp()
+    self.index_p =core.new_intp()
+    self.isize_p =core.new_intp()
   
     # print(self.pre,"shmem name=",self.name)
-    self.core=valkka_core.SharedMemRingBuffer(self.name,self.n_ringbuffer,self.n_bytes,self.mstimeout,False) # shmem ring buffer on the client side
+    self.core=core.SharedMemRingBuffer(self.name,self.n_ringbuffer,self.n_bytes,self.mstimeout,False) # shmem ring buffer on the client side
   
     self.shmem_list=[]
     for i in range(self.n_ringbuffer):
-      self.shmem_list.append(valkka_core.getNumpyShmem(self.core,i)) # if you're looking for this, it's defined in the .i swig interface file.  :)
+      self.shmem_list.append(core.getNumpyShmem(self.core,i)) # if you're looking for this, it's defined in the .i swig interface file.  :)
   
     
   def pull(self):
     """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
     """
     got=self.core.clientPull(self.index_p, self.isize_p)
-    index=valkka_core.intp_value(self.index_p); isize=valkka_core.intp_value(self.isize_p)
+    index=core.intp_value(self.index_p); isize=core.intp_value(self.isize_p)
     if (self.verbose): print(self.pre,"current index, size=",index,isize)
     if (got):
       return index, isize
@@ -109,22 +109,22 @@ class ShmemRGBClient:
     self.pre=self.__class__.__name__+" : " # auxiliary string for debugging output
     parameterInitCheck(ShmemRGBClient.parameter_defs,kwargs,self) # check kwargs agains parameter_defs, attach ok'd parameters to this object as attributes
 
-    self.index_p =valkka_core.new_intp()
-    self.isize_p =valkka_core.new_intp()
+    self.index_p =core.new_intp()
+    self.isize_p =core.new_intp()
   
     # print(self.pre,"shmem name=",self.name)
-    self.core=valkka_core.SharedMemRingBufferRGB(self.name,self.n_ringbuffer,self.width,self.height,self.mstimeout,False) # shmem ring buffer on the client side
+    self.core=core.SharedMemRingBufferRGB(self.name,self.n_ringbuffer,self.width,self.height,self.mstimeout,False) # shmem ring buffer on the client side
   
     self.shmem_list=[]
     for i in range(self.n_ringbuffer):
-      self.shmem_list.append(valkka_core.getNumpyShmem(self.core,i)) # if you're looking for this, it's defined in the .i swig interface file.  :)
+      self.shmem_list.append(core.getNumpyShmem(self.core,i)) # if you're looking for this, it's defined in the .i swig interface file.  :)
   
     
   def pull(self):
     """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
     """
     got=self.core.clientPull(self.index_p, self.isize_p)
-    index=valkka_core.intp_value(self.index_p); isize=valkka_core.intp_value(self.isize_p)
+    index=core.intp_value(self.index_p); isize=core.intp_value(self.isize_p)
     if (self.verbose): print(self.pre,"current index, size=",index,isize)
     if (got):
       return index, isize

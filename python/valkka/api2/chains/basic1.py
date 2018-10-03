@@ -25,7 +25,7 @@ basic1.py : Some more custom filterchain classes for different use cases
 @file    basic1.py
 @author  Sampsa Riikonen
 @date    2018
-@version 0.6.0 
+@version 0.7.0 
   
 @brief Some more custom filterchain classes for different use cases
 """
@@ -33,7 +33,7 @@ basic1.py : Some more custom filterchain classes for different use cases
 import sys
 import time
 import random
-from valkka import valkka_core as core # so, everything that has .core, refers to the api1 level (i.e. swig wrapped cpp code)
+from valkka import core # so, everything that has .core, refers to the api1 level (i.e. swig wrapped cpp code)
 from valkka.api2.threads import LiveThread, OpenGLThread, FileThread # api2 versions of the thread classes
 from valkka.api2.tools import parameterInitCheck, typeCheck
 pre_mod="valkka.api2.chains.basic1 : "

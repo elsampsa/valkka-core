@@ -25,7 +25,7 @@ __init__.py : Valkka python bindings module constructor
 @file    __init__.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.6.0 
+@version 0.7.0 
   
 @brief Valkka python bindings module constructor
 
@@ -42,12 +42,15 @@ in this directory.
 
 These are the "low-level" APIs that were created with swig directly from cpp.  You can use them with, say:
 
-from valkka.valkka_core import *
+from valkka.core.valkka_core import *
 
 .. and then create here, under the valkka module, some higher level APIs if necessary
 """
 
-from valkka.valkka_core import VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH
+# from valkka.core.valkka_core import VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH
+# __version__=str(VERSION_MAJOR)+"."+str(VERSION_MINOR)+"."+str(VERSION_PATCH)
 
+from .valkka_core import * # import everything to valkka.core namespace
 __version__=str(VERSION_MAJOR)+"."+str(VERSION_MINOR)+"."+str(VERSION_PATCH)
+
 

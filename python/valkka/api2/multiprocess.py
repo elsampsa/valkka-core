@@ -25,7 +25,7 @@ multiprocess.py : Multiprocessing with a pipe signal scheme
 @file    multiprocess.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.6.0 
+@version 0.7.0 
   
 @brief   Multiprocessing with a pipe signal scheme
 """
@@ -33,7 +33,7 @@ multiprocess.py : Multiprocessing with a pipe signal scheme
 from multiprocessing import Process, Pipe, Event
 import select
 import time
-from valkka import valkka_core
+from valkka import core
 from valkka.api2.tools import *
 from valkka.api2.shmem import ShmemRGBClient
 

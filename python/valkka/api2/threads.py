@@ -25,15 +25,15 @@ threads.py : api level 1 => api level 2 encapsulation for LiveThread and OpenGLT
 @file    threads.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.6.0 
+@version 0.7.0 
 
 @brief api level 1 => api level 2 encapsulation for LiveThread and OpenGLThread
 """
 import time
-from valkka import valkka_core
+from valkka import core
 from valkka.api2.tools import *
 
-valkka_core.ValkkaXInitThreads()
+core.ValkkaXInitThreads()
 
 pre_mod = "valkka.api2.threads: "
 
@@ -67,13 +67,13 @@ class LiveThread:
         # some "api-level 1" objects here = swig-wrapped cpp objects
         #
         # This parameter set is defined at the cpp header file "framefifo.h"
-        self.framefifo_ctx = valkka_core.FrameFifoContext()
+        self.framefifo_ctx = core.FrameFifoContext()
         self.framefifo_ctx.n_basic = self.n_basic
         self.framefifo_ctx.n_setup = self.n_setup
         self.framefifo_ctx.n_signal = self.n_signal
         self.framefifo_ctx.flush_when_full = self.flush_when_full
         # swig wrapped cpp LiveThread
-        self.core = valkka_core.LiveThread(self.name, self.framefifo_ctx)
+        self.core = core.LiveThread(self.name, self.framefifo_ctx)
         self.core.setAffinity(self.affinity)
         if (self.rtsp_server > -1):
             self.core.setRTSPServer(self.rtsp_server)
@@ -143,13 +143,13 @@ class FileThread:
         # some "api-level 1" objects here = swig-wrapped cpp objects
         #
         # This parameter set is defined at the cpp header file "framefifo.h"
-        self.framefifo_ctx = valkka_core.FrameFifoContext()
+        self.framefifo_ctx = core.FrameFifoContext()
         self.framefifo_ctx.n_basic = self.n_basic
         self.framefifo_ctx.n_setup = self.n_setup
         self.framefifo_ctx.n_signal = self.n_signal
         self.framefifo_ctx.flush_when_full = self.flush_when_full
         # swig wrapped cpp FileThread
-        self.core = valkka_core.FileThread(self.name, self.framefifo_ctx)
+        self.core = core.FileThread(self.name, self.framefifo_ctx)
         self.core.setAffinity(self.affinity)
 
         self.input_filter = self.core.getFrameFilter()
@@ -236,7 +236,7 @@ class OpenGLThread:
         #
         # This parameter set is defined at the cpp header file
         # "openglframefifo.h"
-        self.gl_ctx = valkka_core.OpenGLFrameFifoContext()
+        self.gl_ctx = core.OpenGLFrameFifoContext()
         self.gl_ctx.n_720p = self.n_720p
         self.gl_ctx.n_1080p = self.n_1080p
         self.gl_ctx.n_1440p = self.n_1440p
@@ -249,7 +249,7 @@ class OpenGLThread:
         # fifo_ctx=OpenGLFrameFifoContext(), unsigned
         # msbuftime=DEFAULT_OPENGLTHREAD_BUFFERING_TIME, const char*
         # x_connection="");
-        self.core = valkka_core.OpenGLThread(
+        self.core = core.OpenGLThread(
             self.name, self.gl_ctx, self.msbuftime, self.x_connection)
         self.core.setAffinity(self.affinity)
         self.core.setStaticTexFile(self.background)

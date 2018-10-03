@@ -25,7 +25,7 @@ basic2.py : Some basic classes encapsulating filter chains.  User must define th
 @file    basic.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.6.0 
+@version 0.7.0 
   
 @brief Some basic classes encapsulating filter chains.  User must define the endpoints of the filterchains
 """
@@ -33,7 +33,7 @@ basic2.py : Some basic classes encapsulating filter chains.  User must define th
 import sys
 import time
 import random
-from valkka import valkka_core as core # so, everything that has .core, refers to the api1 level (i.e. swig wrapped cpp code)
+from valkka import core # so, everything that has .core, refers to the api1 level (i.e. swig wrapped cpp code)
 from valkka.api2.threads import LiveThread, OpenGLThread # api2 versions of the thread classes
 from valkka.api2.tools import parameterInitCheck, typeCheck
 pre_mod="valkka.api2.chains.basic2 : "
