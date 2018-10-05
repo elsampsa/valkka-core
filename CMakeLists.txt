@@ -160,6 +160,8 @@ execute_process(
 execute_process(
   COMMAND swig -python -c++ -I/usr/include -o ${CMAKE_SOURCE_DIR}/python/valkka/core/valkka_core_wrap.cpp -outdir ${CMAKE_SOURCE_DIR}/python/valkka/core ${CMAKE_SOURCE_DIR}/include/valkka_core.i
 )
+# /usr/include needed here : in valkka_core.i in the %inline section we refer to that header file
+
 
 # compiler flags
 # add_compile_options("-std=c++14" "-pthread") #  ${GL_CFLAGS})
@@ -244,6 +246,9 @@ set_target_properties(valkka_core PROPERTIES PREFIX "")
 set_target_properties(valkka_core PROPERTIES OUTPUT_NAME "_valkka_core")
 set_target_properties(valkka_core PROPERTIES SUFFIX ".so")
 set_target_properties(valkka_core PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/python/valkka/core)
+
+add_dependencies(valkka_core ${PROJECT_NAME}) # swig .so depends on the main shared library
+
 # # original commands
 
 # # compile:
@@ -277,7 +282,7 @@ foreach( testname ${TESTNAMES} )
   # .. but then it will bust when using the python bindings
   # .. all that crap comes from libavdevice
   
-  add_dependencies(tests ${testname}) # tests depende on the executable
+  add_dependencies(tests ${testname}) # tests depends on the executable
   add_dependencies(${testname} ${PROJECT_NAME}) # test depends on libValkka
 endforeach( testname ${TESTNAMES} )
 
@@ -300,7 +305,7 @@ SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MY_ARCH})
 # The dependencies: keep these consistent with debian/control
 # SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libpython3.5(>= 3.5.2), libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0), python3-numpy") # ubuntu 16
 # NEW: Avoid version numbers, use "utils" packages to imply a dependency, for example, to libglew (without hardcoding the version number into the package name)
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libpython3.5, libgcc1, mesa-utils, libstdc++6, glew-utils, python3-numpy")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, mesa-utils, libstdc++5, glew-utils, python3-numpy")
 
 #
 # objdump -p libValkka.so
