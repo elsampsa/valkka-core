@@ -1,3 +1,15 @@
+valkka (0.7.0-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * Python: switched to namespace packaging
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Fri, 05 Oct 2018 11:02:22 +0300
+
+valkka (0.7.0-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * Python: switched to namespace packaging
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Fri, 05 Oct 2018 11:02:22 +0300
+
 valkka (0.6.0-0ubuntu1-bionicppa2) bionic; urgency=low
 
   * Thread classes modified: request for exit and then wait.  Python API modified.

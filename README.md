@@ -61,10 +61,13 @@ We're currently at alpha
 
 ### Current stable version is 0.6.0
 
-0.6.0 Version
-- etc
+0.7.0 Version : "One namespace to rule them all"
+- Switched to python namespace packaging
 
 ### Older versions
+
+0.6.0 Version
+- etc
 
 0.5.4 Version
 - Python API-level 2 : A managed filterchain that handles streams on-demand between processes
