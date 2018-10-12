@@ -59,12 +59,15 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.6.0
+### Current stable version is 0.7.1
+
+0.7.1 Version
+- Small fix in the python part valkka.api2 (in managed filterchain)
+
+### Older versions
 
 0.7.0 Version : "One namespace to rule them all"
 - Switched to python namespace packaging
-
-### Older versions
 
 0.6.0 Version
 - etc
