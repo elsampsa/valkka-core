@@ -1,3 +1,15 @@
+valkka (0.7.1-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * Python: small fix to managedfilterchain2 in valkka.api2
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Fri, 12 Oct 2018 18:04:54 +0300
+
+valkka (0.7.1-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * Python: small fix to managedfilterchain2 in valkka.api2
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Fri, 12 Oct 2018 18:04:54 +0300
+
 valkka (0.7.0-0ubuntu1-xenialppa1) xenial; urgency=low
 
   * Python: switched to namespace packaging
