@@ -25,7 +25,7 @@ multiprocess.py : Multiprocessing with a pipe signal scheme
 @file    multiprocess.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.7.0 
+@version 0.7.1 
   
 @brief   Multiprocessing with a pipe signal scheme
 """
@@ -114,6 +114,8 @@ class ValkkaProcess(Process):
     self.signal_in.clear()
     self.signal_out.clear()
     
+    # print(self.pre, "init")
+    
     
   def getPipe(self):
     """Returns communication pipe for front-end
@@ -149,6 +151,8 @@ class ValkkaProcess(Process):
   def run(self): # No "_" in the name, but nevertheless, running in the backed
     """After the fork. Now the process starts running
     """
+    # print(self.pre," ==> run")
+    
     self.preRun_()
     self.running=True
     

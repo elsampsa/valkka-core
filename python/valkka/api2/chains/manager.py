@@ -25,7 +25,7 @@ manager.py : Managed filterchain classes.  Resources are managed hierarchically,
 @file    manage.py
 @author  Sampsa Riikonen
 @date    2018
-@version 0.7.0 
+@version 0.7.1 
 
 @brief   Managed filterchain classes.  Resources are managed hierarchically, decoding is turned off if its not required
 """
@@ -109,6 +109,10 @@ class ManagedFilterchain:
         self.startThreads()
         self.active = True
 
+
+    def report(self, *args):
+        if (self.verbose):
+            print(self.pre, *args)
 
     def getParDic(self, keys):
         """Get those parameters from parameters_defs that are in keys as well
@@ -431,11 +435,12 @@ class ManagedFilterchain2(ManagedFilterchain):
         """
         # if first time, connect main branch to swscale_branch
         if (len(self.shmem_terminals)<1):
-            print(self.pre, "getShmem : connecting swscale_branch")
+            self.report("getShmem : connecting swscale_branch")
             self.fork_filter.connect("swscale", self.interval_filter)
         
-        shmem_name =self.idst + "_" + str(self.shmem_counter)
-        print(self.pre, "getShmem : reserving", shmem_name)
+        # shmem_name =self.idst + "_" + str(self.shmem_counter)
+        shmem_name =self.idst + "_" + str(len(self.shmem_terminals))
+        self.report( "getShmem : reserving", shmem_name)
         shmem_filter    =core.RGBShmemFrameFilter(shmem_name, self.shmem_n_buffer, self.width, self.height)
         # shmem_filter    =core.BriefInfoFrameFilter(shmem_name) # a nice way for debugging to see of you are actually getting any frames here ..
 
@@ -450,12 +455,12 @@ class ManagedFilterchain2(ManagedFilterchain):
             self.shmem_terminals.pop(shmem_name)
         except KeyError:
             return
-        print(self.pre, "releaseShmem : releasing", shmem_name)
+        self.report( "releaseShmem : releasing", shmem_name)
         self.sws_fork_filter.disconnect(shmem_name)
         
         # if no more shmem requests, disconnect swscale_branch
         if (len(self.shmem_terminals)==0): # that was the last one ..
-            print(self.pre, "getShmem : disconnecting swscale_branch")
+            self.report( "getShmem : disconnecting swscale_branch")
             self.fork_filter.disconnect("swscale")
     
     

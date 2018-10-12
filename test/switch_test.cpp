@@ -26,7 +26,7 @@
  *  @file    switch.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.7.0 
+ *  @version 0.7.1 
  *  
  *  @brief   Test the Switch and DoubleGate classes
  *
