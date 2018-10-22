@@ -442,7 +442,7 @@ public:
 };                                                                                        // <pyapi>
 
 
-/** Passes frames to a multiprocessing fifo.
+/** Passes frames to a FrameFifo
  * 
  * Typically, the terminal point for the frame filter chain, so there is no next filter = NULL.
  * 

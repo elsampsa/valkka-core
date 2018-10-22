@@ -1,8 +1,8 @@
-#ifndef filethread_HEADER_GUARD 
-#define filethread_HEADER_GUARD
+#ifndef avfilethread_HEADER_GUARD 
+#define avfilethread_HEADER_GUARD
 
 /*
- * filethread.h : A Thread handling files and sending frames to fifo
+ * avfilethread.h : A Thread handling files and sending frames to fifo
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -25,8 +25,11 @@
  *
  */
 
+// TODO: implement this as a subclass of AbstractFileThread
+// TODO: rename FileThread to AVFileThread
+
 /** 
- *  @file    filethread.h
+ *  @file    avfilethread.h
  *  @author  Sampsa Riikonen
  *  @date    2018
  *  @version 0.7.1 
@@ -196,8 +199,6 @@ public:                                                // <pyapi>
   /** Default constructor
    * 
    * @param name          Thread name
-   * @param core_id       (optional) bind this thread to a specific processor
-   * 
    */
   FileThread(const char* name, FrameFifoContext fifo_ctx=FrameFifoContext());        // <pyapi>
   /** Default destructor */

@@ -11,7 +11,7 @@
 #include "framefifo.h"
 #include "threadsignal.h"
 #include "livethread.h"
-#include "filethread.h"
+#include "avfilethread.h"
 #include "fileframefilter.h"
 #include "avthread.h"
 #include "openglthread.h"
@@ -20,6 +20,9 @@
 #include "logging.h"
 #include "testthread.h"
 #include "framefilterset.h"
+#include "filestream.h"
+#include "cachestream.h"
+
 #include <Python.h>
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 // #define PY_ARRAY_UNIQUE_SYMBOL shmem_array_api
@@ -35,6 +38,7 @@ ffmpeg_av_register_all();  // register all avcodecs, muxers, etc.
 // Swig should not try to create a default constructor for the following classes as they're abstract (swig interface file should not have the constructors either):
 %nodefaultctor FrameFilter;
 %nodefaultctor Thread;
+%nodefaultctor AbstractFileThread; // this fucker does not have any effect
 
 // XID types
 %include<X11/X.h>

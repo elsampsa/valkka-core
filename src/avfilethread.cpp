@@ -1,5 +1,5 @@
 /*
- * filethread.cpp : A thread sending frames from files
+ * avfilethread.cpp : A thread sending frames from files
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -23,7 +23,7 @@
  */
 
 /** 
- *  @file    filethread.cpp
+ *  @file    avfilethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
  *  @version 0.7.1 
@@ -31,7 +31,7 @@
  *  @brief  A thread sending frames from files
  */ 
 
-#include "filethread.h"
+#include "avfilethread.h"
 
 
 TestFileStream::TestFileStream(const char* filename) {

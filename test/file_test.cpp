@@ -38,7 +38,7 @@
 #include "avdep.h"
 #include "livethread.h"
 #include "fileframefilter.h"
-#include "filethread.h"
+#include "avfilethread.h"
 #include "openglthread.h"
 
 using namespace std::chrono_literals;
