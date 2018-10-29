@@ -96,6 +96,7 @@ public:
   Frame(); ///< Default ctor
   virtual ~Frame(); ///< Default virtual dtor
   frame_essentials(FrameClass::none,Frame);
+  frame_clone(FrameClass::none,Frame);
   /*Frame(const Frame &f); ///< Default copy ctor
   
   
@@ -110,6 +111,7 @@ public: // redefined virtual
   virtual void dumpPayloadToFile(std::ofstream& fout); ///< Dumps internal payload data into a file
   virtual void update();             ///< Update internal auxiliary state variables
   virtual void reset();              ///< Reset the internal data
+  virtual bool isSeekable();         ///< Can we seek to this frame? (e.g. is it a key-frame .. for H264 sps packets are used as seek markers)
   
 public:
   void copyMetaFrom(Frame *f);        ///< Copy metadata (slot, subsession index, timestamp) to this frame
@@ -144,6 +146,7 @@ public:
   BasicFrame(); ///< Default ctor
   virtual ~BasicFrame(); ///< Default virtual dtor
   frame_essentials(FrameClass::basic, BasicFrame);
+  frame_clone(FrameClass::basic, BasicFrame);
   /*BasicFrame(const BasicFrame &f); ///< Default copy ctor
   
 public: // frame essentials
@@ -156,6 +159,7 @@ public: // redefined virtual
   virtual std::string dumpPayload();
   virtual void dumpPayloadToFile(std::ofstream& fout);
   virtual void reset();              ///< Reset the internal data
+  virtual bool isSeekable();         ///< for H264 true if sps, other codecs, always true
   
 public: // payload handling
   void reserve(std::size_t n_bytes);          ///< Reserve space for internal payload
@@ -194,6 +198,7 @@ public:
   SetupFrame(); ///< Default ctor
   virtual ~SetupFrame(); ///< Default virtual dtor
   frame_essentials(FrameClass::setup,SetupFrame);
+  frame_clone(FrameClass::setup,SetupFrame);
   /*
   SetupFrame(const SetupFrame &f); ///< Default copy ctor
   
@@ -226,6 +231,7 @@ public:
   AVMediaFrame(); ///< Default ctor
   virtual ~AVMediaFrame(); ///< Default virtual dtor
   frame_essentials(FrameClass::avmedia,AVMediaFrame);
+  frame_clone(FrameClass::avmedia,AVMediaFrame);
   /*AVMediaFrame(const AVMediaFrame &f); ///< Default copy ctor
   
 public: // frame essentials
@@ -265,6 +271,7 @@ public:
   AVBitmapFrame(); ///< Default ctor
   virtual ~AVBitmapFrame(); ///< Default virtual dtor
   frame_essentials(FrameClass::avbitmap, AVBitmapFrame);
+  frame_clone(FrameClass::avbitmap, AVBitmapFrame); // TODO: think about this!
   /*
   AVBitmapFrame(const AVBitmapFrame &f); ///< Default copy ctor
   
@@ -303,6 +310,7 @@ public:
   AVRGBFrame();
   virtual ~AVRGBFrame();
   frame_essentials(FrameClass::avrgb,AVRGBFrame);
+  frame_clone(FrameClass::avrgb,AVRGBFrame); // TODO: think about this!
   /*
   AVRGBFrame(const AVRGBFrame &f); ///< Default copy ctor
   
@@ -364,6 +372,7 @@ public:
   YUVFrame(BitmapPars bmpars); ///< Default ctor
   virtual ~YUVFrame(); ///< Default virtual dtor
   frame_essentials(FrameClass::yuv,YUVFrame);
+  // TODO: frame_clone
   /*
   YUVFrame(const YUVFrame &f); ///< Default copy ctor
   
@@ -405,6 +414,7 @@ public:
 typedef std::vector<Frame*>  Reservoir;
 typedef std::deque <Frame*>  Stack;
 typedef std::deque <Frame*>  Fifo;
+typedef std::deque <Frame*>  Cache;
 
 typedef std::vector<YUVFrame*>  YUVReservoir;
 typedef std::deque <YUVFrame*>  YUVStack;
@@ -417,6 +427,7 @@ public:
   SignalFrame();           ///< Default ctor
   virtual ~SignalFrame();  ///< Default virtual dtor
   frame_essentials(FrameClass::signal,SignalFrame);
+  frame_clone(FrameClass::signal,SignalFrame);
   /*
   SignalFrame(const SignalFrame &f); ///< Default copy ctor
   

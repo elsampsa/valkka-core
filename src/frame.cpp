@@ -87,10 +87,15 @@ void Frame::dumpPayloadToFile(std::ofstream& fout) {
 
 
 void Frame::reset() {
-  this->n_slot          =0;
-  this->subsession_index=-1;
-  this->mstimestamp     =0;
+    this->n_slot          =0;
+    this->subsession_index=-1;
+    this->mstimestamp     =0;
 }
+
+bool Frame::isSeekable() {
+    return True;
+}
+
 
 void Frame::update() {
 }
@@ -155,6 +160,23 @@ void BasicFrame::reset() {
   Frame::reset();
   codec_id   =AV_CODEC_ID_NONE;
   media_type =AVMEDIA_TYPE_UNKNOWN;
+}
+
+
+bool BasicFrame::isSeekable() {
+    switch(codec_id) {
+        case AV_CODEC_ID_H264:
+            if (h264_pars.slice_type == H264SliceType::sps) {
+                return True;
+            }
+            else {
+                return False;
+            }
+            break;
+        default:
+            return True;
+            break;
+    }
 }
 
 

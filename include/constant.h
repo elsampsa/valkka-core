@@ -145,7 +145,10 @@ std::ostream &operator<<(std::ostream &os, BitmapPars const &m) {
 
 static const BitmapPars N720  (1,1280,720, 2,2);
 static const BitmapPars N1080 (2,1920,1080,2,2);
-static const BitmapPars N1440 (3,2560,1440,2,2);
+
+// static const BitmapPars N1440 (3,2560,1440,2,2); // this is 2K, but not "universal" one, where all 2Ks would fit
+static const BitmapPars N1440 (3,3000,1690,2,2); // all 2Ks will fit here  :)   Takes more than two times less space than 4K
+
 static const BitmapPars N4K   (4,4032,3000,2,2);
 
 static const std::vector<uint8_t> nalstamp = {0,0,0,1};

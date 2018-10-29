@@ -79,7 +79,11 @@ CLASS(const CLASS &f) {\
   exit(2);\
 };\
 
-
-
+#define frame_clone(CLASSNAME, CLASS) \
+virtual CLASS *getClone() {\
+    CLASS *tmpframe = new CLASS();\
+    *tmpframe = *this;\
+    return tmpframe;\
+};\
 
 #endif

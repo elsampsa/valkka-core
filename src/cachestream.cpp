@@ -44,16 +44,36 @@ void CacheFrameFilter::go(Frame* frame) {
 
 
 
-FrameCache::FrameCache(const char *name, FrameCacheContext ctx) : name(name), ctx(ctx) {
-    //TODO: init cache, mutex, condition, ready_condition
+FrameCache::FrameCache(const char *name, FrameCacheContext ctx) : name(name), ctx(ctx), mintime_(999999999999), maxtime_(0), has_delta_frames(false) {
+    state = cache.end();
 }
 
 FrameCache::~FrameCache() {
+    clear();
 }
+ 
+bool FrameCache::writeCopy(Frame* f, bool wait) {
+  std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+  
+  mintime_=std::min(mintime_, f->mstimestamp);
+  maxtime_=std::max(maxtime_, f->mstimestamp);
+  has_delta_frames = (has_delta_frames or !(f->isSeekable())); // frames that describe changes to previous frames are present
+  
+  cache.push_back(f->getClone());  // push_back takes a copy of the pointer
     
-bool FrameCache::writeCopy(Frame* f, bool wait) { // TODO
-    return False;
+#ifdef TIMING_VERBOSE
+  long int dt=(getCurrentMsTimestamp()-f->mstimestamp);
+  if (dt>100) {
+    std::cout << "FrameCache: "<<name<<" writeCopy : timing : inserting frame " << dt << " ms late" << std::endl;
+  }
+#endif
+  
+  this->condition.notify_one(); // after receiving 
+  return true;
 }
+ 
+ 
+ 
  
 /*
 Frame* FrameCache::read(unsigned short int mstimeout) { // TODO: do we need this?
@@ -61,28 +81,157 @@ Frame* FrameCache::read(unsigned short int mstimeout) { // TODO: do we need this
 }
 */
 
-void FrameCache::dumpFifo() { // TODO
+void FrameCache::clear() {
+    std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+    mintime_=999999999999;
+    maxtime_=0;
+    has_delta_frames=false;
+    for (auto it=cache.begin(); it!=cache.end(); ++it) {
+        delete *it;
+    }
+    state = cache.end();
 }
 
-bool FrameCache::isEmpty() { // TODO
+
+void FrameCache::dump() {
+    std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+    for (auto it=cache.begin(); it!=cache.end(); ++it) {
+        // std::cout << "FrameCache : dump : " << name << " : " << **it << " [" << (*it)->dumpPayload() << std::endl;
+        std::cout << "FrameCache : dump : " << name << " : " << **it;
+        if ((*it)->isSeekable()) {
+            std::cout << " * ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+bool FrameCache::isEmpty() {
+    std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+    return (cache.size() < 1);
+}
+
+
+int FrameCache::seek(long int ms_streamtime_) { // return values: -1 = no frames at left, 1 = no frames at right, 0 = ok
+    std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+    
+    if (cache.size() < 1) {
+        state = cache.end();
+        return -1;
+    }
+    if (ms_streamtime_ < mintime_) {
+        state = cache.end();
+        return -1;
+    }
+    if (ms_streamtime_ > maxtime_) {
+        state = cache.end();
+        return 1;
+    }
+    
+    state = cache.begin();
+    
+    if (has_delta_frames) { // key-frame based seek
+        for(auto it=cache.begin(); it!=cache.end(); ++it) {
+            if ((*it)->mstimestamp > ms_streamtime_) {
+                break;
+            }
+            if ((*it)->isSeekable()) {
+                state = it;
+            }
+        }
+    }
+    else {
+        for(auto it=cache.begin(); it!=cache.end(); ++it) {
+            if ((*it)->mstimestamp > ms_streamtime_) {
+                break;
+            }
+            state = it;
+        }
+    }
+    
+    if (state == cache.end()) {
+        return 1;
+    }
+    return 0;
+}
+
+Frame* FrameCache::pullNextFrame() {
+    std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+    Frame* f;
+    if (state == cache.end()) {
+        return NULL;
+    }
+    f = *state;
+    state++;
+    return f;
 }
 
 
 
-CacheStream::CacheStream(const char *name, FrameCacheContext cache_ctx) : mintime_(0), maxtime_(0), cache(name, cache_ctx), infilter(name, &cache) {
+CacheStream::CacheStream(const char *name, FrameCacheContext cache_ctx) : cache(name, cache_ctx), infilter(name, &cache), target_mstimestamp_(-1), frame_mstimestamp_(-1), reftime(-1), state(AbstractFileState::none) {
 }
 
 CacheStream::~CacheStream() {    
 }
 
 
-void CacheStream::seek(long int ms_streamtime_) { // TODO
+void CacheStream::seek(long int ms_streamtime_) {
+    setRefMstime(ms_streamtime_);
+  
+#ifdef FILE_VERBOSE  
+  std::cout << "CacheStream : seek : seeking to " << ms_streamtime_ << std::endl;
+#endif
+    int i=cache.seek(ms_streamtime_);
+    filethreadlogger.log(LogLevel::debug) << "CacheStream : seek returned " << std::endl;
+    if (i!=0) {
+        state=AbstractFileState::stop;
+        return;
+    }
+    
+    state=AbstractFileState::seek;
+    target_mstimestamp_=ms_streamtime_;
+    
+    long int mstimeout = pullNextFrame(); // sends next_frame, reads new next_frame from the cache, returns timestamp of next frame
+    
+    if (mstimeout < 0) {
+        state=AbstractFileState::stop;
+        return;
+    }
+    
+    // TODO: for receiving frame blocks, check here for the block marker frames and act accordingly
 }
 
 
-long int CacheStream::pullNextFrame() {
-    return 0;
+long int CacheStream::pullNextFrame() { 
+    /*
+    TODO: 
+    - transmit current frame, pull next frame
+    - recurse, if timeout == 0
+    */
+    std::cout << "CacheStream : pullNextFrame : transmitting " << *next_frame << std::endl;
+    next_frame = cache.pullNextFrame();
+    
+    if (!next_frame) {
+        return -1;
+    }
+    
+    return std::max((long int)0, target_mstimestamp_- next_frame->mstimestamp);
 }
+
+
+long int CacheStream::update(long int mstimestamp) {
+    long int timeout;
+    
+    if (state==AbstractFileState::stop) {
+        return -1;
+    }
+    if (state==AbstractFileState::play or state==AbstractFileState::seek) { // when playing, target time changes ..
+        target_mstimestamp_=mstimestamp-reftime;
+    }
+    timeout=pullNextFrame(); // for play and seek
+    return timeout;
+}
+
+
 
 
 

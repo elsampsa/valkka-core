@@ -73,21 +73,34 @@ public:
     
 protected:
     std::string       name;
-    FrameCacheContext ctx;   ///< Parameters defining the cache
+    FrameCacheContext ctx;           ///< Parameters defining the cache
+    long int          mintime_;      ///< smallest frame timestamp (frametime)
+    long int          maxtime_;      ///< biggest frame timestamp (frametime)
+    bool has_delta_frames;           ///< Does the cache have streams with key-frame, delta-frame sequences
   
 protected:
-    Fifo cache;    ///< The queue
+    Cache cache;              ///< The queue
+    Cache::iterator state;    ///< The state of the queue
   
 protected: // mutex synchro
-  std::mutex mutex;                         ///< The Lock
-  std::condition_variable condition;        ///< The Event/Flag
-  std::condition_variable ready_condition;  ///< The Event/Flag for FrameFifo::ready_mutex
+    std::mutex mutex;                         ///< The Lock
+    std::condition_variable condition;        ///< The Event/Flag
+    std::condition_variable ready_condition;  ///< The Event/Flag for FrameFifo::ready_mutex
   
+public: // getters
+    long int getMinTime_() {return this->mintime_;}
+    long int getMaxTime_() {return this->maxtime_;}
+    bool hasDeltaFrames()  {return this->has_delta_frames;}
+      
+      
 public:
-  virtual bool writeCopy(Frame* f, bool wait=false);     ///< Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").  The size of "ftmp" is also checked and set to target_size, if necessary.  If wait is set to true, will wait until there are frames available in the stack.
-  // virtual Frame* read(unsigned short int mstimeout=0);   ///< Pop a frame from the end of the fifo and return the frame to the reservoir stack
-  virtual void dumpFifo();      ///< Dump frames in the fifo
-  bool isEmpty();               ///< Tell if fifo is empty    
+    virtual bool writeCopy(Frame* f, bool wait=false);     ///< Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").  The size of "ftmp" is also checked and set to target_size, if necessary.  If wait is set to true, will wait until there are frames available in the stack.
+    // virtual Frame* read(unsigned short int mstimeout=0);   ///< Pop a frame from the end of the fifo and return the frame to the reservoir stack
+    void clear();          ///< Clear the cache
+    void dump();           ///< Dump frames in the cache
+    bool isEmpty();        ///< Cache empty or not 
+    int seek(long int ms_streamtime_);  ///< Seek to a desider stream time.  -1 = no frames at left, 1 = no frames at right, 0 = ok
+    Frame *pullNextFrame();            ///< Get the next frame.  Returns NULL if no frame was available
 };
 
 
@@ -148,22 +161,35 @@ public:
     virtual ~CacheStream(); ///< Default virtual destructor
         
 protected:
-    FrameCache          cache;
-    long int            mintime_;      ///< smalles frame timestamp (frametime)
-    long int            maxtime_;      ///< biggest frame timestamp (frametime)
+    FrameCache          cache;        
     CacheFrameFilter    infilter;
+    AbstractFileState   state;
+    long int    reftime;                ///< Relation between the stream time and wallclock time.  See \ref timing
+    long int    target_mstimestamp_;    ///< Where the stream would like to be (underscore means stream time)
+    long int    frame_mstimestamp_;     ///< Timestamp of previous frame sent, -1 means there was no previous frame (underscore means stream time)
     
 public:
     std::map<SlotNumber, FrameFilter*>  slots_;     ///< Manipulated by the thread that's using CacheStream
     
 public: // getters
-    long int getMinTime_() {return this->mintime_;}
-    long int getMaxTime_() {return this->maxtime_;}
-    const CacheFrameFilter &getFrameFilter() {return this->infilter;}
+    long int getMinTime_() {return cache.getMinTime_();}
+    long int getMaxTime_() {return cache.getMaxTime_();}
+    CacheFrameFilter &getFrameFilter() {return this->infilter;}
+    void dumpCache() {cache.dump();}
     
-protected: // virtual reimplemented
-    void seek(long int ms_streamtime_);  ///< Seek to a desider stream time
-    long int pullNextFrame();            ///< Tries to achieve FileStream::target_mstimestamp_ . Sends frames whose timestamps are less than that to the filterchain (e.g. to FileContext::framefilter).  Returns timeout to the next frame.
+public: // virtual reimplemented
+    void seek(long int ms_streamtime_);  ///< Set the state of CacheStream::cache to frame corresponding to this time
+    
+    /** Pulls the next frame
+     * - Transmits this->next_frame
+     * - Gets the next frame in going towards the target_mstimestamps_
+     * - .. and puts it into this->next_frame
+     * - Returns the timeout, i.e. the difference between target_mstimestamp_ and this->next_frame.mstimestamp
+     * - If timeout is = 0, calls itself recursively
+     */
+    long int pullNextFrame();
+    long int update(long int mstimestamp);       ///< Calculates FileStream::target_mstimestamp_ and calls pullNextFrame.  Returns the timeout for the next frame
+    
     
 };
 
