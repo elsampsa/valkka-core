@@ -28,7 +28,7 @@
  *  @file    signal.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.7.1 
+ *  @version 0.8.0 
  *  
  *  @brief   Signals used by thread classes
  */ 
@@ -72,9 +72,13 @@ struct AVSignalContext {
 struct OpenGLSignalPars  {   // used by signals:                                
   SlotNumber    n_slot;        ///< in: new_render_context                                         
   Window        x_window_id;   ///< in: new_render_context, new_render_group, del_render_group     
+  
   unsigned int  z;             ///< in: new_render_context                                         
-  int           render_ctx;    ///< in: del_render_context, out: new_render_context                
-  bool          success;       ///< return value: was the call succesful?                          
+  int           render_ctx;    ///< in: del_render_context, out: new_render_context
+  
+  std::array<float, 4> object_coordinates; ///< in: new_rectangle
+  
+  bool          success;       ///< return value: was the call succesful?
 };
 
 // std::ostream &operator<<(std::ostream &os, OpenGLSignalPars const &m);
@@ -90,10 +94,15 @@ enum class OpenGLSignal {
   none,                 ///< null signal
   exit,                 ///< exit
   info,                 ///< used by API infoCall
+  
   new_render_group,     ///< used by API newRenderCroupCall
   del_render_group,     ///< used by API delRenderGroupCall
+  
   new_render_context,   ///< used by API newRenderContextCall
-  del_render_context    ///< used by API delRenderContextCall
+  del_render_context,   ///< used by API delRenderContextCall
+  
+  new_rectangle,        ///< used by API newRectangleCall
+  clear_objects         ///< used by API clearObjectsCall
 };
 
 /** Encapsulates data sent by the signal

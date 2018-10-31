@@ -28,7 +28,7 @@
  *  @file    openglthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.7.1 
+ *  @version 0.8.0 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -40,6 +40,7 @@
 #include "thread.h"
 #include "shader.h"
 #include "threadsignal.h"
+#include "openglobject.h"
 
 
 typedef void ( *PFNGLXSWAPINTERVALEXTPROC) (Display *dpy, GLXDrawable drawable, int interval);
@@ -132,6 +133,9 @@ private: // Initialized at RenderContext::init that calls RenderContext::activat
   std::array<GLfloat,20> vertices;  ///< data of the vertex buffer object
   std::array<GLuint, 6>  indices;   ///< data of the element buffer object
   
+private: 
+  std::list<OverlayObject*> overlays;
+  
 private:
   void activate();   ///< Init VAO, VBO, etc.
     
@@ -145,7 +149,14 @@ public: // getters
 public:
   // bool activate();        ///< Activate this RenderContext (now it can render).  Legacy
   // bool activateIf();      ///< Try to activate if not active already. Legacy
-  void render(XWindowAttributes x_window_attr);  ///< Does the actual drawing of the bitmap
+    
+  void addRectangle(float left, float right, float top, float bottom);
+  void clearObjects();
+    
+  void renderTexture();      ///< Render the texture
+  void renderObjects();      ///< Render objects overlaying the texture
+    
+  void render(XWindowAttributes x_window_attr);  ///< Sets x_window_attr and calls renderTexture and renderObjects
   void bindTextures();    ///< Associate textures with the shader program.  Uses parameters from Shader reference.
   void bindVars();        ///< Upload other data to the GPU (say, transformation matrix).  Uses parameters from Shader reference.
   void bindVertexArray(); ///< Bind the vertex array and draw
@@ -227,201 +238,216 @@ namespace swap_flavors {
 class OpenGLThread : public Thread { // <pyapi>
 
 public: // <pyapi>
-  /** Default constructor
-   * 
-   * @param name          A name indentifying this thread
-   * @param fifo_ctx      Parameters for the internal OpenGLFrameFifo
-   * @param msbuftime     Jitter buffer size in milliseconds (default=100 ms)
-   * 
-   */
-  OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx=OpenGLFrameFifoContext(), unsigned msbuftime=DEFAULT_OPENGLTHREAD_BUFFERING_TIME, const char* x_connection=""); // <pyapi>
-  virtual ~OpenGLThread(); ///< Virtual destructor // <pyapi>
+    /** Default constructor
+    * 
+    * @param name          A name indentifying this thread
+    * @param fifo_ctx      Parameters for the internal OpenGLFrameFifo
+    * @param msbuftime     Jitter buffer size in milliseconds (default=100 ms)
+    * 
+    */
+    OpenGLThread(const char* name, OpenGLFrameFifoContext fifo_ctx=OpenGLFrameFifoContext(), unsigned msbuftime=DEFAULT_OPENGLTHREAD_BUFFERING_TIME, const char* x_connection=""); // <pyapi>
+    virtual ~OpenGLThread(); ///< Virtual destructor // <pyapi>
   
 protected: // initialized at init list
-  OpenGLFrameFifo   *infifo;      ///< This thread reads from this communication fifo
-  FifoFrameFilter   infilter;     ///< A FrameFilter for writing incoming frames
-  std::string       x_connection; ///< X-server connection string (i.e. ":0.0", ":0.1", etc.    
+    OpenGLFrameFifo   *infifo;      ///< This thread reads from this communication fifo
+    FifoFrameFilter   infilter;     ///< A FrameFilter for writing incoming frames
+    std::string       x_connection; ///< X-server connection string (i.e. ":0.0", ":0.1", etc.    
     
 protected: // Shaders. Initialized by makeShaders. 
-  // Future developments: create a shader instance (and a program) per each stream, etc..?
-  // these could be reserved into the stack right here
-  // YUVShader   yuv_shader;
-  // RGBShader   rgb_shader;
-  // .. but, we want to do all OpenGL calls after differentiating the Thread
-  YUVShader*    yuv_shader; ///< Initialized by OpenGLThread::makeShaders
-  RGBShader*    rgb_shader; ///< Initialized by OpenGLThread::makeShaders
+    // Future developments: create a shader instance (and a program) per each stream, etc..?
+    // these could be reserved into the stack right here
+    // YUVShader   yuv_shader;
+    // RGBShader   rgb_shader;
+    // .. but, we want to do all OpenGL calls after differentiating the Thread
+    YUVShader*    yuv_shader; ///< Initialized by OpenGLThread::makeShaders
+    RGBShader*    rgb_shader; ///< Initialized by OpenGLThread::makeShaders
   
 protected: 
-  YUVTEX*       statictex;           ///< Texture to be shown when there is no stream
-  std::string   static_texture_file; ///< Name of the file where statictex is
+    YUVTEX*       statictex;           ///< Texture to be shown when there is no stream
+    std::string   static_texture_file; ///< Name of the file where statictex is
   
 protected: // Variables related to X11 and GLX.  Initialized by initGLX.
-  Display*      display_id;
-  bool          doublebuffer_flag;
-  GLXContext    glc;
-  int*          att;
-  Window        root_id;
-  XVisualInfo*  vi;
-  GLXFBConfig*  fbConfigs;
-  Colormap      cmap;
-  YUVFrame*     dummyframe; ///< A PBO membuf which we reserve from the GPU as the first membuf, but is never used
-  
-  std::vector<SlotContext*>              slots_;        ///< index => SlotContext mapping (based on vector indices) // WARNING: not they're pointers .. no copy_ctor ambiguity with std::vector
-  // std::map<SlotNumber, SlotContext>     slots_;        ///< SlotNumber => SlotContext mapping TODO: start using this in the future
-  std::map<Window, RenderGroup>         render_groups; ///< window_id => RenderGroup mapping.  RenderGroup objects are warehoused here.
-  std::vector<std::list<RenderGroup*>>  render_lists;  ///< Each vector element corresponds to a slot.  Each list inside a vector element has pointers to RenderGroups to be rendered.
-  // std::map<SlotNumber,std::list<RenderGroup*>>  render_lists;  ///< TODO: start using this in the future
+    Display*      display_id;
+    bool          doublebuffer_flag;
+    GLXContext    glc;
+    int*          att;
+    Window        root_id;
+    XVisualInfo*  vi;
+    GLXFBConfig*  fbConfigs;
+    Colormap      cmap;
+    YUVFrame*     dummyframe; ///< A PBO membuf which we reserve from the GPU as the first membuf, but is never used
+    
+    std::vector<SlotContext*>              slots_;        ///< index => SlotContext mapping (based on vector indices) // WARNING: not they're pointers .. no copy_ctor ambiguity with std::vector
+    // std::map<SlotNumber, SlotContext>     slots_;        ///< SlotNumber => SlotContext mapping TODO: start using this in the future
+    std::map<Window, RenderGroup>         render_groups; ///< window_id => RenderGroup mapping.  RenderGroup objects are warehoused here.
+    std::vector<std::list<RenderGroup*>>  render_lists;  ///< Each vector element corresponds to a slot.  Each list inside a vector element has pointers to RenderGroups to be rendered.
+    std::map<int, RenderContext*>         render_contexes; ///< Shortcut to render contexes
+    
+    // std::map<SlotNumber,std::list<RenderGroup*>>  render_lists;  ///< TODO: start using this in the future
   
 private: // function pointers for glx extensions
-  PFNGLXSWAPINTERVALEXTPROC     pglXSwapIntervalEXT;
-  PFNGLXGETSWAPINTERVALMESAPROC pglXGetSwapIntervalMESA;
-  PFNGLXSWAPINTERVALMESAPROC    pglXSwapIntervalMESA;
+    PFNGLXSWAPINTERVALEXTPROC     pglXSwapIntervalEXT;
+    PFNGLXGETSWAPINTERVALMESAPROC pglXGetSwapIntervalMESA;
+    PFNGLXSWAPINTERVALMESAPROC    pglXSwapIntervalMESA;
   
 public: // methods for getting/setting the swap interval .. these choose the correct method to call
-  unsigned                      swap_flavor;
-  unsigned                      swap_interval_at_startup;                             ///< The value of swap interval when this thread was started
-  unsigned                      getSwapInterval(GLXDrawable drawable=0);
-  void                          setSwapInterval(unsigned i, GLXDrawable drawable=0);
+    unsigned                      swap_flavor;
+    unsigned                      swap_interval_at_startup;                             ///< The value of swap interval when this thread was started
+    unsigned                      getSwapInterval(GLXDrawable drawable=0);
+    void                          setSwapInterval(unsigned i, GLXDrawable drawable=0);
   
 protected: // Variables related to queing and presentation
-  unsigned             msbuftime;            ///< Buffering time in milliseconds
-  unsigned             future_ms_tolerance;  ///< If frame is this much in the future, it will be discarded.  See OpenGLThread::OpenGLThread for its value (some multiple of OpenGLThread::msbuftime)
-  std::list<Frame*>    presfifo;             ///< Double-linked list of buffered frames about to be presented
-  long int             calltime, callswaptime;             ///< Debugging: when handleFifo was last called?
+    unsigned             msbuftime;            ///< Buffering time in milliseconds
+    unsigned             future_ms_tolerance;  ///< If frame is this much in the future, it will be discarded.  See OpenGLThread::OpenGLThread for its value (some multiple of OpenGLThread::msbuftime)
+    std::list<Frame*>    presfifo;             ///< Double-linked list of buffered frames about to be presented
+    long int             calltime, callswaptime;             ///< Debugging: when handleFifo was last called?
   
 protected: // debugging variables
-  bool  debug;
+    bool  debug;
     
 public: // manipulate RenderGroup(s)
-  bool                hasRenderGroup(Window window_id); ///< Check if we have render groups
-  RenderGroup&        getRenderGroup(Window window_id); ///< Returns a reference to RenderGroup in OpenGLThread::render_groups .. returns null if not found
-  bool                newRenderGroup(Window window_id); ///< Creates a RenderGroup and inserts it into OpenGLThread::render_groups
-  bool                delRenderGroup(Window window_id); ///< Remove RenderGroup from OpenGLThread::render_groups
+    bool                hasRenderGroup(Window window_id); ///< Check if we have render groups
+    RenderGroup&        getRenderGroup(Window window_id); ///< Returns a reference to RenderGroup in OpenGLThread::render_groups .. returns null if not found
+    bool                newRenderGroup(Window window_id); ///< Creates a RenderGroup and inserts it into OpenGLThread::render_groups
+    bool                delRenderGroup(Window window_id); ///< Remove RenderGroup from OpenGLThread::render_groups
   
 public: // manipulate RenderContex(es)
-  // int                 newRenderContext(SlotNumber slot, Window window_id, unsigned int z); ///< Creates a new render context
-  void                newRenderContext(SlotNumber slot, Window window_id, int id, unsigned int z); ///< Creates a new render context
-  bool                delRenderContext(int id); ///< Runs through OpenGLThread::render_groups and removes indicated RenderContext
+    // int                 newRenderContext(SlotNumber slot, Window window_id, unsigned int z); ///< Creates a new render context
+    void                newRenderContext(SlotNumber slot, Window window_id, int id, unsigned int z); ///< Creates a new render context
+    bool                delRenderContext(int id); ///< Runs through OpenGLThread::render_groups and removes indicated RenderContext
+  
+public: // add overlay objects (rectangles, etc)
+    bool                contextAddRectangle(int id, float left, float right, float top, float bottom);
+    bool                contextClearObjects(int id);
   
 public: // loading and rendering actions
-  void                loadYUVFrame(SlotNumber n_slot, YUVFrame *yuvframe); ///< Load PBO to texture in OpenGLThread::slots_[n_slot]
-  void                render(SlotNumber n_slot); ///< Render all RenderGroup(s) depending on slot n_slot
-  void                checkSlots(long int mstime);
+    void                loadYUVFrame(SlotNumber n_slot, YUVFrame *yuvframe); ///< Load PBO to texture in OpenGLThread::slots_[n_slot]
+    void                render(SlotNumber n_slot); ///< Render all RenderGroup(s) depending on slot n_slot
+    void                checkSlots(long int mstime);
   
 public: // getter methods
-  Display*            getDisplayId() {return display_id;}
-  const GLXContext&   getGlc() {return glc;}
-  const Window&       getRootId() {return root_id;}
-
-  
-//public:
-//  OpenGLFrameFifo&    getFifo();
-  
+    Display*            getDisplayId() {return display_id;}
+    const GLXContext&   getGlc() {return glc;}
+    const Window&       getRootId() {return root_id;}
+    
 public: // slot methods
-  bool                slotUsed       (SlotNumber i);
-  void                activateSlot   (SlotNumber i, YUVFrame *yuvframe);
-  void                activateSlotIf (SlotNumber i, YUVFrame *yuvframe); // Activate slot if it's not already active or if the texture has changed
-  bool                manageSlotTimer(SlotNumber i, long int mstime);
+    bool                slotUsed       (SlotNumber i);
+    void                activateSlot   (SlotNumber i, YUVFrame *yuvframe);
+    void                activateSlotIf (SlotNumber i, YUVFrame *yuvframe); // Activate slot if it's not already active or if the texture has changed
+    bool                manageSlotTimer(SlotNumber i, long int mstime);
   
 public: // setter methods
-  void                debugOn()  {debug=true;}
-  void                debugOff() {debug=false;}
+    void                debugOn()  {debug=true;}
+    void                debugOff() {debug=false;}
   
 public: // Thread variables
-  std::deque<OpenGLSignalContext> signal_fifo;   ///< Redefinition of signal fifo.  Signal fifo of Thread::SignalContext(s) is now hidden.
+    std::deque<OpenGLSignalContext> signal_fifo;   ///< Redefinition of signal fifo.  Signal fifo of Thread::SignalContext(s) is now hidden.
   
 public: // Thread virtual methods
-  void run();                                       ///< Main execution loop is defined here.
-  void preRun();                                    ///< Called before entering the main execution loop, but after creating the thread.  Calls OpenGLThread::createShaders and OpenGLThread::reserveFrames
-  void postRun();                                   ///< Called after the main execution loop exits, but before joining the thread
-  void handleSignal(OpenGLSignalContext &signal_ctx);
-  void handleSignals();                             ///< From signals to methods 
-  void sendSignal(OpenGLSignalContext signal_ctx);        ///< Send a signal to the thread 
-  void sendSignalAndWait(OpenGLSignalContext signal_ctx); ///< Send a signal to the thread and wait all signals to be executed
+    void run();                                       ///< Main execution loop is defined here.
+    void preRun();                                    ///< Called before entering the main execution loop, but after creating the thread.  Calls OpenGLThread::createShaders and OpenGLThread::reserveFrames
+    void postRun();                                   ///< Called after the main execution loop exits, but before joining the thread
+    void handleSignal(OpenGLSignalContext &signal_ctx);
+    void handleSignals();                             ///< From signals to methods 
+    void sendSignal(OpenGLSignalContext signal_ctx);        ///< Send a signal to the thread 
+    void sendSignalAndWait(OpenGLSignalContext signal_ctx); ///< Send a signal to the thread and wait all signals to be executed
   
 public: // methods, internal : initializing / closing .. but we might want to test these separately, keep public
-  void initGLX();          ///< Connect to X11 server, init GLX direct rendering
-  void closeGLX();         ///< Close connection to X11
-  void loadExtensions();   ///< Load OpenGL extensions using GLEW
-  void VSyncOff();         ///< Turn off vsync for swapbuffers
-  int hasCompositor(int screen); ///< Detect if a compositor is running
-  void makeShaders();      ///< Compile shaders
-  void delShaders();       ///< Delete shader
-  void reserveFrames();    ///< Attaches YUVPBO instances with direct GPU memory access to Frame::yuvpbo
-  void releaseFrames();    ///< Deletes YUVPBO by calling Frame::reset
+    void initGLX();          ///< Connect to X11 server, init GLX direct rendering
+    void closeGLX();         ///< Close connection to X11
+    void loadExtensions();   ///< Load OpenGL extensions using GLEW
+    void VSyncOff();         ///< Turn off vsync for swapbuffers
+    int hasCompositor(int screen); ///< Detect if a compositor is running
+    void makeShaders();      ///< Compile shaders
+    void delShaders();       ///< Delete shader
+    void reserveFrames();    ///< Attaches YUVPBO instances with direct GPU memory access to Frame::yuvpbo
+    void releaseFrames();    ///< Deletes YUVPBO by calling Frame::reset
   
 protected: // internal methods
-  void dumpPresFifo();  ///< Dump the presentation queue
-  void diagnosis();     ///< Dump presentation queue size and diagnosis output for infifo (YUVdiagnosis)
-  void resetCallTime();
-  void reportCallTime(unsigned i);        ///< How much time since handleFifo exited
-  long unsigned insertFifo(Frame* f);     ///< Sorted insert: insert a timestamped frame into the fifo
-  void readStaticTex();                   ///< Reads a static texture that's shown on a window when no stream is received.  Uses OpenGLThread::static_texture_file
-  
-  /** Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation
-   * 
-   * See also \ref timing
-   */
-  long unsigned handleFifo();
-  void delRenderContexes();
+    void dumpPresFifo();  ///< Dump the presentation queue
+    void diagnosis();     ///< Dump presentation queue size and diagnosis output for infifo (YUVdiagnosis)
+    void resetCallTime();
+    void reportCallTime(unsigned i);        ///< How much time since handleFifo exited
+    long unsigned insertFifo(Frame* f);     ///< Sorted insert: insert a timestamped frame into the fifo
+    void readStaticTex();                   ///< Reads a static texture that's shown on a window when no stream is received.  Uses OpenGLThread::static_texture_file
+    
+    /** Runs through the fifo, presents / scraps frames, returns timeout until next frame presentation
+    * 
+    * See also \ref timing
+    */
+    long unsigned handleFifo();
+    void delRenderContexes();
   
 public:  // reporting
-  void reportSlots();
-  void reportRenderGroups();
-  void reportRenderList();
-  
-  void dumpYUVStacks() {infifo->dumpYUVStacks();} ///< State of the YUV Frame stack
-  void YUVdiagnosis()  {infifo->YUVdiagnosis();}  ///< Brief resumen of the state of the YUV Frame stack
-  void dumpInFifo()    {infifo->dumpFifo();}      ///< Incoming fifo: here we have all kinds of frames, including YUVFrame(s)
+    void reportSlots();
+    void reportRenderGroups();
+    void reportRenderList();
+    
+    void dumpYUVStacks() {infifo->dumpYUVStacks();} ///< State of the YUV Frame stack
+    void YUVdiagnosis()  {infifo->YUVdiagnosis();}  ///< Brief resumen of the state of the YUV Frame stack
+    void dumpInFifo()    {infifo->dumpFifo();}      ///< Incoming fifo: here we have all kinds of frames, including YUVFrame(s)
   
 public: // testing 
-  void recycle(Frame* f)             {infifo->recycle(f);}               ///< Recycle a frame back to OpenGLFrameFifo
+    void recycle(Frame* f)             {infifo->recycle(f);}               ///< Recycle a frame back to OpenGLFrameFifo
   
 public: // for testing // <pyapi>
-  Window     createWindow(bool map=true, bool show=false);          ///< Creates a new X window (for debugging/testing only) // <pyapi>
-  void       makeCurrent(const Window window_id);  ///< Set current X windox                                // <pyapi>
-  unsigned   getVsyncAtStartup();                  ///< What vsync was at startup time?                     // <pyapi> 
-  void       reConfigWindow(Window window_id);
-  Window     getChildWindow(Window parent_id);
+    Window     createWindow(bool map=true, bool show=false);          ///< Creates a new X window (for debugging/testing only) // <pyapi>
+    void       makeCurrent(const Window window_id);  ///< Set current X windox                                // <pyapi>
+    unsigned   getVsyncAtStartup();                  ///< What vsync was at startup time?                     // <pyapi> 
+    void       reConfigWindow(Window window_id);
+    Window     getChildWindow(Window parent_id);
   
 public: // API // <pyapi>
-  FifoFrameFilter &getFrameFilter();                           ///< API method: get filter for passing frames to this thread // <pyapi>
-  void setStaticTexFile(const char* fname);                    ///< API method: set a file where the static texture (yuv image that's shown when no stream is received) is read from // <pyapi>
+    FifoFrameFilter &getFrameFilter();                           ///< API method: get filter for passing frames to this thread // <pyapi>
+    void setStaticTexFile(const char* fname);                    ///< API method: set a file where the static texture (yuv image that's shown when no stream is received) is read from // <pyapi>
+    
+    /** API call: Like Thread::stopCall() but does not block
+    */
+    void requestStopCall();                                             // <pyapi>
+    
+    /** API call: reports render groups and lists
+    */
+    void infoCall();                                             // <pyapi>
+    
+    /** API call: create a rendering group
+    * @param window_id  X window id
+    */
+    bool newRenderGroupCall  (Window window_id);                 // <pyapi>
+    
+    /** API call: delete a rendering group
+    * @param window_id  X window id
+    */
+    bool delRenderGroupCall  (Window window_id);                 // <pyapi>
+    
+    /** API call: create a new rendering context, i.e. a new stream-to-render mapping
+    * @param slot       Slot number identifying the stream
+    * @param window_id  X window id (corresponding to a created rendering group)
+    * @param z          Stacking order of the rendered bitmap
+    * 
+    * returns a unique integer id presenting the rendering context.
+    * return 0 if the call failed.
+    * 
+    */
+    int newRenderContextCall (SlotNumber slot, Window window_id, unsigned int z);  // <pyapi>
+    
+    /** API call: delete a rendering context
+    * @param id         Rendering context id
+    * 
+    */
+    bool delRenderContextCall(int id);                           // <pyapi>
+    
+    /** API call: add a rectangle that is drawn on the texture
+    * @param id         Rendering context id
+    * 
+    */
+    void addRectangleCall(int id, float left, float right, float top, float bottom); // <pyapi>
+    
+    /** API call: clear all objects drawn on the texture
+    * @param id         Rendering context id
+    * 
+    */
+    void clearObjectsCall(int id); // <pyapi>
   
-  /** API call: Like Thread::stopCall() but does not block
-   */
-  void requestStopCall();                                             // <pyapi>
-  
-  /** API call: reports render groups and lists
-   */
-  void infoCall();                                             // <pyapi>
-  
-  /** API call: create a rendering group
-   * @param window_id  X window id
-   */
-  bool newRenderGroupCall  (Window window_id);                 // <pyapi>
-  
-  /** API call: delete a rendering group
-   * @param window_id  X window id
-   */
-  bool delRenderGroupCall  (Window window_id);                 // <pyapi>
-  
-  /** API call: create a new rendering context, i.e. a new stream-to-render mapping
-   * @param slot       Slot number identifying the stream
-   * @param window_id  X window id (corresponding to a created rendering group)
-   * @param z          Stacking order of the rendered bitmap
-   * 
-   * returns a unique integer id presenting the rendering context.
-   * return 0 if the call failed.
-   * 
-   */
-  int newRenderContextCall (SlotNumber slot, Window window_id, unsigned int z);  // <pyapi>
-  
-  /** API call: delete a rendering context
-   * @param id         Rendering context id
-   * 
-   */
-  bool delRenderContextCall(int id);                           // <pyapi>
 }; // <pyapi>
 
 #endif

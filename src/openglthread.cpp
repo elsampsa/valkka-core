@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.7.1 
+ *  @version 0.8.0 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -169,6 +169,7 @@ RenderContext::RenderContext(SlotContext *slot_context, int id, unsigned int z) 
 
 RenderContext::~RenderContext() {
     slot_context->dec_ref_count();
+    clearObjects();
     // return;
     #ifdef VALGRIND_GPU_DEBUG
     #else
@@ -253,13 +254,13 @@ vertices_size=sizeof(GLfloat)*vertices.size();
     
     // normalized device coordinates and correct ffff%&#!!! flipping of the image
     vertices =std::array<GLfloat,20>{
-        //Positions          Texture Coords
-        //Shader class references:
-        //"position"        "texcoord"
+        // Positions          Texture Coords
+        // Shader class references:
+        // "position"        "texcoord"
         -1.0f, -1.0f, 0.0f,   0.0f, 1.0f, // bottom left
         -1.0f,  1.0f, 0.0f,   0.0f, 0.0f, // top left 
-        1.0f,  1.0f, 0.0f,   1.0f, 0.0f, // top right
-        1.0f, -1.0f, 0.0f,   1.0f, 1.0f  // bottom right
+         1.0f,  1.0f, 0.0f,   1.0f, 0.0f, // top right
+         1.0f, -1.0f, 0.0f,   1.0f, 1.0f  // bottom right
     };
     vertices_size=sizeof(GLfloat)*vertices.size();
     
@@ -303,6 +304,33 @@ vertices_size=sizeof(GLfloat)*vertices.size();
     
     // return true;
 }
+
+
+void RenderContext::addRectangle(float left, float right, float top, float bottom) {
+    opengllogger.log(LogLevel::debug) << "RenderContext: addRectangle: " << left << " " << right << " " << top << " " << bottom << std::endl;
+    Rectangle *obj = new Rectangle();
+    obj->setCoordinates(left, right, top, bottom);
+    overlays.push_front(obj);
+}
+    
+    
+void RenderContext::clearObjects() {
+    for (auto it=overlays.begin(); it!=overlays.end(); ++it) {
+        delete *it;
+    }
+    overlays.clear();
+}
+    
+    
+void RenderContext::renderTexture() { // TODO
+}
+    
+void RenderContext::renderObjects() {
+    for (auto it=overlays.begin(); it!=overlays.end(); ++it) {
+        (*it)->draw();
+    }
+}
+
 
 
 void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextures, bindParameters and bindVertexArray
@@ -354,6 +382,8 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
         std::cout << "RenderContext: render : bindvertexarr timing: " << mstime-swaptime << std::endl;
     }
     #endif
+    
+    renderObjects();
 }
 
 
@@ -880,6 +910,7 @@ void OpenGLThread::newRenderContext(SlotNumber n_slot, Window window_id, int id,
             // reportSlots();
             // reportRenderList();
             // return render_context.getId();
+            render_contexes.insert(std::pair<int, RenderContext*>(id, render_context)); // shortcut
         }
         else {
             opengllogger.log(LogLevel::fatal) << "OpenGLThread: newRenderContext: FATAL: could not add render context " << id << std::endl;
@@ -903,6 +934,7 @@ bool OpenGLThread::delRenderContext(int id) {
         }
         else {
             opengllogger.log(LogLevel::debug) << "OpenGLThread: delRenderContext: removed context " << id << std::endl;
+            render_contexes.erase(id);
             delete render_context;
             removed=true;
         }
@@ -924,12 +956,38 @@ bool OpenGLThread::delRenderContext(int id) {
     return removed;
 }
 
+bool OpenGLThread::contextAddRectangle(int id, float left, float right, float top, float bottom) {
+    opengllogger.log(LogLevel::debug) << "OpenGLThread: contextAddRectangle: " << id << std::endl;
+    
+    auto it=render_contexes.find(id);
+    if (it==render_contexes.end()) {
+        return false;
+    }
+    
+    (it->second)->addRectangle(left, right, top, bottom);
+    return true;
+}
+    
+    
+bool OpenGLThread::contextClearObjects(int id) {
+    auto it=render_contexes.find(id);
+    if (it==render_contexes.end()) {
+        return false;
+    }
+    
+    (it->second)->clearObjects();
+    return true;
+}
+    
+
+
 
 void OpenGLThread::delRenderContexes() {
     // for each render group, empty the render_contexes list
     for(std::map<Window,RenderGroup>::iterator it=render_groups.begin(); it!=render_groups.end(); ++it) {
         (it->second).render_contexes.erase((it->second).render_contexes.begin(),(it->second).render_contexes.end());
     }
+    render_contexes.clear();
 }
 
 
@@ -1442,6 +1500,33 @@ void OpenGLThread::handleSignal(OpenGLSignalContext &signal_ctx) {
                 // pars->success=true;
             }
             break;
+            
+        case OpenGLSignal::new_rectangle:   // newRectangleCall
+            opengllogger.log(LogLevel::debug) << "OpenGLThread: handleSignals: new_rectangle" << std::endl;
+            ok = contextAddRectangle(pars.render_ctx, pars.object_coordinates[0], pars.object_coordinates[1], pars.object_coordinates[2], pars.object_coordinates[3]);
+            if (!ok) {
+                opengllogger.log(LogLevel::normal) << "OpenGLThread: handleSignals: could not add rectangle " << std::endl;
+            }
+            else {
+                // pars->success=true;
+            }
+            break;
+            
+        case OpenGLSignal::clear_objects:   // clearObjectsCall
+            opengllogger.log(LogLevel::debug) << "OpenGLThread: handleSignals: new_rectangle" << std::endl;
+            ok = contextClearObjects(pars.render_ctx);
+            if (!ok) {
+                opengllogger.log(LogLevel::normal) << "OpenGLThread: handleSignals: could not add rectangle " << std::endl;
+            }
+            else {
+                // pars->success=true;
+            }
+            break;
+        
+            
+            
+            
+            
     }
 }
 
@@ -2076,4 +2161,32 @@ bool OpenGLThread::delRenderContextCall(int id) {
     return pars.success;
 }
 
+void OpenGLThread::addRectangleCall(int id, float left, float right, float top, float bottom) {
+    OpenGLSignalPars pars;
+    
+    pars.n_slot      =0;
+    pars.x_window_id =0;
+    pars.z           =0;
+    pars.render_ctx  =id;
+    pars.success     =false;
+    pars.object_coordinates = {left, right, top, bottom};
+    
+    SignalFrame f = SignalFrame();
+    f.opengl_signal_ctx = {OpenGLSignal::new_rectangle, pars};
+    infilter.run(&f);
+}
+
+void OpenGLThread::clearObjectsCall(int id) {
+    OpenGLSignalPars pars;
+    
+    pars.n_slot      =0;
+    pars.x_window_id =0;
+    pars.z           =0;
+    pars.render_ctx  =id;
+    pars.success     =false;
+    
+    SignalFrame f = SignalFrame();
+    f.opengl_signal_ctx = {OpenGLSignal::clear_objects, pars};
+    infilter.run(&f);
+}
 

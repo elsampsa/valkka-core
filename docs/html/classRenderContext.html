@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.7.1</span>
+   &#160;<span id="projectnumber">0.8.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -102,9 +102,23 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#ae3d7df65a8574085cbd3a8356d2d1bba">getId</a> () const</td></tr>
 <tr class="memdesc:ae3d7df65a8574085cbd3a8356d2d1bba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the unique id of this render context. <br /></td></tr>
 <tr class="separator:ae3d7df65a8574085cbd3a8356d2d1bba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5441eb5add3987af54ecd382d9fb244f"><td class="memItemLeft" align="right" valign="top"><a id="a5441eb5add3987af54ecd382d9fb244f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addRectangle</b> (float left, float right, float top, float bottom)</td></tr>
+<tr class="separator:a5441eb5add3987af54ecd382d9fb244f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a314d321cd74719e8e97d3ec7f3b960bd"><td class="memItemLeft" align="right" valign="top"><a id="a314d321cd74719e8e97d3ec7f3b960bd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clearObjects</b> ()</td></tr>
+<tr class="separator:a314d321cd74719e8e97d3ec7f3b960bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab323c3d155136764a2ee3ec14675bee5"><td class="memItemLeft" align="right" valign="top"><a id="ab323c3d155136764a2ee3ec14675bee5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#ab323c3d155136764a2ee3ec14675bee5">renderTexture</a> ()</td></tr>
+<tr class="memdesc:ab323c3d155136764a2ee3ec14675bee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render the texture. <br /></td></tr>
+<tr class="separator:ab323c3d155136764a2ee3ec14675bee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade5cd0960a4fe20618ddd0a207afb58f"><td class="memItemLeft" align="right" valign="top"><a id="ade5cd0960a4fe20618ddd0a207afb58f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#ade5cd0960a4fe20618ddd0a207afb58f">renderObjects</a> ()</td></tr>
+<tr class="memdesc:ade5cd0960a4fe20618ddd0a207afb58f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render objects overlaying the texture. <br /></td></tr>
+<tr class="separator:ade5cd0960a4fe20618ddd0a207afb58f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1670d468447d7fa71085e7d482bdf2a8"><td class="memItemLeft" align="right" valign="top"><a id="a1670d468447d7fa71085e7d482bdf2a8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a1670d468447d7fa71085e7d482bdf2a8">render</a> (XWindowAttributes <a class="el" href="classRenderContext.html#a3e0a39c93825918a48e4fb19211320ff">x_window_attr</a>)</td></tr>
-<tr class="memdesc:a1670d468447d7fa71085e7d482bdf2a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does the actual drawing of the bitmap. <br /></td></tr>
+<tr class="memdesc:a1670d468447d7fa71085e7d482bdf2a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets x_window_attr and calls renderTexture and renderObjects. <br /></td></tr>
 <tr class="separator:a1670d468447d7fa71085e7d482bdf2a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bcc666153aa735d266e5ee41e078b43"><td class="memItemLeft" align="right" valign="top"><a id="a6bcc666153aa735d266e5ee41e078b43"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a6bcc666153aa735d266e5ee41e078b43">bindTextures</a> ()</td></tr>
@@ -174,6 +188,9 @@ std::array&lt; GLfloat, 20 &gt;&#160;</td><td class="memItemRight" valign="botto
 std::array&lt; GLuint, 6 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderContext.html#a26a91a0379dfe078a70e6ddbebaf3a83">indices</a></td></tr>
 <tr class="memdesc:a26a91a0379dfe078a70e6ddbebaf3a83"><td class="mdescLeft">&#160;</td><td class="mdescRight">data of the element buffer object <br /></td></tr>
 <tr class="separator:a26a91a0379dfe078a70e6ddbebaf3a83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae53e5feef795306a3d6b3518521ee67d"><td class="memItemLeft" align="right" valign="top"><a id="ae53e5feef795306a3d6b3518521ee67d"></a>
+std::list&lt; <a class="el" href="classOverlayObject.html">OverlayObject</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>overlays</b></td></tr>
+<tr class="separator:ae53e5feef795306a3d6b3518521ee67d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Encapsulates data for rendering a single bitmap: vertex array object (VAO), vertex buffer object (VBO), vertice coordinates, transformation matrix, etc. </p>

@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.7.1</span>
+   &#160;<span id="projectnumber">0.8.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -90,11 +90,13 @@ Macros</h2></td></tr>
 <tr class="separator:a9dd6c52e211cd617eb61ff53ea0b571d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af537ac39c3246d45d81dde3d1fc5bb43"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>frame_essentials</b>(CLASSNAME,  CLASS)</td></tr>
 <tr class="separator:af537ac39c3246d45d81dde3d1fc5bb43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dae5ac85321a389287755e0b3b6da2e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>frame_clone</b>(CLASSNAME,  CLASS)</td></tr>
+<tr class="separator:a2dae5ac85321a389287755e0b3b6da2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.7.1 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.8.0 </dd></dl>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a0fbb95d2cd37c5b9be9f9f6e832537e9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0fbb95d2cd37c5b9be9f9f6e832537e9">&#9670;&nbsp;</a></span>ban_copy_asm</h2>
@@ -130,6 +132,34 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">CLASS(<span class="keyword">const</span> CLASS &amp;f) {\</div><div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;FATAL: copy-construction prohibited for this class&quot;</span> &lt;&lt; std::endl;\</div><div class="line">  perror(<span class="stringliteral">&quot;FATAL: copy-construction prohibited for this class&quot;</span>);\</div><div class="line">  exit(2);\</div><div class="line">};\</div></div><!-- fragment -->
+</div>
+</div>
+<a id="a2dae5ac85321a389287755e0b3b6da2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dae5ac85321a389287755e0b3b6da2e">&#9670;&nbsp;</a></span>frame_clone</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define frame_clone</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CLASSNAME, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CLASS&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">virtual</span> CLASS *getClone() {\</div><div class="line">    CLASS *tmpframe = <span class="keyword">new</span> CLASS();\</div><div class="line">    *tmpframe = *<span class="keyword">this</span>;\</div><div class="line">    return tmpframe;\</div><div class="line">};\</div></div><!-- fragment -->
 </div>
 </div>
 <a id="af537ac39c3246d45d81dde3d1fc5bb43"></a>

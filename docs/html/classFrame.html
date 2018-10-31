@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.7.1</span>
+   &#160;<span id="projectnumber">0.8.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -102,6 +102,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memitem:adc36bf512f9e5629b6c6075ab5563ddd"><td class="memItemLeft" align="right" valign="top"><a id="adc36bf512f9e5629b6c6075ab5563ddd"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>frame_essentials</b> (<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa334c4a4c42fdb79d7ebc3e73b517e6f8">FrameClass::none</a>, <a class="el" href="classFrame.html">Frame</a>)</td></tr>
 <tr class="separator:adc36bf512f9e5629b6c6075ab5563ddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4000e969c704636a03558cd170b3759a"><td class="memItemLeft" align="right" valign="top"><a id="a4000e969c704636a03558cd170b3759a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>frame_clone</b> (<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa334c4a4c42fdb79d7ebc3e73b517e6f8">FrameClass::none</a>, <a class="el" href="classFrame.html">Frame</a>)</td></tr>
+<tr class="separator:a4000e969c704636a03558cd170b3759a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4723db799543168c63e092dc398f0fc"><td class="memItemLeft" align="right" valign="top"><a id="ae4723db799543168c63e092dc398f0fc"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#ae4723db799543168c63e092dc398f0fc">print</a> (std::ostream &amp;os) const</td></tr>
 <tr class="memdesc:ae4723db799543168c63e092dc398f0fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Produces frame output. <br /></td></tr>
@@ -122,6 +125,10 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#ab104eb93ef2212c4c2112f91d340ba50">reset</a> ()</td></tr>
 <tr class="memdesc:ab104eb93ef2212c4c2112f91d340ba50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the internal data. <br /></td></tr>
 <tr class="separator:ab104eb93ef2212c4c2112f91d340ba50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67a25cfc2631c607e731468acc933f3d"><td class="memItemLeft" align="right" valign="top"><a id="a67a25cfc2631c607e731468acc933f3d"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#a67a25cfc2631c607e731468acc933f3d">isSeekable</a> ()</td></tr>
+<tr class="memdesc:a67a25cfc2631c607e731468acc933f3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Can we seek to this frame? (e.g. is it a key-frame .. for H264 sps packets are used as seek markers) <br /></td></tr>
+<tr class="separator:a67a25cfc2631c607e731468acc933f3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94c53ebcfa6464e67aa91078b2289240"><td class="memItemLeft" align="right" valign="top"><a id="a94c53ebcfa6464e67aa91078b2289240"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#a94c53ebcfa6464e67aa91078b2289240">copyMetaFrom</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
 <tr class="memdesc:a94c53ebcfa6464e67aa91078b2289240"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy metadata (slot, subsession index, timestamp) to this frame. <br /></td></tr>

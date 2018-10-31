@@ -26,7 +26,7 @@
  *  @file    frame_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.7.1 
+ *  @version 0.8.0 
  *  
  *  @brief Testing Frame classes.  Compile with "make tests" and run with valgrind
  *

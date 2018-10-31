@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.7.1</span>
+   &#160;<span id="projectnumber">0.8.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -146,6 +146,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a3996cf6c20676fd6c5f3103f4d723627">delRenderContext</a> (int id)</td></tr>
 <tr class="memdesc:a3996cf6c20676fd6c5f3103f4d723627"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs through <a class="el" href="classOpenGLThread.html#adc39f4a0676a56524c58d3517df97fdb" title="window_id =&gt; RenderGroup mapping. RenderGroup objects are warehoused here. ">OpenGLThread::render_groups</a> and removes indicated <a class="el" href="classRenderContext.html" title="Encapsulates data for rendering a single bitmap: vertex array object (VAO), vertex buffer object (VBO...">RenderContext</a>. <br /></td></tr>
 <tr class="separator:a3996cf6c20676fd6c5f3103f4d723627"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a233bf1ab5b83e50d34530b7ee1cf18ae"><td class="memItemLeft" align="right" valign="top"><a id="a233bf1ab5b83e50d34530b7ee1cf18ae"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>contextAddRectangle</b> (int id, float left, float right, float top, float bottom)</td></tr>
+<tr class="separator:a233bf1ab5b83e50d34530b7ee1cf18ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27cd3d7221f94736e923dcdd1d496490"><td class="memItemLeft" align="right" valign="top"><a id="a27cd3d7221f94736e923dcdd1d496490"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>contextClearObjects</b> (int id)</td></tr>
+<tr class="separator:a27cd3d7221f94736e923dcdd1d496490"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab52f1dd7644e3ad26c8c96f58fcdf4f6"><td class="memItemLeft" align="right" valign="top"><a id="ab52f1dd7644e3ad26c8c96f58fcdf4f6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#ab52f1dd7644e3ad26c8c96f58fcdf4f6">loadYUVFrame</a> (SlotNumber n_slot, <a class="el" href="classYUVFrame.html">YUVFrame</a> *yuvframe)</td></tr>
 <tr class="memdesc:ab52f1dd7644e3ad26c8c96f58fcdf4f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load PBO to texture in <a class="el" href="classOpenGLThread.html#a42ffcba56b2d1d1d706d141506d7c249" title="index =&gt; SlotContext mapping (based on vector indices) // WARNING: not they&#39;re pointers ...">OpenGLThread::slots_</a>[n_slot]. <br /></td></tr>
@@ -317,6 +323,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a828e9b1045354ee6083edcb68142e9ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a828e9b1045354ee6083edcb68142e9ec">delRenderContextCall</a> (int id)</td></tr>
 <tr class="memdesc:a828e9b1045354ee6083edcb68142e9ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">API call: delete a rendering context.  <a href="#a828e9b1045354ee6083edcb68142e9ec">More...</a><br /></td></tr>
 <tr class="separator:a828e9b1045354ee6083edcb68142e9ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46c6d575a04323db711d34e602502de4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a46c6d575a04323db711d34e602502de4">addRectangleCall</a> (int id, float left, float right, float top, float bottom)</td></tr>
+<tr class="memdesc:a46c6d575a04323db711d34e602502de4"><td class="mdescLeft">&#160;</td><td class="mdescRight">API call: add a rectangle that is drawn on the texture.  <a href="#a46c6d575a04323db711d34e602502de4">More...</a><br /></td></tr>
+<tr class="separator:a46c6d575a04323db711d34e602502de4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa02d8e3e61ba64c79d41b56c582a7abc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#aa02d8e3e61ba64c79d41b56c582a7abc">clearObjectsCall</a> (int id)</td></tr>
+<tr class="memdesc:aa02d8e3e61ba64c79d41b56c582a7abc"><td class="mdescLeft">&#160;</td><td class="mdescRight">API call: clear all objects drawn on the texture.  <a href="#aa02d8e3e61ba64c79d41b56c582a7abc">More...</a><br /></td></tr>
+<tr class="separator:aa02d8e3e61ba64c79d41b56c582a7abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:a893a5e029b5111961f7501d2edd65ebe inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a893a5e029b5111961f7501d2edd65ebe">Thread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>)</td></tr>
 <tr class="memdesc:a893a5e029b5111961f7501d2edd65ebe inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classThread.html#a893a5e029b5111961f7501d2edd65ebe">More...</a><br /></td></tr>
@@ -470,6 +482,10 @@ std::map&lt; Window, <a class="el" href="classRenderGroup.html">RenderGroup</a> 
 std::vector&lt; std::list&lt; <a class="el" href="classRenderGroup.html">RenderGroup</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#a643ac63c87b6754a135d5e6f09d41d0e">render_lists</a></td></tr>
 <tr class="memdesc:a643ac63c87b6754a135d5e6f09d41d0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Each vector element corresponds to a slot. Each list inside a vector element has pointers to RenderGroups to be rendered. <br /></td></tr>
 <tr class="separator:a643ac63c87b6754a135d5e6f09d41d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc2428dca143e90e6784660f2d240cae"><td class="memItemLeft" align="right" valign="top"><a id="adc2428dca143e90e6784660f2d240cae"></a>
+std::map&lt; int, <a class="el" href="classRenderContext.html">RenderContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#adc2428dca143e90e6784660f2d240cae">render_contexes</a></td></tr>
+<tr class="memdesc:adc2428dca143e90e6784660f2d240cae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shortcut to render contexes. <br /></td></tr>
+<tr class="separator:adc2428dca143e90e6784660f2d240cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd95b01df8ebaf9cae08e13d4ba87cda"><td class="memItemLeft" align="right" valign="top"><a id="abd95b01df8ebaf9cae08e13d4ba87cda"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOpenGLThread.html#abd95b01df8ebaf9cae08e13d4ba87cda">msbuftime</a></td></tr>
 <tr class="memdesc:abd95b01df8ebaf9cae08e13d4ba87cda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buffering time in milliseconds. <br /></td></tr>
@@ -624,6 +640,100 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a46c6d575a04323db711d34e602502de4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46c6d575a04323db711d34e602502de4">&#9670;&nbsp;</a></span>addRectangleCall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OpenGLThread::addRectangleCall </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>right</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>top</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>bottom</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>API call: add a rectangle that is drawn on the texture. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>Rendering context id </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classOpenGLThread_a46c6d575a04323db711d34e602502de4_cgraph.png" border="0" usemap="#classOpenGLThread_a46c6d575a04323db711d34e602502de4_cgraph" alt=""/></div>
+<map name="classOpenGLThread_a46c6d575a04323db711d34e602502de4_cgraph" id="classOpenGLThread_a46c6d575a04323db711d34e602502de4_cgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa02d8e3e61ba64c79d41b56c582a7abc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa02d8e3e61ba64c79d41b56c582a7abc">&#9670;&nbsp;</a></span>clearObjectsCall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OpenGLThread::clearObjectsCall </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>API call: clear all objects drawn on the texture. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>Rendering context id </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classOpenGLThread_aa02d8e3e61ba64c79d41b56c582a7abc_cgraph.png" border="0" usemap="#classOpenGLThread_aa02d8e3e61ba64c79d41b56c582a7abc_cgraph" alt=""/></div>
+<map name="classOpenGLThread_aa02d8e3e61ba64c79d41b56c582a7abc_cgraph" id="classOpenGLThread_aa02d8e3e61ba64c79d41b56c582a7abc_cgraph">
+</map>
+</div>
+
+</div>
+</div>
 <a id="a828e9b1045354ee6083edcb68142e9ec"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a828e9b1045354ee6083edcb68142e9ec">&#9670;&nbsp;</a></span>delRenderContextCall()</h2>
 

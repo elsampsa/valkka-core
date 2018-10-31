@@ -113,8 +113,8 @@ endif (profile_timing)
 # ****************************************************************
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "0") 
-SET(MINOR_VERSION "7") 
-SET(PATCH_VERSION "1") 
+SET(MINOR_VERSION "8") 
+SET(PATCH_VERSION "0") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
 # *** define build type: Debug or Release # now from the command line
@@ -263,8 +263,7 @@ add_dependencies(valkka_core ${PROJECT_NAME}) # swig .so depends on the main sha
 # set(TESTNAMES "av_live_thread_test" "av_thread_test" "classes_test" "fifo_test" "file_test" "frames_test" "live_stream_check_test" "live_streaming_test" "live_thread_test" "log_test" "opengl_test" "opengl_thread_test" "render_test" "shmem_test" "swscale_test" "threads_test")
 # set(TESTNAMES "shmem_test" "swscale_test")
 # set(TESTNAMES "file_test")
-set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test" "avthread_test" "av_live_thread_test" "openglframefifo_test" "openglthread_test" "live_av_openglthread_test" "live_av_shmem_test" "file_test" "filethread_test" "filethread_test0" "livethread_rtsp_test" "switch_test" "framefilter_test" "cache_test")
-
+set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test" "avthread_test" "av_live_thread_test" "openglframefifo_test" "openglthread_test" "live_av_openglthread_test" "live_av_openglthread_test2" "live_av_shmem_test" "file_test" "filethread_test" "filethread_test0" "livethread_rtsp_test" "switch_test" "framefilter_test" "cache_test")
 
 add_custom_target(tests) # Note: without 'ALL'
 foreach( testname ${TESTNAMES} )

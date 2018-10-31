@@ -11,5 +11,6 @@ var searchData=
   ['n_5fyuvpbo',['n_yuvpbo',['../structFrameFifoContext.html#acea869589096476981ea00e470817d56',1,'FrameFifoContext']]],
   ['name',['name',['../classSharedMemSegment.html#a6b7d9c36dfee22cf2799c9ddf5d7fa33',1,'SharedMemSegment::name()'],['../classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a',1,'Thread::name()']]],
   ['nbuf',['nbuf',['../classFrameSink.html#ab9af1bc3bde6af91e0dc6bbcad7ec83f',1,'FrameSink']]],
-  ['next',['next',['../classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818',1,'FrameFilter']]]
+  ['next',['next',['../classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818',1,'FrameFilter']]],
+  ['next_5fframe',['next_frame',['../classAbstractFileStream.html#a603b28e27b43306e19ce31e1d3a79368',1,'AbstractFileStream']]]
 ];

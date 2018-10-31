@@ -13,6 +13,7 @@ var searchData=
   ['n_5fyuvpbo',['n_yuvpbo',['../structFrameFifoContext.html#acea869589096476981ea00e470817d56',1,'FrameFifoContext']]],
   ['name',['name',['../classSharedMemSegment.html#a6b7d9c36dfee22cf2799c9ddf5d7fa33',1,'SharedMemSegment::name()'],['../classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a',1,'Thread::name()']]],
   ['nbuf',['nbuf',['../classFrameSink.html#ab9af1bc3bde6af91e0dc6bbcad7ec83f',1,'FrameSink']]],
+  ['new_5frectangle',['new_rectangle',['../group__openglthread__tag.html#ggaa7275dda16349b828b8c7e9672e3a2aca46da7818cc879b4b231a76d17a741345',1,'threadsignal.h']]],
   ['new_5frender_5fcontext',['new_render_context',['../group__openglthread__tag.html#ggaa7275dda16349b828b8c7e9672e3a2acafdb19c1ca72cb79f4832c007e65c70b2',1,'threadsignal.h']]],
   ['new_5frender_5fgroup',['new_render_group',['../group__openglthread__tag.html#ggaa7275dda16349b828b8c7e9672e3a2acaa20632b6e8fd8868628f632e6a161021',1,'threadsignal.h']]],
   ['newrendercontext',['newRenderContext',['../classOpenGLThread.html#ac999e4b38de0e978cbc96c4ac3496d29',1,'OpenGLThread']]],
@@ -20,5 +21,6 @@ var searchData=
   ['newrendergroup',['newRenderGroup',['../classOpenGLThread.html#a5849a1a786b6f109d149943b4cbcec9b',1,'OpenGLThread']]],
   ['newrendergroupcall',['newRenderGroupCall',['../classOpenGLThread.html#aa836bb0e21ad549dd78f4d6e5adfa7ff',1,'OpenGLThread']]],
   ['next',['next',['../classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818',1,'FrameFilter']]],
+  ['next_5fframe',['next_frame',['../classAbstractFileStream.html#a603b28e27b43306e19ce31e1d3a79368',1,'AbstractFileStream']]],
   ['none',['none',['../group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa334c4a4c42fdb79d7ebc3e73b517e6f8',1,'none():&#160;frame.h'],['../group__live__tag.html#gga267e2aa9269281d26f54d6c0371a8e76a334c4a4c42fdb79d7ebc3e73b517e6f8',1,'none():&#160;live.h'],['../group__openglthread__tag.html#ggaa7275dda16349b828b8c7e9672e3a2aca334c4a4c42fdb79d7ebc3e73b517e6f8',1,'none():&#160;threadsignal.h']]]
 ];

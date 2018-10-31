@@ -1,9 +1,12 @@
 var searchData=
 [
+  ['cacheframefilter',['CacheFrameFilter',['../classCacheFrameFilter.html#a3fafb5b6e26a378194d1bd1e91537913',1,'CacheFrameFilter']]],
   ['checkalive',['checkAlive',['../classLiveThread.html#a39ea8a235a429002345797a6ae900113',1,'LiveThread']]],
   ['checkbuffersize',['checkBufferSize',['../classFrameSink.html#ab1d5c7e50bcdd2463f2e384c300d578f',1,'FrameSink']]],
   ['checkifdead',['checkIfDead',['../classSlotContext.html#ac8cf39535fc3599cd626c09823c2aa69',1,'SlotContext']]],
+  ['clear',['clear',['../classFrameCache.html#a3cbe0661a2ce14ffedece5c9573b3b05',1,'FrameCache']]],
   ['clearflag',['clearFlag',['../classSharedMemRingBuffer.html#a156b27e9e115f4c73c0e9992cb115ded',1,'SharedMemRingBuffer']]],
+  ['clearobjectscall',['clearObjectsCall',['../classOpenGLThread.html#aa02d8e3e61ba64c79d41b56c582a7abc',1,'OpenGLThread']]],
   ['clientinit',['clientInit',['../classSharedMemSegment.html#a3c9adc83f380527847e312c969e72ead',1,'SharedMemSegment']]],
   ['clientpull',['clientPull',['../classSharedMemRingBuffer.html#a7285c34c4732ba4633d16bbcfbc7c24c',1,'SharedMemRingBuffer']]],
   ['close',['close',['../classStreamClientState.html#a2fadd0a8b27b8752c80a79b3d5e20e69',1,'StreamClientState']]],

@@ -4,6 +4,7 @@ var searchData=
   ['_7eavmediaframe',['~AVMediaFrame',['../classAVMediaFrame.html#a8240c80d2a09db0e9ab749024fd002f5',1,'AVMediaFrame']]],
   ['_7eavthread',['~AVThread',['../classAVThread.html#ab47e906b4eed1c9853e80ade1f429c9f',1,'AVThread']]],
   ['_7ebasicframe',['~BasicFrame',['../classBasicFrame.html#abe5c3cacf20bd01f9511b5bcd2585eb4',1,'BasicFrame']]],
+  ['_7ecachestream',['~CacheStream',['../classCacheStream.html#a9efb57b32bd8f33a549e2c8dfd187888',1,'CacheStream']]],
   ['_7econnection',['~Connection',['../classConnection.html#a2e4352edf667bea83001569e9da8a24d',1,'Connection']]],
   ['_7edecoder',['~Decoder',['../classDecoder.html#a8b70f4475ae0852b138d63f6d8ddb298',1,'Decoder']]],
   ['_7efileframefilter',['~FileFrameFilter',['../classFileFrameFilter.html#abe2eea52de2bd61e1880ebbe58d26f28',1,'FileFrameFilter']]],
