@@ -443,21 +443,9 @@ void RenderContext::bindVars() {// Upload other data to the GPU (say, transforma
     // const YUVTEX *yuvtex;
     const YUVTEX *yuvtex =slot_context->getTEX(); // returns the relevant texture (static or live)
     
-    /*
-     *  if (slot_context.isDead()) { // no frame has been received for a while .. show the static texture instead
-     * #ifdef PRESENT_VERBOSE
-     *    std::cout << "RenderContext: bindVars: using static texture" << std::endl;
-     * #endif
-     *    yuvtex    = statictex;
-}
-else { // everything's ok, use the YUVTEX in the SlotContext
-    yuvtex    = (YUVTEX*)(slot_context.yuvtex);
-}
-*/
-    
-    
     XWindowAttributes& wa=x_window_attr; // shorthand
-    GLfloat r, dx, dy; // , dx2, dy2;
+    // GLfloat r, dx, dy; // , dx2, dy2;
+    GLfloat r, kx, ky;
     
     // calculate dimensions
     // (screeny/screenx) / (iy/ix)  =  screeny*ix / screenx*iy
@@ -512,48 +500,26 @@ else { // everything's ok, use the YUVTEX in the SlotContext
     
     // keep aspect ratio, clip image.  TODO: should be able to choose between clipping and black borders.
     //
-    r=float(wa.height*(bmpars.width)) / float(wa.width*(bmpars.height));
+    r=float(wa.width*(bmpars.height)) / float(wa.height*(bmpars.width));
     if (r<1.){ // screen form: wider than image // keep width, scale up height
-        dy=1/r;
-        dx=1;
+        // kx=1; ky=r; // black borders
+        kx=1/r; ky=1; // clipping
     }
     else if (r>1.) { // screen form: taller than image // keep height, scale up width
-        dx=r;
-        dy=1;
+        // kx=1/r; ky=1; // black borders
+        kx=1; ky=r; // clipping
     }
     else {
-        dx=1;
-        dy=1;
+        kx=1;
+        ky=1;
     }
     
-    /*
-     *  // correct aspect ratio, no missing picture.  Black borders on the image
-     *  // bm.w/bm.h > win.w/win.h    (lhs > 1, rhs < 1)   (**)
-     *  // => dx=1, scale dy with  (bm.h/win.h)*(win.w/bm.w)  (remove scale, put a new one)  
-     *  //
-     *  r=float(wa.height*(bmpars.width)) / float(wa.width*(bmpars.height));
-     *  if (r<1.){ // screen form: wider than image
-     *    dy=1;
-     *    dx=r;
-}
-
-else if (r>1.) { // screen form: taller than image (**)
-    dx=1;
-    dy=1/r;
-}
-else {
-    dx=1;
-    dy=1;
-}
-*/
-    
-    
     #ifdef RENDER_VERBOSE
-    std::cout << "RenderContext: bindVars: dx, dy = " << dx <<" "<<dy<<" "<< std::endl;
+    std::cout << "RenderContext: bindVars: kx, ky = " << kx <<" "<< ky<<" "<< std::endl;
     #endif  
     // /* // test..
-    transform[0]  =dx;
-    transform[5]  =dy;
+    transform[0]  =kx;
+    transform[5]  =ky;
     
     // */
     /*

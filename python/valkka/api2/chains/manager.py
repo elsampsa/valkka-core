@@ -353,6 +353,20 @@ class ManagedFilterchain:
         return sm
 
 
+    def setBoundingBoxes(self, view_port, bbox_list):
+        x_screen_num = view_port.getXScreenNum()
+        openglthread = self.openglthreads[x_screen_num]
+
+        if (view_port in self.tokens_by_port):
+            token = self.tokens_by_port[view_port]
+            openglthread.core.clearObjectsCall(token)
+            for bbox in bbox_list:
+                openglthread.core.addRectangleCall(token, bbox[0], bbox[1], bbox[2], bbox[3]) # left, right, top, bottom
+        
+            
+        
+        
+
 
 class ManagedFilterchain2(ManagedFilterchain):
     """This class implements the following filterchain:

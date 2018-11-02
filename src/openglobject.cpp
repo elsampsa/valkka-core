@@ -63,11 +63,15 @@ void Rectangle::draw() {
 }
     
 void Rectangle::setCoordinates(float left, float right, float top, float bottom) {
+    
+    // let's go from 0..1 coordinates to -1..1 coordinates, i.e.
+    // transform with (x * 2 - 1)
+    
     vertices =std::array<GLfloat,12> {
-        right, top,     0,
-        right, bottom,  0,
-        left,  bottom,  0,
-        left,  top,     0
+        right*(GLfloat)2.-(GLfloat)1., top*   (GLfloat)2.-(GLfloat)1.,  0,
+        right*(GLfloat)2.-(GLfloat)1., bottom*(GLfloat)2.-(GLfloat)1.,  0,
+        left* (GLfloat)2.-(GLfloat)1., bottom*(GLfloat)2.-(GLfloat)1.,  0,
+        left* (GLfloat)2.-(GLfloat)1., top*   (GLfloat)2.-(GLfloat)1.,  0
     };
     
     glBindVertexArray(VAO); // VAO works as a "mini program" .. we do all the steps below, when binding the VAO

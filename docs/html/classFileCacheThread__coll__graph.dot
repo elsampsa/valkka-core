@@ -1,0 +1,31 @@
+digraph "FileCacheThread"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node3 [label="FileCacheThread",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node4 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="AbstractFileThread",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classAbstractFileThread.html",tooltip="This class uses AbstractFileStream(s) "];
+  Node5 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="Thread",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classThread.html",tooltip="A class for multithreading with a signaling system. "];
+  Node6 -> Node3 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" stream" ,fontname="Helvetica"];
+  Node6 [label="CacheStream",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classCacheStream.html",tooltip="Caches (a large amount of) frames and pushes them forward at a rate corresponding to play speed..."];
+  Node7 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="AbstractFileStream",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classAbstractFileStream.html",tooltip="A general class for on-disk stored streams. "];
+  Node8 -> Node7 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" out_frame" ,fontname="Helvetica"];
+  Node8 [label="BasicFrame",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBasicFrame.html",tooltip="Custom payload Frame. "];
+  Node9 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="Frame",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classFrame.html",tooltip="Frame: An abstract queueable class. "];
+  Node10 -> Node8 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" h264_pars" ,fontname="Helvetica"];
+  Node10 [label="H264Pars",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structH264Pars.html"];
+  Node9 -> Node7 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" next_frame" ,fontname="Helvetica"];
+  Node11 -> Node6 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" infilter" ,fontname="Helvetica"];
+  Node11 [label="CacheFrameFilter",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classCacheFrameFilter.html",tooltip="Passes frames to a FrameCache. "];
+  Node12 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 [label="FrameFilter",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classFrameFilter.html",tooltip="The mother class of all frame filters! FrameFilters are used to create \"filter chains\". "];
+  Node12 -> Node12 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" next" ,fontname="Helvetica"];
+  Node13 -> Node11 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" framecache" ,fontname="Helvetica"];
+  Node13 [label="FrameCache",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classFrameCache.html",tooltip="FrameCache works like FrameFifo, but frames are not pre-reserved. "];
+  Node14 -> Node13 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" ctx" ,fontname="Helvetica"];
+  Node14 [label="FrameCacheContext",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structFrameCacheContext.html"];
+  Node13 -> Node6 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" cache" ,fontname="Helvetica"];
+}

@@ -438,6 +438,7 @@ public: // API // <pyapi>
     
     /** API call: add a rectangle that is drawn on the texture
     * @param id         Rendering context id
+    * @param left       left, right, top, bottom define the rectangle in relative (0..1) coordinates
     * 
     */
     void addRectangleCall(int id, float left, float right, float top, float bottom); // <pyapi>

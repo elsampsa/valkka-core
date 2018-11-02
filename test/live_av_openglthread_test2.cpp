@@ -66,69 +66,73 @@ LiveThread      livethread("live");
 
 
 void test_1() {
-  const char* name = "@TEST: live_av_openglthread_test: test 1: ";
-  std::cout << name <<"** @@Feed one rtsp stream to a single window and draw overlaying boxes**" << std::endl;
-  int i;
-  
-  if (!stream_1) {
-    std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
-    exit(2);
-  }
-  std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
-  
-  std::cout << name << "starting threads" << std::endl;
-  
-  // avthread.  setTimeTolerance(10); // 10 milliseconds // just testing ..
-  
-  glthread.setStaticTexFile("1.yuv");
-  
-  // start glthread and create a window
-  glthread.  startCall();
-  Window window_id=glthread.createWindow();
-  glthread.makeCurrent(window_id);
-  std::cout << "new x window "<<window_id<<std::endl;
-  
-  // start av and live threads
-  avthread.  startCall();
-  livethread.startCall();
-  avthread.  decodingOnCall(); // don't forget this ..
-  sleep_for(2s);
-  
-  std::cout << name << "registering stream" << std::endl;
-  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
-  livethread.registerStreamCall(ctx);
-  std::cout << name << "playing stream !" << std::endl;
-  livethread.playStreamCall(ctx);
-  
-  // create render group & context
-  glthread.newRenderGroupCall(window_id);
-  i=glthread.newRenderContextCall(2, window_id, 0);
-  std::cout << "got render context id "<<i<<std::endl;
-  
-  glthread.addRectangleCall(i, -0.5, 0.5, 0.5, -0.5);
-  glthread.addRectangleCall(i, -0.1, 0.1, 0.25, -0.25);
-  
-  sleep_for(10s);
-  
-  glthread.clearObjectsCall(i);
-  glthread.addRectangleCall(i, -0.3, 0.3, 0.25, -0.25);
-  
-  sleep_for(5s);
-  
-  // sleep_for(120s);
-  // sleep_for(604800s); //one week
-  
-  // del render group & context
-  glthread.delRenderContextCall(i);
-  glthread.delRenderGroupCall(window_id);
-  
-  std::cout << name << "stopping threads" << std::endl;
-  livethread.stopCall();
-  avthread.  stopCall();
-  glthread.  stopCall();  
-  
-  
-  
+    const char* name = "@TEST: live_av_openglthread_test: test 1: ";
+    std::cout << name <<"** @@Feed one rtsp stream to a single window and draw overlaying boxes**" << std::endl;
+    int i;
+    
+    if (!stream_1) {
+        std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+        exit(2);
+    }
+    std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+    
+    std::cout << name << "starting threads" << std::endl;
+    
+    // avthread.  setTimeTolerance(10); // 10 milliseconds // just testing ..
+    
+    glthread.setStaticTexFile("1.yuv");
+    
+    // start glthread and create a window
+    glthread.  startCall();
+    Window window_id=glthread.createWindow();
+    glthread.makeCurrent(window_id);
+    std::cout << "new x window "<<window_id<<std::endl;
+    
+    // start av and live threads
+    avthread.  startCall();
+    livethread.startCall();
+    avthread.  decodingOnCall(); // don't forget this ..
+    sleep_for(2s);
+    
+    std::cout << name << "registering stream" << std::endl;
+    LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
+    livethread.registerStreamCall(ctx);
+    std::cout << name << "playing stream !" << std::endl;
+    livethread.playStreamCall(ctx);
+    
+    // create render group & context
+    glthread.newRenderGroupCall(window_id);
+    i=glthread.newRenderContextCall(2, window_id, 0);
+    std::cout << "got render context id "<<i<<std::endl;
+    
+    // glthread.addRectangleCall(i, -0.5, 0.5, 0.5, -0.5);
+    // glthread.addRectangleCall(i, -0.1, 0.1, 0.25, -0.25);
+    
+    glthread.addRectangleCall(i, 0.25, 0.75, 0.75, 0.25);  // left, right, top, bottom in 0..1 coordinates
+    glthread.addRectangleCall(i, 0.1,  0.2, 0.75, 0.25);
+    
+    sleep_for(10s);
+    
+    glthread.clearObjectsCall(i);
+    // glthread.addRectangleCall(i, -0.3, 0.3, 0.25, -0.25);
+    glthread.addRectangleCall(i, 0.3, 0.9, 0.9, 0.1);
+    
+    sleep_for(5s);
+    
+    // sleep_for(120s);
+    // sleep_for(604800s); //one week
+    
+    // del render group & context
+    glthread.delRenderContextCall(i);
+    glthread.delRenderGroupCall(window_id);
+    
+    std::cout << name << "stopping threads" << std::endl;
+    livethread.stopCall();
+    avthread.  stopCall();
+    glthread.  stopCall();  
+    
+    
+    
   
 }
 
