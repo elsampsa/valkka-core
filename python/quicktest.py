@@ -1,4 +1,4 @@
-from valkka.valkka_core import *
+from valkka.core import *
 
 """Just test instatiation
 """

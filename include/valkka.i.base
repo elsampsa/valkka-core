@@ -22,6 +22,7 @@
 #include "framefilterset.h"
 #include "filestream.h"
 #include "cachestream.h"
+#include "valkkafs.h"
 
 #include <Python.h>
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION

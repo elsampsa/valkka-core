@@ -55,8 +55,10 @@ enum class FrameClass {
   
   avpkt,     ///< data at ffmpeg avpkt
   
-  avmedia,   ///< data at ffmpeg av_frame and ffmpeg av_codec_context
-  avbitmap,  ///< child of avmedia: video
+  avmedia,      ///< data at ffmpeg av_frame and ffmpeg av_codec_context
+  avbitmap,     ///< child of avmedia: video
+  // avbitmap_np,  ///< child of avmedia: video, non-planar
+  
   avaudio,   ///< child of avmedia: audio
   
   avrgb,     ///< rgb interpolated from yuv
@@ -288,12 +290,47 @@ public: // redefined virtual
   
     
 public: // helper objects
-  AVPixelFormat  av_pixel_format; ///< From AVCodecContext
+  AVPixelFormat  av_pixel_format; ///< From AVCodecContext .. this class implies YUV420P so this is not really required ..
   BitmapPars     bmpars;          ///< Calculated bitmap plane dimensions, data sizes, etc.
   uint8_t*       y_payload;       ///< shortcut to AVMediaFrame::av_frame->data[0]
   uint8_t*       u_payload;       ///< shortcut to AVMediaFrame::av_frame->data[1]
   uint8_t*       v_payload;       ///< shortcut to AVMediaFrame::av_frame->data[2]
 };
+
+
+/** Decoded YUV frame in a non-planar format (thus "NP")
+ * 
+ * For example, the YUYV422 format (AV_PIX_FMT_YUYV422), where the data layout looks like this:
+ * YUYV YUYV YUYV YUYV YUYV YUYV
+ * 
+ * here we could optimize and copy from YUYV422 directly to YUV420 on the GPU
+ * like in YUVFrame::fromAVBitmapFrame
+ * maybe someday ..
+ * 
+ 
+class AVBitmapFrameNP : public AVMediaFrame {
+  
+public:
+  AVBitmapFrameNP(); ///< Default ctor
+  virtual ~AVBitmapFrameNP(); ///< Default virtual dtor
+  frame_essentials(FrameClass::avbitmap_np, AVBitmapFrameNP);
+  frame_clone(FrameClass::avbitmap_np, AVBitmapFrameNP); // TODO: think about this!
+  
+public: // redefined virtual
+  virtual std::string dumpPayload();
+  virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
+  virtual void reset();              ///< Reset the internal data
+  virtual void update();             ///< Uses AVBitmapFrame::av_frame width and height and AVBitmapFrame::av_pixel_format to calculate AVBitmapFrame::bmpars
+  
+    
+public: // helper objects
+  AVPixelFormat  av_pixel_format; ///< From AVCodecContext .. this class implies YUV422P so this is not really required ..
+  BitmapPars     bmpars;          ///< Reference parameters for corresponding YUV420P frame
+  uint8_t*       payload;         ///< shortcut to the non-planar data
+};
+*/
+
+
 
 /** Decoded RGB frame in FFMpeg format
  * 

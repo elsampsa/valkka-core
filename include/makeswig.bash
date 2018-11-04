@@ -7,7 +7,7 @@ echo
 echo GENERATING valkka_core.i
 echo
 
-headers="thread.h framefifo.h framefilter.h threadsignal.h livethread.h avfilethread.h fileframefilter.h avthread.h openglthread.h openglframefifo.h sharedmem.h logging.h constant.h avdep.h testthread.h framefilterset.h filestream.h cachestream.h"
+headers="thread.h framefifo.h framefilter.h threadsignal.h livethread.h avfilethread.h fileframefilter.h avthread.h openglthread.h openglframefifo.h sharedmem.h logging.h constant.h avdep.h testthread.h framefilterset.h filestream.h cachestream.h valkkafs.h"
 
 # init valkka_core.i
 cat valkka.i.base > valkka_core.i

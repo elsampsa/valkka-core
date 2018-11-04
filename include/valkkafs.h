@@ -35,6 +35,18 @@
 
 #include "thread.h"
 
+#include "Python.h"
+#include "numpy/ndarraytypes.h"
+#include "numpy/arrayobject.h"
+
+/*
+#include "boost/python/numpy.hpp"
+namespace p = boost::python;
+namespace np = boost::python::numpy;
+// https://www.boost.org/doc/libs/1_64_0/libs/python/doc/html/numpy/reference/ndarray.html
+// https://github.com/ndarray/Boost.NumPy/blob/master/libs/numpy/example/simple.cpp
+*/
+
 /** Book-keeping for ValkkaFS
  * 
  * @param device_file   File where payload is written.  Can be /dev/sdb etc., or just a plain file with some space reserved
@@ -43,17 +55,20 @@
  * @param device_size   Size of the device (or the part we want to use) in bytes
  * 
  */
-class ValkkaFS {
+class ValkkaFS {        // <pyapi>
 
-public:
-    ValkkaFS(const char *device_file, const char *block_file, long int blocksize, long int device_size);
-    ~ValkkaFS();
+public:                 // <pyapi>
+    ValkkaFS(const char *device_file, const char *block_file, long int blocksize, long int n_blocks); // <pyapi>
+    ~ValkkaFS();        // <pyapi>
 
 protected:
     std::string     device_file;
     std::string     block_file;
     long int        blocksize;
-    long int        device_size;
+    long int        n_blocks;
+    PyArray_Descr  *descr;
+    PyArrayObject   *arr;
+    // np::ndarray     *py_array;
     
     /*
     getMinTime
@@ -68,10 +83,12 @@ protected:
     markKeyFrame            (same)
 
     ** Python API **
-    
-    getNumpyArrayCall       Returns a numpy array copy of the blocktable
     */
-};
+    
+public:
+    PyObject *getNumpyArrayCall();  // <pyapi>       Returns a numpy array copy of the blocktable
+    
+};                                  // <pyapi>
 
 
 class ValkkaFSWriterThread : public Thread {

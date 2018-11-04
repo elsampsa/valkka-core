@@ -180,7 +180,7 @@ bool VideoDecoder::pull() {
   }
   else if (new_pixel_format==AV_PIX_FMT_YUVJ420P) { // ok
   }
-  else {
+  else { // TODO: set up scaling context for converting other YUV formats to YUV420P
 #ifdef DECODE_VERBOSE
     std::cout << "VideoDecoder: pull: wrong pixel format " << int(new_pixel_format) << std::endl;
 #endif    

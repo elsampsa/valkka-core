@@ -135,6 +135,7 @@ pkg_search_module(X11 REQUIRED x11)
 pkg_search_module(GLEW REQUIRED glew)
 pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the latest ffmpeg
 pkg_search_module(PYTHON REQUIRED python3)
+# no pkg-search for boost ..
 
 message("*** PYTHON INTERFACE ***")
 # execute_process(COMMAND python3 -c "from distutils import sysconfig; print(sysconfig.get_python_lib(),end='')" OUTPUT_VARIABLE PYTHON_DIR)
@@ -263,7 +264,7 @@ add_dependencies(valkka_core ${PROJECT_NAME}) # swig .so depends on the main sha
 # set(TESTNAMES "av_live_thread_test" "av_thread_test" "classes_test" "fifo_test" "file_test" "frames_test" "live_stream_check_test" "live_streaming_test" "live_thread_test" "log_test" "opengl_test" "opengl_thread_test" "render_test" "shmem_test" "swscale_test" "threads_test")
 # set(TESTNAMES "shmem_test" "swscale_test")
 # set(TESTNAMES "file_test")
-set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test" "avthread_test" "av_live_thread_test" "openglframefifo_test" "openglthread_test" "live_av_openglthread_test" "live_av_openglthread_test2" "live_av_shmem_test" "file_test" "filethread_test" "filethread_test0" "livethread_rtsp_test" "switch_test" "framefilter_test" "cache_test")
+set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test" "avthread_test" "av_live_thread_test" "openglframefifo_test" "openglthread_test" "live_av_openglthread_test" "live_av_openglthread_test2" "live_av_shmem_test" "file_test" "filethread_test" "filethread_test0" "livethread_rtsp_test" "switch_test" "framefilter_test" "cache_test" "usbthread_test" "valkkafs_test")
 
 add_custom_target(tests) # Note: without 'ALL'
 foreach( testname ${TESTNAMES} )
@@ -272,8 +273,8 @@ foreach( testname ${TESTNAMES} )
   target_include_directories(${testname} PUBLIC "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include")
   target_include_directories(${testname} PUBLIC "${FFMPEG_ROOT}")
 
-  # target_include_directories(${testname} PUBLIC ${PYTHON_INCLUDE_DIRS})
-  # target_link_libraries(${testname} ${PYTHON_LIBRARIES})
+  target_include_directories(${testname} PUBLIC ${PYTHON_INCLUDE_DIRS})
+  target_link_libraries(${testname} ${PYTHON_LIBRARIES})
   
   target_link_libraries(${testname} "Valkka.so")
   target_link_libraries(${testname} "-L${CMAKE_CURRENT_BINARY_DIR}/lib")
