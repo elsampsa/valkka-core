@@ -76,9 +76,12 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a505ada168aaa843fcde6fc24b92fc4c6"><td class="memItemLeft" align="right" valign="top"><a id="a505ada168aaa843fcde6fc24b92fc4c6"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ValkkaFS</b> (const char *device_file, const char *block_file, long int blocksize, long int device_size)</td></tr>
-<tr class="separator:a505ada168aaa843fcde6fc24b92fc4c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdac4da39fbe0beebd9a4c4b58739367"><td class="memItemLeft" align="right" valign="top"><a id="abdac4da39fbe0beebd9a4c4b58739367"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ValkkaFS</b> (const char *device_file, const char *block_file, long int blocksize, long int n_blocks)</td></tr>
+<tr class="separator:abdac4da39fbe0beebd9a4c4b58739367"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7285e57f2db0c1ae27660cf6b39939e"><td class="memItemLeft" align="right" valign="top"><a id="ac7285e57f2db0c1ae27660cf6b39939e"></a>
+PyObject *&#160;</td><td class="memItemRight" valign="bottom"><b>getNumpyArrayCall</b> ()</td></tr>
+<tr class="separator:ac7285e57f2db0c1ae27660cf6b39939e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -91,9 +94,15 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>block_file</b>
 <tr class="memitem:a0b4d6f22a395c3b58a21d345dccb0e8c"><td class="memItemLeft" align="right" valign="top"><a id="a0b4d6f22a395c3b58a21d345dccb0e8c"></a>
 long int&#160;</td><td class="memItemRight" valign="bottom"><b>blocksize</b></td></tr>
 <tr class="separator:a0b4d6f22a395c3b58a21d345dccb0e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67d8ef698a2060eb62eaa27ac2d67aac"><td class="memItemLeft" align="right" valign="top"><a id="a67d8ef698a2060eb62eaa27ac2d67aac"></a>
-long int&#160;</td><td class="memItemRight" valign="bottom"><b>device_size</b></td></tr>
-<tr class="separator:a67d8ef698a2060eb62eaa27ac2d67aac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59f70526b192abd67f3d9c96c74ccdee"><td class="memItemLeft" align="right" valign="top"><a id="a59f70526b192abd67f3d9c96c74ccdee"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><b>n_blocks</b></td></tr>
+<tr class="separator:a59f70526b192abd67f3d9c96c74ccdee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a2916665a27166cbe4a17c72d594f0a"><td class="memItemLeft" align="right" valign="top"><a id="a2a2916665a27166cbe4a17c72d594f0a"></a>
+PyArray_Descr *&#160;</td><td class="memItemRight" valign="bottom"><b>descr</b></td></tr>
+<tr class="separator:a2a2916665a27166cbe4a17c72d594f0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af01c6d9d0f03167412658f28d29fa242"><td class="memItemLeft" align="right" valign="top"><a id="af01c6d9d0f03167412658f28d29fa242"></a>
+PyArrayObject *&#160;</td><td class="memItemRight" valign="bottom"><b>arr</b></td></tr>
+<tr class="separator:af01c6d9d0f03167412658f28d29fa242"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Book-keeping for <a class="el" href="classValkkaFS.html" title="Book-keeping for ValkkaFS. ">ValkkaFS</a>. </p>

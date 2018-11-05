@@ -22,7 +22,7 @@ var searchData=
   ['state',['state',['../classFileStream.html#a5258e5596180e8bf51bc81c3ce73f330',1,'FileStream::state()'],['../classFrameCache.html#a3d3545e52256706110fb1ca8c8ceec99',1,'FrameCache::state()'],['../classAbstractFileStream.html#a2c55be8b7f713974334cc14f108c6647',1,'AbstractFileStream::state()']]],
   ['static_5ftexture_5ffile',['static_texture_file',['../classOpenGLThread.html#a9dc68aa21b7c94337731ca2681cb0e39',1,'OpenGLThread']]],
   ['statictex',['statictex',['../classSlotContext.html#a55ff54e6f7d21c4726da4b6c16279ed4',1,'SlotContext::statictex()'],['../classOpenGLThread.html#afe7059e3939683420e41964c8d020bc1',1,'OpenGLThread::statictex()']]],
-  ['status',['status',['../structFileContext.html#a4f95d781ab62a727d27b9f469934c053',1,'FileContext']]],
+  ['status',['status',['../structFileContext.html#a4f95d781ab62a727d27b9f469934c053',1,'FileContext::status()'],['../classV4LDevice.html#a4d05e95a4b0966c5ae6f17ee237db1ac',1,'V4LDevice::status()']]],
   ['streams',['streams',['../classSDPOutbound.html#a2d202eb629380c83d80684e3658b20c8',1,'SDPOutbound']]],
   ['subsession',['subsession',['../classStreamClientState.html#a9537edef807552dd72e8680e59945b19',1,'StreamClientState']]],
   ['subsession_5findex',['subsession_index',['../classFrame.html#a9eb7ebe4689c2d14ff027ba4cfe1cb1d',1,'Frame::subsession_index()'],['../classStreamClientState.html#a95e563bd9023c032642d0b89131df02b',1,'StreamClientState::subsession_index()']]],
