@@ -72,7 +72,7 @@ struct H264Pars { ///< H264 parameters
   H264Pars() : slice_type(H264SliceType::none) {};
   short unsigned slice_type;
 };
-std::ostream &operator<<(std::ostream &os, H264Pars const &m) {
+inline std::ostream &operator<<(std::ostream &os, H264Pars const &m) {
  return os << "H264: slice_type="<<m.slice_type;
 }
 
@@ -83,7 +83,7 @@ struct SetupPars { ///< Setup parameters for decoders and muxers (outdated)
   MediaType mediatype;
   Codec     codec;
 };
-std::ostream &operator<<(std::ostream &os, SetupPars const &m) {
+inline std::ostream &operator<<(std::ostream &os, SetupPars const &m) {
  return os << "Setup: mediatype="<< int(m.mediatype) << " codec="<< int(m.codec);
 }
 

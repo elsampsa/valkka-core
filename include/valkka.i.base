@@ -48,6 +48,14 @@ ffmpeg_av_register_all();  // register all avcodecs, muxers, etc.
   $1=PyLong_AsSize_t($input);
 }
 
+%typemap(out) (long int) {
+   $result=PyInt_FromLong($1);
+}
+
+%typemap(out) (std::size_t) {
+   $result=PyInt_FromSize_t($1);
+}
+
 
 %inline %{
 

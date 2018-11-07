@@ -40,7 +40,7 @@
 #include "constant.h"
 #include "logging.h"
 
-int64_t NANOSEC_PER_SEC = 1000000000;
+static const int64_t NANOSEC_PER_SEC = 1000000000;
 
 long int getCurrentMsTimestamp(); ///< Utility function: returns current unix epoch timestamp in milliseconds
 

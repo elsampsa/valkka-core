@@ -47,53 +47,130 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 
 void test_1() {
-  
     const char* name = "@TEST: valkkafs_test: test 1: ";
     std::cout << name <<"** @@DESCRIPTION **" << std::endl;
 
-    npy_intp dims[] = { 1080, 1920, 3 };
-    PyObject *array;
-    
-    Py_Initialize();    
-    #define import_array() {if (_import_array() < 0) {PyErr_Print(); PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import"); } }
-    import_array();
-    
-    array = PyArray_SimpleNew(3, dims, NPY_BYTE);
+    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10);
 
-    ValkkaFS fs = ValkkaFS("disk.dat", "block.dat", 1024*1024, 10);
-  
+    fs.setVal(1,1,22);
+    
+    fs.dump();
+    
+    fs.read();
+
+    std::cout << fs.getVal(1,1) << std::endl;
+    
+    ValkkaFS fs2("disk.dat", "block.dat", 1024*1024, 10);
+    fs2.read();
+    
+    std::cout << fs2.getVal(1,1) << std::endl;
+    
 }
 
 
 void test_2() {
+    const char* name = "@TEST: valkkafs_test: test 2: ";
+    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
   
-  const char* name = "@TEST: valkkafs_test: test 2: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10);
+
+    std::cout << fs.getDevice() << std::endl;
+    std::cout << fs.getDeviceSize() << std::endl;
+    fs.clearDevice();
 }
 
 
 void test_3() {
-  
-  const char* name = "@TEST: valkkafs_test: test 3: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+    const char* name = "@TEST: valkkafs_test: test 3: ";
+    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+
+    BasicFrame *f = new BasicFrame();
+    f->resize(1024*1024);
+    f->subsession_index=1;
+    std::fill(f->payload.begin(), f->payload.end(), 12);
+    f->mstimestamp = 1001;
+
+    std::ofstream os("framedump", std::ios::binary);
+    f->dump(123, os);
+    os.close();
+   
+    std::cout << "frame:" << *f << std::endl;
+    
+    BasicFrame *f2 = new BasicFrame();
+    
+    std::ifstream is("framedump", std::ios::binary);
+    f2->read(is);
+    is.close();
+    
+    std::cout << "frame 2:" << *f2 << std::endl;
+    
+    delete f;
+    delete f2;
 }
 
 
 void test_4() {
-  
-  const char* name = "@TEST: valkkafs_test: test 4: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+    const char* name = "@TEST: valkkafs_test: test 4: ";
+    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    int i;
+    
+    BasicFrame *f = new BasicFrame();
+    f->resize(1024*1024);
+    
+    std::ofstream os("framedump", std::ios::binary);
+    for(i=0;i<10;i++) {
+        f->subsession_index=i%2;
+        f->n_slot=1;
+        std::fill(f->payload.begin(), f->payload.end(), i+1);
+        f->mstimestamp = 100+i;
+        f->dump(i, os);
+        std::cout << *f << std::endl;
+    }
+    os.close();
+    
+    std::cout << std::endl;
+    
+    std::size_t id;
+    std::ifstream is("framedump", std::ios::binary);
+    for(i=0;i<10;i++) {
+        id=f->read(is);
+        std::cout << id << ": " << *f << std::endl;
+    }
+    is.close();
+    
 }
 
 
 void test_5() {
-  
-  const char* name = "@TEST: valkkafs_test: test 5: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+    const char* name = "@TEST: valkkafs_test: test 5: ";
+    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+
+    BasicFrame *f = new BasicFrame();
+    f->resize(1024*1024);
+    f->subsession_index=2;
+    f->n_slot=1;
+    std::fill(f->payload.begin(), f->payload.end(), 1);
+    f->mstimestamp = 100;
+
+    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10);
+    ValkkaFSWriterThread ft("writer", fs);
+    
+    FrameFilter &filt = ft.getFrameFilter();
+    
+    ft.startCall();
+    
+    sleep_for(1s);
+    
+    int i;
+    for(i=0;i<10;i++) {
+        filt.run(f);
+    }
+    
+    sleep_for(5s);
+    
+    ft.stopCall();
+    
+    delete f;
 }
 
 

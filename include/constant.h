@@ -55,6 +55,7 @@ namespace Timeout { ///< Various thread timeouts in milliseconds
   const static long unsigned livethread   =250; // Timeout::livethread
   const static long unsigned avthread     =250; // Timeout::avthread
   const static long unsigned openglthread =250; // Timeout::openglthread
+  const static long unsigned valkkafswriterthread = 250; // Timeout::valkkafswriterthread
   const static long int filethread        =2000; // Timeout::filethread
 }
 
@@ -80,8 +81,9 @@ enum MaxSizes {
 // using BitmapType = unsigned;        
 // using SlotNumber = unsigned short; // swig does not get this ..
 
-typedef unsigned BitmapType; 
+typedef unsigned       BitmapType; 
 typedef unsigned short SlotNumber;   // <pyapi>
+typedef std::size_t    IdNumber;     // <pyapi>
 
 static const SlotNumber I_MAX_SLOTS = 255; // Slot number maximum index.  Max number of slots = I_MAX_SLOTS+1
 
@@ -139,7 +141,7 @@ struct BitmapPars {
   int           v_linesize;
 };
 
-std::ostream &operator<<(std::ostream &os, BitmapPars const &m) {
+inline std::ostream &operator<<(std::ostream &os, BitmapPars const &m) {
   return os << "<BitmapPars: type=" << int(m.type) << " w, h=" << m.width << ", " << m.height << ">";
 }
 

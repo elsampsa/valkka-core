@@ -116,7 +116,7 @@ public: // redefined virtual
   virtual bool isSeekable();         ///< Can we seek to this frame? (e.g. is it a key-frame .. for H264 sps packets are used as seek markers)
   
 public:
-  void copyMetaFrom(Frame *f);        ///< Copy metadata (slot, subsession index, timestamp) to this frame
+  void copyMetaFrom(Frame *f);                         ///< Copy metadata (slot, subsession index, timestamp) to this frame
   
 protected:
   FrameClass frameclass;              ///< Declares frametype for correct typecast.  Used by Frame::getFrameClass()
@@ -127,7 +127,7 @@ public: // public metadata
   long int        mstimestamp;                  ///< Presentation time stamp (PTS) in milliseconds  
 };
 
-std::ostream& operator<< (std::ostream& os, const Frame& f) {
+inline std::ostream& operator<< (std::ostream& os, const Frame& f) {
   // https://stackoverflow.com/questions/4571611/making-operator-virtual
   f.print(os);
   return os;
@@ -183,6 +183,11 @@ public:
   void fillAVPacket(AVPacket *avpkt);      ///< Copy payload to AVPacket structure
   void copyFromAVPacket(AVPacket *avpkt);  ///< Copy data from AVPacket structure
   void filterFromAVPacket(AVPacket *avpkt, AVCodecContext *codec_ctx, AVBitStreamFilterContext *filter);  ///< Copy data from AVPacket structure
+  
+public: // frame serialization
+  std::size_t calcSize();                             ///< How much this frame occupies in bytes when serialized
+  bool dump(IdNumber device_id, std::ofstream &os);   ///< Write the frame to filestream with a certain device id
+  IdNumber read(std::ifstream &is);                   ///< Read the frame from filestream.  Returns device id
 };
 
 
@@ -465,18 +470,12 @@ public:
   virtual ~SignalFrame();  ///< Default virtual dtor
   frame_essentials(FrameClass::signal,SignalFrame);
   frame_clone(FrameClass::signal,SignalFrame);
-  /*
-  SignalFrame(const SignalFrame &f); ///< Default copy ctor
-  
-public:
-  virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
-  virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
-  */
 
 public:
-  OpenGLSignalContext   opengl_signal_ctx;
-  AVSignalContext       av_signal_ctx;
-  
+  OpenGLSignalContext                 opengl_signal_ctx;
+  AVSignalContext                     av_signal_ctx;
+  ValkkaFSWriterSignalContext         valkkafswriter_signal_ctx;
+  void*                               custom_signal_ctx; ///< For extensions
 };
 
 

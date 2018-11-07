@@ -206,7 +206,7 @@ void AVThread::run() {
         
         time(&timer);
         
-        if (difftime(timer,oldtimer)>=1) { // time to check the signals..
+        if ( (1000*difftime(timer,oldtimer)) >= Timeout::avthread) { // time to check the signals..
             handleSignals();
             oldtimer=timer;
             #ifdef FIFO_DIAGNOSIS

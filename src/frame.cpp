@@ -261,6 +261,47 @@ void BasicFrame::filterFromAVPacket(AVPacket *pkt, AVCodecContext *codec_ctx, AV
 }
 
 
+IdNumber BasicFrame::calcSize() {
+    // device_id (std::size_t) subsession_index (int) mstimestamp (long int) media_type (AVMediaType) codec_id (AVCodecId) size (std::size_t) payload (char)
+    // TODO: should use typedefs more
+    return sizeof(IdNumber) + sizeof(subsession_index) + sizeof(mstimestamp) + sizeof(media_type) + sizeof(codec_id) + sizeof(std::size_t) + payload.size();
+}
+
+#define dump_bytes(var) os.write( (const char*)&var, sizeof(var));
+
+bool BasicFrame::dump(IdNumber device_id, std::ofstream &os) {
+    std::size_t len;
+    len=payload.size();
+    
+    dump_bytes(device_id);
+    dump_bytes(subsession_index);
+    dump_bytes(mstimestamp);
+    dump_bytes(media_type);
+    dump_bytes(codec_id);
+    dump_bytes(len); // write the number of bytes
+    os.write((const char*)payload.data(), payload.size()); // write the bytes themselves
+    return true;
+}
+
+#define read_bytes(var) is.read((char*)&var, sizeof(var));
+
+IdNumber BasicFrame::read(std::ifstream &is) {
+    std::size_t len;
+    IdNumber device_id;
+    
+    read_bytes(device_id);
+    read_bytes(subsession_index);
+    read_bytes(mstimestamp);
+    read_bytes(media_type);
+    read_bytes(codec_id);
+    read_bytes(len);  // read the number of bytes
+    payload.resize(len); 
+    is.read((char*)payload.data(), len); // read the bytes themselves
+    
+    return device_id;
+}
+
+
 SetupFrame::SetupFrame() : Frame() {
   reset();
 }
@@ -644,7 +685,7 @@ void YUVFrame::reset() {
 
 
 
-SignalFrame::SignalFrame() : Frame(), opengl_signal_ctx(), av_signal_ctx() {
+SignalFrame::SignalFrame() : Frame(), opengl_signal_ctx(), av_signal_ctx(), custom_signal_ctx(NULL) {
   mstimestamp =getCurrentMsTimestamp();
 }
   

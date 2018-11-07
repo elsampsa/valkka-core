@@ -39,8 +39,9 @@
 /** Different signal types understood by Threads (sending them to the Thread by an interrupt (Thread::sendSignal) or in the Frame stream)
  */
 enum class SignalType {
-  av,
-  gl
+  av,       ///< AVThread
+  gl,       ///< OpenGLThread
+  writer    ///< ValkkaFSWriterThread
 };
 
 /** Signals used by AVThread
@@ -82,7 +83,7 @@ struct OpenGLSignalPars  {   // used by signals:
 };
 
 // std::ostream &operator<<(std::ostream &os, OpenGLSignalPars const &m);
-std::ostream &operator<<(std::ostream &os, OpenGLSignalPars const &m) {
+inline std::ostream &operator<<(std::ostream &os, OpenGLSignalPars const &m) {
  return os << "<OpenGLSignalPars: slot="<<m.n_slot<<" x_window_id="<<m.x_window_id<<" z="<<m.z<<" render_context="<<m.render_ctx<<" success="<<m.success<<">";
 };
 
@@ -115,6 +116,36 @@ struct OpenGLSignalContext {
   OpenGLSignal      signal;   ///< The signal
   // OpenGLSignalPars  *pars;     ///< Why pointers? .. we have return values here // nopes .. not anymore
   OpenGLSignalPars  pars;
+};
+
+/** Signal information for ValkkaFSWriterThread
+ * 
+ */
+struct ValkkaFSWriterSignalPars {
+    std::size_t     n_block;  ///< Seek target block.  Used by signal seek
+    SlotNumber      n_slot;   ///< Slot number.  Used by set_slot_id and unsert_slot_id
+};
+
+/** Signals for ValkkaFSWriterThread
+ * 
+ */
+enum class ValkkaFSWriterSignal {
+    none,
+    exit,
+    
+    seek,                     ///< Used by seekCall
+    
+    set_slot_id,              ///< Used by setSlotIdCall
+    unset_slot_id,            ///< Used by unSetSlotIdCall  
+    clear_slot_id             ///< Used by clearSlotIdCall
+};
+
+/** Encapsulate data sent in the ValkkaFSWriterSignal
+ * 
+ */
+struct ValkkaFSWriterSignalContext {
+    ValkkaFSWriterSignal        signal;
+    ValkkaFSWriterSignalPars    pars;
 };
 
 
