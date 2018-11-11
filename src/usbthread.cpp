@@ -46,8 +46,37 @@ int xioctl(int fh, int request, void *arg)
 }
 
 
+USBDevice::USBDevice(FrameFilter *framefilter) : fd(-1), framefilter(framefilter) {
+}
 
-V4LDevice::V4LDevice(const char *dev) : dev(dev), fd(-1), status(v4l_status::none) {
+USBDevice::~USBDevice() {
+}
+    
+void USBDevice::setupFrame(SetupFrame frame) {
+    setupframe=frame;
+    framefilter->run(&setupframe);
+}    
+
+void USBDevice::open_() {
+}
+
+void USBDevice::close_() {
+}
+
+void USBDevice::pull() {
+    // populate basicframe
+    framefilter->run(&basicframe);
+}
+
+void USBDevice::play() {
+}
+
+void USBDevice::stop() {
+}
+
+
+
+V4LDevice::V4LDevice(std::string dev, FrameFilter *framefilter) : USBDevice(framefilter),  dev(dev), fd(-1), status(v4l_status::none) {
     struct stat st;
     int min;
 
@@ -263,8 +292,7 @@ void V4LDevice::initStreaming() {
         */
 }
     
-    
-    
+
 V4LDevice::~V4LDevice() {
     if (fd > -1) {
         close(fd);
@@ -272,6 +300,203 @@ V4LDevice::~V4LDevice() {
 }
     
 
+USBDeviceThread::USBDeviceThread(const char *name) : Thread(name) {
+}
+    
+USBDeviceThread::~USBDeviceThread() {
+}
+
+void USBDeviceThread::run() {
+    time_t timer;
+    time_t oldtimer;
+    long int dt;
+    
+    struct timeval tv;
+    int r;
+    int tmpfd;
+    int fd;
+    
+    time(&timer);
+    oldtimer=timer;
+    loop=true;
+    
+    fd_set fds;
+    
+    while(loop) {
+        sleep_for(0.1s);
+        
+        FD_ZERO(&fds);
+        fd=-1;
+        for(auto it=slots_.begin(); it!=slots_.end(); ++it) {
+            tmpfd = (it->second)->getFd();
+            
+            fd=std::max(fd, tmpfd);
+            FD_SET(tmpfd, &fds); // add a file descriptor to a set
+        }
+        
+        // TODO: proper timeout
+        /* Timeout. */
+        tv.tv_sec = 2;
+        tv.tv_usec = 0;
+
+        r = select(fd + 1, &fds, NULL, NULL, &tv);
+
+        if (-1 == r) {
+            if (EINTR == errno)
+                continue;
+            // errno_exit("select");
+        }
+        else if (0 == r) {
+            // fprintf(stderr, "select timeout\n");
+            // exit(EXIT_FAILURE);
+        }
+        else {
+            // TODO: read the frame
+            for(auto it=slots_.begin(); it!=slots_.end(); ++it) {
+                if FD_ISSET( (it->second)->getFd(), &fds) {
+                    (it->second)->pull(); // pull: populate basicframe and send it down the filterchain
+                }
+            }
+        }
+            
+        time(&timer);
+        // old-style ("interrupt") signal handling
+        if (difftime(timer,oldtimer)>=Timeout::usbthread) { // time to check the signals..
+            handleSignals();
+            oldtimer=timer;
+        }
+    }
+}
+
+void USBDeviceThread::preRun() {
+}
+    
+void USBDeviceThread::postRun() {
+}
 
 
+void USBDeviceThread::registerCameraStream(USBCameraConnectionContext &ctx) {
+    auto it=slots_.find(ctx.slot);
+    if (it==slots_.end()) { // this slot does not exist
+        V4LDevice *device = new V4LDevice(ctx.device, ctx.framefilter);
+        slots_.insert(std::make_pair(ctx.slot, device));
+        device->open_();
+    }
+    else {
+        std::cout << "USBDeviceThread: registerCameraStream: slot " << ctx.slot << " reserved" << std::endl;
+    }
+}
+
+void USBDeviceThread::deRegisterCameraStream(USBCameraConnectionContext &ctx) {
+    auto it=slots_.find(ctx.slot);
+    if (it==slots_.end()) { // this slot does not exist
+        std::cout << "USBDeviceThread: deRegisterCameraStream: no such slot " << ctx.slot << std::endl;
+    }
+    else {
+        (it->second)->close_();
+        slots_.erase(it);
+        delete (it->second);
+    }
+}
+
+void USBDeviceThread::playCameraStream(USBCameraConnectionContext &ctx) {
+    auto it=slots_.find(ctx.slot);
+    if (it==slots_.end()) { // this slot does not exist
+        std::cout << "USBDeviceThread: playCameraStream: no such slot " << ctx.slot << std::endl;
+    }
+    else {
+        (it->second)->play();
+    }
+}
+
+void USBDeviceThread::stopCameraStream(USBCameraConnectionContext &ctx) {
+    auto it=slots_.find(ctx.slot);
+    if (it==slots_.end()) { // this slot does not exist
+        std::cout << "USBDeviceThread: stopCameraStream: no such slot " << ctx.slot << std::endl;
+    }
+    else {
+        (it->second)->stop();
+    }
+}
+
+
+void USBDeviceThread::handleSignal(USBDeviceSignalContext &signal_ctx) {
+    switch (signal_ctx.signal) {
+        case USBDeviceSignal::exit:
+            loop=false;
+            break;
+            
+        case USBDeviceSignal::register_camera_stream:
+            this->registerCameraStream(signal_ctx.camera_connection_ctx);
+            break;
+            
+        case USBDeviceSignal::deregister_camera_stream:
+            this->deRegisterCameraStream(signal_ctx.camera_connection_ctx);
+            break;
+            
+        case USBDeviceSignal::play_camera_stream:
+            this->playCameraStream(signal_ctx.camera_connection_ctx);
+            break;
+            
+        case USBDeviceSignal::stop_camera_stream:
+            this->stopCameraStream(signal_ctx.camera_connection_ctx);
+            break;
+    }
+}
+
+void USBDeviceThread::sendSignal(USBDeviceSignalContext signal_ctx) {
+    std::unique_lock<std::mutex> lk(this->mutex);
+    this->signal_fifo.push_back(signal_ctx);
+}
+
+void USBDeviceThread::handleSignals() {
+    std::unique_lock<std::mutex> lk(this->mutex);
+    // handle pending signals from the signals fifo
+    for (auto it = signal_fifo.begin(); it != signal_fifo.end(); ++it) { // it == pointer to the actual object (struct SignalContext)
+        handleSignal(*it);
+    }
+    signal_fifo.clear();
+}
+
+
+void USBDeviceThread::registerCameraStreamCall(USBCameraConnectionContext ctx) {
+    USBDeviceSignalContext signal_ctx;
+    signal_ctx.signal = USBDeviceSignal::register_camera_stream;
+    sendSignal(signal_ctx);
+}
+
+void USBDeviceThread::deRegisterCameraStreamCall(USBCameraConnectionContext ctx) {
+    USBDeviceSignalContext signal_ctx;
+    signal_ctx.signal = USBDeviceSignal::deregister_camera_stream;
+    sendSignal(signal_ctx);
+}
+
+void USBDeviceThread::playCameraStreamCall(USBCameraConnectionContext ctx) {
+    USBDeviceSignalContext signal_ctx;
+    signal_ctx.signal = USBDeviceSignal::play_camera_stream;
+    sendSignal(signal_ctx);
+}
+
+void USBDeviceThread::stopCameraStreamCall(USBCameraConnectionContext ctx) {
+    USBDeviceSignalContext signal_ctx;
+    signal_ctx.signal = USBDeviceSignal::stop_camera_stream;
+    sendSignal(signal_ctx);
+}
+
+
+
+void USBDeviceThread::requestStopCall() {
+    if (!this->has_thread) { return; } // thread never started
+    if (stop_requested) { return; }    // can be requested only once
+    stop_requested = true;
+
+    // use the old-style "interrupt" way of sending signals
+    USBDeviceSignalContext signal_ctx;
+    signal_ctx.signal = USBDeviceSignal::exit;
+    
+    this->sendSignal(signal_ctx);
+}
+
+
+    
 

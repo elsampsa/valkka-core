@@ -164,11 +164,9 @@ protected:
     
 protected: // frame input
     FrameFifo               infifo;           ///< Incoming frames are read from here
-    FifoFrameFilter         infilter;         ///< Write incoming frames here
+    FifoFrameFilter         infilter;         ///< Write incoming frames here // TODO: add a chain of correcting FrameFilter(s)
     BlockingFifoFrameFilter infilter_block;   ///< Incoming frames can also be written here.  If stack runs out of frames, writing will block
 
-    const static int        timeout = 1000;   ///< Thread timeout in milliseconds
-    
 protected: // Thread member redefinitions
     std::deque<ValkkaFSWriterSignalContext> signal_fifo;   ///< Redefinition of signal fifo.
   

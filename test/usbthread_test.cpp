@@ -49,8 +49,10 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 void test_1() {  
     const char* name = "@TEST: usbthread_test: test 1: ";
     std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    
+    InfoFrameFilter f("info");
 
-    V4LDevice dev = V4LDevice("/dev/video0");
+    V4LDevice dev = V4LDevice(std::string("/dev/video0"), &f);
     // V4LDevice dev = V4LDevice("/dev/video1");
     // V4LDevice dev = V4LDevice("/dev/video2");
 
@@ -59,7 +61,7 @@ void test_1() {
     if (status == v4l_status::ok_open) {
         std::cout << "OK!" << std::endl;
     }
-  
+    
 }
 
 

@@ -112,8 +112,7 @@ public:
    */
   AVDecoder(AVCodecID av_codec_id);
   virtual ~AVDecoder();
-    
-  
+
 public:
   AVCodecID       av_codec_id;       ///< FFmpeg AVCodecId, identifying the codec 
   AVPacket*       av_packet;         ///< FFmpeg internal data structure; encoded frame (say, H264)
