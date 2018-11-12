@@ -83,9 +83,8 @@ protected:
     std::size_t     n_blocks;
     std::size_t     device_size;
     std::vector<long int> tab;      ///< Blocktable
-    // std::vector<long int> tab2;     ///< Copy of the blocktable in a numpy array
-    // PyArray_Descr   *descr;
-    // PyArrayObject   *arr;
+    std::ofstream   os;             ///< Write handle to blocktable file
+    
     std::mutex      mutex;
     long int        col_0;          ///< Current column 0 value (max keyframe timestamp)
     long int        col_1;          ///< Current column 1 value (max anyframe timestamp)
@@ -105,17 +104,31 @@ public:
     std::size_t     getBlockSeek(std::size_t n_block);
     std::size_t     getCurrentBlockSeek();
     
+public: // getters
+    const std::size_t   getBlockSize() {return this->blocksize;} // <pyapi>
+    
 public:                                  // <pyapi>
     std::size_t get_n_blocks();          // <pyapi>
     std::size_t get_n_cols();            // <pyapi>
     
+    /** dump blocktable to disk */
     void            dump();              // <pyapi>
+    /** dump single row of bloctable to disk */
+    void dumpBlock(std::size_t n_block); // <pyapi>
+    /** read blocktable from disk */
     void            read();              // <pyapi>
+    /** returns device filename */
     std::string     getDevice();         // <pyapi>
+    /** returns device file size */
     std::size_t     getDeviceSize();     // <pyapi>
+    /** creates and clears the device file */
     void            clearDevice();       // <pyapi>
+    /** clears the blocktable (but does not write to disk) */
     void            clearTable();        // <pyapi>
-    
+    /** returns maximum allowed frame size in bytes */
+    std::size_t     maxFrameSize();      // <pyapi>
+    /** print blocktable */
+    void            reportTable(std::size_t from=0, std::size_t to=0);       // <pyapi>
     /** Used by a writer class to inform that a new block has been written */
     void writeBlock();                           // <pyapi>
     
@@ -142,6 +155,27 @@ public:                                  // <pyapi>
      */
     void setArrayCall(PyObject *pyobj);  // <pyapi>
 };                                       // <pyapi>
+
+
+/** Analyzer tool for ValkkaFS
+ * 
+ * - Dump blocks to the terminal
+ * 
+ */
+class ValkkaFSTool {
+    
+public:
+    ValkkaFSTool(ValkkaFS &valkkafs);
+    ~ValkkaFSTool();
+    
+protected:
+    std::ifstream    is;
+    ValkkaFS         &valkkafs;
+    
+public:
+    void dumpBlock(std::size_t n_block);
+};
+
 
 
 /** Writes frames to a file
@@ -180,15 +214,26 @@ protected:
     void handleSignal(ValkkaFSWriterSignalContext &signal_ctx); ///< Handle an individual signal.  Signal can originate from the frame fifo or from the signal_fifo deque
     void handleSignals();                                       ///< Call ValkkaFSWriterThread::handleSignal for every signal in the signal_fifo
 
+protected:
+    void setSlotId(SlotNumber slot, IdNumber id);
+    void unSetSlotId(SlotNumber slot);
+    void clearSlotId();
+    void reportSlotId();
+    void seek(std::size_t n_block);
+    
 // API
 public:                                                       // <pyapi>
     FifoFrameFilter &getFrameFilter();                        // <pyapi>
     FifoFrameFilter &getBlockingFrameFilter();                // <pyapi>
-    /** Set a slot => id number mapping
-    */
+    /** Set a slot => id number mapping */
     void setSlotIdCall(SlotNumber slot, IdNumber id);         // <pyapi>
-    /** Seek to a certain block
-    */
+    /** Clear a slot => id number mapping */
+    void unSetSlotIdCall(SlotNumber slot);                    // <pyapi>
+    /** Clear all slot => id number mappings */
+    void clearSlotIdCall();                                   // <pyapi>
+    /** Print slot, id number mappings */
+    void reportSlotIdCall();                                  // <pyapi>
+    /** Seek to a certain block */
     void seekCall(std::size_t n_block);                       // <pyapi>
     void requestStopCall();                                   // <pyapi>
 };                                                            // <pyapi>

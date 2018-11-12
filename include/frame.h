@@ -145,11 +145,11 @@ inline std::ostream& operator<< (std::ostream& os, const Frame& f) {
 class BasicFrame : public Frame {
 
 public:
-  BasicFrame(); ///< Default ctor
-  virtual ~BasicFrame(); ///< Default virtual dtor
-  frame_essentials(FrameClass::basic, BasicFrame);
-  frame_clone(FrameClass::basic, BasicFrame);
-  /*BasicFrame(const BasicFrame &f); ///< Default copy ctor
+    BasicFrame(); ///< Default ctor
+    virtual ~BasicFrame(); ///< Default virtual dtor
+    frame_essentials(FrameClass::basic, BasicFrame);
+    frame_clone(FrameClass::basic, BasicFrame);
+    /*BasicFrame(const BasicFrame &f); ///< Default copy ctor
   
 public: // frame essentials
   virtual FrameClass getFrameClass();         ///< Returns the subclass frame type.  See Frame::frameclass
@@ -157,21 +157,30 @@ public: // frame essentials
   */
   
 public: // redefined virtual
-  virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
-  virtual std::string dumpPayload();
-  virtual void dumpPayloadToFile(std::ofstream& fout);
-  virtual void reset();              ///< Reset the internal data
-  virtual bool isSeekable();         ///< for H264 true if sps, other codecs, always true
+    virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
+    virtual std::string dumpPayload();
+    virtual void dumpPayloadToFile(std::ofstream& fout);
+    virtual void reset();              ///< Reset the internal data
+    virtual bool isSeekable();         ///< for H264 true if sps, other codecs, always true
   
 public: // payload handling
-  void reserve(std::size_t n_bytes);          ///< Reserve space for internal payload
-  void resize (std::size_t n_bytes);          ///< Init space for internal payload
+    void reserve(std::size_t n_bytes);          ///< Reserve space for internal payload
+    void resize (std::size_t n_bytes);          ///< Init space for internal payload
   
 public: // frame variables
-  std::vector<uint8_t> payload;    ///< Raw payload data (use .data() to get the pointer from std::vector)
-  AVMediaType   media_type;        ///< Type of the media (video/audio)
-  AVCodecID     codec_id;          ///< AVCodeCID of the media
+    std::vector<uint8_t> payload;    ///< Raw payload data (use .data() to get the pointer from std::vector)
+    AVMediaType   media_type;        ///< Type of the media (video/audio)
+    AVCodecID     codec_id;          ///< AVCodeCID of the media
 
+/* // nopes ..
+protected: // for filesystem debugging
+    bool force_seekable;
+    
+public: // for filesystem debugging
+    void setSeekable();
+    void unSetSeekable();
+*/
+  
 public: // codec-dependent parameters  
   H264Pars      h264_pars;        ///< H264 parameters, extracted from the payload
   

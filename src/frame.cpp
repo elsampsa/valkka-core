@@ -164,6 +164,14 @@ void BasicFrame::reset() {
 
 
 bool BasicFrame::isSeekable() {
+    fillPars();
+    
+    /* // nopes
+    if (force_seekable) { // this only for filesystem debuggin
+        return true;
+    }
+    */
+    
     switch(codec_id) {
         case AV_CODEC_ID_H264:
             if (h264_pars.slice_type == H264SliceType::sps) {
@@ -178,6 +186,16 @@ bool BasicFrame::isSeekable() {
             break;
     }
 }
+
+/*
+void BasicFrame::setSeekable() {
+    force_seekable = true;
+}
+
+void BasicFrame::unSetSeekable() {
+    force_seekable = false;
+}
+*/
 
 
 void BasicFrame::reserve(std::size_t n_bytes) {
@@ -198,8 +216,8 @@ void BasicFrame::fillPars() {
 
 
 void BasicFrame::fillH264Pars() {
-  if (payload.size()>4) { 
-    h264_pars.slice_type = ( payload[4] & 31 );
+  if (payload.size()>(nalstamp.size()+1)) { 
+    h264_pars.slice_type = ( payload[nalstamp.size()+1] & 31 );
   }
 }
 
@@ -290,6 +308,11 @@ IdNumber BasicFrame::read(std::ifstream &is) {
     IdNumber device_id;
     
     read_bytes(device_id);
+    
+    if (device_id==0) { // no frame
+        return device_id;
+    }
+    
     read_bytes(subsession_index);
     read_bytes(mstimestamp);
     read_bytes(media_type);

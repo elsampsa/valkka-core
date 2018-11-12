@@ -1,5 +1,5 @@
 /*
- * valkkafs.cpp :
+ * valkkafs.cpp : A simple block file system for video
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -28,13 +28,13 @@
  *  @date    2017
  *  @version 0.8.0 
  *  
- *  @brief 
+ *  @brief   A simple block file system for video
  */ 
 
 #include "valkkafs.h"
 
 
-ValkkaFS::ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks) : device_file(device_file), block_file(block_file), blocksize(blocksize), n_blocks(n_blocks), col_0(0), col_1(0), current_row(0), prev_row(0), pyfunc(NULL)
+ValkkaFS::ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks) : device_file(device_file), block_file(block_file), blocksize(blocksize), n_blocks(n_blocks), col_0(0), col_1(0), current_row(0), prev_row(0), pyfunc(NULL), os(block_file, std::ios::binary)
 {
     tab.resize(n_cols*n_blocks, 0);
     
@@ -106,26 +106,35 @@ ValkkaFS::ValkkaFS(const char *device_file, const char *block_file, std::size_t 
 ValkkaFS::~ValkkaFS() {
     // delete py_array;
     // Py_DECREF(arr);
+    os.close();
 }
 
 void ValkkaFS::dump() {
     std::unique_lock<std::mutex> lk(this->mutex);
-    std::ofstream os(block_file, std::ios::binary);
-    os.write((const char*)&tab, sizeof(tab));
-    os.close();
+    // std::ofstream os(block_file, std::ios::binary);
+    os.seekp(std::streampos(0));
+    os.write((const char*)(tab.data()), sizeof(long int)*tab.size());
+    // os.close();
+}
+
+void ValkkaFS::dumpBlock(std::size_t n_block) {
+    std::size_t i = ind(n_block, 0);
+    os.seekp(std::streampos(i));
+    os.write((const char*)(&tab[i]), sizeof(long int)); // write one row of blocktable into the blocktable file
+    os.write((const char*)(&tab[i+1]), sizeof(long int));
 }
 
 void ValkkaFS::read() {
     std::unique_lock<std::mutex> lk(this->mutex);
     std::ifstream is(block_file, std::ios::binary);
-    is.read((char*)&tab, sizeof(tab));
+    is.read((char*)(tab.data()), sizeof(long int)*tab.size());
     is.close();
 }
-    
 
 std::size_t ValkkaFS::ind(std::size_t i, std::size_t j) {
     if (i>=n_blocks or j>=n_cols) {
         std::cout << "ValkkaFS: ind: wrong index " << i << " " << j << std::endl;
+        return 0;
     }
     else {
         return i*n_cols+j;
@@ -152,6 +161,30 @@ std::size_t ValkkaFS::getCurrentBlockSeek() {
 }
 
 
+std::size_t ValkkaFS::maxFrameSize() {
+    return device_size / 10;
+}
+
+
+void ValkkaFS::reportTable(std::size_t from, std::size_t to) {
+    from=std::min(from, n_blocks-1);
+    to  =std::min(to, n_blocks-1);
+    if (to<from) {
+        return;
+    }
+    if (to==0) {
+        to=n_blocks-1;
+    }
+    std::size_t count;
+    for(count=from;count<=to;count++) {
+        if (tab[ind(count, 0)] > 0 or tab[ind(count, 1)]  > 0) {
+            std::cout << count << " : " << tab[ind(count, 0)] << " " << tab[ind(count, 1)] << std::endl;
+        }
+    }
+}
+
+
+
 void ValkkaFS::writeBlock() {
     std::unique_lock<std::mutex> lk(this->mutex);
     std::string msg("");
@@ -159,19 +192,21 @@ void ValkkaFS::writeBlock() {
     // std::cout << "current_row = " << current_row << std::endl;
     // std::cout << "prev_row = " << prev_row << std::endl;
     
-    if (col_0==0) {
+    if (col_1==0) {
         std::cout << "ValkkaFS : writeBlock : no frames.  Congrats, your ValkkaFS is broken" << std::endl;
-        col_0 = tab[ind(prev_row, 0)]; // copy value from previous block
+        col_1 = tab[ind(prev_row, 1)]; // copy value from previous block
         msg="frame";
     }
-    if (col_1==0) {
+    if (col_0==0) {
         std::cout << "ValkkaFS : writeBlock : no keyframes.  Your ValkkaFS block size is too small" << std::endl;
-        col_1 = tab[ind(prev_row, 1)]; // copy value from previous block
+        col_0 = tab[ind(prev_row, 0)]; // copy value from previous block
         msg="keyframe";
     }
     
     tab[ind(current_row, 0)] = col_0; // save values to blocktable
     tab[ind(current_row, 1)] = col_1;
+    
+    dumpBlock(current_row); // save to the blocktable file as well
     
     prev_row=current_row;
     current_row++;
@@ -198,11 +233,13 @@ void ValkkaFS::writeBlock() {
 
 void ValkkaFS::markFrame(long int mstimestamp) {
     col_1 = std::max(col_1, mstimestamp);
+    std::cout << "ValkkaFS: markFrame: col_1 =" << col_1 << std::endl;
 }
     
 void ValkkaFS::markKeyFrame(long int mstimestamp) {
     col_0 = std::max(col_0, mstimestamp);
     col_1 = std::max(col_1, mstimestamp);
+    std::cout << "ValkkaFS: markKeyFrame: col_0 =" << col_0 << std::endl;
 }
 
 
@@ -230,7 +267,12 @@ void ValkkaFS::clearDevice() {
 void ValkkaFS::clearTable() {
     std::unique_lock<std::mutex> lk(this->mutex);
     std::fill(tab.begin(), tab.end(), 0);
+    // TODO: dump to disk
 }
+
+// TODO: dump blocktable to disk
+// TODO: update a row in blocktable on-disk
+
 
 void ValkkaFS::setCurrentBlock(std::size_t n_block) {
     std::unique_lock<std::mutex> lk(this->mutex);
@@ -296,7 +338,40 @@ std::size_t ValkkaFS::get_n_cols() {
 }
 
 
-ValkkaFSWriterThread::ValkkaFSWriterThread(const char *name, ValkkaFS &valkkafs, FrameFifoContext fifo_ctx) : Thread(name), valkkafs(valkkafs), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), filestream(name, std::ios::binary)
+
+ValkkaFSTool::ValkkaFSTool(ValkkaFS &valkkafs) : valkkafs(valkkafs), is(valkkafs.getDevice(), std::ios::binary) {
+}
+
+ValkkaFSTool::~ValkkaFSTool() {
+    is.close();
+}
+
+void ValkkaFSTool::dumpBlock(std::size_t n_block) {
+    if (n_block < 0 or n_block > valkkafs.get_n_blocks()-1) {
+        return;
+    }
+    is.seekg(std::streampos(valkkafs.getBlockSeek(n_block)));
+    std::cout << std::endl << "----- Block number : " << n_block << " -----" << std::endl;
+    IdNumber id;
+    BasicFrame f = BasicFrame();
+    while(true) {
+        id = f.read(is);
+        if (id==0) {
+            break;
+        }
+        else {
+            bool seek = f.isSeekable();
+            std::cout << "[" << id << "] " << f;
+            if (seek) {
+                std::cout << " * ";
+            }
+            std::cout << std::endl;
+        }
+    }
+}
+
+
+ValkkaFSWriterThread::ValkkaFSWriterThread(const char *name, ValkkaFS &valkkafs, FrameFifoContext fifo_ctx) : Thread(name), valkkafs(valkkafs), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), filestream(valkkafs.getDevice(), std::ios::binary)
 {
 }
     
@@ -316,6 +391,10 @@ void ValkkaFSWriterThread::run() {
     oldtimer=timer;
     loop=true;
     
+    std::size_t bytecount=0; // bytecount inside a block
+    std::size_t framesize;
+    IdNumber    id;
+                    
     while(loop) {
         f=infifo.read(Timeout::valkkafswriterthread);
         if (!f) { // TIMEOUT
@@ -323,18 +402,56 @@ void ValkkaFSWriterThread::run() {
         }
         else { // GOT FRAME // this must ALWAYS BE ACCOMPANIED WITH A RECYCLE CALL
             // Handle signal frames
-            if (f->getFrameClass()==FrameClass::signal) {
+            if (f->getFrameClass()==FrameClass::signal) { // SIGNALFRAME
                 SignalFrame *signalframe = static_cast<SignalFrame*>(f);
                 handleSignal(signalframe->valkkafswriter_signal_ctx);
-            }
-            else if (f->getFrameClass()==FrameClass::basic) {
-                std::cout << "ValkkaFSWriterThread : " << this->name <<" got BasicFrame " << *f << std::endl;
-                // TODO: use valkkafs, filestream and frame methods, declare a new block when necessary
-                /*
-                std::size_t calcSize();                             
-                bool dump(IdNumber device_id, std::ofstream &os);
-                */
-            }
+            } // SIGNALFRAME
+            else if (f->getFrameClass()==FrameClass::basic) { // BASICFRAME
+                BasicFrame *bf = static_cast<BasicFrame*>(f);
+                std::cout << "ValkkaFSWriterThread : " << this->name <<" got BasicFrame " << *bf << std::endl;
+                // get the id
+                auto it = slot_to_id.find(bf->n_slot);
+                if (it == slot_to_id.end()) { // this slot has not been registered using an unique id
+                    std::cout << "ValkkaFSWriterThread : slot " << bf->n_slot << " does not have an id " << std::endl;
+                }
+                else { // HAS ID
+                    id = it->second;
+                    framesize = bf->calcSize();
+                    // test if a single frame can fit into this filesystem
+                    if (framesize+sizeof(IdNumber) > valkkafs.maxFrameSize()) {
+                        std::cout << "ValkkaFSWriterThread : frame " << *f <<" too big for this ValkkaFS" << std::endl;
+                    }
+                    else { // FILESYSTEM OK
+                        // test if the current frame fits into the current block.  An extra zero IdNumber is required to mark the block end
+                        if ( (bytecount+framesize+sizeof(IdNumber)) > valkkafs.getBlockSize()) {
+                            // finish this block by writing IdNumber 0
+                            IdNumber zero=0;
+                            filestream.write((const char*)&zero, sizeof(zero));
+                            // start a new block, seek to the new position
+                            bytecount=0;
+                            valkkafs.writeBlock(); // inform ValkkaFS that a new block has been entered
+                            // seek to the new position (which might have been wrapper to 0)
+                            filestream.seekp(std::streampos(valkkafs.getCurrentBlockSeek())); 
+                        }
+                        std::cout << "ValkkaFSWriterThread : writing frame " << *f << std::endl;
+                        bf->dump(id, filestream);
+                        // inform ValkkaFS about the progression of key frames
+                        // progression is measured per leading stream (stream with subsession_index == 0)
+                        if (bf->subsession_index==0) { // LEAD STREAM
+                            if (bf->isSeekable()) {
+                                std::cout << "ValkkaFSWriterThread : run : marking keyframe" << std::endl;
+                                valkkafs.markKeyFrame(bf->mstimestamp);
+                            }
+                            else {
+                                std::cout << "ValkkaFSWriterThread : run : marking frame" << std::endl;
+                                valkkafs.markFrame(bf->mstimestamp);
+                            }
+                        } // LEAD STREAM
+                        bytecount+=framesize;
+                        std::cout << "ValkkaFSWriterThread : run : bytecount = " << bytecount << std::endl;
+                    } // FILESYSTEM OK
+                } // HAS ID
+            } // BASICFRAME
             else {
                 std::cout << "ValkkaFSWriterThread : " << this->name <<" accepts only BasicFrame " << std::endl;
             }
@@ -359,10 +476,31 @@ void ValkkaFSWriterThread::postRun() {
 
 void ValkkaFSWriterThread::handleSignal(ValkkaFSWriterSignalContext &signal_ctx) {
     switch (signal_ctx.signal) {
+        
         case ValkkaFSWriterSignal::exit:
             loop=false;
             break;
-        // TODO
+            
+        case ValkkaFSWriterSignal::set_slot_id:
+            setSlotId(signal_ctx.pars.n_slot, signal_ctx.pars.id);
+            break;
+            
+        case ValkkaFSWriterSignal::unset_slot_id:
+            unSetSlotId(signal_ctx.pars.n_slot);
+            break;
+            
+        case ValkkaFSWriterSignal::clear_slot_id:
+            clearSlotId();
+            break;
+            
+        case ValkkaFSWriterSignal::report_slot_id:
+            reportSlotId();
+            break;
+            
+        case ValkkaFSWriterSignal::seek:
+            break;
+            
+        
     }
 }
 
@@ -388,11 +526,122 @@ FifoFrameFilter &ValkkaFSWriterThread::getBlockingFrameFilter() {
     return (FifoFrameFilter&)infilter_block;
 }
 
-void ValkkaFSWriterThread::setSlotIdCall(SlotNumber slot, IdNumber id) { // TODO
+
+void ValkkaFSWriterThread::setSlotId(SlotNumber slot, IdNumber id) {
+    std::cout << "ValkkaFSWriterThread: setSlotId: " << slot << " " << id << std::endl;
+    auto it=slot_to_id.find(slot);
+    if (it==slot_to_id.end()) { // this slot does not exist
+        slot_to_id.insert(std::make_pair(slot, id));
+    }
+    else {
+        std::cout << "ValkkaFSWriterThread: setSlotId: slot " << slot << " reserved" << std::endl;
+    }
 }
- 
-void ValkkaFSWriterThread::seekCall(std::size_t n_block) { // TODO
+    
+void ValkkaFSWriterThread::unSetSlotId(SlotNumber slot) {
+    std::cout << "ValkkaFSWriterThread: unSetSlotId: " << slot << std::endl;
+    auto it=slot_to_id.find(slot);
+    if (it==slot_to_id.end()) { // this slot does not exist
+        std::cout << "ValkkaFSWriterThread: unSetSlotId: no such slot " << slot << std::endl;
+    }
+    else {
+        slot_to_id.erase(it);
+    }
 }
+    
+void ValkkaFSWriterThread::clearSlotId() {
+    std::cout << "ValkkaFSWriterThread: clearSlotId: " << std::endl;
+    slot_to_id.clear();
+}
+
+void ValkkaFSWriterThread::reportSlotId() {
+    std::cout << "ValkkaFSWriterThread: reportSlotId: " << std::endl;
+    for(auto it=slot_to_id.begin(); it!=slot_to_id.end(); ++it) {
+        std::cout << "ValkkaFSWriterThread: reportSlotId: " << it->first << " --> " << it->second << std::endl;
+    }
+}
+
+    
+void ValkkaFSWriterThread::seek(std::size_t n_block) {
+    filestream.seekp(std::streampos(valkkafs.getBlockSeek(n_block)));
+}
+
+
+void ValkkaFSWriterThread::setSlotIdCall(SlotNumber slot, IdNumber id) {
+    ValkkaFSWriterSignalContext signal_ctx;
+    ValkkaFSWriterSignalPars    pars;
+    
+    pars.n_slot = slot;
+    pars.id     = id;
+
+    signal_ctx.signal = ValkkaFSWriterSignal::set_slot_id;
+    signal_ctx.pars   = pars;
+    
+    // prepare a signal frame
+    SignalFrame f = SignalFrame();
+    f.valkkafswriter_signal_ctx = signal_ctx;
+    // .. and send it to the queue
+    infilter.run(&f);
+}
+
+
+void ValkkaFSWriterThread::unSetSlotIdCall(SlotNumber slot) {
+    ValkkaFSWriterSignalContext signal_ctx;
+    ValkkaFSWriterSignalPars    pars;
+    
+    pars.n_slot = slot;
+
+    signal_ctx.signal = ValkkaFSWriterSignal::unset_slot_id;
+    signal_ctx.pars   = pars;
+    
+    // prepare a signal frame
+    SignalFrame f = SignalFrame();
+    f.valkkafswriter_signal_ctx = signal_ctx;
+    // .. and send it to the queue
+    infilter.run(&f);
+}
+
+void ValkkaFSWriterThread::clearSlotIdCall() {
+    ValkkaFSWriterSignalContext signal_ctx;
+    ValkkaFSWriterSignalPars    pars;
+    
+    signal_ctx.signal = ValkkaFSWriterSignal::clear_slot_id;
+    signal_ctx.pars   = pars;
+    
+    // prepare a signal frame
+    SignalFrame f = SignalFrame();
+    f.valkkafswriter_signal_ctx = signal_ctx;
+    // .. and send it to the queue
+    infilter.run(&f);
+}
+
+void ValkkaFSWriterThread::reportSlotIdCall() {
+    ValkkaFSWriterSignalContext signal_ctx;
+    signal_ctx.signal = ValkkaFSWriterSignal::report_slot_id;
+    
+    // prepare a signal frame
+    SignalFrame f = SignalFrame();
+    f.valkkafswriter_signal_ctx = signal_ctx;
+    // .. and send it to the queue
+    infilter.run(&f);
+}
+
+void ValkkaFSWriterThread::seekCall(std::size_t n_block) {
+    ValkkaFSWriterSignalContext signal_ctx;
+    ValkkaFSWriterSignalPars    pars;
+    
+    pars.n_block= n_block;
+
+    signal_ctx.signal = ValkkaFSWriterSignal::seek;
+    signal_ctx.pars   = pars;
+    
+    // prepare a signal frame
+    SignalFrame f = SignalFrame();
+    f.valkkafswriter_signal_ctx = signal_ctx;
+    // .. and send it to the queue
+    infilter.run(&f);
+}
+
 
 void ValkkaFSWriterThread::requestStopCall() {
     if (!this->has_thread) { return; } // thread never started

@@ -123,7 +123,8 @@ struct OpenGLSignalContext {
  */
 struct ValkkaFSWriterSignalPars {
     std::size_t     n_block;  ///< Seek target block.  Used by signal seek
-    SlotNumber      n_slot;   ///< Slot number.  Used by set_slot_id and unsert_slot_id
+    SlotNumber      n_slot;   ///< Slot number.  Used by set_slot_id and unset_slot_id
+    IdNumber        id;       ///< Id.  Used by set_slot_id and unset_slot_id
 };
 
 /** Signals for ValkkaFSWriterThread
@@ -137,7 +138,8 @@ enum class ValkkaFSWriterSignal {
     
     set_slot_id,              ///< Used by setSlotIdCall
     unset_slot_id,            ///< Used by unSetSlotIdCall  
-    clear_slot_id             ///< Used by clearSlotIdCall
+    clear_slot_id,            ///< Used by clearSlotIdCall
+    report_slot_id            ///< Used by reportSlotIdCall
 };
 
 /** Encapsulate data sent in the ValkkaFSWriterSignal

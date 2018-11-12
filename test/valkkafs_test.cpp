@@ -174,6 +174,52 @@ void test_5() {
 }
 
 
+void test_6() {
+    const char* name = "@TEST: valkkafs_test: test 6: ";
+    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+
+    // construct a dummy frame
+    BasicFrame *f = new BasicFrame();
+    f->resize(1024*1024);
+    f->subsession_index=2;
+    f->n_slot=1;
+    std::fill(f->payload.begin(), f->payload.end(), 1);
+    f->mstimestamp = 100;
+
+    // create ValkkaFS and WriterThread
+    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10); // blocksize, number of blocks
+    ValkkaFSWriterThread ft("writer", fs);
+    
+    FrameFilter &filt = ft.getFrameFilter();
+    
+    ft.startCall();
+    
+    sleep_for(1s);
+    std::cout << "\nSetting slot" << std::endl;
+    ft.setSlotIdCall(1, 123);ft.reportSlotIdCall();
+    std::cout << "\nSetting slot - same again" << std::endl;
+    ft.setSlotIdCall(1, 123);ft.reportSlotIdCall();
+    std::cout << "\nSetting slot - new" << std::endl;
+    ft.setSlotIdCall(3, 123);ft.reportSlotIdCall();
+    std::cout << "\nUnsetting slot" << std::endl;
+    ft.unSetSlotIdCall(1);ft.reportSlotIdCall();
+    std::cout << "\nClear all" << std::endl;
+    ft.clearSlotIdCall();ft.reportSlotIdCall();
+    
+    std::cout << "\nWriting frames" << std::endl;
+    int i;
+    for(i=0;i<10;i++) {
+        filt.run(f);
+    }
+    
+    sleep_for(5s);
+    
+    std::cout << "\nStopping" << std::endl;
+    ft.stopCall();
+    
+    delete f;
+}
+
 
 int main(int argc, char** argcv) {
   if (argc<2) {
@@ -219,6 +265,9 @@ int main(int argc, char** argcv) {
         break;
       case(5):
         test_5();
+        break;
+      case(6):
+        test_6();
         break;
       default:
         std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;
