@@ -37,6 +37,7 @@
 #include "logging.h"
 #include "avdep.h"
 #include "valkkafs.h"
+#include "valkkafsreader.h"
 
 using namespace std::chrono_literals;
 using std::this_thread::sleep_for;
@@ -48,7 +49,7 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 void test_1() {
     const char* name = "@TEST: valkkafswriter_test: test 1: ";
-    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    std::cout << name <<"** @@Write frames **" << std::endl;
   
     // construct a dummy frame
     BasicFrame *f = new BasicFrame();
@@ -59,12 +60,14 @@ void test_1() {
     f->codec_id   =AV_CODEC_ID_H264;
     
     // create ValkkaFS and WriterThread
-    ValkkaFS fs("disk.dump", "block.dat", 10*1024, 10); // dumpfile, blockfile, blocksize, number of blocks
+    ValkkaFS fs("disk.dump", "block.dat", 10*1024, 10, true); // dumpfile, blockfile, blocksize, number of blocks, init blocktable
+    // 10 blocks
+    // so, with this frame size, its 9 frames per block
     ValkkaFSWriterThread ft("writer", fs);
 
     fs.clearDevice(); // create and fill device file "disk.dump"
-    fs.clearTable();
-    fs.dump();
+    fs.clearTable(); // clears blocktable and dumps it to disk
+    // fs.dumpTable();
     
     FrameFilter &filt = ft.getFrameFilter();
 
@@ -75,22 +78,18 @@ void test_1() {
     
     std::cout << "\nWriting frames" << std::endl;
     int i;
-    for(i=0;i<100;i++) {
+    int nb=7; // write this many blocks // 6, 7
+    for(i=0;i<=(9*nb);i++) {
         std::fill(f->payload.begin(), f->payload.end(), 0);
         // let's simulate a H264 frame
         std::copy(nalstamp.begin(),nalstamp.end(),f->payload.begin()); // insert 0001
-        
         long int mstimestamp = 1000*(i+1);
-        // std::cout << "mstimestamp =" << mstimestamp << std::endl;
-        
         f->mstimestamp = mstimestamp;
-        
-        // std::cout << "writing frame : " << *f << std::endl;
-        
-        if (i%5==0) {
+        if (i%5==0) { // every 5.th frame a key frame
             f->payload[5]=(31 & 7); // mark fake sps frame
         }
         filt.run(f);
+        sleep_for(0.01s); // otherwise frames will overflow ..
     }
 
     sleep_for(1s);
@@ -101,44 +100,135 @@ void test_1() {
     
     fs.reportTable();
     
-    fs.dump();
+    fs.dumpTable(); // to disk
     
     ValkkaFSTool fstool(fs);
     
-    fstool.dumpBlock(0);
+    for(i=0;i<=nb;i++) {
+        fstool.dumpBlock(i);
+    }
 }
 
 
 void test_2() {
-  
     const char* name = "@TEST: valkkafswriter_test: test 2: ";
-    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    std::cout << name <<"** @@Read frames with ValkkaFSTool **" << std::endl;
     
-    ValkkaFS fs("disk.dump", "block.dat", 10*1024, 10); // dumpfile, blockfile, blocksize, number of blocks
-    fs.read();
+    ValkkaFS fs("disk.dump", "block.dat", 10*1024, 10, false); // dumpfile, blockfile, blocksize, number of blocks, don't overwrite blocktable
+    // fs.read();
     
     fs.reportTable();
     
     ValkkaFSTool fstool(fs);
         
-    fstool.dumpBlock(0);
+    std::size_t i;
+    for(i=0;i<=fs.get_n_blocks();i++) {
+        fstool.dumpBlock(i);
+    }
   
 }
 
 
-void test_3() {
-  
-  const char* name = "@TEST: valkkafswriter_test: test 3: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+void test_3() { // do: 3, 2 => crash .. of course .. number of blocks don't match
+    const char* name = "@TEST: valkkafswriter_test: test 3: ";
+    std::cout << name <<"** @@Write frames with filesystem wrap **" << std::endl;
+
+    // construct a dummy frame
+    BasicFrame *f = new BasicFrame();
+    f->resize(1024);
+    f->subsession_index=0;
+    f->n_slot=1;
+    f->media_type =AVMEDIA_TYPE_VIDEO;
+    f->codec_id   =AV_CODEC_ID_H264;
+    
+    // create ValkkaFS and WriterThread
+    ValkkaFS fs("disk.dump", "block.dat", 10*1024, 5, true); // dumpfile, blockfile, blocksize, number of blocks, clear blocktable
+    // 5 blocks
+    // so, with this frame size, its 9 frames per block
+    ValkkaFSWriterThread ft("writer", fs);
+
+    fs.clearDevice(); // create and fill device file "disk.dump"
+    fs.clearTable();  // clears blocktable and dumps it to disk
+    
+    FrameFilter &filt = ft.getFrameFilter();
+
+    ft.startCall();
+
+    sleep_for(1s);
+    ft.setSlotIdCall(1, 123);
+    
+    std::cout << "\nWriting frames" << std::endl;
+    int i;
+    int nb=7; // write this many blocks
+    for(i=0;i<=(10*nb);i++) { // write over the block
+        // let's simulate a H264 frame
+        std::fill(f->payload.begin(), f->payload.end(), 0);
+        std::copy(nalstamp.begin(),nalstamp.end(),f->payload.begin()); // insert 0001
+        long int mstimestamp = 1000*(i+1);
+        f->mstimestamp = mstimestamp;
+        if (i%5==0) { // every 5.th frame a key frame
+            f->payload[4]=(31 & 7); // mark fake sps frame
+        }
+        filt.run(f);
+        sleep_for(0.01s); // otherwise frames will overflow ..
+    }
+
+    sleep_for(1s);
+
+    std::cout << "\nStopping" << std::endl;
+    ft.stopCall();
+    delete f;
+    
+    fs.reportTable(0, 0, true);
+    
+    fs.dumpTable(); // to disk
+    
+    ValkkaFSTool fstool(fs);
+    
+    for(i=0;i<=nb;i++) {
+        fstool.dumpBlock(i);
+    }
 }
 
 
-void test_4() {
-  
-  const char* name = "@TEST: valkkafswriter_test: test 4: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+void test_4() { // 3, 4
+    const char* name = "@TEST: valkkafsreader_test: test 4: ";
+    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    int i;
+    
+    // create ValkkaFS and WriterReaderThread
+    ValkkaFS fs("disk.dump", "block.dat", 10*1024, 5, false); // dumpfile, blockfile, blocksize, number of blocks, recover blocktable
+    // fs.read();
+    // 5 blocks
+    // so, with this frame size, its 9 frames per block
+    
+    fs.reportTable(0, 0, true);
+    ValkkaFSTool fstool(fs);
+    for(i=0;i<fs.get_n_blocks();i++) {
+        // std::cout << i << std::endl;
+        fstool.dumpBlock(i);
+    }
+    
+    InfoFrameFilter filter("info");    
+    ValkkaFSReaderThread ft("reader", fs, filter);
+    
+    std::list<std::size_t> block_list = {0};
+    
+    ft.startCall();
+
+    sleep_for(1s);
+    
+    ft.setSlotIdCall(2, 123);
+    ft.reportSlotIdCall();
+    
+    
+    
+    // TODO: continue from here
+    ft.pullBlocksCall(block_list);
+    
+    sleep_for(2s);
+    
+    ft.stopCall();
 }
 
 

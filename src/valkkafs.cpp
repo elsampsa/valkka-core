@@ -34,73 +34,30 @@
 #include "valkkafs.h"
 
 
-ValkkaFS::ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks) : device_file(device_file), block_file(block_file), blocksize(blocksize), n_blocks(n_blocks), col_0(0), col_1(0), current_row(0), prev_row(0), pyfunc(NULL), os(block_file, std::ios::binary)
+ValkkaFS::ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks, bool init) : device_file(device_file), block_file(block_file), blocksize(blocksize), n_blocks(n_blocks), col_0(0), col_1(0), current_row(0), prev_row(0), pyfunc(NULL), os(block_file, std::fstream::binary | std::fstream::out | std::fstream::in), init(init)
 {
-    tab.resize(n_cols*n_blocks, 0);
-    
-    device_size=blocksize*n_blocks;
- 
-    /*
-    #define import_array() {if (_import_array() < 0) {PyErr_Print(); PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import"); } }
-    import_array(); // needed here !
-    
-    tab2.resize(2*n_blocks, 0); // blocktable copy .. makes more sense to create the array at the main program / python side
-    
-    PyArray_NewFromDescr(
-        PyTypeObject* subtype, 
-        PyArray_Descr* descr, 
-        int nd, 
-        npy_intp* dims, 
-        npy_intp* strides, 
-        void* data, 
-        int flags, 
-        PyObject* obj
-    )
-    */
-    
-    /*
-    npy_intp dims[] = {n_blocks, 2};
-    descr = PyArray_DescrFromType(NPY_LONG); // https://stackoverflow.com/questions/42913564/numpy-c-api-using-pyarray-descr-for-array-creation-causes-segfaults
-    // https://docs.scipy.org/doc/numpy-1.13.0/reference/c-api.dtype.html
-    
-    
-    std::cout << "arr" << std::endl;
-    
-    arr = (PyArrayObject*)PyArray_NewFromDescr(
-        &PyArray_Type,
-        descr, 
-        2, 
-        dims, 
-        NULL, 
-        tab2.data(),
-        NPY_ARRAY_F_CONTIGUOUS,
-        NULL
-    );
-    
-    Py_INCREF(arr);
-    
-    /*
-    npy_intp ind[] = {0, 0};
+    if (!os.is_open()) { // so the file did not exist
+        // create
+        os.open(block_file, std::fstream::out | std::fstream::binary | std::fstream::trunc); 
 
-    long *mat;
+        // close
+        if (os.is_open())
+            os.close();
+
+        // re-open
+        os.open(block_file, std::fstream::binary | std::fstream::out | std::fstream::in);
+    }
     
-    mat = (long*)arr->data;
+    os.seekp(std::streampos(0));
+    tab.resize(n_cols*n_blocks, 0);
+    device_size=blocksize*n_blocks;
     
-    mat[0] = 11;
-    mat[1] = 12;
-    mat[2] = 21;
-    mat[3] = 22;
-    // ind[0] runs first
-    
-    ind[0]=0; ind[1]=0;
-    std::cout << "val =" << *(long*)PyArray_GetPtr(arr, ind) << std::endl;
-    
-    ind[0]=0; ind[1]=1;
-    std::cout << "val =" << *(long*)PyArray_GetPtr(arr, ind) << std::endl;
-    
-    ind[0]=1; ind[1]=0;
-    std::cout << "val =" << *(long*)PyArray_GetPtr(arr, ind) << std::endl;
-    */
+    if (init) {
+        clearTable();
+    }
+    else {
+        readTable();
+    }
 }
     
 ValkkaFS::~ValkkaFS() {
@@ -109,12 +66,17 @@ ValkkaFS::~ValkkaFS() {
     os.close();
 }
 
-void ValkkaFS::dump() {
-    std::unique_lock<std::mutex> lk(this->mutex);
-    // std::ofstream os(block_file, std::ios::binary);
+void ValkkaFS::dumpTable_() {
+    std::cout << "ValkkaFS: dumpTable_ : size =" << tab.size() << std::endl;
     os.seekp(std::streampos(0));
     os.write((const char*)(tab.data()), sizeof(long int)*tab.size());
-    // os.close();
+    os.flush();
+    os.seekp(std::streampos(0));
+}
+
+void ValkkaFS::dumpTable() {
+    std::unique_lock<std::mutex> lk(this->mutex);
+    dumpTable_();
 }
 
 void ValkkaFS::dumpBlock(std::size_t n_block) {
@@ -122,9 +84,10 @@ void ValkkaFS::dumpBlock(std::size_t n_block) {
     os.seekp(std::streampos(i));
     os.write((const char*)(&tab[i]), sizeof(long int)); // write one row of blocktable into the blocktable file
     os.write((const char*)(&tab[i+1]), sizeof(long int));
+    os.flush();
 }
 
-void ValkkaFS::read() {
+void ValkkaFS::readTable() {
     std::unique_lock<std::mutex> lk(this->mutex);
     std::ifstream is(block_file, std::ios::binary);
     is.read((char*)(tab.data()), sizeof(long int)*tab.size());
@@ -166,7 +129,7 @@ std::size_t ValkkaFS::maxFrameSize() {
 }
 
 
-void ValkkaFS::reportTable(std::size_t from, std::size_t to) {
+void ValkkaFS::reportTable(std::size_t from, std::size_t to, bool show_all) {
     from=std::min(from, n_blocks-1);
     to  =std::min(to, n_blocks-1);
     if (to<from) {
@@ -177,8 +140,11 @@ void ValkkaFS::reportTable(std::size_t from, std::size_t to) {
     }
     std::size_t count;
     for(count=from;count<=to;count++) {
-        if (tab[ind(count, 0)] > 0 or tab[ind(count, 1)]  > 0) {
+        if (tab[ind(count, 0)] > 0 and tab[ind(count, 1)]  > 0) {
             std::cout << count << " : " << tab[ind(count, 0)] << " " << tab[ind(count, 1)] << std::endl;
+        }
+        else if (show_all) {
+            std::cout << count << " : - " << std::endl;
         }
     }
 }
@@ -216,6 +182,10 @@ void ValkkaFS::writeBlock() {
     
     col_0=0;
     col_1=0;
+    
+    // clear old values, if any
+    tab[ind(current_row,0)]=0;
+    tab[ind(current_row,1)]=0;
     
     if (pyfunc!=NULL) {
         PyGILState_STATE gstate;
@@ -267,7 +237,7 @@ void ValkkaFS::clearDevice() {
 void ValkkaFS::clearTable() {
     std::unique_lock<std::mutex> lk(this->mutex);
     std::fill(tab.begin(), tab.end(), 0);
-    // TODO: dump to disk
+    dumpTable_();
 }
 
 // TODO: dump blocktable to disk
@@ -339,7 +309,7 @@ std::size_t ValkkaFS::get_n_cols() {
 
 
 
-ValkkaFSTool::ValkkaFSTool(ValkkaFS &valkkafs) : valkkafs(valkkafs), is(valkkafs.getDevice(), std::ios::binary) {
+ValkkaFSTool::ValkkaFSTool(ValkkaFS &valkkafs) : valkkafs(valkkafs), is(valkkafs.getDevice(), std::fstream::binary | std::fstream::in) {
 }
 
 ValkkaFSTool::~ValkkaFSTool() {
@@ -348,6 +318,9 @@ ValkkaFSTool::~ValkkaFSTool() {
 
 void ValkkaFSTool::dumpBlock(std::size_t n_block) {
     if (n_block < 0 or n_block > valkkafs.get_n_blocks()-1) {
+        return;
+    }
+    if (valkkafs.getVal(n_block,0)==0 and valkkafs.getVal(n_block,0)==0) {
         return;
     }
     is.seekg(std::streampos(valkkafs.getBlockSeek(n_block)));
@@ -365,16 +338,33 @@ void ValkkaFSTool::dumpBlock(std::size_t n_block) {
             if (seek) {
                 std::cout << " * ";
             }
+            std::cout << "    " << f.dumpPayload();
             std::cout << std::endl;
         }
     }
 }
 
 
-ValkkaFSWriterThread::ValkkaFSWriterThread(const char *name, ValkkaFS &valkkafs, FrameFifoContext fifo_ctx) : Thread(name), valkkafs(valkkafs), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), filestream(valkkafs.getDevice(), std::ios::binary)
+ValkkaFSWriterThread::ValkkaFSWriterThread(const char *name, ValkkaFS &valkkafs, FrameFifoContext fifo_ctx) : Thread(name), valkkafs(valkkafs), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), filestream(valkkafs.getDevice(), std::fstream::binary | std::fstream::out | std::fstream::in)
 {
+    if (!filestream.is_open()) { // so the file did not exist
+        valkkafs.clearDevice();
+        /*
+        // create
+        filestream.open(block_file, std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        
+        // close
+        if (filestream.is_open())
+            filestream.close();
+
+        */
+        // re-open
+        filestream.open(valkkafs.getDevice(), std::fstream::binary | std::fstream::out | std::fstream::in);
+    }
+    filestream.seekp(std::streampos(0));
 }
     
+
 ValkkaFSWriterThread::~ValkkaFSWriterThread() {
     filestream.close();
 }
@@ -427,13 +417,18 @@ void ValkkaFSWriterThread::run() {
                             // finish this block by writing IdNumber 0
                             IdNumber zero=0;
                             filestream.write((const char*)&zero, sizeof(zero));
+                            // bytecount += sizeof(zero);
                             // start a new block, seek to the new position
                             bytecount=0;
                             valkkafs.writeBlock(); // inform ValkkaFS that a new block has been entered
-                            // seek to the new position (which might have been wrapper to 0)
+                            // seek to the new position (which might have been wrapped to 0)
                             filestream.seekp(std::streampos(valkkafs.getCurrentBlockSeek())); 
+                            // write a zero IdNumber to the beginning of the new block
+                            filestream.write((const char*)&zero, sizeof(zero));
+                            // rewind
+                            filestream.seekp(std::streampos(valkkafs.getCurrentBlockSeek()));
                         }
-                        std::cout << "ValkkaFSWriterThread : writing frame " << *f << std::endl;
+                        std::cout << "ValkkaFSWriterThread : writing frame " << *f << " " << f->dumpPayload() << std::endl;
                         bf->dump(id, filestream);
                         // inform ValkkaFS about the progression of key frames
                         // progression is measured per leading stream (stream with subsession_index == 0)
@@ -498,7 +493,7 @@ void ValkkaFSWriterThread::handleSignal(ValkkaFSWriterSignalContext &signal_ctx)
             break;
             
         case ValkkaFSWriterSignal::seek:
-            break;
+            break; // TODO
             
         
     }
@@ -655,13 +650,5 @@ void ValkkaFSWriterThread::requestStopCall() {
     this->sendSignal(signal_ctx);
 }
 
-
-    
- 
-ValkkaFSReaderThread::ValkkaFSReaderThread(const char *name, ValkkaFS &valkkafs) : Thread(name), valkkafs(valkkafs) {
-}
-
-ValkkaFSReaderThread::~ValkkaFSReaderThread() {
-}
 
 

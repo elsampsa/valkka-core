@@ -217,7 +217,7 @@ void BasicFrame::fillPars() {
 
 void BasicFrame::fillH264Pars() {
   if (payload.size()>(nalstamp.size()+1)) { 
-    h264_pars.slice_type = ( payload[nalstamp.size()+1] & 31 );
+    h264_pars.slice_type = ( payload[nalstamp.size()] & 31 );
   }
 }
 
@@ -287,7 +287,7 @@ IdNumber BasicFrame::calcSize() {
 
 #define dump_bytes(var) os.write( (const char*)&var, sizeof(var));
 
-bool BasicFrame::dump(IdNumber device_id, std::ofstream &os) {
+bool BasicFrame::dump(IdNumber device_id, std::fstream &os) {
     std::size_t len;
     len=payload.size();
     
@@ -303,11 +303,17 @@ bool BasicFrame::dump(IdNumber device_id, std::ofstream &os) {
 
 #define read_bytes(var) is.read((char*)&var, sizeof(var));
 
-IdNumber BasicFrame::read(std::ifstream &is) {
+IdNumber BasicFrame::read(std::fstream &is) {
     std::size_t len;
     IdNumber device_id;
     
+    len = 0;
+    device_id = 0;
+    
     read_bytes(device_id);
+    // is.read((char*)&device_id, sizeof(IdNumber));
+    
+    std::cout << "BasicFrame : read : device_id =" << device_id << std::endl;
     
     if (device_id==0) { // no frame
         return device_id;

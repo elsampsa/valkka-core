@@ -195,8 +195,8 @@ public:
   
 public: // frame serialization
   std::size_t calcSize();                             ///< How much this frame occupies in bytes when serialized
-  bool dump(IdNumber device_id, std::ofstream &os);   ///< Write the frame to filestream with a certain device id
-  IdNumber read(std::ifstream &is);                   ///< Read the frame from filestream.  Returns device id
+  bool dump(IdNumber device_id, std::fstream &os);    ///< Write the frame to filestream with a certain device id
+  IdNumber read(std::fstream &is);                    ///< Read the frame from filestream.  Returns device id
 };
 
 
@@ -484,6 +484,7 @@ public:
   OpenGLSignalContext                 opengl_signal_ctx;
   AVSignalContext                     av_signal_ctx;
   ValkkaFSWriterSignalContext         valkkafswriter_signal_ctx;
+  ValkkaFSReaderSignalContext         valkkafsreader_signal_ctx;
   void*                               custom_signal_ctx; ///< For extensions
 };
 

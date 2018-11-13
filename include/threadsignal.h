@@ -151,4 +151,40 @@ struct ValkkaFSWriterSignalContext {
 };
 
 
+/** Signal information for ValkkaFSReaderThread
+ * 
+ */
+struct ValkkaFSReaderSignalPars {
+    std::list<std::size_t> block_list; ///< List of blocks to be read and sent. Used by pull_blocks
+    SlotNumber      n_slot;            ///< Slot number.  Used by set_slot_id and unset_slot_id
+    IdNumber        id;                ///< Id.  Used by set_slot_id and unset_slot_id
+};
+
+/** Signals for ValkkaFSReaderThread
+ * 
+ */
+enum class ValkkaFSReaderSignal {
+    none,
+    exit,
+    
+    pull_blocks,              ///< Used by pullBlocksCall
+    
+    set_slot_id,              ///< Used by setSlotIdCall
+    unset_slot_id,            ///< Used by unSetSlotIdCall  
+    clear_slot_id,            ///< Used by clearSlotIdCall
+    report_slot_id            ///< Used by reportSlotIdCall
+};
+
+/** Encapsulate data sent in the ValkkaFSReaderSignal
+ * 
+ */
+struct ValkkaFSReaderSignalContext {
+    ValkkaFSReaderSignal        signal;
+    ValkkaFSReaderSignalPars    pars;
+};
+
+
+
+
+
 #endif

@@ -56,16 +56,21 @@ namespace np = boost::python::numpy;
  * @param block_file    Book-keeping of the blocks in the device file
  * @param blocksize     Size of a single block in bytes
  * @param n_blocks      Size of the device (or the part we want to use) in bytes
+ * @param init          Clear the block_file even if it exists
  * 
  * - At python, maintain a json file with these parameters and with the current_row (i.e. block) 
  * - .. current_row is informed by using callbacks to the python side
- * - At python, use also read() and setCurrentBlock(n_block)
- * - At python, use also clear() and clearDevice() if needed
+ * - At python, use also setCurrentBlock(n_block)
+ * - At python, use also clearTable() [and clearDevice()] if needed
+ * - The last block that's currently being written (current_row) is overwritten from start when the writing starts the next time
  * 
- * Actual reading and writing of frames are done by other classes
+ * Actual reading and writing of frames are done by other classes (ValkkaFSWriterThread and ValkkaFSReaderThread)
  * 
+ * When reading frames, they are passed between processes typically like this:
  * 
- * device_id (long uint) subsession_index (int) mstimestamp (long int) media_type (AVMediaType) codec_id (AVCodecId) size (std::size_t) payload (char)
+ * ValkkaFSReaderThread => CacheStream => Decoder
+ * 
+ * - Frame serialization : device_id (long uint) subsession_index (int) mstimestamp (long int) media_type (AVMediaType) codec_id (AVCodecId) size (std::size_t) payload (char)
  * 
  * 
  * 
@@ -73,7 +78,16 @@ namespace np = boost::python::numpy;
 class ValkkaFS {        // <pyapi>
 
 public:                 // <pyapi>
-    ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks); // <pyapi>
+    
+    /** Default Constructor
+     * 
+     * @param   device_file   where the payload is written (a file or a disk device)
+     * @param   block_file    where the filesystem (block) information is written.  A dump of blocktable
+     * @param   blocksize     size of a block
+     * @param   n_blocks      number of blocks
+     * @param   init          true = init and dump blocktable to disk.  false = try to read blocktable from disk (default)
+     */
+    ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks, bool init=false); // <pyapi>
     ~ValkkaFS();        // <pyapi>
 
 protected:
@@ -81,9 +95,10 @@ protected:
     std::string     block_file;
     std::size_t     blocksize;
     std::size_t     n_blocks;
+    bool            init;           ///< Clear the blocktable or not even if it exists
     std::size_t     device_size;
     std::vector<long int> tab;      ///< Blocktable
-    std::ofstream   os;             ///< Write handle to blocktable file
+    std::fstream    os;             ///< Write handle to blocktable file
     
     std::mutex      mutex;
     long int        col_0;          ///< Current column 0 value (max keyframe timestamp)
@@ -111,24 +126,27 @@ public:                                  // <pyapi>
     std::size_t get_n_blocks();          // <pyapi>
     std::size_t get_n_cols();            // <pyapi>
     
+    void dumpTable_();
+    
     /** dump blocktable to disk */
-    void            dump();              // <pyapi>
+    void            dumpTable();              // <pyapi>
     /** dump single row of bloctable to disk */
     void dumpBlock(std::size_t n_block); // <pyapi>
     /** read blocktable from disk */
-    void            read();              // <pyapi>
+    void            readTable();          // <pyapi>
     /** returns device filename */
     std::string     getDevice();         // <pyapi>
     /** returns device file size */
     std::size_t     getDeviceSize();     // <pyapi>
     /** creates and clears the device file */
     void            clearDevice();       // <pyapi>
+    // TODO: initDevice() : write IdNumber 0 to the beginning of each block
     /** clears the blocktable (but does not write to disk) */
     void            clearTable();        // <pyapi>
     /** returns maximum allowed frame size in bytes */
     std::size_t     maxFrameSize();      // <pyapi>
     /** print blocktable */
-    void            reportTable(std::size_t from=0, std::size_t to=0);       // <pyapi>
+    void            reportTable(std::size_t from=0, std::size_t to=0, bool show_all=false);       // <pyapi>
     /** Used by a writer class to inform that a new block has been written */
     void writeBlock();                           // <pyapi>
     
@@ -169,7 +187,7 @@ public:
     ~ValkkaFSTool();
     
 protected:
-    std::ifstream    is;
+    std::fstream     is;
     ValkkaFS         &valkkafs;
     
 public:
@@ -178,7 +196,7 @@ public:
 
 
 
-/** Writes frames to a file
+/** Writes frames to ValkkaFS
  * 
  * - Reads frames from infifo
  * - Writes them to the disk as they arrive
@@ -193,7 +211,7 @@ public:                                              // <pyapi>
 
 protected:
     ValkkaFS                            &valkkafs;
-    std::ofstream                       filestream;
+    std::fstream                        filestream;
     std::map<SlotNumber, IdNumber>      slot_to_id;  ///< Map from slot numbers to ids
     
 protected: // frame input
@@ -237,35 +255,6 @@ public:                                                       // <pyapi>
     void seekCall(std::size_t n_block);                       // <pyapi>
     void requestStopCall();                                   // <pyapi>
 };                                                            // <pyapi>
-
-
-class ValkkaFSReaderThread : public Thread {
-    
-public:
-    ValkkaFSReaderThread(const char *name, ValkkaFS &valkkafs);
-    ~ValkkaFSReaderThread();
-
-private:
-    ValkkaFS    &valkkafs;
-    
-    
-    /*
-    ValkkaFSReadThread(ValkkaFS valkkafs) / or "ValkkaFSDumpThread"
-
-    pullBlocks(std::list)     Dump all blocks in the list to output filters
-    
-    **Python API**
-    
-    getValkkaFS()
-    pullBlocksCall(PyObject)
-    RegisterOutputCall(context with id and cam id)
-    deRegisterOutputCall(cam id)
-    
-    ? put here playCall, seekCall, etc.
-    =>
-    */
-};
-    
 
 
 #endif

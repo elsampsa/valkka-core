@@ -48,20 +48,20 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 void test_1() {
     const char* name = "@TEST: valkkafs_test: test 1: ";
-    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    std::cout << name <<"** @@Write and recover ValkkaFS info **" << std::endl;
 
-    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10);
+    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10, true);
 
     fs.setVal(1,1,22);
     
-    fs.dump();
+    fs.dumpTable();
     
-    fs.read();
+    fs.readTable();
 
     std::cout << fs.getVal(1,1) << std::endl;
     
-    ValkkaFS fs2("disk.dat", "block.dat", 1024*1024, 10);
-    fs2.read();
+    ValkkaFS fs2("disk.dat", "block.dat", 1024*1024, 10, false);
+    // fs2.read();
     
     std::cout << fs2.getVal(1,1) << std::endl;
     
@@ -70,19 +70,21 @@ void test_1() {
 
 void test_2() {
     const char* name = "@TEST: valkkafs_test: test 2: ";
-    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    std::cout << name <<"** @@Write ValkkaFS info **" << std::endl;
   
-    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10);
+    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10, false);
 
     std::cout << fs.getDevice() << std::endl;
     std::cout << fs.getDeviceSize() << std::endl;
     fs.clearDevice();
+    fs.clearTable();
+    fs.dumpTable();
 }
 
 
 void test_3() {
     const char* name = "@TEST: valkkafs_test: test 3: ";
-    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    std::cout << name <<"** @@Test Frame serialization **" << std::endl;
 
     BasicFrame *f = new BasicFrame();
     f->resize(1024*1024);
@@ -90,7 +92,7 @@ void test_3() {
     std::fill(f->payload.begin(), f->payload.end(), 12);
     f->mstimestamp = 1001;
 
-    std::ofstream os("framedump", std::ios::binary);
+    std::fstream os("framedump", std::fstream::binary | std::fstream::out);
     f->dump(123, os);
     os.close();
    
@@ -98,7 +100,7 @@ void test_3() {
     
     BasicFrame *f2 = new BasicFrame();
     
-    std::ifstream is("framedump", std::ios::binary);
+    std::fstream is("framedump", std::ios::binary | std::fstream::in);
     f2->read(is);
     is.close();
     
@@ -111,13 +113,13 @@ void test_3() {
 
 void test_4() {
     const char* name = "@TEST: valkkafs_test: test 4: ";
-    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    std::cout << name <<"** @@Test frame serialization 2 **" << std::endl;
     int i;
     
     BasicFrame *f = new BasicFrame();
     f->resize(1024*1024);
     
-    std::ofstream os("framedump", std::ios::binary);
+    std::fstream os("framedump", std::fstream::binary | std::fstream::out);
     for(i=0;i<10;i++) {
         f->subsession_index=i%2;
         f->n_slot=1;
@@ -131,7 +133,7 @@ void test_4() {
     std::cout << std::endl;
     
     std::size_t id;
-    std::ifstream is("framedump", std::ios::binary);
+    std::fstream is("framedump", std::fstream::binary | std::fstream::in);
     for(i=0;i<10;i++) {
         id=f->read(is);
         std::cout << id << ": " << *f << std::endl;
@@ -143,7 +145,7 @@ void test_4() {
 
 void test_5() {
     const char* name = "@TEST: valkkafs_test: test 5: ";
-    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    std::cout << name <<"** @@Test ValkkaFSWriterThread **" << std::endl;
 
     BasicFrame *f = new BasicFrame();
     f->resize(1024*1024);
@@ -152,7 +154,7 @@ void test_5() {
     std::fill(f->payload.begin(), f->payload.end(), 1);
     f->mstimestamp = 100;
 
-    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10);
+    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10, true); // last parameter: init blocktable
     ValkkaFSWriterThread ft("writer", fs);
     
     FrameFilter &filt = ft.getFrameFilter();
@@ -176,7 +178,7 @@ void test_5() {
 
 void test_6() {
     const char* name = "@TEST: valkkafs_test: test 6: ";
-    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    std::cout << name <<"** @@Test ValkkaFSWriterThread 2 **" << std::endl;
 
     // construct a dummy frame
     BasicFrame *f = new BasicFrame();
@@ -187,7 +189,7 @@ void test_6() {
     f->mstimestamp = 100;
 
     // create ValkkaFS and WriterThread
-    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10); // blocksize, number of blocks
+    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10, true); // blocksize, number of blocks .. init blocktable
     ValkkaFSWriterThread ft("writer", fs);
     
     FrameFilter &filt = ft.getFrameFilter();
