@@ -44,7 +44,7 @@ ValkkaFSReaderThread::~ValkkaFSReaderThread() {
     
 void ValkkaFSReaderThread::run() {
     Frame* f;
-    long int dt;
+    long int dt=0;
     long int mstime, oldmstime;
 
     mstime = getCurrentMsTimestamp();

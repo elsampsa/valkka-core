@@ -58,6 +58,8 @@ long int getMsDiff(timeval tv1, timeval tv2); ///< Utility function: return time
 
 struct timeval msToTimeval(long int mstimestamp); ///< Milliseconds to timeval
 
+long int timevalToMs(struct timeval time); /// Timeval to milliseconds
+
 bool slotOk(SlotNumber n_slot); ///< Checks the slot number range
 
 void normalize_timespec(struct timespec *ts, time_t sec, int64_t nanosec);

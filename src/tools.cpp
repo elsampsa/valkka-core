@@ -56,6 +56,10 @@ struct timeval msToTimeval(long int mstimestamp) {
   return fPresentationTime;
 }
 
+long int timevalToMs(struct timeval time) {
+    return time.tv_sec*1000+time.tv_usec/1000;
+}
+
 
 bool slotOk(SlotNumber n_slot) {
   if (n_slot>I_MAX_SLOTS) {

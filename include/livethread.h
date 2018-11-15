@@ -80,13 +80,6 @@ enum class LiveConnectionType { // <pyapi>
 };                              // <pyapi>
 
 
-enum class TimeCorrectionType { // <pyapi>
-  none,                         // <pyapi>
-  smart,                        // <pyapi>
-  dummy                         // <pyapi>
-};                              // <pyapi>
-
-
 /** Identifies a stream and encapsulates information about the type of connection the user is requesting to LiveThread.  LiveConnectionContext is also included in LiveThread::SignalContext, i.e. it carries the signal information to LiveThread (for the thread signaling system, see \ref threading_tag).
   * 
   * (A side note: this class is not nested inside the LiveThread class for one simple reason: swig does not like nested classes, so it would make it harder to create Python bindings)

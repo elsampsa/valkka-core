@@ -374,7 +374,7 @@ void ValkkaFSWriterThread::run() {
     unsigned short subsession_index;
     Frame* f;
 
-    long int dt;
+    long int dt=0;
     long int mstime, oldmstime;
     mstime = getCurrentMsTimestamp();
     oldmstime = mstime;

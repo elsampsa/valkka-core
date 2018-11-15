@@ -65,19 +65,21 @@ derived class: v4LDevice
 /** Parameters for connecting to a usb camera
  * 
  */
-struct USBCameraConnectionContext { // <pyapi>
-    USBCameraConnectionContext(const char *device, SlotNumber slot, FrameFilter *f) : // <pyapi>
-    device(device), slot(slot), framefilter(f), width(N720.width), height(N720.height) {};     // <pyapi>
-    USBCameraConnectionContext() {};   // <pyapi>
-    std::string device;                // <pyapi>
+struct USBCameraConnectionContext {                                                                                                        // <pyapi>
+    USBCameraConnectionContext(const char *device, SlotNumber slot, FrameFilter *f) :                                                      // <pyapi>
+    device(device), slot(slot), framefilter(f), width(N720.width), height(N720.height), time_correction(TimeCorrectionType::smart) {};     // <pyapi>
+    USBCameraConnectionContext() : time_correction(TimeCorrectionType::smart) {};                                                          // <pyapi>
+    std::string device;                                           // <pyapi>
     /** A unique stream slot that identifies this stream */
-    SlotNumber         slot;        // <pyapi>
+    SlotNumber         slot;                                      // <pyapi>
     /** Frames are feeded into this FrameFilter */
-    FrameFilter*       framefilter; // <pyapi>
-    int                width;       // <pyapi>
-    int                height;      // <pyapi>
-    // TODO: format, fps, etc.      // <pyapi>
-};                                  // <pyapi>
+    FrameFilter*       framefilter;                               // <pyapi>
+    int                width;                                     // <pyapi>
+    int                height;                                    // <pyapi>
+    /** How to perform frame timestamp correction */
+    TimeCorrectionType time_correction;                           // <pyapi>
+    // TODO: format, fps, etc.                                    // <pyapi>
+};                                                                // <pyapi>
 
 
 /** Signals used by USBDeviceThread
@@ -104,7 +106,7 @@ class USBDevice {
     
 public:    
     USBDevice(FrameFilter *framefilter);
-    ~USBDevice();
+    virtual ~USBDevice();
     
 protected:
     int fd;
@@ -177,6 +179,10 @@ protected:
     struct v4l2_buffer         buf;
     std::vector<BasicFrame*>   ring_buffer;
     static const int           n_ring_buffer = 5;
+    
+    FrameFilter*            timestampfilter;        
+    FrameFilter*            inputfilter;
+  
     
 public: // getters
     const v4l_status        getStatus() {return this->status;}

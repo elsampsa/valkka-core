@@ -93,8 +93,26 @@ V4LDevice::V4LDevice(USBCameraConnectionContext camera_ctx) : USBDevice(camera_c
     int i;
     for(i=0;i<n_ring_buffer;i++) {
         f = new BasicFrame();
-        // f->resize(PayloadSizes::DEFAULT_PAYLOAD_SIZE_H264);
+        f->subsession_index=0;
+        f->n_slot=camera_ctx.slot;
         ring_buffer.push_back(f);
+    }
+    
+    // timestamp corrector
+    if       (camera_ctx.time_correction==TimeCorrectionType::none) {
+        // no timestamp correction: LiveThread --> {SlotFrameFilter: inputfilter} --> camera_ctx.framefilter
+        timestampfilter = new TimestampFrameFilter2("timestampfilter",NULL);
+        inputfilter     = new SlotFrameFilter("input_filter",camera_ctx.slot,camera_ctx.framefilter);
+    }
+    else if  (camera_ctx.time_correction==TimeCorrectionType::dummy) {
+        // smart timestamp correction:  LiveThread --> {SlotFrameFilter: inputfilter} --> {TimestampFrameFilter2: timestampfilter} --> camera_ctx.framefilter
+        timestampfilter = new DummyTimestampFrameFilter("dummy_timestamp_filter",camera_ctx.framefilter);
+        inputfilter     = new SlotFrameFilter("input_filter",camera_ctx.slot,timestampfilter);
+    }
+    else { // smart corrector
+        // brute-force timestamp correction: LiveThread --> {SlotFrameFilter: inputfilter} --> {DummyTimestampFrameFilter: timestampfilter} --> camera_ctx.framefilter
+        timestampfilter = new TimestampFrameFilter2("smart_timestamp_filter",camera_ctx.framefilter);
+        inputfilter     = new SlotFrameFilter("input_filter",camera_ctx.slot,timestampfilter);
     }
 }
 
@@ -106,6 +124,9 @@ V4LDevice::~V4LDevice() {
     for(auto it=ring_buffer.begin(); it!=ring_buffer.end(); it++) {
         delete *it;
     }
+    
+    delete timestampfilter;
+    delete inputfilter;
 }
 
 
@@ -249,6 +270,11 @@ void V4LDevice::open_() {
     */
     
     std::cout << "V4LDevice : image size : " << fmt.fmt.pix.sizeimage << std::endl;
+    
+    for(auto it=ring_buffer.begin(); it!=ring_buffer.end(); it++) {
+        (*it)->media_type = AVMEDIA_TYPE_VIDEO;
+        (*it)->codec_id   = AV_CODEC_ID_H264;
+    }
     
     status = v4l_status::ok_format;
 
@@ -419,7 +445,10 @@ int V4LDevice::pull() {
     }
 
     std::cout << "V4LDevice: pull: ring buffer index: " << i << std::endl;
-    // framefilter->run(&basicframe);
+    
+    // struct timeval timestamp
+    ring_buffer[i]->mstimestamp=timevalToMs(buf.timestamp);
+    inputfilter->run(ring_buffer[i]);
     
     if (-1 == xioctl(fd, VIDIOC_QBUF, &buf)) {
         // errno_exit("VIDIOC_QBUF");
@@ -471,8 +500,9 @@ void USBDeviceThread::run() {
     oldmstime = mstime;
     
     fd_set fds;
-    tv = msToTimeval(Timeout::usbthread);
+    
     loop=true;
+    dt=0;
     
     while(loop) {
         std::cout << "USBDeviceThread: loop, dt=" << dt << std::endl;
@@ -490,7 +520,7 @@ void USBDeviceThread::run() {
         tv = msToTimeval(Timeout::usbthread); // must be set each time
         
         r = select(fd + 1, &fds, NULL, NULL, &tv);
-
+        
         if (-1 == r) {
             if (EINTR == errno)
                 continue;
@@ -549,7 +579,7 @@ void USBDeviceThread::playCameraStream(USBCameraConnectionContext &ctx) {
         device->play();
     }
     else {
-        std::cout << "USBDeviceThread: registerCameraStream: slot " << ctx.slot << " reserved" << std::endl;
+        std::cout << "USBDeviceThread: playCameraStream: slot " << ctx.slot << " reserved" << std::endl;
     }
 }
 
@@ -557,13 +587,14 @@ void USBDeviceThread::playCameraStream(USBCameraConnectionContext &ctx) {
 void USBDeviceThread::stopCameraStream(USBCameraConnectionContext &ctx) {
     auto it=slots_.find(ctx.slot);
     if (it==slots_.end()) { // this slot does not exist
-        std::cout << "USBDeviceThread: deRegisterCameraStream: no such slot " << ctx.slot << std::endl;
+        std::cout << "USBDeviceThread: stopCameraStream: no such slot " << ctx.slot << std::endl;
     }
     else {
         // (it->second)->close_();
         (it->second)->stop();
-        slots_.erase(it);
+        std::cout << "USBDeviceThread: destructing slot " << ctx.slot << std::endl;
         delete (it->second);
+        slots_.erase(it);
     }
 }
 

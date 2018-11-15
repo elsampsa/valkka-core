@@ -72,6 +72,14 @@ enum class FrameClass {
   Last =signal
 };
 
+/** Methods to correct frame timestamps
+ * 
+ */
+enum class TimeCorrectionType { // <pyapi>
+  none,                         // <pyapi>
+  smart,                        // <pyapi>
+  dummy                         // <pyapi>
+};                              // <pyapi>
 
 
 /** Frame: An abstract queueable class.

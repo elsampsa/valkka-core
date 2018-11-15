@@ -76,7 +76,7 @@ void test_1() {
 
 void test_2() {
   const char* name = "@TEST: usbthread_test: test 2: ";
-  std::cout << name <<"** @@Test USBThread **" << std::endl;
+  std::cout << name <<"** @@Test USBDeviceThread **" << std::endl;
   
   InfoFrameFilter f("info");
   USBDeviceThread usbt("usbthread");
@@ -121,16 +121,41 @@ void test_2() {
   //usbt.deRegisterCameraStreamCall(ctx);
   
   
-  std::cout << "\nstop" << std::endl;
+  std::cout << "\nthread stop" << std::endl;
   usbt.stopCall();
   
 }
 
 
 void test_3() {
-  
   const char* name = "@TEST: usbthread_test: test 3: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+  std::cout << name <<"** @@Test USBDeviceThread 2 **" << std::endl;
+  
+  InfoFrameFilter f("info");
+  USBDeviceThread usbt("usbthread");
+  
+  std::cout << "start" << std::endl;
+  usbt.startCall();
+  
+  sleep_for(1s);
+  
+  USBCameraConnectionContext ctx("/dev/video2", 1, &f);
+  
+  //std::cout << "\nregister" << std::endl;
+  //usbt.registerCameraStreamCall(ctx);
+  
+  sleep_for(1s);
+  
+  std::cout << "\nplay" << std::endl;
+  usbt.playCameraStreamCall(ctx);
+  
+  sleep_for(3s);
+  
+  std::cout << "\nstop" << std::endl;
+  usbt.stopCameraStreamCall(ctx);
+  
+  std::cout << "\n thread stop" << std::endl;
+  usbt.stopCall();
   
 }
 
