@@ -60,13 +60,13 @@ void AVThread::run() {
     bool got_frame;
     unsigned short subsession_index;
     Frame* f;
-    time_t timer;
-    time_t oldtimer;
     Decoder* decoder; // alias
+
     long int dt;
+    long int mstime, oldmstime;
     
-    time(&timer);
-    oldtimer=timer;
+    mstime = getCurrentMsTimestamp();
+    oldmstime = mstime;
     loop=true;
     
     while(loop) {
@@ -204,11 +204,13 @@ void AVThread::run() {
             
         } // GOT FRAME
         
-        time(&timer);
-        
-        if ( (1000*difftime(timer,oldtimer)) >= Timeout::avthread) { // time to check the signals..
+        mstime = getCurrentMsTimestamp();
+        dt = mstime-oldmstime;
+        // old-style ("interrupt") signal handling
+        if (dt>=Timeout::avthread) { // time to check the signals..
+            std::cout << "USBDeviceThread: run: interrupt, dt= " << dt << std::endl;
             handleSignals();
-            oldtimer=timer;
+            oldmstime=mstime;
             #ifdef FIFO_DIAGNOSIS
             infifo.diagnosis();
             #endif

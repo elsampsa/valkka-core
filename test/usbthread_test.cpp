@@ -48,14 +48,23 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 void test_1() {  
     const char* name = "@TEST: usbthread_test: test 1: ";
-    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    std::cout << name <<"** @@Test opening a V4L device **" << std::endl;
     
     InfoFrameFilter f("info");
 
-    V4LDevice dev = V4LDevice(std::string("/dev/video0"), &f);
+    // v4l2-ctl -d /dev/video2 --list-formats
+    
+    USBCameraConnectionContext ctx("/dev/video2", 1, &f);
+    
+    // USBCameraConnectionContext ctx("/dev/video2", 1, &f);
+    
+    V4LDevice dev = V4LDevice(ctx);
     // V4LDevice dev = V4LDevice("/dev/video1");
     // V4LDevice dev = V4LDevice("/dev/video2");
 
+    dev.open_();
+    // dev.paska();
+    
     v4l_status status = dev.getStatus();
 
     if (status == v4l_status::ok_open) {
@@ -66,9 +75,54 @@ void test_1() {
 
 
 void test_2() {
-  
   const char* name = "@TEST: usbthread_test: test 2: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+  std::cout << name <<"** @@Test USBThread **" << std::endl;
+  
+  InfoFrameFilter f("info");
+  USBDeviceThread usbt("usbthread");
+  
+  std::cout << "start" << std::endl;
+  usbt.startCall();
+  
+  sleep_for(1s);
+  
+  USBCameraConnectionContext ctx("/dev/video2", 1, &f);
+  
+  //std::cout << "\nregister" << std::endl;
+  //usbt.registerCameraStreamCall(ctx);
+  
+  sleep_for(1s);
+  
+  std::cout << "\nplay" << std::endl;
+  usbt.playCameraStreamCall(ctx);
+  
+  sleep_for(3s);
+  
+  std::cout << "\nstop" << std::endl;
+  usbt.stopCameraStreamCall(ctx);
+  
+  sleep_for(3s);
+  
+  ///*
+  std::cout << "\nplay" << std::endl;
+  usbt.playCameraStreamCall(ctx);
+  
+  sleep_for(3s);
+  //*/
+  
+  ///*
+  std::cout << "\nreplay" << std::endl;
+  usbt.playCameraStreamCall(ctx);
+  
+  sleep_for(3s);
+  //*/
+  
+  //std::cout << "\nderegister" << std::endl;
+  //usbt.deRegisterCameraStreamCall(ctx);
+  
+  
+  std::cout << "\nstop" << std::endl;
+  usbt.stopCall();
   
 }
 

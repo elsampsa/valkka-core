@@ -61,97 +61,22 @@ derived class: v4LDevice
 
 */
 
-class USBDevice {
-    
-public:    
-    USBDevice(FrameFilter *framefilter);
-    ~USBDevice();
-    
-protected:
-    int fd;
-    FrameFilter *framefilter;   ///< Output FrameFilter
-    SetupFrame setupframe;     ///< This frame is used to send subsession information
-    BasicFrame basicframe;     ///< Data is being copied into this frame
-    
-public: // getters
-    int getFd() {return fd;}
-    
-public:
-    void setupFrame(SetupFrame frame);  ///< sets the setupframe and writes it to the framefilter
-    virtual void open_();
-    virtual void close_();
-    virtual void pull();            ///< Populates basicframe, sends it through the filter
-    virtual void play();
-    virtual void stop();
-};
 
-
-
-// at the python level, check this directory: /sys/class/video4linux
-// .. that directory has video0/ video1/   .. with file "name", etc.
-// .. /dev/video0 has the actualy device for reading
-
-int xioctl(int fh, int request, void *arg);
-
-enum v4l_status {
-    none,           ///< undefined (initial value)
-    not_found,      ///< file not found
-    not_device,     ///< not device file
-    not_read,       ///< could not read device
-    not_v4l2,       ///< not v4l2 device
-    not_video_cap,  ///< not video capture devices
-    not_io,         ///< does not support file io (not used anyway)
-    not_stream,     ///< does not support streaming
-    not_ptr,        ///< does not support user pointers
-    ok_open,        ///< streaming device ok
-    not_format,     ///< could not achieve the requested format
-    ok_format       ///< everything's ok!
-};
-
-
-class V4LDevice : public USBDevice {
-    
-public:
-    
-    /** Default constructor
-     * 
-     * Open the device, query its capabilities
-     * 
-     * - Sets opening state
-     * 
-     * 
-     */
-    
-    V4LDevice(std::string dev, FrameFilter *framefilter);
-    ~V4LDevice();
-    
-protected:
-    std::string     dev;     ///< Name of the device
-    v4l_status      status;  ///< State of the device
-    int             fd;      ///< File number
-    v4l2_capability cap;
-    v4l2_format     fmt;
-    
-    
-public: // getters
-    const v4l_status        getStatus() {return this->status;} 
-    const v4l2_capability   getCapability() {return this->cap;}
-    
-    
-public:
-    void request(int width, int height, int pix_fmt);
-    void initStreaming();
-    
-};
-
-
+/** Parameters for connecting to a usb camera
+ * 
+ */
 struct USBCameraConnectionContext { // <pyapi>
-    std::string device;             // <pyapi>
+    USBCameraConnectionContext(const char *device, SlotNumber slot, FrameFilter *f) : // <pyapi>
+    device(device), slot(slot), framefilter(f), width(N720.width), height(N720.height) {};     // <pyapi>
+    USBCameraConnectionContext() {};   // <pyapi>
+    std::string device;                // <pyapi>
     /** A unique stream slot that identifies this stream */
     SlotNumber         slot;        // <pyapi>
     /** Frames are feeded into this FrameFilter */
     FrameFilter*       framefilter; // <pyapi>
-    // format, fps, etc.            // <pyapi>
+    int                width;       // <pyapi>
+    int                height;      // <pyapi>
+    // TODO: format, fps, etc.      // <pyapi>
 };                                  // <pyapi>
 
 
@@ -175,6 +100,98 @@ struct USBDeviceSignalContext {
 };
 
 
+class USBDevice {
+    
+public:    
+    USBDevice(FrameFilter *framefilter);
+    ~USBDevice();
+    
+protected:
+    int fd;
+    FrameFilter *framefilter;   ///< Output FrameFilter
+    SetupFrame  setupframe;     ///< This frame is used to send subsession information
+    BasicFrame  basicframe;     ///< Data is being copied into this frame
+    bool        playing;        ///< Is currently streaming or not
+    
+public: // getters
+    int     getFd()     {return fd;}
+    bool    isPlaying() {return this->playing;}
+
+    
+public:
+    void setupFrame(SetupFrame frame);  ///< sets the setupframe and writes it to the framefilter
+    virtual void open_();
+    virtual void close_();
+    virtual int pull();            ///< Populates basicframe, sends it through the filter
+    virtual void play();
+    virtual void stop();
+};
+
+
+
+// at the python level, check this directory: /sys/class/video4linux
+// .. that directory has video0/ video1/   .. with file "name", etc.
+// .. /dev/video0 has the actualy device for reading
+
+int xioctl(int fh, int request, void *arg);
+
+/** Different stages of v4l2 device initialization
+ */
+enum v4l_status {
+    none            =0,      ///< undefined (initial value)
+    not_found       =1,      ///< file not found
+    not_device      =2,      ///< not device file
+    not_read        =3,      ///< could not read device
+    ok_open         =4,      ///< device opened
+    not_v4l2        =5,      ///< not v4l2 device
+    not_video_cap   =6,      ///< not video capture devices
+    not_stream      =7,      ///< does not support streaming
+    not_format      =8,      ///< device could not satisfy the demanded format
+    ok_format       =9,      ///< format is ok
+    not_ptr         =10,     ///< does not support user pointers
+    not_map         =11,     ///< could not communicate pointers with the drivers
+    not_on          =12,     ///< could not turn stream on
+    ok              =13
+};
+
+
+class V4LDevice : public USBDevice {
+    
+public:
+    
+    /** Default constructor
+     * 
+     * Open the device, query its capabilities
+     * 
+     * - Sets opening state
+     * 
+     * 
+     */
+    
+    V4LDevice(USBCameraConnectionContext camera_ctx);
+    ~V4LDevice();
+    
+protected:
+    USBCameraConnectionContext camera_ctx;
+    v4l_status                 status;              ///< State of the device
+    struct v4l2_buffer         buf;
+    std::vector<BasicFrame*>   ring_buffer;
+    static const int           n_ring_buffer = 5;
+    
+public: // getters
+    const v4l_status        getStatus() {return this->status;}
+  
+public: // virtual redefined
+    virtual void open_();     ///< Init camera device with some parameters
+    virtual void close_();
+    virtual int pull();                                    ///< Populates basicframe, sends it through the filter
+    virtual void play();
+    virtual void stop();
+    
+};
+
+
+
 class USBDeviceThread : public Thread {                                               // <pyapi>
 
 public:                                                                               // <pyapi>
@@ -191,7 +208,7 @@ protected: // frame output from this thread
     
 protected: // Thread member redefinitions
     std::deque<USBDeviceSignalContext> signal_fifo;   ///< Redefinition of signal fifo.
-  
+    
 public: // redefined virtual functions
     void run();
     void preRun();
@@ -203,19 +220,18 @@ protected:
     void handleSignals();                                  ///< Call USBDeviceThread::handleSignal for every signal in the signal_fifo
     
 protected:
-    void registerCameraStream   (USBCameraConnectionContext &ctx);    
-    void deRegisterCameraStream (USBCameraConnectionContext &ctx);
+    //void registerCameraStream   (USBCameraConnectionContext &ctx);    
+    //void deRegisterCameraStream (USBCameraConnectionContext &ctx);
     void playCameraStream       (USBCameraConnectionContext &ctx);
     void stopCameraStream       (USBCameraConnectionContext &ctx);
     
   
 // public API section
 public:                                                                 // <pyapi>
-    void registerCameraStreamCall   (USBCameraConnectionContext ctx);   // <pyapi>
-    void deRegisterCameraStreamCall (USBCameraConnectionContext ctx);   // <pyapi>
+    //void registerCameraStreamCall   (USBCameraConnectionContext ctx);   // <pyapi>
+    //void deRegisterCameraStreamCall (USBCameraConnectionContext ctx);   // <pyapi>
     void playCameraStreamCall       (USBCameraConnectionContext ctx);   // <pyapi>
     void stopCameraStreamCall       (USBCameraConnectionContext ctx);   // <pyapi>
-
     void requestStopCall();                                             // <pyapi>
 };                                                                      // <pyapi>
 

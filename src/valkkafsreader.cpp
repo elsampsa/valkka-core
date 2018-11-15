@@ -44,11 +44,12 @@ ValkkaFSReaderThread::~ValkkaFSReaderThread() {
     
 void ValkkaFSReaderThread::run() {
     Frame* f;
-    time_t timer;
-    time_t oldtimer;
+    long int dt;
+    long int mstime, oldmstime;
+
+    mstime = getCurrentMsTimestamp();
+    oldmstime = mstime;
     
-    time(&timer);
-    oldtimer=timer;
     loop=true;
     
     while(loop) {
@@ -68,12 +69,13 @@ void ValkkaFSReaderThread::run() {
             infifo.recycle(f); // always recycle
         } // GOT FRAME
         
-        time(&timer);
-        
+        mstime = getCurrentMsTimestamp();
+        dt = mstime-oldmstime;
         // old-style ("interrupt") signal handling
-        if ( (1000*difftime(timer,oldtimer)) >= Timeout::valkkafsreaderthread ) { // time to check the signals..
+        if (dt>=Timeout::valkkafsreaderthread) { // time to check the signals..
+            std::cout << "ValkkaFSReaderThread: run: interrupt, dt= " << dt << std::endl;
             handleSignals();
-            oldtimer=timer;
+            oldmstime=mstime;
         }
     }
 }

@@ -41,7 +41,8 @@
 enum class SignalType {
   av,       ///< AVThread
   gl,       ///< OpenGLThread
-  writer    ///< ValkkaFSWriterThread
+  writer,   ///< ValkkaFSWriterThread
+  reader    ///< ValkkaFSReaderThread
 };
 
 /** Signals used by AVThread
@@ -182,6 +183,8 @@ struct ValkkaFSReaderSignalContext {
     ValkkaFSReaderSignal        signal;
     ValkkaFSReaderSignalPars    pars;
 };
+
+
 
 
 

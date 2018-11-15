@@ -373,12 +373,12 @@ void ValkkaFSWriterThread::run() {
     bool ok;
     unsigned short subsession_index;
     Frame* f;
-    time_t timer;
-    time_t oldtimer;
+
     long int dt;
+    long int mstime, oldmstime;
+    mstime = getCurrentMsTimestamp();
+    oldmstime = mstime;
     
-    time(&timer);
-    oldtimer=timer;
     loop=true;
     
     std::size_t bytecount=0; // bytecount inside a block
@@ -453,12 +453,13 @@ void ValkkaFSWriterThread::run() {
             infifo.recycle(f); // always recycle
         } // GOT FRAME
         
-        time(&timer);
-        
+        mstime = getCurrentMsTimestamp();
+        dt = mstime-oldmstime;
         // old-style ("interrupt") signal handling
-        if ( (1000*difftime(timer,oldtimer)) >= Timeout::valkkafswriterthread ) { // time to check the signals..
+        if (dt>=Timeout::valkkafswriterthread) { // time to check the signals..
+            std::cout << "ValkkaFSWriterThread: run: interrupt, dt= " << dt << std::endl;
             handleSignals();
-            oldtimer=timer;
+            oldmstime=mstime;
         }
     }
 }

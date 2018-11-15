@@ -485,7 +485,7 @@ public:
   AVSignalContext                     av_signal_ctx;
   ValkkaFSWriterSignalContext         valkkafswriter_signal_ctx;
   ValkkaFSReaderSignalContext         valkkafsreader_signal_ctx;
-  void*                               custom_signal_ctx; ///< For extensions
+  void*                               custom_signal_ctx; ///< For extensions.  TODO: migrate all signal contexes here
 };
 
 

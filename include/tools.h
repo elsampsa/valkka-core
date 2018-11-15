@@ -40,13 +40,23 @@
 #include "constant.h"
 #include "logging.h"
 
+/** posix time doodle:
+*
+* time_t (sec)
+* 
+* struct timeval (tv_sec, tv_usec)
+* 
+* struct timespec (tv_sec, tv_nsec)
+* 
+*/
+
 static const int64_t NANOSEC_PER_SEC = 1000000000;
 
-long int getCurrentMsTimestamp(); ///< Utility function: returns current unix epoch timestamp in milliseconds
+long int getCurrentMsTimestamp(); ///< Utility function: returns current unix epoch timestamp in milliseconds.  Uses timeval
 
 long int getMsDiff(timeval tv1, timeval tv2); ///< Utility function: return timedif of two timeval structs in milliseconds
 
-struct timeval msToTimeval(long int mstimestamp);
+struct timeval msToTimeval(long int mstimestamp); ///< Milliseconds to timeval
 
 bool slotOk(SlotNumber n_slot); ///< Checks the slot number range
 
