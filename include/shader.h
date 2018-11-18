@@ -29,7 +29,7 @@
  *  @author  Sampsa Riikonen
  *  @author  Markus Kaukonen
  *  @date    2017
- *  @version 0.8.0 
+ *  @version 0.9.0 
  *  
  *  @brief OpenGL shaders for YUV to RGB interpolation
  *  
@@ -62,21 +62,27 @@ public:
 protected: // functions that return shader programs
   virtual const char* vertex_shader()     =0;
   virtual const char* fragment_shader()   =0;
+  const char* vertex_shader_obj();
+  const char* fragment_shader_obj();
   
   
 public: // declare GLint variable references here with "* SHADER PROGRAM VAR"
-  GLint  transform; ///< OpenGL VERTEX SHADER PROGRAM VAR : transformation matrix
-  GLint  position;  ///< OpenGL VERTEX SHADER PROGRAM VAR : position vertex array.  Typically "hard-coded" into the shader code with (location=0)
-  GLint  texcoord;  ///< OpenGL VERTEX SHADER PROGRAM VAR : texture coordinate array. Typically "hard-coded" into the shader code with (location=1)
+  GLint  transform;     ///< OpenGL VERTEX SHADER PROGRAM VAR : transformation matrix
+  GLint  transform_obj; ///< OpenGL VERTEX SHADER PROGRAM VAR : transformation matrix.  For the object overlay shader program
+  GLint  position;      ///< OpenGL VERTEX SHADER PROGRAM VAR : position vertex array.  Typically "hard-coded" into the shader code with (location=0)
+  GLint  texcoord;      ///< OpenGL VERTEX SHADER PROGRAM VAR : texture coordinate array. Typically "hard-coded" into the shader code with (location=1)
+  GLint  object;
   
 protected:
-  GLuint program;   ///< OpenGL reference to shader program
-
+  GLuint program;          ///< OpenGL reference to vertex & fragment shader program for rendering bitmap
+  GLuint program_obj;      ///< OpenGL reference to vertex & fragment shader program for rendering overlay objects
+  
 public:
   void compile();   ///< Compile shader
   void virtual findVars();  ///< Link shader program variable references to the shader program
   void scale(GLfloat fx, GLfloat fy); ///< Set transformation matrix to simple scaling
-  void use();       ///< Use this shader program
+  void use();       ///< Use shader program for bitmap rendering
+  void use_obj();   ///< Use shader program for overlay object drawing
   void validate();  ///< Validate shader program
   
 };
@@ -120,5 +126,7 @@ public:
   void findVars();
   
 };
+
+
 
 #endif

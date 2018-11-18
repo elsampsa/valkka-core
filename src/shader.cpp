@@ -27,7 +27,7 @@
  *  @author  Sampsa Riikonen
  *  @author  Markus Kaukonen
  *  @date    2017
- *  @version 0.8.0 
+ *  @version 0.9.0 
  *  
  *  @brief 
  *
@@ -37,6 +37,29 @@
 
 #include "shader.h"
 #include "logging.h"
+
+
+const char* Shader::vertex_shader_obj () { return
+"#version 300 es\n"
+"precision mediump float;\n"
+"uniform mat4 transform;\n"
+"layout (location = 0) in vec3 position;\n"
+"void main()\n"
+"{\n"
+"  gl_Position = transform * vec4(position, 1.0f);\n"
+"}\n";
+}
+
+const char* Shader::fragment_shader_obj () { return
+"#version 300 es\n"
+"precision mediump float;\n"
+"out vec4 colour;\n"
+"void main()\n"
+"{\n"
+"  colour = vec4(0,1,0,0);\n"
+"}\n";
+}
+
 
 
 /*** RGB Shader Program ***/
@@ -154,6 +177,10 @@ const char* YUVShader::fragment_shader  () { return
 "}\n";
 }
 
+
+
+
+
 Shader::Shader() {
   /*
   compile(); // woops.. at constructor time, overwritten virtual methods are NOT called
@@ -171,17 +198,17 @@ Shader::~Shader() {
 
 
 void Shader::compile() {
-  GLuint id_vertex_shader, id_fragment_shader;
+  GLuint id_vertex_shader, id_fragment_shader, id_vertex_shader_obj, id_fragment_shader_obj;
   const char *source;
   int length, cc;
   GLint success;
   GLchar infoLog[512];
   
   // opengllogger.log(LogLevel::fatal) << 
-  
   opengllogger.log(LogLevel::debug) << "Shader: compile: " <<std::endl;
   opengllogger.log(LogLevel::crazy) << "Shader: compile: vertex program=" << std::endl << vertex_shader() << std::endl;
   opengllogger.log(LogLevel::crazy) << "Shader: compile: fragment program=" << std::endl << fragment_shader() << std::endl;
+  opengllogger.log(LogLevel::crazy) << "Shader: compile: fragment obj program=" << std::endl << fragment_shader_obj() << std::endl;
   
   // create and compiler vertex shader
   source=vertex_shader();
@@ -196,7 +223,7 @@ void Shader::compile() {
     opengllogger.log(LogLevel::fatal) << "Shader: compile: vertex shader program (len="<<length<<") COMPILATION FAILED!" << std::endl << infoLog << std::endl;
   }
 
-  // create and compiler fragment shader
+  // create and compile fragment shader
   source=fragment_shader();
   id_fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
   length = std::strlen(source);
@@ -209,10 +236,36 @@ void Shader::compile() {
     opengllogger.log(LogLevel::fatal) << "Shader: compile: fragment shader program (len="<<length<<") COMPILATION FAILED!" << std::endl << infoLog << std::endl;
   }
 
-  // Shader Program
+  // create and compiler vertex shader for overlay objects
+  source=vertex_shader_obj();
+  id_vertex_shader_obj = glCreateShader(GL_VERTEX_SHADER);
+  length = std::strlen(source);
+  glShaderSource(id_vertex_shader_obj, 1, &source, &length); 
+  glCompileShader(id_vertex_shader_obj);
+  glGetShaderiv(id_vertex_shader_obj, GL_COMPILE_STATUS, &success);
+  if (!success)
+  {
+    glGetShaderInfoLog(id_vertex_shader_obj, 512, NULL, infoLog);
+    opengllogger.log(LogLevel::fatal) << "Shader: compile: vertex shader program (len="<<length<<") COMPILATION FAILED!" << std::endl << infoLog << std::endl;
+  }
+
+  
+  // create and compile fragment shader for overlay objects
+  source=fragment_shader_obj();
+  id_fragment_shader_obj = glCreateShader(GL_FRAGMENT_SHADER);
+  length = std::strlen(source);
+  glShaderSource(id_fragment_shader_obj, 1, &source, &length);   
+  glCompileShader(id_fragment_shader_obj);
+  glGetShaderiv(id_fragment_shader_obj, GL_COMPILE_STATUS, &success);
+  if (!success)
+  {
+    glGetShaderInfoLog(id_fragment_shader_obj, 512, NULL, infoLog);
+    opengllogger.log(LogLevel::fatal) << "Shader: compile: fragment shader obj program (len="<<length<<") COMPILATION FAILED!" << std::endl << infoLog << std::endl;
+  }
+
+  // Shader Program for bitmap interpolation
   this->program = glCreateProgram();
   opengllogger.log(LogLevel::debug) << "Shader: compile: program index=" << this->program << "\n";
-  
   glAttachShader(this->program, id_vertex_shader);
   glAttachShader(this->program, id_fragment_shader);
   glLinkProgram(this->program);
@@ -223,19 +276,38 @@ void Shader::compile() {
     glGetProgramInfoLog(this->program, 512, NULL, infoLog);
     opengllogger.log(LogLevel::fatal) << "Shader: compile: fragment shader LINKING FAILED!" << std::endl << infoLog << std::endl;
   }
+  
+  // Shader Program for geometric overlay objects
+  this->program_obj = glCreateProgram();
+  opengllogger.log(LogLevel::debug) << "Shader: compile: program_obj index=" << this->program << "\n";
+  glAttachShader(this->program_obj, id_vertex_shader_obj);
+  glAttachShader(this->program_obj, id_fragment_shader_obj);
+  glLinkProgram(this->program_obj);
+  // Print linking errors if any
+  glGetProgramiv(this->program_obj, GL_LINK_STATUS, &success);
+  if (!success)
+  {
+    glGetProgramInfoLog(this->program_obj, 512, NULL, infoLog);
+    opengllogger.log(LogLevel::fatal) << "Shader: compile: fragment shader LINKING FAILED!" << std::endl << infoLog << std::endl;
+  }
+  
   // Delete the shaders as they're linked into our program now and no longer necessery
   glDeleteShader(id_vertex_shader);
   glDeleteShader(id_fragment_shader);
+  glDeleteShader(id_vertex_shader_obj);
+  glDeleteShader(id_fragment_shader_obj);
 }
 
 
 void Shader::findVars() {
   position=0; // this is hard-coded into the shader code (see "location=0")
   texcoord=1; // this is hard-coded into the shader code (see "location=1")
+  object=0;   // hard-coded into the shader code for overlay objects ("location=0")
   
 #ifdef VALGRIND_GPU_DEBUG
 #else
-  transform=glGetUniformLocation(program,"transform");
+  transform     =glGetUniformLocation(program,    "transform");
+  transform_obj =glGetUniformLocation(program_obj,"transform");
 #endif
   opengllogger.log(LogLevel::debug) << "Shader: findVars: Location of the transform matrix: " << transform << std::endl;
 }
@@ -263,6 +335,13 @@ void Shader::use() {
 #endif
 }
 
+void Shader::use_obj() {
+  // opengllogger.log(LogLevel::crazy) << "Shader: use: using program index=" << this->program << std::endl;
+#ifdef VALGRIND_GPU_DEBUG
+#else
+  glUseProgram(this->program_obj);
+#endif
+}
 
 void Shader::validate() {
 #ifdef VALGRIND_GPU_DEBUG
@@ -319,12 +398,16 @@ YUVShader::~YUVShader() {
 void YUVShader::findVars() {
   position=0; // this is hard-coded into the shader code (see "location=0")
   texcoord=1; // this is hard-coded into the shader code (see "location=1")
+  object=0;
   
   opengllogger.log(LogLevel::debug) << "YUVShader: findVars: Location of position: " << position << std::endl;
   opengllogger.log(LogLevel::debug) << "YUVShader: findVars: Location of texcoord: " << texcoord << std::endl;
   
   transform=glGetUniformLocation(program,"transform");
   opengllogger.log(LogLevel::debug) << "YUVShader: findVars: Location of the transform matrix: " << transform << std::endl;
+  
+  transform_obj=glGetUniformLocation(program_obj,"transform");
+  opengllogger.log(LogLevel::debug) << "YUVShader: findVars: Location of the transform matrix in obj: " << transform_obj << std::endl;
   
   texy=glGetUniformLocation(program,"texy");
   opengllogger.log(LogLevel::debug) << "YUVShader: findVars: Location of texy: " << texy << std::endl;
@@ -335,3 +418,5 @@ void YUVShader::findVars() {
   texv=glGetUniformLocation(program,"texv");
   opengllogger.log(LogLevel::debug) << "YUVShader: findVars: Location of texv: " << texv << std::endl;
 }
+
+

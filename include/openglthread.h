@@ -28,7 +28,7 @@
  *  @file    openglthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.8.0 
+ *  @version 0.9.0 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -159,6 +159,8 @@ public:
   void render(XWindowAttributes x_window_attr);  ///< Sets x_window_attr and calls renderTexture and renderObjects
   void bindTextures();    ///< Associate textures with the shader program.  Uses parameters from Shader reference.
   void bindVars();        ///< Upload other data to the GPU (say, transformation matrix).  Uses parameters from Shader reference.
+  void bindVarsObj();     ///< bindVars for the overlay objects.  Uses previously calculated value of RenderContext::transform
+  
   void bindVertexArray(); ///< Bind the vertex array and draw
 };
 

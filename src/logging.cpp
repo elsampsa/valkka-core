@@ -26,7 +26,7 @@
  *  @file    logging.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.8.0 
+ *  @version 0.9.0 
  *  @brief   Logging with various log levels
  */ 
 
@@ -101,7 +101,7 @@ Logger fifologger;
 Logger opengllogger;
 Logger filelogger;
 Logger filethreadlogger;
-
+Logger usblogger;
 
 extern void setLogLevel_framelogger(int level)      { framelogger.setLevel(level); };
 extern void setLogLevel_filterlogger(int level)     { filterlogger.setLevel(level); };     
@@ -114,6 +114,7 @@ extern void setLogLevel_fifologger(int level)       { fifologger.setLevel(level)
 extern void setLogLevel_opengllogger(int level)     { opengllogger.setLevel(level); };     
 extern void setLogLevel_filelogger(int level)       { filelogger.setLevel(level); };     
 extern void setLogLevel_filethreadlogger(int level) { filethreadlogger.setLevel(level); };
+extern void setLogLevel_usblogger(int level)  { usblogger.setLevel(level); };
 
 
 void crazy_log_all() {
@@ -128,6 +129,7 @@ void crazy_log_all() {
   opengllogger        .setLevel(LogLevel::crazy);
   filelogger          .setLevel(LogLevel::crazy);
   filethreadlogger    .setLevel(LogLevel::crazy);
+  usblogger    .setLevel(LogLevel::crazy);
 }
 
 
@@ -143,6 +145,7 @@ void debug_log_all() {
   opengllogger        .setLevel(LogLevel::debug);
   filelogger          .setLevel(LogLevel::debug);
   filethreadlogger    .setLevel(LogLevel::debug);
+  usblogger    .setLevel(LogLevel::debug);
 }
 
 void normal_log_all() {
@@ -157,6 +160,7 @@ void normal_log_all() {
   opengllogger        .setLevel(LogLevel::normal);
   filelogger          .setLevel(LogLevel::normal);
   filethreadlogger    .setLevel(LogLevel::normal);
+  usblogger    .setLevel(LogLevel::normal);
 }
 
 void fatal_log_all() { // only critical / fatal msgs
@@ -171,5 +175,6 @@ void fatal_log_all() { // only critical / fatal msgs
   opengllogger        .setLevel(LogLevel::fatal);
   filelogger          .setLevel(LogLevel::fatal);
   filethreadlogger    .setLevel(LogLevel::fatal);
+  usblogger    .setLevel(LogLevel::fatal);
 }
 

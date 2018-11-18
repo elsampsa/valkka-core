@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.8.0 
+ *  @version 0.9.0 
  *  
  *  @brief FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU
  *

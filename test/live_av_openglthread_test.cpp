@@ -26,7 +26,7 @@
  *  @file    live_av_openglthread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.8.0 
+ *  @version 0.9.0 
  *  
  *  @brief   Test the full pipeline: LiveThread => AVThread => OpenGLThread
  *
@@ -60,7 +60,7 @@ DummyFrameFilter decoded_info("decoded",false,&gl_in_filter); // non-verbose
 AVThread        avthread("avthread",decoded_info);
 FifoFrameFilter &in_filter = avthread.getFrameFilter(); // request framefilter from AVThread
 // InfoFrameFilter out_filter("encoded",&in_filter);
-DummyFrameFilter out_filter("decoded",false,&in_filter); // non-verbose
+DummyFrameFilter out_filter("encoded",false,&in_filter); // non-verbose
 LiveThread      livethread("live");
 
 

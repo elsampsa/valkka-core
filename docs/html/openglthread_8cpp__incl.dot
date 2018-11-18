@@ -124,6 +124,7 @@ digraph "/home/sampsa/C/valkka/src/openglthread.cpp"
   Node1 -> Node61 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node61 [label="openglobject.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$openglobject_8h.html",tooltip="OpenGL objects, i.e. stuff that can be drawn on the OpenGL canvas on top the textures (boxes..."];
   Node61 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node61 -> Node60 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node0 -> Node53 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node0 -> Node54 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
 }

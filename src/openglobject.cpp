@@ -26,7 +26,7 @@
  *  @file    openglobject.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.8.0 
+ *  @version 0.9.0 
  *  
  *  @brief 
  */ 
@@ -56,6 +56,7 @@ Rectangle::~Rectangle() {
 void Rectangle::draw() {
     // opengllogger.log(LogLevel::debug) << "Rectangle: draw: is_set = " << is_set << std::endl;
     if (is_set) {
+        // shader->use();
         glBindVertexArray(VAO);
         glDrawArrays(GL_LINE_LOOP, 0, 4);
         glBindVertexArray(0);
@@ -74,12 +75,22 @@ void Rectangle::setCoordinates(float left, float right, float top, float bottom)
         left* (GLfloat)2.-(GLfloat)1., top*   (GLfloat)2.-(GLfloat)1.,  0
     };
     
+    /*
+    color = std::array<GLfloat, 4> {
+        GLfloat(0), GLfloat(1), GLfloat(0), GLfloat(0)  //RGBA
+    };
+    */
+    
     glBindVertexArray(VAO); // VAO works as a "mini program" .. we do all the steps below, when binding the VAO
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
-    glEnableVertexAttribArray(0);
+    // color attribute
+    //glVertexAttribPointer(shader->color_rgba, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+    //glEnableVertexAttribArray(shader->color_rgba); // this refers to (location=0) in the shader program
+    
+    glEnableVertexAttribArray(0); // position in the shader program
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     
     glBindVertexArray(0); // Unbind VAO

@@ -26,7 +26,7 @@
  *  @file    valkkafswriter_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.9.0 
  *  
  *  @brief 
  *

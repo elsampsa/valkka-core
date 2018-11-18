@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.8.0</span>
+   &#160;<span id="projectnumber">0.9.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -155,6 +155,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicFrame.html#a5067fbad84e4862c5cdc95d8c90cdb58">filterFromAVPacket</a> (AVPacket *<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa97ef9389ad005c2cca5aaa6d3708db32">avpkt</a>, AVCodecContext *codec_ctx, AVBitStreamFilterContext *filter)</td></tr>
 <tr class="memdesc:a5067fbad84e4862c5cdc95d8c90cdb58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data from AVPacket structure. <br /></td></tr>
 <tr class="separator:a5067fbad84e4862c5cdc95d8c90cdb58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b5a6fc1e8d98910b37db89422087c33"><td class="memItemLeft" align="right" valign="top"><a id="a2b5a6fc1e8d98910b37db89422087c33"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicFrame.html#a2b5a6fc1e8d98910b37db89422087c33">calcSize</a> ()</td></tr>
+<tr class="memdesc:a2b5a6fc1e8d98910b37db89422087c33"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much this frame occupies in bytes when serialized. <br /></td></tr>
+<tr class="separator:a2b5a6fc1e8d98910b37db89422087c33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadf5601e31470385c73014f87c2b7003"><td class="memItemLeft" align="right" valign="top"><a id="aadf5601e31470385c73014f87c2b7003"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicFrame.html#aadf5601e31470385c73014f87c2b7003">dump</a> (IdNumber device_id, std::fstream &amp;os)</td></tr>
+<tr class="memdesc:aadf5601e31470385c73014f87c2b7003"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the frame to filestream with a certain device id. <br /></td></tr>
+<tr class="separator:aadf5601e31470385c73014f87c2b7003"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3207b5f95d718040b2ae400292ea5317"><td class="memItemLeft" align="right" valign="top"><a id="a3207b5f95d718040b2ae400292ea5317"></a>
+IdNumber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicFrame.html#a3207b5f95d718040b2ae400292ea5317">read</a> (std::fstream &amp;is)</td></tr>
+<tr class="memdesc:a3207b5f95d718040b2ae400292ea5317"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the frame from filestream. Returns device id. <br /></td></tr>
+<tr class="separator:a3207b5f95d718040b2ae400292ea5317"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classFrame"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classFrame')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classFrame.html">Frame</a></td></tr>
 <tr class="memitem:ad2e5946cf41d4817e750500acf05d02b inherit pub_methods_classFrame"><td class="memItemLeft" align="right" valign="top"><a id="ad2e5946cf41d4817e750500acf05d02b"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#ad2e5946cf41d4817e750500acf05d02b">Frame</a> ()</td></tr>

@@ -5,6 +5,8 @@ var searchData=
   ['getclientstate',['getClientState',['../classSharedMemSegment.html#a852c4898686ae1f6637fe92af1306428',1,'SharedMemSegment::getClientState()'],['../classSharedMemRingBuffer.html#aa5c5d30addf55288ea9228101be025c0',1,'SharedMemRingBuffer::getClientState()']]],
   ['getcontext',['getContext',['../classRenderGroup.html#a0c0f7baf0581d27e5da078bc5a276bf0',1,'RenderGroup']]],
   ['getcurrentmstimestamp',['getCurrentMsTimestamp',['../tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f',1,'getCurrentMsTimestamp():&#160;tools.cpp'],['../tools_8cpp.html#a69a8d8c398f99883b5c1a22173d6b12f',1,'getCurrentMsTimestamp():&#160;tools.cpp']]],
+  ['getdevice',['getDevice',['../classValkkaFS.html#ada8fe44c2c39f08e52b000c277018664',1,'ValkkaFS']]],
+  ['getdevicesize',['getDeviceSize',['../classValkkaFS.html#a03a7d62773d7caaeeacf5f224d5806b1',1,'ValkkaFS']]],
   ['getflagvalue',['getFlagValue',['../classSharedMemRingBuffer.html#a2d82b75607988d7aae119893483d4488',1,'SharedMemRingBuffer']]],
   ['getframefilter',['getFrameFilter',['../classFileThread.html#a81d71edab95b415a886f005d7c550c41',1,'FileThread::getFrameFilter()'],['../classLiveThread.html#aafb4e08b5bcf410add3e5a76cd05bda2',1,'LiveThread::getFrameFilter()'],['../classOpenGLThread.html#aec91256bd35c861e076e514d16b09693',1,'OpenGLThread::getFrameFilter()']]],
   ['getid',['getId',['../classRenderContext.html#ae3d7df65a8574085cbd3a8356d2d1bba',1,'RenderContext']]],

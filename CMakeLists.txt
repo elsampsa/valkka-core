@@ -113,7 +113,7 @@ endif (profile_timing)
 # ****************************************************************
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "0") 
-SET(MINOR_VERSION "8") 
+SET(MINOR_VERSION "9") 
 SET(PATCH_VERSION "0") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
@@ -305,7 +305,7 @@ SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MY_ARCH})
 # The dependencies: keep these consistent with debian/control
 # SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libpython3.5(>= 3.5.2), libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0), python3-numpy") # ubuntu 16
 # NEW: Avoid version numbers, use "utils" packages to imply a dependency, for example, to libglew (without hardcoding the version number into the package name)
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, mesa-utils, libstdc++5, glew-utils, python3-numpy")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, mesa-utils, libstdc++5, glew-utils, python3-numpy, v4l-utils")
 
 #
 # objdump -p libValkka.so

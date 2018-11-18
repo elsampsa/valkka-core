@@ -28,7 +28,7 @@
  *  @file    usbthread.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.1
+ *  @version 0.9.0 
  *  
  *  @brief   USB Camera control and streaming
  */ 
@@ -116,8 +116,8 @@ protected:
     bool        playing;        ///< Is currently streaming or not
     
 public: // getters
-    int     getFd()     {return fd;}
-    bool    isPlaying() {return this->playing;}
+    int             getFd()     {return fd;}
+    virtual bool    isPlaying() {return this->playing;}
 
     
 public:
@@ -153,7 +153,7 @@ enum v4l_status {
     not_ptr         =10,     ///< does not support user pointers
     not_map         =11,     ///< could not communicate pointers with the drivers
     not_on          =12,     ///< could not turn stream on
-    ok              =13
+    ok              =13      ///< stream is playing allright
 };
 
 
@@ -178,6 +178,7 @@ protected:
     v4l_status                 status;              ///< State of the device
     struct v4l2_buffer         buf;
     std::vector<BasicFrame*>   ring_buffer;
+    SetupFrame                 setup_frame;
     static const int           n_ring_buffer = 5;
     
     FrameFilter*            timestampfilter;        
@@ -186,11 +187,13 @@ protected:
     
 public: // getters
     const v4l_status        getStatus() {return this->status;}
+    const std::string       getName()   {return this->camera_ctx.device;}
   
 public: // virtual redefined
+    virtual bool isPlaying();
     virtual void open_();     ///< Init camera device with some parameters
     virtual void close_();
-    virtual int pull();                                    ///< Populates basicframe, sends it through the filter
+    virtual int pull();       ///< Populates basicframe, sends it through the filter
     virtual void play();
     virtual void stop();
     

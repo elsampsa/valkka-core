@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.8.0</span>
+   &#160;<span id="projectnumber">0.9.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -62,12 +62,18 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classValkkaFSReaderThread-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ValkkaFSReaderThread Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="classValkkaFS.html" title="Book-keeping for ValkkaFS. ">ValkkaFS</a> reader thread.  
+ <a href="classValkkaFSReaderThread.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="valkkafsreader_8h_source.html">valkkafsreader.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for ValkkaFSReaderThread:</div>
 <div class="dyncontent">
@@ -85,9 +91,53 @@ Collaboration diagram for ValkkaFSReaderThread:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6d756c1c91f213c0fc33abaf8d56ee0e"><td class="memItemLeft" align="right" valign="top"><a id="a6d756c1c91f213c0fc33abaf8d56ee0e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ValkkaFSReaderThread</b> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, <a class="el" href="classValkkaFS.html">ValkkaFS</a> &amp;valkkafs)</td></tr>
-<tr class="separator:a6d756c1c91f213c0fc33abaf8d56ee0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a318cc65dfe4fafa9a353808d5c85c534"><td class="memItemLeft" align="right" valign="top"><a id="a318cc65dfe4fafa9a353808d5c85c534"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ValkkaFSReaderThread</b> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, <a class="el" href="classValkkaFS.html">ValkkaFS</a> &amp;valkkafs, <a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;outfilter, <a class="el" href="structFrameFifoContext.html">FrameFifoContext</a> fifo_ctx=<a class="el" href="structFrameFifoContext.html">FrameFifoContext</a>(10))</td></tr>
+<tr class="separator:a318cc65dfe4fafa9a353808d5c85c534"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9391c37a451a490e4de20a6f176c9b8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a9391c37a451a490e4de20a6f176c9b8f">run</a> ()</td></tr>
+<tr class="memdesc:a9391c37a451a490e4de20a6f176c9b8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main execution loop is defined here.  <a href="#a9391c37a451a490e4de20a6f176c9b8f">More...</a><br /></td></tr>
+<tr class="separator:a9391c37a451a490e4de20a6f176c9b8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bd2ff4528d53a116e9b5bd739bbec64"><td class="memItemLeft" align="right" valign="top"><a id="a4bd2ff4528d53a116e9b5bd739bbec64"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a4bd2ff4528d53a116e9b5bd739bbec64">preRun</a> ()</td></tr>
+<tr class="memdesc:a4bd2ff4528d53a116e9b5bd739bbec64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called before entering the main execution loop, but after creating the thread. <br /></td></tr>
+<tr class="separator:a4bd2ff4528d53a116e9b5bd739bbec64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72a9df00ac0a2229291abfb223c02951"><td class="memItemLeft" align="right" valign="top"><a id="a72a9df00ac0a2229291abfb223c02951"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a72a9df00ac0a2229291abfb223c02951">postRun</a> ()</td></tr>
+<tr class="memdesc:a72a9df00ac0a2229291abfb223c02951"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the main execution loop exits, but before joining the thread. <br /></td></tr>
+<tr class="separator:a72a9df00ac0a2229291abfb223c02951"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04be7e7f8a0504a92676c4a4eb163915"><td class="memItemLeft" align="right" valign="top"><a id="a04be7e7f8a0504a92676c4a4eb163915"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a04be7e7f8a0504a92676c4a4eb163915">sendSignal</a> (<a class="el" href="structValkkaFSReaderSignalContext.html">ValkkaFSReaderSignalContext</a> signal_ctx)</td></tr>
+<tr class="memdesc:a04be7e7f8a0504a92676c4a4eb163915"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert a signal into the signal_fifo. <br /></td></tr>
+<tr class="separator:a04be7e7f8a0504a92676c4a4eb163915"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfd20999f42ea1d01e9090c31204081f"><td class="memItemLeft" align="right" valign="top"><a id="acfd20999f42ea1d01e9090c31204081f"></a>
+<a class="el" href="classFifoFrameFilter.html">FifoFrameFilter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFrameFilter</b> ()</td></tr>
+<tr class="separator:acfd20999f42ea1d01e9090c31204081f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a361fd5015c05bd49572dc493b508fb65"><td class="memItemLeft" align="right" valign="top"><a id="a361fd5015c05bd49572dc493b508fb65"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a361fd5015c05bd49572dc493b508fb65">setSlotIdCall</a> (SlotNumber slot, IdNumber id)</td></tr>
+<tr class="memdesc:a361fd5015c05bd49572dc493b508fb65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a id number =&gt; slot mapping. <br /></td></tr>
+<tr class="separator:a361fd5015c05bd49572dc493b508fb65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8a6472c1b0872ae7a224daad81fb13a"><td class="memItemLeft" align="right" valign="top"><a id="ae8a6472c1b0872ae7a224daad81fb13a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#ae8a6472c1b0872ae7a224daad81fb13a">unSetSlotIdCall</a> (IdNumber id)</td></tr>
+<tr class="memdesc:ae8a6472c1b0872ae7a224daad81fb13a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear a id number =&gt; slot mapping. <br /></td></tr>
+<tr class="separator:ae8a6472c1b0872ae7a224daad81fb13a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad92da0672f525f9f3909cd90b7010fba"><td class="memItemLeft" align="right" valign="top"><a id="ad92da0672f525f9f3909cd90b7010fba"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#ad92da0672f525f9f3909cd90b7010fba">clearSlotIdCall</a> ()</td></tr>
+<tr class="memdesc:ad92da0672f525f9f3909cd90b7010fba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all id number =&gt; slot mappings. <br /></td></tr>
+<tr class="separator:ad92da0672f525f9f3909cd90b7010fba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b7f32736a631e7f52b6179fe93b422f"><td class="memItemLeft" align="right" valign="top"><a id="a5b7f32736a631e7f52b6179fe93b422f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a5b7f32736a631e7f52b6179fe93b422f">reportSlotIdCall</a> ()</td></tr>
+<tr class="memdesc:a5b7f32736a631e7f52b6179fe93b422f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print id number =&gt; slot mappings. <br /></td></tr>
+<tr class="separator:a5b7f32736a631e7f52b6179fe93b422f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a520fd8f5e95c21cfd1705c66359958e6"><td class="memItemLeft" align="right" valign="top"><a id="a520fd8f5e95c21cfd1705c66359958e6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>pullBlocksCall</b> (std::list&lt; std::size_t &gt; block_list)</td></tr>
+<tr class="separator:a520fd8f5e95c21cfd1705c66359958e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17a1324bd19e062cac619eeffcba4119"><td class="memItemLeft" align="right" valign="top"><a id="a17a1324bd19e062cac619eeffcba4119"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a17a1324bd19e062cac619eeffcba4119">pullBlocksPyCall</a> (PyObject *pylist)</td></tr>
+<tr class="memdesc:a17a1324bd19e062cac619eeffcba4119"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request blocks with python list. <br /></td></tr>
+<tr class="separator:a17a1324bd19e062cac619eeffcba4119"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8e18f32f1e86803ee9056fad49163c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#ad8e18f32f1e86803ee9056fad49163c7">requestStopCall</a> ()</td></tr>
+<tr class="memdesc:ad8e18f32f1e86803ee9056fad49163c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: stops the thread.  <a href="#ad8e18f32f1e86803ee9056fad49163c7">More...</a><br /></td></tr>
+<tr class="separator:ad8e18f32f1e86803ee9056fad49163c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:a893a5e029b5111961f7501d2edd65ebe inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a893a5e029b5111961f7501d2edd65ebe">Thread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>)</td></tr>
 <tr class="memdesc:a893a5e029b5111961f7501d2edd65ebe inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classThread.html#a893a5e029b5111961f7501d2edd65ebe">More...</a><br /></td></tr>
@@ -95,17 +145,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">~Thread</a> ()</td></tr>
 <tr class="memdesc:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor:<b>not</b> virtual.  <a href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">More...</a><br /></td></tr>
 <tr class="separator:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae90dfabab3e1776cf01a26e7ee3a620 inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#aae90dfabab3e1776cf01a26e7ee3a620">run</a> ()=0</td></tr>
-<tr class="memdesc:aae90dfabab3e1776cf01a26e7ee3a620 inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main execution loop is defined here.  <a href="classThread.html#aae90dfabab3e1776cf01a26e7ee3a620">More...</a><br /></td></tr>
-<tr class="separator:aae90dfabab3e1776cf01a26e7ee3a620 inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab862ff46c28cbc4673977d962623f0fa inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="ab862ff46c28cbc4673977d962623f0fa"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#ab862ff46c28cbc4673977d962623f0fa">preRun</a> ()=0</td></tr>
-<tr class="memdesc:ab862ff46c28cbc4673977d962623f0fa inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called before entering the main execution loop, but after creating the thread. <br /></td></tr>
-<tr class="separator:ab862ff46c28cbc4673977d962623f0fa inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a407e6b24f6697b0c77527f95b5c7e08a inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a407e6b24f6697b0c77527f95b5c7e08a"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a407e6b24f6697b0c77527f95b5c7e08a">postRun</a> ()=0</td></tr>
-<tr class="memdesc:a407e6b24f6697b0c77527f95b5c7e08a inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the main execution loop exits, but before joining the thread. <br /></td></tr>
-<tr class="separator:a407e6b24f6697b0c77527f95b5c7e08a inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20db67a3ec14a198b5444f3214d6155d inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a20db67a3ec14a198b5444f3214d6155d"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a20db67a3ec14a198b5444f3214d6155d">sendSignal</a> (<a class="el" href="structSignalContext.html">SignalContext</a> signal_ctx)</td></tr>
 <tr class="memdesc:a20db67a3ec14a198b5444f3214d6155d inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a signal to the thread. <br /></td></tr>
@@ -124,21 +163,35 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a9cde638865dccf06b25f1c766f2610ec inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a9cde638865dccf06b25f1c766f2610ec">stopCall</a> ()</td></tr>
 <tr class="memdesc:a9cde638865dccf06b25f1c766f2610ec inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: stops the thread.  <a href="classThread.html#a9cde638865dccf06b25f1c766f2610ec">More...</a><br /></td></tr>
 <tr class="separator:a9cde638865dccf06b25f1c766f2610ec inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a006c30f8d492854a15ba92dad2850a4c inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a006c30f8d492854a15ba92dad2850a4c">requestStopCall</a> ()</td></tr>
-<tr class="memdesc:a006c30f8d492854a15ba92dad2850a4c inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: stops the thread.  <a href="classThread.html#a006c30f8d492854a15ba92dad2850a4c">More...</a><br /></td></tr>
-<tr class="separator:a006c30f8d492854a15ba92dad2850a4c inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ecff37449db3af69888738f73c8fd04 inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a0ecff37449db3af69888738f73c8fd04">waitStopCall</a> ()</td></tr>
 <tr class="memdesc:a0ecff37449db3af69888738f73c8fd04 inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: waits until the thread is joined.  <a href="classThread.html#a0ecff37449db3af69888738f73c8fd04">More...</a><br /></td></tr>
 <tr class="separator:a0ecff37449db3af69888738f73c8fd04 inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:adba33ad87a3fbff23453f6b1b4501a69"><td class="memItemLeft" align="right" valign="top"><a id="adba33ad87a3fbff23453f6b1b4501a69"></a>
-<a class="el" href="classValkkaFS.html">ValkkaFS</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>valkkafs</b></td></tr>
-<tr class="separator:adba33ad87a3fbff23453f6b1b4501a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a852427865edd3dd320c6c331032c3122"><td class="memItemLeft" align="right" valign="top"><a id="a852427865edd3dd320c6c331032c3122"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a852427865edd3dd320c6c331032c3122">handleSignal</a> (<a class="el" href="structValkkaFSReaderSignalContext.html">ValkkaFSReaderSignalContext</a> &amp;signal_ctx)</td></tr>
+<tr class="memdesc:a852427865edd3dd320c6c331032c3122"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle an individual signal. Signal can originate from the frame fifo or from the signal_fifo deque. <br /></td></tr>
+<tr class="separator:a852427865edd3dd320c6c331032c3122"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a109d358e3ea34112a6d840520afed514"><td class="memItemLeft" align="right" valign="top"><a id="a109d358e3ea34112a6d840520afed514"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a109d358e3ea34112a6d840520afed514">handleSignals</a> ()</td></tr>
+<tr class="memdesc:a109d358e3ea34112a6d840520afed514"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call <a class="el" href="classValkkaFSReaderThread.html#a852427865edd3dd320c6c331032c3122" title="Handle an individual signal. Signal can originate from the frame fifo or from the signal_fifo deque...">ValkkaFSReaderThread::handleSignal</a> for every signal in the signal_fifo. <br /></td></tr>
+<tr class="separator:a109d358e3ea34112a6d840520afed514"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d1687c94b532bd146531ca2e05c9b22"><td class="memItemLeft" align="right" valign="top"><a id="a0d1687c94b532bd146531ca2e05c9b22"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setSlotId</b> (SlotNumber slot, IdNumber id)</td></tr>
+<tr class="separator:a0d1687c94b532bd146531ca2e05c9b22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43c7b7677becffa1c0c79a3d66ba31ed"><td class="memItemLeft" align="right" valign="top"><a id="a43c7b7677becffa1c0c79a3d66ba31ed"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>unSetSlotId</b> (IdNumber id)</td></tr>
+<tr class="separator:a43c7b7677becffa1c0c79a3d66ba31ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99640430de37d71b23d7fe1444f902aa"><td class="memItemLeft" align="right" valign="top"><a id="a99640430de37d71b23d7fe1444f902aa"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clearSlotId</b> ()</td></tr>
+<tr class="separator:a99640430de37d71b23d7fe1444f902aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdf28031cdb4ed8e6d998eac08ad5574"><td class="memItemLeft" align="right" valign="top"><a id="abdf28031cdb4ed8e6d998eac08ad5574"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reportSlotId</b> ()</td></tr>
+<tr class="separator:abdf28031cdb4ed8e6d998eac08ad5574"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a312129f1a103375fe1950497d9b1ae12"><td class="memItemLeft" align="right" valign="top"><a id="a312129f1a103375fe1950497d9b1ae12"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>pullBlocks</b> (std::list&lt; std::size_t &gt; block_list)</td></tr>
+<tr class="separator:a312129f1a103375fe1950497d9b1ae12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:adfeea499c4cc16c4c70eb8449bbee548 inherit pro_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="adfeea499c4cc16c4c70eb8449bbee548"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#adfeea499c4cc16c4c70eb8449bbee548">mainRun</a> ()</td></tr>
@@ -148,10 +201,33 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a4428ec86c8bc7da14b558f25fb723ce0">closeThread</a> ()</td></tr>
 <tr class="memdesc:a4428ec86c8bc7da14b558f25fb723ce0 inherit pro_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set <a class="el" href="classThread.html#a9e604c94f8ee52771ffbc1dac03b93ad" title="true if thread has been started ">Thread::has_thread</a> to false. <br /></td></tr>
 <tr class="separator:a4428ec86c8bc7da14b558f25fb723ce0 inherit pro_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_static_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
-<tr class="memitem:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="ad9d3cca144a41f08e791b451838a51fc"></a>
-static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b> (void *p)</td></tr>
-<tr class="separator:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:adba33ad87a3fbff23453f6b1b4501a69"><td class="memItemLeft" align="right" valign="top"><a id="adba33ad87a3fbff23453f6b1b4501a69"></a>
+<a class="el" href="classValkkaFS.html">ValkkaFS</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>valkkafs</b></td></tr>
+<tr class="separator:adba33ad87a3fbff23453f6b1b4501a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af40f99349c6951e8c430afb8bbc6ecd0"><td class="memItemLeft" align="right" valign="top"><a id="af40f99349c6951e8c430afb8bbc6ecd0"></a>
+<a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>outfilter</b></td></tr>
+<tr class="separator:af40f99349c6951e8c430afb8bbc6ecd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34d5da3e3830d6a7e91e63306f5bb6d1"><td class="memItemLeft" align="right" valign="top"><a id="a34d5da3e3830d6a7e91e63306f5bb6d1"></a>
+std::map&lt; IdNumber, SlotNumber &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>id_to_slot</b></td></tr>
+<tr class="separator:a34d5da3e3830d6a7e91e63306f5bb6d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a1247bafd663d8188cfaffbe40c5ab7"><td class="memItemLeft" align="right" valign="top"><a id="a9a1247bafd663d8188cfaffbe40c5ab7"></a>
+std::fstream&#160;</td><td class="memItemRight" valign="bottom"><b>filestream</b></td></tr>
+<tr class="separator:a9a1247bafd663d8188cfaffbe40c5ab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef5c50e53882b13a462fd135efb009ef"><td class="memItemLeft" align="right" valign="top"><a id="aef5c50e53882b13a462fd135efb009ef"></a>
+<a class="el" href="classFrameFifo.html">FrameFifo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#aef5c50e53882b13a462fd135efb009ef">infifo</a></td></tr>
+<tr class="memdesc:aef5c50e53882b13a462fd135efb009ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incoming frames are read from here. <br /></td></tr>
+<tr class="separator:aef5c50e53882b13a462fd135efb009ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91b5c2f1c0181d1812e92c201b8ff1c5"><td class="memItemLeft" align="right" valign="top"><a id="a91b5c2f1c0181d1812e92c201b8ff1c5"></a>
+<a class="el" href="classFifoFrameFilter.html">FifoFrameFilter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a91b5c2f1c0181d1812e92c201b8ff1c5">infilter</a></td></tr>
+<tr class="memdesc:a91b5c2f1c0181d1812e92c201b8ff1c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write incoming frames here. Only for SignalFrames. <br /></td></tr>
+<tr class="separator:a91b5c2f1c0181d1812e92c201b8ff1c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30225863f47e8e10c06514bf84f2b4d2"><td class="memItemLeft" align="right" valign="top"><a id="a30225863f47e8e10c06514bf84f2b4d2"></a>
+std::deque&lt; <a class="el" href="structValkkaFSReaderSignalContext.html">ValkkaFSReaderSignalContext</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a30225863f47e8e10c06514bf84f2b4d2">signal_fifo</a></td></tr>
+<tr class="memdesc:a30225863f47e8e10c06514bf84f2b4d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redefinition of signal fifo. <br /></td></tr>
+<tr class="separator:a30225863f47e8e10c06514bf84f2b4d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classThread')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:a2e64f4b9dab400b7b06f2c73da4e465a inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a2e64f4b9dab400b7b06f2c73da4e465a"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a></td></tr>
@@ -204,10 +280,90 @@ cpu_set_t&#160;</td><td class="memItemRight" valign="bottom"><b>cpuset</b></td><
 <tr class="memitem:a30df147ca2dedd5ce9a1c7e39c5e8ab9 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a30df147ca2dedd5ce9a1c7e39c5e8ab9"></a>
 pthread_t&#160;</td><td class="memItemRight" valign="bottom"><b>internal_thread</b></td></tr>
 <tr class="separator:a30df147ca2dedd5ce9a1c7e39c5e8ab9 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_static_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
+<tr class="memitem:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="ad9d3cca144a41f08e791b451838a51fc"></a>
+static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b> (void *p)</td></tr>
+<tr class="separator:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="classValkkaFS.html" title="Book-keeping for ValkkaFS. ">ValkkaFS</a> reader thread. </p>
+<ul>
+<li>Reads frames from a <a class="el" href="classValkkaFS.html" title="Book-keeping for ValkkaFS. ">ValkkaFS</a> device file and writes them to output framefilter</li>
+<li>Frames are requested on per-block basis </li>
+</ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad8e18f32f1e86803ee9056fad49163c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8e18f32f1e86803ee9056fad49163c7">&#9670;&nbsp;</a></span>requestStopCall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ValkkaFSReaderThread::requestStopCall </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>API method: stops the thread. </p>
+<p>Like <a class="el" href="classThread.html#a9cde638865dccf06b25f1c766f2610ec" title="API method: stops the thread. ">Thread::stopCall()</a> but does not block. Waiting for the thread to join is done in Thread::waitStoppedCall() </p>
+
+<p>Reimplemented from <a class="el" href="classThread.html#a006c30f8d492854a15ba92dad2850a4c">Thread</a>.</p>
+
+</div>
+</div>
+<a id="a9391c37a451a490e4de20a6f176c9b8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9391c37a451a490e4de20a6f176c9b8f">&#9670;&nbsp;</a></span>run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ValkkaFSReaderThread::run </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Main execution loop is defined here. </p>
+
+<p>Implements <a class="el" href="classThread.html#aae90dfabab3e1776cf01a26e7ee3a620">Thread</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classValkkaFSReaderThread_a9391c37a451a490e4de20a6f176c9b8f_cgraph.png" border="0" usemap="#classValkkaFSReaderThread_a9391c37a451a490e4de20a6f176c9b8f_cgraph" alt=""/></div>
+<map name="classValkkaFSReaderThread_a9391c37a451a490e4de20a6f176c9b8f_cgraph" id="classValkkaFSReaderThread_a9391c37a451a490e4de20a6f176c9b8f_cgraph">
+</map>
+</div>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/sampsa/C/valkka/include/<a class="el" href="valkkafs_8h_source.html">valkkafs.h</a></li>
-<li>/home/sampsa/C/valkka/src/<a class="el" href="valkkafs_8cpp.html">valkkafs.cpp</a></li>
+<li>/home/sampsa/C/valkka/include/<a class="el" href="valkkafsreader_8h_source.html">valkkafsreader.h</a></li>
+<li>/home/sampsa/C/valkka/src/<a class="el" href="valkkafsreader_8cpp.html">valkkafsreader.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

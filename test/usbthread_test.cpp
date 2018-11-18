@@ -26,7 +26,7 @@
  *  @file    usbthread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.9.0 
  *  
  *  @brief   Test USB cam classes
  *
@@ -36,6 +36,9 @@
 #include "framefilter.h"
 #include "logging.h"
 #include "avdep.h"
+#include "avthread.h"
+#include "openglthread.h"
+#include "livethread.h"
 #include "usbthread.h"
 
 using namespace std::chrono_literals;
@@ -107,7 +110,7 @@ void test_2() {
   std::cout << "\nplay" << std::endl;
   usbt.playCameraStreamCall(ctx);
   
-  sleep_for(3s);
+  sleep_for(30s);
   //*/
   
   ///*
@@ -149,7 +152,7 @@ void test_3() {
   std::cout << "\nplay" << std::endl;
   usbt.playCameraStreamCall(ctx);
   
-  sleep_for(3s);
+  sleep_for(2s);
   
   std::cout << "\nstop" << std::endl;
   usbt.stopCameraStreamCall(ctx);
@@ -161,17 +164,130 @@ void test_3() {
 
 
 void test_4() {
+    const char* name = "@TEST: usbthread_test: test 4: ";
+    std::cout << name <<"** @@USBDeviceThread -> AVThread -> OpenGLThread **" << std::endl;
+    // (USBDeviceThread:usbthread) --> {FrameFilter:info} --> {FifoFrameFilter:in_filter} -->> (AVThread:avthread) --> {InfoFrameFilter:decoded_info} -->> (OpenGLThread:glthread)
+
+    OpenGLThread        glthread("gl_thread");
+    FifoFrameFilter     &gl_in_filter = glthread.getFrameFilter();
+    // InfoFrameFilter decoded_info("decoded",&gl_in_filter);
+    DummyFrameFilter    decoded_info("decoded",false,&gl_in_filter); // non-verbose
+    AVThread            avthread("avthread",decoded_info);
+    FifoFrameFilter     &in_filter = avthread.getFrameFilter(); // request framefilter from AVThread
+    // InfoFrameFilter out_filter("encoded",&in_filter);
+    DummyFrameFilter    out_filter("encoded",false,&in_filter); // non-verbose
+    USBDeviceThread     usbthread("usbthread");
+    
+    USBCameraConnectionContext ctx("/dev/video2", 1, &out_filter);
+ 
+    std::cout << name << "starting threads" << std::endl;
+    glthread.  startCall();
+    avthread.  startCall();
+    usbthread. startCall();
+    
+    avthread.  decodingOnCall();
+    
+    // create window
+    Window window_id=glthread.createWindow();
+    glthread.makeCurrent(window_id);
+    std::cout << "new x window "<<window_id<<std::endl;
+
+    // create render group & context
+    glthread.newRenderGroupCall(window_id);
+    int i=glthread.newRenderContextCall(1, window_id, 0);
+    std::cout << "got render context id "<<i<<std::endl;
   
-  const char* name = "@TEST: usbthread_test: test 4: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+    std::cout << "\nplay" << std::endl;
+    usbthread. playCameraStreamCall(ctx);
+    
+    sleep_for(60s);
+    
+    std::cout << "\nstop" << std::endl;
+    usbthread.stopCameraStreamCall(ctx);
+    
+    sleep_for(5s);
+    // sleep_for(604800s); //one week
+    
+    std::cout << name << "stopping threads" << std::endl;
+    usbthread. stopCall();
+    avthread.  stopCall();
+    glthread.  stopCall();
 }
 
 
 void test_5() {
-  
   const char* name = "@TEST: usbthread_test: test 5: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+  std::cout << name <<"** @@USBDeviceThread -> AVThread -> OpenGLThread with 2 cameras **" << std::endl;
+  
+  // (USBDeviceThread:usbthread) --> {FrameFilter:info} --> {FifoFrameFilter:in_filter} -->> (AVThread:avthread) --> {InfoFrameFilter:decoded_info} -->> (OpenGLThread:glthread)
+
+    USBDeviceThread     usbthread("usbthread");
+    OpenGLThread        glthread("gl_thread");
+    FifoFrameFilter     &gl_in_filter = glthread.getFrameFilter();
+    // InfoFrameFilter decoded_info("decoded",&gl_in_filter);
+    
+    DummyFrameFilter    decoded_info("decoded",false,&gl_in_filter); // non-verbose
+    AVThread            avthread("avthread",decoded_info);
+    FifoFrameFilter     &in_filter = avthread.getFrameFilter(); // request framefilter from AVThread
+    // InfoFrameFilter out_filter("encoded",&in_filter);
+    DummyFrameFilter    out_filter("encoded",false,&in_filter); // non-verbose
+    
+    DummyFrameFilter    decoded_info2("decoded2",false,&gl_in_filter); // non-verbose
+    AVThread            avthread2("avthread2",decoded_info2);
+    FifoFrameFilter     &in_filter2 = avthread2.getFrameFilter(); // request framefilter from AVThread
+    // InfoFrameFilter out_filter2("encoded2",&in_filter2);
+    DummyFrameFilter    out_filter2("encoded2",false,&in_filter2); // non-verbose
+    
+    USBCameraConnectionContext ctx("/dev/video2", 1, &out_filter);
+    USBCameraConnectionContext ctx2("/dev/video3", 2, &out_filter2);
+    
+    std::cout << name << "starting threads" << std::endl;
+    glthread.  startCall();
+    
+    avthread.  startCall();
+    avthread2. startCall();
+    
+    usbthread. startCall();
+
+    avthread.  decodingOnCall();
+    avthread2. decodingOnCall();
+    
+    // create windows
+    Window window_id=glthread.createWindow();
+    glthread.makeCurrent(window_id);
+    std::cout << "new x window "<<window_id<<std::endl;
+
+    Window window_id2=glthread.createWindow();
+    glthread.makeCurrent(window_id2);
+    std::cout << "new x window 2 "<<window_id2<<std::endl;
+    
+    // create render groups & contexts
+    glthread.newRenderGroupCall(window_id);
+    int i=glthread.newRenderContextCall(1, window_id, 0);
+    std::cout << "got render context id "<<i<<std::endl;
+  
+    glthread.newRenderGroupCall(window_id2);
+    int i2=glthread.newRenderContextCall(2, window_id2, 0);
+    std::cout << "got render context id 2 "<<i2<<std::endl;
+    
+    std::cout << "\nplay" << std::endl;
+    usbthread. playCameraStreamCall(ctx);
+    usbthread. playCameraStreamCall(ctx2);
+    
+    sleep_for(60s);
+    
+    std::cout << "\nstop" << std::endl;
+    usbthread.stopCameraStreamCall(ctx);
+    usbthread.stopCameraStreamCall(ctx2);
+    
+    sleep_for(5s);
+    // sleep_for(604800s); //one week
+    
+    std::cout << name << "stopping threads" << std::endl;
+    usbthread. stopCall();
+    avthread.  stopCall();
+    glthread.  stopCall();
+  
   
 }
 

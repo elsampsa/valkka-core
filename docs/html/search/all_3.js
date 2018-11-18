@@ -21,7 +21,6 @@ var searchData=
   ['delshaders',['delShaders',['../classOpenGLThread.html#a7c421fdb80d8838ee63e5057e881d5d7',1,'OpenGLThread']]],
   ['deregisteroutboundcall',['deregisterOutboundCall',['../classLiveThread.html#a3c8f86130eaa8c2c68898a2f74de03f2',1,'LiveThread']]],
   ['deregisterstreamcall',['deregisterStreamCall',['../classFileCacheThread.html#ac683e36c76857e90bd89ddca2221e454',1,'FileCacheThread::deregisterStreamCall()'],['../classLiveThread.html#ad9c33d99f8aa561c67559744b9f3e4b0',1,'LiveThread::deregisterStreamCall()']]],
-  ['dev',['dev',['../classV4LDevice.html#aca933e00d5876402527b14f06ba4a26c',1,'V4LDevice']]],
   ['diagnosis',['diagnosis',['../classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4',1,'FrameFifo::diagnosis()'],['../classOpenGLThread.html#ae13e33cc0aa85c84032078b21cc6bac1',1,'OpenGLThread::diagnosis()']]],
   ['disconnect',['disconnect',['../classForkFrameFilterN.html#a5f080194aaecc7d728e7cc7f0725c33c',1,'ForkFrameFilterN']]],
   ['display_5fid',['display_id',['../classRenderGroup.html#a4747ce66c8739d85fb560d720aee9eb7',1,'RenderGroup']]],
@@ -33,7 +32,8 @@ var searchData=
   ['dummyframe',['dummyframe',['../classOpenGLThread.html#a8e98178bf6e41cb643fa33e8cafcd9c7',1,'OpenGLThread']]],
   ['dummyframefilter',['DummyFrameFilter',['../classDummyFrameFilter.html',1,'']]],
   ['dummytimestampframefilter',['DummyTimestampFrameFilter',['../classDummyTimestampFrameFilter.html',1,'']]],
-  ['dump',['dump',['../classFrameCache.html#aa4e0acd45a9b1a1e534d8c3637164157',1,'FrameCache']]],
+  ['dump',['dump',['../classFrameCache.html#aa4e0acd45a9b1a1e534d8c3637164157',1,'FrameCache::dump()'],['../classBasicFrame.html#aadf5601e31470385c73014f87c2b7003',1,'BasicFrame::dump()']]],
+  ['dumpblock',['dumpBlock',['../classValkkaFS.html#a0127eba35026ae7bd9d03aca9696ba35',1,'ValkkaFS']]],
   ['dumpfifo',['dumpFifo',['../classFrameFifo.html#afbff47ed40f017d26d8a905f7decc9e1',1,'FrameFifo']]],
   ['dumpframefilter',['DumpFrameFilter',['../classDumpFrameFilter.html',1,'']]],
   ['dumpinfifo',['dumpInFifo',['../classOpenGLThread.html#a4ea25c7f013a61bb854060950a6377d0',1,'OpenGLThread']]],
@@ -41,6 +41,7 @@ var searchData=
   ['dumppayloadtofile',['dumpPayloadToFile',['../classFrame.html#a9392d8c803ee50e3bbdea2dee76aeecc',1,'Frame::dumpPayloadToFile()'],['../classBasicFrame.html#a3af32eb195bba2158cd30f11cfa1c9d0',1,'BasicFrame::dumpPayloadToFile()']]],
   ['dumppresfifo',['dumpPresFifo',['../classOpenGLThread.html#a31f98701eebad8ae50abd864081fade6',1,'OpenGLThread']]],
   ['dumpstacks',['dumpStacks',['../classFrameFifo.html#a8bba517986f815c009eed50823dda2ea',1,'FrameFifo']]],
+  ['dumptable',['dumpTable',['../classValkkaFS.html#ae3dc0e02d00ca41b3139f41f6387fb60',1,'ValkkaFS']]],
   ['dumpyuvstacks',['dumpYUVStacks',['../classOpenGLFrameFifo.html#ac823062e8f19e1afc4b6d9e8feab0c8d',1,'OpenGLFrameFifo::dumpYUVStacks()'],['../classOpenGLThread.html#aedf29eb85857d4068f48928dca545f0b',1,'OpenGLThread::dumpYUVStacks()']]],
   ['duration',['duration',['../structFileContext.html#af2525987b3d3049c4fbff872520ee5d0',1,'FileContext::duration()'],['../classFileStream.html#abd3fc60ff8652037587ab422ebbbeff6',1,'FileStream::duration()']]]
 ];

@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.8.0 
+ *  @version 0.9.0 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -383,6 +383,8 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
     }
     #endif
     
+    shader->use_obj(); // use the shader for drawing overlay objects
+    bindVarsObj();
     renderObjects();
 }
 
@@ -533,6 +535,15 @@ void RenderContext::bindVars() {// Upload other data to the GPU (say, transforma
     #ifdef VALGRIND_GPU_DEBUG
     #else
     glUniformMatrix4fv(shader->transform, 1, GL_FALSE, transform.data());
+    #endif
+}
+
+void RenderContext::bindVarsObj() {
+    // transformation has been calculated .. no need to recalc
+    YUVShader *shader = (YUVShader*)(slot_context->shader); // shorthand
+    #ifdef VALGRIND_GPU_DEBUG
+    #else
+    glUniformMatrix4fv(shader->transform_obj, 1, GL_FALSE, transform.data());
     #endif
 }
 

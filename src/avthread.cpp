@@ -26,7 +26,7 @@
  *  @file    avthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.8.0 
+ *  @version 0.9.0 
  *  @brief   FFmpeg decoding thread
  */ 
 
@@ -208,7 +208,7 @@ void AVThread::run() {
         dt = mstime-oldmstime;
         // old-style ("interrupt") signal handling
         if (dt>=Timeout::avthread) { // time to check the signals..
-            std::cout << "USBDeviceThread: run: interrupt, dt= " << dt << std::endl;
+            // avthreadlogger.log(LogLevel::verbose) << "AVThread: run: interrupt, dt= " << dt << std::endl;
             handleSignals();
             oldmstime=mstime;
             #ifdef FIFO_DIAGNOSIS

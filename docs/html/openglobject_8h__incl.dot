@@ -81,4 +81,9 @@ digraph "/home/sampsa/C/valkka/include/openglobject.h"
   Node38 [label="GL/glx.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
   Node1 -> Node39 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node39 [label="GL/glxext.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node0 -> Node40 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node40 [label="shader.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$shader_8h_source.html"];
+  Node40 -> Node1 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node40 -> Node41 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node41 [label="macro.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$macro_8h.html"];
 }

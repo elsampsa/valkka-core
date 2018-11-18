@@ -585,9 +585,15 @@ printf "END: openglthread_test 5\n\n" &>> test.out
 fi
 
 
+# if false; then
+if true; then
+echo "usbthread_test"
+valgrind="valgrind" # enable valgrind
+# valgrind="" # disable valgrind
 
+echo 3
+$valgrind ./usbthread_test 3 $LOGLEVEL &>> test.out
+printf "END: usbthread_test 3\n\n" &>> test.out
 
-
-
-
+fi
 

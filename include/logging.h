@@ -29,7 +29,7 @@
  *  @file    logging.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.8.0 
+ *  @version 0.9.0 
  *  
  *  @brief Logging utilities
  *
@@ -149,6 +149,7 @@ extern Logger fifologger;
 extern Logger opengllogger;
 extern Logger filelogger;
 extern Logger filethreadlogger;
+extern Logger usblogger;
 
 extern void setLogLevel_framelogger(int level);          // <pyapi>
 extern void setLogLevel_filterlogger(int level);         // <pyapi>
@@ -161,6 +162,7 @@ extern void setLogLevel_fifologger(int level);           // <pyapi>
 extern void setLogLevel_opengllogger(int level);         // <pyapi>
 extern void setLogLevel_filelogger(int level);           // <pyapi>
 extern void setLogLevel_filethreadlogger(int level);     // <pyapi>
+extern void setLogLevel_usblogger(int level);     // <pyapi>
 
 extern void crazy_log_all();   // <pyapi>
 extern void debug_log_all();   // <pyapi>

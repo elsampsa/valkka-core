@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.8.0</span>
+   &#160;<span id="projectnumber">0.9.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -63,54 +63,123 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
 <a href="classV4LDevice-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">V4LDevice Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for V4LDevice:</div>
+<div class="dyncontent">
+<div class="center"><img src="classV4LDevice__inherit__graph.png" border="0" usemap="#V4LDevice_inherit__map" alt="Inheritance graph"/></div>
+<map name="V4LDevice_inherit__map" id="V4LDevice_inherit__map">
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for V4LDevice:</div>
+<div class="dyncontent">
+<div class="center"><img src="classV4LDevice__coll__graph.png" border="0" usemap="#V4LDevice_coll__map" alt="Collaboration graph"/></div>
+<map name="V4LDevice_coll__map" id="V4LDevice_coll__map">
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae4d6669c15e94c509d6f6f53b5528654"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classV4LDevice.html#ae4d6669c15e94c509d6f6f53b5528654">V4LDevice</a> (const char *<a class="el" href="classV4LDevice.html#aca933e00d5876402527b14f06ba4a26c">dev</a>)</td></tr>
-<tr class="memdesc:ae4d6669c15e94c509d6f6f53b5528654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ae4d6669c15e94c509d6f6f53b5528654">More...</a><br /></td></tr>
-<tr class="separator:ae4d6669c15e94c509d6f6f53b5528654"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42a6a14345391061ff5f1108d77d9f09"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classV4LDevice.html#a42a6a14345391061ff5f1108d77d9f09">V4LDevice</a> (<a class="el" href="structUSBCameraConnectionContext.html">USBCameraConnectionContext</a> camera_ctx)</td></tr>
+<tr class="memdesc:a42a6a14345391061ff5f1108d77d9f09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a42a6a14345391061ff5f1108d77d9f09">More...</a><br /></td></tr>
+<tr class="separator:a42a6a14345391061ff5f1108d77d9f09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2b579f9777c51802a4026450c313ffb"><td class="memItemLeft" align="right" valign="top"><a id="ac2b579f9777c51802a4026450c313ffb"></a>
 const <a class="el" href="usbthread_8h.html#ab193ba186f9e1e0d948dcc659ad9084d">v4l_status</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getStatus</b> ()</td></tr>
 <tr class="separator:ac2b579f9777c51802a4026450c313ffb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a699d2db63d4387e69a2f63e2545f6c2b"><td class="memItemLeft" align="right" valign="top"><a id="a699d2db63d4387e69a2f63e2545f6c2b"></a>
-const v4l2_capability&#160;</td><td class="memItemRight" valign="bottom"><b>getCapability</b> ()</td></tr>
-<tr class="separator:a699d2db63d4387e69a2f63e2545f6c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b407e62d0a3b1b438553687101951e9"><td class="memItemLeft" align="right" valign="top"><a id="a6b407e62d0a3b1b438553687101951e9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>request</b> (int width, int height, int pix_fmt)</td></tr>
-<tr class="separator:a6b407e62d0a3b1b438553687101951e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa28593371f0820f5d0f2cfb13a7c11c8"><td class="memItemLeft" align="right" valign="top"><a id="aa28593371f0820f5d0f2cfb13a7c11c8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>initStreaming</b> ()</td></tr>
-<tr class="separator:aa28593371f0820f5d0f2cfb13a7c11c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4577be4243f957d56cf84b93b409aab2"><td class="memItemLeft" align="right" valign="top"><a id="a4577be4243f957d56cf84b93b409aab2"></a>
+const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> ()</td></tr>
+<tr class="separator:a4577be4243f957d56cf84b93b409aab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dee4c0c2a3909a5767439e3315e838d"><td class="memItemLeft" align="right" valign="top"><a id="a5dee4c0c2a3909a5767439e3315e838d"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>isPlaying</b> ()</td></tr>
+<tr class="separator:a5dee4c0c2a3909a5767439e3315e838d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25401ae9acd76eb0b17b615226bfff9b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classV4LDevice.html#a25401ae9acd76eb0b17b615226bfff9b">open_</a> ()</td></tr>
+<tr class="memdesc:a25401ae9acd76eb0b17b615226bfff9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init camera device with some parameters.  <a href="#a25401ae9acd76eb0b17b615226bfff9b">More...</a><br /></td></tr>
+<tr class="separator:a25401ae9acd76eb0b17b615226bfff9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9bfff86844fef5284e5839bfd49ce30"><td class="memItemLeft" align="right" valign="top"><a id="ae9bfff86844fef5284e5839bfd49ce30"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>close_</b> ()</td></tr>
+<tr class="separator:ae9bfff86844fef5284e5839bfd49ce30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b000a21e2123735ece7a371d6d491e1"><td class="memItemLeft" align="right" valign="top"><a id="a7b000a21e2123735ece7a371d6d491e1"></a>
+virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classV4LDevice.html#a7b000a21e2123735ece7a371d6d491e1">pull</a> ()</td></tr>
+<tr class="memdesc:a7b000a21e2123735ece7a371d6d491e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Populates basicframe, sends it through the filter. <br /></td></tr>
+<tr class="separator:a7b000a21e2123735ece7a371d6d491e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b2e2b61981e505b0159e1aeb892800a"><td class="memItemLeft" align="right" valign="top"><a id="a7b2e2b61981e505b0159e1aeb892800a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> ()</td></tr>
+<tr class="separator:a7b2e2b61981e505b0159e1aeb892800a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a076671e035eedc2743d5254ae0810f4a"><td class="memItemLeft" align="right" valign="top"><a id="a076671e035eedc2743d5254ae0810f4a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
+<tr class="separator:a076671e035eedc2743d5254ae0810f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classUSBDevice"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classUSBDevice')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classUSBDevice.html">USBDevice</a></td></tr>
+<tr class="memitem:aafbc7ccd85c0e9ea02482b7ecc3b25ed inherit pub_methods_classUSBDevice"><td class="memItemLeft" align="right" valign="top"><a id="aafbc7ccd85c0e9ea02482b7ecc3b25ed"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>USBDevice</b> (<a class="el" href="classFrameFilter.html">FrameFilter</a> *<a class="el" href="classUSBDevice.html#afa0cd14c8f50434294eaa027a18dfbf0">framefilter</a>)</td></tr>
+<tr class="separator:aafbc7ccd85c0e9ea02482b7ecc3b25ed inherit pub_methods_classUSBDevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28401e11065b80b85d741e44e6c9f73c inherit pub_methods_classUSBDevice"><td class="memItemLeft" align="right" valign="top"><a id="a28401e11065b80b85d741e44e6c9f73c"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>getFd</b> ()</td></tr>
+<tr class="separator:a28401e11065b80b85d741e44e6c9f73c inherit pub_methods_classUSBDevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae834edc3c49be49882ad45a7534e66ae inherit pub_methods_classUSBDevice"><td class="memItemLeft" align="right" valign="top"><a id="ae834edc3c49be49882ad45a7534e66ae"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUSBDevice.html#ae834edc3c49be49882ad45a7534e66ae">setupFrame</a> (<a class="el" href="classSetupFrame.html">SetupFrame</a> frame)</td></tr>
+<tr class="memdesc:ae834edc3c49be49882ad45a7534e66ae inherit pub_methods_classUSBDevice"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the setupframe and writes it to the framefilter <br /></td></tr>
+<tr class="separator:ae834edc3c49be49882ad45a7534e66ae inherit pub_methods_classUSBDevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:aca933e00d5876402527b14f06ba4a26c"><td class="memItemLeft" align="right" valign="top"><a id="aca933e00d5876402527b14f06ba4a26c"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classV4LDevice.html#aca933e00d5876402527b14f06ba4a26c">dev</a></td></tr>
-<tr class="memdesc:aca933e00d5876402527b14f06ba4a26c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the device. <br /></td></tr>
-<tr class="separator:aca933e00d5876402527b14f06ba4a26c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca7f9f5efee3ea473ba315a9d2b107c8"><td class="memItemLeft" align="right" valign="top"><a id="aca7f9f5efee3ea473ba315a9d2b107c8"></a>
+<a class="el" href="structUSBCameraConnectionContext.html">USBCameraConnectionContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>camera_ctx</b></td></tr>
+<tr class="separator:aca7f9f5efee3ea473ba315a9d2b107c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d05e95a4b0966c5ae6f17ee237db1ac"><td class="memItemLeft" align="right" valign="top"><a id="a4d05e95a4b0966c5ae6f17ee237db1ac"></a>
 <a class="el" href="usbthread_8h.html#ab193ba186f9e1e0d948dcc659ad9084d">v4l_status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classV4LDevice.html#a4d05e95a4b0966c5ae6f17ee237db1ac">status</a></td></tr>
 <tr class="memdesc:a4d05e95a4b0966c5ae6f17ee237db1ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">State of the device. <br /></td></tr>
 <tr class="separator:a4d05e95a4b0966c5ae6f17ee237db1ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc79dd6e40021df4dc2eb79fca17d543"><td class="memItemLeft" align="right" valign="top"><a id="afc79dd6e40021df4dc2eb79fca17d543"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classV4LDevice.html#afc79dd6e40021df4dc2eb79fca17d543">fd</a></td></tr>
-<tr class="memdesc:afc79dd6e40021df4dc2eb79fca17d543"><td class="mdescLeft">&#160;</td><td class="mdescRight">File number. <br /></td></tr>
-<tr class="separator:afc79dd6e40021df4dc2eb79fca17d543"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e48ca7c0d46d0ad108fb20f42770877"><td class="memItemLeft" align="right" valign="top"><a id="a3e48ca7c0d46d0ad108fb20f42770877"></a>
-v4l2_capability&#160;</td><td class="memItemRight" valign="bottom"><b>cap</b></td></tr>
-<tr class="separator:a3e48ca7c0d46d0ad108fb20f42770877"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a7870c7f20c88d5e91712dc7c596d6e"><td class="memItemLeft" align="right" valign="top"><a id="a4a7870c7f20c88d5e91712dc7c596d6e"></a>
-v4l2_format&#160;</td><td class="memItemRight" valign="bottom"><b>fmt</b></td></tr>
-<tr class="separator:a4a7870c7f20c88d5e91712dc7c596d6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a478be436abe2088458a288f1c7daed7c"><td class="memItemLeft" align="right" valign="top"><a id="a478be436abe2088458a288f1c7daed7c"></a>
+struct v4l2_buffer&#160;</td><td class="memItemRight" valign="bottom"><b>buf</b></td></tr>
+<tr class="separator:a478be436abe2088458a288f1c7daed7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf70b5f40988556d11a82b2cb769b1fc"><td class="memItemLeft" align="right" valign="top"><a id="abf70b5f40988556d11a82b2cb769b1fc"></a>
+std::vector&lt; <a class="el" href="classBasicFrame.html">BasicFrame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ring_buffer</b></td></tr>
+<tr class="separator:abf70b5f40988556d11a82b2cb769b1fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa793840a99080a109aaa571a8f119540"><td class="memItemLeft" align="right" valign="top"><a id="aa793840a99080a109aaa571a8f119540"></a>
+<a class="el" href="classSetupFrame.html">SetupFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><b>setup_frame</b></td></tr>
+<tr class="separator:aa793840a99080a109aaa571a8f119540"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d02f492ab8fe046b07fb5df79bd796b"><td class="memItemLeft" align="right" valign="top"><a id="a1d02f492ab8fe046b07fb5df79bd796b"></a>
+<a class="el" href="classFrameFilter.html">FrameFilter</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>timestampfilter</b></td></tr>
+<tr class="separator:a1d02f492ab8fe046b07fb5df79bd796b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6060d06cf9f30e404ae5d26b2d3e261f"><td class="memItemLeft" align="right" valign="top"><a id="a6060d06cf9f30e404ae5d26b2d3e261f"></a>
+<a class="el" href="classFrameFilter.html">FrameFilter</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>inputfilter</b></td></tr>
+<tr class="separator:a6060d06cf9f30e404ae5d26b2d3e261f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classUSBDevice"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classUSBDevice')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classUSBDevice.html">USBDevice</a></td></tr>
+<tr class="memitem:a41fd386ac630d5110aa7067cbed5635a inherit pro_attribs_classUSBDevice"><td class="memItemLeft" align="right" valign="top"><a id="a41fd386ac630d5110aa7067cbed5635a"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fd</b></td></tr>
+<tr class="separator:a41fd386ac630d5110aa7067cbed5635a inherit pro_attribs_classUSBDevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa0cd14c8f50434294eaa027a18dfbf0 inherit pro_attribs_classUSBDevice"><td class="memItemLeft" align="right" valign="top"><a id="afa0cd14c8f50434294eaa027a18dfbf0"></a>
+<a class="el" href="classFrameFilter.html">FrameFilter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUSBDevice.html#afa0cd14c8f50434294eaa027a18dfbf0">framefilter</a></td></tr>
+<tr class="memdesc:afa0cd14c8f50434294eaa027a18dfbf0 inherit pro_attribs_classUSBDevice"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a>. <br /></td></tr>
+<tr class="separator:afa0cd14c8f50434294eaa027a18dfbf0 inherit pro_attribs_classUSBDevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23dcf1589aafe5f814e093ceebf6a50a inherit pro_attribs_classUSBDevice"><td class="memItemLeft" align="right" valign="top"><a id="a23dcf1589aafe5f814e093ceebf6a50a"></a>
+<a class="el" href="classSetupFrame.html">SetupFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUSBDevice.html#a23dcf1589aafe5f814e093ceebf6a50a">setupframe</a></td></tr>
+<tr class="memdesc:a23dcf1589aafe5f814e093ceebf6a50a inherit pro_attribs_classUSBDevice"><td class="mdescLeft">&#160;</td><td class="mdescRight">This frame is used to send subsession information. <br /></td></tr>
+<tr class="separator:a23dcf1589aafe5f814e093ceebf6a50a inherit pro_attribs_classUSBDevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4def041374ed5615666c3233623c9e5 inherit pro_attribs_classUSBDevice"><td class="memItemLeft" align="right" valign="top"><a id="aa4def041374ed5615666c3233623c9e5"></a>
+<a class="el" href="classBasicFrame.html">BasicFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUSBDevice.html#aa4def041374ed5615666c3233623c9e5">basicframe</a></td></tr>
+<tr class="memdesc:aa4def041374ed5615666c3233623c9e5 inherit pro_attribs_classUSBDevice"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data is being copied into this frame. <br /></td></tr>
+<tr class="separator:aa4def041374ed5615666c3233623c9e5 inherit pro_attribs_classUSBDevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3368f4de443a0cab1b9b333df320e695 inherit pro_attribs_classUSBDevice"><td class="memItemLeft" align="right" valign="top"><a id="a3368f4de443a0cab1b9b333df320e695"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUSBDevice.html#a3368f4de443a0cab1b9b333df320e695">playing</a></td></tr>
+<tr class="memdesc:a3368f4de443a0cab1b9b333df320e695 inherit pro_attribs_classUSBDevice"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is currently streaming or not. <br /></td></tr>
+<tr class="separator:a3368f4de443a0cab1b9b333df320e695 inherit pro_attribs_classUSBDevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
+Static Protected Attributes</h2></td></tr>
+<tr class="memitem:a7893ed12e7c96fd7a9cdfff88b4a8c29"><td class="memItemLeft" align="right" valign="top"><a id="a7893ed12e7c96fd7a9cdfff88b4a8c29"></a>
+static const int&#160;</td><td class="memItemRight" valign="bottom"><b>n_ring_buffer</b> = 5</td></tr>
+<tr class="separator:a7893ed12e7c96fd7a9cdfff88b4a8c29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae4d6669c15e94c509d6f6f53b5528654"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4d6669c15e94c509d6f6f53b5528654">&#9670;&nbsp;</a></span>V4LDevice()</h2>
+<a id="a42a6a14345391061ff5f1108d77d9f09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42a6a14345391061ff5f1108d77d9f09">&#9670;&nbsp;</a></span>V4LDevice()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -118,8 +187,8 @@ v4l2_format&#160;</td><td class="memItemRight" valign="bottom"><b>fmt</b></td></
         <tr>
           <td class="memname">V4LDevice::V4LDevice </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>dev</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structUSBCameraConnectionContext.html">USBCameraConnectionContext</a>&#160;</td>
+          <td class="paramname"><em>camera_ctx</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -130,6 +199,39 @@ v4l2_format&#160;</td><td class="memItemRight" valign="bottom"><b>fmt</b></td></
 <ul>
 <li>Sets opening state </li>
 </ul>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a25401ae9acd76eb0b17b615226bfff9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25401ae9acd76eb0b17b615226bfff9b">&#9670;&nbsp;</a></span>open_()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void V4LDevice::open_ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Init camera device with some parameters. </p>
+<ul>
+<li></li>
+</ul>
+
+<p>Reimplemented from <a class="el" href="classUSBDevice.html">USBDevice</a>.</p>
 
 </div>
 </div>

@@ -25,7 +25,7 @@ tools.py : helper functions
 @file    tools.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.8.0 
+@version 0.9.0 
 
 @brief helper functions
 """
@@ -36,7 +36,6 @@ import types
 import sys
 import os
 import inspect
-
 
 is_py3 = (sys.version_info >= (3, 0))
 
@@ -252,4 +251,40 @@ def generateGetters(definitions, obj):
             setattr(obj, getter_name, getter)
         
 
+
+
+def getH264V4l2(verbose=False):
+    """Find all V4l2 cameras with H264 encoding, and returns a list of tuples with ..
+    
+    (device file, device name), e.g. ("/dev/video2", "HD Pro Webcam C920")
+    """
+    from subprocess import *
+    
+    cams=[]
+
+    for device in glob.glob("/sys/class/video4linux/*"):
+        devname=device.split("/")[-1]
+        devfile=os.path.join("/dev",devname)
+        
+        lis=("v4l2-ctl --list-formats -d "+devfile).split()
+
+        p = Popen(lis, stdout=PIPE, stderr=PIPE)
+        # p.communicate()
+        # print(dir(p))
+        # print(p.returncode)
+        # print(p.stderr.read().decode("utf-8"))
+        st = p.stdout.read().decode("utf-8")
+        # print(st)
+        
+        if (st.lower().find("h264")>-1):
+            namefile=os.path.join(device, "name")
+            # print(namefile)
+            f=open(namefile, "r"); name=f.read(); f.close()
+            cams.append((devfile, name.strip()))
+
+    if (verbose):
+        for cam in cams:
+            print(cam)
+        
+    return cams
 
