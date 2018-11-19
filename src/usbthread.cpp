@@ -562,7 +562,7 @@ void USBDeviceThread::run() {
                 if FD_ISSET( (it->second)->getFd(), &fds) {
                     usblogger.log(LogLevel::crazy) << "USBDeviceThread: run: pulling frame" << std::endl;
                     int num = (it->second)->pull(); // pull: populate basicframe and send it down the filterchain
-                    usblogger.log(LogLevel::crazy) << "USBDeviceThread: pull returned " << num << std::endl;
+                    // usblogger.log(LogLevel::crazy) << "USBDeviceThread: pull returned " << num << std::endl;
                     if (num<0) {
                         usblogger.log(LogLevel::debug) << "USBDeviceThread: run: FATAL: pull failed" << std::endl;
                         (it->second)->close_();

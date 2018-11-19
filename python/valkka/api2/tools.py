@@ -258,7 +258,8 @@ def getH264V4l2(verbose=False):
     
     (device file, device name), e.g. ("/dev/video2", "HD Pro Webcam C920")
     """
-    from subprocess import *
+    import glob
+    from subprocess import Popen, PIPE
     
     cams=[]
 

@@ -120,6 +120,58 @@ class LiveThread:
     # """
 
 
+
+class USBDeviceThread:
+    
+    parameter_defs = {
+        "name":     (str, "usb_thread"),
+        "affinity": (int, -1),
+        "verbose":  (bool, False)
+    }
+
+    def __init__(self, **kwargs):
+        # auxiliary string for debugging output
+        self.pre = self.__class__.__name__ + " : "
+        # checks kwargs agains parameter_defs, attach ok'd parameters to this
+        # object as attributes
+        parameterInitCheck(LiveThread.parameter_defs, kwargs, self)
+
+        # swig wrapped cpp USBDeviceThread
+        self.core = core.USBDeviceThread(self.name)
+        self.core.setAffinity(self.affinity)
+        self.active = True
+        self.core.startCall()
+
+    """
+    def registerStream(self, ctx):
+        pass
+
+    def deregisterStream(self, ctx):
+        pass
+    """
+
+    def playStream(self, ctx):
+        self.core.playCameraStreamCall(ctx)
+
+    def stopStream(self, ctx):
+        self.core.stopCameraStreamCall(ctx)
+
+    def close(self):
+        if not self.active:
+            return
+        if (self.verbose):
+            print(self.pre, "stopping core.USBDeviceThread")
+        self.core.stopCall()
+        self.active = False
+
+    def requestClose(self):
+        self.core.requestStopCall()
+        
+    def waitClose(self):
+        self.core.waitStopCall()
+        self.active = False
+
+
 class FileThread:
     # FileThread(const char* name, int core_id=-1);
 

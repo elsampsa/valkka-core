@@ -5,4 +5,5 @@ from .basic import *
 from .basic1 import *
 from .basic2 import *
 from .manager import *
+from .manager3 import *
 from .port import *
