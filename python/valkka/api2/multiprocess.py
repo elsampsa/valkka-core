@@ -159,7 +159,7 @@ class ValkkaProcess(Process):
     while(self.running):
       self.cycle_()
       self.handleSignal_()
-        
+    
     self.postRun_()
     
     

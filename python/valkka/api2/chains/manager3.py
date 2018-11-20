@@ -188,7 +188,10 @@ class ManagedFilterchain3:
         self.sws_fork_filter = core.ForkFrameFilterN("sws_fork_at_slot_" + str(self.slot))
         self.sws_filter      = core.SwScaleFrameFilter("sws_filter", self.width, self.height, self.sws_fork_filter)
         self.interval_filter = core.TimeIntervalFrameFilter("interval_filter", self.shmem_image_interval, self.sws_filter)
-
+        
+        # self.interval_filter = core.BriefInfoFrameFilter("interval_filter") # DEBUG
+        # self.fork_filter.connect("swscale", self.interval_filter) # DEBUG: connect from the start
+    
     
     def createContext(self):
         """Defined the connection and uses (feeds) self.av_in_filter with that connection
@@ -213,10 +216,10 @@ class ManagedFilterchain3:
         # shmem_name =self.idst + "_" + str(self.shmem_counter)
         shmem_name =self.idst + "_" + str(len(self.shmem_terminals))
         self.report( "getShmem : reserving", shmem_name)
-        # shmem_filter    =core.RGBShmemFrameFilter(shmem_name, self.shmem_n_buffer, self.width, self.height)
-        shmem_filter    =core.BriefInfoFrameFilter(shmem_name) # a nice way for debugging to see of you are actually getting any frames here ..
+        shmem_filter    =core.RGBShmemFrameFilter(shmem_name, self.shmem_n_buffer, self.width, self.height)
+        # shmem_filter    =core.BriefInfoFrameFilter(shmem_name) # DEBUG: see if you are actually getting any frames here ..
 
-        self.shmem_terminals[shmem_name] = shmem_filter    
+        self.shmem_terminals[shmem_name] = shmem_filter
         self.sws_fork_filter.connect(shmem_name, shmem_filter)
     
         return shmem_name 
