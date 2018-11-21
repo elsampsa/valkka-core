@@ -61,14 +61,17 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.8.0
+### Current stable version is 0.9.0
+
+0.9.0 Version
+- H264 USB Cameras work
+
+### Older versions
 
 0.8.0 Version : "Say Yolo again"
 - Added bounding boxes to OpenGLThread API
-- Tested Valkka Live with YOLOv3 object detection - works nicely
+- Tested Valkka Live with YOLOv3 object detection
 - Started sketching USB camera thread and ValkkaFS
-
-### Older versions
 
 0.7.1 Version
 - Small fix in the python part valkka.api2 (in managed filterchain)
