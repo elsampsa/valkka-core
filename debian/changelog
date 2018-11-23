@@ -1,3 +1,9 @@
+valkka (0.9.0-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * USB Cameras work ok
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Wed, 21 Nov 2018 10:34:21 +0200
+
 valkka (0.9.0-0ubuntu1-bionicppa1) bionic; urgency=low
 
   * USB Cameras work ok
