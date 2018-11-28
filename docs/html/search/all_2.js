@@ -17,7 +17,7 @@ var searchData=
   ['child_5fid',['child_id',['../classRenderGroup.html#a6eb2340dba794074fdd91bfb912241a7',1,'RenderGroup']]],
   ['clear',['clear',['../classFrameCache.html#a3cbe0661a2ce14ffedece5c9573b3b05',1,'FrameCache']]],
   ['clear_5fobjects',['clear_objects',['../group__openglthread__tag.html#ggaa7275dda16349b828b8c7e9672e3a2aca81264942ef06e341a1e964611326f910',1,'threadsignal.h']]],
-  ['cleardevice',['clearDevice',['../classValkkaFS.html#a1a895e5a2ad0137e6616c8d5f61dcf57',1,'ValkkaFS']]],
+  ['cleardevice',['clearDevice',['../classValkkaFS.html#ae2a6d075cb0eaba832a7b2c681865535',1,'ValkkaFS']]],
   ['clearflag',['clearFlag',['../classSharedMemRingBuffer.html#a156b27e9e115f4c73c0e9992cb115ded',1,'SharedMemRingBuffer']]],
   ['clearobjectscall',['clearObjectsCall',['../classOpenGLThread.html#aa02d8e3e61ba64c79d41b56c582a7abc',1,'OpenGLThread']]],
   ['clearslotidcall',['clearSlotIdCall',['../classValkkaFSWriterThread.html#a9fdf9bcca09f77e35c907570f006a8ca',1,'ValkkaFSWriterThread::clearSlotIdCall()'],['../classValkkaFSReaderThread.html#ad92da0672f525f9f3909cd90b7010fba',1,'ValkkaFSReaderThread::clearSlotIdCall()']]],

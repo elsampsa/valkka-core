@@ -718,3 +718,56 @@
  */
  
 
+/** @page valkkafs ValkkaFS
+ * 
+ * Notes on the block and timestamp scheme
+ * 
+ * - Stream number 0 is always the "leading codec"
+ *
+\verbatim
+
+    A, a = frames from source A (mayor letter = KEY frame.  Designates time start, i.e. sps packet, etc.)
+    B, b = frames from source B
+    etc.
+    
+    Assume that if cameras are on-line, there is a key-frame from each camera in every block
+    
+
+                                                                BlockTable
+                                                                
+                                                                k-max, maximum KEY frame timestamp in block
+                                                                max, maximum frame timestamp in block
+                                                                
+    time ->
+                                                                k-max max       block
+                                                                
+    01 02 03 04 05 06 07 08 09 10 11 12 13 14                   12    14        10
+    b  b  d  D  a  A  a  c  c  a  C  B  b  b                    
+
+    15 16 17 18 19 20 21 22 23 24 25 26 27 28                   26    28        11
+    a  a  B  c  A  C  b  b  c  b  a  D  d  a 
+
+    29 30 31 32 33 34 35 36 37 38 39 40 41 42                   37    42        12
+    A  b  B  c  d  C  d  d  D  a  a  b  c  a
+
+\endverbatim
+ *    
+ * Request time (21, 29)
+ *
+ * ==>
+ *
+ * Lower limit: we need that all cameras have stamped a key frame with =< 21.  This way we can seek to t = 21.
+ *
+ * if any of the cameras has stamped > 21, needs earlier block 
+ * 
+ * --> start from block 10 (search: last block of all blocks that have k-max =< 21)
+ * 
+ * 
+ * Higher limit: all cameras have stamped >= 29 for any frame
+ * 
+ * if any of the cameras has stamped < 29, needs later block
+ * 
+ * --> last block to include is 12 (search: first block of all blocks that have max >= 29)
+ * 
+ */
+

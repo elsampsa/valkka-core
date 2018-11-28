@@ -6,7 +6,7 @@ var searchData=
   ['checkbuffersize',['checkBufferSize',['../classFrameSink.html#ab1d5c7e50bcdd2463f2e384c300d578f',1,'FrameSink']]],
   ['checkifdead',['checkIfDead',['../classSlotContext.html#ac8cf39535fc3599cd626c09823c2aa69',1,'SlotContext']]],
   ['clear',['clear',['../classFrameCache.html#a3cbe0661a2ce14ffedece5c9573b3b05',1,'FrameCache']]],
-  ['cleardevice',['clearDevice',['../classValkkaFS.html#a1a895e5a2ad0137e6616c8d5f61dcf57',1,'ValkkaFS']]],
+  ['cleardevice',['clearDevice',['../classValkkaFS.html#ae2a6d075cb0eaba832a7b2c681865535',1,'ValkkaFS']]],
   ['clearflag',['clearFlag',['../classSharedMemRingBuffer.html#a156b27e9e115f4c73c0e9992cb115ded',1,'SharedMemRingBuffer']]],
   ['clearobjectscall',['clearObjectsCall',['../classOpenGLThread.html#aa02d8e3e61ba64c79d41b56c582a7abc',1,'OpenGLThread']]],
   ['clearslotidcall',['clearSlotIdCall',['../classValkkaFSWriterThread.html#a9fdf9bcca09f77e35c907570f006a8ca',1,'ValkkaFSWriterThread::clearSlotIdCall()'],['../classValkkaFSReaderThread.html#ad92da0672f525f9f3909cd90b7010fba',1,'ValkkaFSReaderThread::clearSlotIdCall()']]],

@@ -14,3 +14,5 @@ from valkka.api2.threads import LiveThread, USBDeviceThread, FileThread, OpenGLT
 from valkka.api2.multiprocess import ValkkaProcess, ValkkaShmemRGBProcess, safe_select
 from valkka.api2.shmem import ShmemClient, ShmemRGBClient
 from valkka.api2.tools import *
+from valkka.api2.valkkafs import ValkkaFS, findBlockDevices
+

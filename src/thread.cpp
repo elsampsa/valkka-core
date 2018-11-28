@@ -97,7 +97,9 @@ void Thread::closeThread() {
     // pthread_* way
     void *res;
     int i;
+    threadlogger.log(LogLevel::debug) << "Thread: closeThread: joining "<< this->name <<std::endl;
     i=pthread_join(internal_thread, &res);
+    threadlogger.log(LogLevel::debug) << "Thread: closeThread: joined "<< this->name <<std::endl;
     if (i!=0) {perror("Thread: closeThread: WARNING! join failed"); exit(1);}
     thread_joined = true;
     free(res); // free resources allocated by thread

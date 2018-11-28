@@ -76,7 +76,11 @@ void test_2() {
 
     std::cout << fs.getDevice() << std::endl;
     std::cout << fs.getDeviceSize() << std::endl;
-    fs.clearDevice();
+    
+    fs.clearDevice(true, true); // write through, be verbose
+    fs.clearDevice(false, true); // just stripe, be verbose
+    
+    
     fs.clearTable();
     fs.dumpTable();
 }
@@ -223,6 +227,17 @@ void test_6() {
 }
 
 
+void test_7() {
+    const char* name = "@TEST: valkkafs_test: test 2: ";
+    std::cout << name <<"** @@Write ValkkaFS info **" << std::endl;
+    return; // WARNING: dangerous test, as it will wipe out /dev/sda
+  
+    ValkkaFS fs("/dev/sda", "block.dat", 20*1024*1024, 3, false);
+    fs.clearDevice(false, true); // just stripe, be verbose
+}
+
+
+
 int main(int argc, char** argcv) {
   if (argc<2) {
     std::cout << argcv[0] << " needs an integer argument.  Second interger argument (optional) is verbosity" << std::endl;
@@ -270,6 +285,9 @@ int main(int argc, char** argcv) {
         break;
       case(6):
         test_6();
+        break;
+      case(7):
+        test_7();
         break;
       default:
         std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;

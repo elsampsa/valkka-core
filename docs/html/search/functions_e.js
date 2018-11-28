@@ -23,7 +23,7 @@ var searchData=
   ['setslotidcall',['setSlotIdCall',['../classValkkaFSWriterThread.html#a6e0f2f5ef7d7f311613d993a3724351e',1,'ValkkaFSWriterThread::setSlotIdCall()'],['../classValkkaFSReaderThread.html#a361fd5015c05bd49572dc493b508fb65',1,'ValkkaFSReaderThread::setSlotIdCall()']]],
   ['setstatictexfile',['setStaticTexFile',['../classOpenGLThread.html#a2ba9d6cf06e8c9582c02265f67b88722',1,'OpenGLThread']]],
   ['settimetolerance',['setTimeTolerance',['../classAVThread.html#a8d96322069c6fce339c7991a5d1ef55f',1,'AVThread']]],
-  ['setupframe',['setupFrame',['../classUSBDevice.html#ae834edc3c49be49882ad45a7534e66ae',1,'USBDevice::setupFrame()'],['../classSetupFrame.html#a2d43e80773538956c44e11a7e40d5361',1,'SetupFrame::SetupFrame()']]],
+  ['setupframe',['SetupFrame',['../classSetupFrame.html#a2d43e80773538956c44e11a7e40d5361',1,'SetupFrame::SetupFrame()'],['../classUSBDevice.html#ae834edc3c49be49882ad45a7534e66ae',1,'USBDevice::setupFrame()']]],
   ['setupnextsubsession',['setupNextSubsession',['../classValkkaRTSPClient.html#aacf85e6354aead6cdbdc10e3c82e50d8',1,'ValkkaRTSPClient']]],
   ['setuppars',['SetupPars',['../structSetupPars.html#aff4b1ec27d962cee9823291f4e306af6',1,'SetupPars']]],
   ['setval',['setVal',['../classValkkaFS.html#abcc845e549c57026dae6bd038a538e34',1,'ValkkaFS']]],

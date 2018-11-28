@@ -1,5 +1,11 @@
 # Valkka - OpenSource Video Surveillance and Management for Linux
 
+## For the VERY impatient
+
+Looking for an OpenSource video surveillance program with object detection?
+
+Just go [here](https://elsampsa.github.io/valkka-live/).
+
 ## Synopsis
 
 The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VMAs) in Linux environment.  The idea is create VMA systems with graphical user interfaces (GUIs) using the combination of python3 and Qt (i.e. PyQt).
@@ -15,6 +21,8 @@ If you just want to use the API, no need to go further.
 If you are interested in compiling Valkka yourself or even help us with the core development, keep on reading.
 
 ## Why this library?
+
+Most of the people nowadays have a concentration span of milliseconds (because of mobile devices).  Thank you for keep on reading!  :)
 
 Valkka is *not* your browser-based-javacsript-node.js-cloud toy.  We're writing a library for building large ip camera systems in LAN (or virtual-LAN / VPN) environments, capable of doing simultaneously massive live video streaming, surveillance, recording and machine vision.
 

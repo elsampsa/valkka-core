@@ -221,8 +221,6 @@ void test_4() { // 3, 4
     ft.setSlotIdCall(2, 123);
     ft.reportSlotIdCall();
     
-    
-    
     // TODO: continue from here
     ft.pullBlocksCall(block_list);
     

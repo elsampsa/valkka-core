@@ -102,6 +102,7 @@ Logger opengllogger;
 Logger filelogger;
 Logger filethreadlogger;
 Logger usblogger;
+Logger valkkafslogger;
 
 extern void setLogLevel_framelogger(int level)      { framelogger.setLevel(level); };
 extern void setLogLevel_filterlogger(int level)     { filterlogger.setLevel(level); };     
@@ -115,6 +116,7 @@ extern void setLogLevel_opengllogger(int level)     { opengllogger.setLevel(leve
 extern void setLogLevel_filelogger(int level)       { filelogger.setLevel(level); };     
 extern void setLogLevel_filethreadlogger(int level) { filethreadlogger.setLevel(level); };
 extern void setLogLevel_usblogger(int level)  { usblogger.setLevel(level); };
+extern void setLogLevel_valkkafslogger(int level)  { usblogger.setLevel(level); };
 
 
 void crazy_log_all() {
@@ -130,6 +132,7 @@ void crazy_log_all() {
   filelogger          .setLevel(LogLevel::crazy);
   filethreadlogger    .setLevel(LogLevel::crazy);
   usblogger    .setLevel(LogLevel::crazy);
+  valkkafslogger    .setLevel(LogLevel::crazy);
 }
 
 
@@ -146,6 +149,7 @@ void debug_log_all() {
   filelogger          .setLevel(LogLevel::debug);
   filethreadlogger    .setLevel(LogLevel::debug);
   usblogger    .setLevel(LogLevel::debug);
+  valkkafslogger    .setLevel(LogLevel::debug);
 }
 
 void normal_log_all() {
@@ -161,6 +165,7 @@ void normal_log_all() {
   filelogger          .setLevel(LogLevel::normal);
   filethreadlogger    .setLevel(LogLevel::normal);
   usblogger    .setLevel(LogLevel::normal);
+  valkkafslogger    .setLevel(LogLevel::normal);
 }
 
 void fatal_log_all() { // only critical / fatal msgs
@@ -176,5 +181,6 @@ void fatal_log_all() { // only critical / fatal msgs
   filelogger          .setLevel(LogLevel::fatal);
   filethreadlogger    .setLevel(LogLevel::fatal);
   usblogger    .setLevel(LogLevel::fatal);
+  valkkafslogger    .setLevel(LogLevel::fatal);
 }
 

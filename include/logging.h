@@ -150,6 +150,7 @@ extern Logger opengllogger;
 extern Logger filelogger;
 extern Logger filethreadlogger;
 extern Logger usblogger;
+extern Logger valkkafslogger;
 
 extern void setLogLevel_framelogger(int level);          // <pyapi>
 extern void setLogLevel_filterlogger(int level);         // <pyapi>
@@ -163,6 +164,7 @@ extern void setLogLevel_opengllogger(int level);         // <pyapi>
 extern void setLogLevel_filelogger(int level);           // <pyapi>
 extern void setLogLevel_filethreadlogger(int level);     // <pyapi>
 extern void setLogLevel_usblogger(int level);     // <pyapi>
+extern void setLogLevel_valkkafslogger(int level);     // <pyapi>
 
 extern void crazy_log_all();   // <pyapi>
 extern void debug_log_all();   // <pyapi>

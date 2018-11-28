@@ -298,6 +298,7 @@ bool BasicFrame::dump(IdNumber device_id, std::fstream &os) {
     dump_bytes(codec_id);
     dump_bytes(len); // write the number of bytes
     os.write((const char*)payload.data(), payload.size()); // write the bytes themselves
+    os.flush();
     return true;
 }
 
@@ -312,8 +313,7 @@ IdNumber BasicFrame::read(std::fstream &is) {
     
     read_bytes(device_id);
     // is.read((char*)&device_id, sizeof(IdNumber));
-    
-    std::cout << "BasicFrame : read : device_id =" << device_id << std::endl;
+    // std::cout << "BasicFrame : read : device_id =" << device_id << std::endl;
     
     if (device_id==0) { // no frame
         return device_id;

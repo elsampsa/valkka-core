@@ -60,7 +60,7 @@ digraph "/home/sampsa/C/valkka/include/macro.h"
   Node26 -> Node27 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node27 [label="/home/sampsa/C/valkka\l/src/valkkafsreader.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$valkkafsreader_8cpp.html"];
   Node25 -> Node28 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node28 [label="/home/sampsa/C/valkka\l/src/valkkafs.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$valkkafs_8cpp.html",tooltip="A simple block file system for video. "];
+  Node28 [label="/home/sampsa/C/valkka\l/src/valkkafs.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$valkkafs_8cpp.html",tooltip="A simple block file system for streaming media. "];
   Node12 -> Node26 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node12 -> Node29 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node29 [label="/home/sampsa/C/valkka\l/src/thread.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$thread_8cpp.html",tooltip="A class for multithreading, similar to Python&#39;s standard library \"threading.Thread\". "];

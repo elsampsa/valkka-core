@@ -36,6 +36,7 @@
 #include "thread.h"
 #include "framefilter.h"
 #include "framefifo.h"
+#include "logging.h"
 
 #include "Python.h"
 #include "numpy/ndarraytypes.h"
@@ -126,29 +127,31 @@ public:                                  // <pyapi>
     std::size_t get_n_blocks();          // <pyapi>
     std::size_t get_n_cols();            // <pyapi>
     
+    /** dump blocktable to disk.  Not thread safe. */
     void dumpTable_();
+    /** dump single row of bloctable to disk.  Not thread safe. */
+    void updateDumpTable_(std::size_t n_block);
     
     /** dump blocktable to disk */
     void            dumpTable();              // <pyapi>
-    /** dump single row of bloctable to disk */
-    void dumpBlock(std::size_t n_block); // <pyapi>
     /** read blocktable from disk */
     void            readTable();          // <pyapi>
     /** returns device filename */
     std::string     getDevice();         // <pyapi>
     /** returns device file size */
     std::size_t     getDeviceSize();     // <pyapi>
-    /** creates and clears the device file */
-    void            clearDevice();       // <pyapi>
-    // TODO: initDevice() : write IdNumber 0 to the beginning of each block
-    /** clears the blocktable (but does not write to disk) */
+    /** write   */
+    void            clearDevice(bool writethrough=false, bool verbose=false);       // <pyapi>
+    /** clears the blocktable and writes it to the disk */
     void            clearTable();        // <pyapi>
     /** returns maximum allowed frame size in bytes */
     std::size_t     maxFrameSize();      // <pyapi>
     /** print blocktable */
     void            reportTable(std::size_t from=0, std::size_t to=0, bool show_all=false);       // <pyapi>
-    /** Used by a writer class to inform that a new block has been written */
-    void writeBlock();                           // <pyapi>
+    /** Used by a writer class to inform that a new block has been written
+     * @param pycall : use the provided python callback function or not
+     */
+    void writeBlock(bool pycall=true);                           // <pyapi>
     
     /** Used by a writer class to inform that a non-key frame has been written */
     void markFrame(long int mstimestamp);        // <pyapi>
@@ -180,19 +183,19 @@ public:                                  // <pyapi>
  * - Dump blocks to the terminal
  * 
  */
-class ValkkaFSTool {
+class ValkkaFSTool {                        // <pyapi>
     
-public:
-    ValkkaFSTool(ValkkaFS &valkkafs);
-    ~ValkkaFSTool();
+public:                                     // <pyapi>
+    ValkkaFSTool(ValkkaFS &valkkafs);       // <pyapi>
+    ~ValkkaFSTool();                        // <pyapi>
     
 protected:
     std::fstream     is;
     ValkkaFS         &valkkafs;
     
-public:
-    void dumpBlock(std::size_t n_block);
-};
+public:                                     // <pyapi>
+    void dumpBlock(std::size_t n_block);    // <pyapi>
+};                                          // <pyapi>
 
 
 
@@ -233,6 +236,7 @@ protected:
     void handleSignals();                                       ///< Call ValkkaFSWriterThread::handleSignal for every signal in the signal_fifo
 
 protected:
+    void saveCurrentBlock(bool pycall=true);
     void setSlotId(SlotNumber slot, IdNumber id);
     void unSetSlotId(SlotNumber slot);
     void clearSlotId();

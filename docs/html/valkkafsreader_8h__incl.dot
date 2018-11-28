@@ -106,6 +106,7 @@ digraph "/home/sampsa/C/valkka/include/valkkafsreader.h"
   Node57 -> Node40 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node57 -> Node56 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node57 -> Node41 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node57 -> Node54 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node57 -> Node58 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node58 [label="Python.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
   Node57 -> Node59 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
