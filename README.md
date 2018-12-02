@@ -69,12 +69,16 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.9.0
+### Current stable version is 0.10.0
+
+0.10.0 Version
+- Nasty segmentation fault in OpenGL part fixed: called glDeleteBuffers instread of glDeleteVertexArrays for a VAO !
+- ValkkaFS progressing
+
+### Older versions
 
 0.9.0 Version
 - H264 USB Cameras work
-
-### Older versions
 
 0.8.0 Version : "Say Yolo again"
 - Added bounding boxes to OpenGLThread API

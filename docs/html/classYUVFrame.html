@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.9.0</span>
+   &#160;<span id="projectnumber">0.10.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -118,9 +118,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVFrame.html#a6f149f5c330e613f8337b20815a8e5fb">reset</a> ()</td></tr>
 <tr class="memdesc:a6f149f5c330e613f8337b20815a8e5fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the internal data. <br /></td></tr>
 <tr class="separator:a6f149f5c330e613f8337b20815a8e5fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27064f66162dbaf4dc4559286c35c8e0"><td class="memItemLeft" align="right" valign="top"><a id="a27064f66162dbaf4dc4559286c35c8e0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVFrame.html#a27064f66162dbaf4dc4559286c35c8e0">fromAVBitmapFrame</a> (<a class="el" href="classAVBitmapFrame.html">AVBitmapFrame</a> *f)</td></tr>
-<tr class="memdesc:a27064f66162dbaf4dc4559286c35c8e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies data to the GPU from <a class="el" href="classAVBitmapFrame.html" title="Decoded YUV/RGB frame in FFMpeg format. ">AVBitmapFrame</a>. <br /></td></tr>
+<tr class="memitem:a27064f66162dbaf4dc4559286c35c8e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVFrame.html#a27064f66162dbaf4dc4559286c35c8e0">fromAVBitmapFrame</a> (<a class="el" href="classAVBitmapFrame.html">AVBitmapFrame</a> *f)</td></tr>
+<tr class="memdesc:a27064f66162dbaf4dc4559286c35c8e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies data to the GPU from <a class="el" href="classAVBitmapFrame.html" title="Decoded YUV/RGB frame in FFMpeg format. ">AVBitmapFrame</a>.  <a href="#a27064f66162dbaf4dc4559286c35c8e0">More...</a><br /></td></tr>
 <tr class="separator:a27064f66162dbaf4dc4559286c35c8e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classFrame"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classFrame')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classFrame.html">Frame</a></td></tr>
 <tr class="memitem:ad2e5946cf41d4817e750500acf05d02b inherit pub_methods_classFrame"><td class="memItemLeft" align="right" valign="top"><a id="ad2e5946cf41d4817e750500acf05d02b"></a>
@@ -233,7 +232,31 @@ Additional Inherited Members</h2></td></tr>
 <p>Copiable/Queable : no</p>
 <p>Instances of this frame are not copiable when crossing thread borders, however, instances of this frame are used internally by <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a> and <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo managed and used by OpenGLThread. ">OpenGLFrameFifo</a>, and they are being queued and recycled.</p>
 <p>For more details, see <a class="el" href="classOpenGLFrameFifo.html" title="A FrameFifo managed and used by OpenGLThread. ">OpenGLFrameFifo</a> and <a class="el" href="classOpenGLFrameFifo.html#a5899d1c55639923bf615ca96df00618e" title="Tries to get a YUVFrame with correct bitmap dimensions from the stack. If success, returns pointer to the YUVFrame, otherwise NULL. ">OpenGLFrameFifo::prepareAVBitmapFrame</a> </p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a27064f66162dbaf4dc4559286c35c8e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27064f66162dbaf4dc4559286c35c8e0">&#9670;&nbsp;</a></span>fromAVBitmapFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void YUVFrame::fromAVBitmapFrame </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAVBitmapFrame.html">AVBitmapFrame</a> *&#160;</td>
+          <td class="paramname"><em>f</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies data to the GPU from <a class="el" href="classAVBitmapFrame.html" title="Decoded YUV/RGB frame in FFMpeg format. ">AVBitmapFrame</a>. </p>
+<ul>
+<li></li>
+</ul>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="frame_8h_source.html">frame.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="frame_8cpp.html">frame.cpp</a></li>
 </ul>

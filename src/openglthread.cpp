@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.9.0 
+ *  @version 0.10.0 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -174,9 +174,14 @@ RenderContext::~RenderContext() {
     #ifdef VALGRIND_GPU_DEBUG
     #else
     // TODO: WARNING: we're managing a GPU resource here.  Know what you're doing
-    glDeleteBuffers(1, &VAO);
+    
+    ///*
+    glDeleteVertexArrays(1, &VAO);
+    // glDeleteBuffers(1, &VAO); // This made mysterious segfaults!
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
+    //*/
+    // std::cout << "RenderContext: dtor" << std::endl;
     #endif
 }
 
@@ -632,9 +637,11 @@ RenderContext* RenderGroup::delContext(int id) {
         return NULL;
     }
     else {
+        RenderContext* ctx =*it;
         render_contexes.erase(it); // this drives the compiler mad.. it starts moving stuff in the container..?
         // render_contexes.pop_back(); // this is ok..
-        return (*it);
+        // return (*it); // can't dereference ? TODO
+        return ctx;
     }
 }
 
@@ -660,9 +667,12 @@ void RenderGroup::render() {
     long int swaptime;
     #endif
     
+    #ifdef VALGRIND_GPU_DEBUG
+    #else
     if (!glXMakeCurrent(display_id, child_id, glc)) { // choose this x window for manipulation
         opengllogger.log(LogLevel::normal) << "RenderGroup: render: WARNING! could not draw"<<std::endl;
     }
+    #endif
     XGetWindowAttributes(display_id, child_id, &(x_window_attr));
     
     #ifdef OPENGL_TIMING
@@ -1406,6 +1416,7 @@ void OpenGLThread::postRun() {// Called after the main execution loop exits, but
     delRenderContexes();
     for(auto it=slots_.begin(); it!=slots_.end(); ++it) {
         (*it)->deActivate(); // deletes textures
+        delete *it;
     }
     infifo->deallocateYUV();
     delete dummyframe;
@@ -1673,6 +1684,8 @@ void OpenGLThread::closeGLX() {
 
 void OpenGLThread::loadExtensions() {
     ///*
+#ifdef VALGRIND_GPU_DEBUG
+#else
     this->makeCurrent(this->root_id); // a context must be made current before glew works..
     
     glewExperimental = GL_TRUE;
@@ -1767,6 +1780,8 @@ else {
         perror("OpenGLThread: loadExtensions: no swap control: there's something wrong with your graphics driver");
         swap_flavor =swap_flavors::none;
     }
+
+#endif
 }
 
 
@@ -2102,12 +2117,10 @@ int OpenGLThread::newRenderContextCall(SlotNumber slot, Window window_id, unsign
     // */
     
     /* // old
-     *  OpenGLSignalContext signal_ctx = {OpenGLSignal::new_render_context, pars};
-     *  sendSignalAndWait(signal_ctx);
-     *  // there could be a mutex going in with the signal .. and then we wait for that mutex
-     *  
-     *  opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContextCall: return pars="<< pars <<std::endl;
-     */
+    OpenGLSignalContext signal_ctx = {OpenGLSignal::new_render_context, pars};
+    sendSignalAndWait(signal_ctx);
+    opengllogger.log(LogLevel::debug) << "OpenGLThread: newRenderContextCall: return pars="<< pars <<std::endl;
+    */
     
     return pars.render_ctx;
 }
@@ -2122,19 +2135,19 @@ bool OpenGLThread::delRenderContextCall(int id) {
     pars.render_ctx  =id; // input
     pars.success     =false;
     
-    // new
+    ///* // new
     SignalFrame f = SignalFrame();
     // f.opengl_signal_ctx = {OpenGLSignal::del_render_context, &pars};
     f.opengl_signal_ctx = {OpenGLSignal::del_render_context, pars};
     infilter.run(&f);
     pars.success=true;
+    //*/
     
     /* // old
-     *  OpenGLSignalContext signal_ctx = {OpenGLSignal::del_render_context, &pars};
-     *  sendSignalAndWait(signal_ctx);
-     * 
-     *  opengllogger.log(LogLevel::debug) << "OpenGLThread: delRenderContextCall: return pars="<< pars <<std::endl;
-     */
+    OpenGLSignalContext signal_ctx = {OpenGLSignal::del_render_context, pars};
+    sendSignalAndWait(signal_ctx);
+    opengllogger.log(LogLevel::debug) << "OpenGLThread: delRenderContextCall: return pars="<< pars <<std::endl;
+    */
     return pars.success;
 }
 

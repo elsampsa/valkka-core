@@ -29,7 +29,7 @@
  *  @file    frame.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.9.0 
+ *  @version 0.10.0 
  *  
  *  @brief   Frame classes
  */ 
@@ -211,6 +211,8 @@ public: // frame serialization
 /** Setup frame for decoders
  * 
  * Carries information for instantiation and initialization of decoders
+ * 
+ * This is basically just a signal for the decoders to initialize themselves
  * 
  * Copiable/Queable : yes.  uses default copy-constructor and copy-assignment
  * 

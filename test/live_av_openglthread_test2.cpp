@@ -26,7 +26,7 @@
  *  @file    live_av_openglthread_test2.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.9.0 
+ *  @version 0.10.0 
  *  
  *  @brief   Test the full pipeline: LiveThread => AVThread => OpenGLThread .. and draw some boxes!
  *
@@ -130,26 +130,106 @@ void test_1() {
     livethread.stopCall();
     avthread.  stopCall();
     glthread.  stopCall();  
-    
-    
-    
-  
 }
 
 
 void test_2() {
-  
-  const char* name = "@TEST: live_av_openglthread_test2: test 2: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+    const char* name = "@TEST: live_av_openglthread_test2: test 2: ";
+    std::cout << name <<"** @@Create and delete several render contexes.  No video. **" << std::endl;
+    
+    // start glthread and create a window
+    glthread.  startCall();
+    Window window_id=glthread.createWindow();
+    glthread.makeCurrent(window_id);
+    std::cout << "new x window "<<window_id<<std::endl;
+
+    // create render group & context
+    glthread.newRenderGroupCall(window_id);
+    
+    int n, i;
+    for(n=0;n<=8;n++) {
+        std::cout << "create " << n+1 << std::endl;
+        i=glthread.newRenderContextCall(2, window_id, 0);
+        std::cout << "got render context id "<<i<<std::endl;
+        // del render group & context
+        sleep_for(2s);
+        std::cout << "delete " << n+1 << std::endl;
+        glthread.delRenderContextCall(i);
+    }
+    
+    glthread.delRenderGroupCall(window_id);
+
+    std::cout << name << "stopping threads" << std::endl;
+    glthread.  stopCall(); 
+
 }
 
 
-void test_3() {
-  
-  const char* name = "@TEST: live_av_openglthread_test2: test 3: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+void test_3() {  
+    const char* name = "@TEST: live_av_openglthread_test2: test 3: ";
+    std::cout << name <<"** @@Create and delete several render contexes **" << std::endl;
+
+    int n, i;
+
+    if (!stream_1) {
+        std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+        exit(2);
+    }
+    std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+
+    std::cout << name << "starting threads" << std::endl;
+
+    // avthread.  setTimeTolerance(10); // 10 milliseconds // just testing ..
+
+    glthread.setStaticTexFile("1.yuv");
+
+    // start glthread and create a window
+    glthread.  startCall();
+    Window window_id=glthread.createWindow();
+    glthread.makeCurrent(window_id);
+    std::cout << "new x window "<<window_id<<std::endl;
+
+    // start av and live threads
+    avthread.  startCall();
+    livethread.startCall();
+    avthread.  decodingOnCall(); // don't forget this ..
+    sleep_for(2s);
+
+    std::cout << name << "registering stream" << std::endl;
+    LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
+    livethread.registerStreamCall(ctx);
+    std::cout << name << "playing stream !" << std::endl;
+    livethread.playStreamCall(ctx);
+
+    // create render group & context
+    glthread.newRenderGroupCall(window_id);
+    std::cout << "create 1" << std::endl;
+    i=glthread.newRenderContextCall(2, window_id, 0);
+    std::cout << "got render context id "<<i<<std::endl;
+    sleep_for(1s);
+    
+    std::cout << "delete 1" << std::endl;
+    glthread.delRenderContextCall(i);
+
+    for(n=0;n<=8;n++) {
+        std::cout << "create "<< n+2 << std::endl; // segfault at create 6
+        i=glthread.newRenderContextCall(2, window_id, 0);
+        std::cout << "got render context id "<<i<<std::endl;
+        // del render group & context
+        sleep_for(1s);
+        glthread.delRenderContextCall(i); // no remove, no segfault
+        // segfault occurs when uploading bitmaps into GPU memory
+        std::cout << "delete "<< n+2 << std::endl;
+    }
+
+    // del render group
+    glthread.delRenderGroupCall(window_id);
+
+    std::cout << name << "stopping threads" << std::endl;
+    livethread.stopCall();
+    avthread.  stopCall();
+    glthread.  stopCall();  
+    
 }
 
 

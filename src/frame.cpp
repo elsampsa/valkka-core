@@ -26,7 +26,7 @@
  *  @file    frame.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.9.0 
+ *  @version 0.10.0 
  *  
  *  @brief 
  */ 
@@ -279,13 +279,12 @@ void BasicFrame::filterFromAVPacket(AVPacket *pkt, AVCodecContext *codec_ctx, AV
 }
 
 
-IdNumber BasicFrame::calcSize() {
+std::size_t BasicFrame::calcSize() {
     // device_id (std::size_t) subsession_index (int) mstimestamp (long int) media_type (AVMediaType) codec_id (AVCodecId) size (std::size_t) payload (char)
     // TODO: should use typedefs more
     return sizeof(IdNumber) + sizeof(subsession_index) + sizeof(mstimestamp) + sizeof(media_type) + sizeof(codec_id) + sizeof(std::size_t) + payload.size();
 }
 
-#define dump_bytes(var) os.write( (const char*)&var, sizeof(var));
 
 bool BasicFrame::dump(IdNumber device_id, std::fstream &os) {
     std::size_t len;
@@ -302,7 +301,7 @@ bool BasicFrame::dump(IdNumber device_id, std::fstream &os) {
     return true;
 }
 
-#define read_bytes(var) is.read((char*)&var, sizeof(var));
+
 
 IdNumber BasicFrame::read(std::fstream &is) {
     std::size_t len;
@@ -353,7 +352,6 @@ void SetupFrame::reset() {
   media_type=AVMEDIA_TYPE_UNKNOWN;
   codec_id  =AV_CODEC_ID_NONE;
 }
-
 
 
 AVMediaFrame::AVMediaFrame() : media_type(AVMEDIA_TYPE_UNKNOWN), codec_id(AV_CODEC_ID_NONE) { // , mediatype(MediaType::none) {
@@ -632,6 +630,7 @@ void YUVFrame::fromAVBitmapFrame(AVBitmapFrame *bmframe) {
   std::cout << "YUVFrame: fromAVBitmapFrame source v   : w, linesize, h : "<< source_bmpars.v_width << " " << source_bmpars.v_linesize << " " << source_bmpars.v_height << " "<< std::endl;  
 #endif
   
+  ///*
   av_image_copy_plane(
     y_payload,
     source_bmpars.y_width, // This is consistent what we're doing later on with the textures ..
@@ -658,6 +657,7 @@ void YUVFrame::fromAVBitmapFrame(AVBitmapFrame *bmframe) {
     source_bmpars.v_width,
     source_bmpars.v_height
   );
+  //*/
   
   // std::cout << this->dumpPayload() << std::endl;
   

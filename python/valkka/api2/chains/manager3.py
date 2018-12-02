@@ -25,7 +25,7 @@ manager3.py : Managed filterchain classes, this time the right way.  Resources a
 @file    manage3.py
 @author  Sampsa Riikonen
 @date    2018
-@version 0.9.0 
+@version 0.10.0 
 
 @brief   Managed filterchain classes, this time the right way.  Resources are managed hierarchically, decoding is turned off if its not required
 """
@@ -270,8 +270,7 @@ class ManagedFilterchain3:
         openglthread = self.openglthreads[x_screen_num]
 
         if (self.verbose):
-            print(
-                self.pre,
+            print(self.pre,
                 "addViewPort: view_port, window_id, x_screen_num",
                 view_port,
                 window_id,
@@ -290,8 +289,7 @@ class ManagedFilterchain3:
             # this only in the first time : start sending frames to X screen
             # number x_screen_num!
             if (self.verbose):
-                print(
-                    self.pre,
+                print(self.pre,
                     "addViewPort: start streaming to x-screen",
                     x_screen_num)
             self.fork_filter.connect(
@@ -299,7 +297,9 @@ class ManagedFilterchain3:
                 openglthread.getInput())
 
         # send frames from this slot to correct openglthread and window_id
+        print(self.pre, "       connecting slot, window_id", self.slot, window_id)
         token = openglthread.connect(slot=self.slot, window_id=window_id)
+        print(self.pre, "       ==> connected slot, window_id, token", self.slot, window_id, token)
         self.tokens_by_port[view_port] = token
 
         if (len(self.ports) < 1):
@@ -318,8 +318,7 @@ class ManagedFilterchain3:
         openglthread = self.openglthreads[x_screen_num]
 
         if (self.verbose):
-            print(
-                self.pre,
+            print(self.pre,
                 "delViewPort: view_port, window_id, x_screen_num",
                 view_port,
                 window_id,
@@ -334,15 +333,16 @@ class ManagedFilterchain3:
         token = self.tokens_by_port.pop(view_port)
         # stop the slot => render context / x-window mapping associated to the
         # token
+        print(self.pre, "delViewPort:       disconnecting token", token)
         openglthread.disconnect(token)
+        print(self.pre, "delViewPort:       OK disconnected token", token)
 
         n_x_screen_ports = self.getNumXscreenPorts(x_screen_num)
 
         if (n_x_screen_ports < 1):
             # no need to send this stream to X Screen number x_screen_num
             if (self.verbose):
-                print(
-                    self.pre,
+                print(self.pre,
                     "delViewPort: removing stream from x-screen",
                     x_screen_num)
 

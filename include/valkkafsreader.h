@@ -28,7 +28,7 @@
  *  @file    valkkafsreader.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.9.0 
+ *  @version 0.10.0 
  *  
  *  @brief
  */ 

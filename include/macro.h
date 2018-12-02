@@ -28,7 +28,7 @@
  *  @file    macro.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.9.0 
+ *  @version 0.10.0 
  *  
  *  @brief
  */ 
@@ -85,5 +85,12 @@ virtual CLASS *getClone() {\
     *tmpframe = *this;\
     return tmpframe;\
 };\
+
+
+
+// macros for dumping and reading variables
+#define dump_bytes(var) os.write( (const char*)&var, sizeof(var));
+#define read_bytes(var) is.read((char*)&var, sizeof(var));
+
 
 #endif

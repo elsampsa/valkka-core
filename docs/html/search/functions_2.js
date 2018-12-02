@@ -1,7 +1,7 @@
 var searchData=
 [
   ['cacheframefilter',['CacheFrameFilter',['../classCacheFrameFilter.html#a3fafb5b6e26a378194d1bd1e91537913',1,'CacheFrameFilter']]],
-  ['calcsize',['calcSize',['../classBasicFrame.html#a2b5a6fc1e8d98910b37db89422087c33',1,'BasicFrame']]],
+  ['calcsize',['calcSize',['../classBasicFrame.html#ab6595b2bd209b394021fb20d165ebf3b',1,'BasicFrame']]],
   ['checkalive',['checkAlive',['../classLiveThread.html#a39ea8a235a429002345797a6ae900113',1,'LiveThread']]],
   ['checkbuffersize',['checkBufferSize',['../classFrameSink.html#ab1d5c7e50bcdd2463f2e384c300d578f',1,'FrameSink']]],
   ['checkifdead',['checkIfDead',['../classSlotContext.html#ac8cf39535fc3599cd626c09823c2aa69',1,'SlotContext']]],

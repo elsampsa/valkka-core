@@ -32,7 +32,7 @@
  *  @file    avfilethread.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.9.0 
+ *  @version 0.10.0 
  *  
  *  @brief A Thread handling files and sending frames to fifo
  */ 

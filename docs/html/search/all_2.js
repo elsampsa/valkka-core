@@ -6,7 +6,7 @@ var searchData=
   ['cachestream_2ecpp',['cachestream.cpp',['../cachestream_8cpp.html',1,'']]],
   ['cachestream_2eh',['cachestream.h',['../cachestream_8h.html',1,'']]],
   ['cachinggateframefilter',['CachingGateFrameFilter',['../classCachingGateFrameFilter.html',1,'']]],
-  ['calcsize',['calcSize',['../classBasicFrame.html#a2b5a6fc1e8d98910b37db89422087c33',1,'BasicFrame']]],
+  ['calcsize',['calcSize',['../classBasicFrame.html#ab6595b2bd209b394021fb20d165ebf3b',1,'BasicFrame']]],
   ['callswaptime',['callswaptime',['../classOpenGLThread.html#ad24a551f833274b53c53d99183c98c1f',1,'OpenGLThread']]],
   ['canary',['canary',['../classBufferSource.html#ab807118e6c625c82092b4b95006035e0',1,'BufferSource']]],
   ['channel0',['channel0',['../classSwitch.html#a8d920c5d1ed7018b7b2245e6d0e9580a',1,'Switch']]],
