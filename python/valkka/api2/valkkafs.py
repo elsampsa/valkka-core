@@ -34,6 +34,7 @@ import json
 import os
 import glob
 import numpy
+import logging
 from valkka import core
 from valkka.api2.tools import *
 
@@ -309,9 +310,10 @@ class ValkkaFS:
     
     
     def getTimeRange(self, blocktable = None):
-        if not blocktable:
+        if isinstance(blocktable,None.__class__):
             blocktable = self.getBlockTable()
-        return (blocktable[:,0].min(), blocktable[:,1].max())
+        nonzero = blocktable[:,0]>0
+        return (blocktable[nonzero,0].min(), blocktable[nonzero,1].max())
         
     
     def getInd(self, times, blocktable = None):
@@ -325,7 +327,7 @@ class ValkkaFS:
         # verbose=True
         verbose=False
         
-        if not blocktable:
+        if isinstance(blocktable,None.__class__):
             blocktable = self.getBlockTable()
         
         t0 = times[0]
@@ -433,14 +435,16 @@ class ValkkaFS:
         else:
             t0=None
             
-        return inds[order]                   # return sorted indices
+        final = inds[order]                 # return sorted indices
+            
+        return final.tolist()
         
 
     def getIndNeigh(self, n=1, time=0, blocktable = None):
         verbose=False
         # verbose=True
         
-        if not blocktable:
+        if isinstance(blocktable,None.__class__):
             blocktable = self.getBlockTable()
         
         ftab=blocktable[:,0]                                # row index 1 = max timestamp of all devices in the block 
@@ -471,7 +475,7 @@ class ValkkaFS:
         if (verbose): print("BlockTable: ** final indices",inds,"\n")
         
         finalinds.sort()
-        return finalinds
+        return finalinds.tolist()
     
 
     
@@ -517,6 +521,199 @@ class ValkkaFSWriterThread:
     def __del__(self):
         self.close()
 
+
+
+
+"""
+- ValkkaFS
+- ValkkaFSReaderThread
+- FileCacheThread
+                                            (+---->   AVThread)
+                                    SOURCE     |                    
+valkkafsreaderthread --> filecachethread ----+---->   AVThread  ----> Forks, etc. ----> OpenGLThread
+
+id => slot               filestreamcontext:
+                            slot => framefilter
+
+how about .. ?
+
+SOURCE ==> ManagerFilterChain
+
+ManagedFilterChain.setSource(filterchain)
+
+- camera database: id numbers
+- create managedfilterchain for every file stream
+
+LiveManagedFilterChain (source defined within the class)
+USBManagedFilterChain (same ..)
+FileManagedFilterChain .. or just
+ManagedFilterChain
+
+For every camera, generate a ManagedFilterChain
+
+ManagedFilterChain.getInputFrameFilter(framefilter)
+ValkkaFSManager.setOutput(id, slot, framefilter)
+"""
+class ValkkaFSManager:
+    
+    timediff=10000 # blocktable can be inquired max this frequency (ms)
+    
+    def __init__(self, valkkafs: ValkkaFS, timecallback: callable):
+        """ValkkaFSReaderThread --> FileCacheThread
+        """
+        self.logger = getLogger(__name__ + "." + self.__class__.__name__)
+        self.logger.setLevel(logging.DEBUG)
+        
+        self.valkkafs = valkkafs
+        self.timecallback = timecallback
+        self.readBlockTable()
+        self.cacherthread = core.FileCacheThread("cacher")
+        self.readerthread = core.ValkkaFSReaderThread("reader", valkkafs.core, self.cacherthread.getFrameFilter())
+        self.currentmstime = None # None means there's no reference point (no seek has succeeded so far)
+        self.current_blocks = []
+        self.current_timerange = () # time limits of current blocks
+        
+        # callback coming from cpp, informing about the current time
+        self.cacherthread.setPyCallback(self.timeCallback__)
+   
+        self.cacherthread.startCall()
+        self.readerthread.startCall()
+        self.active = True
+        
+        
+    def timeCallback__(self, mstime):
+        """Handle here under / overflows:
+        
+        - If the stream goes over global timelimits, stop it
+        - .. same for underflow
+        
+        - If goes under / over currently available blocks, order more
+        
+        TODO: mstime = 0 could mean there is no reference time
+        """
+        
+        """TODO: handle these cases:
+        self.readBlockTableIf()
+        if not self.timeOK(mstime):
+            self.logger.info("timeCallback__ : no such time in blocktable %i", mstime)
+            self.stop()
+            return
+        
+        if not self.currentTimeOK():
+            self.logger.info("timeCallback__ : will request more blocks for time %i", mstime)
+            # TODO
+            return
+        """
+        self.currentmstime = mstime
+        self.timecallback(mstime)
+        
+   
+    def getCurrentTime(self):
+        return self.currentmstime
+   
+   
+    def timeOK(self, mstimestamp):
+        """Time in the blocktable range?
+        """
+        if (mstimestamp < self.timerange[0]) or (mstimestamp > self.timerange[1]):
+            self.logger.info("timeOK : invalid time %i range is %i %i", 
+                                mstimestamp, self.timerange[0], self.timerange[1])
+            return False
+        return True
+    
+    
+    def currentTimeOK(self, mstimestamp):
+        """Time in the currently loaded blocks range?
+        """
+        if (mstimestamp < self.current_timerange[0]) or (mstimestamp > self.current_timerange[1]):
+            self.logger.info("currentTimeOK : invalid time %i range is %i %i", 
+                                mstimestamp, self.current_timerange[0], self.current_timerange[1])
+            return False
+        return True
+    
+   
+    def setOutput(self, _id, slot, framefilter):
+        """Set id => slot mapping.  Send to defined framefilter
+        """
+        self.readerthread.setSlotIdCall(slot, _id) # id => slot
+        ctx = core.FileStreamContext(slot, framefilter) # slot => framefilter
+        self.cacherthread.registerStreamCall(ctx)
+        # deregisterStreamCall
+        
+
+    def readBlockTable(self):
+        """Create a copy of the blocktable
+        """
+        self.blocktable = self.valkkafs.getBlockTable()
+        self.timerange = self.valkkafs.getTimeRange(self.blocktable)
+        self.checktime = time.time()
+        
+    
+    def readBlockTableIf(self):
+        """Create a copy of the blocktable, but only if a certain time has passed
+        """
+        if (time.time() - self.checktime) >= self.timediff:
+            self.readBlockTable()
+        
+
+    def play(self):
+        if not self.currentmstime:
+            return False
+        self.cacherthread.playStreamsCall()
+    
+    
+    def stop(self):
+        self.cacherthread.stopStreamsCall()
+    
+    
+    def seek(self, mstimestamp):
+        """Before performing seek, check the blocktable
+        
+        Returns True if the seek could be done, False otherwise
+        
+        """
+        self.stop()
+        self.readBlockTableIf()
+        if not self.timeOK(mstimestamp):
+            return False
+        # there's stream for that time, so proceed
+        self.logger.info("seek : proceeds with %i", mstimestamp)
+        self.cacherthread.seekStreamsCall(mstimestamp) # simply sets the target time
+        block_list = self.valkkafs.getIndNeigh(n=1, time=mstimestamp, blocktable = self.blocktable)
+        
+        if len(block_list) < 1:
+            return False
+        
+        self.logger.debug("seek : requesting blocks %s %s", block_list.__class__.__name__, str(block_list))
+        self.readerthread.pullBlocksPyCall(block_list) # this send frames from readerthread -> cacherthread
+        
+        self.current_blocks = block_list
+        self.current_timerange = (self.blocktable[block_list[0], 0],
+                                  self.blocktable[block_list[-1],1])
+        
+
+    def close(self):
+        if not self.active:
+            return
+        self.logger.debug("close: stopping threads")
+        self.cacherthread.stopCall()
+        self.readerthread.stopCall()
+        self.active = False
+
+
+    def requestClose(self):
+        self.cacherthread.requestStopCall()
+        self.readerthread.requestStopCall()
+        
+        
+    def waitClose(self):
+        self.cacherthread.waitStopCall()
+        self.readerthread.waitStopCall()
+        self.active = False
+
+
+    def __del__(self):
+        self.close()
 
 
  

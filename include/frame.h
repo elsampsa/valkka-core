@@ -66,7 +66,9 @@ enum class FrameClass {
   yuv,      ///< data at the GPU
   
   setup,     ///< setup data
-  signal,    ///< signal to AVThread or OpenGLThread
+  signal,    ///< signal to AVThread or OpenGLThread.  Also custom signals to custom Threads
+  
+  marker,    ///< Used when sending blocks of frames: mark filesystem and block start and end
   
   First=none,
   Last =signal
@@ -496,6 +498,25 @@ public:
   ValkkaFSWriterSignalContext         valkkafswriter_signal_ctx;
   ValkkaFSReaderSignalContext         valkkafsreader_signal_ctx;
   void*                               custom_signal_ctx; ///< For extensions.  TODO: migrate all signal contexes here
+};
+
+
+class MarkerFrame : public Frame {
+
+public:
+    MarkerFrame();           ///< Default ctor
+    virtual ~MarkerFrame();  ///< Default virtual dtor
+    frame_essentials(FrameClass::marker,MarkerFrame);
+    frame_clone(FrameClass::marker,MarkerFrame);
+    
+public: // redefined virtual
+  // virtual std::string dumpPayload();
+  virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
+  virtual void reset();
+    
+public:
+    bool    fs_start, fs_end;   ///< Filesystem start / end  // this controlled better at the python level
+    bool    tm_start, tm_end;   ///< Transmission start / end
 };
 
 

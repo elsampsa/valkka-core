@@ -1510,11 +1510,6 @@ void OpenGLThread::handleSignal(OpenGLSignalContext &signal_ctx) {
                 // pars->success=true;
             }
             break;
-        
-            
-            
-            
-            
     }
 }
 

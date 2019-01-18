@@ -174,6 +174,11 @@ void ValkkaFSReaderThread::reportSlotId() {
 void ValkkaFSReaderThread::pullBlocks(std::list<std::size_t> block_list) {
     IdNumber id;
     BasicFrame f = BasicFrame();
+    MarkerFrame start_marker = MarkerFrame();
+    MarkerFrame end_marker = MarkerFrame();
+    
+    start_marker.tm_start=true;
+    end_marker.tm_end=true;
     
     for(auto it=block_list.begin(); it!=block_list.end(); it++) { // BLOCK LOOP
         valkkafslogger.log(LogLevel::debug) <<"ValkkaFSReaderThread : pullBlocks : " << *it << std::endl;
@@ -182,11 +187,15 @@ void ValkkaFSReaderThread::pullBlocks(std::list<std::size_t> block_list) {
             filestream.seekp(std::streampos(valkkafs.getBlockSeek(*it))); // TODO
             while(true) { // FRAME LOOP
                 id = f.read(filestream);
-                valkkafslogger.log(LogLevel::debug) <<"ValkkaFSReaderThread : pullBlocks : id " << id << std::endl;
+                // valkkafslogger.log(LogLevel::debug) <<"ValkkaFSReaderThread : pullBlocks : id " << id << std::endl;
                 if (id==0) { // no more frames in this block
                     break;
                 }
                 else { // HAS FRAME
+                    if (start_marker.mstimestamp==0) { // mark transmission start
+                        start_marker.mstimestamp=f.mstimestamp;
+                        outfilter.run(&start_marker);
+                    }
                     auto it2=id_to_slot.find(id);
                     if (it2==id_to_slot.end()) {
                         valkkafslogger.log(LogLevel::debug) <<"ValkkaFSReader: no slot for id " << id << std::endl;
@@ -207,6 +216,12 @@ void ValkkaFSReaderThread::pullBlocks(std::list<std::size_t> block_list) {
             } // FRAME LOOP
         } // BLOCK OK
     } // BLOCK LOOP
+    if (start_marker.mstimestamp==0) { // mark transmission start (there were no frames)
+        start_marker.mstimestamp=f.mstimestamp;
+        outfilter.run(&start_marker);
+    }
+    end_marker.mstimestamp=f.mstimestamp; // can be zero as well
+    outfilter.run(&end_marker);
 }
 
 void ValkkaFSReaderThread::setSlotIdCall(SlotNumber slot, IdNumber id) {
@@ -287,7 +302,11 @@ void ValkkaFSReaderThread::pullBlocksCall(std::list<std::size_t> block_list) {
 
 
 void ValkkaFSReaderThread::pullBlocksPyCall(PyObject *pylist) {
+    Py_INCREF(pylist);
+    
+    valkkafslogger.log(LogLevel::debug) << "ValkkaFSReaderThread: pullBlocksPyCall" << std::endl;
     if (!PyList_Check(pylist)) {
+        valkkafslogger.log(LogLevel::fatal) << "ValkkaFSReaderThread: pullBlocksPyCall: not a python list" << std::endl;
         return;
     }
     std::list<std::size_t> block_list;
@@ -300,13 +319,14 @@ void ValkkaFSReaderThread::pullBlocksPyCall(PyObject *pylist) {
             block_list.push_back(PyLong_AsSize_t(element));
         }
     }
-    valkkafslogger.log(LogLevel::debug) <<"ValkkaFSReaderThread: pullBlocksPyCall: pylist= ";
+    valkkafslogger.log(LogLevel::debug) << "ValkkaFSReaderThread: pullBlocksPyCall: pylist= ";
     for(auto it=block_list.begin(); it!=block_list.end(); it++) {
         valkkafslogger.log(LogLevel::debug) <<*it << " ";
     }
     valkkafslogger.log(LogLevel::debug) <<std::endl;
     
     pullBlocksCall(block_list);
+    Py_DECREF(pylist);
 }
 
 

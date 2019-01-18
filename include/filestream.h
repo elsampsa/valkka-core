@@ -153,8 +153,12 @@ public:                                                 // <pyapi>
     * @param name          Thread name
     * 
     */
-    AbstractFileThread(const char* name);               // <pyapi>
-    virtual ~AbstractFileThread();                      // <pyapi>
+    AbstractFileThread(const char* name, FrameFifoContext fifo_ctx=FrameFifoContext(10));   // <pyapi>
+    virtual ~AbstractFileThread();                                                          // <pyapi>
+
+protected: // frame input
+    FrameFifo               infifo;           ///< Incoming frames are read from here
+    FifoFrameFilter         infilter;         ///< Write incoming frames here
 
 protected:
     virtual void preRun();

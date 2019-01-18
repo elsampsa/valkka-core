@@ -54,6 +54,7 @@ FrameFifo::FrameFifo(const char *name, FrameFifoContext ctx) : name(name), ctx(c
   make_reservoir_and_stack(basic,  ctx.n_basic,  BasicFrame);
   make_reservoir_and_stack(setup,  ctx.n_setup,  SetupFrame);
   make_reservoir_and_stack(signal, ctx.n_signal, SignalFrame);
+  make_reservoir_and_stack(marker, ctx.n_marker, MarkerFrame);
   // TODO
   
   /* reserve for all these..
@@ -81,6 +82,7 @@ FrameFifo::~FrameFifo() {
   delete_reservoir(basic);
   delete_reservoir(setup);
   delete_reservoir(signal);
+  delete_reservoir(marker);
   
   /*
   Reservoir &reservoir=reservoirs[FrameClass::basic]; // alias

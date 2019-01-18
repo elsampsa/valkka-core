@@ -41,7 +41,7 @@
 
 /** ValkkaFS reader thread
  * 
- * - Reads frames from a ValkkaFS device file and writes them to output framefilter
+ * - Reads frames from a ValkkaFS device file and writes them (one block at a time) to output framefilter
  * - Frames are requested on per-block basis
  * 
  */

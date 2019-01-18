@@ -35,6 +35,7 @@
 
 #include "framefifo.h"
 #include "filestream.h"
+#include "Python.h"
 
 
 /*   02 03 04 05 06 07 08 09 10 11 12 13
@@ -52,6 +53,54 @@
  *       2    3    4
  * 
  */
+
+
+
+struct FileStreamContext {                                          // <pyapi>
+    FileStreamContext(SlotNumber slot, FrameFilter *framefilter) :  // <pyapi>
+    slot(slot), framefilter(framefilter) {}                         // <pyapi>
+    FileStreamContext() {}                                          // <pyapi>
+    SlotNumber      slot;                                           // <pyapi>
+    FrameFilter     *framefilter;                                   // <pyapi>
+};                                                                  // <pyapi>
+
+
+/** Signal information for FileCacheThread
+ * 
+ */
+struct FileCacheSignalPars {                                // <pyapi>
+    ///< Identifies the stream                             
+    FileStreamContext   file_stream_ctx;                    // <pyapi>
+    ///< Timestamp for the seek signal
+    long int mstimestamp;                                   // <pyapi>
+};                                                          // <pyapi>
+
+
+/** Signals for FileCacheThread
+ * 
+ */
+enum class FileCacheSignal {
+    none,
+    exit,
+    register_stream,
+    deregister_stream,
+    play_streams,
+    stop_streams,
+    seek_streams,
+    clear_streams,
+    report_cache
+};
+
+
+/** Encapsulate data sent to FileCacheThread
+ * 
+ * 
+ */
+struct FileCacheSignalContext {
+    FileCacheSignal         signal;
+    FileCacheSignalPars     pars;
+};
+
 
 
 struct FrameCacheContext { // nothing here yet ..
@@ -73,10 +122,10 @@ public:
     
 protected:
     std::string       name;
-    FrameCacheContext ctx;           ///< Parameters defining the cache
-    long int          mintime_;      ///< smallest frame timestamp (frametime)
-    long int          maxtime_;      ///< biggest frame timestamp (frametime)
-    bool has_delta_frames;           ///< Does the cache have streams with key-frame, delta-frame sequences
+    FrameCacheContext ctx;              ///< Parameters defining the cache
+    long int          mintime_;         ///< smallest frame timestamp (frametime)
+    long int          maxtime_;         ///< biggest frame timestamp (frametime)
+    bool              has_delta_frames; ///< Does the cache have streams with key-frame, delta-frame sequences
   
 protected:
     Cache cache;              ///< The queue
@@ -92,6 +141,9 @@ public: // getters
     long int getMaxTime_() {return this->maxtime_;}
     bool hasDeltaFrames()  {return this->has_delta_frames;}
       
+protected:
+    void dump_();
+    void clear_();
       
 public:
     virtual bool writeCopy(Frame* f, bool wait=false);     ///< Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").  The size of "ftmp" is also checked and set to target_size, if necessary.  If wait is set to true, will wait until there are frames available in the stack.
@@ -102,6 +154,7 @@ public:
     int seek(long int ms_streamtime_);  ///< Seek to a desider stream time.  -1 = no frames at left, 1 = no frames at right, 0 = ok
     Frame *pullNextFrame();            ///< Get the next frame.  Returns NULL if no frame was available
 };
+
 
 
 
@@ -130,116 +183,91 @@ protected:
 };                                                                                      // <pyapi>
 
 
-
-/** Caches (a large amount of) frames and pushes them forward at a rate corresponding to play speed
+/** Thread that caches frames and streams them into output at play speed
  * 
- *  - CacheFileStream admins FrameFilter and FrameCache (that is protected with a mutex)
- *  - CacheFileStream only observes (does not manipulate) FrameCache, that is being filled and run by the Filesystem thread
- *  - FrameCache has its own rules how to behave when start / end frames are reserved, how the frames are updated, etc.
- *  - FileCacheThread "runs" and times the CacheFileStream.
- *  - Filesystem thread gets the FrameFilter from CacheFileThread that gets it from CacheFileStream
- *  - Filesytem thread does the cam id => slot mapping
+ * - Has two FrameCaches: other one is used to stream, while other one is caching the incoming frames
  * 
+ * \verbatim
  * 
- *  CacheStream
- *      CacheFrameFilter (pyapi) --> FrameCache
- *      getFrameFilter : returns CacheFrameFilter           
- *  
- *  FileCacheThread (pyapi)
- *      uses CacheStream
- *      getFrameFilter : uses CacheStream::getFrameFilter
- *      Similar to LiveThread, give output contexes (certain slot to certain framefilter)
+ *                                                       +----> FrameCache
+ *                                                       |
+ *                           +----> SwitchFrameFilter ---+
+ *                           |                           |
+ *                           |                           +----> FrameCache
+ *  ---> ForkFrameFilter ----+
+ *                           |
+ *                           |
+ *                           +----> ClassFrameFilter (MarkerFrame) ---> Event loop
  * 
- *  Filesystem thread writes to FileCacheThread::getFrameFilter
+ * \endverbatim
+ * 
  * 
  * 
  */
-class CacheStream : public AbstractFileStream {
-
-public:
-    CacheStream(const char *name, FrameCacheContext cache_ctx = FrameCacheContext());
-    virtual ~CacheStream(); ///< Default virtual destructor
+class FileCacheThread : public AbstractFileThread {                                     // <pyapi>
+    
+public:                                                                                 // <pyapi>
+    FileCacheThread(const char *name);                                                  // <pyapi>
+    virtual ~FileCacheThread();                                                         // <pyapi>
         
+protected: // internal framefilter chain
+    ForkFrameFilter     fork;                ///< Write incoming frames here
+    TypeFrameFilter     typefilter;
+    SwitchFrameFilter   switchfilter;
+    CacheFrameFilter    cache_filter_1, cache_filter_2; 
+    
 protected:
-    FrameCache          cache;        
-    CacheFrameFilter    infilter;
-    AbstractFileState   state;
-    long int    reftime;                ///< Relation between the stream time and wallclock time.  See \ref timing
-    long int    target_mstimestamp_;    ///< Where the stream would like to be (underscore means stream time)
-    long int    frame_mstimestamp_;     ///< Timestamp of previous frame sent, -1 means there was no previous frame (underscore means stream time)
-    
-public:
-    std::map<SlotNumber, FrameFilter*>  slots_;     ///< Manipulated by the thread that's using CacheStream
-    
-public: // getters
-    long int getMinTime_() {return cache.getMinTime_();}
-    long int getMaxTime_() {return cache.getMaxTime_();}
-    CacheFrameFilter &getFrameFilter() {return this->infilter;}
-    void dumpCache() {cache.dump();}
-    
-public: // virtual reimplemented
-    void seek(long int ms_streamtime_);  ///< Set the state of CacheStream::cache to frame corresponding to this time
-    
-    /** Pulls the next frame
-     * - Transmits this->next_frame
-     * - Gets the next frame in going towards the target_mstimestamps_
-     * - .. and puts it into this->next_frame
-     * - Returns the timeout, i.e. the difference between target_mstimestamp_ and this->next_frame.mstimestamp
-     * - If timeout is = 0, calls itself recursively
-     */
-    long int pullNextFrame();
-    long int update(long int mstimestamp);       ///< Calculates FileStream::target_mstimestamp_ and calls pullNextFrame.  Returns the timeout for the next frame
-    
-    
-};
-
-
-struct FileCacheSignalContext {                                                                       // <pyapi>
-  /** Default constructor */
-  FileCacheSignalContext(SlotNumber slot, FrameFilter* framefilter) :                                 // <pyapi>
-  slot(slot), framefilter(framefilter)                                                                // <pyapi>
-  {}                                                                                                  // <pyapi>
-  /** Dummy constructor : remember to set member values by hand */
-  FileCacheSignalContext() :                                                                          // <pyapi>
-  slot(0), framefilter(NULL)                                                                          // <pyapi>  
-  {}                                                                                                  // <pyapi>
-  SlotNumber         slot;              ///< A unique stream slot that identifies this stream         // <pyapi>
-  FrameFilter*       framefilter;       ///< The frames are feeded into this FrameFilter              // <pyapi>
-};                                                                                                    // <pyapi>
-
-
-class FileCacheThread : public AbstractFileThread {                           // <pyapi>
-    
-public:                                                                     // <pyapi>
-    FileCacheThread(const char *name);                                      // <pyapi>
-    virtual ~FileCacheThread();                                             // <pyapi>
-        
-protected:
-    CacheStream           stream;
+    FrameCache  frame_cache_1;
+    FrameCache  frame_cache_2;
+    FrameCache  *play_cache;    ///< Points to the current play cache (default frame_cache_2)
+    FrameCache  *tmp_cache;     ///< Points to current cache receiving frames
+    void        (*callback)(long int mstimestamp);
+    PyObject    *pyfunc;
+    long int    target_mstimestamp_;
+    Frame       *next;
+    long int    reftime;
+    long int    walltime;
+    AbstractFileState state;
     
 protected: // Thread member redefinitions
     std::deque<FileCacheSignalContext> signal_fifo;   ///< Redefinition of signal fifo.
-  
+    std::vector<FrameFilter*>          slots_;        ///< Slot number => output framefilter mapping
+    
 public: // redefined virtual functions
     void run();
     void preRun();
     void postRun();
     void sendSignal(FileCacheSignalContext signal_ctx);
   
-protected:
-    void handleSignals();
-
+public: // internal
+    void switchCache();
+    void dumpPlayCache();
+    void dumpTmpCache();
+    void stopStreams();
+    void playStreams();
+    void seekStreams(long int mstimestamp);
+    
 private: // internal
-    void registerStream   (FileCacheSignalContext &ctx);
-    void deregisterStream (FileCacheSignalContext &ctx);
+    void handleSignal(FileCacheSignalContext &signal_ctx);
+    void handleSignals();
+    int  safeGetSlot(SlotNumber slot, FrameFilter*& ff);
+    void registerStream   (FileStreamContext &ctx);
+    void deregisterStream (FileStreamContext &ctx);
   
+public: // API must be called before thread start
+    void setCallback(void func(long int));
+    
 public: // API                                              // <pyapi>
-    void registerStreamCall   (FileCacheSignalContext &ctx); ///< API method: registers a stream                                // <pyapi> 
-    void deregisterStreamCall (FileCacheSignalContext &ctx); ///< API method: de-registers a stream                             // <pyapi>
-    const CacheFrameFilter &getFrameFilter();                                            // <pyapi>
-    void requestStopCall();                                                             // <pyapi>
-    // TODO: stop, play, seek commands
-};                                                                                      // <pyapi>
+    void setPyCallback(PyObject* pobj);                          // <pyapi>
+    void registerStreamCall   (FileStreamContext &ctx);     // <pyapi> 
+    void deregisterStreamCall (FileStreamContext &ctx);     // <pyapi>
+    FrameFilter &getFrameFilter();                          // <pyapi>
+    void requestStopCall();                                 // <pyapi>
+    void dumpCache();                                       // <pyapi>
+    void stopStreamsCall();                                        // <pyapi>
+    void playStreamsCall();                                        // <pyapi>
+    void seekStreamsCall(long int mstimestamp);                    // <pyapi>
+};                                                          // <pyapi>
 
 
 

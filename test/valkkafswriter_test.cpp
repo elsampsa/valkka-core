@@ -192,12 +192,12 @@ void test_3() { // do: 3, 2 => crash .. of course .. number of blocks don't matc
 
 
 void test_4() { // 3, 4
-    const char* name = "@TEST: valkkafsreader_test: test 4: ";
-    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    const char* name = "@TEST: valkkafswriter_test: test 4: ";
+    std::cout << name <<"** @@Use valkkafsreader to read frames from ValkkaFS **" << std::endl;
     int i;
     
     // create ValkkaFS and WriterReaderThread
-    ValkkaFS fs("disk.dump", "block.dat", 10*1024, 5, false); // dumpfile, blockfile, blocksize, number of blocks, recover blocktable
+    ValkkaFS fs("disk.dump", "block.dat", 10*1024, 5, false); // dumpfile, blockfile, blocksize, number of blocks, clear blocktable
     // fs.read();
     // 5 blocks
     // so, with this frame size, its 9 frames per block
@@ -221,7 +221,6 @@ void test_4() { // 3, 4
     ft.setSlotIdCall(2, 123);
     ft.reportSlotIdCall();
     
-    // TODO: continue from here
     ft.pullBlocksCall(block_list);
     
     sleep_for(2s);

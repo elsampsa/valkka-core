@@ -348,7 +348,7 @@ void GateFrameFilter::go(Frame* frame) {
   
 void GateFrameFilter::run(Frame* frame) {
   std::unique_lock<std::mutex> lk(mutex);
-  this->go(frame); // manipulate frame
+  // this->go(frame); // manipulate frame
   if (!next) {return;}
   if (on) { // pass all frames if flag is set
     (this->next)->run(frame);
@@ -379,6 +379,47 @@ void GateFrameFilter::noConfigFrames() {
   
 }
 
+
+SwitchFrameFilter::SwitchFrameFilter(const char* name, FrameFilter* next1, FrameFilter* next2) : FrameFilter(name, NULL), next1(next1), next2(next2), index(1) {
+}
+
+void SwitchFrameFilter::go(Frame* frame) {
+}
+
+void SwitchFrameFilter::run(Frame* frame) {
+    std::unique_lock<std::mutex> lk(mutex);
+    // this->go(frame); // manipulate frame
+    if (index==1 and next1) {
+        next1->run(frame);
+    }
+    else if (index==2 and next2) {
+        next2->run(frame);
+    }
+}
+    
+void SwitchFrameFilter::set1() {
+    std::unique_lock<std::mutex> lk(mutex);
+    index=1;
+}
+
+void SwitchFrameFilter::set2() {
+    std::unique_lock<std::mutex> lk(mutex);
+    index=2;
+}
+
+
+TypeFrameFilter::TypeFrameFilter(const char* name, FrameClass frameclass, FrameFilter* next) : FrameFilter(name, next), frameclass(frameclass) {
+}
+
+void TypeFrameFilter::go(Frame* frame) {
+}
+
+
+void TypeFrameFilter::run(Frame* frame) {
+    if (next and frame->getFrameClass()==frameclass) {
+        next->run(frame);
+    }
+}
 
 
 CachingGateFrameFilter::CachingGateFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next), on(false), setupframe(), got_setup(false) {

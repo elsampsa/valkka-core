@@ -722,6 +722,42 @@ SignalFrame::~SignalFrame() {
 }
 
 
-//frame_essentials(FrameClass::signal, SignalFrame);
+MarkerFrame::MarkerFrame() : Frame(), fs_start(false), fs_end(false), tm_start(false), tm_end(false) {
+}
+
+MarkerFrame::~MarkerFrame() {
+}
 
 
+void MarkerFrame::print(std::ostream& os) const {
+  os << "<MarkerFrame: timestamp="<<mstimestamp<<" subsession_index="<<subsession_index<<" slot="<<n_slot<<" / ";
+  if (fs_start) {
+    os << "FS_START ";
+  }
+  if (fs_end) {
+      os << "FS_END ";
+  }
+  if (tm_start) {
+      os << "TM_START ";
+  }
+  if (tm_end) {
+      os << "TM_END ";
+  }
+  os << ">";
+}
+
+
+void MarkerFrame::reset() {
+    fs_start=false;
+    fs_end=false;
+    tm_start=false;
+    tm_end=false;
+}
+    
+    
+    
+    
+    
+    
+    
+    

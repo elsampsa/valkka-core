@@ -189,7 +189,7 @@ long int AbstractFileStream::pullNextFrame() {
 }
 
 
-AbstractFileThread::AbstractFileThread(const char *name) : Thread(name) {
+AbstractFileThread::AbstractFileThread(const char *name, FrameFifoContext fifo_ctx) : Thread(name), infifo(name,fifo_ctx), infilter(name,&infifo) {
 }
 
 AbstractFileThread::~AbstractFileThread() { // TODO : a model method
