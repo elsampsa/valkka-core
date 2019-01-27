@@ -141,7 +141,62 @@ bool FrameCache::isEmpty() {
 }
 
 
-int FrameCache::seek(long int ms_streamtime_) { // return values: -1 = no frames at left, 1 = no frames at right, 0 = ok
+int FrameCache::seek(long int ms_streamtime_) {
+    std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+    // std::cout << "FrameCache : seek : mintime, maxtime, seek time " << mintime_ << " " << maxtime_ << " " << ms_streamtime_ << std::endl;
+    
+    state = cache.end();
+    if (cache.size() < 1) {
+        return -1;
+    }
+    if (ms_streamtime_ < mintime_) {
+        return -1;
+    }
+    if (ms_streamtime_ > maxtime_) {
+        return 1;
+    }
+    
+    // backward iteration from the last frame
+    Cache::reverse_iterator it; // iterate from right (old) to left (young)
+    Frame *f; // shorthand
+    
+    f=NULL;
+    for(auto it=cache.rbegin(); it!=cache.rend(); ++it) { // FRAME ITER
+        f = *it;
+        if (f->n_slot > 0) { // SLOT > 0
+            if (f->mstimestamp <= ms_streamtime_) {
+                break;
+            }
+        } // SLOT > 0
+    } // FRAME ITER
+
+    if (it == cache.rend()) { // left overflow
+        return -1;
+    }
+
+    if (f) {
+        std::cout << "FrameCache : seek : frame = " << *f;
+    }
+    
+    // let's get the forward iterator
+    Cache::iterator it2;
+    for (it2=cache.begin(); it2!=cache.end(); ++it2) {
+        if (f==*it2) {break;}
+    }
+    
+    state = it2;
+    /*
+    f = *state;
+    if (f) {
+        std::cout << "FrameCache : state = " << *f;
+    }
+    */
+    
+    return 0; // ok!
+}
+
+
+int FrameCache::keySeek(long int ms_streamtime_) { // return values: -1 = no frames at left, 1 = no frames at right, 0 = ok
     std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
         
     // std::cout << "FrameCache : seek : mintime, maxtime, seek time " << mintime_ << " " << maxtime_ << " " << ms_streamtime_ << std::endl;
@@ -255,6 +310,12 @@ FileCacheThread::FileCacheThread(const char *name) : AbstractFileThread(name),
     */
     // init_signal_frames(infifo, FileCacheSignalContext); // nopes .. doesnt' make any sense .. at FrameFifo::writeCopy
     this->slots_.resize(I_MAX_SLOTS+1,NULL);
+    this->setup_frames.resize(I_MAX_SLOTS+1);
+    for (auto it_slot = setup_frames.begin(); it_slot != setup_frames.end(); ++it_slot) {
+        it_slot->resize(I_MAX_SUBSESSIONS+1, NULL);
+    }
+    // SetupFrame *f = setup_frames[255][4]; // overflow
+    // SetupFrame *f = setup_frames[4][255]; // correct order of indexes is this
 }
 
 
@@ -267,6 +328,14 @@ FileCacheThread::~FileCacheThread() {
     }
     */
     // clear_signal_frames(infifo, FileCacheSignalContext);
+    
+    for (auto it_slot=setup_frames.begin(); it_slot!=setup_frames.end(); ++it_slot) {
+        for (auto it_subs=it_slot->begin(); it_subs!=it_slot->end(); ++it_subs) {
+            if (*it_subs) {
+                delete *it_subs;
+            }
+        }
+    } // yes, I know, this sucks
     
     if (pyfunc!=NULL) {
         Py_DECREF(pyfunc);
@@ -312,15 +381,24 @@ void FileCacheThread::dumpTmpCache() {
 }
 
 void FileCacheThread::stopStreams() {
-    state=AbstractFileState::stop;
+    if (reftime > 0) {
+        state=AbstractFileState::stop;
+        walltime = getCurrentMsTimestamp();
+        target_mstimestamp_ = walltime - reftime;
+    }
 }
 
 void FileCacheThread::playStreams() {
-    state=AbstractFileState::play;
+    if (target_mstimestamp_ > 0) {
+        state=AbstractFileState::play;
+        walltime = getCurrentMsTimestamp();
+        reftime = walltime - target_mstimestamp_;
+    }
 }
 
 void FileCacheThread::seekStreams(long int mstimestamp_) {
     int i;
+    stopStreams(); // seeking a stream stops it
     
     // reftime = (t0 - t0_)
     target_mstimestamp_ = mstimestamp_;
@@ -335,7 +413,7 @@ void FileCacheThread::seekStreams(long int mstimestamp_) {
     // .. let's keep it here just for cpp debugging purposes
     if ( (target_mstimestamp_ >= play_cache->getMinTime_()) and (target_mstimestamp_ <= play_cache->getMaxTime_()) ) {
         std::cout << "FileCacheThread : seekStreams : play_cache seek" << std::endl;
-        i=play_cache->seek(target_mstimestamp_); // could evoke a separate thread to do the job (in order to multiplex properly), but maybe its not necessary
+        i=play_cache->keySeek(target_mstimestamp_); // could evoke a separate thread to do the job (in order to multiplex properly), but maybe its not necessary
         std::cout << "FileCacheThread : seekStreams : play_cache seek done" << std::endl;
         if (i==0) { // Seek OK
             next=play_cache->pullNextFrame();
@@ -370,7 +448,7 @@ void FileCacheThread::seekStreams(long int mstimestamp_) {
     /*
     while(next and (next->mstimestamp <= target_mstimestamp_)) {
         i=safeGetSlot(next->n_slot, ff);
-        if (i>=0) {
+        if (i>=1) {
             ff->run(next);
         }
         next=play_cache->pullNextFrame();
@@ -383,13 +461,16 @@ void FileCacheThread::seekStreams(long int mstimestamp_) {
 
         
 void FileCacheThread::run() {
+    // TODO: send SetupFrame as the first frame
+    // TODO: define on render context, that last frame should be kept
     // pulls next frame from the stream (CacheStream) and sends it to the correct FrameFilter
     // handle the sending of SetupFrame(s) (that are used to initialize decoders)
     // For each received Frame, write them to FrameFilter at slots_[n_slot]
     bool ok;
     unsigned short subsession_index;
     long int dt;
-    long int mstime, oldmstime, timeout, next_mstimestamp;
+    long int mstime, timeout, next_mstimestamp;
+    long int save1mstime, save2mstime; // interrupt times
     int i;
     Frame* f;
     FrameFilter *ff;
@@ -398,7 +479,8 @@ void FileCacheThread::run() {
     
     mstime = getCurrentMsTimestamp();
     walltime = mstime;
-    oldmstime = mstime;
+    save1mstime = mstime;
+    save2mstime = mstime;
     loop=true;
     next=NULL; // no next frame to be presented
     next_mstimestamp=0;
@@ -413,6 +495,7 @@ void FileCacheThread::run() {
         if (next) { // there is a frame to await for
             // TODO: what to do when seek ended?
             // std::cout << "FileCacheThread : run : has next frame " << *next << std::endl;
+            target_mstimestamp_ = next->mstimestamp; // target time in streamtime
             next_mstimestamp = next->mstimestamp + reftime; // next Frame's timestamp in wallclock time
             timeout=std::max((long int)0,(next_mstimestamp-walltime)); // timeout: timestamp - wallclock time.  For seek, wallclock time is frozen
         }
@@ -456,7 +539,19 @@ void FileCacheThread::run() {
                     }
                     else {
                         std::cout << "FileCacheThread : run : play_cache seek" << std::endl;
-                        i=play_cache->seek(target_mstimestamp_); // could evoke a separate thread to do the job (in order to multiplex properly), but maybe its not necessary
+                        // so, the seek must be started from the previous i-frame, or not
+                        // this depends on the state of the decoder.  If this is a "continuous-seek" (during play), then seeking from i-frame is not required
+                        // could evoke seeks a separate thread to do the job (in order to multiplex properly), but maybe its not necessary
+                        if (state == AbstractFileState::stop) {
+                            i=play_cache->keySeek(target_mstimestamp_); 
+                        }
+                        else if (state == AbstractFileState::play) {
+                            i=play_cache->seek(target_mstimestamp_);
+                        }
+                        else {
+                            std::cout << "FileCacheThread : run : can't seek" << std::endl;
+                            i=-1;
+                        }
                         std::cout << "FileCacheThread : run : play_cache seek done" << std::endl;
                         if (i==0) { // Seek OK
                             next=play_cache->pullNextFrame();
@@ -472,7 +567,6 @@ void FileCacheThread::run() {
         } // GOT FRAME
         
         mstime = getCurrentMsTimestamp();
-        dt = mstime-oldmstime;
         
         if (state==AbstractFileState::play) {
             walltime = mstime; // update wallclocktime (if play)
@@ -487,27 +581,66 @@ void FileCacheThread::run() {
         while (next and ((next_mstimestamp-walltime)<=0)) { // just send all frames at once
             // std::cout << "FileCacheThread : run : transmit " << *next << std::endl;
             i=safeGetSlot(next->n_slot, ff);
-            if (i>=0) {
+            if (i>=1) {
+                if (!setup_frames[next->subsession_index][next->n_slot]) { // create a SetupFrame for decoder initialization
+                    if (next->getFrameClass() == FrameClass::basic) { // check that the frame is BasicFrame
+                        BasicFrame *basicf = static_cast<BasicFrame*>(next);
+                        SetupFrame *setupf = new SetupFrame();
+                        setupf->media_type = basicf->media_type;
+                        setupf->codec_id = basicf->codec_id;
+                        setupf->copyMetaFrom(basicf);
+                        setup_frames[next->subsession_index][next->n_slot] = setupf;
+                        std::cout << "FileCacheThread : run : pushing frame " << *setupf << std::endl;
+                        ff->run(setupf);
+                    }
+                }
+                // modifying the frame here: it's just a pointer, so the frame in the underlying FrameCache will be modified as well
+                // could create a copy here
+                std::cout << "FileCacheThread : run : pushing frame " << *next << " distance to target=" << walltime - (next->mstimestamp + reftime) << std::endl;
+                // during the pushing, correct the frametime to walltime
+                next->mstimestamp = next->mstimestamp + reftime;
                 ff->run(next);
+                next->mstimestamp = next->mstimestamp - reftime;
             }
+            /*
+            else {
+                std::cout << "FileCacheThread: run: frame=" << *next << std::endl; // marker frames appear here..
+            }
+            */
             next=play_cache->pullNextFrame(); // new next frame
-            next_mstimestamp = next->mstimestamp + reftime; // next Frame's timestamp in wallclock time
-            //  (t + (t0-t0_)) - t0 = t + t0 -t0_ -t0 = t-t0
+            if (next) {
+                next_mstimestamp = next->mstimestamp + reftime; // next Frame's timestamp in wallclock time
+                //  (t + (t0-t0_)) - t0 = t + t0 -t0_ -t0 = t-t0
+                target_mstimestamp_ = next->mstimestamp; // target time in streamtime
+            }
         }
         
         // old-style ("interrupt") signal handling
-        if (dt>=Timeout::filecachethread) { // time to check the signals..
-            // std::cout << "FileCacheThread: run: interrupt, dt= " << dt << std::endl;
+        if ((mstime-save1mstime)>=Timeout::filecachethread) { // time to check the signals..
+            // std::cout << "FileCacheThread: run: interrupt, dt= " << mstime-save1mstime << std::endl;
             handleSignals();
-            oldmstime=mstime;
+            save1mstime=mstime;
         }
-        if (dt>=10000) { // send message to the python side
-            if (pyfunc!=NULL) {
+        if ((mstime-save2mstime)>=300) { // send message to the python side // TODO: one should be able to adjust this frequency .. 1000 ms is too big
+            //std::cout << "FileCacheThread : run : python callback interrupt" << std::endl;
+            if (pyfunc) {
+                // std::cout << "FileCacheThread : run : evoke python callback : " << walltime << std::endl;
                 PyGILState_STATE gstate;
                 gstate = PyGILState_Ensure();
-                PyObject_CallFunction(pyfunc, "i", walltime);
+                PyObject* res;
+                
+                if (reftime>0) {
+                    res=PyObject_CallFunction(pyfunc, "l", walltime-reftime); // send current stream time
+                }
+                else {
+                    res=PyObject_CallFunction(pyfunc, "l", 0); // no reference time set 
+                }
+                if (!res) {
+                    std::cout << "FileCacheThread: run: WARNING: python callback failed" << std::endl;
+                }
                 PyGILState_Release(gstate);
             }
+            save2mstime=mstime;
         }
         
     } // LOOP
@@ -596,7 +729,7 @@ int FileCacheThread::safeGetSlot(SlotNumber slot, FrameFilter*& ff) {
         return 0;
     }
     else {
-        valkkafslogger.log(LogLevel::debug) << "FileCacheThread: safeGetSlot : returning " << slot << std::endl;
+        valkkafslogger.log(LogLevel::crazy) << "FileCacheThread: safeGetSlot : returning " << slot << std::endl;
         ff=framefilter;
         return 1;
     }

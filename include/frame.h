@@ -210,11 +210,20 @@ public: // frame serialization
 };
 
 
-/** Setup frame for decoders
+enum class SetupFrameType {
+    none,
+    stream_init,
+    stream_state
+};
+
+
+/** Setup frame
  * 
- * Carries information for instantiation and initialization of decoders
+ * "Setup Frame" is not maybe the most transparent name.  This frame class carries general information between Threads
  * 
- * This is basically just a signal for the decoders to initialize themselves
+ * - For decoders and muxers signals instantiation and initialization
+ * - May carry additional metadata of the stream if necessary (in the future)
+ * - Carries information about file stream states (play, stop, seek, etc.)
  * 
  * Copiable/Queable : yes.  uses default copy-constructor and copy-assignment
  * 
@@ -223,8 +232,8 @@ public: // frame serialization
 class SetupFrame : public Frame {
   
 public:
-  SetupFrame(); ///< Default ctor
-  virtual ~SetupFrame(); ///< Default virtual dtor
+  SetupFrame();             ///< Default ctor
+  virtual ~SetupFrame();    ///< Default virtual dtor
   frame_essentials(FrameClass::setup,SetupFrame);
   frame_clone(FrameClass::setup,SetupFrame);
   /*
@@ -237,11 +246,15 @@ public: // frame essentials
   
 public: // redefined virtual
   virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
-  virtual void reset();              ///< Reset the internal data
+  virtual void reset();                       ///< Reset the internal data
   
 public: // managed objects
-  AVMediaType   media_type;
-  AVCodecID     codec_id;
+    SetupFrameType  sub_type;    ///< Type of the SetupFrame
+    
+    AVMediaType     media_type; ///< For subtype stream_init
+    AVCodecID       codec_id;   ///< For subtype stream_init
+    
+    AbstractFileState   stream_state;   ///< For subtype stream_state
 };
 
 
@@ -483,7 +496,9 @@ typedef std::vector<YUVFrame*>  YUVReservoir;
 typedef std::deque <YUVFrame*>  YUVStack;
 
 
-
+/** A frame signaling internal thread commands, states of recorded video, etc.
+ * 
+ */
 class SignalFrame : public Frame {
 
 public:
@@ -493,11 +508,11 @@ public:
   frame_clone(FrameClass::signal,SignalFrame);
 
 public:
-  OpenGLSignalContext                 opengl_signal_ctx;
-  AVSignalContext                     av_signal_ctx;
-  ValkkaFSWriterSignalContext         valkkafswriter_signal_ctx;
-  ValkkaFSReaderSignalContext         valkkafsreader_signal_ctx;
-  void*                               custom_signal_ctx; ///< For extensions.  TODO: migrate all signal contexes here
+  OpenGLSignalContext                 opengl_signal_ctx;            ///< Thread commands to OpenGLThread
+  AVSignalContext                     av_signal_ctx;                ///< Thread commands to AVThread
+  ValkkaFSWriterSignalContext         valkkafswriter_signal_ctx;    ///< Thread commands to ValkkFSWriterThread
+  ValkkaFSReaderSignalContext         valkkafsreader_signal_ctx;    ///< Thread commands to ValkkaFSReaderThread
+  void*                               custom_signal_ctx;            ///< For extensions: thread commands for any thread.  TODO: migrate all signal contexes here
 };
 
 

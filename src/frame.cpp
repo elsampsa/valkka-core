@@ -330,7 +330,7 @@ IdNumber BasicFrame::read(std::fstream &is) {
 }
 
 
-SetupFrame::SetupFrame() : Frame() {
+SetupFrame::SetupFrame() : Frame(), sub_type(SetupFrameType::none), media_type(AVMEDIA_TYPE_UNKNOWN), codec_id(AV_CODEC_ID_NONE), stream_state(AbstractFileState::none)  {
   reset();
 }
   
@@ -341,9 +341,14 @@ SetupFrame::~SetupFrame() {
 //frame_essentials(FrameClass::setup, SetupFrame);
 
 void SetupFrame::print(std::ostream &os) const {
-  os << "<SetupFrame: timestamp="<<mstimestamp<<" subsession_index="<<subsession_index<<" slot="<<n_slot<<" / ";  //<<std::endl;
-  os << "media_type=" << int(media_type) << " codec_id=" << int(codec_id);
-  os << ">";
+    os << "<SetupFrame: timestamp="<<mstimestamp<<" subsession_index="<<subsession_index<<" slot="<<n_slot<<" / ";  //<<std::endl;
+    if (sub_type == SetupFrameType::stream_init) {
+        os << "media_type=" << int(media_type) << " codec_id=" << int(codec_id);
+    }
+    else if (sub_type == SetupFrameType::stream_state) {
+        os << "stream_state=" << int(stream_state);
+    }
+    os << ">";
 }
 
 

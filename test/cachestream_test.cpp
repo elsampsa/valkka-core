@@ -306,7 +306,7 @@ void test_4() {
     std::cout << name <<"** @@Write, seek and play **" << std::endl;
 
     std::size_t payload_size = 20; // there is more to the frame than just the payload
-    std::size_t frames_per_block = 15;
+    std::size_t frames_per_block = 15; // 15 secs per block
     std::size_t n_blocks = 50;
     
     // construct a dummy frame
@@ -340,7 +340,7 @@ void test_4() {
         // let's simulate a H264 frame
         std::fill(f->payload.begin(), f->payload.end(), 0);
         std::copy(nalstamp.begin(),nalstamp.end(),f->payload.begin()); // insert 0001
-        long int mstimestamp = 1000*(i+1);
+        long int mstimestamp = 1000*(i+1); 
         f->mstimestamp = mstimestamp;
         if (i%4==0) { // every 4.th frame a key frame
             f->payload[4]=(31 & 7); // mark fake sps frame
@@ -350,6 +350,8 @@ void test_4() {
     }
     sleep_for(1s);
 
+    
+    
     // 1 000 => 106 000
     
     std::cout << "\nStopping" << std::endl;
@@ -387,9 +389,9 @@ void test_4() {
     fcacher.seekStreamsCall(7900); // set the target time.  There are no frames, so nothing happens
     sleep_for(0.1s);
     freader.pullBlocksCall(block_list); // send frames.  Once the transmission ends, seek iteration is performed
-    
     sleep_for(2s);
     
+    /*
     std::cout << "\nPLAY\n" << std::endl;
     fcacher.playStreamsCall();
     sleep_for(3s);
@@ -398,6 +400,16 @@ void test_4() {
     sleep_for(3s);
     std::cout << "\nPLAY\n" << std::endl;
     fcacher.playStreamsCall();
+    sleep_for(3s);
+    */
+    
+    std::cout << "\nSEEK AND PLAY OVER EDGE\n" << std::endl;
+    fcacher.seekStreamsCall(26000); // set the target time.  There are no frames, so nothing happens
+    sleep_for(2s);
+    fcacher.playStreamsCall();
+    sleep_for(10s);
+    std::cout << "\nSTOP\n" << std::endl;
+    fcacher.stopStreamsCall();
     sleep_for(3s);
     
     fcacher.stopCall();

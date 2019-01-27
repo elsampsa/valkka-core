@@ -422,7 +422,7 @@ public:                                                               // <pyapi>
 protected:
   bool        on;
   std::mutex  mutex;
-  SetupFrame  setupframe;
+  SetupFrame  setupframe;   // TODO: shouldn't we have array of setupframes here?
   bool        got_setup;
   
 protected: 

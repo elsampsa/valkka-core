@@ -473,6 +473,7 @@ FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter&
     basicframe.codec_id             =AV_CODEC_ID_H264;
     basicframe.subsession_index     =subsession_index;
     // prepare setup frame
+    setupframe.sub_type             =SetupFrameType::stream_init;
     setupframe.media_type           =AVMEDIA_TYPE_VIDEO;
     setupframe.codec_id             =AV_CODEC_ID_H264;   // what frame types are to be expected from this stream
     setupframe.subsession_index     =subsession_index;
@@ -488,6 +489,7 @@ FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter&
     basicframe.codec_id             =AV_CODEC_ID_PCM_MULAW;
     basicframe.subsession_index     =subsession_index;
     // prepare setup frame
+    setupframe.sub_type             =SetupFrameType::stream_init;
     setupframe.media_type           =AVMEDIA_TYPE_AUDIO;
     setupframe.codec_id             =AV_CODEC_ID_PCM_MULAW;   // what frame types are to be expected from this stream
     setupframe.subsession_index     =subsession_index;

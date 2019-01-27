@@ -202,6 +202,7 @@ void ValkkaFSReaderThread::pullBlocks(std::list<std::size_t> block_list) {
                     }
                     else { // HAS SLOT
                         f.n_slot=it2->second;
+                        f.fillPars();
                         outfilter.run(&f);
                         /*
                         bool seek = f.isSeekable();

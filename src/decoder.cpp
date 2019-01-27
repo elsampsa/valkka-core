@@ -83,6 +83,8 @@ AVDecoder::AVDecoder(AVCodecID av_codec_id) : av_codec_id(av_codec_id) {
   av_init_packet(av_packet);
   // av_frame        =av_frame_alloc();
   
+  std::cout << "AVDecoder : AV_CODEC_ID=" << av_codec_id << " AV_CODEC_ID_H264=" << AV_CODEC_ID_H264 << " AV_CODEC_ID_INDEO3=" << AV_CODEC_ID_INDEO3 <<std::endl;
+  
   av_codec        =avcodec_find_decoder(av_codec_id);
   if (!av_codec) {
     std::perror("AVDecoder: FATAL: could not find av_codec");

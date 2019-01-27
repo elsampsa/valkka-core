@@ -64,60 +64,61 @@ FileFrameFilter::~FileFrameFilter() {
 
 
 void FileFrameFilter::go(Frame* frame) {
-  std::unique_lock<std::mutex> lk(this->mutex);
-  
-  // make a copy of the setup frames ..
-  if (frame->getFrameClass()==FrameClass::setup) {    
-    SetupFrame *setupframe = static_cast<SetupFrame*>(frame);
-
-    if (setupframe->subsession_index>1) {
-      filelogger.log(LogLevel::fatal) << "FileFrameFilter : too many subsessions! " << std::endl;
-    }
-    else {
-      filelogger.log(LogLevel::debug) << "FileFrameFilter :  go : got setup frame " << *setupframe << std::endl;
-      setupframes[setupframe->subsession_index].copyFrom(setupframe);
-    }
-    return;
-  }
-  
-  else if (frame->getFrameClass()==FrameClass::basic) {
-    BasicFrame *basicframe =static_cast<BasicFrame*>(frame);
+    std::unique_lock<std::mutex> lk(this->mutex);
     
-    if (!ready) {
-      if (setupframes[0].subsession_index > -1) { // we have got at least one setupframe and after that, payload
-        ready=true;
-      }
-    }
+    // make a copy of the setup frames ..
+    if (frame->getFrameClass()==FrameClass::setup) { // SETUPFRAME
+        SetupFrame *setupframe = static_cast<SetupFrame*>(frame);        
+        if (setupframe->sub_type == SetupFrameType::stream_init) { // INIT
+            if (setupframe->subsession_index>1) {
+                filelogger.log(LogLevel::fatal) << "FileFrameFilter : too many subsessions! " << std::endl;
+            }
+            else {
+                filelogger.log(LogLevel::debug) << "FileFrameFilter :  go : got setup frame " << *setupframe << std::endl;
+                setupframes[setupframe->subsession_index].copyFrom(setupframe);
+            }
+            return;
+        } // INIT
+    } // SETUPFRAME
     
-    if (ready and active and !initialized) { // got setup frames, writing has been requested, but file has not been opened yet
-      initFile(); // modifies member initialized
-      if (!initialized) { // can't init this file.. de-activate
-        deActivate_();
-      }
+    else if (frame->getFrameClass()==FrameClass::basic) {
+        BasicFrame *basicframe =static_cast<BasicFrame*>(frame);
+        
+        if (!ready) {
+            if (setupframes[0].subsession_index > -1) { // we have got at least one setupframe and after that, payload
+                ready=true;
+            }
+        }
+        
+        if (ready and active and !initialized) { // got setup frames, writing has been requested, but file has not been opened yet
+            initFile(); // modifies member initialized
+            if (!initialized) { // can't init this file.. de-activate
+                deActivate_();
+            }
+        }
+        
+        if (initialized) { // everything's ok! just write..
+            if (!zerotimeset) {
+                mstimestamp0=basicframe->mstimestamp;
+                zerotimeset=true;
+            }
+            long int dt=(basicframe->mstimestamp-mstimestamp0);
+            if (dt<0) { dt=0; }
+            
+            filelogger.log(LogLevel::debug) << "FileFrameFilter : writing frame with mstimestamp " << dt << std::endl;
+            //av_stream=streams[frame->subsession_index];
+            
+            internal_frame.copyFrom(basicframe);
+            internal_frame.mstimestamp=dt;
+            internal_frame.fillAVPacket(avpkt);
+            av_interleaved_write_frame(output_context,avpkt);
+        }
+        else {
+            // std::cout << "FileFrameFilter: go: discarding frame" << std::endl;
+        }
+    } // BasicFrame
+    else { // don't know how to handle that frame ..
     }
-    
-    if (initialized) { // everything's ok! just write..
-      if (!zerotimeset) {
-        mstimestamp0=basicframe->mstimestamp;
-        zerotimeset=true;
-      }
-      long int dt=(basicframe->mstimestamp-mstimestamp0);
-      if (dt<0) { dt=0; }
-    
-      filelogger.log(LogLevel::debug) << "FileFrameFilter : writing frame with mstimestamp " << dt << std::endl;
-      //av_stream=streams[frame->subsession_index];
-      
-      internal_frame.copyFrom(basicframe);
-      internal_frame.mstimestamp=dt;
-      internal_frame.fillAVPacket(avpkt);
-      av_interleaved_write_frame(output_context,avpkt);
-    }
-    else {
-      // std::cout << "FileFrameFilter: go: discarding frame" << std::endl;
-    }
-  } // BasicFrame
-  else { // don't know how to handle that frame ..
-  }
 }
 
     

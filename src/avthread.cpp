@@ -89,49 +89,51 @@ void AVThread::run() {
                 infifo.recycle(f); // return frame to the stack - never forget this!
             } // got frame: subsession_index too big
             
-            else if (f->getFrameClass()==FrameClass::setup) { // got frame: DECODER INIT
-                
-                if (decoders[subsession_index]!=NULL) { // slot is occupied
-                    avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : decoder reinit " << std::endl;
-                    delete decoders[subsession_index];
-                    decoders[subsession_index]=NULL;
-                }
-                
-                // register a new decoder
+            else if (f->getFrameClass()==FrameClass::setup) { // got frame : SETUP
                 SetupFrame *setupframe = static_cast<SetupFrame*>(f);
-                avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : registering decoder for subsession " <<subsession_index<< std::endl;
                 
-                if (setupframe->media_type==AVMEDIA_TYPE_AUDIO) { // AUDIO
-                    
-                    switch (setupframe->codec_id) { // switch: audio codecs
-                        case AV_CODEC_ID_PCM_MULAW:
-                            decoders[subsession_index]=new DummyDecoder();
-                            break;
-                        default:
-                            break;
-                            
-                    } // switch: audio codecs
-                } // AUDIO
-                else if (setupframe->media_type==AVMEDIA_TYPE_VIDEO) { // VIDEO
-                    
-                    switch (setupframe->codec_id) { // switch: video codecs
-                        case AV_CODEC_ID_H264:
-                            decoders[subsession_index]=new VideoDecoder(AV_CODEC_ID_H264);
-                            break;
-                        default:
-                            break;
-                            
-                    } // switch: video codecs
-                    
-                } // VIDEO
-                else { // UNKNOW MEDIA TYPE
-                    decoders[subsession_index]=new DummyDecoder();
-                }
+                if (setupframe->sub_type == SetupFrameType::stream_init) { // STREAM INIT
                 
+                    if (decoders[subsession_index]!=NULL) { // slot is occupied
+                        avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : decoder reinit " << std::endl;
+                        delete decoders[subsession_index];
+                        decoders[subsession_index]=NULL;
+                    }
+                    
+                    // register a new decoder
+                    avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : registering decoder for subsession " <<subsession_index<< std::endl;
+                    
+                    if (setupframe->media_type==AVMEDIA_TYPE_AUDIO) { // AUDIO
+                        
+                        switch (setupframe->codec_id) { // switch: audio codecs
+                            case AV_CODEC_ID_PCM_MULAW:
+                                decoders[subsession_index]=new DummyDecoder();
+                                break;
+                            default:
+                                break;
+                                
+                        } // switch: audio codecs
+                    } // AUDIO
+                    else if (setupframe->media_type==AVMEDIA_TYPE_VIDEO) { // VIDEO
+                        
+                        switch (setupframe->codec_id) { // switch: video codecs
+                            case AV_CODEC_ID_H264:
+                                decoders[subsession_index]=new VideoDecoder(AV_CODEC_ID_H264);
+                                break;
+                            default:
+                                break;
+                                
+                        } // switch: video codecs
+                        
+                    } // VIDEO
+                    else { // UNKNOW MEDIA TYPE
+                        decoders[subsession_index]=new DummyDecoder();
+                    }
+                } // STREAM INIT
+                
+                outfilter.run(f); // pass setup frames downstream (they'll go all the way to OpenGLThread)
                 infifo.recycle(f); // return frame to the stack - never forget this!
-                
-                
-            } // got frame: DECODER INIT
+            } // got frame : SETUP
             
             else if (decoders[subsession_index]==NULL) { // woops, no decoder registered yet..
                 avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : no decoder registered for stream " << subsession_index << std::endl;

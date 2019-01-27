@@ -40,18 +40,6 @@
 #include "tools.h"
 
 
-/** Describes the state of an AbstractFileStream 
- *
- * @ingroup file_tag
- */
-enum class AbstractFileState {                // <pyapi>
-    none,                                     // <pyapi>
-    error,                                    // <pyapi>
-    seek, // in the middle of a seek          // <pyapi>
-    stop, // stream stopped                   // <pyapi>
-    play  // stream is playing                // <pyapi> 
-};                                            // <pyapi>
-
 
 /** A general class for on-disk stored streams
  * 

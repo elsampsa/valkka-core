@@ -152,6 +152,7 @@ public:
     void dump();           ///< Dump frames in the cache
     bool isEmpty();        ///< Cache empty or not 
     int seek(long int ms_streamtime_);  ///< Seek to a desider stream time.  -1 = no frames at left, 1 = no frames at right, 0 = ok
+    int keySeek(long int ms_streamtime_);  ///< Seek to a desider stream time.  -1 = no frames at left, 1 = no frames at right, 0 = ok.  From the nearest key-frame to the target frame.
     Frame *pullNextFrame();            ///< Get the next frame.  Returns NULL if no frame was available
 };
 
@@ -232,6 +233,9 @@ protected:
 protected: // Thread member redefinitions
     std::deque<FileCacheSignalContext> signal_fifo;   ///< Redefinition of signal fifo.
     std::vector<FrameFilter*>          slots_;        ///< Slot number => output framefilter mapping
+    // std::vector<SetupFrame*>           setup_frames;  ///< Slot number => SetupFrame mapping.  Book-keeping of SetupFrames
+    std::vector<std::vector<SetupFrame*>>   setup_frames; ///< Slot number, subsession_index => SetupFrame mapping.  Book-keeping of SetupFrames
+    
     
 public: // redefined virtual functions
     void run();

@@ -66,6 +66,7 @@ void init_frames() {
     // LiveThread is requested to send the frames with a certain slot number to a certain filter .. and that filter receives always frames with the same slot number
     // There should always be an AVThread per slot
     
+    setupframe.sub_type=SetupFrameType::stream_init;
     setupframe.n_slot=1;
     setupframe.subsession_index =0;
     setupframe.media_type =AVMEDIA_TYPE_VIDEO; // what frame types are to be expected from this stream
@@ -79,6 +80,7 @@ void init_frames() {
     vframe.payload={0,0,0,1,0,0,0,0,0,0};
     
     
+    setupframe.sub_type=SetupFrameType::stream_init;
     setupframe_a.n_slot=1;
     setupframe_a.subsession_index =1;
     setupframe_a.media_type =AVMEDIA_TYPE_AUDIO; // what frame types are to be expected from this stream

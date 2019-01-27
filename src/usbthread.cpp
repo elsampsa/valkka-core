@@ -395,6 +395,7 @@ void V4LDevice::open_() {
     status = v4l_status::ok;
     
     // prepare setup frame
+    setupframe.sub_type             =SetupFrameType::stream_init;
     setupframe.media_type           =AVMEDIA_TYPE_VIDEO;
     setupframe.codec_id             =AV_CODEC_ID_H264;   // what frame types are to be expected from this stream
     setupframe.subsession_index     =0;

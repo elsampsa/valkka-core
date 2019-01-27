@@ -83,7 +83,7 @@ BriefInfoFrameFilter::BriefInfoFrameFilter(const char* name, FrameFilter* next) 
 }
 
 void BriefInfoFrameFilter::go(Frame* frame) {
-  std::cout << "DummyFrameFilter : "<< this->name << " : got frame : " << *(frame) << " dT=" << frame->mstimestamp-getCurrentMsTimestamp() << std::endl;
+  std::cout << "BriefInfoFrameFilter : "<< this->name << " : " << *(frame) << " dT=" << frame->mstimestamp-getCurrentMsTimestamp() << std::endl;
 }
 
 
@@ -429,16 +429,18 @@ void CachingGateFrameFilter::go(Frame* frame) {
 }
 
 void CachingGateFrameFilter::run(Frame* frame) {
-  std::unique_lock<std::mutex> lk(mutex);
-  this->go(frame); // manipulate frame
-  if (!next) {return;}
-  if (on) { // passes all frames if flag is set
-    (this->next)->run(frame);
-  }
-  if (frame->getFrameClass()==FrameClass::setup) {
-    got_setup=true;
-    setupframe = *(static_cast<SetupFrame*>(frame)); // create a cached copy of the SetupFrame
-  }
+    std::unique_lock<std::mutex> lk(mutex);
+    this->go(frame); // manipulate frame
+    if (!next) {return;}
+    if (on) { // passes all frames if flag is set
+        (this->next)->run(frame);
+    }
+    if (frame->getFrameClass()==FrameClass::setup) {
+        setupframe = *(static_cast<SetupFrame*>(frame)); // create a cached copy of the SetupFrame
+        if (setupframe.sub_type == SetupFrameType::stream_init) { // TODO: shouldn't we have an array of setupframes (for each substream)
+            got_setup=true;
+        }
+    }
 }
   
 void CachingGateFrameFilter::set() {

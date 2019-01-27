@@ -687,6 +687,7 @@ void RenderGroup::render() {
     #endif
     
     #ifdef VALGRIND_GPU_DEBUG
+    // std::cout << "VALGRIND_GPU_DEBUG" << std::endl;
     #else
     glFinish(); // TODO: debugging
     glViewport(0, 0, x_window_attr.width, x_window_attr.height);
@@ -1123,11 +1124,16 @@ long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
     
     ///*
     // handle special (signal) frames here
-    if (f->getFrameClass()==FrameClass::signal) {
+    if (f->getFrameClass() == FrameClass::signal) {
         // std::cout << "OpenGLThread: insertFifo: SignalFrame" << std::endl;
         SignalFrame *signalframe = static_cast<SignalFrame*>(f);
         handleSignal(signalframe->opengl_signal_ctx);
         // recycle(f); // alias
+        infifo->recycle(f);
+        return 0;
+    }
+    else if (f->getFrameClass() == FrameClass::setup) {
+        std::cout << "OpenGLThread: insertFifo: SetupFrame: " << *f << std::endl;
         infifo->recycle(f);
         return 0;
     }
@@ -1256,7 +1262,7 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
             if (present_frame) { // present_frame
                 if (!slotOk(f->n_slot)) {//slot overflow, do nothing
                 }
-                else if (f->getFrameClass()==FrameClass::yuv) {// accepted frametype: yuv
+                else if (f->getFrameClass()==FrameClass::yuv) {// YUV FRAME
                     YUVFrame *yuvframe = static_cast<YUVFrame*>(f);
                     #if defined(PRESENT_VERBOSE) || defined(TIMING_VERBOSE)
                     std::cout<<"OpenGLThread: handleFifo: PRESENTING " << rel_mstimestamp << " <"<< yuvframe->mstimestamp <<"> " << std::endl;
@@ -1284,7 +1290,7 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
                     else {
                         // opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: feeding frames too fast! dropping.." << std::endl; // printed by manageSlotTimer => manageTimer
                     }
-                } // accepted frametype: yuv
+                } // YUV FRAME
             }// present frame
             infifo->recycle(f); // codec found or not, frame always recycled
         }// present or scrap

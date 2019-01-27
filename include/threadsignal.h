@@ -36,6 +36,20 @@
 #include "constant.h"
 
 
+/** Describes the state of a stream
+ *
+ * @ingroup file_tag
+ */
+enum class AbstractFileState {                // <pyapi>
+    none,                                     // <pyapi>
+    error,                                    // <pyapi>
+    seek, // in the middle of a seek          // <pyapi>
+    stop, // stream stopped                   // <pyapi>
+    play  // stream is playing                // <pyapi> 
+};                                            // <pyapi>
+
+
+
 /** Different signal types understood by Threads (sending them to the Thread by an interrupt (Thread::sendSignal) or in the Frame stream)
  */
 enum class SignalType {

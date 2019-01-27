@@ -89,6 +89,7 @@ typedef unsigned short SlotNumber;   // <pyapi>
 typedef std::size_t    IdNumber;     // <pyapi>
 
 static const SlotNumber I_MAX_SLOTS = 255; // Slot number maximum index.  Max number of slots = I_MAX_SLOTS+1
+static const int I_MAX_SUBSESSIONS = 3;
 
 
 /** 
