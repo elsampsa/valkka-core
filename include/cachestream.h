@@ -229,6 +229,7 @@ protected:
     long int    reftime;
     long int    walltime;
     AbstractFileState state;
+    SetupFrame  state_setupframe; ///< SetupFrame for sending the stream state
     
 protected: // Thread member redefinitions
     std::deque<FileCacheSignalContext> signal_fifo;   ///< Redefinition of signal fifo.
@@ -247,9 +248,10 @@ public: // internal
     void switchCache();
     void dumpPlayCache();
     void dumpTmpCache();
-    void stopStreams();
-    void playStreams();
-    void seekStreams(long int mstimestamp);
+    void sendSetupFrames(SetupFrame *f); ///< Sends SetupFrame s to all active slots
+    void stopStreams(bool send_state = true);
+    void playStreams(bool send_state = true);
+    void seekStreams(long int mstimestamp, bool send_state = true);
     
 private: // internal
     void handleSignal(FileCacheSignalContext &signal_ctx);

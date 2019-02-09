@@ -58,7 +58,7 @@ AVThread::~AVThread() {
 void AVThread::run() {
     bool ok;
     bool got_frame;
-    unsigned short subsession_index;
+    int subsession_index;
     Frame* f;
     Decoder* decoder; // alias
 
@@ -68,6 +68,8 @@ void AVThread::run() {
     mstime = getCurrentMsTimestamp();
     oldmstime = mstime;
     loop=true;
+    
+    int n_decoders = int(decoders.size()); // std::size_t to int
     
     while(loop) {
         f=infifo.read(Timeout::avthread);
@@ -84,13 +86,15 @@ void AVThread::run() {
             // info frame    : init decoder
             // regular frame : make a copy
             
-            if (subsession_index>=decoders.size()) { // got frame: subsession_index too big
-                avthreadlogger.log(LogLevel::fatal) << "AVThread: "<< this->name <<" : run : decoder slot overlow : "<<subsession_index<<"/"<<decoders.size()<< std::endl; // we can only have that many decoder for one stream
+            if (subsession_index >= n_decoders) { // got frame: subsession_index too big
+                avthreadlogger.log(LogLevel::fatal) << "AVThread: "<< this->name <<" : run : decoder slot overlow : "<<subsession_index<<"/"<<n_decoders<< std::endl; // we can only have that many decoder for one stream
                 infifo.recycle(f); // return frame to the stack - never forget this!
             } // got frame: subsession_index too big
             
             else if (f->getFrameClass()==FrameClass::setup) { // got frame : SETUP
                 SetupFrame *setupframe = static_cast<SetupFrame*>(f);
+                
+                std::cout << "AVThread: got SetupFrame: " << *setupframe << std::endl;
                 
                 if (setupframe->sub_type == SetupFrameType::stream_init) { // STREAM INIT
                 

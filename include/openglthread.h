@@ -71,11 +71,13 @@ public:
   long int     lastmstime;  ///< Last millisecond timestamp when this slot received a frame
     
 private:
-  uint      ref_count;
-  bool      active;     ///< Is activated or not.  Active = has received a setup frame
-  bool      is_dead;    ///< Has received frames or not for a while ?
-  AVCodecID codec_id;   ///< FFmpeg codec id
-  
+    uint      ref_count;
+    bool      active;     ///< Is activated or not.  Active = has received a setup frame
+    bool      is_dead;    ///< Has received frames or not for a while ?
+    AVCodecID codec_id;   ///< FFmpeg codec id
+    bool      load_flag;  ///< This flag is cleared when a new frame is loaded
+    bool      keep_flag;  ///< Should we keep on showing the previous frame, even if the slot is_dead?
+
 private:
   long int  prev_mstimestamp; ///< for debugging: check if frames are fed in correct timestamp order
   
@@ -95,8 +97,10 @@ public: // getters
   bool isDead()   const {return is_dead;}
   
 public: // setters
-  void inc_ref_count() {ref_count++;}
-  void dec_ref_count() {ref_count--;}
+    void inc_ref_count() {ref_count++;}
+    void dec_ref_count() {ref_count--;}
+    void loadFlag(bool val);
+    void keepFlag(bool val);
 };
 
 
@@ -341,7 +345,7 @@ public: // slot methods
 public: // setter methods
     void                debugOn()  {debug=true;}
     void                debugOff() {debug=false;}
-  
+    
 public: // Thread variables
     std::deque<OpenGLSignalContext> signal_fifo;   ///< Redefinition of signal fifo.  Signal fifo of Thread::SignalContext(s) is now hidden.
   

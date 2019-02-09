@@ -556,7 +556,8 @@ ValkkaFSManager.setOutput(id, slot, framefilter)
 """
 class ValkkaFSManager:
     
-    timediff=10000 # blocktable can be inquired max this frequency (ms)
+    timetolerance = 500 # if frames are missing at this distance or further, request for more blocks
+    timediff = 10000 # blocktable can be inquired max this frequency (ms)
     
     def __init__(self, valkkafs: ValkkaFS, timecallback: callable = None):
         """ValkkaFSReaderThread --> FileCacheThread
@@ -607,7 +608,7 @@ class ValkkaFSManager:
         
         self.logger.info("timeCallback__ : distance to current block edge is %i", mstime-self.current_timerange[1])
         
-        if mstime-self.current_timerange[1] > -500:
+        if mstime-self.current_timerange[1] > -timetolerance:
             self.logger.info("timeCallback__ : will request more blocks")
             ok = self.reqBlocks(mstime)
             if not ok:
@@ -695,7 +696,8 @@ class ValkkaFSManager:
     def seek(self, mstimestamp):
         """Before performing seek, check the blocktable
         
-        Returns True if the seek could be done, False otherwise
+        - Returns True if the seek could be done, False otherwise
+        - Requests frames always from ValkkaFSReaderThread (with reqBlocks), even if there are already frames at this timestamp
         
         """
         assert(isinstance(mstimestamp, int))
@@ -709,7 +711,16 @@ class ValkkaFSManager:
         ok = self.reqBlocks(mstimestamp)
         if not ok: self.logger.warning("seek : could not get blocks")
             
-
+            
+    def smartSeek(self, mstimestamp):
+        self.readBlockTableIf()
+        if (mstimestamp > self.timerange[0] + self.timetolerance) and (mstimestamp < self.timerange[1] - self.timetolerance): # no need to request new blocks
+            self.stop()
+            self.cacherthread.seekStreamsCall(mstimestamp) # simply sets the target time
+        else:
+            self.seek(mstimestamp)
+        
+        
     def reqBlocks(self, mstimestamp):
         block_list = self.valkkafs.getIndNeigh(n=1, time=mstimestamp, blocktable = self.blocktable)
         if len(block_list) > 0:
@@ -721,6 +732,11 @@ class ValkkaFSManager:
             return True
         else:
             return False
+        
+        
+    def getTimeRange(self):
+        self.readBlockTableIf()
+        return self.timerange()
         
         
     def close(self):

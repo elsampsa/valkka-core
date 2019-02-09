@@ -330,7 +330,7 @@ IdNumber BasicFrame::read(std::fstream &is) {
 }
 
 
-SetupFrame::SetupFrame() : Frame(), sub_type(SetupFrameType::none), media_type(AVMEDIA_TYPE_UNKNOWN), codec_id(AV_CODEC_ID_NONE), stream_state(AbstractFileState::none)  {
+SetupFrame::SetupFrame() : Frame(), sub_type(SetupFrameType::stream_init), media_type(AVMEDIA_TYPE_UNKNOWN), codec_id(AV_CODEC_ID_NONE), stream_state(AbstractFileState::none) {
   reset();
 }
   

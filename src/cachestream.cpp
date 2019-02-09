@@ -380,26 +380,60 @@ void FileCacheThread::dumpPlayCache() {
 void FileCacheThread::dumpTmpCache() {
 }
 
-void FileCacheThread::stopStreams() {
-    if (reftime > 0) {
-        state=AbstractFileState::stop;
-        walltime = getCurrentMsTimestamp();
-        target_mstimestamp_ = walltime - reftime;
+
+void FileCacheThread::sendSetupFrames(SetupFrame *f) {
+    SlotNumber cc = 0;
+    std::cout << "FileCacheThread : sendSetupFrames : " << std::endl;
+    for (auto it=slots_.begin(); it!=slots_.end(); ++it) {
+        if (*it) {
+            std::cout << "FileCacheThread : sendSetupFrames : " << cc << " : " << *f << std::endl;
+            f->n_slot = cc;
+            (*it)->run(f);
+        }
+        cc++;
     }
 }
 
-void FileCacheThread::playStreams() {
+
+void FileCacheThread::stopStreams(bool send_state) {
+    if (reftime > 0) {
+        state = AbstractFileState::stop;
+        walltime = getCurrentMsTimestamp();
+        target_mstimestamp_ = walltime - reftime;
+        
+        if (send_state) {
+            state_setupframe.mstimestamp = walltime;
+            state_setupframe.sub_type = SetupFrameType::stream_state;
+            state_setupframe.stream_state = state;
+            sendSetupFrames(&state_setupframe);
+        }
+    }
+}
+
+void FileCacheThread::playStreams(bool send_state) {
     if (target_mstimestamp_ > 0) {
         state=AbstractFileState::play;
         walltime = getCurrentMsTimestamp();
         reftime = walltime - target_mstimestamp_;
+        
+        if (send_state) {
+            state_setupframe.mstimestamp = walltime;
+            state_setupframe.sub_type = SetupFrameType::stream_state;
+            state_setupframe.stream_state = state;
+            sendSetupFrames(&state_setupframe);
+        }
     }
 }
 
-void FileCacheThread::seekStreams(long int mstimestamp_) {
+void FileCacheThread::seekStreams(long int mstimestamp_, bool send_state) {
     int i;
+    if (send_state) {
+        state_setupframe.mstimestamp = walltime;
+        state_setupframe.sub_type = SetupFrameType::stream_state;
+        state_setupframe.stream_state = AbstractFileState::seek;
+        sendSetupFrames(&state_setupframe);
+    }
     stopStreams(); // seeking a stream stops it
-    
     // reftime = (t0 - t0_)
     target_mstimestamp_ = mstimestamp_;
     walltime = getCurrentMsTimestamp();

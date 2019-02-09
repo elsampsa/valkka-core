@@ -48,7 +48,7 @@
 typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, Bool, const int*);
 
 
-SlotContext::SlotContext(YUVTEX *statictex, YUVShader* shader) : statictex(statictex), shader(shader), yuvtex(NULL), active(false), codec_id(AV_CODEC_ID_NONE), bmpars(BitmapPars()), lastmstime(0), is_dead(true), ref_count(0) {
+SlotContext::SlotContext(YUVTEX *statictex, YUVShader* shader) : statictex(statictex), shader(shader), yuvtex(NULL), active(false), codec_id(AV_CODEC_ID_NONE), bmpars(BitmapPars()), lastmstime(0), is_dead(true), ref_count(0), load_flag(false), keep_flag(false) {
 }
 
 
@@ -68,11 +68,15 @@ void SlotContext::activate(BitmapPars bmpars) {
     yuvtex=new YUVTEX(bmpars); // valgrind_debug protected
     active=true;
     is_dead=true;
+    //load_flag = false; // nopes
+    //keep_flag = false; // nopes
 }
 
 
 void SlotContext::deActivate() {//Deallocate
     active=false;
+    load_flag = false;
+    keep_flag = false;
     if (yuvtex!=NULL) {delete yuvtex;}
     yuvtex=NULL;
     bmpars=BitmapPars();
@@ -94,6 +98,7 @@ void SlotContext::loadYUVFrame(YUVFrame *yuvframe) {
     #endif
     
     yuvtex->loadYUVFrame(yuvframe); // from pbo to texture.  has valgrind_gpu_debug 
+    load_flag = true;
 }
 
 
@@ -126,23 +131,50 @@ bool SlotContext::isPending(long int mstime) {
 }
 
 
+void SlotContext::loadFlag(bool val) {
+    load_flag = val;
+}
+
+void SlotContext::keepFlag(bool val) {
+    keep_flag = val;
+}
+
+
+
 YUVTEX* SlotContext::getTEX() {
+    /* So, with respect to the deadtime timeout, this can have two states:
+     * - Keep on showing the last frame
+     * - Show the static background image
+     * 
+     */
     
-    /* // testing ..
-     *  if (active) {
-     *    return yuvtex;
-}
-else {
-    return statictex;
-}
-*/
+    if (!active) { // nothing much to show ..
+        return statictex;
+    }
     
+    if (load_flag) { // can use this yuvtex
+        if (keep_flag) { // keep on showing the last frame, no matter what
+            return yuvtex;
+        }
+        else if (is_dead) { // no frames have been received, and we are not forced to use the last frame
+            return statictex;
+        }
+        else { // everything's ok .. stream is alive
+            return yuvtex;
+        }
+    }
+    else { // if load_flag is cleared, the current yuvtex must not be used.  Must wait for a new yuvtex
+        return statictex;
+    }
+    
+    /* // old turf
     if (is_dead) {
         return statictex;
     }
     else if (active) {
         return yuvtex;
     }
+    */
 }
 
 
@@ -1121,7 +1153,6 @@ void OpenGLThread::reportCallTime(unsigned i) {
 
 
 long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
-    
     ///*
     // handle special (signal) frames here
     if (f->getFrameClass() == FrameClass::signal) {
@@ -1134,6 +1165,24 @@ long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
     }
     else if (f->getFrameClass() == FrameClass::setup) {
         std::cout << "OpenGLThread: insertFifo: SetupFrame: " << *f << std::endl;
+        
+        SetupFrame *setupframe = static_cast<SetupFrame*>(f);
+        
+        if (setupframe->sub_type == SetupFrameType::stream_state) { // stream state
+            if (setupframe->n_slot <= I_MAX_SLOTS) { // slot ok
+                SlotContext *slot_ctx = slots_[setupframe->n_slot]; // shorthand
+                    
+                if (setupframe->stream_state == AbstractFileState::seek) {
+                    slot_ctx->loadFlag(true); // can't show present frame, must wait for the next frame
+                }
+                else if (setupframe->stream_state == AbstractFileState::play) {
+                    slot_ctx->keepFlag(false); // don't keep on showing the last frame
+                }
+                else if (setupframe->stream_state == AbstractFileState::stop) {
+                    slot_ctx->keepFlag(true); // it's ok to keep on showing the last frame
+                }
+            } // slot ok
+        } // stream state
         infifo->recycle(f);
         return 0;
     }
