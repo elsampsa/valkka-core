@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['abstractfilestate',['AbstractFileState',['../group__file__tag.html#gacb30a600a83bdef34fc93f9df11b3fae',1,'filestream.h']]],
+  ['abstractfilestate',['AbstractFileState',['../group__file__tag.html#gacb30a600a83bdef34fc93f9df11b3fae',1,'threadsignal.h']]],
   ['abstractfilestream',['AbstractFileStream',['../classAbstractFileStream.html',1,'AbstractFileStream'],['../classAbstractFileStream.html#a2c5a0be4b6f3f1afcc5e651b675723a2',1,'AbstractFileStream::AbstractFileStream()']]],
-  ['abstractfilethread',['AbstractFileThread',['../classAbstractFileThread.html',1,'AbstractFileThread'],['../classAbstractFileThread.html#a60670ee5d88eea05086482db1d7f24ad',1,'AbstractFileThread::AbstractFileThread()']]],
+  ['abstractfilethread',['AbstractFileThread',['../classAbstractFileThread.html',1,'AbstractFileThread'],['../classAbstractFileThread.html#a146e9ad6658694692f64080a95085e5b',1,'AbstractFileThread::AbstractFileThread()']]],
   ['activate',['activate',['../classFileFrameFilter.html#a7c7fe5a052012e7004584880614da606',1,'FileFrameFilter::activate()'],['../classSlotContext.html#a35460fe19f7826d08307ffe39e71c5d3',1,'SlotContext::activate()'],['../classRenderContext.html#a9d35f8024f738cf73b99697487ef173a',1,'RenderContext::activate()']]],
   ['active',['active',['../classFileFrameFilter.html#a0e6cdb3beb767afecbecf3daece1d62a',1,'FileFrameFilter::active()'],['../classBufferSource.html#af2891d20315d560f9e30924d1be25557',1,'BufferSource::active()'],['../classSlotContext.html#a950b167cf90911ed67a8af57730347e9',1,'SlotContext::active()']]],
   ['active_5fslots',['active_slots',['../classFileThread.html#a38e115da765b12cb03bc52208b079fa8',1,'FileThread']]],
@@ -20,6 +20,7 @@ var searchData=
   ['av_5fframe',['av_frame',['../classAVMediaFrame.html#adda0edc926991cdd2cceea52ee897bde',1,'AVMediaFrame']]],
   ['av_5fpacket',['av_packet',['../classAVDecoder.html#ac5d67718d461c5237f83dd04d3cf3814',1,'AVDecoder']]],
   ['av_5fpixel_5fformat',['av_pixel_format',['../classAVBitmapFrame.html#a7dac7b382a8f869d42dd2e8c768db9f3',1,'AVBitmapFrame']]],
+  ['av_5fsignal_5fctx',['av_signal_ctx',['../classSignalFrame.html#ae791a00d1ba4e9ed1001263cce7bebf5',1,'SignalFrame']]],
   ['avaudio',['avaudio',['../group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aaa11a9c22a3891851a1a1b2fb8fe771de',1,'frame.h']]],
   ['avbitmap',['avbitmap',['../group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa4286e2cd5e215d075fac906e69b10cb7',1,'frame.h']]],
   ['avbitmapframe',['AVBitmapFrame',['../classAVBitmapFrame.html',1,'AVBitmapFrame'],['../classAVBitmapFrame.html#a573e967763d607c12c8aa97ae5f34365',1,'AVBitmapFrame::AVBitmapFrame()']]],

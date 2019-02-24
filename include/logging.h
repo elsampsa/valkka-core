@@ -174,8 +174,8 @@ extern void setLogLevel_fifologger(int level);           // <pyapi>
 extern void setLogLevel_opengllogger(int level);         // <pyapi>
 extern void setLogLevel_filelogger(int level);           // <pyapi>
 extern void setLogLevel_filethreadlogger(int level);     // <pyapi>
-extern void setLogLevel_usblogger(int level);     // <pyapi>
-extern void setLogLevel_valkkafslogger(int level);     // <pyapi>
+extern void setLogLevel_usblogger(int level);            // <pyapi>
+extern void setLogLevel_valkkafslogger(int level);       // <pyapi>
 
 extern void crazy_log_all();   // <pyapi>
 extern void debug_log_all();   // <pyapi>

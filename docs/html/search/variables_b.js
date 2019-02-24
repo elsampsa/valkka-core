@@ -1,17 +1,15 @@
 var searchData=
 [
-  ['n_5favframe',['n_avframe',['../structFrameFifoContext.html#a99731c8b17a35f1cce8663e5f0a51c53',1,'FrameFifoContext']]],
-  ['n_5favpkt',['n_avpkt',['../structFrameFifoContext.html#a07bb37d4500dd1167c66210a9d7efa92',1,'FrameFifoContext']]],
-  ['n_5fbasic',['n_basic',['../structFrameFifoContext.html#a2d17c05a5a4270c25fa2f07a44e2ca85',1,'FrameFifoContext']]],
-  ['n_5fblock',['n_block',['../structValkkaFSWriterSignalPars.html#afc4c293ca59855fb3d54373a8856b83b',1,'ValkkaFSWriterSignalPars']]],
-  ['n_5fbytes',['n_bytes',['../classSharedMemSegment.html#ab32950dffd4a0f7ed1a15164871c056b',1,'SharedMemSegment::n_bytes()'],['../classSharedMemRingBuffer.html#a146b8bc580741ca0ccf88a2bb2649493',1,'SharedMemRingBuffer::n_bytes()']]],
-  ['n_5fchannel',['n_channel',['../classSwitch.html#a0445c8bb47aacff250596bd82655b0fd',1,'Switch']]],
-  ['n_5fsetup',['n_setup',['../structFrameFifoContext.html#a1a20461522f6b86444433676f28997cd',1,'FrameFifoContext::n_setup()'],['../structOpenGLFrameFifoContext.html#af427a897a93ca7de6c16900e3bcbe84a',1,'OpenGLFrameFifoContext::n_setup()']]],
-  ['n_5fsignal',['n_signal',['../structFrameFifoContext.html#aa2036de0df2a76ea54c9e46e59acec83',1,'FrameFifoContext::n_signal()'],['../structOpenGLFrameFifoContext.html#a2bb6e2280cff5939a3067e7113b886ab',1,'OpenGLFrameFifoContext::n_signal()']]],
-  ['n_5fslot',['n_slot',['../classFrame.html#afceac675e9e36fdf011aaa605d78c3d9',1,'Frame::n_slot()'],['../structOpenGLSignalPars.html#ae33b8f218338c3893eae827480c8ba4d',1,'OpenGLSignalPars::n_slot()'],['../structValkkaFSWriterSignalPars.html#a7f7fe48d43e74fe1a12679fb817841e6',1,'ValkkaFSWriterSignalPars::n_slot()'],['../structValkkaFSReaderSignalPars.html#afe77f3264e44ed5c72acbb906b52373e',1,'ValkkaFSReaderSignalPars::n_slot()']]],
-  ['n_5fyuvpbo',['n_yuvpbo',['../structFrameFifoContext.html#acea869589096476981ea00e470817d56',1,'FrameFifoContext']]],
-  ['name',['name',['../classSharedMemSegment.html#a6b7d9c36dfee22cf2799c9ddf5d7fa33',1,'SharedMemSegment::name()'],['../classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a',1,'Thread::name()']]],
-  ['nbuf',['nbuf',['../classFrameSink.html#ab9af1bc3bde6af91e0dc6bbcad7ec83f',1,'FrameSink']]],
-  ['next',['next',['../classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818',1,'FrameFilter']]],
-  ['next_5fframe',['next_frame',['../classAbstractFileStream.html#a603b28e27b43306e19ce31e1d3a79368',1,'AbstractFileStream']]]
+  ['maxtime_5f',['maxtime_',['../classFrameCache.html#aa905008742ed955175c4398a3d0ffc6b',1,'FrameCache']]],
+  ['media_5ftype',['media_type',['../classBasicFrame.html#ac97acb7471526e6807e386dcf5b9e8e0',1,'BasicFrame::media_type()'],['../classSetupFrame.html#ab3a3d550b05782027053768d4dec94a1',1,'SetupFrame::media_type()'],['../classAVMediaFrame.html#a90e4bd52b819e23cc0b93012d27f865d',1,'AVMediaFrame::media_type()']]],
+  ['meta',['meta',['../classSharedMemSegment.html#ad774c7cc3dc0bd1f8631e59e83197947',1,'SharedMemSegment']]],
+  ['meta_5fname',['meta_name',['../classSharedMemSegment.html#a638452b2e87cce46040638e9b554cda0',1,'SharedMemSegment']]],
+  ['mintime_5f',['mintime_',['../classFrameCache.html#a9bb1efcc36065fd6d626b897b1c77ee0',1,'FrameCache']]],
+  ['msbuftime',['msbuftime',['../classOpenGLThread.html#abd95b01df8ebaf9cae08e13d4ba87cda',1,'OpenGLThread']]],
+  ['msreconnect',['msreconnect',['../structLiveConnectionContext.html#a3b94ed2d8dad98763f6e7e4f00dd931b',1,'LiveConnectionContext']]],
+  ['mstimeout',['mstimeout',['../classSharedMemRingBuffer.html#aa671684f01190c97587c730a33ad579c',1,'SharedMemRingBuffer']]],
+  ['mstimestamp',['mstimestamp',['../structFileContext.html#aac2a5997885dc75927cf55d4785f3c46',1,'FileContext::mstimestamp()'],['../structFileCacheSignalPars.html#a1b14cca6d23103e6e442e1c10c71012a',1,'FileCacheSignalPars::mstimestamp()'],['../classFrame.html#ae6de613c5c8bb6b383dc108cef6c415f',1,'Frame::mstimestamp()']]],
+  ['mstimestamp0',['mstimestamp0',['../classFileFrameFilter.html#a3e86f037640ca34ecaf4bd8f7662c7cb',1,'FileFrameFilter']]],
+  ['mstimetolerance',['mstimetolerance',['../classAVThread.html#a500682ab48302bc94c4f2a9adf08b701',1,'AVThread']]],
+  ['mutex',['mutex',['../classFrameCache.html#a709a6dc29acda8a577a92df59aef4c77',1,'FrameCache::mutex()'],['../classFileFrameFilter.html#a7051cc96ca7695d66feb0ed7ebe57b7a',1,'FileFrameFilter::mutex()'],['../classFrameFifo.html#a937f07e8345eeced5fcb2447e4c234ea',1,'FrameFifo::mutex()'],['../classThread.html#a6383ead608b8e4be6debb9f25bcfe80a',1,'Thread::mutex()']]]
 ];

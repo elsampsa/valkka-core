@@ -148,7 +148,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Custom payload <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a>.  <a href="classBasicFrame.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSetupFrame.html">SetupFrame</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup frame for decoders.  <a href="classSetupFrame.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup frame.  <a href="classSetupFrame.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVMediaFrame.html">AVMediaFrame</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decoded <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> in FFmpeg format.  <a href="classAVMediaFrame.html#details">More...</a><br /></td></tr>
@@ -163,6 +163,9 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A GPU YUV frame.  <a href="classYUVFrame.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalFrame.html">SignalFrame</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A frame signaling internal thread commands, states of recorded video, etc.  <a href="classSignalFrame.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMarkerFrame.html">MarkerFrame</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -201,8 +204,10 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aaa0f848942ce863cf53c0fa6cc684007d">FrameClass::setup</a>, 
 <a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee">FrameClass::signal</a>, 
+<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aab272bda9bf0c1cdcba614b5ed99c4d62">FrameClass::marker</a>, 
 <b>First</b> =none, 
-<b>Last</b> =signal
+<br />
+&#160;&#160;<b>Last</b> =signal
 <br />
  }<tr class="memdesc:ga4c17b19991c62a93b7a272b92037d69a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> classes used by Valkka.  <a href="group__frames__tag.html#ga4c17b19991c62a93b7a272b92037d69a">More...</a><br /></td></tr>
 </td></tr>
@@ -213,6 +218,11 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:ac7e9c7fc4910cfe7eed4025d4505f619"><td class="mdescLeft">&#160;</td><td class="mdescRight">Methods to correct frame timestamps.  <a href="frame_8h.html#ac7e9c7fc4910cfe7eed4025d4505f619">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:ac7e9c7fc4910cfe7eed4025d4505f619"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5579b777599f71f831d62b45345c8482"><td class="memItemLeft" align="right" valign="top"><a id="a5579b777599f71f831d62b45345c8482"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>SetupFrameType</b> { <b>none</b>, 
+<b>stream_init</b>, 
+<b>stream_state</b>
+ }</td></tr>
+<tr class="separator:a5579b777599f71f831d62b45345c8482"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>

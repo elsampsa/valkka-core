@@ -4,7 +4,7 @@ digraph "USBDevice"
   node [fontname="Helvetica",fontsize="10",shape=record];
   Node2 [label="USBDevice",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node3 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" setupframe" ,fontname="Helvetica"];
-  Node3 [label="SetupFrame",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classSetupFrame.html",tooltip="Setup frame for decoders. "];
+  Node3 [label="SetupFrame",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classSetupFrame.html",tooltip="Setup frame. "];
   Node4 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node4 [label="Frame",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classFrame.html",tooltip="Frame: An abstract queueable class. "];
   Node5 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" basicframe" ,fontname="Helvetica"];

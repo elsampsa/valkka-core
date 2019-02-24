@@ -42,9 +42,11 @@ pre_mod="valkka.api2.chains.basic2 : "
 class OpenFilterchain:
   """This class implements the following filterchain:
   
-  ::
-    
-    (LiveThread:livethread) -->> (AVThread:avthread) --> {ForkFrameFilterN:forkfilter}
+  :: 
+                                                                                           ...
+                                                                                          |
+    (LiveThread:livethread) -->> (AVThread:avthread) --> {ForkFrameFilterN:forkfilter} ---+  request forked streams with method "connect"
+                                                                                          |...
   
   """
   

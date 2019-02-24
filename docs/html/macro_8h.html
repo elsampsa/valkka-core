@@ -98,6 +98,10 @@ Macros</h2></td></tr>
 <tr class="memitem:ab8e410edfe456c56471126cecc1a3b9b"><td class="memItemLeft" align="right" valign="top"><a id="ab8e410edfe456c56471126cecc1a3b9b"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>read_bytes</b>(var)&#160;&#160;&#160;is.read((char*)&amp;var, sizeof(var));</td></tr>
 <tr class="separator:ab8e410edfe456c56471126cecc1a3b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac02577838f85625203107749dabd303b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>init_signal_frames</b>(FIFONAME,  CONTEXTCLASS)</td></tr>
+<tr class="separator:ac02577838f85625203107749dabd303b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84c06673ee35a73d9345fb3916c36723"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>clear_signal_frames</b>(FIFONAME,  CONTEXTCLASS)</td></tr>
+<tr class="separator:a84c06673ee35a73d9345fb3916c36723"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
@@ -138,6 +142,36 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">CLASS(<span class="keyword">const</span> CLASS &amp;f) {\</div><div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;FATAL: copy-construction prohibited for this class&quot;</span> &lt;&lt; std::endl;\</div><div class="line">  perror(<span class="stringliteral">&quot;FATAL: copy-construction prohibited for this class&quot;</span>);\</div><div class="line">  exit(2);\</div><div class="line">};\</div></div><!-- fragment -->
+</div>
+</div>
+<a id="a84c06673ee35a73d9345fb3916c36723"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84c06673ee35a73d9345fb3916c36723">&#9670;&nbsp;</a></span>clear_signal_frames</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define clear_signal_frames</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">FIFONAME, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CONTEXTCLASS&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">Reservoir &amp;res = FIFONAME.getReservoir(<a class="code" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee">FrameClass::signal</a>);\</div><div class="line">for(<span class="keyword">auto</span> it=res.begin(); it!=res.end(); ++it) {\</div><div class="line">    SignalFrame* f = <span class="keyword">static_cast&lt;</span><a class="code" href="classSignalFrame.html">SignalFrame</a>*<span class="keyword">&gt;</span>(*it);\</div><div class="line">    delete (CONTEXTCLASS*)(f-&gt;custom_signal_ctx);\</div><div class="line">};\</div><div class="ttc" id="group__frames__tag_html_gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee"><div class="ttname"><a href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee">FrameClass::signal</a></div><div class="ttdoc">signal to AVThread or OpenGLThread. Also custom signals to custom Threads </div></div>
+<div class="ttc" id="classSignalFrame_html"><div class="ttname"><a href="classSignalFrame.html">SignalFrame</a></div><div class="ttdoc">A frame signaling internal thread commands, states of recorded video, etc. </div><div class="ttdef"><b>Definition:</b> frame.h:502</div></div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="a2dae5ac85321a389287755e0b3b6da2e"></a>
@@ -194,7 +228,38 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keyword">virtual</span> <a class="code" href="group__frames__tag.html#ga4c17b19991c62a93b7a272b92037d69a">FrameClass</a> getFrameClass() {\</div><div class="line">  return CLASSNAME;\</div><div class="line">};\</div><div class="line">virtual <span class="keywordtype">void</span> copyFrom(<a class="code" href="classFrame.html">Frame</a> *f) {\</div><div class="line">  CLASS *cf;\</div><div class="line">  cf=<span class="keyword">dynamic_cast&lt;</span>CLASS*<span class="keyword">&gt;</span>(f);\</div><div class="line">  if (!cf) {\</div><div class="line">    perror(<span class="stringliteral">&quot;FATAL : invalid cast at copyFrom&quot;</span>);\</div><div class="line">    exit(5);\</div><div class="line">  }\</div><div class="line">  *<span class="keyword">this</span> =*(cf);\</div><div class="line">};\</div><div class="line">CLASS(<span class="keyword">const</span> CLASS &amp;f) {\</div><div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;FATAL: copy-construction prohibited for frame classes&quot;</span> &lt;&lt; std::endl;\</div><div class="line">  perror(<span class="stringliteral">&quot;FATAL: copy-construction prohibited for frame classes&quot;</span>);\</div><div class="line">  exit(2);\</div><div class="line">};\</div><div class="ttc" id="group__frames__tag_html_ga4c17b19991c62a93b7a272b92037d69a"><div class="ttname"><a href="group__frames__tag.html#ga4c17b19991c62a93b7a272b92037d69a">FrameClass</a></div><div class="ttdeci">FrameClass</div><div class="ttdoc">Enumeration of Frame classes used by Valkka. </div><div class="ttdef"><b>Definition:</b> frame.h:51</div></div>
-<div class="ttc" id="classFrame_html"><div class="ttname"><a href="classFrame.html">Frame</a></div><div class="ttdoc">Frame: An abstract queueable class. </div><div class="ttdef"><b>Definition:</b> frame.h:103</div></div>
+<div class="ttc" id="classFrame_html"><div class="ttname"><a href="classFrame.html">Frame</a></div><div class="ttdoc">Frame: An abstract queueable class. </div><div class="ttdef"><b>Definition:</b> frame.h:105</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ac02577838f85625203107749dabd303b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac02577838f85625203107749dabd303b">&#9670;&nbsp;</a></span>init_signal_frames</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define init_signal_frames</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">FIFONAME, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CONTEXTCLASS&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">Reservoir &amp;res = FIFONAME.getReservoir(<a class="code" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee">FrameClass::signal</a>);\</div><div class="line">for(<span class="keyword">auto</span> it=res.begin(); it!=res.end(); ++it) {\</div><div class="line">    SignalFrame* f = <span class="keyword">static_cast&lt;</span><a class="code" href="classSignalFrame.html">SignalFrame</a>*<span class="keyword">&gt;</span>(*it);\</div><div class="line">    f-&gt;<a class="code" href="classSignalFrame.html#a2ffd2ab7e6335c4572d5caf30037cc03">custom_signal_ctx</a> = (<span class="keywordtype">void</span>*)(<span class="keyword">new</span> CONTEXTCLASS());\</div><div class="line">};\</div><div class="ttc" id="group__frames__tag_html_gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee"><div class="ttname"><a href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee">FrameClass::signal</a></div><div class="ttdoc">signal to AVThread or OpenGLThread. Also custom signals to custom Threads </div></div>
+<div class="ttc" id="classSignalFrame_html"><div class="ttname"><a href="classSignalFrame.html">SignalFrame</a></div><div class="ttdoc">A frame signaling internal thread commands, states of recorded video, etc. </div><div class="ttdef"><b>Definition:</b> frame.h:502</div></div>
+<div class="ttc" id="classSignalFrame_html_a2ffd2ab7e6335c4572d5caf30037cc03"><div class="ttname"><a href="classSignalFrame.html#a2ffd2ab7e6335c4572d5caf30037cc03">SignalFrame::custom_signal_ctx</a></div><div class="ttdeci">void * custom_signal_ctx</div><div class="ttdoc">For extensions: thread commands for any thread. TODO: migrate all signal contexes here...</div><div class="ttdef"><b>Definition:</b> frame.h:515</div></div>
 </div><!-- fragment -->
 </div>
 </div>

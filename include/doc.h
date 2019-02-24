@@ -771,3 +771,111 @@
  * 
  */
 
+
+
+/** @page filesystem ValkkaFSManager
+ * 
+ * Writing, reading and caching frames
+ * 
+ * The level 2 API Python class ValkkaFSManager, uses several level 1 API (core) Python class objects
+ * 
+ * - core.ValkkaFS : blocktable and book-keeping
+ * - core.ValkkaFSReaderThread : reads frames from the file or block device
+ * - core.ValkkaFSCacherThread : caches the read frames into memory (typically several blocks of frames)
+ * - core.ValkkaFSWriterThread : writes frames into the file or block device
+ * 
+ * - Frames are requested on per-block basis from core.ValkkaFSReaderThread.  It feeds frames to core.ValkkaFSCacherThread
+ * - Seek, play and stop operations take place within the cached frames in core.ValkkaFSCacherThread
+ * - All Threads share a common core.ValkkaFS object that has the blocktable and is also visible at the Python side
+ * 
+ * The logic of requesting certain blocks in order to show (and buffer) frames for a certain time instant is handled completely at the python side
+ * 
+ * This orchestration is handled by the level 2 API Python class ValkkaFSManager.
+ *
+ * Let's use the following pseudocode notation, to see how objects are contained within other objects:
+\verbatim
+classname(init parameter) {
+    classnames of contained objects
+}
+\endverbatim
+ *
+ * This is how it looks like.  Let's hope you'll get the big picture.  :)
+ *
+\verbatim
+api2.ValkkaFSManager(api2.ValkkaFS) {
+    
+    1: api2.ValkkaFS {core.ValkkaFS}
+    2: core.ValkkaFSReaderThread {
+        core.ValkkaFS
+        - writes to core.FileCacherThread.getFrameFilter() [4]
+        - frames are requested on per-block basis
+        }
+    3: core.ValkkaFSWriterThread {
+        core.ValkkaFS
+        - input framefilter can be requested with getFrameFilter()
+        }
+    4: core.FileCacherThread {
+        - receives seek, play, stop, operations
+    
+        }   
+    
+    # callbacks from the c++ side:
+    
+    def timeCallback__(mstime: int):
+        - originates from core.FileCacherThread
+        - once per 300 ms
+        
+    def timeLimitsCallback__(tup: tuple):
+        - originates from core.FileCacherThread
+        - sent when frame cache has been updated
+    
+    # some important methods:
+    
+    def setOutput(_id, slot, framefilter [**]):
+        """Set id => slot mapping.  Set output framefilter
+        """
+        core.ValkkaFSReaderThread.setSlotIdCall(slot, _id)  # ID-TO-SLOT MAPPING
+        ctx = core.FileStreamContext(slot, framefilter)     # SLOT-TO-FRAMEFILTER MAPPING [**]
+        core.FileCacherThread.registerStreamCall(ctx)
+
+    def setInput(_id, slot):
+        core.ValkkaFSWriterThread.setSlotIdCall(_id, slot)
+
+    def getInputFrameFilter():
+        return ValkkaFSWriterThread.getFrameFilter()
+        
+    }
+\endverbatim
+ * 
+ * Frames are transported like this:
+ *
+\verbatim
+outgoing frames:
+    
+    core.ValkkaFSReaderThread [2] --> core.FileCacherThread [4] --> output framefilter [**]
+    
+     - Request blocks of frames        - Set seek point, play,
+       to be sent downstream             stop, etc. 
+     - Uses shared core.ValkkaFS      
+       instance
+    
+    
+incoming frames:
+
+    --> core.ValkkaFSWriterThread.getFrameFilter() --> core.ValkkaFSWriterThread
+                                                       
+                                                       - Updates shared core.ValkkaFS
+                                                         instance
+\endverbatim
+ *
+ *
+ * c++ => Python callbacks
+ *
+ * core.FileCacherThread => 
+ * 
+ 
+ 
+ */
+
+
+

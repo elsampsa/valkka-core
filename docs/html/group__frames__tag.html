@@ -97,7 +97,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Custom payload <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a>.  <a href="classBasicFrame.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSetupFrame.html">SetupFrame</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup frame for decoders.  <a href="classSetupFrame.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup frame.  <a href="classSetupFrame.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVMediaFrame.html">AVMediaFrame</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decoded <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> in FFmpeg format.  <a href="classAVMediaFrame.html#details">More...</a><br /></td></tr>
@@ -127,8 +127,10 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aaa0f848942ce863cf53c0fa6cc684007d">FrameClass::setup</a>, 
 <a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee">FrameClass::signal</a>, 
+<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aab272bda9bf0c1cdcba614b5ed99c4d62">FrameClass::marker</a>, 
 <b>First</b> =none, 
-<b>Last</b> =signal
+<br />
+&#160;&#160;<b>Last</b> =signal
 <br />
  }<tr class="memdesc:ga4c17b19991c62a93b7a272b92037d69a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> classes used by Valkka.  <a href="group__frames__tag.html#ga4c17b19991c62a93b7a272b92037d69a">More...</a><br /></td></tr>
 </td></tr>
@@ -177,7 +179,9 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="gga4c17b19991c62a93b7a272b92037d69aaa0f848942ce863cf53c0fa6cc684007d"></a>setup&#160;</td><td class="fielddoc"><p>setup data </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee"></a>signal&#160;</td><td class="fielddoc"><p>signal to <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a> or <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a> </p>
+<tr><td class="fieldname"><a id="gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee"></a>signal&#160;</td><td class="fielddoc"><p>signal to <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a> or <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>. Also custom signals to custom Threads </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga4c17b19991c62a93b7a272b92037d69aab272bda9bf0c1cdcba614b5ed99c4d62"></a>marker&#160;</td><td class="fielddoc"><p>Used when sending blocks of frames: mark filesystem and block start and end. </p>
 </td></tr>
 </table>
 

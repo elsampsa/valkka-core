@@ -223,8 +223,9 @@ protected:
     FrameCache  *play_cache;    ///< Points to the current play cache (default frame_cache_2)
     FrameCache  *tmp_cache;     ///< Points to current cache receiving frames
     void        (*callback)(long int mstimestamp);
-    PyObject    *pyfunc;
-    long int    target_mstimestamp_;
+    PyObject    *pyfunc;        ///< Python callback that emits current time
+    PyObject    *pyfunc2;       ///< Python callback that emits current loaded time limits
+    long int    target_mstimestamp_;    ///< We should be at this time instant (streamtime)
     Frame       *next;
     long int    reftime;
     long int    walltime;
@@ -264,15 +265,16 @@ public: // API must be called before thread start
     void setCallback(void func(long int));
     
 public: // API                                              // <pyapi>
-    void setPyCallback(PyObject* pobj);                          // <pyapi>
+    void setPyCallback(PyObject* pobj);                     // <pyapi>
+    void setPyCallback2(PyObject* pobj);                    // <pyapi>
     void registerStreamCall   (FileStreamContext &ctx);     // <pyapi> 
     void deregisterStreamCall (FileStreamContext &ctx);     // <pyapi>
     FrameFilter &getFrameFilter();                          // <pyapi>
     void requestStopCall();                                 // <pyapi>
     void dumpCache();                                       // <pyapi>
-    void stopStreamsCall();                                        // <pyapi>
-    void playStreamsCall();                                        // <pyapi>
-    void seekStreamsCall(long int mstimestamp);                    // <pyapi>
+    void stopStreamsCall();                                 // <pyapi>
+    void playStreamsCall();                                 // <pyapi>
+    void seekStreamsCall(long int mstimestamp);             // <pyapi>
 };                                                          // <pyapi>
 
 

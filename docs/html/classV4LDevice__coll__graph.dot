@@ -6,7 +6,7 @@ digraph "V4LDevice"
   Node3 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node3 [label="USBDevice",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classUSBDevice.html"];
   Node4 -> Node3 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" setupframe" ,fontname="Helvetica"];
-  Node4 [label="SetupFrame",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classSetupFrame.html",tooltip="Setup frame for decoders. "];
+  Node4 [label="SetupFrame",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classSetupFrame.html",tooltip="Setup frame. "];
   Node5 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node5 [label="Frame",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classFrame.html",tooltip="Frame: An abstract queueable class. "];
   Node6 -> Node3 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" basicframe" ,fontname="Helvetica"];

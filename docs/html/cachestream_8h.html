@@ -65,13 +65,15 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">cachestream.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="framefifo_8h_source.html">framefifo.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="filestream_8h_source.html">filestream.h</a>&quot;</code><br />
+<code>#include &quot;Python.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for cachestream.h:</div>
 <div class="dyncontent">
@@ -91,6 +93,14 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileStreamContext.html">FileStreamContext</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileCacheSignalPars.html">FileCacheSignalPars</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal information for <a class="el" href="classFileCacheThread.html" title="Thread that caches frames and streams them into output at play speed. ">FileCacheThread</a>.  <a href="structFileCacheSignalPars.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encapsulate data sent to <a class="el" href="classFileCacheThread.html" title="Thread that caches frames and streams them into output at play speed. ">FileCacheThread</a>.  <a href="structFileCacheSignalContext.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFrameCacheContext.html">FrameCacheContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameCache.html">FrameCache</a></td></tr>
@@ -99,19 +109,59 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCacheFrameFilter.html">CacheFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Passes frames to a <a class="el" href="classFrameCache.html" title="FrameCache works like FrameFifo, but frames are not pre-reserved. ">FrameCache</a>.  <a href="classCacheFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCacheStream.html">CacheStream</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches (a large amount of) frames and pushes them forward at a rate corresponding to play speed.  <a href="classCacheStream.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html">FileCacheThread</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> that caches frames and streams them into output at play speed.  <a href="classFileCacheThread.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ada9b6bfa4ba1d83563a501d8c4df2d2f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cachestream_8h.html#ada9b6bfa4ba1d83563a501d8c4df2d2f">FileCacheSignal</a> { <br />
+&#160;&#160;<b>none</b>, 
+<b>exit</b>, 
+<b>register_stream</b>, 
+<b>deregister_stream</b>, 
+<br />
+&#160;&#160;<b>play_streams</b>, 
+<b>stop_streams</b>, 
+<b>seek_streams</b>, 
+<b>clear_streams</b>, 
+<br />
+&#160;&#160;<b>report_cache</b>
+<br />
+ }<tr class="memdesc:ada9b6bfa4ba1d83563a501d8c4df2d2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signals for <a class="el" href="classFileCacheThread.html" title="Thread that caches frames and streams them into output at play speed. ">FileCacheThread</a>.  <a href="cachestream_8h.html#ada9b6bfa4ba1d83563a501d8c4df2d2f">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:ada9b6bfa4ba1d83563a501d8c4df2d2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>0.10.0 </dd></dl>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ada9b6bfa4ba1d83563a501d8c4df2d2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada9b6bfa4ba1d83563a501d8c4df2d2f">&#9670;&nbsp;</a></span>FileCacheSignal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="cachestream_8h.html#ada9b6bfa4ba1d83563a501d8c4df2d2f">FileCacheSignal</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Signals for <a class="el" href="classFileCacheThread.html" title="Thread that caches frames and streams them into output at play speed. ">FileCacheThread</a>. </p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

@@ -6,5 +6,5 @@ digraph "AbstractFileThread"
   Node1 -> Node0 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node1 [label="Thread",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classThread.html",tooltip="A class for multithreading with a signaling system. "];
   Node0 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="FileCacheThread",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classFileCacheThread.html"];
+  Node2 [label="FileCacheThread",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classFileCacheThread.html",tooltip="Thread that caches frames and streams them into output at play speed. "];
 }

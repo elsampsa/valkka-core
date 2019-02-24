@@ -115,8 +115,8 @@ extern void setLogLevel_fifologger(int level)       { fifologger.setLevel(level)
 extern void setLogLevel_opengllogger(int level)     { opengllogger.setLevel(level); };     
 extern void setLogLevel_filelogger(int level)       { filelogger.setLevel(level); };     
 extern void setLogLevel_filethreadlogger(int level) { filethreadlogger.setLevel(level); };
-extern void setLogLevel_usblogger(int level)  { usblogger.setLevel(level); };
-extern void setLogLevel_valkkafslogger(int level)  { usblogger.setLevel(level); };
+extern void setLogLevel_usblogger(int level)        { usblogger.setLevel(level); };
+extern void setLogLevel_valkkafslogger(int level)   { valkkafslogger.setLevel(level); };
 
 
 void crazy_log_all() {

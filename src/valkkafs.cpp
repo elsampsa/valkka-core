@@ -397,6 +397,8 @@ ValkkaFSWriterThread::ValkkaFSWriterThread(const char *name, ValkkaFS &valkkafs,
         filestream.open(valkkafs.getDevice(), std::fstream::binary | std::fstream::out | std::fstream::in);
     }
     filestream.seekp(std::streampos(0));
+    
+    std::cout << "ValkkaFSWriterThread : device is " << valkkafs.getDevice() << std::endl;
 }
     
 
@@ -434,6 +436,7 @@ void ValkkaFSWriterThread::run() {
             else if (f->getFrameClass()==FrameClass::basic) { // BASICFRAME
                 BasicFrame *bf = static_cast<BasicFrame*>(f);
                 valkkafslogger.log(LogLevel::crazy) << "ValkkaFSWriterThread : " << this->name <<" got BasicFrame " << *bf << std::endl;
+                // std::cout << "ValkkaFSWriterThread : " << this->name <<" got BasicFrame " << *bf << std::endl;
                 // get the id
                 auto it = slot_to_id.find(bf->n_slot);
                 if (it == slot_to_id.end()) { // this slot has not been registered using an unique id

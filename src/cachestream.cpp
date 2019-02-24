@@ -45,7 +45,7 @@ void CacheFrameFilter::go(Frame* frame) {
 
 
 
-FrameCache::FrameCache(const char *name, FrameCacheContext ctx) : name(name), ctx(ctx), mintime_(999999999999), maxtime_(0), has_delta_frames(false) {
+FrameCache::FrameCache(const char *name, FrameCacheContext ctx) : name(name), ctx(ctx), mintime_(9999999999999), maxtime_(0), has_delta_frames(false) {
     state = cache.end();
 }
 
@@ -96,8 +96,8 @@ Frame* FrameCache::read(unsigned short int mstimeout) { // TODO: do we need this
 */
 
 void FrameCache::clear_() {
-    mintime_=999999999999;
-    maxtime_=0;
+    mintime_ = 9999999999999;
+    maxtime_ = 0;
     has_delta_frames=false;
     for (auto it=cache.begin(); it!=cache.end(); ++it) {
         delete *it;
@@ -299,7 +299,7 @@ FileCacheThread::FileCacheThread(const char *name) : AbstractFileThread(name),
     fork(name, &switchfilter, &typefilter),
     play_cache(&frame_cache_2),
     tmp_cache(&frame_cache_1),
-    callback(NULL), target_mstimestamp_(0), pyfunc(NULL), next(NULL), reftime(0), walltime(0), state(AbstractFileState::stop)
+    callback(NULL), target_mstimestamp_(0), pyfunc(NULL), pyfunc2(NULL), next(NULL), reftime(0), walltime(0), state(AbstractFileState::stop)
     {
     /*
     Reservoir &res = infifo.getReservoir(FrameClass::signal); // TODO: move this into macro
@@ -340,6 +340,9 @@ FileCacheThread::~FileCacheThread() {
     if (pyfunc!=NULL) {
         Py_DECREF(pyfunc);
     }
+    if (pyfunc2!=NULL) {
+        Py_DECREF(pyfunc2);
+    }
 }
 
 void FileCacheThread::setCallback(void func(long int)) {
@@ -347,16 +350,29 @@ void FileCacheThread::setCallback(void func(long int)) {
 }
 
 void FileCacheThread::setPyCallback(PyObject* pobj) {
-  // pass here, say "signal.emit" or a function/method that accepts single argument
-  if (PyCallable_Check(pobj)) { // https://docs.python.org/3/c-api/type.html#c.PyTypeObject
-    Py_INCREF(pobj);
-    pyfunc=pobj;
-  }
-  else {
-    std::cout << "TestThread: setCallback: needs python callable" << std::endl;
-    pyfunc=NULL;
-  }
+    // pass here, say "signal.emit" or a function/method that accepts single argument
+    if (PyCallable_Check(pobj)) { // https://docs.python.org/3/c-api/type.html#c.PyTypeObject
+        Py_INCREF(pobj);
+        pyfunc=pobj;
+    }
+    else {
+        std::cout << "TestThread: setPyCallback: needs python callable for emitting current time" << std::endl;
+        pyfunc=NULL;
+    }
 }
+
+void FileCacheThread::setPyCallback2(PyObject* pobj) {
+    // pass here, say "signal.emit" or a function/method that accepts single argument
+    if (PyCallable_Check(pobj)) { // https://docs.python.org/3/c-api/type.html#c.PyTypeObject
+        Py_INCREF(pobj);
+        pyfunc2=pobj;
+    }
+    else {
+        std::cout << "TestThread: setPyCallback2: needs python callable for emitting loaded frame time limits" << std::endl;
+        pyfunc2=NULL;
+    }
+}
+
 
 
 void FileCacheThread::switchCache() {
@@ -371,6 +387,39 @@ void FileCacheThread::switchCache() {
         tmp_cache=&frame_cache_2;
         switchfilter.set2();
         frame_cache_2.clear();
+    }
+    
+    if (pyfunc2) {
+        std::cout << "FileCacheThread : switchCache : evoke python callback : " << std::endl;
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
+        PyObject *res, *tup;
+    
+        // res = Py_BuildValue("ll", (long int)(1), (long int)(2));
+        // res = Py_BuildValue("(ii)", 123, 456); // debug : crassssh
+        
+        tup = PyTuple_New(2);
+        
+        PyTuple_SET_ITEM(tup, 0, PyLong_FromLong(play_cache->getMinTime_()));
+        PyTuple_SET_ITEM(tup, 1, PyLong_FromLong(play_cache->getMaxTime_()));
+        
+        /*
+        if (!res) {
+            std::cout << "FileCacheThread: switchCache: WARNING: could not create tuple" << std::endl;
+        }
+        */
+        
+        // res = PyObject_CallFunctionObjArgs(pyfunc2, res);
+        res = PyObject_CallFunctionObjArgs(pyfunc2, tup, NULL);
+        
+        // send a tuple with min and max loaded frame time values
+        // res=PyObject_CallFunction(pyfunc2, "ll", play_cache->getMinTime_(), play_cache->getMaxTime_());  // nooo fucking way
+        // res=PyObject_CallFunction(pyfunc2, "l", 0); // debug // works ok
+        
+        if (!res) {
+            std::cout << "FileCacheThread: switchCache: WARNING: python callback failed" << std::endl;
+        }
+        PyGILState_Release(gstate);
     }
 }
     
@@ -529,12 +578,14 @@ void FileCacheThread::run() {
         if (next) { // there is a frame to await for
             // TODO: what to do when seek ended?
             // std::cout << "FileCacheThread : run : has next frame " << *next << std::endl;
-            target_mstimestamp_ = next->mstimestamp; // target time in streamtime
+            // target_mstimestamp_ = next->mstimestamp; // target time in streamtime // NO NO NO
             next_mstimestamp = next->mstimestamp + reftime; // next Frame's timestamp in wallclock time
-            timeout=std::max((long int)0,(next_mstimestamp-walltime)); // timeout: timestamp - wallclock time.  For seek, wallclock time is frozen
+            // timeout=std::max((long int)0,(next_mstimestamp-walltime)); // timeout: timestamp - wallclock time.  For seek, wallclock time is frozen
+            timeout=std::min((long int)300,(next_mstimestamp-walltime));
         }
         else {
-            timeout=Timeout::filecachethread;
+            // timeout=Timeout::filecachethread;
+            timeout=300;
         }
         
         // std::cout << "FileCacheThread : run : timeout = " << timeout << std::endl;
@@ -604,6 +655,7 @@ void FileCacheThread::run() {
         
         if (state==AbstractFileState::play) {
             walltime = mstime; // update wallclocktime (if play)
+            target_mstimestamp_ = walltime - reftime;
         }
         
         /*
@@ -613,7 +665,7 @@ void FileCacheThread::run() {
         }
         */
         while (next and ((next_mstimestamp-walltime)<=0)) { // just send all frames at once
-            // std::cout << "FileCacheThread : run : transmit " << *next << std::endl;
+            std::cout << "FileCacheThread : run : transmit " << *next << std::endl;
             i=safeGetSlot(next->n_slot, ff);
             if (i>=1) {
                 if (!setup_frames[next->subsession_index][next->n_slot]) { // create a SetupFrame for decoder initialization
@@ -643,9 +695,10 @@ void FileCacheThread::run() {
             */
             next=play_cache->pullNextFrame(); // new next frame
             if (next) {
+                std::cout << "FileCacheThread : run : new next frame " << *next << std::endl;
                 next_mstimestamp = next->mstimestamp + reftime; // next Frame's timestamp in wallclock time
                 //  (t + (t0-t0_)) - t0 = t + t0 -t0_ -t0 = t-t0
-                target_mstimestamp_ = next->mstimestamp; // target time in streamtime
+                // target_mstimestamp_ = next->mstimestamp; // target time in streamtime // NOPES
             }
         }
         

@@ -1,7 +1,6 @@
 var searchData=
 [
   ['fifoframefilter',['FifoFrameFilter',['../classFifoFrameFilter.html#a56d3d14fdcb3d5a1b96799caaf7afaf9',1,'FifoFrameFilter']]],
-  ['filecachesignalcontext',['FileCacheSignalContext',['../structFileCacheSignalContext.html#a7370c0b66f06dd4a022ba97522e188f0',1,'FileCacheSignalContext::FileCacheSignalContext(SlotNumber slot, FrameFilter *framefilter)'],['../structFileCacheSignalContext.html#a74236e2d572cd7b445693967d9f44dd8',1,'FileCacheSignalContext::FileCacheSignalContext()']]],
   ['filecontext',['FileContext',['../structFileContext.html#ae6f5c89aa9a3525a3add01956c918115',1,'FileContext::FileContext(std::string filename, SlotNumber slot, FrameFilter *framefilter, long int st=0)'],['../structFileContext.html#a92707f5c82151c722b6fba08de09ad73',1,'FileContext::FileContext()']]],
   ['fileframefilter',['FileFrameFilter',['../classFileFrameFilter.html#ad574ff26061537687aa1c9568b28dc09',1,'FileFrameFilter']]],
   ['filestream',['FileStream',['../classFileStream.html#a7e83daa23512e7d9fccd651f3f1a12bb',1,'FileStream']]],

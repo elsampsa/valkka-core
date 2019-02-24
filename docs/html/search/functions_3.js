@@ -12,7 +12,7 @@ var searchData=
   ['delrendergroupcall',['delRenderGroupCall',['../classOpenGLThread.html#ac05c2be99cdeb614aac854d442995c45',1,'OpenGLThread']]],
   ['delshaders',['delShaders',['../classOpenGLThread.html#a7c421fdb80d8838ee63e5057e881d5d7',1,'OpenGLThread']]],
   ['deregisteroutboundcall',['deregisterOutboundCall',['../classLiveThread.html#a3c8f86130eaa8c2c68898a2f74de03f2',1,'LiveThread']]],
-  ['deregisterstreamcall',['deregisterStreamCall',['../classFileCacheThread.html#ac683e36c76857e90bd89ddca2221e454',1,'FileCacheThread::deregisterStreamCall()'],['../classLiveThread.html#ad9c33d99f8aa561c67559744b9f3e4b0',1,'LiveThread::deregisterStreamCall()']]],
+  ['deregisterstreamcall',['deregisterStreamCall',['../classLiveThread.html#ad9c33d99f8aa561c67559744b9f3e4b0',1,'LiveThread']]],
   ['diagnosis',['diagnosis',['../classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4',1,'FrameFifo::diagnosis()'],['../classOpenGLThread.html#ae13e33cc0aa85c84032078b21cc6bac1',1,'OpenGLThread::diagnosis()']]],
   ['disconnect',['disconnect',['../classForkFrameFilterN.html#a5f080194aaecc7d728e7cc7f0725c33c',1,'ForkFrameFilterN']]],
   ['dogetnextframe',['doGetNextFrame',['../classBufferSource.html#a796bc84e5233c21c379a57f2a3b65e54',1,'BufferSource']]],

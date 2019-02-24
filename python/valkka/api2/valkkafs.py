@@ -37,6 +37,7 @@ import numpy
 import logging
 from valkka import core
 from valkka.api2.tools import *
+import datetime
 
 pre_mod = "valkka.api2.valkkafs: "
 
@@ -135,31 +136,38 @@ class ValkkaFS:
     
     @staticmethod
     def loadFromDirectory(dirname, verbose=False):
-        jsonfile    =os.path.join(dirname,"valkkafs.json")
+        jsonfile = os.path.join(dirname,"valkkafs.json")
         assert(os.path.exists(dirname))
         assert(os.path.exists(jsonfile))
         f=open(jsonfile, "r")
         dic=json.loads(f.read())
         f.close()
         
-        dumpfile        =dic["dumpfile"]
-        blockfile       =dic["blockfile"]
-        blocksize       =dic["blocksize"]
-        n_blocks        =dic["n_blocks"]
-        current_block   =dic["current_block"]
+        partition_uuid  = dic["partition_uuid"]
+        dumpfile        = dic["dumpfile"]
+        blockfile       = dic["blockfile"]
+        blocksize       = dic["blocksize"]
+        n_blocks        = dic["n_blocks"]
+        current_block   = dic["current_block"]
         
-        assert(os.path.exists(dumpfile))
+        # either partition_uuid or local file
+        # assert((partition_uuid is None) or (dumpfile is None)) # nopes .. dumpfile refers to the correct /dev/name taken earlier from partition_uuid
+        
+        if partition_uuid is None:
+            assert(os.path.exists(dumpfile))
+        
         assert(os.path.exists(blockfile))
         assert(current_block < n_blocks)
         
         fs = ValkkaFS(
-            dumpfile   =dumpfile, 
-            blockfile  =blockfile,
-            blocksize  =blocksize,
-            n_blocks   =n_blocks,
-            current_block =current_block,
-            jsonfile   =jsonfile,
-            verbose    =verbose
+            partition_uuid = partition_uuid,
+            dumpfile       = dumpfile, 
+            blockfile      = blockfile,
+            blocksize      = blocksize,
+            n_blocks       = n_blocks,
+            current_block  = current_block,
+            jsonfile       = jsonfile,
+            verbose        = verbose
             )
         
         fs.reload_()
@@ -169,8 +177,15 @@ class ValkkaFS:
     @staticmethod
     def newFromDirectory(dirname=None, blocksize=None, n_blocks=None, device_size=None, partition_uuid=None, verbose=False):
         assert(isinstance(dirname, str))
-        if (os.path.exists(dirname)):
-            pass
+        
+        jsonfile  =os.path.join(dirname,"valkkafs.json")
+        blockfile =os.path.join(dirname,"blockfile")
+        dumpfile  =os.path.join(dirname,"dumpfile")
+
+        if (os.path.exists(dirname)): # clear directory
+            os.remove(jsonfile)
+            os.remove(blockfile)
+            if os.path.exists(dumpfile): os.remove(dumpfile)
         else:
             os.makedirs(dirname)
         
@@ -184,26 +199,48 @@ class ValkkaFS:
             assert(isinstance(device_size, int))
             n_blocks = device_size // blocksize
 
-        jsonfile  =os.path.join(dirname,"valkkafs.json")
-        blockfile =os.path.join(dirname,"blockfile")
+        if (partition_uuid is not None): # if no partition has been defined, then use default filename "dumpfile" in the directory
+            dumpfile = None
         
-        dumpfile = None
-        if (partition_uuid==None): # if no partition has been defined, then use default filename "dumpfile" in the directory
-            dumpfile=os.path.join(dirname,"dumpfile")
+        print("ValkkaFS: newFromDirectory: %s, %s" % (str(dumpfile), str(partition_uuid)))
         
         fs = ValkkaFS(
             partition_uuid = partition_uuid,
-            dumpfile   =dumpfile,
-            blockfile  =blockfile,
-            blocksize  =blocksize,
-            n_blocks   =n_blocks,
-            current_block =0,
-            jsonfile   =jsonfile,
-            verbose    =verbose
+            dumpfile   = dumpfile,
+            blockfile  = blockfile,
+            blocksize  = blocksize,
+            n_blocks   = n_blocks,
+            current_block = 0,
+            jsonfile   = jsonfile,
+            verbose    = verbose
             )
         
         fs.reinit()
         return fs
+        
+        
+    @staticmethod
+    def checkDirectory(dirname):
+        jsonfile  =os.path.join(dirname,"valkkafs.json")
+        assert(os.path.exists(dirname))
+        assert(os.path.exists(jsonfile))
+        f=open(jsonfile, "r")
+        dic=json.loads(f.read())
+        f.close()
+        
+        partition_uuid  = dic["partition_uuid"]
+        dumpfile        = dic["dumpfile"]
+        blockfile       = dic["blockfile"]
+        blocksize       = dic["blocksize"]
+        n_blocks        = dic["n_blocks"]
+        current_block   = dic["current_block"]
+        
+        block_device_dic = findBlockDevices()
+        
+        if (partition_uuid is not None):
+            assert(partition_uuid.lower() in block_device_dic) # check that partition_uuid exists
+            # print(block_device_dic, dumpfile)
+            assert(block_device_dic[partition_uuid.lower()][0] == dumpfile) # check that it correspond to the correct device
         
              
     filesystem_defs={
@@ -236,6 +273,8 @@ class ValkkaFS:
             self.dumpfile = block_device_dic[self.partition_uuid.lower()][0]
         else:
             assert(isinstance(self.dumpfile, str))
+        
+        print("ValkkaFS: dumpfile = %s" % (str(self.dumpfile)))
         
         self.core = core.ValkkaFS(self.dumpfile, self.blockfile, self.blocksize, self.n_blocks, False) # dumpfile, blockfile, blocksize, number of blocks, init blocktable
         self.blocksize = self.core.getBlockSize() # in the case it was adjusted ..
@@ -289,6 +328,7 @@ class ValkkaFS:
         
         
     def reinit(self):
+        # TODO: remove dumpfile
         # verbose=True
         verbose=False
         self.core.clearTable()
@@ -305,6 +345,7 @@ class ValkkaFS:
             self.core.clearDevice(True, verbose) # write-through the file
             print("ValkkaFS: cleared device")
         
+        
     def reload_(self):
         self.core.readTable()
     
@@ -312,7 +353,11 @@ class ValkkaFS:
     def getTimeRange(self, blocktable = None):
         if isinstance(blocktable,None.__class__):
             blocktable = self.getBlockTable()
-        nonzero = blocktable[:,0]>0
+        nonzero = blocktable[:,0] > 0
+        
+        if nonzero.sum() < 1: # empty blocktable
+            return ()
+            
         return (int(blocktable[nonzero,0].min()), int(blocktable[nonzero,1].max()))
         
     
@@ -523,6 +568,11 @@ class ValkkaFSWriterThread:
 
 
 
+def formatMstimestamp(mstime):
+    t = datetime.datetime.fromtimestamp(mstime/1000)
+    return "%s:%s" % (t.minute, t.second)
+    
+
 
 """
 - ValkkaFS
@@ -559,78 +609,119 @@ class ValkkaFSManager:
     timetolerance = 500 # if frames are missing at this distance or further, request for more blocks
     timediff = 10000 # blocktable can be inquired max this frequency (ms)
     
-    def __init__(self, valkkafs: ValkkaFS, timecallback: callable = None):
+    def __init__(self, valkkafs: ValkkaFS):
         """ValkkaFSReaderThread --> FileCacheThread
         """
         self.logger = getLogger(__name__ + "." + self.__class__.__name__)
         self.logger.setLevel(logging.DEBUG)
         
         self.valkkafs = valkkafs
-        self.timecallback = timecallback
+        
+        self.timecallback = None
+        self.timelimitscallback = None
+        
+        self.timerange = () # filesystem timerange.  empty tuple implies no frames
+        
         self.readBlockTable()
+        
         self.cacherthread = core.FileCacheThread("cacher")
         self.readerthread = core.ValkkaFSReaderThread("reader", valkkafs.core, self.cacherthread.getFrameFilter())
+        self.writerthread = core.ValkkaFSWriterThread("writer", valkkafs.core)
+        
         self.currentmstime = None # None means there's no reference point (no seek has succeeded so far)
         self.current_blocks = []
-        self.current_timerange = () # time limits of current blocks
+        self.current_timerange = (0,0) # time limits of current blocks
         
         # callback coming from cpp, informing about the current time
         self.cacherthread.setPyCallback(self.timeCallback__)
-   
+        self.cacherthread.setPyCallback2(self.timeLimitsCallback__)
+        
         self.cacherthread.startCall()
         self.readerthread.startCall()
+        self.writerthread.startCall()
         self.active = True
         
         
-    def timeCallback__(self, mstime):
-        """Handle here under / overflows:
+    def hasFrames(self):
+        return len(self.timerange) > 0
         
-        - If the stream goes over global timelimits, stop it
-        - .. same for underflow
-        - If goes under / over currently available blocks, order more
         
-        - WARNING: this is closely impossible to debug, as it's called from cpp
-        - .. so you need to test-call it from python
-        """
+    def setTimeCallback(self, timecallback: callable):
+        self.timecallback = timecallback
         
-        self.logger.info("timeCallback_ : %i", (mstime))
         
-        if mstime <= 0: # time not set
-            self.logger.info("timeCallback_ : no time set")
-            return
+    def setTimeLimitsCallback(self, timelimitscallback: callable):
+        self.timelimitscallback = timelimitscallback
         
-        self.readBlockTableIf()
-        if not self.timeOK(mstime):
-            self.logger.info("timeCallback__ : no such time in blocktable %i", (mstime))
-            self.logger.info("timeCallback__ : stop stream")
-            self.stop()
-            return
         
-        self.logger.info("timeCallback__ : distance to current block edge is %i", mstime-self.current_timerange[1])
-        
-        if mstime-self.current_timerange[1] > -timetolerance:
-            self.logger.info("timeCallback__ : will request more blocks")
-            ok = self.reqBlocks(mstime)
-            if not ok:
-                self.logger.warning("timeCallback__ : requesting blocks failed")
+    def timeCallback__(self, mstime: int):
+        try:
+            """This is called from cpp on regular time intervals
             
-        if not self.currentTimeOK(mstime):
-            self.logger.info("timeCallback__ : no frames for time %i", (mstime))
-            # TODO
-            return
-        
-        # TODO: time near block limits: request for more frames if possible
-        # TODO: does the framecache switching go smoothly in play?
-        
-        self.logger.info("timeCallback__ : time ok : %i" % (mstime))
-        self.currentmstime = mstime
-        if self.timecallback:
-            try:
-                self.timecallback(mstime)
-            except Exception as e:
-                self.logger.warning("timeCallback__ : your call back failed with '%s'", str(e))
+            :param mstime:  millisecond timestamp
             
-   
+            Handle under / overflows:
+            
+            - If the stream goes over global timelimits, stop it
+            - .. same for underflow
+            - If goes under / over currently available blocks, order more
+            
+            - using try / except blocks we can see the error message even when this is called from cpp
+            """
+            
+            self.logger.info("timeCallback__ : %i == %s", mstime, formatMstimestamp(mstime))
+            
+            if mstime <= 0: # time not set
+                self.logger.info("timeCallback__ : no time set")
+                return
+            
+            self.readBlockTableIf()
+            if not self.timeOK(mstime):
+                self.logger.info("timeCallback__ : no such time in blocktable %i", (mstime))
+                self.logger.info("timeCallback__ : stop stream")
+                self.stop()
+                return
+            
+            self.logger.info("timeCallback__ : distance to current block edge is %i", mstime-self.current_timerange[1])
+            
+            if mstime-self.current_timerange[1] > -self.timetolerance:
+                self.logger.info("timeCallback__ : will request more blocks")
+                ok = self.reqBlocks(mstime)
+                if not ok:
+                    self.logger.warning("timeCallback__ : requesting blocks failed")
+                
+            if not self.currentTimeOK(mstime):
+                self.logger.info("timeCallback__ : no frames for time %i", (mstime))
+                # TODO
+                return
+            
+            # TODO: time near block limits: request for more frames if possible
+            # TODO: does the framecache switching go smoothly in play?
+            
+            self.logger.info("timeCallback__ : time ok : %i" % (mstime))
+            self.currentmstime = mstime
+            
+            if self.timecallback is not None:
+                try:
+                    self.timecallback(mstime)
+                except Exception as e:
+                    self.logger.warning("timeCallback__ : your call back failed with '%s'", str(e))
+                    
+        except Exception as e:
+            raise(e)
+            print("timeCallback__ failed with '%s'" % (str(e)))
+            
+            
+    def timeLimitsCallback__(self, tup):
+        try:
+            self.logger.debug("timeLimitsCallback__ : %s", str(tup))
+            self.logger.debug("timeLimitsCallback__ : %s -> %s", formatMstimestamp(tup[0]), formatMstimestamp(tup[1]))
+            if self.timelimitscallback is not None:
+                self.timelimitscallback(tup)
+        except Exception as e:
+            print("timeLimitsCallback__ failed with '%s'" % (str(e)))
+        
+            
     def getCurrentTime(self):
         return self.currentmstime
    
@@ -638,6 +729,8 @@ class ValkkaFSManager:
     def timeOK(self, mstimestamp):
         """Time in the blocktable range?
         """
+        if self.hasFrames() == False:
+            return False
         if (mstimestamp < self.timerange[0]) or (mstimestamp > self.timerange[1]):
             self.logger.info("timeOK : invalid time %i range is %i %i", 
                                 mstimestamp, self.timerange[0], self.timerange[1])
@@ -664,8 +757,30 @@ class ValkkaFSManager:
         self.readerthread.setSlotIdCall(slot, _id) # id => slot
         ctx = core.FileStreamContext(slot, framefilter) # slot => framefilter
         self.cacherthread.registerStreamCall(ctx)
-        # deregisterStreamCall
+        return ctx
+    
+    
+    def clearOutput(self, ctx):
+        self.cacherthread.deregisterStreamCall(ctx)
+    
+    
+    def setOutput_(self, _id, slot):
+        """Just set id => slot mapping.  For debugging
+        """
+        self.readerthread.setSlotIdCall(slot, _id) # id => slot
         
+    
+    def setInput(self, _id, slot):
+        """Map incoming frames from slot to id number
+        """
+        self.writerthread.setSlotIdCall(_id, slot)
+    
+    
+    def getFrameFilter(self):
+        """Push frames here
+        """
+        return self.writerthread.getFrameFilter()
+    
 
     def readBlockTable(self):
         """Create a copy of the blocktable
@@ -683,8 +798,9 @@ class ValkkaFSManager:
 
 
     def play(self):
-        if not self.currentmstime:
+        if self.currentmstime is None:
             return False
+        self.logger.debug("play")
         self.cacherthread.playStreamsCall()
         return True
     
@@ -701,7 +817,7 @@ class ValkkaFSManager:
         
         """
         assert(isinstance(mstimestamp, int))
-        self.stop()
+        # self.stop() # seekStreamsCall stops
         self.readBlockTableIf()
         if not self.timeOK(mstimestamp):
             return False
@@ -713,11 +829,18 @@ class ValkkaFSManager:
             
             
     def smartSeek(self, mstimestamp):
+        """Like seek, but does not request frames if there are already frames in this timerange
+        """
         self.readBlockTableIf()
-        if (mstimestamp > self.timerange[0] + self.timetolerance) and (mstimestamp < self.timerange[1] - self.timetolerance): # no need to request new blocks
-            self.stop()
-            self.cacherthread.seekStreamsCall(mstimestamp) # simply sets the target time
+        self.logger.debug("smartSeek :")
+        if self.hasFrames() == False:
+            return
+        if (mstimestamp > self.current_timerange[0] + self.timetolerance) and (mstimestamp < self.current_timerange[1] - self.timetolerance): # no need to request new blocks
+            # self.stop()
+            self.logger.debug("smartSeek : just set target time")
+            self.cacherthread.seekStreamsCall(mstimestamp) # simply sets the target time # seekStreamsCall stops
         else:
+            self.logger.debug("smartSeek : request frames")
             self.seek(mstimestamp)
         
         
@@ -736,24 +859,27 @@ class ValkkaFSManager:
         
     def getTimeRange(self):
         self.readBlockTableIf()
-        return self.timerange()
+        return self.timerange
         
         
     def close(self):
         if not self.active:
             return
         self.logger.debug("close: stopping threads")
+        self.writerthread.stopCall()
         self.cacherthread.stopCall()
         self.readerthread.stopCall()
         self.active = False
 
 
     def requestClose(self):
+        self.writerthread.requestStopCall()
         self.cacherthread.requestStopCall()
         self.readerthread.requestStopCall()
         
         
     def waitClose(self):
+        self.writerthread.waitStopCall()
         self.cacherthread.waitStopCall()
         self.readerthread.waitStopCall()
         self.active = False

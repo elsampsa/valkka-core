@@ -88,8 +88,6 @@ digraph "/home/sampsa/C/valkka/src/cachestream.cpp"
   Node2 -> Node42 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node42 [label="frame.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$frame_8h.html",tooltip="Frame classes. "];
   Node42 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node42 -> Node43 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node43 [label="codec.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$codec_8h.html",tooltip="Codec definitions (slightly outdated) "];
   Node42 -> Node53 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node53 [label="tools.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$tools_8h.html",tooltip="Auxiliary routines. "];
   Node53 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
@@ -113,4 +111,6 @@ digraph "/home/sampsa/C/valkka/src/cachestream.cpp"
   Node58 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node56 -> Node54 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node56 -> Node53 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node59 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node59 [label="Python.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
 }
