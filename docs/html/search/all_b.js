@@ -25,5 +25,5 @@ var searchData=
   ['mstimetolerance',['mstimetolerance',['../classAVThread.html#a500682ab48302bc94c4f2a9adf08b701',1,'AVThread']]],
   ['mstotimeval',['msToTimeval',['../tools_8h.html#a6b263f324f19945af28ebde686acc6d6',1,'msToTimeval(long int mstimestamp):&#160;tools.cpp'],['../tools_8cpp.html#a6b263f324f19945af28ebde686acc6d6',1,'msToTimeval(long int mstimestamp):&#160;tools.cpp']]],
   ['mutex',['mutex',['../classFrameCache.html#a709a6dc29acda8a577a92df59aef4c77',1,'FrameCache::mutex()'],['../classFileFrameFilter.html#a7051cc96ca7695d66feb0ed7ebe57b7a',1,'FileFrameFilter::mutex()'],['../classFrameFifo.html#a937f07e8345eeced5fcb2447e4c234ea',1,'FrameFifo::mutex()'],['../classThread.html#a6383ead608b8e4be6debb9f25bcfe80a',1,'Thread::mutex()']]],
-  ['multithreads',['multithreads',['../group__threading__tag.html',1,'']]]
+  ['multithreading',['multithreading',['../group__threading__tag.html',1,'']]]
 ];

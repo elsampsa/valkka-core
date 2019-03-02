@@ -2,11 +2,11 @@ digraph "/home/sampsa/C/valkka/include/filestream.h"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node57 [label="/home/sampsa/C/valkka\l/include/filestream.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node57 -> Node58 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node58 [label="/home/sampsa/C/valkka\l/include/cachestream.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cachestream_8h.html"];
+  Node58 [label="/home/sampsa/C/valkka\l/include/filestream.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node58 -> Node59 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node59 [label="/home/sampsa/C/valkka\l/src/cachestream.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cachestream_8cpp.html"];
-  Node57 -> Node60 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node60 [label="/home/sampsa/C/valkka\l/src/filestream.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$filestream_8cpp.html"];
+  Node59 [label="/home/sampsa/C/valkka\l/include/cachestream.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cachestream_8h.html"];
+  Node59 -> Node60 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node60 [label="/home/sampsa/C/valkka\l/src/cachestream.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cachestream_8cpp.html"];
+  Node58 -> Node61 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node61 [label="/home/sampsa/C/valkka\l/src/filestream.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$filestream_8cpp.html"];
 }

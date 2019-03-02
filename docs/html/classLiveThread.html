@@ -68,7 +68,7 @@ $(function() {
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classLiveThread-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">LiveThread Class Reference<div class="ingroups"><a class="el" href="group__livethread__tag.html">livethread</a> &#124; <a class="el" href="group__threading__tag.html">multithreads</a></div></div>  </div>
+<div class="title">LiveThread Class Reference<div class="ingroups"><a class="el" href="group__livethread__tag.html">livethread</a> &#124; <a class="el" href="group__threading__tag.html">multithreading</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -168,6 +168,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">~Thread</a> ()</td></tr>
 <tr class="memdesc:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor:<b>not</b> virtual.  <a href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">More...</a><br /></td></tr>
 <tr class="separator:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="af1d76230f621bf4139ee5dd52e23fa8a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#af1d76230f621bf4139ee5dd52e23fa8a">postJoin</a> ()</td></tr>
+<tr class="memdesc:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the thread has been joined. <br /></td></tr>
+<tr class="separator:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20db67a3ec14a198b5444f3214d6155d inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a20db67a3ec14a198b5444f3214d6155d"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a20db67a3ec14a198b5444f3214d6155d">sendSignal</a> (<a class="el" href="structSignalContext.html">SignalContext</a> signal_ctx)</td></tr>
 <tr class="memdesc:a20db67a3ec14a198b5444f3214d6155d inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a signal to the thread. <br /></td></tr>
@@ -394,7 +398,7 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Live555, running in a separate thread. </p>
-<p>This class implements a "producer" thread that outputs frames into a <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> (see <a class="el" href="group__threading__tag.html">multithreads</a>)</p>
+<p>This class implements a "producer" thread that outputs frames into a <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> (see <a class="el" href="group__threading__tag.html">multithreading</a>)</p>
 <p>This <a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> has its own running Live555 event loop. It registers a callback into the Live555 event loop which checks periodically for signals send to the thread. Signals to this thread are sent using the <a class="el" href="classLiveThread.html#ae0022c31c399a43d26c1800dfe707a57" title="Send a signal to the thread. ">LiveThread::sendSignal</a> method.</p>
 <p>API methods take as parameter either <a class="el" href="structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection the user is requesting ...">LiveConnectionContext</a> or <a class="el" href="structLiveOutboundContext.html" title="Same as LiveConnectionContext, but for outbound streams (i.e. ">LiveOutboundContext</a> instances that identify the stream (type, address, slot number, etc.) </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>

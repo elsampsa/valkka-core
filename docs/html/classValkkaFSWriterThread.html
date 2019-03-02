@@ -105,6 +105,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#ac55457417751308a447863b7076e87c1">postRun</a> ()</td></tr>
 <tr class="memdesc:ac55457417751308a447863b7076e87c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the main execution loop exits, but before joining the thread. <br /></td></tr>
 <tr class="separator:ac55457417751308a447863b7076e87c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af509993e988dbd303c0b187a80685f03"><td class="memItemLeft" align="right" valign="top"><a id="af509993e988dbd303c0b187a80685f03"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#af509993e988dbd303c0b187a80685f03">postJoin</a> ()</td></tr>
+<tr class="memdesc:af509993e988dbd303c0b187a80685f03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the thread has been joined. <br /></td></tr>
+<tr class="separator:af509993e988dbd303c0b187a80685f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7974aca47727cf90af97447b3729ef8e"><td class="memItemLeft" align="right" valign="top"><a id="a7974aca47727cf90af97447b3729ef8e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#a7974aca47727cf90af97447b3729ef8e">sendSignal</a> (<a class="el" href="structValkkaFSWriterSignalContext.html">ValkkaFSWriterSignalContext</a> signal_ctx)</td></tr>
 <tr class="memdesc:a7974aca47727cf90af97447b3729ef8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert a signal into the signal_fifo. <br /></td></tr>
@@ -177,9 +181,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#a46fd1c7443b4683180e066460dff94df">handleSignals</a> ()</td></tr>
 <tr class="memdesc:a46fd1c7443b4683180e066460dff94df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call <a class="el" href="classValkkaFSWriterThread.html#a68b37c8d4ea5876611e4692b43ca4836" title="Handle an individual signal. Signal can originate from the frame fifo or from the signal_fifo deque...">ValkkaFSWriterThread::handleSignal</a> for every signal in the signal_fifo. <br /></td></tr>
 <tr class="separator:a46fd1c7443b4683180e066460dff94df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a69efaa14d699a8ac0cdb5af6fb7e2a"><td class="memItemLeft" align="right" valign="top"><a id="a0a69efaa14d699a8ac0cdb5af6fb7e2a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>saveCurrentBlock</b> (bool pycall=true)</td></tr>
-<tr class="separator:a0a69efaa14d699a8ac0cdb5af6fb7e2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46a7ae96bb1fa2e17c15dd6caccb9dac"><td class="memItemLeft" align="right" valign="top"><a id="a46a7ae96bb1fa2e17c15dd6caccb9dac"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>saveCurrentBlock</b> (bool pycall=true, bool use_gil=true)</td></tr>
+<tr class="separator:a46a7ae96bb1fa2e17c15dd6caccb9dac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4430cca5aeb7a5df0b1f1c2af042ec9"><td class="memItemLeft" align="right" valign="top"><a id="ab4430cca5aeb7a5df0b1f1c2af042ec9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setSlotId</b> (SlotNumber slot, IdNumber id)</td></tr>
 <tr class="separator:ab4430cca5aeb7a5df0b1f1c2af042ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -217,6 +221,9 @@ std::fstream&#160;</td><td class="memItemRight" valign="bottom"><b>filestream</b
 std::map&lt; SlotNumber, IdNumber &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#a78702518b28957d50efc7fb62df7a115">slot_to_id</a></td></tr>
 <tr class="memdesc:a78702518b28957d50efc7fb62df7a115"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map from slot numbers to ids. <br /></td></tr>
 <tr class="separator:a78702518b28957d50efc7fb62df7a115"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8ab17c3c0aad8d7d609db8df0aab1d4"><td class="memItemLeft" align="right" valign="top"><a id="af8ab17c3c0aad8d7d609db8df0aab1d4"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>bytecount</b></td></tr>
+<tr class="separator:af8ab17c3c0aad8d7d609db8df0aab1d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79c051142596092e94e8463b74135156"><td class="memItemLeft" align="right" valign="top"><a id="a79c051142596092e94e8463b74135156"></a>
 <a class="el" href="classFrameFifo.html">FrameFifo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#a79c051142596092e94e8463b74135156">infifo</a></td></tr>
 <tr class="memdesc:a79c051142596092e94e8463b74135156"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incoming frames are read from here. <br /></td></tr>

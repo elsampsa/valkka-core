@@ -337,12 +337,6 @@ FileCacheThread::~FileCacheThread() {
         }
     } // yes, I know, this sucks
     
-    if (pyfunc!=NULL) {
-        Py_DECREF(pyfunc);
-    }
-    if (pyfunc2!=NULL) {
-        Py_DECREF(pyfunc2);
-    }
 }
 
 void FileCacheThread::setCallback(void func(long int)) {
@@ -350,6 +344,9 @@ void FileCacheThread::setCallback(void func(long int)) {
 }
 
 void FileCacheThread::setPyCallback(PyObject* pobj) {
+    //PyGILState_STATE gstate;
+    //gstate = PyGILState_Ensure();
+    
     // pass here, say "signal.emit" or a function/method that accepts single argument
     if (PyCallable_Check(pobj)) { // https://docs.python.org/3/c-api/type.html#c.PyTypeObject
         Py_INCREF(pobj);
@@ -359,9 +356,14 @@ void FileCacheThread::setPyCallback(PyObject* pobj) {
         std::cout << "TestThread: setPyCallback: needs python callable for emitting current time" << std::endl;
         pyfunc=NULL;
     }
+    
+    //PyGILState_Release(gstate);
 }
 
 void FileCacheThread::setPyCallback2(PyObject* pobj) {
+    PyGILState_STATE gstate;
+    gstate = PyGILState_Ensure();
+    
     // pass here, say "signal.emit" or a function/method that accepts single argument
     if (PyCallable_Check(pobj)) { // https://docs.python.org/3/c-api/type.html#c.PyTypeObject
         Py_INCREF(pobj);
@@ -371,6 +373,8 @@ void FileCacheThread::setPyCallback2(PyObject* pobj) {
         std::cout << "TestThread: setPyCallback2: needs python callable for emitting loaded frame time limits" << std::endl;
         pyfunc2=NULL;
     }
+    
+    PyGILState_Release(gstate);
 }
 
 
@@ -391,8 +395,11 @@ void FileCacheThread::switchCache() {
     
     if (pyfunc2) {
         std::cout << "FileCacheThread : switchCache : evoke python callback : " << std::endl;
+        
+        // This is not needed: PyObject_CallFunctionObjArgs does it
         PyGILState_STATE gstate;
         gstate = PyGILState_Ensure();
+        
         PyObject *res, *tup;
     
         // res = Py_BuildValue("ll", (long int)(1), (long int)(2));
@@ -706,14 +713,21 @@ void FileCacheThread::run() {
         if ((mstime-save1mstime)>=Timeout::filecachethread) { // time to check the signals..
             // std::cout << "FileCacheThread: run: interrupt, dt= " << mstime-save1mstime << std::endl;
             handleSignals();
+            // std::cout << "FileCacheThread: loop =" << loop << std::endl;
             save1mstime=mstime;
         }
-        if ((mstime-save2mstime)>=300) { // send message to the python side // TODO: one should be able to adjust this frequency .. 1000 ms is too big
-            //std::cout << "FileCacheThread : run : python callback interrupt" << std::endl;
+        if ((mstime-save2mstime)>=3000 and loop) { // send message to the python side // TODO: one should be able to adjust this frequency .. 1000 ms is too big
+            // checking loop here is important: otherwise the process will hang when joining .. has something to do with PyGILState ?
+            // std::cout << "FileCacheThread : run : python callback interrupt" << std::endl;
             if (pyfunc) {
-                // std::cout << "FileCacheThread : run : evoke python callback : " << walltime << std::endl;
+                // if (false) {
+                std::cout << "FileCacheThread : run : evoke python callback : " << walltime << std::endl;
+                
+                // WARNING: this is not needed.  It's done by PyObject_CallFunction .. actually.. this crashes without locking the GIL!  .. this sometimes blocks, sometimes not
+                // ValkkaFS::writeBlock and this call seem to conflict..? .. nopes its again ValkkaFS::writeBlock that blocks ..
                 PyGILState_STATE gstate;
                 gstate = PyGILState_Ensure();
+                
                 PyObject* res;
                 
                 if (reftime>0) {
@@ -737,6 +751,13 @@ void FileCacheThread::preRun() {
 }
     
 void FileCacheThread::postRun() {
+    std::cout << "FileCacheThread: postRun" << std::endl;    
+    if (pyfunc!=NULL) {
+        Py_DECREF(pyfunc);
+    }
+    if (pyfunc2!=NULL) {
+        Py_DECREF(pyfunc2);
+    }
 }
 
 

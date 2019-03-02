@@ -141,9 +141,9 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#aaedf92e0f4609f6595e2b4368ebe2199">reportTable</a> (std::size_t from=0, std::size_t to=0, bool show_all=false)</td></tr>
 <tr class="memdesc:aaedf92e0f4609f6595e2b4368ebe2199"><td class="mdescLeft">&#160;</td><td class="mdescRight">print blocktable <br /></td></tr>
 <tr class="separator:aaedf92e0f4609f6595e2b4368ebe2199"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af68c887033984c6a65a600ec014942c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#af68c887033984c6a65a600ec014942c5">writeBlock</a> (bool pycall=true)</td></tr>
-<tr class="memdesc:af68c887033984c6a65a600ec014942c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by a writer class to inform that a new block has been written.  <a href="#af68c887033984c6a65a600ec014942c5">More...</a><br /></td></tr>
-<tr class="separator:af68c887033984c6a65a600ec014942c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a887f8d5de60aafb5174c2a24f661fe50"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#a887f8d5de60aafb5174c2a24f661fe50">writeBlock</a> (bool pycall=true, bool use_gil=true)</td></tr>
+<tr class="memdesc:a887f8d5de60aafb5174c2a24f661fe50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by a writer class to inform that a new block has been written.  <a href="#a887f8d5de60aafb5174c2a24f661fe50">More...</a><br /></td></tr>
+<tr class="separator:a887f8d5de60aafb5174c2a24f661fe50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89ae0e5b23662583156ec41fdd1f0877"><td class="memItemLeft" align="right" valign="top"><a id="a89ae0e5b23662583156ec41fdd1f0877"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#a89ae0e5b23662583156ec41fdd1f0877">markFrame</a> (long int mstimestamp)</td></tr>
 <tr class="memdesc:a89ae0e5b23662583156ec41fdd1f0877"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by a writer class to inform that a non-key frame has been written. <br /></td></tr>
@@ -391,8 +391,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="af68c887033984c6a65a600ec014942c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af68c887033984c6a65a600ec014942c5">&#9670;&nbsp;</a></span>writeBlock()</h2>
+<a id="a887f8d5de60aafb5174c2a24f661fe50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a887f8d5de60aafb5174c2a24f661fe50">&#9670;&nbsp;</a></span>writeBlock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -401,8 +401,18 @@ Here is the call graph for this function:</div>
           <td class="memname">void ValkkaFS::writeBlock </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>pycall</em> = <code>true</code></td><td>)</td>
+          <td class="paramname"><em>pycall</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>use_gil</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -414,6 +424,10 @@ Here is the call graph for this function:</div>
   </table>
   </dd>
 </dl>
+<ul>
+<li></li>
+<li></li>
+</ul>
 
 </div>
 </div>

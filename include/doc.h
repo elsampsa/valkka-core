@@ -412,37 +412,54 @@
  */
 
 
-/** @defgroup threading_tag multithreads
+/** @defgroup threading_tag multithreading
  * 
- * The Thread class is a prototype for implementing thread-safe multithreading classes.  There are three pure virtual classes, namely:
+ * - Threads are running independently at the "backend"
+ * - They are started, controlled and stopped from the "frontend Python side"
+ * - This image illustrates the situation:
  * 
- * 1. Thread::preRun() allocates necessary resources for the Thread (of course some resources may be reserved at constructor time)
+ \verbatim
+ +-------------------------+         +-------------------------+-------------------------+           
+ | "backend" thread        |         |                 "frontend" thread                 |
+ | c++ thread              |         |                         |    Python side method   |
+ | running independently   |         |     c++ side            |    (hold GIL)           |
+ |                         |         |                         |     |                   |
+ | - do stuff &            |         |                   <-----|-----+                   |
+ |   get messages from     | [queue] |   - send message to     |                         |
+ |   queue                 |         |     queue         >-----|-----+                   |
+ | - perform callbacks     |         |                         |     |                   |
+ |   to python side        |         |   - for backend         |   continue in Python    |
+ |   (obtain GIL)          |         |     termination         |   side & exit           |
+ |                         |         |     wait for thread     |   (release GIL)         |
+ |                         |         |     join                |                         |
+ |                         |         |                         |                         |
+ +-------------------------+         +-------------------------+-------------------------+
+ \endverbatim
+ * 
+ * The frontend's "Python side" API methods are typically tagged with "Call", i.e. they are named "startCall", "stopCall", etc. and are automatically generated from the c++ methods using SWIG.
+ *
+ * The backend runs std::thread or pthread whose target method is Thread::mainRun().  The Thread class is a prototype for implementing thread-safe multithreading classes.  There are three pure virtual classes, namely:
+ * 
+ * 1. Thread::preRun() allocates necessary resources for the Thread (if not reserved at constructor time)
  * 2. Thread::run() uses the resources and does an infinite loop.  It listens to requests and executes Thread's methods
  * 3. Thread::postRun() deallocates resources
  * 
  * The method Thread::mainRun() simply does the sequence (1-3)
- * 
- * Controlling the thread, once it has been started, follows these principles:
- * 
- * 1. In the "front-end", an API method is called with a some context instance "ctx" (say, ip address of the camera, etc.)
- * 2. That API method, in turn, encapsulates the context instance into Thread::SignalContext (that is characteristic of each thread)
- * 3. .. and uses the thread-safe method Thread::sendSignal(signal_context), to place that request into the request queue Thread::signal_fifo
- * 4. At the "back-end" (i.e. "inside" the running thread), Thread::run() is doing it's infinite loop and get's a new request from Thread::signal_fifo
- * 5. Thread::run() uses Thread::handleSignal that delegates the request to one of Thread's methods
- * 
- * To make distinction between "front-end" (API) and "back-end" (internal) methods, the API method names should be designated with the ending "Call".  
- * 
- * The two API methods in the prototype class, Thread::startCall and Thread::stopCall start and stop the thread, respectively.
- * 
- * When developing and debugging Thread classes, one can write test programs like this: 
- * 
- * Thread::preRun(); <br>
- * [call here thread's internal methods] <br>
- * Thread::postRun(); <br>
- * 
- * For practical Thread implementations, see for examṕle LiveThread and OpenGLThread
+ *
+ * Since we're dealing here with extending python code in c++ (frontend) and with calling python callbacks from c++ (backend), extra care must be taken with the Python Global Interpreter Lock (GIL)
+ *
+ * Frontend methods hold the Python GIL (as they are just normal python methods), which is kept during the whole execution of the c++ "frontend" part (i.e. no Py_BEGIN_ALLOW_THREADS here).  These are just fast calls that exit once they have sent a signal to the message queue.
+ *
+ * An exception to this rule is the special method Thread::requestStopCall() which, after sending a termination signal to the backend, waits for the thread join (for joining Thread::mainRun()).
+ *
+ * If at this moment, the backend is trying to perform a python callback, a deadlock will occur: the frontend is holding the python GIL, while the backend is waiting for its release.
+ *
+ * All Python callbacks from the backend after Thread::run() has been exited, should then be performed in the Thread's destructor, and without touching the GIL (destructors are typically evoked by the Python garbage collector, i.e. the GIL is being hold from the Python side)
+ *
+ * For practical Thread implementations, see for example LiveThread and OpenGLThread
  * 
  * Thread can be bound to a particular processor core, if needed.
+ * 
  * 
  */
 

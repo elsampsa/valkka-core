@@ -35,6 +35,7 @@
  */
 
 
+#include "Python.h"
 #include "framefifo.h"
 
 // #define STD_THREAD 1 // keep this commented if you want to adjust processor affinity
@@ -148,6 +149,8 @@ public: // not protected, cause we might need to test these separately
   virtual void preRun() = 0; 
   /** Called after the main execution loop exits, but before joining the thread */
   virtual void postRun() = 0; 
+  /** Called after the thread has been joined **/
+  virtual void postJoin();
   /** Send a signal to the thread */
   virtual void sendSignal(SignalContext signal_ctx); 
   /** Send a signal to the thread and wait for all signals to be executed */

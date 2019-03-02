@@ -69,7 +69,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>The <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> class implements a "producer" thread (see <a class="el" href="group__threading__tag.html">multithreads</a>) that feeds frames into a <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> (see <a class="el" href="group__frames__tag.html">the frame class</a>).  
+<p>The <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> class implements a "producer" thread (see <a class="el" href="group__threading__tag.html">multithreading</a>) that feeds frames into a <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> (see <a class="el" href="group__frames__tag.html">the frame class</a>).  
 <a href="#details">More...</a></p>
 <div class="dynheader">
 Collaboration diagram for livethread:</div>
@@ -131,7 +131,7 @@ Functions</h2></td></tr>
 <tr class="separator:gac7724aa950a968459770fd85e6cf95c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>The <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> class implements a "producer" thread (see <a class="el" href="group__threading__tag.html">multithreads</a>) that feeds frames into a <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> (see <a class="el" href="group__frames__tag.html">the frame class</a>). </p>
+<p>The <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> class implements a "producer" thread (see <a class="el" href="group__threading__tag.html">multithreading</a>) that feeds frames into a <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> (see <a class="el" href="group__frames__tag.html">the frame class</a>). </p>
 <p>The <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> chain feeds finally a <a class="el" href="classFrameFifo.html" title="A thread-safe combination of a fifo (first-in-first-out) queue and an associated stack. ">FrameFifo</a>, which is being read by a "consumer" thread (typically a <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a>).</p>
 <p>After the <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> has been started with <a class="el" href="classThread.html#a6c10e28af2524b3d5ca93ca9c0bea0ed" title="API method: starts the thread. ">LiveThread::startCall</a>, connections can be defined by instantiating a <a class="el" href="structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection the user is requesting ...">LiveConnectionContext</a> and by passing it to LiveThread::registerStream </p>
 <h2 class="groupheader">Enumeration Type Documentation</h2>

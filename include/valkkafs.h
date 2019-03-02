@@ -151,7 +151,7 @@ public:                                  // <pyapi>
     /** Used by a writer class to inform that a new block has been written
      * @param pycall : use the provided python callback function or not
      */
-    void writeBlock(bool pycall=true);                           // <pyapi>
+    void writeBlock(bool pycall=true, bool use_gil=true);   // <pyapi>
     
     /** Used by a writer class to inform that a non-key frame has been written */
     void markFrame(long int mstimestamp);        // <pyapi>
@@ -216,6 +216,7 @@ protected:
     ValkkaFS                            &valkkafs;
     std::fstream                        filestream;
     std::map<SlotNumber, IdNumber>      slot_to_id;  ///< Map from slot numbers to ids
+    std::size_t                         bytecount;
     
 protected: // frame input
     FrameFifo               infifo;           ///< Incoming frames are read from here
@@ -229,6 +230,7 @@ public: // redefined virtual functions
     void run();
     void preRun();
     void postRun();
+    void postJoin();
     void sendSignal(ValkkaFSWriterSignalContext signal_ctx);    ///< Insert a signal into the signal_fifo
       
 protected:
@@ -236,7 +238,7 @@ protected:
     void handleSignals();                                       ///< Call ValkkaFSWriterThread::handleSignal for every signal in the signal_fifo
 
 protected:
-    void saveCurrentBlock(bool pycall=true);
+    void saveCurrentBlock(bool pycall=true, bool use_gil=true);
     void setSlotId(SlotNumber slot, IdNumber id);
     void unSetSlotId(SlotNumber slot);
     void clearSlotId();

@@ -229,10 +229,22 @@ void test_4() { // 3, 4
 }
 
 
+
 void test_5() {
-  
-  const char* name = "@TEST: valkkafswriter_test: test 5: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    const char* name = "@TEST: valkkafswriter_test: test 5: ";
+    std::cout << name <<"** @@Read frames with ValkkaFSTool **" << std::endl;
+    
+    ValkkaFS fs("/dev/sda1", "/home/sampsa/python3_packages/valkka_examples/api_level_2/qt/fs_directory/blockfile", 2097152, 100, false); // dumpfile, blockfile, blocksize, number of blocks, don't overwrite blocktable
+    // fs.read();
+    
+    fs.reportTable();
+    
+    ValkkaFSTool fstool(fs);
+        
+    std::size_t i;
+    for(i=0;i<=fs.get_n_blocks();i++) {
+        fstool.dumpBlock(i);
+    }
   
 }
 

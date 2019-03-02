@@ -284,6 +284,16 @@ class ValkkaFS:
         # self.getBlockTable()
         self.core.setBlockCallback(self.new_block_cb) # callback when a new block is registered
 
+        print("ValkkaFS: resuming writing at block", self.current_block)
+
+        self.core.setCurrentBlock(self.current_block)
+
+        # attach an analysis tool
+        self.analyzer = core.ValkkaFSTool(self.core)
+        
+        self.verbose = True
+
+
     def new_block_cb(self, inp):
         """inp is either an error string or an int
         """
@@ -609,11 +619,12 @@ class ValkkaFSManager:
     timetolerance = 500 # if frames are missing at this distance or further, request for more blocks
     timediff = 10000 # blocktable can be inquired max this frequency (ms)
     
-    def __init__(self, valkkafs: ValkkaFS):
+    def __init__(self, valkkafs: ValkkaFS, write = True, read = True, cache = True):
         """ValkkaFSReaderThread --> FileCacheThread
         """
         self.logger = getLogger(__name__ + "." + self.__class__.__name__)
         self.logger.setLevel(logging.DEBUG)
+        # self.logger.setLevel(logging.WARNING)
         
         self.valkkafs = valkkafs
         
@@ -625,8 +636,8 @@ class ValkkaFSManager:
         self.readBlockTable()
         
         self.cacherthread = core.FileCacheThread("cacher")
-        self.readerthread = core.ValkkaFSReaderThread("reader", valkkafs.core, self.cacherthread.getFrameFilter())
-        self.writerthread = core.ValkkaFSWriterThread("writer", valkkafs.core)
+        self.readerthread = core.ValkkaFSReaderThread("reader", self.valkkafs.core, self.cacherthread.getFrameFilter())
+        self.writerthread = core.ValkkaFSWriterThread("writer", self.valkkafs.core)
         
         self.currentmstime = None # None means there's no reference point (no seek has succeeded so far)
         self.current_blocks = []
@@ -636,9 +647,14 @@ class ValkkaFSManager:
         self.cacherthread.setPyCallback(self.timeCallback__)
         self.cacherthread.setPyCallback2(self.timeLimitsCallback__)
         
-        self.cacherthread.startCall()
-        self.readerthread.startCall()
-        self.writerthread.startCall()
+        # use these for debugging
+        if cache:
+            self.cacherthread.startCall()
+        if read:
+            self.readerthread.startCall()
+        if write:
+            self.writerthread.startCall()
+            
         self.active = True
         
         
@@ -655,6 +671,7 @@ class ValkkaFSManager:
         
         
     def timeCallback__(self, mstime: int):
+        # return # debug
         try:
             """This is called from cpp on regular time intervals
             
@@ -867,8 +884,8 @@ class ValkkaFSManager:
             return
         self.logger.debug("close: stopping threads")
         self.writerthread.stopCall()
-        self.cacherthread.stopCall()
         self.readerthread.stopCall()
+        self.cacherthread.stopCall()
         self.active = False
 
 

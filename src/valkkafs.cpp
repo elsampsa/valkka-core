@@ -71,6 +71,13 @@ ValkkaFS::ValkkaFS(const char *device_file, const char *block_file, std::size_t 
 ValkkaFS::~ValkkaFS() {
     // delete py_array;
     // Py_DECREF(arr);
+    
+    if (pyfunc) {
+        //PyGILState_STATE gstate;
+        //gstate = PyGILState_Ensure();
+        Py_DECREF(pyfunc);
+        //PyGILState_Release(gstate);
+    }
     os.close();
 }
 
@@ -160,7 +167,7 @@ void ValkkaFS::reportTable(std::size_t from, std::size_t to, bool show_all) {
 
 
 
-void ValkkaFS::writeBlock(bool pycall) {
+void ValkkaFS::writeBlock(bool pycall, bool use_gil) {
     std::unique_lock<std::mutex> lk(this->mutex);
     std::string msg("");
     
@@ -202,20 +209,30 @@ void ValkkaFS::writeBlock(bool pycall) {
     
     if (pyfunc!=NULL) {
         PyGILState_STATE gstate;
-        // std::cout << "ValkkaFS: writeBlock: obtaining Python GIL" << std::endl;
-        // weird shit ahead
-        // if thread.cpp => Thread::closeThread => thread joining has been called the following line will hang:
-        gstate = PyGILState_Ensure();
-        // std::cout << "ValkkaFS: writeBlock: obtained Python GIL" << std::endl;
+        
+        if (use_gil) {
+            ///*
+            // WARNING: this is not needed! .. the PyObject_CallFunction does that
+            std::cout << "ValkkaFS: writeBlock: obtaining Python GIL" << std::endl;
+            gstate = PyGILState_Ensure();
+            // WARNING: weird shit ahead
+            // WARNING: if thread.cpp => Thread::closeThread => thread joining has been called the following line will hang:
+            std::cout << "ValkkaFS: writeBlock: obtained Python GIL" << std::endl;
+            //*/
+        }
         if (msg.size()>0) {
             PyObject_CallFunction(pyfunc, "s", msg.c_str());
         }
         else {
             PyObject_CallFunction(pyfunc, "n", current_row);
         }
-        // std::cout << "ValkkaFS: writeBlock: releasing Python GIL" << std::endl;
-        PyGILState_Release(gstate);
-        // std::cout << "ValkkaFS: writeBlock: released Python GIL" << std::endl;
+        if (use_gil) {
+            ///*
+            std::cout << "ValkkaFS: writeBlock: releasing Python GIL" << std::endl;
+            PyGILState_Release(gstate);
+            std::cout << "ValkkaFS: writeBlock: released Python GIL" << std::endl;
+            //*/
+        }
     }
     
 }
@@ -288,6 +305,9 @@ void ValkkaFS::setCurrentBlock(std::size_t n_block) {
 void ValkkaFS::setBlockCallback(PyObject* pobj) {
     std::unique_lock<std::mutex> lk(this->mutex);
     
+    // PyGILState_STATE gstate;
+    // gstate = PyGILState_Ensure();
+    
     // pass here, say "signal.emit" or a function/method that accepts single argument
     if (PyCallable_Check(pobj)) { // https://docs.python.org/3/c-api/type.html#c.PyTypeObject
         Py_INCREF(pobj);
@@ -297,12 +317,16 @@ void ValkkaFS::setBlockCallback(PyObject* pobj) {
         valkkafslogger.log(LogLevel::fatal) << "TestThread: setCallback: needs python callable" << std::endl;
         pyfunc=NULL;
     }
+    
+    // PyGILState_Release(gstate);
 }
 
 void ValkkaFS::setArrayCall(PyObject* pyobj) {
     std::unique_lock<std::mutex> lk(this->mutex);
 
-    Py_INCREF(pyobj);
+    PyGILState_STATE gstate;
+    gstate = PyGILState_Ensure();
+    // Py_INCREF(pyobj);
     
     PyArrayObject *pyarr = (PyArrayObject*)pyobj;
     long int *data = (long int*)pyarr->data;
@@ -329,7 +353,8 @@ void ValkkaFS::setArrayCall(PyObject* pyobj) {
     data[3]=22;
     */
     
-    Py_DECREF(pyobj);
+    // Py_DECREF(pyobj);
+    PyGILState_Release(gstate);
 }
 
 
@@ -380,7 +405,7 @@ void ValkkaFSTool::dumpBlock(std::size_t n_block) {
 }
 
 
-ValkkaFSWriterThread::ValkkaFSWriterThread(const char *name, ValkkaFS &valkkafs, FrameFifoContext fifo_ctx) : Thread(name), valkkafs(valkkafs), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), filestream(valkkafs.getDevice(), std::fstream::binary | std::fstream::out | std::fstream::in)
+ValkkaFSWriterThread::ValkkaFSWriterThread(const char *name, ValkkaFS &valkkafs, FrameFifoContext fifo_ctx) : Thread(name), valkkafs(valkkafs), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), filestream(valkkafs.getDevice(), std::fstream::binary | std::fstream::out | std::fstream::in), bytecount(0)
 {
     if (!filestream.is_open()) { // so the file did not exist
         valkkafs.clearDevice();
@@ -396,14 +421,14 @@ ValkkaFSWriterThread::ValkkaFSWriterThread(const char *name, ValkkaFS &valkkafs,
         // re-open
         filestream.open(valkkafs.getDevice(), std::fstream::binary | std::fstream::out | std::fstream::in);
     }
-    filestream.seekp(std::streampos(0));
+    // filestream.seekp(std::streampos(0));
+    filestream.seekp(std::streampos(valkkafs.getCurrentBlockSeek()));
     
     std::cout << "ValkkaFSWriterThread : device is " << valkkafs.getDevice() << std::endl;
 }
     
 
 ValkkaFSWriterThread::~ValkkaFSWriterThread() {
-    filestream.close();
 }
 
 void ValkkaFSWriterThread::run() {
@@ -416,13 +441,12 @@ void ValkkaFSWriterThread::run() {
     mstime = getCurrentMsTimestamp();
     oldmstime = mstime;
     
-    loop=true;
-    
-    std::size_t bytecount=0; // bytecount inside a block
+    loop=true;    
     std::size_t framesize;
     IdNumber    id;
-                    
-    while(loop) {
+    
+    bytecount = 0; // bytecount inside a block
+    while(loop) { // LOOP
         f=infifo.read(Timeout::valkkafswriterthread);
         if (!f) { // TIMEOUT
             valkkafslogger.log(LogLevel::crazy) << "ValkkaFSWriterThread: "<< this->name <<" timeout expired!" << std::endl;
@@ -477,8 +501,9 @@ void ValkkaFSWriterThread::run() {
                         // progression is measured per leading stream (stream with subsession_index == 0)
                         if (bf->subsession_index==0) { // LEAD STREAM
                             if (bf->isSeekable()) {
-                                valkkafslogger.log(LogLevel::debug) << "ValkkaFSWriterThread : run : marking keyframe" << std::endl;
+                                valkkafslogger.log(LogLevel::debug) << "ValkkaFSWriterThread : run : marking keyframe at bytecount " << bytecount << std::endl;
                                 valkkafs.markKeyFrame(bf->mstimestamp);
+                                // saveCurrentBlock(true); // debugging
                             }
                             else {
                                 valkkafslogger.log(LogLevel::crazy) << "ValkkaFSWriterThread : run : marking frame" << std::endl;
@@ -504,22 +529,26 @@ void ValkkaFSWriterThread::run() {
             handleSignals();
             oldmstime=mstime;
         }
-    }
+        // if (bytecount > 1024) { loop = false; } // debug
+    } // LOOP
         
+    /*
     if (bytecount > 0) { // the thread will exit.  Let's save and close the current block (it might not be full though)
-        saveCurrentBlock(false);
+        // saveCurrentBlock(false);
+        saveCurrentBlock(true);
     }
+    */
 }
 
 
 
-void ValkkaFSWriterThread::saveCurrentBlock(bool pycall) {
-    // std::cout << "ValkkaFSWriterThread: saveCurrentBlock: start" << std::endl;
+void ValkkaFSWriterThread::saveCurrentBlock(bool pycall, bool use_gil) {
+    std::cout << "ValkkaFSWriterThread: saveCurrentBlock: start" << std::endl;
     // finish this block by writing IdNumber 0
     IdNumber zero=0;
-    filestream.write((const char*)&zero, sizeof(zero));
+    filestream.write((const char*)&zero, sizeof(zero)); // block end mark .. after this, we're safe.  This block can be read safely.  Writing can be resumed from the next block.
     // start a new block, seek to the new position
-    valkkafs.writeBlock(pycall); // inform ValkkaFS that a new block has been entered
+    valkkafs.writeBlock(pycall, use_gil); // inform ValkkaFS that a new block has been entered.  This block can be read safely.
     // seek to the new position (which might have been wrapped to 0)
     filestream.seekp(std::streampos(valkkafs.getCurrentBlockSeek())); 
     // write a zero IdNumber to the beginning of the new block
@@ -534,15 +563,21 @@ void ValkkaFSWriterThread::preRun() {
 }
     
 void ValkkaFSWriterThread::postRun() {
-    
-    
 }
+
+void ValkkaFSWriterThread::postJoin() {
+    if (bytecount > 0) {
+        saveCurrentBlock(true, false); // use callback but don't obtain GIL
+    }
+    filestream.close();
+}
+
 
 void ValkkaFSWriterThread::handleSignal(ValkkaFSWriterSignalContext &signal_ctx) {
     switch (signal_ctx.signal) {
         
         case ValkkaFSWriterSignal::exit:
-            loop=false;
+            loop = false;
             break;
             
         case ValkkaFSWriterSignal::set_slot_id:
@@ -561,8 +596,8 @@ void ValkkaFSWriterThread::handleSignal(ValkkaFSWriterSignalContext &signal_ctx)
             reportSlotId();
             break;
             
-        case ValkkaFSWriterSignal::seek:
-            break; // TODO
+        case ValkkaFSWriterSignal::seek: // need this?
+            break;
             
         
     }
@@ -715,7 +750,7 @@ void ValkkaFSWriterThread::requestStopCall() {
     // use the old-style "interrupt" way of sending signals
     ValkkaFSWriterSignalContext signal_ctx;
     signal_ctx.signal = ValkkaFSWriterSignal::exit;
-    
+ 
     this->sendSignal(signal_ctx);
 }
 
