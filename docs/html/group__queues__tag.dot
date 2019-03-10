@@ -1,0 +1,13 @@
+digraph "queues and fifos"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir=LR;
+  Node3 [label="opengl",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group__openglthread__tag.html",tooltip="Things related to OpenGL. "];
+  Node0 [label="queues and fifos",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 [label="available framefilters",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group__filters__tag.html",tooltip="Things related to FrameFilters. "];
+  Node2 [label="livethread",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group__livethread__tag.html",tooltip="The LiveThread class implements a \"producer\" thread (see multithreading) that feeds frames into a Fra..."];
+  Node0->Node1 [shape=plaintext, label="CacheFrameFilter\nFifoFrameFilter\nBlockingFifoFrameFilter", color="orange", dir="none", style="dashed"];
+  Node0->Node2 [shape=plaintext, label="LiveFifo", color="orange", dir="none", style="dashed"];
+  Node0->Node3 [shape=plaintext, label="OpenGLFrameFifoContext\nOpenGLFrameFifo", color="orange", dir="none", style="dashed"];
+}

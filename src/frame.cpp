@@ -319,11 +319,29 @@ IdNumber BasicFrame::read(std::fstream &is) {
     }
     
     read_bytes(subsession_index);
+    if (subsession_index < 0) { // corrupt frame
+        valkkafslogger.log(LogLevel::fatal) << "BasicFrame : read : corrupt frame (subsession_index)" << std::endl;
+        return 0;
+    }
+    
     read_bytes(mstimestamp);
+    if (mstimestamp < 0) { // corrupt frame
+        valkkafslogger.log(LogLevel::fatal) << "BasicFrame : read : corrupt frame (mstimestamp)" << std::endl;
+        return 0;
+    }
+    
     read_bytes(media_type);
     read_bytes(codec_id);
     read_bytes(len);  // read the number of bytes
-    payload.resize(len); 
+    
+    try {
+        payload.resize(len);
+    }
+    catch (std::bad_alloc& ba) {
+        valkkafslogger.log(LogLevel::fatal) << "BasicFrame : read : corrupt frame : bad_alloc caught " << ba.what() << std::endl;
+        return 0;
+    }
+        
     is.read((char*)payload.data(), len); // read the bytes themselves
     
     return device_id;

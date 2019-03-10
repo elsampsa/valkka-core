@@ -227,10 +227,10 @@ protected:
     PyObject    *pyfunc2;       ///< Python callback that emits current loaded time limits
     long int    target_mstimestamp_;    ///< We should be at this time instant (streamtime)
     Frame       *next;
-    long int    reftime;
+    long int    reftime;                ///< walltime = frametime_ + reftime
     long int    walltime;
     AbstractFileState state;
-    SetupFrame  state_setupframe; ///< SetupFrame for sending the stream state
+    SetupFrame  state_setupframe; ///< SetupFrame for sending the stream state (seek, play, etc.)
     
 protected: // Thread member redefinitions
     std::deque<FileCacheSignalContext> signal_fifo;   ///< Redefinition of signal fifo.
@@ -249,10 +249,11 @@ public: // internal
     void switchCache();
     void dumpPlayCache();
     void dumpTmpCache();
-    void sendSetupFrames(SetupFrame *f); ///< Sends SetupFrame s to all active slots
+    void sendSetupFrames(SetupFrame *f);                                ///< Sends SetupFrame s to all active slots
     void stopStreams(bool send_state = true);
     void playStreams(bool send_state = true);
-    void seekStreams(long int mstimestamp, bool send_state = true);
+    void setRefTimeAndStop(bool send_state = true);                     ///< Set reference time and set state to stop
+    void seekStreams(long int mstimestamp, bool send_state = true);     ///< Sets target time.  Sets FileCacheThread::next = NULL
     
 private: // internal
     void handleSignal(FileCacheSignalContext &signal_ctx);

@@ -199,9 +199,11 @@ void ValkkaFS::writeBlock(bool pycall, bool use_gil) {
     col_0=0;
     col_1=0;
     
+    // set the next block values to zero
     // clear old values, if any
     tab[ind(current_row,0)]=0;
     tab[ind(current_row,1)]=0;
+    updateDumpTable_(current_row); 
     
     if (!pycall) {
         return;

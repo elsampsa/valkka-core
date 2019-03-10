@@ -1,0 +1,11 @@
+digraph "livethread"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir=LR;
+  Node1 [label="queues and fifos",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group__queues__tag.html",tooltip="Multiprocessing queues/fifos. "];
+  Node0 [label="livethread",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 [label="multithreading",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group__threading__tag.html"];
+  Node0->Node1 [shape=plaintext, label="LiveFifo", color="orange", dir="none", style="dashed"];
+  Node0->Node2 [shape=plaintext, label="LiveThread", color="orange", dir="none", style="dashed"];
+}

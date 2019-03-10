@@ -149,8 +149,11 @@ YUVTEX* SlotContext::getTEX() {
      */
     
     if (!active) { // nothing much to show ..
+        // std::cout << "OpenGLThread : SlotContext : getText : not active" << std::endl;
         return statictex;
     }
+    
+    // std::cout << "OpenGLThread : SlotContext : getText : load, keep, is_dead " << load_flag << " " << keep_flag << " " << is_dead << std::endl;
     
     if (load_flag) { // can use this yuvtex
         if (keep_flag) { // keep on showing the last frame, no matter what
@@ -1164,7 +1167,7 @@ long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
         return 0;
     }
     else if (f->getFrameClass() == FrameClass::setup) {
-        std::cout << "OpenGLThread: insertFifo: SetupFrame: " << *f << std::endl;
+        opengllogger.log(LogLevel::debug) << "OpenGLThread: insertFifo: SetupFrame: " << *f << std::endl;
         
         SetupFrame *setupframe = static_cast<SetupFrame*>(f);
         
@@ -1173,7 +1176,7 @@ long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
                 SlotContext *slot_ctx = slots_[setupframe->n_slot]; // shorthand
                     
                 if (setupframe->stream_state == AbstractFileState::seek) {
-                    slot_ctx->loadFlag(true); // can't show present frame, must wait for the next frame
+                    slot_ctx->loadFlag(true); // can't show present frame (after clicking seek, it's not valid anymore), must wait for a new frame
                 }
                 else if (setupframe->stream_state == AbstractFileState::play) {
                     slot_ctx->keepFlag(false); // don't keep on showing the last frame

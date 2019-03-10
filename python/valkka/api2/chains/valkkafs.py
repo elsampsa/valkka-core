@@ -272,16 +272,7 @@ class ValkkaFSFileFilterchain:
         
         "affinity": (int, -1),
         "verbose": (bool, False),
-        "msreconnect": (int, 0),
-
-        # Timestamp correction type: TimeCorrectionType_none,
-        # TimeCorrectionType_dummy, or TimeCorrectionType_smart (default)
-        "time_correction": None,
-        # Operating system socket ringbuffer size in bytes # 0 means default
-        "recv_buffer_size": (int, 0),
-        # Reordering buffer time for Live555 packets in MILLIseconds # 0 means
-        # default
-        "reordering_mstime": (int, 0)
+        "msreconnect": (int, 0)
     }
 
     def __init__(self, **kwargs):
@@ -329,11 +320,19 @@ class ValkkaFSFileFilterchain:
         
         self.avthread.setAffinity(self.affinity)
 
+        self.info = core.InfoFrameFilter("debug")
+
         # initial connections : recorded stream
-        self.connect_to_stream("rec_decode_"+str(self.slot), self.avthread.getFrameFilter()) # self.fork to AVThread
+        
+        self.connect_to_stream("rec_decode_"+str(self.slot), self.avthread.getBlockingFrameFilter()) # self.fork to AVThread
+        # self.connect_to_stream("rec_decode_"+str(self.slot), self.info) # debug 
+        
         # # self.valkkafs.setOutput(_id, slot, framefilter)
         self.ctx = self.valkkafsmanager.setOutput(self.id_rec, self.slot, self.fork) # recorded stream to self.fork
-                
+        
+        self.connect_to_yuv("debug", self.info) # debug
+        
+        
     def connect_to_stream(self, name, framefilter):
         return self.fork.connect(name, framefilter)
 

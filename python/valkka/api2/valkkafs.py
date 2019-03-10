@@ -617,7 +617,7 @@ ValkkaFSManager.setOutput(id, slot, framefilter)
 class ValkkaFSManager:
     
     timetolerance = 500 # if frames are missing at this distance or further, request for more blocks
-    timediff = 10000 # blocktable can be inquired max this frequency (ms)
+    timediff = 5 # blocktable can be inquired max this frequency (secs)
     
     def __init__(self, valkkafs: ValkkaFS, write = True, read = True, cache = True):
         """ValkkaFSReaderThread --> FileCacheThread
