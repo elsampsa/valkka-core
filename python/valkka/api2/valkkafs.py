@@ -42,7 +42,9 @@ import datetime
 pre_mod = "valkka.api2.valkkafs: "
 
 # https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs
-guid_linux_swap="0657FD6D-A4AB-43C4-84E5-0933C84B4F4F"
+guid_linux_swap="0657FD6D-A4AB-43C4-84E5-0933C84B4F4F" # GPT partition table
+mbr_linux_swap="82" # MBR partition table
+
 
 
 def findBlockDevices():
@@ -84,8 +86,10 @@ def findBlockDevices():
     devs={}
     # devs=[]
     block_devices = glob.glob("/sys/block/sd*")
+    block_devices += glob.glob("/dev/nvme*")
     # block_devices = glob.glob("/sys/block/*")
     for block_device in block_devices:
+        # print("block_device", block_device)
         devname = os.path.join("/dev", block_device.split("/")[-1]) # e.g. "/dev/sda"
         lis=["sfdisk", devname, "-J"]
         p = Popen(lis, stdout=PIPE, stderr=PIPE)
@@ -98,7 +102,7 @@ def findBlockDevices():
                 ptable = dic["partitiontable"]
                 if "partitions" in ptable:
                     for partition in ptable["partitions"]:
-                        if (partition["type"]==guid_linux_swap):
+                        if (partition["type"]==guid_linux_swap): # GTP partition table 
                             p = Popen(["blockdev", "--getsize64", devname], stdout=PIPE, stderr=PIPE)
                             st = p.stdout.read().decode("utf-8").strip()
                             devs[partition["uuid"].lower()]=(partition["node"], int(st))
@@ -108,6 +112,12 @@ def findBlockDevices():
                                 }
                             """
                             # devs.append((partition["uuid"], partition["node"], int(st)))
+                        """
+                        elif (partition["type"]==mbr_linux_swap): # MBR partition table
+                            p = Popen(["blockdev", "--getsize64", devname], stdout=PIPE, stderr=PIPE)
+                            st = p.stdout.read().decode("utf-8").strip()
+                            devs[partition["node"].lower()]=(partition["node"], int(st))
+                        """
     return devs
 
 
