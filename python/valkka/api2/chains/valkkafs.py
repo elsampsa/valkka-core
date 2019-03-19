@@ -330,7 +330,7 @@ class ValkkaFSFileFilterchain:
         # # self.valkkafs.setOutput(_id, slot, framefilter)
         self.ctx = self.valkkafsmanager.setOutput(self.id_rec, self.slot, self.fork) # recorded stream to self.fork
         
-        self.connect_to_yuv("debug", self.info) # debug
+        # self.connect_to_yuv("debug", self.info) # debug
         
         
     def connect_to_stream(self, name, framefilter):

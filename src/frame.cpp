@@ -297,7 +297,7 @@ bool BasicFrame::dump(IdNumber device_id, std::fstream &os) {
     dump_bytes(codec_id);
     dump_bytes(len); // write the number of bytes
     os.write((const char*)payload.data(), payload.size()); // write the bytes themselves
-    os.flush();
+    // os.flush();
     return true;
 }
 

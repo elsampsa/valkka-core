@@ -80,7 +80,7 @@
 #include <string.h>
 #include <assert.h>
 
-// usb cams
+// usb cams & raw file write
 #include <fcntl.h>              /* low-level i/o */
 #include <unistd.h>
 #include <sys/stat.h>
@@ -95,4 +95,5 @@
 #include<GL/glxext.h>
 
 #endif
+
 

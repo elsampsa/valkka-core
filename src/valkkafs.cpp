@@ -34,17 +34,21 @@
 #include "valkkafs.h"
 
 
-ValkkaFS::ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks, bool init) : device_file(device_file), block_file(block_file), blocksize(blocksize), n_blocks(n_blocks), col_0(0), col_1(0), current_row(0), prev_row(0), pyfunc(NULL), os(block_file, std::fstream::binary | std::fstream::out | std::fstream::in), init(init)
+ValkkaFS::ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks, bool init) : device_file(device_file), block_file(block_file), blocksize(blocksize), n_blocks(n_blocks), col_0(0), col_1(0), current_row(0), prev_row(0), pyfunc(NULL), os(), init(init)
 {
-    if (!os.is_open()) { // so the file did not exist
+    // os.rdbuf()->pubsetbuf(0, 0); // keep this commented.  When using ofstream, of course, have a buffer
+    os.open(block_file, std::fstream::binary | std::fstream::out | std::fstream::in); // we want O_DIRECT here..!
+    
+    if (!os.is_open()) { // so the file did not exist ..
         // create
-        os.open(block_file, std::fstream::out | std::fstream::binary | std::fstream::trunc); 
+        os.open(block_file, std::fstream::out | std::fstream::binary | std::fstream::trunc);
 
         // close
         if (os.is_open())
             os.close();
 
         // re-open
+        // os.rdbuf()->pubsetbuf(0, 0); // nopes
         os.open(block_file, std::fstream::binary | std::fstream::out | std::fstream::in);
     }
     
@@ -409,7 +413,7 @@ void ValkkaFSTool::dumpBlock(std::size_t n_block) {
 
 ValkkaFSWriterThread::ValkkaFSWriterThread(const char *name, ValkkaFS &valkkafs, FrameFifoContext fifo_ctx) : Thread(name), valkkafs(valkkafs), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), filestream(valkkafs.getDevice(), std::fstream::binary | std::fstream::out | std::fstream::in), bytecount(0)
 {
-    if (!filestream.is_open()) { // so the file did not exist
+    if (!filestream.is_open()) { // so the file did not exist // TODO: we need this?  ValkkaFS should take care of this ..
         valkkafs.clearDevice();
         /*
         // create
@@ -460,17 +464,17 @@ void ValkkaFSWriterThread::run() {
                 handleSignal(signalframe->valkkafswriter_signal_ctx);
             } // SIGNALFRAME
             else if (f->getFrameClass()==FrameClass::basic) { // BASICFRAME
-                BasicFrame *bf = static_cast<BasicFrame*>(f);
-                valkkafslogger.log(LogLevel::crazy) << "ValkkaFSWriterThread : " << this->name <<" got BasicFrame " << *bf << std::endl;
-                // std::cout << "ValkkaFSWriterThread : " << this->name <<" got BasicFrame " << *bf << std::endl;
+                BasicFrame *basicframe = static_cast<BasicFrame*>(f);
+                valkkafslogger.log(LogLevel::crazy) << "ValkkaFSWriterThread : " << this->name <<" got BasicFrame " << *basicframe << std::endl;
+                // std::cout << "ValkkaFSWriterThread : " << this->name <<" got BasicFrame " << *basicframe << std::endl;
                 // get the id
-                auto it = slot_to_id.find(bf->n_slot);
+                auto it = slot_to_id.find(basicframe->n_slot);
                 if (it == slot_to_id.end()) { // this slot has not been registered using an unique id
-                    valkkafslogger.log(LogLevel::debug) << "ValkkaFSWriterThread : slot " << bf->n_slot << " does not have an id " << std::endl;
+                    valkkafslogger.log(LogLevel::debug) << "ValkkaFSWriterThread : slot " << basicframe->n_slot << " does not have an id " << std::endl;
                 }
                 else { // HAS ID
                     id = it->second;
-                    framesize = bf->calcSize();
+                    framesize = basicframe->calcSize();
                     // test if a single frame can fit into this filesystem
                     if (framesize+sizeof(IdNumber) > valkkafs.maxFrameSize()) {
                         valkkafslogger.log(LogLevel::fatal) << "ValkkaFSWriterThread : frame " << *f <<" too big for this ValkkaFS" << std::endl;
@@ -498,18 +502,18 @@ void ValkkaFSWriterThread::run() {
                             
                         }
                         valkkafslogger.log(LogLevel::crazy) << "ValkkaFSWriterThread : writing frame " << *f << " " << f->dumpPayload() << std::endl;
-                        bf->dump(id, filestream); // performs a flush as well
+                        basicframe->dump(id, filestream); // performs a flush as well
                         // inform ValkkaFS about the progression of key frames
                         // progression is measured per leading stream (stream with subsession_index == 0)
-                        if (bf->subsession_index==0) { // LEAD STREAM
-                            if (bf->isSeekable()) {
+                        if (basicframe->subsession_index==0) { // LEAD STREAM
+                            if (basicframe->isSeekable()) {
                                 valkkafslogger.log(LogLevel::debug) << "ValkkaFSWriterThread : run : marking keyframe at bytecount " << bytecount << std::endl;
-                                valkkafs.markKeyFrame(bf->mstimestamp);
+                                valkkafs.markKeyFrame(basicframe->mstimestamp);
                                 // saveCurrentBlock(true); // debugging
                             }
                             else {
                                 valkkafslogger.log(LogLevel::crazy) << "ValkkaFSWriterThread : run : marking frame" << std::endl;
-                                valkkafs.markFrame(bf->mstimestamp);
+                                valkkafs.markFrame(basicframe->mstimestamp);
                             }
                         } // LEAD STREAM
                         bytecount+=framesize;

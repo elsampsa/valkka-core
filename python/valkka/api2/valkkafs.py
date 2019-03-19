@@ -275,6 +275,8 @@ class ValkkaFS:
         # object as attributes
         parameterInitCheck(ValkkaFS.parameter_defs, kwargs, self)
         
+        self.block_cb = None # a custom callback in the callback chain when a new block is ready
+        
         block_device_dic = findBlockDevices() 
         
         if (self.dumpfile==None): # no dumpfile defined .. so it must be the partition uuid
@@ -292,7 +294,7 @@ class ValkkaFS:
         self.blocktable_ = numpy.zeros((self.core.get_n_blocks(), self.core.get_n_cols()),dtype=numpy.int_) # this memory area is accessed by cpp
         # self.blocktable  = numpy.zeros((self.core.get_n_blocks(), self.core.get_n_cols()),dtype=numpy.int_) # copy of the cpp blocktable
         # self.getBlockTable()
-        self.core.setBlockCallback(self.new_block_cb) # callback when a new block is registered
+        self.core.setBlockCallback(self.new_block_cb__) # callback when a new block is registered
 
         print("ValkkaFS: resuming writing at block", self.current_block)
 
@@ -304,16 +306,28 @@ class ValkkaFS:
         self.verbose = True
 
 
-    def new_block_cb(self, inp):
+    def new_block_cb__(self, inp):
         """inp is either an error string or an int
         """
-        if (self.verbose):
-            print(self.pre, "new_block_cb:", inp)
-        if isinstance(inp, int):
-            self.current_block=inp
-            self.writeJson()
-        elif isinstance(inp, str):
-            print("ValkkaFS: new_block_cb: got message:", inp)
+        try:
+            if (self.verbose):
+                print(self.pre, "new_block_cb:", inp)
+            if isinstance(inp, int):
+                self.current_block = inp
+                self.writeJson()
+            elif isinstance(inp, str):
+                print("ValkkaFS: new_block_cb: got message:", inp)
+                
+            if self.block_cb is not None:
+                self.block_cb()
+                
+        except Exception as e:
+            print("ValkkaFS: failed with '%s'" % (str(e)))
+            
+        
+    def setBlockCallback(self, cb):
+        self.block_cb = cb
+        
         
     def getBlockTable(self):
         self.core.setArrayCall(self.blocktable_) # copy data from cpp to python (this is thread safe)
@@ -633,8 +647,8 @@ class ValkkaFSManager:
         """ValkkaFSReaderThread --> FileCacheThread
         """
         self.logger = getLogger(__name__ + "." + self.__class__.__name__)
-        self.logger.setLevel(logging.DEBUG)
-        # self.logger.setLevel(logging.WARNING)
+        # self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.WARNING)
         
         self.valkkafs = valkkafs
         
@@ -680,6 +694,10 @@ class ValkkaFSManager:
         self.timelimitscallback = timelimitscallback
         
         
+    def setBlockCallback(self, cb):
+        self.valkkafs.setBlockCallback(cb)
+        
+        
     def timeCallback__(self, mstime: int):
         # return # debug
         try:
@@ -696,20 +714,20 @@ class ValkkaFSManager:
             - using try / except blocks we can see the error message even when this is called from cpp
             """
             
-            self.logger.info("timeCallback__ : %i == %s", mstime, formatMstimestamp(mstime))
+            self.logger.debug("timeCallback__ : %i == %s", mstime, formatMstimestamp(mstime))
             
             if mstime <= 0: # time not set
-                self.logger.info("timeCallback__ : no time set")
+                self.logger.debug("timeCallback__ : no time set")
                 return
             
             self.readBlockTableIf()
             if not self.timeOK(mstime):
-                self.logger.info("timeCallback__ : no such time in blocktable %i", (mstime))
-                self.logger.info("timeCallback__ : stop stream")
+                self.logger.warning("timeCallback__ : no such time in blocktable %i", (mstime))
+                self.logger.warning("timeCallback__ : stop stream")
                 self.stop()
                 return
             
-            self.logger.info("timeCallback__ : distance to current block edge is %i", mstime-self.current_timerange[1])
+            self.logger.debug("timeCallback__ : distance to current block edge is %i", mstime-self.current_timerange[1])
             
             if mstime-self.current_timerange[1] > -self.timetolerance:
                 self.logger.info("timeCallback__ : will request more blocks")
@@ -725,18 +743,18 @@ class ValkkaFSManager:
             # TODO: time near block limits: request for more frames if possible
             # TODO: does the framecache switching go smoothly in play?
             
-            self.logger.info("timeCallback__ : time ok : %i" % (mstime))
+            self.logger.debug("timeCallback__ : time ok : %i" % (mstime))
             self.currentmstime = mstime
             
             if self.timecallback is not None:
                 try:
                     self.timecallback(mstime)
                 except Exception as e:
-                    self.logger.warning("timeCallback__ : your call back failed with '%s'", str(e))
+                    self.logger.warning("timeCallback__ : your call backfailed with '%s'", str(e))
                     
         except Exception as e:
             raise(e)
-            print("timeCallback__ failed with '%s'" % (str(e)))
+            self.logger.warning("timeCallback__ failed with '%s'" % (str(e)))
             
             
     def timeLimitsCallback__(self, tup):
@@ -748,7 +766,7 @@ class ValkkaFSManager:
         except Exception as e:
             print("timeLimitsCallback__ failed with '%s'" % (str(e)))
         
-            
+        
     def getCurrentTime(self):
         return self.currentmstime
    
