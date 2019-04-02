@@ -87,11 +87,6 @@ virtual CLASS *getClone() {\
 };\
 
 
-// macros for dumping and reading variables
-#define dump_bytes(var) os.write( (const char*)&var, sizeof(var));
-#define read_bytes(var) is.read((char*)&var, sizeof(var));
-
-
 // macros for initializing and deallocating SignalFrame's custom_signal_ctx
 
 

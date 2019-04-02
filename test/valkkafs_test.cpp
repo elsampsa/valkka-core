@@ -80,7 +80,6 @@ void test_2() {
     fs.clearDevice(true, true); // write through, be verbose
     fs.clearDevice(false, true); // just stripe, be verbose
     
-    
     fs.clearTable();
     fs.dumpTable();
 }
@@ -96,17 +95,19 @@ void test_3() {
     std::fill(f->payload.begin(), f->payload.end(), 12);
     f->mstimestamp = 1001;
 
-    std::fstream os("framedump", std::fstream::binary | std::fstream::out);
+    // std::fstream os("framedump", std::fstream::binary | std::fstream::out);
+    RaWriter os("framedump");
     f->dump(123, os);
-    os.close();
+    os.close_();
    
     std::cout << "frame:" << *f << std::endl;
     
     BasicFrame *f2 = new BasicFrame();
     
-    std::fstream is("framedump", std::ios::binary | std::fstream::in);
+    // std::fstream is("framedump", std::ios::binary | std::fstream::in);
+    RawReader is("framedump");
     f2->read(is);
-    is.close();
+    is.close_();
     
     std::cout << "frame 2:" << *f2 << std::endl;
     
@@ -122,28 +123,34 @@ void test_4() {
     
     BasicFrame *f = new BasicFrame();
     f->resize(1024*1024);
+    // f->resize(10);
     
-    std::fstream os("framedump", std::fstream::binary | std::fstream::out);
+    // std::fstream os("framedump", std::fstream::binary | std::fstream::out);
+    RaWriter os("framedump");
     for(i=0;i<10;i++) {
         f->subsession_index=i%2;
-        f->n_slot=1;
+        f->n_slot=i;
         std::fill(f->payload.begin(), f->payload.end(), i+1);
         f->mstimestamp = 100+i;
-        f->dump(i, os);
+        f->dump(3, os); // device_id, writer
         std::cout << *f << std::endl;
     }
-    os.close();
+    os.close_();
     
     std::cout << std::endl;
     
+    // return;
+    
     std::size_t id;
-    std::fstream is("framedump", std::fstream::binary | std::fstream::in);
+    // std::fstream is("framedump", std::fstream::binary | std::fstream::in);
+    RawReader is("framedump");
     for(i=0;i<10;i++) {
         id=f->read(is);
         std::cout << id << ": " << *f << std::endl;
     }
-    is.close();
+    is.close_();
     
+    delete f;
 }
 
 
@@ -153,25 +160,27 @@ void test_5() {
 
     BasicFrame *f = new BasicFrame();
     f->resize(1024*1024);
-    f->subsession_index=2;
+    f->subsession_index=0; // at least one stream must be the "lead stream" and have subsession_index = 0
     f->n_slot=1;
     std::fill(f->payload.begin(), f->payload.end(), 1);
     f->mstimestamp = 100;
 
-    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10, true); // last parameter: init blocktable
+    ValkkaFS fs("disk.dat", "block.dat", 20*1024*1024, 10, true); // last parameter: init blocktable
     ValkkaFSWriterThread ft("writer", fs);
     
     FrameFilter &filt = ft.getFrameFilter();
     
     ft.startCall();
-    
     sleep_for(1s);
+    ft.setSlotIdCall(1, 1); // slot, id
     
     int i;
     for(i=0;i<10;i++) {
+        std::cout << "sending " << i << std::endl;
         filt.run(f);
     }
     
+    std::cout << "sleepin'" << std::endl;
     sleep_for(5s);
     
     ft.stopCall();
@@ -187,13 +196,13 @@ void test_6() {
     // construct a dummy frame
     BasicFrame *f = new BasicFrame();
     f->resize(1024*1024);
-    f->subsession_index=2;
+    f->subsession_index=0;
     f->n_slot=1;
     std::fill(f->payload.begin(), f->payload.end(), 1);
     f->mstimestamp = 100;
 
     // create ValkkaFS and WriterThread
-    ValkkaFS fs("disk.dat", "block.dat", 1024*1024, 10, true); // blocksize, number of blocks .. init blocktable
+    ValkkaFS fs("disk.dat", "block.dat", 10*1024*1024, 10, true); // blocksize, number of blocks .. init blocktable
     ValkkaFSWriterThread ft("writer", fs);
     
     FrameFilter &filt = ft.getFrameFilter();

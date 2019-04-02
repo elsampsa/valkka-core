@@ -821,7 +821,15 @@ classname(init parameter) {
 \verbatim
 api2.ValkkaFSManager(api2.ValkkaFS) {
     
-    1: api2.ValkkaFS {core.ValkkaFS}
+    1: api2.ValkkaFS {
+        core.ValkkaFS
+        
+        # functions called from the c++ side:
+        def new_block_cb__(propagate, par:
+            - propagate indicates if further callbacks should be evoked
+            - par is an integer (block number) or an error string
+        }
+            
     2: core.ValkkaFSReaderThread {
         core.ValkkaFS
         - writes to core.FileCacherThread.getFrameFilter() [4]
@@ -836,7 +844,7 @@ api2.ValkkaFSManager(api2.ValkkaFS) {
     
         }   
     
-    # callbacks from the c++ side:
+    # functions called from the c++ side:
     
     def timeCallback__(mstime: int):
         - originates from core.FileCacherThread
@@ -845,6 +853,7 @@ api2.ValkkaFSManager(api2.ValkkaFS) {
     def timeLimitsCallback__(tup: tuple):
         - originates from core.FileCacherThread
         - sent when frame cache has been updated
+    
     
     # some important methods:
     
@@ -886,13 +895,94 @@ incoming frames:
 \endverbatim
  *
  *
- * c++ => Python callbacks
- *
- * core.FileCacherThread => 
- * 
- 
- 
  */
+ 
+/** @page filesystem cpp / Python callbacks
+ * 
+ * ValkkaFS is using both cpp-to-python and python-to-cpp calls
+ * 
+ * This can get tricky, and care must be taken to avoid nasty deadlocks due to the Python Global Interpreter Lock (GIL) 
+ * 
+ * The cpp part of the code can decide to call some python code, that has been defined in the main thread Python part.  This is done by the cpp code "autonomously" and is not initiated from the python side. (*)
+ * 
+ * Python part might evoke some cpp code. (**)
+ * 
+ * Special care must be taken with "callback cascades" that start from cpp and end up back to the cpp side again.
+ * 
+ * The acquisition and release of GIL is illustrated in the following graph.
+\verbatim
+
+(*)      = callback from cpp to Python
+(**)     = callback from Python to cpp
+|        = the instance holding the GIL
+DEADLOCK = example deadlock situations
+
+A program using both (*) and (**) callbacks:
 
 
+            main thread (Python)           cpp thread
+            
+               |
+               |
+               |
+                                           | acquire GIL (*) 
+                                           | - call python method, defined at main thread
+                                           | release GIL
+               |
+               |
+               |
+                                           | acquire GIL (*)
+                                           | - call python method, defined at main thread
+                                           |   - that python method might call cpp code which tries to acquire GIL => DEADLOCK!
+                                           | release GIL
+            
+               |
+               | 
+               | call swig-wrapped   
+               | cpp method (**)           do not acquire GIL           
+               |                           as it's being hold by the main thread
+               |                           return
+               |
+                                           | acquire GIL (*)
+                                           | - call python method, defined at main thread
+                                           | release GIL 
+               
+\endverbatim
+
+
+
+
+\verbatim
+            
+            
+            
+            main thread (Python)           ValkkaFSWriterThread    
+            
+              |
+              |
+                                           | acquire GIL
+                                           | - call ValkkaFSWriterThread::pyfunc
+                                           |   - In the python side, this is set to valkka.api2.valkkafs.new_block_cb__
+                                           |   - .. which in turn continues the callback-cascade into ValkkaFS::setArrayCall
+                                           | release GIL
+              |
+              |
+            
+              | requestStopCall           requestStopCall (cpp side)
+              | (python side)             - sends message to thread's message queue
+              |                           - returns immediately
+             
+              |                           exits thread's running loop
+               
+              | waitStopCall              preJoin 
+              |                           => saveCurrentBlock 
+              |                              => valkkaFS::writeBlock 
+              |                                 - should not acquire GIL as this has been 
+              |                                   requested from the python side
+              |                           thread join & exit
+               
+\endverbatim
+               
+ *
+ */
 

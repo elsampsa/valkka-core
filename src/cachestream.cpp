@@ -388,7 +388,6 @@ void FileCacheThread::switchCache() {
         // res = Py_BuildValue("(ii)", 123, 456); // debug : crassssh
         
         tup = PyTuple_New(2);
-        
         PyTuple_SET_ITEM(tup, 0, PyLong_FromLong(play_cache->getMinTime_()));
         PyTuple_SET_ITEM(tup, 1, PyLong_FromLong(play_cache->getMaxTime_()));
         
@@ -582,6 +581,7 @@ void FileCacheThread::run() {
                 if (markerframe->tm_end) {
                     valkkafslogger.log(LogLevel::debug) << "FileCacheThread :  run : transmission end" << std::endl;
                     switchCache(); // start using the new FrameCache
+                    next = NULL; // this refers to a cleared frame
                     // the client calls (1) the ValkkaFSReaderThread and (2) seekStreams of this thread
                     // When MarkerFrame with end flag arrives, the seek is activated
                     // We need: (a) target_mstimestamp_ (b) next Frame

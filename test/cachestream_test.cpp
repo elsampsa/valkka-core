@@ -264,7 +264,7 @@ void test_3() {
     BLOCK_LIST = &block_list;
     FREADER = &freader;
     
-    fcacher.setCallback(fpointer);
+    // fcacher.setCallback(fpointer);
     
     fcacher.startCall();
     freader.startCall();

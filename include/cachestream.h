@@ -187,18 +187,19 @@ protected:
 /** Thread that caches frames and streams them into output at play speed
  * 
  * - Has two FrameCaches: other one is used to stream, while other one is caching the incoming frames
+ * - This framefilter chain is typically driven by another thread (ValkkaFSReaderThread)
  * 
  * \verbatim
  * 
  *                                                       +----> FrameCache
  *                                                       |
- *                           +----> SwitchFrameFilter ---+
- *                           |                           |
+ *                           +----> SwitchFrameFilter ---+                This part of the framefilter chain is typically 
+ *                           |                           |                driven by another thread (ValkkaFSReaderThread)
  *                           |                           +----> FrameCache
  *  ---> ForkFrameFilter ----+
  *                           |
  *                           |
- *                           +----> ClassFrameFilter (MarkerFrame) ---> Event loop
+ *                           +----> ClassFrameFilter (MarkerFrame) ---> FileCacheThread event loop
  * 
  * \endverbatim
  * 

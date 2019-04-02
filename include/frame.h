@@ -42,6 +42,7 @@
 #include "opengl.h"
 #include "tools.h"
 #include "macro.h"
+#include "rawrite.h"
 
 
 /** Enumeration of Frame classes used by Valkka
@@ -205,8 +206,8 @@ public:
   
 public: // frame serialization
   std::size_t calcSize();                             ///< How much this frame occupies in bytes when serialized
-  bool dump(IdNumber device_id, std::fstream &os);    ///< Write the frame to filestream with a certain device id
-  IdNumber read(std::fstream &is);                    ///< Read the frame from filestream.  Returns device id
+  bool dump(IdNumber device_id, RaWriter &raw_writer);    ///< Write the frame to filestream with a certain device id
+  IdNumber read(RawReader &raw_reader);                    ///< Read the frame from filestream.  Returns device id
 };
 
 

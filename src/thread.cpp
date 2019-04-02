@@ -73,7 +73,7 @@ void Thread::mainRun() {// for std::thread version
     }
     this->run();
     this->postRun();
-    threadlogger.log(LogLevel::debug) << "Thread: mainRun: bye from "<< this->name <<std::endl;
+    threadlogger.log(LogLevel::debug) << "Thread: mainRun: (0) bye : "<< this->name <<std::endl;
 }
 
 #ifdef STD_THREAD
@@ -87,25 +87,26 @@ void* Thread::mainRun_(void *p) {// for the pthread_* version
 
 
 void Thread::closeThread() {
-    threadlogger.log(LogLevel::debug) << "Thread: closeThread: "<< this->name <<std::endl;
+    threadlogger.log(LogLevel::debug) << "Thread: closeThread: (1) "<< this->name <<std::endl;
     // sleep_for(3s); return; // debugging
     // sleep_for(3s); // debugging
     if (!this->has_thread) { return; } // thread not even started
     if (thread_joined) { return; } // can be joined only once
+    
+    this->preJoin();
+    
     #ifdef STD_THREAD
         // std::thread way
-        threadlogger.log(LogLevel::debug) << "Waiting thread join for " << this->name << std::endl;
-        threadlogger.log(LogLevel::debug) << "Thread: closeThread: joining "<< this->name <<std::endl;
+        threadlogger.log(LogLevel::debug) << "Thread: closeThread: (2) joining : "<< this->name <<std::endl;
         this->internal_thread.join();
-        threadlogger.log(LogLevel::debug) << "thread joined for " << this->name << std::endl;
+        threadlogger.log(LogLevel::debug) << "Thread: closeThread: (3) joined : " << this->name << std::endl;
     #else
         // pthread_* way
         void *res;
         int i;
-        threadlogger.log(LogLevel::debug) << "Waiting thread join for " << this->name << std::endl;
-        threadlogger.log(LogLevel::debug) << "Thread: closeThread: joining "<< this->name <<std::endl;
+        threadlogger.log(LogLevel::debug) << "Thread: closeThread: (2) joining : "<< this->name <<std::endl;
         i=pthread_join(internal_thread, &res);
-        threadlogger.log(LogLevel::debug) << "Thread: closeThread: joined "<< this->name <<std::endl;
+        threadlogger.log(LogLevel::debug) << "Thread: closeThread: (3) joined : "<< this->name <<std::endl;
         if (i!=0) {perror("Thread: closeThread: WARNING! join failed"); exit(1);}
         thread_joined = true;
         free(res); // free resources allocated by thread
@@ -114,12 +115,17 @@ void Thread::closeThread() {
     #endif
     
     this->postJoin();
-    threadlogger.log(LogLevel::debug) << "Thread: closeThread: bye "<< this->name <<std::endl;
+    
+    threadlogger.log(LogLevel::debug) << "Thread: closeThread: (4) bye : "<< this->name <<std::endl;
 }
 
 
-void Thread::postJoin() { // be default, do nothing
+void Thread::preJoin() {
 }
+
+void Thread::postJoin() {
+}
+
 
 
 void Thread::startCall() {

@@ -149,6 +149,8 @@ public: // not protected, cause we might need to test these separately
   virtual void preRun() = 0; 
   /** Called after the main execution loop exits, but before joining the thread */
   virtual void postRun() = 0; 
+  /** Called before the thread is joined **/
+  virtual void preJoin();
   /** Called after the thread has been joined **/
   virtual void postJoin();
   /** Send a signal to the thread */

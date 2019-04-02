@@ -286,7 +286,12 @@ std::size_t BasicFrame::calcSize() {
 }
 
 
-bool BasicFrame::dump(IdNumber device_id, std::fstream &os) {
+#define dump_bytes(var) raw_writer.dump( (const char*)&var, sizeof(var));
+#define read_bytes(var) raw_reader.get((char*)&var, sizeof(var));
+
+
+// bool BasicFrame::dump(IdNumber device_id, std::fstream &os) {
+bool BasicFrame::dump(IdNumber device_id, RaWriter& raw_writer) {
     std::size_t len;
     len=payload.size();
     
@@ -296,14 +301,16 @@ bool BasicFrame::dump(IdNumber device_id, std::fstream &os) {
     dump_bytes(media_type);
     dump_bytes(codec_id);
     dump_bytes(len); // write the number of bytes
-    os.write((const char*)payload.data(), payload.size()); // write the bytes themselves
+    // std::cout << "BasicFrame: dump: len = " << len << std::endl;
+    raw_writer.dump((const char*)payload.data(), payload.size());
+    // os.write((const char*)payload.data(), payload.size()); // write the bytes themselves
     // os.flush();
     return true;
 }
 
 
-
-IdNumber BasicFrame::read(std::fstream &is) {
+// IdNumber BasicFrame::read(std::fstream &is) {
+IdNumber BasicFrame::read(RawReader& raw_reader) {
     std::size_t len;
     IdNumber device_id;
     
@@ -342,7 +349,7 @@ IdNumber BasicFrame::read(std::fstream &is) {
         return 0;
     }
         
-    is.read((char*)payload.data(), len); // read the bytes themselves
+    raw_reader.get((char*)payload.data(), len); // read the bytes themselves
     
     return device_id;
 }

@@ -34,11 +34,12 @@
 #include "valkkafsreader.h"
 
 
-ValkkaFSReaderThread::ValkkaFSReaderThread(const char *name, ValkkaFS &valkkafs, FrameFilter &outfilter, FrameFifoContext fifo_ctx) : Thread(name), valkkafs(valkkafs), outfilter(outfilter), infifo(name, fifo_ctx), infilter(name, &infifo), filestream(valkkafs.getDevice(), std::fstream::binary | std::fstream::in) {
+ValkkaFSReaderThread::ValkkaFSReaderThread(const char *name, ValkkaFS &valkkafs, FrameFilter &outfilter, FrameFifoContext fifo_ctx, bool o_direct) : Thread(name), valkkafs(valkkafs), outfilter(outfilter), infifo(name, fifo_ctx), infilter(name, &infifo), raw_reader(valkkafs.getDevice().c_str(), o_direct) {
 }
     
     
 ValkkaFSReaderThread::~ValkkaFSReaderThread() {
+    raw_reader.close_();
 }
     
     
@@ -184,9 +185,13 @@ void ValkkaFSReaderThread::pullBlocks(std::list<std::size_t> block_list) {
         valkkafslogger.log(LogLevel::debug) <<"ValkkaFSReaderThread : pullBlocks : " << *it << std::endl;
         if (*it < valkkafs.get_n_blocks()) { // BLOCK OK
             valkkafslogger.log(LogLevel::debug) <<"ValkkaFSReaderThread : pullBlocks : block seek " << valkkafs.getBlockSeek(*it) << std::endl;
-            filestream.seekp(std::streampos(valkkafs.getBlockSeek(*it))); // TODO
+            // filestream.seekp(std::streampos(valkkafs.getBlockSeek(*it))); // TODO
+            raw_reader.seek(valkkafs.getBlockSeek(*it));
+            
             while(true) { // FRAME LOOP
-                id = f.read(filestream);
+                // id = f.read(filestream);
+                id = f.read(raw_reader);
+                
                 // valkkafslogger.log(LogLevel::debug) <<"ValkkaFSReaderThread : pullBlocks : id " << id << std::endl;
                 if (id==0) { // no more frames in this block
                     break;

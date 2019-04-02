@@ -92,6 +92,7 @@ def findBlockDevices():
         # print("block_device", block_device)
         devname = os.path.join("/dev", block_device.split("/")[-1]) # e.g. "/dev/sda"
         lis=["sfdisk", devname, "-J"]
+        # print("lis>", lis)
         p = Popen(lis, stdout=PIPE, stderr=PIPE)
         st = p.stdout.read().decode("utf-8").strip()
         # print(">"+st+"<")
@@ -201,7 +202,7 @@ class ValkkaFS:
         
         assert(isinstance(blocksize, int))
         
-        blocksize = max(512, (blocksize - blocksize%512)) # blocksize must be a multiple of 512
+        blocksize = max(core.FS_GRAIN_SIZE, (blocksize - blocksize%core.FS_GRAIN_SIZE)) # blocksize must be a multiple of 512
         
         if (isinstance(n_blocks, int)):
             pass
@@ -289,6 +290,7 @@ class ValkkaFS:
         print("ValkkaFS: dumpfile = %s" % (str(self.dumpfile)))
         
         self.core = core.ValkkaFS(self.dumpfile, self.blockfile, self.blocksize, self.n_blocks, False) # dumpfile, blockfile, blocksize, number of blocks, init blocktable
+        
         self.blocksize = self.core.getBlockSize() # in the case it was adjusted ..
         
         self.blocktable_ = numpy.zeros((self.core.get_n_blocks(), self.core.get_n_cols()),dtype=numpy.int_) # this memory area is accessed by cpp
@@ -300,39 +302,56 @@ class ValkkaFS:
 
         self.core.setCurrentBlock(self.current_block)
 
-        # attach an analysis tool
-        self.analyzer = core.ValkkaFSTool(self.core)
+        # # attach an analysis tool
+        # self.analyzer = core.ValkkaFSTool(self.core)
         
         self.verbose = True
 
 
-    def new_block_cb__(self, inp):
-        """inp is either an error string or an int
+    def new_block_cb__(self, propagate, par):
+        """input tuple elements:
+        
+        boolean    : should the callback be propagated or not
+        int / str  : int = block number, str = error message
+        
         """
+        
+        #propagate = tup[0]
+        #par = tup[1]
+        
         try:
             if (self.verbose):
-                print(self.pre, "new_block_cb:", inp)
-            if isinstance(inp, int):
-                self.current_block = inp
+                print(self.pre, "new_block_cb__:", propagate, par)
+            if isinstance(par, int):
+                self.current_block = par
+                print("ValkkaFS: new_block_cb__: block:", par)
                 self.writeJson()
-            elif isinstance(inp, str):
-                print("ValkkaFS: new_block_cb: got message:", inp)
+                print("ValkkaFS: new_block_cb__: wrote json")
+            elif isinstance(par, str):
+                print("ValkkaFS: new_block_cb__: got message:", par)
                 
-            if self.block_cb is not None:
+            if (self.block_cb is not None) and propagate:
+                print(self.pre, "new_block_cb: subcallback")
                 self.block_cb()
+                
+            print(self.pre, "new_block_cb: bye")
                 
         except Exception as e:
             print("ValkkaFS: failed with '%s'" % (str(e)))
             
+        
+        
         
     def setBlockCallback(self, cb):
         self.block_cb = cb
         
         
     def getBlockTable(self):
+        print("ValkkaFS: getBlockTable")
         self.core.setArrayCall(self.blocktable_) # copy data from cpp to python (this is thread safe)
         # self.blocktable[:,:] = self.blocktable_[:,:] # copy the data .. self.blocktable can be accessed without fear of being overwritten during accesss
         # return self.blocktable
+        print("ValkkaFS: getBlockTable: exit")
         return self.blocktable_
         
     def report(self):

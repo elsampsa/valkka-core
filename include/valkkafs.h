@@ -36,6 +36,7 @@
 #include "thread.h"
 #include "framefilter.h"
 #include "framefifo.h"
+#include "rawrite.h"
 #include "logging.h"
 
 #include "Python.h"
@@ -149,7 +150,9 @@ public:                                  // <pyapi>
     /** print blocktable */
     void            reportTable(std::size_t from=0, std::size_t to=0, bool show_all=false);       // <pyapi>
     /** Used by a writer class to inform that a new block has been written
-     * @param pycall : use the provided python callback function or not
+     * @param pycall   : Use the provided python callback function or not?  default = true
+     * @param use_gil  : Acquire Python GIL or not? should be true, when evoked "autonomously" by this thread and false, when evoked from python.  default = true
+     * 
      */
     void writeBlock(bool pycall=true, bool use_gil=true);   // <pyapi>
     
@@ -190,7 +193,8 @@ public:                                     // <pyapi>
     ~ValkkaFSTool();                        // <pyapi>
     
 protected:
-    std::fstream     is;
+    // std::fstream     is;
+    RawReader        raw_reader;
     ValkkaFS         &valkkafs;
     
 public:                                     // <pyapi>
@@ -209,12 +213,13 @@ public:                                     // <pyapi>
 class ValkkaFSWriterThread : public Thread {         // <pyapi>
 
 public:                                              // <pyapi>
-    ValkkaFSWriterThread(const char *name, ValkkaFS &valkkafs, FrameFifoContext fifo_ctx=FrameFifoContext());  // <pyapi>
+    ValkkaFSWriterThread(const char *name, ValkkaFS &valkkafs, FrameFifoContext fifo_ctx=FrameFifoContext(), bool o_direct = false);  // <pyapi>
     ~ValkkaFSWriterThread();                                                               // <pyapi>
 
 protected:
     ValkkaFS                            &valkkafs;
-    std::fstream                        filestream;
+    // std::fstream                        filestream;
+    RaWriter                            raw_writer;
     std::map<SlotNumber, IdNumber>      slot_to_id;  ///< Map from slot numbers to ids
     std::size_t                         bytecount;
     
@@ -230,6 +235,7 @@ public: // redefined virtual functions
     void run();
     void preRun();
     void postRun();
+    void preJoin();
     void postJoin();
     void sendSignal(ValkkaFSWriterSignalContext signal_ctx);    ///< Insert a signal into the signal_fifo
       

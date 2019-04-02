@@ -63,6 +63,10 @@ void test_1() {
     ValkkaFS fs("disk.dump", "block.dat", 10*1024, 10, true); // dumpfile, blockfile, blocksize, number of blocks, init blocktable
     // 10 blocks
     // so, with this frame size, its 9 frames per block
+    
+    std::cout << "ValkkaFS blocksize: " << fs.getBlockSize() << std::endl;
+    // return;
+    
     ValkkaFSWriterThread ft("writer", fs);
 
     fs.clearDevice(); // create and fill device file "disk.dump"
@@ -77,19 +81,32 @@ void test_1() {
     ft.setSlotIdCall(1, 123);
     
     std::cout << "\nWriting frames" << std::endl;
-    int i;
+    int i, j;
     int nb=7; // write this many blocks // 6, 7
-    for(i=0;i<=(9*nb);i++) {
-        std::fill(f->payload.begin(), f->payload.end(), 0);
-        // let's simulate a H264 frame
-        std::copy(nalstamp.begin(),nalstamp.end(),f->payload.begin()); // insert 0001
-        long int mstimestamp = 1000*(i+1);
-        f->mstimestamp = mstimestamp;
-        if (i%5==0) { // every 5.th frame a key frame
-            f->payload[5]=(31 & 7); // mark fake sps frame
+    int bf=4; // frames per block
+    int count = 0;
+    
+    for(j=0;j<=nb; j++) {
+        std::cout << "\nBLOCK " << j << "\n";
+        for(i=0;i<=4;i++) {
+            std::fill(f->payload.begin(), f->payload.end(), 0);
+            // let's simulate a H264 frame
+            std::copy(nalstamp.begin(),nalstamp.end(),f->payload.begin()); // insert 0001
+            long int mstimestamp = 1000*(j+1)+i*100;
+            f->mstimestamp = mstimestamp;
+            if (i%5==0) { // every 5.th frame a key frame
+                std::cout << "marking key" << std::endl;
+                f->payload[nalstamp.size()]=(31 & 7); // mark fake sps frame
+            }
+            // std::cout << "payload: " << f->dumpPayload() << std::endl;
+            // std::cout << "isSeekable: " << f->isSeekable() << std::endl;
+            
+            count += f->calcSize();
+            std::cout << i << ": framesize " << f->calcSize() << " " << count << std::endl;
+            
+            filt.run(f);
+            sleep_for(0.01s); // otherwise frames will overflow ..
         }
-        filt.run(f);
-        sleep_for(0.01s); // otherwise frames will overflow ..
     }
 
     sleep_for(1s);
@@ -97,6 +114,8 @@ void test_1() {
     std::cout << "\nStopping" << std::endl;
     ft.stopCall();
     delete f;
+    
+    // return;
     
     fs.reportTable();
     
@@ -112,7 +131,7 @@ void test_1() {
 
 void test_2() {
     const char* name = "@TEST: valkkafswriter_test: test 2: ";
-    std::cout << name <<"** @@Read frames with ValkkaFSTool **" << std::endl;
+    std::cout << name <<"** @@Read frames with ValkkaFSTool.  Continuation of test 1. **" << std::endl;
     
     ValkkaFS fs("disk.dump", "block.dat", 10*1024, 10, false); // dumpfile, blockfile, blocksize, number of blocks, don't overwrite blocktable
     // fs.read();
@@ -123,13 +142,14 @@ void test_2() {
         
     std::size_t i;
     for(i=0;i<=fs.get_n_blocks();i++) {
+        // std::cout << "i = " << i << std::endl;
         fstool.dumpBlock(i);
     }
   
 }
 
 
-void test_3() { // do: 3, 2 => crash .. of course .. number of blocks don't match
+void test_3() { // don't do: 3, 2 => crash .. of course .. number of blocks don't match
     const char* name = "@TEST: valkkafswriter_test: test 3: ";
     std::cout << name <<"** @@Write frames with filesystem wrap **" << std::endl;
 
@@ -212,7 +232,7 @@ void test_4() { // 3, 4
     InfoFrameFilter filter("info");    
     ValkkaFSReaderThread ft("reader", fs, filter);
     
-    std::list<std::size_t> block_list = {0};
+    std::list<std::size_t> block_list = {0, 1, 2};
     
     ft.startCall();
 
@@ -233,6 +253,7 @@ void test_4() { // 3, 4
 void test_5() {
     const char* name = "@TEST: valkkafswriter_test: test 5: ";
     std::cout << name <<"** @@Read frames with ValkkaFSTool **" << std::endl;
+    return;
     
     ValkkaFS fs("/dev/sda1", "/home/sampsa/python3_packages/valkka_examples/api_level_2/qt/fs_directory/blockfile", 2097152, 100, false); // dumpfile, blockfile, blocksize, number of blocks, don't overwrite blocktable
     // fs.read();

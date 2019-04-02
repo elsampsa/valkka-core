@@ -48,7 +48,7 @@ static const bool DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL        = false; // <pyapi>
 static const bool DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL  = false; // <pyapi>
 static const long int DEFAULT_TIMESTAMP_RESET_TIME         = 60000; // <pyapi>
 static const long int TIMESTAMP_CORRECT_TRESHOLD           = 30000; // <pyapi> // timestamp correctors start correcting timestamps if they are this much off (in milliseconds)
-
+static const std::size_t FS_GRAIN_SIZE                     = 4096;  // <pyapi> // grain size for ValkkaFS
 
 namespace Timeout { ///< Various thread timeouts in milliseconds
   const static long unsigned thread       =250; // Timeout::thread
