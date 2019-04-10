@@ -36,7 +36,7 @@
 // https://stackoverflow.com/questions/14914462/ffmpeg-memory-leak
 // #define AV_REALLOC
 
-Decoder::Decoder() {
+Decoder::Decoder() : has_frame(false) {
 };
 
 
@@ -58,6 +58,10 @@ void Decoder::input(Frame *f) {
   }
 }
 
+bool Decoder::hasFrame() {
+    return has_frame;
+}
+
 
 Frame* DummyDecoder::output() {
   return &out_frame;
@@ -70,20 +74,23 @@ void DummyDecoder::flush() {
 
 bool DummyDecoder::pull() {
   out_frame=in_frame;
+  has_frame = true;
   return true;
 }
 
 
 
-AVDecoder::AVDecoder(AVCodecID av_codec_id) : av_codec_id(av_codec_id) {
+AVDecoder::AVDecoder(AVCodecID av_codec_id) : Decoder(), av_codec_id(av_codec_id) {
   int retcode;
 
+  has_frame = false;
+  
   // av_packet       =av_packet_alloc(); // oops.. not part of the public API (defined in avcodec.c instead of avcodec.h)
   av_packet       =new AVPacket();
   av_init_packet(av_packet);
   // av_frame        =av_frame_alloc();
   
-  std::cout << "AVDecoder : AV_CODEC_ID=" << av_codec_id << " AV_CODEC_ID_H264=" << AV_CODEC_ID_H264 << " AV_CODEC_ID_INDEO3=" << AV_CODEC_ID_INDEO3 <<std::endl;
+  // std::cout << "AVDecoder : AV_CODEC_ID=" << av_codec_id << " AV_CODEC_ID_H264=" << AV_CODEC_ID_H264 << " AV_CODEC_ID_INDEO3=" << AV_CODEC_ID_INDEO3 <<std::endl;
   
   av_codec        =avcodec_find_decoder(av_codec_id);
   if (!av_codec) {
@@ -146,6 +153,8 @@ Frame* VideoDecoder::output() {
 bool VideoDecoder::pull() {
   int retcode;
   int got_frame;
+  
+  has_frame = false;
   
   /* // some debugging .. (filter just sps, pps and keyframes)
   if (in_frame.h264_pars.slice_type != H264SliceType::pps and in_frame.h264_pars.slice_type != H264SliceType::sps and in_frame.h264_pars.slice_type != H264SliceType::i) {
@@ -239,6 +248,7 @@ bool VideoDecoder::pull() {
   std::cout << "VideoDecoder: payload: "<< out_frame.dumpPayload() << std::endl;
 #endif
   
+  has_frame = true;
   return true;
 }
 

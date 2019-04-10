@@ -77,6 +77,7 @@ protected:
   FrameFilter& outfilter;               ///< Outgoing, decoded frames are written here
   std::vector<Decoder*> decoders;       ///< A vector/list of registered and instantiated decoders
   long int     mstimetolerance;         ///< Drop frames if they are in milliseconds this much late
+  AbstractFileState state;             ///< Seek, play, stop or what
   
 protected:
   bool is_decoding; ///< should currently decode or not

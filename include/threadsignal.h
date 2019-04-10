@@ -40,13 +40,13 @@
  *
  * @ingroup file_tag
  */
-enum class AbstractFileState {                // <pyapi>
-    none,                                     // <pyapi>
-    error,                                    // <pyapi>
-    seek, // in the middle of a seek          // <pyapi>
-    stop, // stream stopped                   // <pyapi>
-    play  // stream is playing                // <pyapi> 
-};                                            // <pyapi>
+enum class AbstractFileState {                
+    none,                                     
+    error,                                    
+    seek,   // seek start
+    stop,   // stream stopped
+    play    // stream is playing
+};                                          
 
 
 

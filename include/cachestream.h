@@ -68,12 +68,14 @@ struct FileStreamContext {                                          // <pyapi>
 /** Signal information for FileCacheThread
  * 
  */
-struct FileCacheSignalPars {                                // <pyapi>
+struct FileCacheSignalPars {                                
     ///< Identifies the stream                             
-    FileStreamContext   file_stream_ctx;                    // <pyapi>
+    FileStreamContext   file_stream_ctx;                    
     ///< Timestamp for the seek signal
-    long int mstimestamp;                                   // <pyapi>
-};                                                          // <pyapi>
+    long int mstimestamp;                                   
+    ///< Seek: use existing frames for seek or clear the state
+    bool clear;
+}; 
 
 
 /** Signals for FileCacheThread
@@ -254,7 +256,7 @@ public: // internal
     void stopStreams(bool send_state = true);
     void playStreams(bool send_state = true);
     void setRefTimeAndStop(bool send_state = true);                     ///< Set reference time and set state to stop
-    void seekStreams(long int mstimestamp, bool send_state = true);     ///< Sets target time.  Sets FileCacheThread::next = NULL
+    void seekStreams(long int mstimestamp, bool clear, bool send_state = true);     ///< Sets target time.  Sets FileCacheThread::next = NULL
     
 private: // internal
     void handleSignal(FileCacheSignalContext &signal_ctx);
@@ -276,7 +278,7 @@ public: // API                                              // <pyapi>
     void dumpCache();                                       // <pyapi>
     void stopStreamsCall();                                 // <pyapi>
     void playStreamsCall();                                 // <pyapi>
-    void seekStreamsCall(long int mstimestamp);             // <pyapi>
+    void seekStreamsCall(long int mstimestamp, bool clear = false); // <pyapi>
 };                                                          // <pyapi>
 
 

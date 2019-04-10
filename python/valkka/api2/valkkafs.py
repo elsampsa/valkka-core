@@ -666,8 +666,9 @@ class ValkkaFSManager:
         """ValkkaFSReaderThread --> FileCacheThread
         """
         self.logger = getLogger(__name__ + "." + self.__class__.__name__)
-        # self.logger.setLevel(logging.DEBUG)
-        self.logger.setLevel(logging.WARNING)
+        self.logger.setLevel(logging.DEBUG)
+        # self.logger.setLevel(logging.INFO)
+        # self.logger.setLevel(logging.WARNING)
         
         self.valkkafs = valkkafs
         
@@ -733,10 +734,10 @@ class ValkkaFSManager:
             - using try / except blocks we can see the error message even when this is called from cpp
             """
             
-            self.logger.debug("timeCallback__ : %i == %s", mstime, formatMstimestamp(mstime))
+            # self.logger.debug("timeCallback__ : %i == %s", mstime, formatMstimestamp(mstime))
             
             if mstime <= 0: # time not set
-                self.logger.debug("timeCallback__ : no time set")
+                # self.logger.debug("timeCallback__ : no time set")
                 return
             
             self.readBlockTableIf()
@@ -746,14 +747,16 @@ class ValkkaFSManager:
                 self.stop()
                 return
             
-            self.logger.debug("timeCallback__ : distance to current block edge is %i", mstime-self.current_timerange[1])
+            # self.logger.debug("timeCallback__ : distance to current block edge is %i", mstime-self.current_timerange[1])
             
+            """ # WARNING: DEBUG THIS!
             if mstime-self.current_timerange[1] > -self.timetolerance:
                 self.logger.info("timeCallback__ : will request more blocks")
                 ok = self.reqBlocks(mstime)
                 if not ok:
                     self.logger.warning("timeCallback__ : requesting blocks failed")
-                
+            """
+               
             if not self.currentTimeOK(mstime):
                 self.logger.info("timeCallback__ : no frames for time %i", (mstime))
                 # TODO
@@ -762,7 +765,7 @@ class ValkkaFSManager:
             # TODO: time near block limits: request for more frames if possible
             # TODO: does the framecache switching go smoothly in play?
             
-            self.logger.debug("timeCallback__ : time ok : %i" % (mstime))
+            # self.logger.debug("timeCallback__ : time ok : %i" % (mstime))
             self.currentmstime = mstime
             
             if self.timecallback is not None:
@@ -850,6 +853,9 @@ class ValkkaFSManager:
         """Create a copy of the blocktable
         """
         self.blocktable = self.valkkafs.getBlockTable()
+        
+        self.logger.debug("readBlockTable: %s", self.blocktable)
+        
         self.timerange = self.valkkafs.getTimeRange(self.blocktable)
         self.checktime = time.time()
         
@@ -887,7 +893,7 @@ class ValkkaFSManager:
             return False
         # there's stream for that time, so proceed
         self.logger.info("seek : proceeds with %i", mstimestamp)
-        self.cacherthread.seekStreamsCall(mstimestamp) # simply sets the target time
+        self.cacherthread.seekStreamsCall(mstimestamp, True) # note that clear flag is True : clear the seek.
         ok = self.reqBlocks(mstimestamp)
         if not ok: self.logger.warning("seek : could not get blocks")
             
@@ -896,13 +902,22 @@ class ValkkaFSManager:
         """Like seek, but does not request frames if there are already frames in this timerange
         """
         self.readBlockTableIf()
-        self.logger.debug("smartSeek :")
+        self.logger.debug("smartSeek : current timerange: %s", self.current_timerange)
+        self.logger.debug("smartSeek : timetolerance: %s", self.timetolerance)
         if self.hasFrames() == False:
             return
-        if (mstimestamp > self.current_timerange[0] + self.timetolerance) and (mstimestamp < self.current_timerange[1] - self.timetolerance): # no need to request new blocks
+        
+        lower = self.current_timerange[0] + self.timetolerance
+        upper = self.current_timerange[1] - self.timetolerance
+        
+        self.logger.debug("smartSeek: mstimestamp %s", mstimestamp)
+        self.logger.debug("smartSeek: lower limit %s", lower)
+        self.logger.debug("smartSeek: upper limit %s", upper)
+        
+        if (mstimestamp > lower) and (mstimestamp < upper): # no need to request new blocks
             # self.stop()
             self.logger.debug("smartSeek : just set target time")
-            self.cacherthread.seekStreamsCall(mstimestamp) # simply sets the target time # seekStreamsCall stops
+            self.cacherthread.seekStreamsCall(mstimestamp, False) # simply sets the target (note that clear is set to False)
         else:
             self.logger.debug("smartSeek : request frames")
             self.seek(mstimestamp)
@@ -910,10 +925,15 @@ class ValkkaFSManager:
         
     def reqBlocks(self, mstimestamp):
         block_list = self.valkkafs.getIndNeigh(n=1, time=mstimestamp, blocktable = self.blocktable)
+        # WARNING: blocks are in block order, not in time order
         if len(block_list) > 0:
             self.current_blocks = block_list
-            self.current_timerange = (self.blocktable[block_list[0], 0],
-                                    self.blocktable[block_list[-1],1])
+            tmp = self.blocktable[block_list,:]
+            self.current_timerange = (
+                tmp[:,0].min(), # max of the first column (key frames) 
+                tmp[:,1].max() # min of the second column (any frames)
+                )
+            self.logger.debug("reqBlocks : current timerange now %s", self.current_timerange)
             self.logger.debug("reqBlocks : requesting blocks %s %s", block_list.__class__.__name__, str(block_list))
             self.readerthread.pullBlocksPyCall(block_list) # this send frames from readerthread -> cacherthread
             return True

@@ -199,16 +199,19 @@ int FrameCache::seek(long int ms_streamtime_) {
 int FrameCache::keySeek(long int ms_streamtime_) { // return values: -1 = no frames at left, 1 = no frames at right, 0 = ok
     std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
         
-    // std::cout << "FrameCache : seek : mintime, maxtime, seek time " << mintime_ << " " << maxtime_ << " " << ms_streamtime_ << std::endl;
+    std::cout << "FrameCache : keySeek : mintime, maxtime, seek time " << mintime_ << " " << maxtime_ << " " << ms_streamtime_ << std::endl;
     
     state = cache.end();
     if (cache.size() < 1) {
+        std::cout << "FrameCache : keySeek : ERROR: cache.size" << std::endl;
         return -1;
     }
     if (ms_streamtime_ < mintime_) {
+        std::cout << "FrameCache : keySeek : ERROR: mintime_" << std::endl;
         return -1;
     }
     if (ms_streamtime_ > maxtime_) {
+        std::cout << "FrameCache : keySeek : ERROR: maxtime_" << std::endl;
         return 1;
     }
     
@@ -273,7 +276,6 @@ int FrameCache::keySeek(long int ms_streamtime_) { // return values: -1 = no fra
     }
     */
     
-        
     return 0; // ok!
 }
 
@@ -477,7 +479,7 @@ void FileCacheThread::setRefTimeAndStop(bool send_state) { // calculate reftime,
 }
 
 
-void FileCacheThread::seekStreams(long int mstimestamp_, bool send_state) {
+void FileCacheThread::seekStreams(long int mstimestamp_, bool clear, bool send_state) {
     int i;
     if (send_state) {
         state_setupframe.mstimestamp = walltime;
@@ -486,6 +488,8 @@ void FileCacheThread::seekStreams(long int mstimestamp_, bool send_state) {
         sendSetupFrames(&state_setupframe);
         // this goes to downstream, all the way to OpenGLThread.  In OpenGLThread, the frame is cleared.
     }
+    state = AbstractFileState::seek;
+    
     // reftime = (t0 - t0_)
     target_mstimestamp_ = mstimestamp_;
     walltime = getCurrentMsTimestamp();
@@ -497,7 +501,7 @@ void FileCacheThread::seekStreams(long int mstimestamp_, bool send_state) {
     valkkafslogger.log(LogLevel::debug) << "FileCacheThread : seekStreams : maxtime : " << play_cache->getMaxTime_() << std::endl;
     
     // if the frame is available, go there immediately
-    if ( (target_mstimestamp_ >= play_cache->getMinTime_()) and (target_mstimestamp_ <= play_cache->getMaxTime_()) ) {
+    if ( ( (target_mstimestamp_ >= play_cache->getMinTime_()) and (target_mstimestamp_ <= play_cache->getMaxTime_()) ) and !clear) {
         valkkafslogger.log(LogLevel::debug) << "FileCacheThread : seekStreams : play_cache immediate seek" << std::endl;
         i=play_cache->keySeek(target_mstimestamp_); // could evoke a separate thread to do the job (in order to multiplex properly), but maybe its not necessary
         valkkafslogger.log(LogLevel::debug) << "FileCacheThread : seekStreams : play_cache seek done" << std::endl;
@@ -507,7 +511,7 @@ void FileCacheThread::seekStreams(long int mstimestamp_, bool send_state) {
             if (!next) {
                 valkkafslogger.log(LogLevel::fatal) << "FileCacheThread : seekStreams : WARNING : no next frame after seek" << std::endl;
             }
-            stopStreams(); // seeking a stream stops it
+            // stopStreams(); // seeking a stream stops it
         }
     }
     else {
@@ -589,11 +593,11 @@ void FileCacheThread::run() {
                         valkkafslogger.log(LogLevel::fatal) << "FileCacheThread : run : WARNING : got transmission end but seek time not set" << std::endl;
                     }
                     else {
-                        valkkafslogger.log(LogLevel::debug) << "FileCacheThread :  run : play_cache seek" << std::endl;
+                        valkkafslogger.log(LogLevel::debug) << "FileCacheThread :  run : play_cache seek with state " << int(state) << std::endl;
                         // so, the seek must be started from the previous i-frame, or not
                         // this depends on the state of the decoder.  If this is a "continuous-seek" (during play), then seeking from i-frame is not required
                         // could evoke seeks a separate thread to do the job (in order to multiplex properly), but maybe its not necessary
-                        if (state == AbstractFileState::stop) {
+                        if (state == AbstractFileState::stop or state == AbstractFileState::seek) {
                             i=play_cache->keySeek(target_mstimestamp_); 
                         }
                         else if (state == AbstractFileState::play) {
@@ -605,10 +609,16 @@ void FileCacheThread::run() {
                         }
                         valkkafslogger.log(LogLevel::debug) << "FileCacheThread :  run : play_cache seek done" << std::endl;
                         if (i==0) { // Seek OK
+                            valkkafslogger.log(LogLevel::debug) << "FileCacheThread :  run : play_cache seek OK" << std::endl;
                             next = play_cache->pullNextFrame(); // this will initiate the process of [pulling frames from the cache]
                             if (!next) {
                                 valkkafslogger.log(LogLevel::fatal) << "FileCacheThread : run : WARNING : no next frame after seek" << std::endl;
                             }
+                            if (reftime <= 0) { // seek is done.  match the current time to the requested frametime
+                                walltime = getCurrentMsTimestamp();
+                                reftime = walltime - target_mstimestamp_;
+                            }
+                        
                         } // Seek OK
                     }
                 }
@@ -626,11 +636,13 @@ void FileCacheThread::run() {
         // [pulling frames from the cache]
         while (next and ((next_mstimestamp-walltime)<=0)) { // just send all frames at once
             // valkkafslogger.log(LogLevel::crazy) << "FileCacheThread :  run : transmit " << *next << std::endl;
-            if (reftime == 0) { // reftime has not been set, so set it at the first frame that gets sent downstream
-                std::cout << "FileCacheThread : setting reftime : " << mstime << ", " << target_mstimestamp_ << std::endl;
-                reftime = mstime - target_mstimestamp_;
-                stopStreams(); // with reftime set, this works and sends SetupFrame downstreams
+            if (reftime <= 0) { // reftime has not been set, so set it at the first frame that gets sent downstream
+                // std::cout << "FileCacheThread : setting reftime : " << mstime << ", " << target_mstimestamp_ << std::endl;
+                // reftime = mstime - target_mstimestamp_;
+                // stopStreams(); // with reftime set, this works and sends SetupFrame downstreams
+                valkkafslogger.log(LogLevel::fatal) << "FileCacheThread : run : reftime not set" << std::endl;
             }
+            
             i=safeGetSlot(next->n_slot, ff);
             if (i>=1) {
                 if (!setup_frames[next->n_slot][next->subsession_index]) { // create a SetupFrame for decoder initialization
@@ -651,7 +663,9 @@ void FileCacheThread::run() {
                 
                 // modifying the frame here: it's just a pointer, so the frame in the underlying FrameCache will be modified as well
                 // could create a copy here
-                valkkafslogger.log(LogLevel::crazy) << "FileCacheThread :  run : pushing frame " << *next << " distance to target=" << walltime - (next->mstimestamp + reftime) << std::endl;
+                // valkkafslogger.log(LogLevel::crazy) << "FileCacheThread :  run : pushing frame " << *next << " distance to target=" << walltime - (next->mstimestamp + reftime) << std::endl;
+                valkkafslogger.log(LogLevel::debug) << "FileCacheThread :  run : pushing frame " << *next << " corrected timestamp = " << next->mstimestamp + reftime << std::endl;
+                
                 // during the pushing, correct the frametime to walltime
                 next->mstimestamp = next->mstimestamp + reftime;
                 ff->run(next);
@@ -668,6 +682,20 @@ void FileCacheThread::run() {
                 next_mstimestamp = next->mstimestamp + reftime; // next Frame's timestamp in wallclock time
                 //  (t + (t0-t0_)) - t0 = t + t0 -t0_ -t0 = t-t0
                 // target_mstimestamp_ = next->mstimestamp; // target time in streamtime // NOPES
+            }
+            
+            if (!next or ((next_mstimestamp-walltime)>0)) {
+                // this loop is about to break: there is no next frame, or the target frame has been reached
+                if (state == AbstractFileState::seek) {
+                    if (!next) {
+                        std::cout << "FileCacheThread: no next frame" << std::endl;
+                    }
+                    if ((next_mstimestamp-walltime)>0) {
+                        std::cout << "FileCacheThread: target reached.  next = " << next_mstimestamp << std::endl;
+                    }
+                    std::cout << "FileCacheThread: Switching from seek to stop" << std::endl;
+                    stopStreams();
+                }
             }
         }
         
@@ -742,7 +770,7 @@ void FileCacheThread::handleSignal(FileCacheSignalContext &signal_ctx) {
             playStreams();
             break;
         case FileCacheSignal::seek_streams:
-            seekStreams(signal_ctx.pars.mstimestamp);
+            seekStreams(signal_ctx.pars.mstimestamp, signal_ctx.pars.clear);
             break;
     }
 }
@@ -895,13 +923,14 @@ void FileCacheThread::playStreamsCall() {
     infilter.run(&f);
 }
 
-void FileCacheThread::seekStreamsCall(long int mstimestamp) {
+void FileCacheThread::seekStreamsCall(long int mstimestamp, bool clear) {
     SignalFrame f = SignalFrame();
     FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
     
     // encapsulate parameters
     FileCacheSignalPars pars;
     pars.mstimestamp = mstimestamp;
+    pars.clear       = clear;
     
     // encapsulate signal and parameters into signal context of the frame
     signal_ctx->signal = FileCacheSignal::seek_streams;

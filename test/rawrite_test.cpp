@@ -90,9 +90,9 @@ void test_2() {
 
 void test_3() {
     const char* name = "@TEST: rawrite: test 3: ";
-    std::cout << name <<"** @@Write'n'read to /dev/sda **" << std::endl;
+    std::cout << name <<"** @@Write'n'read to /dev/sda1 **" << std::endl;
   
-    const char* devname = "/dev/sda";
+    const char* devname = "/dev/sda1";
     
     int i;
     char dump[5000];
@@ -101,7 +101,7 @@ void test_3() {
     }
     
     // RaWriter writer = RaWriter(devname, true);
-    RaWriter writer = RaWriter(devname, false);
+    RaWriter writer = RaWriter(devname, false); // with O_DIRECT
     
     writer.dump(&dump[0], std::size_t(10));
     writer.dump(&dump[0], std::size_t(5000));

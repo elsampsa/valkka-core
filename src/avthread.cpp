@@ -34,7 +34,7 @@
 #include "logging.h"
 
 
-AVThread::AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) : Thread(name), outfilter(outfilter), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), is_decoding(false), mstimetolerance(0) {
+AVThread::AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) : Thread(name), outfilter(outfilter), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), is_decoding(false), mstimetolerance(0), state(AbstractFileState::none) {
     avthreadlogger.log(LogLevel::debug) << "AVThread : constructor : N_MAX_DECODERS ="<<int(N_MAX_DECODERS)<<std::endl;
     decoders.resize(int(N_MAX_DECODERS),NULL);
 }
@@ -60,7 +60,7 @@ void AVThread::run() {
     bool got_frame;
     int subsession_index;
     Frame* f;
-    Decoder* decoder; // alias
+    Decoder* decoder = NULL; // alias
 
     long int dt=0;
     long int mstime, oldmstime;
@@ -94,9 +94,9 @@ void AVThread::run() {
             else if (f->getFrameClass()==FrameClass::setup) { // got frame : SETUP
                 SetupFrame *setupframe = static_cast<SetupFrame*>(f);
                 
-                std::cout << "AVThread: got SetupFrame: " << *setupframe << std::endl;
+                // avthreadlogger.log(LogLevel::debug) << "AVThread: " << name << " got SetupFrame: " << *setupframe << std::endl;
                 
-                if (setupframe->sub_type == SetupFrameType::stream_init) { // STREAM INIT
+                if (setupframe->sub_type == SetupFrameType::stream_init) { // SETUP: STREAM INIT
                 
                     if (decoders[subsession_index]!=NULL) { // slot is occupied
                         avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : decoder reinit " << std::endl;
@@ -133,9 +133,39 @@ void AVThread::run() {
                     else { // UNKNOW MEDIA TYPE
                         decoders[subsession_index]=new DummyDecoder();
                     }
-                } // STREAM INIT
+                } // SETUP STREAM INIT
                 
-                outfilter.run(f); // pass setup frames downstream (they'll go all the way to OpenGLThread)
+                else if (setupframe->sub_type == SetupFrameType::stream_state) { // SETUP STREAM STATE
+                    
+                    // std::cout << "AVThread: setupframe: stream_state: " << *f << std::endl;
+                    
+                    outfilter.run(f); // pass the setupframe downstream (they'll go all the way to OpenGLThread)
+                    if (setupframe->stream_state == AbstractFileState::seek) {
+                        // go into seek state .. don't forward frames
+                        state = AbstractFileState::seek;
+                        avthreadlogger.log(LogLevel::debug) << "AVThread: " << name << " setupframe: seek mode " << *f << std::endl;
+                    
+                    }
+                    else if (setupframe->stream_state == AbstractFileState::play) {
+                        state = AbstractFileState::play;
+                    }
+                    else if (setupframe->stream_state == AbstractFileState::stop) { // typically, marks end of seek
+                        avthreadlogger.log(LogLevel::debug) << "AVThread: " << name << " setupframe: stop mode " << *f << std::endl;
+                        state = AbstractFileState::stop;
+                        // during seek, frames, starting from the latest I-frame to the required frame, are decoded in a sprint
+                        // because of this, the frames typically arrive late to the final destination (say, OpenGLThread)
+                        // so we take the last decoded frame and send it again with a corrected timestamp (current time)
+                        if (decoder and decoder->hasFrame()) {
+                            std::cout << "AVThread: resend" << std::endl;
+                            Frame *tmpf = decoder->output();
+                            tmpf->mstimestamp = getCurrentMsTimestamp();
+                            std::cout << "AVThread: resend:" << *((AVMediaFrame*)tmpf) << std::endl;
+                            outfilter.run(tmpf);
+                        }
+                    }
+                    else {
+                    }
+                } // SETUP STREAM STATE
                 infifo.recycle(f); // return frame to the stack - never forget this!
             } // got frame : SETUP
             
@@ -181,7 +211,13 @@ void AVThread::run() {
                         }
                         else { // no time tolerance defined
                             //outfilter.run(&(decoder->out_frame));
-                            outfilter.run(decoder->output()); // return a reference to a decoded frame
+                            if (state != AbstractFileState::seek) { // frames during seek are discarded
+                                outfilter.run(decoder->output()); // return a reference to a decoded frame
+                            }
+                            else {
+                                avthreadlogger.log(LogLevel::debug) << "AVThread: seek: scrapping frame: " << *(decoder->output()) << std::endl;
+                            }
+                            
                             #ifdef PROFILE_TIMING
                             dt=(getCurrentMsTimestamp()-decoder->getMsTimestamp());
                             // std::cout << "[PROFILE_TIMING] AVThread: " << this->name <<" run: decoder sending frame at " << dt << " ms" << std::endl;

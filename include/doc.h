@@ -982,7 +982,149 @@ A program using both (*) and (**) callbacks:
               |                           thread join & exit
                
 \endverbatim
-               
  *
  */
+
+
+/** @page Caching Frames
+ * 
+ * 
+ * FileCacherThread::run
+ * 
+ * 
+ * 
+\verbatim
+
+
+walltime == wallclock time 
+
+target_mstimestamp_ = 0 
+    current target frametime, transformed from current walltime : stopStreams, seekStreams, run
+
+next = NULL 
+    points to next frame : run
+    
+reftime = 0 
+    value for transforming frametime <-> walltime : playStreams, seekStreams, run
+
+next_mstimestamp = 0 : run
+    timestamp of the next frame in wallclock time
+
+    
+while True:
+    
+    if next != NULL and reftime > 0:
+        # next frame exists and we can get it's wallclock time
+        next_mstimestamp = next.mstimestamp + reftime # from frametime to walltime
+        # => calculate timeout to the next frame
+        timeout = ..
+    else:
+        timeout = default_timeout
+    
+    f = infifo.read(timeout)
+    
+    # there's either a frame or this was a timeout
+    
+    if TIMEOUT:
+        pass
+        
+    elif GOT_FRAME:
+        
+        if f is signal:
+            # handle the signal => seekStreams, playStreams, stopStreams
+            
+        elif f is marker:
+            if marker == TM_START # transmission start
+                # do nothing .. frames are flowing to tmp cache
+                
+            elif marker == TM_END # transmission end
+                switchCache() # tmp cache becomes the play_cache
+                next = NULL
+                if target_mstimestamp_ <= 0: # no seek time set yet
+                    # this can happen: seek has not yet called, but block transmission has been requested
+                    # that's fixed with the next seek call
+                    print WARNING
+                else:
+                    if state == SEEK or state == STOP:
+                        i = play_cache->keySeek
+                    elif state == PLAY:
+                        i = play_cache->seek
+                    else:
+                        print WARNING
+                        
+                    if seek succeeded:
+                        next = play_cache.pullNextFrame()
+                        
+                    if next != None:
+                        walltime = getCurrentMsTimestamp();
+                        reftime = walltime - target_mstimestamp_; # match walltime to target frametime
+                        
+        
+    # frame handled
+    
+    mstime = getCurrentMsTimestamp() # update current time
+    
+    if reftime > 0 and & state == PLAY: # walltime get's updated constantly
+        walltime = mstime
+        target_mstimestamp_ = walltime - reftime; # update current frametime
+            
+    # FRAME PULL LOOP: pull all necessary frames from the cache
+    while next != NULL and (next_mstimestamp - walltime) <= 0:
+        
+        if reftime == 0: # no reftime set .. take it from the first frame
+            reftime = mstime - target_mstimestamp_
+            stopStreams() # state => STOP, send SetupFrames
+        
+        # create & send a SetupFrame for decoder init if necessary
+        ...
+        
+        # send frame to correct framefilter with this timestamp:
+        frame.mstimestamp = next.mstimestamp + reftime # from frametime to walltime
+        
+        next = play_cache.pullNextFrame()
+        if next != NULL:
+            next_mstimestamp = next.mstimestamp + reftime # from frametime to walltime
+            
+        if next == NULL or next_mstimestamp - walltime > 0: # while loop is about to break
+            if state == SEEK
+                stopStreams() # state => STOP, send SetupFrames
+    
+    # handle signals etc
+
+
+- seek sets the reftime
+- play : stream's been stopped, so there's a fixed target_mstimestamp_ => get reftime == walltime <-> frametime mapping from there
+- stop : stream's been playing / seeking, so there's reftime (wall-time <-> frametime mapping) => get target_mstimestamp_ from walltime
+
+stopStreams:
+    if reftime > 0:
+        walltime = getCurrentMsTimestamp()
+        target_mstimestamp_ = walltime - reftime # get current frametime from walltime
+        
+playStreams:
+    if target_mstimestamp_ > 0:
+        walltime = getCurrentMsTimestamp()
+        reftime = walltime - target_mstimestamp_ # get reftime from current frametime
+        
+seekStreams(mstimestamp_): # if target frame time mstimestamp_ is found in play_cache, do immediate seek, otherwise, set reftime = 0
+    target_mstimestamp_ = mstimestamp_
+    if play_cache has the target frame, then:
+        walltime = getCurrentMsTimestamp()
+        reftime = walltime - target_mstimestamp_
+    else:
+        reftime = 0
+    
+
+
+
+
+\endverbatim
+ * 
+ * 
+ * 
+ */
+ 
+ 
+
+
 
