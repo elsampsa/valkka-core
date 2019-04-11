@@ -38,6 +38,7 @@ import logging
 from valkka import core
 from valkka.api2.tools import *
 import datetime
+import traceback
 
 pre_mod = "valkka.api2.valkkafs: "
 
@@ -572,7 +573,9 @@ class ValkkaFS:
         finalinds=numpy.hstack((finalinds,inds))
         if (verbose): print("BlockTable: ** final indices",inds,"\n")
         
-        finalinds.sort()
+        order=ftab[inds].argsort()                          # final blocks should be in time order
+        finalinds = finalinds[order]
+        # finalinds.sort()
         return finalinds.tolist()
     
 
@@ -749,13 +752,13 @@ class ValkkaFSManager:
             
             # self.logger.debug("timeCallback__ : distance to current block edge is %i", mstime-self.current_timerange[1])
             
-            """ # WARNING: DEBUG THIS!
-            if mstime-self.current_timerange[1] > -self.timetolerance:
+            # """ # WARNING: DEBUG THIS!
+            if self.current_timerange[1] - mstime < self.timetolerance:
                 self.logger.info("timeCallback__ : will request more blocks")
                 ok = self.reqBlocks(mstime)
                 if not ok:
                     self.logger.warning("timeCallback__ : requesting blocks failed")
-            """
+            # """
                
             if not self.currentTimeOK(mstime):
                 self.logger.info("timeCallback__ : no frames for time %i", (mstime))
@@ -876,6 +879,8 @@ class ValkkaFSManager:
     
     
     def stop(self):
+        traceback.print_stack()
+        self.logger.debug("stop")
         self.cacherthread.stopStreamsCall()
     
     

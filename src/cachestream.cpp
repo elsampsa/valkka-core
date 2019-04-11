@@ -454,6 +454,11 @@ void FileCacheThread::playStreams(bool send_state) {
         state=AbstractFileState::play;
         walltime = getCurrentMsTimestamp();
         reftime = walltime - target_mstimestamp_;
+    
+        valkkafslogger.log(LogLevel::debug) << "FileCacheThread : playStreams: reftime: " << reftime << std::endl;
+        if (next) {
+            valkkafslogger.log(LogLevel::debug) << "FileCacheThread : playStreams: next: " << *next << std::endl;
+        }
         
         if (send_state) {
             state_setupframe.mstimestamp = walltime;
@@ -550,7 +555,12 @@ void FileCacheThread::run() {
         
         if (next and reftime > 0) { // there is a frame to await for
             next_mstimestamp = next->mstimestamp + reftime; // next Frame's timestamp in wallclock time
-            timeout=std::min((long int)300,(next_mstimestamp-walltime));
+            if (state == AbstractFileState::stop) {
+                timeout = Timeout::filecachethread;
+            }
+            else {
+                timeout = std::min((long int)Timeout::filecachethread, (next_mstimestamp-walltime));
+            }
         }
         else {
             timeout=Timeout::filecachethread;
@@ -628,13 +638,20 @@ void FileCacheThread::run() {
         
         mstime = getCurrentMsTimestamp();
         
-        if (state==AbstractFileState::play and reftime > 0) {
+        if (state == AbstractFileState::play and reftime > 0) {
             walltime = mstime; // update wallclocktime (if play)
             target_mstimestamp_ = walltime - reftime;
         }
         
+        if (next) {
+            valkkafslogger.log(LogLevel::fatal) << "FileCacheThread : run : next - walltime " << next_mstimestamp - walltime << std::endl;
+        }
+        else {
+            valkkafslogger.log(LogLevel::fatal) << "FileCacheThread : run : no next frame " << std::endl;
+        }
+        
         // [pulling frames from the cache]
-        while (next and ((next_mstimestamp-walltime)<=0)) { // just send all frames at once
+        while (next and ((next_mstimestamp - walltime) <= 0)) { // just send all frames at once
             // valkkafslogger.log(LogLevel::crazy) << "FileCacheThread :  run : transmit " << *next << std::endl;
             if (reftime <= 0) { // reftime has not been set, so set it at the first frame that gets sent downstream
                 // std::cout << "FileCacheThread : setting reftime : " << mstime << ", " << target_mstimestamp_ << std::endl;
@@ -700,7 +717,7 @@ void FileCacheThread::run() {
         }
         
         // old-style ("interrupt") signal handling
-        if ((mstime-save1mstime)>=Timeout::filecachethread) { // time to check the signals..
+        if ((mstime-save1mstime) >= Timeout::filecachethread) { // time to check the signals..
             // std::cout << "FileCacheThread: run: interrupt, dt= " << mstime-save1mstime << std::endl;
             handleSignals();
             // std::cout << "FileCacheThread: loop =" << loop << std::endl;
