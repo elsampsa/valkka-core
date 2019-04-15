@@ -980,7 +980,19 @@ A program using both (*) and (**) callbacks:
               |                                 - should not acquire GIL as this has been 
               |                                   requested from the python side
               |                           thread join & exit
-               
+            
+            --------------------------------------------------
+            
+                                           | CacheStream::run
+                                           | pyfunc
+                                                => valkka.api2.ValkkaFSManager.timeCallback__(mstime)
+                                                    => valkka.api2.ValkkaFSManager.stop()
+                                                        => ValkkaFSWriterThread::stopStreamsCall() # this makes any sense?
+                                                - it's ok to call other thread's functions, as long as they don't return the callback chain to python
+                                                
+            
+            
+            
 \endverbatim
  *
  */

@@ -571,9 +571,9 @@ class ValkkaFS:
         inds=inds[0:min(len(inds),n+1)]                     # take nearest neighbour to target block..
         if (verbose): print("BlockTable: final indices2",inds,"\n")
         finalinds=numpy.hstack((finalinds,inds))
-        if (verbose): print("BlockTable: ** final indices",inds,"\n")
+        if (verbose): print("BlockTable: ** final indices",finalinds,"\n")
         
-        order=ftab[inds].argsort()                          # final blocks should be in time order
+        order=ftab[finalinds].argsort()                          # final blocks should be in time order
         finalinds = finalinds[order]
         # finalinds.sort()
         return finalinds.tolist()
@@ -662,7 +662,7 @@ ValkkaFSManager.setOutput(id, slot, framefilter)
 """
 class ValkkaFSManager:
     
-    timetolerance = 500 # if frames are missing at this distance or further, request for more blocks
+    timetolerance = 2000 # if frames are missing at this distance or further, request for more blocks
     timediff = 5 # blocktable can be inquired max this frequency (secs)
     
     def __init__(self, valkkafs: ValkkaFS, write = True, read = True, cache = True):
@@ -703,6 +703,7 @@ class ValkkaFSManager:
             self.writerthread.startCall()
             
         self.active = True
+        self.playing = False
         
         
     def hasFrames(self):
@@ -744,21 +745,23 @@ class ValkkaFSManager:
                 return
             
             self.readBlockTableIf()
-            if not self.timeOK(mstime):
+            if not self.timeOK(mstime) and self.playing:
                 self.logger.warning("timeCallback__ : no such time in blocktable %i", (mstime))
                 self.logger.warning("timeCallback__ : stop stream")
+                # self.playing = False
                 self.stop()
                 return
             
             # self.logger.debug("timeCallback__ : distance to current block edge is %i", mstime-self.current_timerange[1])
             
-            # """ # WARNING: DEBUG THIS!
-            if self.current_timerange[1] - mstime < self.timetolerance:
-                self.logger.info("timeCallback__ : will request more blocks")
-                ok = self.reqBlocks(mstime)
-                if not ok:
-                    self.logger.warning("timeCallback__ : requesting blocks failed")
-            # """
+            if self.current_timerange[1] - mstime < self.timetolerance: # time to request more blocks
+                if (mstime >= (self.timerange[0] + 2000) and mstime <= (self.timerange[1] - 2000)): 
+                    # request blocks only if the times are in blocktable
+                    # the requested time must also be a bit away from the filesystem limit (self.timerange[1])
+                    self.logger.info("timeCallback__ : will request more blocks: time: %s, timerange: %s", mstime, self.timerange)
+                    ok = self.reqBlocks(mstime)
+                    if not ok:
+                        self.logger.warning("timeCallback__ : requesting blocks failed")
                
             if not self.currentTimeOK(mstime):
                 self.logger.info("timeCallback__ : no frames for time %i", (mstime))
@@ -775,7 +778,7 @@ class ValkkaFSManager:
                 try:
                     self.timecallback(mstime)
                 except Exception as e:
-                    self.logger.warning("timeCallback__ : your call backfailed with '%s'", str(e))
+                    self.logger.warning("timeCallback__ : your callback failed with '%s'", str(e))
                     
         except Exception as e:
             raise(e)
@@ -856,9 +859,7 @@ class ValkkaFSManager:
         """Create a copy of the blocktable
         """
         self.blocktable = self.valkkafs.getBlockTable()
-        
-        self.logger.debug("readBlockTable: %s", self.blocktable)
-        
+        # self.logger.debug("readBlockTable: %s", self.blocktable)
         self.timerange = self.valkkafs.getTimeRange(self.blocktable)
         self.checktime = time.time()
         
@@ -875,14 +876,17 @@ class ValkkaFSManager:
             return False
         self.logger.debug("play")
         self.cacherthread.playStreamsCall()
+        self.playing = True
         return True
     
     
     def stop(self):
-        traceback.print_stack()
-        self.logger.debug("stop")
-        self.cacherthread.stopStreamsCall()
-    
+        if self.playing:
+            # traceback.print_stack()
+            self.logger.debug("stop")
+            self.cacherthread.stopStreamsCall()
+            self.playing = False
+        
     
     def seek(self, mstimestamp):
         """Before performing seek, check the blocktable
@@ -930,7 +934,7 @@ class ValkkaFSManager:
         
     def reqBlocks(self, mstimestamp):
         block_list = self.valkkafs.getIndNeigh(n=1, time=mstimestamp, blocktable = self.blocktable)
-        # WARNING: blocks are in block order, not in time order
+        # blocks are now in timeorder
         if len(block_list) > 0:
             self.current_blocks = block_list
             tmp = self.blocktable[block_list,:]

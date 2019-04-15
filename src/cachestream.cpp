@@ -60,7 +60,7 @@ bool FrameCache::writeCopy(Frame* f, bool wait) {
     
     if (f->getFrameClass()==FrameClass::marker) {
         MarkerFrame *markerframe = static_cast<MarkerFrame*>(f);
-        std::cout << "FrameCache: writeCopy: got marker frame " << *markerframe << std::endl;
+        valkkafslogger.log(LogLevel::debug) << "FrameCache: writeCopy: got marker frame " << *markerframe << std::endl;
         if (markerframe->tm_start) {
             clear_();
         }
@@ -80,7 +80,7 @@ bool FrameCache::writeCopy(Frame* f, bool wait) {
     #ifdef TIMING_VERBOSE
     long int dt=(getCurrentMsTimestamp()-f->mstimestamp);
     if (dt>100) {
-        std::cout << "FrameCache: "<<name<<" writeCopy : timing : inserting frame " << dt << " ms late" << std::endl;
+        valkkafslogger.log(LogLevel::debug) << "FrameCache: "<<name<<" writeCopy : timing : inserting frame " << dt << " ms late" << std::endl;
     }
     #endif
 
@@ -199,19 +199,19 @@ int FrameCache::seek(long int ms_streamtime_) {
 int FrameCache::keySeek(long int ms_streamtime_) { // return values: -1 = no frames at left, 1 = no frames at right, 0 = ok
     std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
         
-    std::cout << "FrameCache : keySeek : mintime, maxtime, seek time " << mintime_ << " " << maxtime_ << " " << ms_streamtime_ << std::endl;
+    valkkafslogger.log(LogLevel::debug) << "FrameCache : keySeek : mintime, maxtime, seek time " << mintime_ << " " << maxtime_ << " " << ms_streamtime_ << std::endl;
     
     state = cache.end();
     if (cache.size() < 1) {
-        std::cout << "FrameCache : keySeek : ERROR: cache.size" << std::endl;
+        valkkafslogger.log(LogLevel::normal) << "FrameCache : keySeek : ERROR: cache.size" << std::endl;
         return -1;
     }
     if (ms_streamtime_ < mintime_) {
-        std::cout << "FrameCache : keySeek : ERROR: mintime_" << std::endl;
+        valkkafslogger.log(LogLevel::normal) << "FrameCache : keySeek : ERROR: mintime_" << std::endl;
         return -1;
     }
     if (ms_streamtime_ > maxtime_) {
-        std::cout << "FrameCache : keySeek : ERROR: maxtime_" << std::endl;
+        valkkafslogger.log(LogLevel::normal) << "FrameCache : keySeek : ERROR: maxtime_" << std::endl;
         return 1;
     }
     
@@ -259,7 +259,7 @@ int FrameCache::keySeek(long int ms_streamtime_) { // return values: -1 = no fra
     }
 
     if (f) {
-        std::cout << "FrameCache : seek : frame = " << *f;
+        valkkafslogger.log(LogLevel::debug) << "FrameCache : seek : frame = " << *f;
     }
     
     // let's get the forward iterator
@@ -425,7 +425,9 @@ void FileCacheThread::sendSetupFrames(SetupFrame *f) {
     valkkafslogger.log(LogLevel::debug) << "FileCacheThread : sendSetupFrames : " << std::endl;
     for (auto it=slots_.begin(); it!=slots_.end(); ++it) {
         if (*it) {
+            #ifdef CACHESTREAM_VERBOSE
             std::cout << "FileCacheThread : sendSetupFrames : " << cc << " : " << *f << std::endl;
+            #endif
             f->n_slot = cc;
             (*it)->run(f);
         }
@@ -527,6 +529,7 @@ void FileCacheThread::seekStreams(long int mstimestamp_, bool clear, bool send_s
 
         
 void FileCacheThread::run() {
+    std::unique_lock<std::mutex> lk(this->loop_mutex);
     bool ok;
     unsigned short subsession_index;
     long int dt;
@@ -542,10 +545,10 @@ void FileCacheThread::run() {
     walltime = mstime;
     save1mstime = mstime;
     save2mstime = mstime;
-    loop=true;
-    next=NULL; // no next frame to be presented
-    next_mstimestamp=0;
-    stream=false;
+    loop = true;
+    next = NULL; // no next frame to be presented
+    next_mstimestamp = 0;
+    stream = false;
     
     while(loop) { // LOOP
         // always transmit all frames whose mstimestamp is less than target_mstimestamp_
@@ -643,12 +646,14 @@ void FileCacheThread::run() {
             target_mstimestamp_ = walltime - reftime;
         }
         
+        /*
         if (next) {
             valkkafslogger.log(LogLevel::fatal) << "FileCacheThread : run : next - walltime " << next_mstimestamp - walltime << std::endl;
         }
         else {
             valkkafslogger.log(LogLevel::fatal) << "FileCacheThread : run : no next frame " << std::endl;
         }
+        */
         
         // [pulling frames from the cache]
         while (next and ((next_mstimestamp - walltime) <= 0)) { // just send all frames at once
@@ -670,7 +675,9 @@ void FileCacheThread::run() {
                         setupf->codec_id = basicf->codec_id;
                         setupf->copyMetaFrom(basicf);
                         setup_frames[next->n_slot][next->subsession_index] = setupf;
-                        valkkafslogger.log(LogLevel::crazy) << "FileCacheThread : run : pushing SetupFrame " << *setupf << std::endl;
+                        #ifdef CACHESTREAM_VERBOSE
+                        std::cout << "FileCacheThread : run : pushing SetupFrame " << *setupf << std::endl;
+                        #endif
                         ff->run(setupf);
                     }
                 }
@@ -681,7 +688,9 @@ void FileCacheThread::run() {
                 // modifying the frame here: it's just a pointer, so the frame in the underlying FrameCache will be modified as well
                 // could create a copy here
                 // valkkafslogger.log(LogLevel::crazy) << "FileCacheThread :  run : pushing frame " << *next << " distance to target=" << walltime - (next->mstimestamp + reftime) << std::endl;
-                valkkafslogger.log(LogLevel::debug) << "FileCacheThread :  run : pushing frame " << *next << " corrected timestamp = " << next->mstimestamp + reftime << std::endl;
+                #ifdef CACHESTREAM_VERBOSE
+                std::cout << "FileCacheThread :  run : pushing frame " << *next << " corrected timestamp = " << next->mstimestamp + reftime << std::endl;
+                #endif
                 
                 // during the pushing, correct the frametime to walltime
                 next->mstimestamp = next->mstimestamp + reftime;
@@ -704,6 +713,7 @@ void FileCacheThread::run() {
             if (!next or ((next_mstimestamp-walltime)>0)) {
                 // this loop is about to break: there is no next frame, or the target frame has been reached
                 if (state == AbstractFileState::seek) {
+                    #ifdef CACHESTREAM_VERBOSE
                     if (!next) {
                         std::cout << "FileCacheThread: no next frame" << std::endl;
                     }
@@ -711,6 +721,7 @@ void FileCacheThread::run() {
                         std::cout << "FileCacheThread: target reached.  next = " << next_mstimestamp << std::endl;
                     }
                     std::cout << "FileCacheThread: Switching from seek to stop" << std::endl;
+                    #endif
                     stopStreams();
                 }
             }
@@ -725,8 +736,16 @@ void FileCacheThread::run() {
         }
         if ((mstime-save2mstime) >= Timeout::filecachethread and loop) { // send message to the python side
             if (pyfunc) {
-                // std::cout << "FileCacheThread : run : evoke python callback : " << walltime << std::endl;
+                // consider this:
+                // requestStopCall() => sends signal for the main loop to exit
+                // waitStopCall() => calls thread join
+                // when that join is called, execution might be here and thread join conflicts with the python GIL
+                // (loop is set to false _after_ reading the signal)
+                // that's why this method is protected by loop_mutex 
+                //
+                //std::cout << "FileCacheThread : run : time emit : " << walltime << std::endl;
                 PyGILState_STATE gstate;
+                
                 gstate = PyGILState_Ensure();
                 
                 PyObject* res;
@@ -741,6 +760,9 @@ void FileCacheThread::run() {
                     valkkafslogger.log(LogLevel::fatal) << "FileCacheThread :  run: WARNING: python time callback failed" << std::endl;
                 }
                 PyGILState_Release(gstate);
+                
+                //std::cout << "FileCacheThread : run : time emit exit: " << walltime << std::endl;
+                
             }
             save2mstime=mstime;
         }

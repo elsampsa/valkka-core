@@ -57,7 +57,8 @@ namespace Timeout { ///< Various thread timeouts in milliseconds
   const static long unsigned openglthread =250; // Timeout::openglthread
   const static long unsigned valkkafswriterthread = 250; // Timeout::valkkafswriterthread
   const static long unsigned valkkafsreaderthread = 250; // Timeout::valkkafswriterthread
-  const static long unsigned filecachethread = 300; // Timeout::valkkacachethread
+  const static long unsigned filecachethread = 1000; // Timeout::valkkacachethread
+  // const static long unsigned filecachethread = 500; // Timeout::valkkacachethread
   const static long unsigned usbthread    =250; // Timeout::usbthread
   const static long int filethread        =2000; // Timeout::filethread
 }

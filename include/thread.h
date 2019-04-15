@@ -128,6 +128,9 @@ protected: // common variables of all Thread subclasses
   
   std::mutex   mutex;                    ///< Mutex protecting the condition variable and signal queue
   std::condition_variable condition;     ///< Condition variable for the signal queue (triggered when all signals processed).  Not necessarily used by all subclasses.
+  
+  std::mutex   loop_mutex;               ///< Protects thread's main execution loop (if necessary)
+  
   std::deque<SignalContext> signal_fifo; ///< Signal queue (fifo).  Redefine in child classes.
   bool         loop;                     ///< Use this boolean to control if the main loop in Thread:run should exit
   

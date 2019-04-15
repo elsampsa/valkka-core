@@ -87,6 +87,7 @@ void* Thread::mainRun_(void *p) {// for the pthread_* version
 
 
 void Thread::closeThread() {
+    std::unique_lock<std::mutex> lk(this->loop_mutex);
     threadlogger.log(LogLevel::debug) << "Thread: closeThread: (1) "<< this->name <<std::endl;
     // sleep_for(3s); return; // debugging
     // sleep_for(3s); // debugging
@@ -227,6 +228,7 @@ TestProducerThread::TestProducerThread(const char* name, FrameFifo* framefifo, i
 void TestProducerThread::preRun() {}
 void TestProducerThread::postRun() {}
 void TestProducerThread::run() {
+    // std::unique_lock<std::mutex> lk(this->loop_mutex); // use if needed
     int i;
     BasicFrame *f = new BasicFrame();
     bool res;

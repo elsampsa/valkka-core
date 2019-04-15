@@ -156,10 +156,9 @@ void AVThread::run() {
                         // because of this, the frames typically arrive late to the final destination (say, OpenGLThread)
                         // so we take the last decoded frame and send it again with a corrected timestamp (current time)
                         if (decoder and decoder->hasFrame()) {
-                            std::cout << "AVThread: resend" << std::endl;
                             Frame *tmpf = decoder->output();
                             tmpf->mstimestamp = getCurrentMsTimestamp();
-                            std::cout << "AVThread: resend:" << *((AVMediaFrame*)tmpf) << std::endl;
+                            avthreadlogger.log(LogLevel::debug) << "AVThread: " << name << " resend: " << *((AVMediaFrame*)tmpf) << std::endl;
                             outfilter.run(tmpf);
                         }
                     }
@@ -206,7 +205,7 @@ void AVThread::run() {
                                 outfilter.run(decoder->output()); // returns a reference to a decoded frame
                             }
                             else {
-                                avthreadlogger.log(LogLevel::debug) << "AVThread: not sending late frame " << *(decoder->output()) << std::endl;
+                                avthreadlogger.log(LogLevel::debug) << "AVThread: " << name << " : not sending late frame " << *(decoder->output()) << std::endl;
                             }
                         }
                         else { // no time tolerance defined
@@ -215,7 +214,7 @@ void AVThread::run() {
                                 outfilter.run(decoder->output()); // return a reference to a decoded frame
                             }
                             else {
-                                avthreadlogger.log(LogLevel::debug) << "AVThread: seek: scrapping frame: " << *(decoder->output()) << std::endl;
+                                avthreadlogger.log(LogLevel::debug) << "AVThread: seek: " << name << " scrapping frame: " << *(decoder->output()) << std::endl;
                             }
                             
                             #ifdef PROFILE_TIMING

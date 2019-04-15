@@ -109,6 +109,12 @@ if    (profile_timing)
   message("PROFILE TIMING ENABLED")
 endif (profile_timing)
 
+option(cachestream_verbose "cachestream_verbose" OFF)
+if    (cachestream_verbose)
+  add_definitions("-DCACHESTREAM_VERBOSE")
+  message("CACHESTREAM_VERBOSE ENABLED")
+endif (cachestream_verbose)
+
 
 # ****************************************************************
 # WARNING: the following three lines are modified by the "setver.bash" script
