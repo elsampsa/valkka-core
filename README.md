@@ -183,7 +183,7 @@ and then do:
 
 You need (at least):
 
-    sudo apt-get install build-essential libc6-dev yasm cmake pkg-config swig libglew-dev mesa-common-dev libstdc++-5-dev python3-dev python3-numpy libasound2-dev
+    sudo apt-get install build-essential libc6-dev yasm cmake pkg-config swig libglew-dev mesa-common-dev libstdc++-5-dev python3-dev python3-numpy libasound2-dev valgrind
     
 ### Compile
 

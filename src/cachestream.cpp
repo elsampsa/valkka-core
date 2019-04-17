@@ -380,7 +380,7 @@ void FileCacheThread::switchCache() {
     if (pyfunc2) {
         valkkafslogger.log(LogLevel::debug) << "FileCacheThread: switchCache : evoke python callback : loaded frame limits" << std::endl;
         
-        // This is not needed: PyObject_CallFunctionObjArgs does it
+        // This is not needed: PyObject_CallFunctionObjArgs does it ?
         PyGILState_STATE gstate;
         gstate = PyGILState_Ensure();
         
