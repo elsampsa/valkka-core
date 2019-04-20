@@ -36,11 +36,12 @@
 
 RaWriter::RaWriter(const char* filename, bool direct) : filename(filename), fd(0), count(0) {
     if (direct) {
-        fd = open(this->filename.c_str(), O_CREAT | O_WRONLY | O_LARGEFILE | O_NONBLOCK | O_DSYNC | O_DIRECT, S_IRWXU);
+        fd = open(this->filename.c_str(), O_CREAT | O_WRONLY | O_LARGEFILE | O_NONBLOCK | O_DIRECT, S_IRWXU);
         // fd = open(this->filename.c_str(), O_CREAT | O_WRONLY | O_DIRECT, S_IRWXU); // no f-way to make this work
     }
     else {
-        fd = open(this->filename.c_str(), O_CREAT | O_WRONLY | O_LARGEFILE | O_NONBLOCK | O_DSYNC, S_IRWXU);
+        // fd = open(this->filename.c_str(), O_CREAT | O_WRONLY | O_LARGEFILE | O_NONBLOCK | O_DSYNC, S_IRWXU);
+        fd = open(this->filename.c_str(), O_CREAT | O_WRONLY | O_LARGEFILE | O_NONBLOCK, S_IRWXU);
         // fd = open(this->filename.c_str(), O_CREAT | O_WRONLY, S_IRWXU);
     }
     
@@ -194,8 +195,8 @@ RawReader::RawReader(const char* filename, bool direct) : filename(filename), fd
         fd = open(this->filename.c_str(), O_RDONLY | O_LARGEFILE | O_NONBLOCK | O_DIRECT);
     }
     else {
-        // fd = open(this->filename.c_str(), O_RDONLY | O_LARGEFILE | O_NONBLOCK);
-        fd = open(this->filename.c_str(), O_RDONLY | O_LARGEFILE | O_NONBLOCK | O_DSYNC);
+        fd = open(this->filename.c_str(), O_RDONLY | O_LARGEFILE | O_NONBLOCK);
+        // fd = open(this->filename.c_str(), O_RDONLY | O_LARGEFILE | O_NONBLOCK | O_DSYNC);
         // fd = open(this->filename.c_str(), O_CREAT | O_WRONLY);
     }    
     is_open = true;
