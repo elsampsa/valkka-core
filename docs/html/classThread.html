@@ -110,6 +110,10 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a407e6b24f6697b0c77527f95b5c7e08a">postRun</a> ()=0</td></tr>
 <tr class="memdesc:a407e6b24f6697b0c77527f95b5c7e08a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the main execution loop exits, but before joining the thread. <br /></td></tr>
 <tr class="separator:a407e6b24f6697b0c77527f95b5c7e08a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a544545691c206a095aefeafc7b52a408"><td class="memItemLeft" align="right" valign="top"><a id="a544545691c206a095aefeafc7b52a408"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a544545691c206a095aefeafc7b52a408">preJoin</a> ()</td></tr>
+<tr class="memdesc:a544545691c206a095aefeafc7b52a408"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called before the thread is joined. <br /></td></tr>
+<tr class="separator:a544545691c206a095aefeafc7b52a408"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1d76230f621bf4139ee5dd52e23fa8a"><td class="memItemLeft" align="right" valign="top"><a id="af1d76230f621bf4139ee5dd52e23fa8a"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#af1d76230f621bf4139ee5dd52e23fa8a">postJoin</a> ()</td></tr>
 <tr class="memdesc:af1d76230f621bf4139ee5dd52e23fa8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the thread has been joined. <br /></td></tr>
@@ -188,6 +192,10 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href
 std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a0a58a652291ba8011b4b100077543af1">condition</a></td></tr>
 <tr class="memdesc:a0a58a652291ba8011b4b100077543af1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Condition variable for the signal queue (triggered when all signals processed). Not necessarily used by all subclasses. <br /></td></tr>
 <tr class="separator:a0a58a652291ba8011b4b100077543af1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e126419b64924b472a2ee2ffa5a4103"><td class="memItemLeft" align="right" valign="top"><a id="a3e126419b64924b472a2ee2ffa5a4103"></a>
+std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a3e126419b64924b472a2ee2ffa5a4103">loop_mutex</a></td></tr>
+<tr class="memdesc:a3e126419b64924b472a2ee2ffa5a4103"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protects thread's main execution loop (if necessary) <br /></td></tr>
+<tr class="separator:a3e126419b64924b472a2ee2ffa5a4103"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6816c44497ea3ddd732ca3322ca1348"><td class="memItemLeft" align="right" valign="top"><a id="ab6816c44497ea3ddd732ca3322ca1348"></a>
 std::deque&lt; <a class="el" href="structSignalContext.html">SignalContext</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#ab6816c44497ea3ddd732ca3322ca1348">signal_fifo</a></td></tr>
 <tr class="memdesc:ab6816c44497ea3ddd732ca3322ca1348"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal queue (fifo). Redefine in child classes. <br /></td></tr>
@@ -451,6 +459,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classThread_a0ecff37449db3af69888738f73c8fd04_cgraph.png" border="0" usemap="#classThread_a0ecff37449db3af69888738f73c8fd04_cgraph" alt=""/></div>
 <map name="classThread_a0ecff37449db3af69888738f73c8fd04_cgraph" id="classThread_a0ecff37449db3af69888738f73c8fd04_cgraph">
+<area shape="rect" id="node2" href="classThread.html#a4428ec86c8bc7da14b558f25fb723ce0" title="Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set Thread::has_thread to false. " alt="" coords="197,5,339,32"/>
 </map>
 </div>
 

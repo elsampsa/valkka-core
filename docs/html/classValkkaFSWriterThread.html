@@ -79,6 +79,7 @@ Inheritance diagram for ValkkaFSWriterThread:</div>
 <div class="dyncontent">
 <div class="center"><img src="classValkkaFSWriterThread__inherit__graph.png" border="0" usemap="#ValkkaFSWriterThread_inherit__map" alt="Inheritance graph"/></div>
 <map name="ValkkaFSWriterThread_inherit__map" id="ValkkaFSWriterThread_inherit__map">
+<area shape="rect" id="node2" href="classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="51,5,114,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -86,14 +87,22 @@ Collaboration diagram for ValkkaFSWriterThread:</div>
 <div class="dyncontent">
 <div class="center"><img src="classValkkaFSWriterThread__coll__graph.png" border="0" usemap="#ValkkaFSWriterThread_coll__map" alt="Collaboration graph"/></div>
 <map name="ValkkaFSWriterThread_coll__map" id="ValkkaFSWriterThread_coll__map">
+<area shape="rect" id="node2" href="classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="5,184,68,211"/>
+<area shape="rect" id="node3" href="classFifoFrameFilter.html" title="Passes frames to a FrameFifo. " alt="" coords="277,184,388,211"/>
+<area shape="rect" id="node4" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="130,95,218,121"/>
+<area shape="rect" id="node8" href="classBlockingFifoFrameFilter.html" title="Passes frames to a multiprocessing fifo. " alt="" coords="93,184,253,211"/>
+<area shape="rect" id="node5" href="classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack. " alt="" coords="296,95,377,121"/>
+<area shape="rect" id="node6" href="structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo. " alt="" coords="273,5,400,32"/>
+<area shape="rect" id="node7" href="classValkkaFS.html" title="Book&#45;keeping for ValkkaFS. " alt="" coords="412,184,491,211"/>
+<area shape="rect" id="node9" href="classRaWriter.html" title="RaWriter" alt="" coords="597,184,671,211"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a678d034396658f7c7e963430160cbc3e"><td class="memItemLeft" align="right" valign="top"><a id="a678d034396658f7c7e963430160cbc3e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ValkkaFSWriterThread</b> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, <a class="el" href="classValkkaFS.html">ValkkaFS</a> &amp;valkkafs, <a class="el" href="structFrameFifoContext.html">FrameFifoContext</a> fifo_ctx=<a class="el" href="structFrameFifoContext.html">FrameFifoContext</a>())</td></tr>
-<tr class="separator:a678d034396658f7c7e963430160cbc3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97a4b1be4dcb7f96b2148254e128e1cf"><td class="memItemLeft" align="right" valign="top"><a id="a97a4b1be4dcb7f96b2148254e128e1cf"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ValkkaFSWriterThread</b> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, <a class="el" href="classValkkaFS.html">ValkkaFS</a> &amp;valkkafs, <a class="el" href="structFrameFifoContext.html">FrameFifoContext</a> fifo_ctx=<a class="el" href="structFrameFifoContext.html">FrameFifoContext</a>(), bool o_direct=false)</td></tr>
+<tr class="separator:a97a4b1be4dcb7f96b2148254e128e1cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51102d612786159dbd2d55b0c00cc707"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#a51102d612786159dbd2d55b0c00cc707">run</a> ()</td></tr>
 <tr class="memdesc:a51102d612786159dbd2d55b0c00cc707"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main execution loop is defined here.  <a href="#a51102d612786159dbd2d55b0c00cc707">More...</a><br /></td></tr>
 <tr class="separator:a51102d612786159dbd2d55b0c00cc707"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -105,6 +114,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#ac55457417751308a447863b7076e87c1">postRun</a> ()</td></tr>
 <tr class="memdesc:ac55457417751308a447863b7076e87c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the main execution loop exits, but before joining the thread. <br /></td></tr>
 <tr class="separator:ac55457417751308a447863b7076e87c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a556b82d2445ed9834357784cbab4bfab"><td class="memItemLeft" align="right" valign="top"><a id="a556b82d2445ed9834357784cbab4bfab"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#a556b82d2445ed9834357784cbab4bfab">preJoin</a> ()</td></tr>
+<tr class="memdesc:a556b82d2445ed9834357784cbab4bfab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called before the thread is joined. <br /></td></tr>
+<tr class="separator:a556b82d2445ed9834357784cbab4bfab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af509993e988dbd303c0b187a80685f03"><td class="memItemLeft" align="right" valign="top"><a id="af509993e988dbd303c0b187a80685f03"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#af509993e988dbd303c0b187a80685f03">postJoin</a> ()</td></tr>
 <tr class="memdesc:af509993e988dbd303c0b187a80685f03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the thread has been joined. <br /></td></tr>
@@ -214,9 +227,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a365c9145abbeeb3bf696e83ee0c5d306"><td class="memItemLeft" align="right" valign="top"><a id="a365c9145abbeeb3bf696e83ee0c5d306"></a>
 <a class="el" href="classValkkaFS.html">ValkkaFS</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>valkkafs</b></td></tr>
 <tr class="separator:a365c9145abbeeb3bf696e83ee0c5d306"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c218183d2873d2d18b7cb982454624f"><td class="memItemLeft" align="right" valign="top"><a id="a6c218183d2873d2d18b7cb982454624f"></a>
-std::fstream&#160;</td><td class="memItemRight" valign="bottom"><b>filestream</b></td></tr>
-<tr class="separator:a6c218183d2873d2d18b7cb982454624f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30c067502d8c9ccdb5f65dcf9fdda1da"><td class="memItemLeft" align="right" valign="top"><a id="a30c067502d8c9ccdb5f65dcf9fdda1da"></a>
+<a class="el" href="classRaWriter.html">RaWriter</a>&#160;</td><td class="memItemRight" valign="bottom"><b>raw_writer</b></td></tr>
+<tr class="separator:a30c067502d8c9ccdb5f65dcf9fdda1da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78702518b28957d50efc7fb62df7a115"><td class="memItemLeft" align="right" valign="top"><a id="a78702518b28957d50efc7fb62df7a115"></a>
 std::map&lt; SlotNumber, IdNumber &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#a78702518b28957d50efc7fb62df7a115">slot_to_id</a></td></tr>
 <tr class="memdesc:a78702518b28957d50efc7fb62df7a115"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map from slot numbers to ids. <br /></td></tr>
@@ -271,6 +284,10 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href
 std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a0a58a652291ba8011b4b100077543af1">condition</a></td></tr>
 <tr class="memdesc:a0a58a652291ba8011b4b100077543af1 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Condition variable for the signal queue (triggered when all signals processed). Not necessarily used by all subclasses. <br /></td></tr>
 <tr class="separator:a0a58a652291ba8011b4b100077543af1 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a3e126419b64924b472a2ee2ffa5a4103"></a>
+std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a3e126419b64924b472a2ee2ffa5a4103">loop_mutex</a></td></tr>
+<tr class="memdesc:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protects thread's main execution loop (if necessary) <br /></td></tr>
+<tr class="separator:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6816c44497ea3ddd732ca3322ca1348 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="ab6816c44497ea3ddd732ca3322ca1348"></a>
 std::deque&lt; <a class="el" href="structSignalContext.html">SignalContext</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#ab6816c44497ea3ddd732ca3322ca1348">signal_fifo</a></td></tr>
 <tr class="memdesc:ab6816c44497ea3ddd732ca3322ca1348 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal queue (fifo). Redefine in child classes. <br /></td></tr>
@@ -369,6 +386,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classValkkaFSWriterThread_a51102d612786159dbd2d55b0c00cc707_cgraph.png" border="0" usemap="#classValkkaFSWriterThread_a51102d612786159dbd2d55b0c00cc707_cgraph" alt=""/></div>
 <map name="classValkkaFSWriterThread_a51102d612786159dbd2d55b0c00cc707_cgraph" id="classValkkaFSWriterThread_a51102d612786159dbd2d55b0c00cc707_cgraph">
+<area shape="rect" id="node2" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. Uses timeval. " alt="" coords="233,5,400,32"/>
 </map>
 </div>
 

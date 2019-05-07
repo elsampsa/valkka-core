@@ -69,6 +69,7 @@ enum PayloadSizes {
   
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024*100, ///< Default buffer size in Live555 for h264
   DEFAULT_PAYLOAD_SIZE_H264       = 1024*300, ///< Default buffer size in Live555 for h264 
+  // DEFAULT_PAYLOAD_SIZE_H264       = 1024*500, ///< Default buffer size in Live555 for h264
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024*10,  ///< Default buffer size in Live555 for h264 // debug
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024, // use this small value for debugging (( debug
   
@@ -145,6 +146,10 @@ struct BitmapPars {
   int           u_linesize;
   int           v_linesize;
 };
+
+bool operator==(BitmapPars const &a, BitmapPars const &b) { // is copyable ?
+    return ( (a.y_linesize == b.y_linesize) and (a.u_linesize == b.u_linesize) and (a.v_linesize == b.v_linesize) );
+}
 
 inline std::ostream &operator<<(std::ostream &os, BitmapPars const &m) {
   return os << "<BitmapPars: type=" << int(m.type) << " w, h=" << m.width << ", " << m.height << ">";

@@ -34,7 +34,7 @@
 #include "logging.h"
 
 
-AVThread::AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) : Thread(name), outfilter(outfilter), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), is_decoding(false), mstimetolerance(0), state(AbstractFileState::none) {
+AVThread::AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) : Thread(name), outfilter(outfilter), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), is_decoding(false), mstimetolerance(0), state(AbstractFileState::none), n_threads(1) {
     avthreadlogger.log(LogLevel::debug) << "AVThread : constructor : N_MAX_DECODERS ="<<int(N_MAX_DECODERS)<<std::endl;
     decoders.resize(int(N_MAX_DECODERS),NULL);
 }
@@ -122,7 +122,7 @@ void AVThread::run() {
                         
                         switch (setupframe->codec_id) { // switch: video codecs
                             case AV_CODEC_ID_H264:
-                                decoders[subsession_index]=new VideoDecoder(AV_CODEC_ID_H264);
+                                decoders[subsession_index]=new VideoDecoder(AV_CODEC_ID_H264, n_threads = this->n_threads);
                                 break;
                             default:
                                 break;
@@ -325,6 +325,11 @@ void AVThread::handleSignals() {
 }
 
 // API
+
+
+void AVThread::setNumberOfThreads(int n_threads) {
+    this->n_threads = n_threads;
+}
 
 void AVThread::decodingOnCall() {
     AVSignalContext signal_ctx;

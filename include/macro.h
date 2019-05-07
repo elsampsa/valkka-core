@@ -104,6 +104,4 @@ for(auto it=res.begin(); it!=res.end(); ++it) {\
     delete (CONTEXTCLASS*)(f->custom_signal_ctx);\
 };\
 
-
-
 #endif

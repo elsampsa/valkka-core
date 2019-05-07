@@ -75,10 +75,6 @@ void ValkkaXInitThreads(void) {
   Status status = XInitThreads();
 }
 
-
-void setLiveOutPacketBuffermaxSize(unsigned i) {
-  OutPacketBuffer::maxSize = i;
-}
   
 %}
 

@@ -27,5 +27,7 @@ var searchData=
   ['logging_2ecpp',['logging.cpp',['../logging_8cpp.html',1,'']]],
   ['logging_2eh',['logging.h',['../logging_8h.html',1,'']]],
   ['loop',['loop',['../classFileThread.html#a25d7bab2682e2098ad54e0bfce17c9c1',1,'FileThread::loop()'],['../classThread.html#adfc33fd9a806a1d05e325a19d73b2812',1,'Thread::loop()']]],
+  ['loop_5fmutex',['loop_mutex',['../classThread.html#a3e126419b64924b472a2ee2ffa5a4103',1,'Thread']]],
+  ['luma',['luma',['../classMovementFrameFilter.html#a0b38ddb9e79887f965d15b90320a7574',1,'MovementFrameFilter']]],
   ['library_20architecture',['Library architecture',['../process_chart.html',1,'']]]
 ];

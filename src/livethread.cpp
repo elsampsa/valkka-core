@@ -41,6 +41,10 @@ using namespace std::chrono_literals;
 using std::this_thread::sleep_for; 
 
 
+void setLiveOutPacketBuffermaxSize(unsigned i) {
+  OutPacketBuffer::maxSize = i;  
+}                                               
+
 
 LiveFifo::LiveFifo(const char* name, FrameFifoContext ctx) : FrameFifo(name, ctx) {
 }
@@ -1251,6 +1255,7 @@ FifoFrameFilter &LiveThread::getFrameFilter() {
 
 void LiveThread::setRTSPServer(int portnum) {
     authDB =NULL;
+        
     server = RTSPServer::createNew(*env, portnum, authDB); // like in the test programs, this is instantiated outside the event loop
     if (server == NULL) {
         *env << "Failed to create live RTSP server: " << env->getResultMsg() << "\n";

@@ -365,6 +365,8 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classValkkaFS_a474feef22cff4c4038ca74007667d3e4_cgraph.png" border="0" usemap="#classValkkaFS_a474feef22cff4c4038ca74007667d3e4_cgraph" alt=""/></div>
 <map name="classValkkaFS_a474feef22cff4c4038ca74007667d3e4_cgraph" id="classValkkaFS_a474feef22cff4c4038ca74007667d3e4_cgraph">
+<area shape="rect" id="node2" href="classValkkaFS.html#ada8fe44c2c39f08e52b000c277018664" title="returns device filename " alt="" coords="212,5,359,32"/>
+<area shape="rect" id="node3" href="classBasicFrame.html#a63ab00e546c0361c5b573fad2ad74107" title="Read the frame from filestream. Returns device id. " alt="" coords="223,56,348,83"/>
 </map>
 </div>
 
@@ -420,12 +422,12 @@ Here is the call graph for this function:</div>
 <p>Used by a writer class to inform that a new block has been written. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pycall</td><td>: use the provided python callback function or not </td></tr>
+    <tr><td class="paramname">pycall</td><td>: Use the provided python callback function or not? default = true </td></tr>
+    <tr><td class="paramname">use_gil</td><td>: Acquire Python GIL or not? should be true, when evoked "autonomously" by this thread and false, when evoked from python. default = true </td></tr>
   </table>
   </dd>
 </dl>
 <ul>
-<li></li>
 <li></li>
 </ul>
 

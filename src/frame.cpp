@@ -415,7 +415,7 @@ void AVMediaFrame::reset() {
   Frame::reset();
   media_type   =AVMEDIA_TYPE_UNKNOWN; 
   codec_id     =AV_CODEC_ID_NONE;
-  // TODO: resert AVFrame ?
+  // TODO: reset AVFrame ?
 }
 
 
@@ -500,6 +500,23 @@ void AVBitmapFrame::update() {
 }
 
 
+void AVBitmapFrame::copyPayloadFrom(AVBitmapFrame *frame) {
+    if ( !(bmpars == frame->bmpars) ) {
+        std::cout << "AVBitmapFrame : copyPayloadFrom : bitmap parameters don't match" << std::endl;
+        return;
+    }
+    int i;
+    i = av_frame_copy(av_frame, frame->av_frame); // copies payload
+    if (i < 0) {
+        std::cout << "AVBitmapFrame : copyPayloadFrom : av_frame_copy failed" << std::endl;
+    }
+    i = av_frame_copy_props(av_frame, frame->av_frame); // copies av_frame metadata
+    if (i < 0) {
+        std::cout << "AVBitmapFrame : copyPayloadFrom : av_frame_copy_props failed" << std::endl;
+    }
+    update();
+}
+
 
 AVRGBFrame::AVRGBFrame() : AVBitmapFrame() {
 }
@@ -509,9 +526,16 @@ AVRGBFrame::~AVRGBFrame() {
 }
 
 
-//frame_essentials(FrameClass::avrgb, AVRGBFrame);
- 
-  
+void AVRGBFrame::reserve(int width, int height) {
+    av_frame->format = AV_PIX_FMT_RGB24;
+    av_pixel_format = AV_PIX_FMT_RGB24;
+    av_frame->width = width;
+    av_frame->height = height;
+    int i = av_frame_get_buffer(av_frame, 32); // int align;
+    update();
+}
+
+
 std::string AVRGBFrame::dumpPayload() {
   std::stringstream tmp;  
   int i;
@@ -741,6 +765,62 @@ void YUVFrame::reset() {
   Frame::reset();
   source_bmpars =BitmapPars();
 }
+
+
+
+RGBFrame::RGBFrame(int max_width, int max_height) : Frame(), max_width(max_width), max_height(max_height), width(0), height(0) {
+    this->payload.resize(this->max_width*this->max_height*3);
+}
+
+
+RGBFrame::~RGBFrame() {
+}
+
+    
+std::string RGBFrame::dumpPayload() {
+    std::stringstream tmp;
+    int i;
+
+    tmp << "[";
+    for (auto it = payload.begin(); it != payload.end(); ++it) {
+        tmp << (unsigned int)(*it) << " ";
+    }
+    tmp << "] ";
+    return tmp.str();  
+}
+
+void RGBFrame::print(std::ostream& os) const {
+    os << "<RGBFrame: timestamp="<<mstimestamp<<" subsession_index="<<subsession_index<<" slot="<<n_slot<<" / ";
+    os << "width = " << width << " of " << max_width << " / ";
+    os << "height = " << height << " of " << max_height;
+    os <<">";
+}
+    
+    
+void RGBFrame::reset() {
+    Frame::reset();
+    width = 0;
+    height = 0;
+}
+
+
+void RGBFrame::fromAVRGBFrame(AVRGBFrame *f) {
+    AVFrame *av_frame =f->av_frame;
+    
+    std::size_t n_bytes = std::size_t(av_frame->linesize[0] * av_frame->height);
+    
+    if (n_bytes > payload.size()) {
+        std::cout << "RGBFrame : fromAVRGBFrame : WARNING : frame too big with " << av_frame->linesize[0] * av_frame->height << " bytes" << std::endl;
+        return;
+    }
+    
+    // std::cout << "SharedMemSegment: putAVRGBFrame: copying " << *meta << " bytes from " << *f << std::endl;
+    memcpy(payload.data(), av_frame->data[0], n_bytes);
+    
+    copyMetaFrom(f);
+}
+
+
 
 
 

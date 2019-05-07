@@ -481,8 +481,16 @@ FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter&
     // send setup frame
     framefilter.run(&setupframe);
     setReceiveBuffer(DEFAULT_PAYLOAD_SIZE_H264); // sets nbuf
-  } 
-  else if (strcmp(codec_name,"PCMU")==0) {
+  }
+  else {
+    return;
+  }
+  
+  // some beautifull day enable audio.  At the moment, it messes up some things (for example, re-transmitting streams, etc.)
+  
+  
+  /*
+    else if (strcmp(codec_name,"PCMU")==0) {
     livelogger.log(LogLevel::debug) << "FrameSink: init PCMU Frame"<<std::endl;
     // prepare payload frame
     basicframe.media_type           =AVMEDIA_TYPE_AUDIO;
@@ -504,6 +512,7 @@ FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter&
     basicframe.subsession_index     =subsession_index;
     setReceiveBuffer(DEFAULT_PAYLOAD_SIZE); // sets nbuf
   }
+  */
   
 #ifdef SEND_PARAMETER_SETS
   sendParameterSets();
@@ -550,11 +559,14 @@ void FrameSink::afterGettingFrame(unsigned frameSize, unsigned numTruncatedBytes
   // std::cout << "afterGettingFrame: mstimestamp=" << mstimestamp <<std::endl;
   basicframe.mstimestamp=(presentationTime.tv_sec*1000+presentationTime.tv_usec/1000);
   basicframe.fillPars();
+  // std::cout << "afterGettingFrame: " << basicframe << std::endl;
   
   basicframe.payload.resize(checkBufferSize(frameSize)); // set correct frame size .. now information about the packet length goes into the filter chain
   
   scs.setFrame(); // flag that indicates that we got a frame
-    
+  
+  // std::cerr << "BufferSource: IN0: " << basicframe << std::endl;
+  
   framefilter.run(&basicframe); // starts the frame filter chain
   
   if (numTruncatedBytes>0) {// time to grow the buffer..

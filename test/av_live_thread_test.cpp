@@ -115,7 +115,7 @@ void test_2() {
   std::cout << name << "playing stream !" << std::endl;
   livethread.playStreamCall(ctx);
   
-  sleep_for(5s);
+  sleep_for(3s);
   // sleep_for(604800s); //one week
   
   std::cout << name << "stopping threads" << std::endl;
@@ -169,6 +169,35 @@ void test_4() {
 
 
 void test_5() {
+    const char* name = "@TEST: av_live_thread_test: test 5: ";
+    std::cout << name <<"** @@Send frames from live to av thread.  Test multithreading decoding. **" << std::endl;
+    
+    if (!stream_1) {
+        std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+        exit(2);
+    }
+    std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+    
+    avthread.setNumberOfThreads(4);
+    
+    std::cout << name << "starting threads" << std::endl;
+    livethread.startCall();
+    avthread.  startCall();
+
+    avthread.decodingOnCall();
+    
+    std::cout << name << "registering stream" << std::endl;
+    LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
+    livethread.registerStreamCall(ctx);
+    
+    std::cout << name << "playing stream !" << std::endl;
+    livethread.playStreamCall(ctx);
+    
+    sleep_for(5s);
+    // sleep_for(60s);
+    // sleep_for(604800s); //one week
+    
+    std::cout << name << "stopping threads" << std::endl;
 }
 
 

@@ -112,9 +112,12 @@ public:
    * @param av_codec_id  FFmpeg AVCodecId identifying the codec
    * 
    */
-  AVDecoder(AVCodecID av_codec_id);
+  AVDecoder(AVCodecID av_codec_id, int n_threads = 1);
   virtual ~AVDecoder();
 
+protected:
+    int n_threads;
+  
 public:
   AVCodecID       av_codec_id;       ///< FFmpeg AVCodecId, identifying the codec 
   AVPacket*       av_packet;         ///< FFmpeg internal data structure; encoded frame (say, H264)
@@ -138,7 +141,7 @@ public:
 class VideoDecoder : public AVDecoder {
   
 public:
-  VideoDecoder(AVCodecID av_codec_id); ///< Default constructor
+  VideoDecoder(AVCodecID av_codec_id, int n_threads = 1); ///< Default constructor
   virtual ~VideoDecoder();             ///< Default destructor
   
 protected:

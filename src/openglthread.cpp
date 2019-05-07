@@ -815,7 +815,7 @@ unsigned OpenGLThread::getSwapInterval(GLXDrawable drawable) {
             break;
         }
         default: {
-            opengllogger.log(LogLevel::normal) << "OpenGLThread::setSwapInterval: could not set swap interval" << std::endl;
+            opengllogger.log(LogLevel::normal) << "OpenGLThread::getSwapInterval: could not get swap interval" << std::endl;
             break;
         }
     }

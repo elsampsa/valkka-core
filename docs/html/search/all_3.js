@@ -32,16 +32,16 @@ var searchData=
   ['dummyframe',['dummyframe',['../classOpenGLThread.html#a8e98178bf6e41cb643fa33e8cafcd9c7',1,'OpenGLThread']]],
   ['dummyframefilter',['DummyFrameFilter',['../classDummyFrameFilter.html',1,'']]],
   ['dummytimestampframefilter',['DummyTimestampFrameFilter',['../classDummyTimestampFrameFilter.html',1,'']]],
-  ['dump',['dump',['../classFrameCache.html#aa4e0acd45a9b1a1e534d8c3637164157',1,'FrameCache::dump()'],['../classBasicFrame.html#aadf5601e31470385c73014f87c2b7003',1,'BasicFrame::dump()']]],
+  ['dump',['dump',['../classFrameCache.html#aa4e0acd45a9b1a1e534d8c3637164157',1,'FrameCache::dump()'],['../classBasicFrame.html#ac3ebcf016b398ac74c94a01ab0006109',1,'BasicFrame::dump()'],['../classRaWriter.html#a7c6d20956e287ea65589ba33aea995bb',1,'RaWriter::dump()']]],
   ['dumpfifo',['dumpFifo',['../classFrameFifo.html#afbff47ed40f017d26d8a905f7decc9e1',1,'FrameFifo']]],
   ['dumpframefilter',['DumpFrameFilter',['../classDumpFrameFilter.html',1,'']]],
   ['dumpinfifo',['dumpInFifo',['../classOpenGLThread.html#a4ea25c7f013a61bb854060950a6377d0',1,'OpenGLThread']]],
-  ['dumppayload',['dumpPayload',['../classFrame.html#a13e9ae3eac3e0efcb3684723ff77cf34',1,'Frame::dumpPayload()'],['../classBasicFrame.html#a81f5614e82427d1dcc1bd31fd6258f9f',1,'BasicFrame::dumpPayload()'],['../classAVMediaFrame.html#a2938a790b9f8fcc73656dfde4e668a6f',1,'AVMediaFrame::dumpPayload()'],['../classAVBitmapFrame.html#a02770da469f4b3d0094be6204b29d32f',1,'AVBitmapFrame::dumpPayload()'],['../classAVRGBFrame.html#a56f06ede8897cb8f6f191c7072285f06',1,'AVRGBFrame::dumpPayload()'],['../classYUVFrame.html#aa558b47e0ddcf8251af3c735a56aae65',1,'YUVFrame::dumpPayload()']]],
+  ['dumppayload',['dumpPayload',['../classFrame.html#a13e9ae3eac3e0efcb3684723ff77cf34',1,'Frame::dumpPayload()'],['../classBasicFrame.html#a81f5614e82427d1dcc1bd31fd6258f9f',1,'BasicFrame::dumpPayload()'],['../classAVMediaFrame.html#a2938a790b9f8fcc73656dfde4e668a6f',1,'AVMediaFrame::dumpPayload()'],['../classAVBitmapFrame.html#a02770da469f4b3d0094be6204b29d32f',1,'AVBitmapFrame::dumpPayload()'],['../classAVRGBFrame.html#a56f06ede8897cb8f6f191c7072285f06',1,'AVRGBFrame::dumpPayload()'],['../classYUVFrame.html#aa558b47e0ddcf8251af3c735a56aae65',1,'YUVFrame::dumpPayload()'],['../classRGBFrame.html#a5491ad56b19e249b092f13e879e506c8',1,'RGBFrame::dumpPayload()']]],
   ['dumppayloadtofile',['dumpPayloadToFile',['../classFrame.html#a9392d8c803ee50e3bbdea2dee76aeecc',1,'Frame::dumpPayloadToFile()'],['../classBasicFrame.html#a3af32eb195bba2158cd30f11cfa1c9d0',1,'BasicFrame::dumpPayloadToFile()']]],
   ['dumppresfifo',['dumpPresFifo',['../classOpenGLThread.html#a31f98701eebad8ae50abd864081fade6',1,'OpenGLThread']]],
   ['dumpstacks',['dumpStacks',['../classFrameFifo.html#a8bba517986f815c009eed50823dda2ea',1,'FrameFifo']]],
   ['dumptable',['dumpTable',['../classValkkaFS.html#ae3dc0e02d00ca41b3139f41f6387fb60',1,'ValkkaFS']]],
   ['dumptable_5f',['dumpTable_',['../classValkkaFS.html#ad92105905525460cbe5089d6ec95b4b4',1,'ValkkaFS']]],
   ['dumpyuvstacks',['dumpYUVStacks',['../classOpenGLFrameFifo.html#ac823062e8f19e1afc4b6d9e8feab0c8d',1,'OpenGLFrameFifo::dumpYUVStacks()'],['../classOpenGLThread.html#aedf29eb85857d4068f48928dca545f0b',1,'OpenGLThread::dumpYUVStacks()']]],
-  ['duration',['duration',['../structFileContext.html#af2525987b3d3049c4fbff872520ee5d0',1,'FileContext::duration()'],['../classFileStream.html#abd3fc60ff8652037587ab422ebbbeff6',1,'FileStream::duration()']]]
+  ['duration',['duration',['../structFileContext.html#af2525987b3d3049c4fbff872520ee5d0',1,'FileContext::duration()'],['../classFileStream.html#abd3fc60ff8652037587ab422ebbbeff6',1,'FileStream::duration()'],['../classMovementFrameFilter.html#ab8c2509679fc3ca49c1dc9e513b06712',1,'MovementFrameFilter::duration()']]]
 ];

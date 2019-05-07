@@ -41,6 +41,9 @@
 #include "framefifo.h"
 
 
+void setLiveOutPacketBuffermaxSize(unsigned i); // <pyapi>
+
+
 /** This is a special FrameFifo class for feeding frames *into* live555, i.e. for sending them to the network.
  * 
  * Should not be instantiated by the user, but requested from LiveThread with LiveThread::getFifo()

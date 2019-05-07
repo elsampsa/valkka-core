@@ -65,7 +65,7 @@ $(function() {
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classAVMediaFrame-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">AVMediaFrame Class Reference<div class="ingroups"><a class="el" href="group__frames__tag.html">the frame class</a></div></div>  </div>
+<div class="title">AVMediaFrame Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group__frames__tag.html">the frame class</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -102,12 +102,10 @@ Public Member Functions</h2></td></tr>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVMediaFrame.html#a8240c80d2a09db0e9ab749024fd002f5">~AVMediaFrame</a> ()</td></tr>
 <tr class="memdesc:a8240c80d2a09db0e9ab749024fd002f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default virtual dtor. <br /></td></tr>
 <tr class="separator:a8240c80d2a09db0e9ab749024fd002f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4050f0f7f070445a24a37f5b8520fc6e"><td class="memItemLeft" align="right" valign="top"><a id="a4050f0f7f070445a24a37f5b8520fc6e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>frame_essentials</b> (<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa158e8cd0eee094c1d4975df4c59457d4">FrameClass::avmedia</a>, <a class="el" href="classAVMediaFrame.html">AVMediaFrame</a>)</td></tr>
-<tr class="separator:a4050f0f7f070445a24a37f5b8520fc6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5479205c1c2aa3dcbf124ea02cb7605"><td class="memItemLeft" align="right" valign="top"><a id="ac5479205c1c2aa3dcbf124ea02cb7605"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>frame_clone</b> (<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa158e8cd0eee094c1d4975df4c59457d4">FrameClass::avmedia</a>, <a class="el" href="classAVMediaFrame.html">AVMediaFrame</a>)</td></tr>
-<tr class="separator:ac5479205c1c2aa3dcbf124ea02cb7605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae21e06dea95b4921f7878a1cc783ae12"><td class="memItemLeft" align="right" valign="top"><a id="ae21e06dea95b4921f7878a1cc783ae12"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVMediaFrame.html#ae21e06dea95b4921f7878a1cc783ae12">update</a> ()=0</td></tr>
+<tr class="memdesc:ae21e06dea95b4921f7878a1cc783ae12"><td class="mdescLeft">&#160;</td><td class="mdescRight">update any helper objects <br /></td></tr>
+<tr class="separator:ae21e06dea95b4921f7878a1cc783ae12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2938a790b9f8fcc73656dfde4e668a6f"><td class="memItemLeft" align="right" valign="top"><a id="a2938a790b9f8fcc73656dfde4e668a6f"></a>
 virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVMediaFrame.html#a2938a790b9f8fcc73656dfde4e668a6f">dumpPayload</a> ()</td></tr>
 <tr class="memdesc:a2938a790b9f8fcc73656dfde4e668a6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dumps internal payload data. <br /></td></tr>
@@ -139,10 +137,6 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#a9392d8c803ee50e3bbdea2dee76aeecc">dumpPayloadToFile</a> (std::ofstream &amp;fout)</td></tr>
 <tr class="memdesc:a9392d8c803ee50e3bbdea2dee76aeecc inherit pub_methods_classFrame"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dumps internal payload data into a file. <br /></td></tr>
 <tr class="separator:a9392d8c803ee50e3bbdea2dee76aeecc inherit pub_methods_classFrame"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31aee47f16abb8322dd96860a4363fda inherit pub_methods_classFrame"><td class="memItemLeft" align="right" valign="top"><a id="a31aee47f16abb8322dd96860a4363fda"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#a31aee47f16abb8322dd96860a4363fda">update</a> ()</td></tr>
-<tr class="memdesc:a31aee47f16abb8322dd96860a4363fda inherit pub_methods_classFrame"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update internal auxiliary state variables. <br /></td></tr>
-<tr class="separator:a31aee47f16abb8322dd96860a4363fda inherit pub_methods_classFrame"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67a25cfc2631c607e731468acc933f3d inherit pub_methods_classFrame"><td class="memItemLeft" align="right" valign="top"><a id="a67a25cfc2631c607e731468acc933f3d"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#a67a25cfc2631c607e731468acc933f3d">isSeekable</a> ()</td></tr>
 <tr class="memdesc:a67a25cfc2631c607e731468acc933f3d inherit pub_methods_classFrame"><td class="mdescLeft">&#160;</td><td class="mdescRight">Can we seek to this frame? (e.g. is it a key-frame .. for H264 sps packets are used as seek markers) <br /></td></tr>
@@ -190,7 +184,10 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Decoded <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> in FFmpeg format. </p>
-<p>The decoded frame is in FFmpeg/libav format in <a class="el" href="classAVMediaFrame.html#adda0edc926991cdd2cceea52ee897bde" title="The decoded frame. ">AVMediaFrame::av_frame</a></p>
+<ul>
+<li>The decoded frame is in FFmpeg/libav format in <a class="el" href="classAVMediaFrame.html#adda0edc926991cdd2cceea52ee897bde" title="The decoded frame. ">AVMediaFrame::av_frame</a></li>
+<li>Constructor does not reserve data for frames. This is done by classes using this class</li>
+</ul>
 <p>Copiable/Queable : no </p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="frame_8h_source.html">frame.h</a></li>

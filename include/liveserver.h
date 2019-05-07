@@ -56,7 +56,7 @@ public:
    * @param fifo   See BufferSource::fifo
    * 
    */
-  BufferSource(UsageEnvironment &env, FrameFifo &fifo, Boolean &canary, unsigned preferredFrameSize =0, unsigned playTimePerFrame =0, unsigned offset=0);
+  BufferSource(UsageEnvironment &env, FrameFifo &fifo, Boolean &canary, unsigned preferredFrameSize = 0, unsigned playTimePerFrame =0, unsigned offset=0);
   virtual ~BufferSource();
   
 private:
@@ -68,6 +68,8 @@ private:
   unsigned  fPreferredFrameSize;
   unsigned  fPlayTimePerFrame;
   unsigned  offset;
+  std::mutex mutex;
+  long int  prevtime;
   
 public:
   std::deque<BasicFrame*> internal_fifo; ///< Internal fifo BasicFrame, i.e. payload frames

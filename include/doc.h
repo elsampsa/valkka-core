@@ -334,7 +334,12 @@
  *
  *- LiveThread::handleFrame checks the slot of the outgoing frame, takes the corresponding Outbound instance and calls Outbound::handleFrame
  *
- *- Outbound has a set of Stream instances in Outbound::streams.  There is a Stream instance per media substream.
+ * SDP Streams
+ * -----------
+ * 
+ * Streams sent directly to UDP ports, as defined in an SDP file ("SDP" streams)
+ * 
+ *- SDPOutbound has a set of Stream instances in Outbound::streams.  There is a Stream instance per media substream.
  *
  *- Stream instances encapsulate the usual live555 stuff per substream: RTPSink, RTCPInstance, Groupsock, FramedSource, etc.
  *
@@ -360,6 +365,35 @@
  *BufferSource => H264VideoStreamDiscreteFramer => H264VideoRTPSink
  * 
  *
+ * This diagram, where "{}" means enclosing object will help you to understand this:
+ \verbatim
+ BufferSource (.., fifo) {
+    - Live555 FramedSource class with method "doGetNextFrame"
+    - Recycles frames back to fifo (in doGetNextFrame)
+ }
+ 
+ Stream {
+    RTPSink,
+    RTCPInstance,
+    Groupsock,
+    BufferSource *buffer_source,
+    FrameFifo &fifo,
+    
+    methods:
+        startPlaying
+            - issues startPlaying on the live555 
+              event loop (for the internal live555 
+              filterchain defined in the Stream subclasses)
+        afterPlaying
+            - a live555 callback
+ }
+ 
+ H264 : public Stream {
+    - Instantiates buffer_source = new BufferSource (.., fifo)
+    - Creates the live555 internal filterchain
+ }
+ \endverbatim
+ *
  * RTSP Server
  * -----------
  *
@@ -374,6 +408,23 @@
  * - There is a tricky inner event loop that generates sps/pps info into the sdp string at H264ServerMediaSubsession::getAuxSDPLine .. (as this has been hacked from H264VideoFileServerMediaSubsession).  That can get stuck sometimes (!)
  * - Media sessions can be removed from the server with RTSPServer::removeServerMediaSession(media_session)
  *
+ * To get this into one's head, let's take a look at this diagram.  "{}" means enclosing object:
+ \verbatim
+ RTSPServer {
+ 
+    H264ServerMediaSubsession {
+        - member "fifo" is a reference to FrameFifo
+    
+        - method : createNewStreamSource
+            - creates buffer_source = BufferSource (.., fifo)
+            - creates H264VideoStreamDiscreteFramer(buffer_source)
+            => returns to RTPServer: H264VideoStreamDiscreteFramer(buffer_source)
+            
+        - inherited method sdpLines
+        - inherited method closeStreamSource
+    }
+ }
+ \endverbatim
  */
 
 

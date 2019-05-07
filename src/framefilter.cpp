@@ -271,6 +271,9 @@ void TimestampFrameFilter::go(Frame* frame) {
 #ifdef TIMESTAMPFILTER_DEBUG
   std::cout << "TimestampFrameFilter: go: final frame->mstimestamp " << frame->mstimestamp << std::endl;
 #endif
+  
+  // std::cerr << "BufferSource: IN0: " << *frame << std::endl;
+  
 }
 
 
@@ -309,6 +312,7 @@ void TimestampFrameFilter2::go(Frame* frame) {
   std::cout << "TimestampFrameFilter2: go: final frame->mstimestamp " << frame->mstimestamp << std::endl;
 #endif
   
+  // std::cerr << "BufferSource: IN0: " << *frame << std::endl;
   
 #ifdef PROFILE_TIMING
   long int dt=(ctime-frame->mstimestamp);
