@@ -74,6 +74,7 @@ We're currently at alpha
 0.11.0 Version
 - Bug fixes at the live555 bridge by Petri
 - ValkkaFS progressing
+- Ubuntu PPA build fails for i386 & armhf.  This has something to do with the ```off_t``` datatype.
 
 ### Older versions
 

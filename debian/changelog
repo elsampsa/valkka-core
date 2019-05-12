@@ -1,3 +1,15 @@
+valkka (0.11.0-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * Live555 bugfixes, etc.
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Sun, 12 May 2019 12:42:54 +0300
+
+valkka (0.11.0-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * Live555 bugfixes, etc.
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Sun, 12 May 2019 12:42:54 +0300
+
 valkka (0.10.0-0ubuntu1-xenialppa1) xenial; urgency=low
 
   * Bugfixes, ValkkaFS progressing

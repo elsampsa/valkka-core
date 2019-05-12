@@ -105,10 +105,15 @@ clear; debuild -S -sa
  
 At the upper level directory:
 ```
-dput ppa:sampsa-riikonen/valkka <source.changes> 
+dput ppa:sampsa-riikonen/valkka FILENAME_source.changes
 ```
 (dput accepts switch "-f" if you want to force upload)
-   
+
+Or use the short-hand script:
+```
+./upload.bash FILENAME_source.changes
+```
+
 (a comment)
 ```
 problems?  check with
