@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.10.0</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -63,6 +63,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classAVDecoder-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">AVDecoder Class Reference<div class="ingroups"><a class="el" href="group__decoding__tag.html">decoding</a></div></div>  </div>
@@ -96,9 +97,9 @@ Collaboration diagram for AVDecoder:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9b638a2866a0ed3b520a3fad3901f3d1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVDecoder.html#a9b638a2866a0ed3b520a3fad3901f3d1">AVDecoder</a> (AVCodecID <a class="el" href="classAVDecoder.html#a86613c05b0ded37d193f7609bd03d1b7">av_codec_id</a>)</td></tr>
-<tr class="memdesc:a9b638a2866a0ed3b520a3fad3901f3d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a9b638a2866a0ed3b520a3fad3901f3d1">More...</a><br /></td></tr>
-<tr class="separator:a9b638a2866a0ed3b520a3fad3901f3d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0103cf0141e9e990ac3265013ec62e08"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVDecoder.html#a0103cf0141e9e990ac3265013ec62e08">AVDecoder</a> (AVCodecID <a class="el" href="classAVDecoder.html#a86613c05b0ded37d193f7609bd03d1b7">av_codec_id</a>, int n_threads=1)</td></tr>
+<tr class="memdesc:a0103cf0141e9e990ac3265013ec62e08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a0103cf0141e9e990ac3265013ec62e08">More...</a><br /></td></tr>
+<tr class="separator:a0103cf0141e9e990ac3265013ec62e08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af28490aea460e9e6ae29166b04bce6c7"><td class="memItemLeft" align="right" valign="top"><a id="af28490aea460e9e6ae29166b04bce6c7"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVDecoder.html#af28490aea460e9e6ae29166b04bce6c7">flush</a> ()</td></tr>
 <tr class="memdesc:af28490aea460e9e6ae29166b04bce6c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset decoder state. How to flush depends on the decoder library. <br /></td></tr>
@@ -126,6 +127,9 @@ long int&#160;</td><td class="memItemRight" valign="bottom"><b>getMsTimestamp</b
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDecoder.html#a0615a6371eee1174db1cafc8b32281df">pull</a> ()=0</td></tr>
 <tr class="memdesc:a0615a6371eee1174db1cafc8b32281df inherit pub_methods_classDecoder"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode in_frame to out_frame. Return true if decoder returned a new frame (into out_frame), otherwise false. Implementation depends on the decoder library. <br /></td></tr>
 <tr class="separator:a0615a6371eee1174db1cafc8b32281df inherit pub_methods_classDecoder"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d0f729293838b212fe26c5675ae6814 inherit pub_methods_classDecoder"><td class="memItemLeft" align="right" valign="top"><a id="a4d0f729293838b212fe26c5675ae6814"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasFrame</b> ()</td></tr>
+<tr class="separator:a4d0f729293838b212fe26c5675ae6814 inherit pub_methods_classDecoder"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -146,20 +150,26 @@ AVCodec *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href=
 <tr class="memdesc:ae18e601d736b4724cc6152b874bea32d"><td class="mdescLeft">&#160;</td><td class="mdescRight">FFmpeg internal data structure. <br /></td></tr>
 <tr class="separator:ae18e601d736b4724cc6152b874bea32d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a024c6041360b7eec900a704c0fe8f180"><td class="memItemLeft" align="right" valign="top"><a id="a024c6041360b7eec900a704c0fe8f180"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>n_threads</b></td></tr>
+<tr class="separator:a024c6041360b7eec900a704c0fe8f180"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classDecoder"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classDecoder')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classDecoder.html">Decoder</a></td></tr>
 <tr class="memitem:a8a17a4a02face9a8f1db8cca13f7f890 inherit pro_attribs_classDecoder"><td class="memItemLeft" align="right" valign="top"><a id="a8a17a4a02face9a8f1db8cca13f7f890"></a>
 <a class="el" href="classBasicFrame.html">BasicFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDecoder.html#a8a17a4a02face9a8f1db8cca13f7f890">in_frame</a></td></tr>
 <tr class="memdesc:a8a17a4a02face9a8f1db8cca13f7f890 inherit pro_attribs_classDecoder"><td class="mdescLeft">&#160;</td><td class="mdescRight">Payload data to be decoded. <br /></td></tr>
 <tr class="separator:a8a17a4a02face9a8f1db8cca13f7f890 inherit pro_attribs_classDecoder"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8861c86372146dbbfe897d7ee22770c6 inherit pro_attribs_classDecoder"><td class="memItemLeft" align="right" valign="top"><a id="a8861c86372146dbbfe897d7ee22770c6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_frame</b></td></tr>
+<tr class="separator:a8861c86372146dbbfe897d7ee22770c6 inherit pro_attribs_classDecoder"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classDecoder.html" title="A Virtual class for decoders. ">Decoder</a> using FFmpeg/libav. </p>
 <p>A virtual class to decode any media format with FFmpeg </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a9b638a2866a0ed3b520a3fad3901f3d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b638a2866a0ed3b520a3fad3901f3d1">&#9670;&nbsp;</a></span>AVDecoder()</h2>
+<a id="a0103cf0141e9e990ac3265013ec62e08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0103cf0141e9e990ac3265013ec62e08">&#9670;&nbsp;</a></span>AVDecoder()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -168,8 +178,18 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">AVDecoder::AVDecoder </td>
           <td>(</td>
           <td class="paramtype">AVCodecID&#160;</td>
-          <td class="paramname"><em>av_codec_id</em></td><td>)</td>
+          <td class="paramname"><em>av_codec_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n_threads</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -181,6 +201,9 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+<ul>
+<li></li>
+</ul>
 
 </div>
 </div>

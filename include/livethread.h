@@ -28,7 +28,7 @@
  *  @file    livethread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief A live555 thread
  *
@@ -39,6 +39,9 @@
 #include "thread.h"
 #include "framefilter.h"
 #include "framefifo.h"
+
+
+void setLiveOutPacketBuffermaxSize(unsigned i); // <pyapi>
 
 
 /** This is a special FrameFifo class for feeding frames *into* live555, i.e. for sending them to the network.

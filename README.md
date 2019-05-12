@@ -69,13 +69,17 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.10.0
+### Current stable version is 0.11.0
+
+0.11.0 Version
+- Bug fixes at the live555 bridge by Petri
+- ValkkaFS progressing
+
+### Older versions
 
 0.10.0 Version
 - Nasty segmentation fault in OpenGL part fixed: called glDeleteBuffers instread of glDeleteVertexArrays for a VAO !
 - ValkkaFS progressing
-
-### Older versions
 
 0.9.0 Version
 - H264 USB Cameras work
@@ -183,7 +187,7 @@ and then do:
 
 You need (at least):
 
-    sudo apt-get install build-essential libc6-dev yasm cmake pkg-config swig libglew-dev mesa-common-dev libstdc++-5-dev python3-dev python3-numpy libasound2-dev
+    sudo apt-get install build-essential libc6-dev yasm cmake pkg-config swig libglew-dev mesa-common-dev libstdc++-5-dev python3-dev python3-numpy libasound2-dev valgrind
     
 ### Compile
 

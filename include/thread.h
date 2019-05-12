@@ -28,13 +28,14 @@
  *  @file    thread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief Base class for multithreading
  *
  */
 
 
+#include "Python.h"
 #include "framefifo.h"
 
 // #define STD_THREAD 1 // keep this commented if you want to adjust processor affinity
@@ -127,6 +128,9 @@ protected: // common variables of all Thread subclasses
   
   std::mutex   mutex;                    ///< Mutex protecting the condition variable and signal queue
   std::condition_variable condition;     ///< Condition variable for the signal queue (triggered when all signals processed).  Not necessarily used by all subclasses.
+  
+  std::mutex   loop_mutex;               ///< Protects thread's main execution loop (if necessary)
+  
   std::deque<SignalContext> signal_fifo; ///< Signal queue (fifo).  Redefine in child classes.
   bool         loop;                     ///< Use this boolean to control if the main loop in Thread:run should exit
   
@@ -148,6 +152,10 @@ public: // not protected, cause we might need to test these separately
   virtual void preRun() = 0; 
   /** Called after the main execution loop exits, but before joining the thread */
   virtual void postRun() = 0; 
+  /** Called before the thread is joined **/
+  virtual void preJoin();
+  /** Called after the thread has been joined **/
+  virtual void postJoin();
   /** Send a signal to the thread */
   virtual void sendSignal(SignalContext signal_ctx); 
   /** Send a signal to the thread and wait for all signals to be executed */

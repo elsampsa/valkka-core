@@ -1,0 +1,7 @@
+<map id="USBDevice" name="USBDevice">
+<area shape="rect" id="node2" href="$classSetupFrame.html" title="Setup frame. " alt="" coords="5,95,99,121"/>
+<area shape="rect" id="node3" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="41,5,100,32"/>
+<area shape="rect" id="node4" href="$classBasicFrame.html" title="Custom payload Frame. " alt="" coords="123,95,215,121"/>
+<area shape="rect" id="node5" href="$structH264Pars.html" title="H264Pars" alt="" coords="129,5,209,32"/>
+<area shape="rect" id="node6" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="240,95,328,121"/>
+</map>

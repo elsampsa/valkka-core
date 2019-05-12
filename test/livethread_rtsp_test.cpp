@@ -26,7 +26,7 @@
  *  @file    livethread_rtsp_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief 
  *
@@ -45,6 +45,8 @@ const char* stream_1   =std::getenv("VALKKA_TEST_RTSP_1");
 const char* stream_2   =std::getenv("VALKKA_TEST_RTSP_2");
 const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
+int portnum = 8555;
+
 
 void test_1() {
   const char* name = "@TEST: livethread_rtsp_test: test 1: ";
@@ -56,8 +58,10 @@ void test_1() {
   }
   std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
   
+  setLiveOutPacketBuffermaxSize(300*1024); // 300 kB
+  
   LiveThread livethread2("livethread2");
-  livethread2.setRTSPServer();
+  livethread2.setRTSPServer(portnum);
   FifoFrameFilter& fifo_filter =livethread2.getFrameFilter();
   
   BriefInfoFrameFilter info_filter("info_filter",&fifo_filter);
@@ -88,11 +92,13 @@ void test_2() {
   }
   std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
   
+  setLiveOutPacketBuffermaxSize(300*1024); // 300 kB
+  
   // filtergraph:
   // (LiveThread:livethread) --> {BriefInfoFrameFilter:info_filter) --> (FifoFrameFilter: fifo_filter) -->> (LiveThread:livethread2) 
   LiveThread  livethread("livethread");
   LiveThread  livethread2("livethread"); // stack size for incoming fifo
-  livethread2.setRTSPServer(8554);
+  livethread2.setRTSPServer(portnum);
   
   FifoFrameFilter& fifo_filter =livethread2.getFrameFilter();
   
@@ -105,7 +111,7 @@ void test_2() {
   
   sleep_for(1s);
 
-  LiveOutboundContext out_ctx = LiveOutboundContext(LiveConnectionType::rtsp, std::string("kokkelis"), 2, 50000); // ffplay rtsp://localhost:8554/kokkelis
+  LiveOutboundContext out_ctx = LiveOutboundContext(LiveConnectionType::rtsp, std::string("kokkelis"), 2, 50000); // ffplay rtsp://localhost:8554/kokkelis  .. that last "5000" is not used by the rtsp server
   livethread2.registerOutboundCall(out_ctx);
   
   sleep_for(1s);
@@ -138,11 +144,18 @@ void test_3() {
   }
   std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
   
+  std::string stream_address = std::string("rtsp://localhost:")+std::string(std::to_string(portnum))+std::string("/kokkelis");
+  
+  std::cout << "stream address: " << stream_address << std::endl;
+  
+  setLiveOutPacketBuffermaxSize(300*1024); // 300 kB
+  
   // filtergraph:
   // (LiveThread:livethread) --> {BriefInfoFrameFilter:info_filter) --> (FifoFrameFilter: fifo_filter) -->> (LiveThread:livethread2) 
   LiveThread  livethread("livethread");
   LiveThread  livethread2("livethread"); // stack size for incoming fifo
-  livethread2.setRTSPServer(8554);
+  
+  livethread2.setRTSPServer(portnum);
   
   FifoFrameFilter& fifo_filter =livethread2.getFrameFilter();
   
@@ -162,10 +175,14 @@ void test_3() {
   
   // LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info_filter);
   LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &fifo_filter);
+  
+  ctx.reordering_time = 2000*1000;
+  ctx.time_correction = TimeCorrectionType::none;
+  
   livethread.registerStreamCall(ctx);
   livethread.playStreamCall(ctx);
   
-  sleep_for(60s);
+  sleep_for(1*60s);
   
   livethread.stopStreamCall(ctx);
   
@@ -180,11 +197,31 @@ void test_3() {
 
 
 
-void test_4() {
-  
+void test_4() {  
   const char* name = "@TEST: livethread_rtsp_test: test 4: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+  std::cout << name <<"** @@Read from the RTSP Server **" << std::endl;
   
+  std::string stream_address = std::string("rtsp://localhost:")+std::string(std::to_string(portnum))+std::string("/kokkelis");
+  // std::string stream_address = std::string("rtsp://admin:123456@192.168.0.134");
+  
+  std::cout << "server: " << stream_address << std::endl;
+  
+  setLiveOutPacketBuffermaxSize(300*1024); // 300 kB
+  
+  LiveThread  livethread("livethread");
+  DummyFrameFilter dummyfilter("dummy");
+  
+  std::cout << "starting live thread" << std::endl;
+  livethread. startCall();
+  
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, stream_address, 2, &dummyfilter);
+  ctx.reordering_time = 2000*1000;
+  ctx.time_correction = TimeCorrectionType::none;
+  
+  livethread.registerStreamCall(ctx);
+  livethread.playStreamCall(ctx);
+  sleep_for(1*60s);
+  livethread. stopCall();
 }
 
 

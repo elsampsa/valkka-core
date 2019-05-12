@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -48,7 +48,7 @@
 typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, Bool, const int*);
 
 
-SlotContext::SlotContext(YUVTEX *statictex, YUVShader* shader) : statictex(statictex), shader(shader), yuvtex(NULL), active(false), codec_id(AV_CODEC_ID_NONE), bmpars(BitmapPars()), lastmstime(0), is_dead(true), ref_count(0) {
+SlotContext::SlotContext(YUVTEX *statictex, YUVShader* shader) : statictex(statictex), shader(shader), yuvtex(NULL), active(false), codec_id(AV_CODEC_ID_NONE), bmpars(BitmapPars()), lastmstime(0), is_dead(true), ref_count(0), load_flag(false), keep_flag(false) {
 }
 
 
@@ -68,11 +68,15 @@ void SlotContext::activate(BitmapPars bmpars) {
     yuvtex=new YUVTEX(bmpars); // valgrind_debug protected
     active=true;
     is_dead=true;
+    //load_flag = false; // nopes
+    //keep_flag = false; // nopes
 }
 
 
 void SlotContext::deActivate() {//Deallocate
     active=false;
+    load_flag = false;
+    keep_flag = false;
     if (yuvtex!=NULL) {delete yuvtex;}
     yuvtex=NULL;
     bmpars=BitmapPars();
@@ -94,6 +98,7 @@ void SlotContext::loadYUVFrame(YUVFrame *yuvframe) {
     #endif
     
     yuvtex->loadYUVFrame(yuvframe); // from pbo to texture.  has valgrind_gpu_debug 
+    load_flag = true;
 }
 
 
@@ -126,23 +131,53 @@ bool SlotContext::isPending(long int mstime) {
 }
 
 
+void SlotContext::loadFlag(bool val) {
+    load_flag = val;
+}
+
+void SlotContext::keepFlag(bool val) {
+    keep_flag = val;
+}
+
+
+
 YUVTEX* SlotContext::getTEX() {
+    /* So, with respect to the deadtime timeout, this can have two states:
+     * - Keep on showing the last frame
+     * - Show the static background image
+     * 
+     */
     
-    /* // testing ..
-     *  if (active) {
-     *    return yuvtex;
-}
-else {
-    return statictex;
-}
-*/
+    if (!active) { // nothing much to show ..
+        // std::cout << "OpenGLThread : SlotContext : getText : not active" << std::endl;
+        return statictex;
+    }
     
+    // std::cout << "OpenGLThread : SlotContext : getText : load, keep, is_dead " << load_flag << " " << keep_flag << " " << is_dead << std::endl;
+    
+    if (load_flag) { // can use this yuvtex
+        if (keep_flag) { // keep on showing the last frame, no matter what
+            return yuvtex;
+        }
+        else if (is_dead) { // no frames have been received, and we are not forced to use the last frame
+            return statictex;
+        }
+        else { // everything's ok .. stream is alive
+            return yuvtex;
+        }
+    }
+    else { // if load_flag is cleared, the current yuvtex must not be used.  Must wait for a new yuvtex
+        return statictex;
+    }
+    
+    /* // old turf
     if (is_dead) {
         return statictex;
     }
     else if (active) {
         return yuvtex;
     }
+    */
 }
 
 
@@ -687,6 +722,7 @@ void RenderGroup::render() {
     #endif
     
     #ifdef VALGRIND_GPU_DEBUG
+    // std::cout << "VALGRIND_GPU_DEBUG" << std::endl;
     #else
     glFinish(); // TODO: debugging
     glViewport(0, 0, x_window_attr.width, x_window_attr.height);
@@ -779,7 +815,7 @@ unsigned OpenGLThread::getSwapInterval(GLXDrawable drawable) {
             break;
         }
         default: {
-            opengllogger.log(LogLevel::normal) << "OpenGLThread::setSwapInterval: could not set swap interval" << std::endl;
+            opengllogger.log(LogLevel::normal) << "OpenGLThread::getSwapInterval: could not get swap interval" << std::endl;
             break;
         }
     }
@@ -1120,14 +1156,36 @@ void OpenGLThread::reportCallTime(unsigned i) {
 
 
 long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
-    
     ///*
     // handle special (signal) frames here
-    if (f->getFrameClass()==FrameClass::signal) {
+    if (f->getFrameClass() == FrameClass::signal) {
         // std::cout << "OpenGLThread: insertFifo: SignalFrame" << std::endl;
         SignalFrame *signalframe = static_cast<SignalFrame*>(f);
         handleSignal(signalframe->opengl_signal_ctx);
         // recycle(f); // alias
+        infifo->recycle(f);
+        return 0;
+    }
+    else if (f->getFrameClass() == FrameClass::setup) {
+        opengllogger.log(LogLevel::debug) << "OpenGLThread: insertFifo: SetupFrame: " << *f << std::endl;
+        
+        SetupFrame *setupframe = static_cast<SetupFrame*>(f);
+        
+        if (setupframe->sub_type == SetupFrameType::stream_state) { // stream state
+            if (setupframe->n_slot <= I_MAX_SLOTS) { // slot ok
+                SlotContext *slot_ctx = slots_[setupframe->n_slot]; // shorthand
+                    
+                if (setupframe->stream_state == AbstractFileState::seek) {
+                    slot_ctx->loadFlag(true); // can't show present frame (after clicking seek, it's not valid anymore), must wait for a new frame
+                }
+                else if (setupframe->stream_state == AbstractFileState::play) {
+                    slot_ctx->keepFlag(false); // don't keep on showing the last frame
+                }
+                else if (setupframe->stream_state == AbstractFileState::stop) {
+                    slot_ctx->keepFlag(true); // it's ok to keep on showing the last frame
+                }
+            } // slot ok
+        } // stream state
         infifo->recycle(f);
         return 0;
     }
@@ -1256,7 +1314,7 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
             if (present_frame) { // present_frame
                 if (!slotOk(f->n_slot)) {//slot overflow, do nothing
                 }
-                else if (f->getFrameClass()==FrameClass::yuv) {// accepted frametype: yuv
+                else if (f->getFrameClass()==FrameClass::yuv) {// YUV FRAME
                     YUVFrame *yuvframe = static_cast<YUVFrame*>(f);
                     #if defined(PRESENT_VERBOSE) || defined(TIMING_VERBOSE)
                     std::cout<<"OpenGLThread: handleFifo: PRESENTING " << rel_mstimestamp << " <"<< yuvframe->mstimestamp <<"> " << std::endl;
@@ -1284,7 +1342,7 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
                     else {
                         // opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: feeding frames too fast! dropping.." << std::endl; // printed by manageSlotTimer => manageTimer
                     }
-                } // accepted frametype: yuv
+                } // YUV FRAME
             }// present frame
             infifo->recycle(f); // codec found or not, frame always recycled
         }// present or scrap
@@ -1510,11 +1568,6 @@ void OpenGLThread::handleSignal(OpenGLSignalContext &signal_ctx) {
                 // pars->success=true;
             }
             break;
-        
-            
-            
-            
-            
     }
 }
 

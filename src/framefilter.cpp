@@ -26,7 +26,7 @@
  *  @file    framefilter.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief 
  */ 
@@ -83,7 +83,7 @@ BriefInfoFrameFilter::BriefInfoFrameFilter(const char* name, FrameFilter* next) 
 }
 
 void BriefInfoFrameFilter::go(Frame* frame) {
-  std::cout << "DummyFrameFilter : "<< this->name << " : got frame : " << *(frame) << " dT=" << frame->mstimestamp-getCurrentMsTimestamp() << std::endl;
+  std::cout << "BriefInfoFrameFilter : "<< this->name << " : " << *(frame) << " dT=" << frame->mstimestamp-getCurrentMsTimestamp() << std::endl;
 }
 
 
@@ -271,6 +271,9 @@ void TimestampFrameFilter::go(Frame* frame) {
 #ifdef TIMESTAMPFILTER_DEBUG
   std::cout << "TimestampFrameFilter: go: final frame->mstimestamp " << frame->mstimestamp << std::endl;
 #endif
+  
+  // std::cerr << "BufferSource: IN0: " << *frame << std::endl;
+  
 }
 
 
@@ -309,6 +312,7 @@ void TimestampFrameFilter2::go(Frame* frame) {
   std::cout << "TimestampFrameFilter2: go: final frame->mstimestamp " << frame->mstimestamp << std::endl;
 #endif
   
+  // std::cerr << "BufferSource: IN0: " << *frame << std::endl;
   
 #ifdef PROFILE_TIMING
   long int dt=(ctime-frame->mstimestamp);
@@ -348,7 +352,7 @@ void GateFrameFilter::go(Frame* frame) {
   
 void GateFrameFilter::run(Frame* frame) {
   std::unique_lock<std::mutex> lk(mutex);
-  this->go(frame); // manipulate frame
+  // this->go(frame); // manipulate frame
   if (!next) {return;}
   if (on) { // pass all frames if flag is set
     (this->next)->run(frame);
@@ -380,6 +384,47 @@ void GateFrameFilter::noConfigFrames() {
 }
 
 
+SwitchFrameFilter::SwitchFrameFilter(const char* name, FrameFilter* next1, FrameFilter* next2) : FrameFilter(name, NULL), next1(next1), next2(next2), index(1) {
+}
+
+void SwitchFrameFilter::go(Frame* frame) {
+}
+
+void SwitchFrameFilter::run(Frame* frame) {
+    std::unique_lock<std::mutex> lk(mutex);
+    // this->go(frame); // manipulate frame
+    if (index==1 and next1) {
+        next1->run(frame);
+    }
+    else if (index==2 and next2) {
+        next2->run(frame);
+    }
+}
+    
+void SwitchFrameFilter::set1() {
+    std::unique_lock<std::mutex> lk(mutex);
+    index=1;
+}
+
+void SwitchFrameFilter::set2() {
+    std::unique_lock<std::mutex> lk(mutex);
+    index=2;
+}
+
+
+TypeFrameFilter::TypeFrameFilter(const char* name, FrameClass frameclass, FrameFilter* next) : FrameFilter(name, next), frameclass(frameclass) {
+}
+
+void TypeFrameFilter::go(Frame* frame) {
+}
+
+
+void TypeFrameFilter::run(Frame* frame) {
+    if (next and frame->getFrameClass()==frameclass) {
+        next->run(frame);
+    }
+}
+
 
 CachingGateFrameFilter::CachingGateFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next), on(false), setupframe(), got_setup(false) {
 }
@@ -388,16 +433,18 @@ void CachingGateFrameFilter::go(Frame* frame) {
 }
 
 void CachingGateFrameFilter::run(Frame* frame) {
-  std::unique_lock<std::mutex> lk(mutex);
-  this->go(frame); // manipulate frame
-  if (!next) {return;}
-  if (on) { // passes all frames if flag is set
-    (this->next)->run(frame);
-  }
-  if (frame->getFrameClass()==FrameClass::setup) {
-    got_setup=true;
-    setupframe = *(static_cast<SetupFrame*>(frame)); // create a cached copy of the SetupFrame
-  }
+    std::unique_lock<std::mutex> lk(mutex);
+    this->go(frame); // manipulate frame
+    if (!next) {return;}
+    if (on) { // passes all frames if flag is set
+        (this->next)->run(frame);
+    }
+    if (frame->getFrameClass()==FrameClass::setup) {
+        setupframe = *(static_cast<SetupFrame*>(frame)); // create a cached copy of the SetupFrame
+        if (setupframe.sub_type == SetupFrameType::stream_init) { // TODO: shouldn't we have an array of setupframes (for each substream)
+            got_setup=true;
+        }
+    }
 }
   
 void CachingGateFrameFilter::set() {
@@ -508,8 +555,8 @@ SwScaleFrameFilter::SwScaleFrameFilter(const char* name, int target_width, int t
   // shorthand
   AVFrame *output_frame =outputframe.av_frame;
   
-  int nb =av_image_alloc(output_frame->data, output_frame->linesize, target_width, target_height, AV_PIX_FMT_RGB24, 1);
-  if (nb<=0) {
+  int nb = av_image_alloc(output_frame->data, output_frame->linesize, target_width, target_height, AV_PIX_FMT_RGB24, 1);
+  if (nb <= 0) {
     std::cout << "SwScaleFrameFilter: could not reserve frame " << std::endl;
     exit(5);
   }
@@ -529,6 +576,7 @@ SwScaleFrameFilter::~SwScaleFrameFilter() {
   else {
     sws_freeContext(sws_ctx);
   }
+  av_freep(&((outputframe.av_frame)->data[0]));
 }
 
 

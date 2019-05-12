@@ -26,7 +26,7 @@
  *  @file    cache_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief   Test caching frames
  *
@@ -143,11 +143,11 @@ void test_1() {
 
 void test_2() {
     const char* name = "@TEST: cache_test: test 2: ";
-    std::cout << name <<"** @@Test CacheStream **" << std::endl;
+    std::cout << name <<"** @@Test FrameCache **" << std::endl;
     
-    CacheStream cachestream = CacheStream("test", FrameCacheContext());
-    CacheFrameFilter &input = cachestream.getFrameFilter();
-    
+    FrameCache framecache = FrameCache("test", FrameCacheContext());
+    CacheFrameFilter input("test", &framecache);
+
     std::vector<BasicFrame*> frames;
     int i;
     for(i=0; i<100; i++) {
@@ -175,10 +175,10 @@ void test_2() {
         input.run(f);
     }
     
-    cachestream.dumpCache();
-    std::cout << "min, max time = " << cachestream.getMinTime_() << " " << cachestream.getMaxTime_() << std::endl;
+    framecache.dump();
+    std::cout << "min, max time = " << framecache.getMinTime_() << " " << framecache.getMaxTime_() << std::endl;
     
-    cachestream.seek(5015);
+    framecache.seek(5015);
     // TODO: test update, etc
     
     for(auto it=frames.begin(); it!=frames.end(); it++) {

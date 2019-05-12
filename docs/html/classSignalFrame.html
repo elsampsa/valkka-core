@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.10.0</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -68,6 +68,11 @@ $(function() {
 <div class="title">SignalFrame Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A frame signaling internal thread commands, states of recorded video, etc.  
+ <a href="classSignalFrame.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="frame_8h_source.html">frame.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for SignalFrame:</div>
 <div class="dyncontent">
@@ -151,20 +156,24 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ab5b9572661168a4639731b693a6218ea"><td class="memItemLeft" align="right" valign="top"><a id="ab5b9572661168a4639731b693a6218ea"></a>
-<a class="el" href="structOpenGLSignalContext.html">OpenGLSignalContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>opengl_signal_ctx</b></td></tr>
+<a class="el" href="structOpenGLSignalContext.html">OpenGLSignalContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalFrame.html#ab5b9572661168a4639731b693a6218ea">opengl_signal_ctx</a></td></tr>
+<tr class="memdesc:ab5b9572661168a4639731b693a6218ea"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> commands to <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>. <br /></td></tr>
 <tr class="separator:ab5b9572661168a4639731b693a6218ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae791a00d1ba4e9ed1001263cce7bebf5"><td class="memItemLeft" align="right" valign="top"><a id="ae791a00d1ba4e9ed1001263cce7bebf5"></a>
-<a class="el" href="structAVSignalContext.html">AVSignalContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>av_signal_ctx</b></td></tr>
+<a class="el" href="structAVSignalContext.html">AVSignalContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalFrame.html#ae791a00d1ba4e9ed1001263cce7bebf5">av_signal_ctx</a></td></tr>
+<tr class="memdesc:ae791a00d1ba4e9ed1001263cce7bebf5"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> commands to <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a>. <br /></td></tr>
 <tr class="separator:ae791a00d1ba4e9ed1001263cce7bebf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8f23a5b5b57b2b333b29861ef53c0a7"><td class="memItemLeft" align="right" valign="top"><a id="ae8f23a5b5b57b2b333b29861ef53c0a7"></a>
-<a class="el" href="structValkkaFSWriterSignalContext.html">ValkkaFSWriterSignalContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>valkkafswriter_signal_ctx</b></td></tr>
+<a class="el" href="structValkkaFSWriterSignalContext.html">ValkkaFSWriterSignalContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalFrame.html#ae8f23a5b5b57b2b333b29861ef53c0a7">valkkafswriter_signal_ctx</a></td></tr>
+<tr class="memdesc:ae8f23a5b5b57b2b333b29861ef53c0a7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> commands to ValkkFSWriterThread. <br /></td></tr>
 <tr class="separator:ae8f23a5b5b57b2b333b29861ef53c0a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a339a5187ffd1121f7bbffc9beb594858"><td class="memItemLeft" align="right" valign="top"><a id="a339a5187ffd1121f7bbffc9beb594858"></a>
-<a class="el" href="structValkkaFSReaderSignalContext.html">ValkkaFSReaderSignalContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>valkkafsreader_signal_ctx</b></td></tr>
+<a class="el" href="structValkkaFSReaderSignalContext.html">ValkkaFSReaderSignalContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalFrame.html#a339a5187ffd1121f7bbffc9beb594858">valkkafsreader_signal_ctx</a></td></tr>
+<tr class="memdesc:a339a5187ffd1121f7bbffc9beb594858"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> commands to <a class="el" href="classValkkaFSReaderThread.html" title="ValkkaFS reader thread. ">ValkkaFSReaderThread</a>. <br /></td></tr>
 <tr class="separator:a339a5187ffd1121f7bbffc9beb594858"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ffd2ab7e6335c4572d5caf30037cc03"><td class="memItemLeft" align="right" valign="top"><a id="a2ffd2ab7e6335c4572d5caf30037cc03"></a>
 void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalFrame.html#a2ffd2ab7e6335c4572d5caf30037cc03">custom_signal_ctx</a></td></tr>
-<tr class="memdesc:a2ffd2ab7e6335c4572d5caf30037cc03"><td class="mdescLeft">&#160;</td><td class="mdescRight">For extensions. TODO: migrate all signal contexes here. <br /></td></tr>
+<tr class="memdesc:a2ffd2ab7e6335c4572d5caf30037cc03"><td class="mdescLeft">&#160;</td><td class="mdescRight">For extensions: thread commands for any thread. TODO: migrate all signal contexes here. <br /></td></tr>
 <tr class="separator:a2ffd2ab7e6335c4572d5caf30037cc03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classFrame"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classFrame')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classFrame.html">Frame</a></td></tr>
 <tr class="memitem:afceac675e9e36fdf011aaa605d78c3d9 inherit pub_attribs_classFrame"><td class="memItemLeft" align="right" valign="top"><a id="afceac675e9e36fdf011aaa605d78c3d9"></a>
@@ -188,7 +197,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memdesc:ab114ed8f04347ba62ea8a910bd318233 inherit pro_attribs_classFrame"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declares frametype for correct typecast. Used by Frame::getFrameClass() <br /></td></tr>
 <tr class="separator:ab114ed8f04347ba62ea8a910bd318233 inherit pro_attribs_classFrame"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A frame signaling internal thread commands, states of recorded video, etc. </p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="frame_8h_source.html">frame.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="frame_8cpp.html">frame.cpp</a></li>
 </ul>

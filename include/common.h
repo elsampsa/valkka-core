@@ -29,7 +29,7 @@
  *  @file    common.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief List of common header files
  *
@@ -80,7 +80,7 @@
 #include <string.h>
 #include <assert.h>
 
-// usb cams
+// usb cams & raw file write
 #include <fcntl.h>              /* low-level i/o */
 #include <unistd.h>
 #include <sys/stat.h>
@@ -95,4 +95,5 @@
 #include<GL/glxext.h>
 
 #endif
+
 

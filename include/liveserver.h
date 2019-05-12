@@ -29,7 +29,7 @@
  *  @file    liveserver.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief   Live555 interface for server side: streaming to udp sockets directly or by using an on-demand rtsp server
  */ 
@@ -56,7 +56,7 @@ public:
    * @param fifo   See BufferSource::fifo
    * 
    */
-  BufferSource(UsageEnvironment &env, FrameFifo &fifo, Boolean &canary, unsigned preferredFrameSize =0, unsigned playTimePerFrame =0, unsigned offset=0);
+  BufferSource(UsageEnvironment &env, FrameFifo &fifo, Boolean &canary, unsigned preferredFrameSize = 0, unsigned playTimePerFrame =0, unsigned offset=0);
   virtual ~BufferSource();
   
 private:
@@ -68,6 +68,8 @@ private:
   unsigned  fPreferredFrameSize;
   unsigned  fPlayTimePerFrame;
   unsigned  offset;
+  std::mutex mutex;
+  long int  prevtime;
   
 public:
   std::deque<BasicFrame*> internal_fifo; ///< Internal fifo BasicFrame, i.e. payload frames

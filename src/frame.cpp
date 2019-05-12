@@ -26,7 +26,7 @@
  *  @file    frame.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief 
  */ 
@@ -286,7 +286,12 @@ std::size_t BasicFrame::calcSize() {
 }
 
 
-bool BasicFrame::dump(IdNumber device_id, std::fstream &os) {
+#define dump_bytes(var) raw_writer.dump( (const char*)&var, sizeof(var));
+#define read_bytes(var) raw_reader.get((char*)&var, sizeof(var));
+
+
+// bool BasicFrame::dump(IdNumber device_id, std::fstream &os) {
+bool BasicFrame::dump(IdNumber device_id, RaWriter& raw_writer) {
     std::size_t len;
     len=payload.size();
     
@@ -296,14 +301,16 @@ bool BasicFrame::dump(IdNumber device_id, std::fstream &os) {
     dump_bytes(media_type);
     dump_bytes(codec_id);
     dump_bytes(len); // write the number of bytes
-    os.write((const char*)payload.data(), payload.size()); // write the bytes themselves
-    os.flush();
+    // std::cout << "BasicFrame: dump: len = " << len << std::endl;
+    raw_writer.dump((const char*)payload.data(), payload.size());
+    // os.write((const char*)payload.data(), payload.size()); // write the bytes themselves
+    // os.flush();
     return true;
 }
 
 
-
-IdNumber BasicFrame::read(std::fstream &is) {
+// IdNumber BasicFrame::read(std::fstream &is) {
+IdNumber BasicFrame::read(RawReader& raw_reader) {
     std::size_t len;
     IdNumber device_id;
     
@@ -319,18 +326,36 @@ IdNumber BasicFrame::read(std::fstream &is) {
     }
     
     read_bytes(subsession_index);
+    if (subsession_index < 0) { // corrupt frame
+        valkkafslogger.log(LogLevel::fatal) << "BasicFrame : read : corrupt frame (subsession_index)" << std::endl;
+        return 0;
+    }
+    
     read_bytes(mstimestamp);
+    if (mstimestamp < 0) { // corrupt frame
+        valkkafslogger.log(LogLevel::fatal) << "BasicFrame : read : corrupt frame (mstimestamp)" << std::endl;
+        return 0;
+    }
+    
     read_bytes(media_type);
     read_bytes(codec_id);
     read_bytes(len);  // read the number of bytes
-    payload.resize(len); 
-    is.read((char*)payload.data(), len); // read the bytes themselves
+    
+    try {
+        payload.resize(len);
+    }
+    catch (std::bad_alloc& ba) {
+        valkkafslogger.log(LogLevel::fatal) << "BasicFrame : read : corrupt frame : bad_alloc caught " << ba.what() << std::endl;
+        return 0;
+    }
+        
+    raw_reader.get((char*)payload.data(), len); // read the bytes themselves
     
     return device_id;
 }
 
 
-SetupFrame::SetupFrame() : Frame() {
+SetupFrame::SetupFrame() : Frame(), sub_type(SetupFrameType::stream_init), media_type(AVMEDIA_TYPE_UNKNOWN), codec_id(AV_CODEC_ID_NONE), stream_state(AbstractFileState::none) {
   reset();
 }
   
@@ -341,9 +366,14 @@ SetupFrame::~SetupFrame() {
 //frame_essentials(FrameClass::setup, SetupFrame);
 
 void SetupFrame::print(std::ostream &os) const {
-  os << "<SetupFrame: timestamp="<<mstimestamp<<" subsession_index="<<subsession_index<<" slot="<<n_slot<<" / ";  //<<std::endl;
-  os << "media_type=" << int(media_type) << " codec_id=" << int(codec_id);
-  os << ">";
+    os << "<SetupFrame: timestamp="<<mstimestamp<<" subsession_index="<<subsession_index<<" slot="<<n_slot<<" / ";  //<<std::endl;
+    if (sub_type == SetupFrameType::stream_init) {
+        os << "media_type=" << int(media_type) << " codec_id=" << int(codec_id);
+    }
+    else if (sub_type == SetupFrameType::stream_state) {
+        os << "stream_state=" << int(stream_state);
+    }
+    os << ">";
 }
 
 
@@ -385,7 +415,7 @@ void AVMediaFrame::reset() {
   Frame::reset();
   media_type   =AVMEDIA_TYPE_UNKNOWN; 
   codec_id     =AV_CODEC_ID_NONE;
-  // TODO: resert AVFrame ?
+  // TODO: reset AVFrame ?
 }
 
 
@@ -470,6 +500,23 @@ void AVBitmapFrame::update() {
 }
 
 
+void AVBitmapFrame::copyPayloadFrom(AVBitmapFrame *frame) {
+    if ( !(bmpars == frame->bmpars) ) {
+        std::cout << "AVBitmapFrame : copyPayloadFrom : bitmap parameters don't match" << std::endl;
+        return;
+    }
+    int i;
+    i = av_frame_copy(av_frame, frame->av_frame); // copies payload
+    if (i < 0) {
+        std::cout << "AVBitmapFrame : copyPayloadFrom : av_frame_copy failed" << std::endl;
+    }
+    i = av_frame_copy_props(av_frame, frame->av_frame); // copies av_frame metadata
+    if (i < 0) {
+        std::cout << "AVBitmapFrame : copyPayloadFrom : av_frame_copy_props failed" << std::endl;
+    }
+    update();
+}
+
 
 AVRGBFrame::AVRGBFrame() : AVBitmapFrame() {
 }
@@ -479,9 +526,16 @@ AVRGBFrame::~AVRGBFrame() {
 }
 
 
-//frame_essentials(FrameClass::avrgb, AVRGBFrame);
- 
-  
+void AVRGBFrame::reserve(int width, int height) {
+    av_frame->format = AV_PIX_FMT_RGB24;
+    av_pixel_format = AV_PIX_FMT_RGB24;
+    av_frame->width = width;
+    av_frame->height = height;
+    int i = av_frame_get_buffer(av_frame, 32); // int align;
+    update();
+}
+
+
 std::string AVRGBFrame::dumpPayload() {
   std::stringstream tmp;  
   int i;
@@ -714,6 +768,62 @@ void YUVFrame::reset() {
 
 
 
+RGBFrame::RGBFrame(int max_width, int max_height) : Frame(), max_width(max_width), max_height(max_height), width(0), height(0) {
+    this->payload.resize(this->max_width*this->max_height*3);
+}
+
+
+RGBFrame::~RGBFrame() {
+}
+
+    
+std::string RGBFrame::dumpPayload() {
+    std::stringstream tmp;
+    int i;
+
+    tmp << "[";
+    for (auto it = payload.begin(); it != payload.end(); ++it) {
+        tmp << (unsigned int)(*it) << " ";
+    }
+    tmp << "] ";
+    return tmp.str();  
+}
+
+void RGBFrame::print(std::ostream& os) const {
+    os << "<RGBFrame: timestamp="<<mstimestamp<<" subsession_index="<<subsession_index<<" slot="<<n_slot<<" / ";
+    os << "width = " << width << " of " << max_width << " / ";
+    os << "height = " << height << " of " << max_height;
+    os <<">";
+}
+    
+    
+void RGBFrame::reset() {
+    Frame::reset();
+    width = 0;
+    height = 0;
+}
+
+
+void RGBFrame::fromAVRGBFrame(AVRGBFrame *f) {
+    AVFrame *av_frame =f->av_frame;
+    
+    std::size_t n_bytes = std::size_t(av_frame->linesize[0] * av_frame->height);
+    
+    if (n_bytes > payload.size()) {
+        std::cout << "RGBFrame : fromAVRGBFrame : WARNING : frame too big with " << av_frame->linesize[0] * av_frame->height << " bytes" << std::endl;
+        return;
+    }
+    
+    // std::cout << "SharedMemSegment: putAVRGBFrame: copying " << *meta << " bytes from " << *f << std::endl;
+    memcpy(payload.data(), av_frame->data[0], n_bytes);
+    
+    copyMetaFrom(f);
+}
+
+
+
+
+
 SignalFrame::SignalFrame() : Frame(), opengl_signal_ctx(), av_signal_ctx(), custom_signal_ctx(NULL) {
   mstimestamp =getCurrentMsTimestamp();
 }
@@ -722,6 +832,42 @@ SignalFrame::~SignalFrame() {
 }
 
 
-//frame_essentials(FrameClass::signal, SignalFrame);
+MarkerFrame::MarkerFrame() : Frame(), fs_start(false), fs_end(false), tm_start(false), tm_end(false) {
+}
+
+MarkerFrame::~MarkerFrame() {
+}
 
 
+void MarkerFrame::print(std::ostream& os) const {
+  os << "<MarkerFrame: timestamp="<<mstimestamp<<" subsession_index="<<subsession_index<<" slot="<<n_slot<<" / ";
+  if (fs_start) {
+    os << "FS_START ";
+  }
+  if (fs_end) {
+      os << "FS_END ";
+  }
+  if (tm_start) {
+      os << "TM_START ";
+  }
+  if (tm_end) {
+      os << "TM_END ";
+  }
+  os << ">";
+}
+
+
+void MarkerFrame::reset() {
+    fs_start=false;
+    fs_end=false;
+    tm_start=false;
+    tm_end=false;
+}
+    
+    
+    
+    
+    
+    
+    
+    

@@ -25,7 +25,7 @@ threads.py : api level 1 => api level 2 encapsulation for LiveThread and OpenGLT
 @file    threads.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.10.0 
+@version 0.11.0 
 
 @brief api level 1 => api level 2 encapsulation for LiveThread and OpenGLThread
 """
@@ -354,10 +354,14 @@ class OpenGLThread:
     def delRenderGroup(self, window_id):
         return self.core.delRenderGroupCall(window_id)
 
-    def newRenderContextCall(self, slot, window_id, z=0):
+    def newRenderContextCall(self, slot, window_id, z=0): # TODO: deprecated
         return self.core.newRenderContextCall(
             slot, window_id, z)  # returns token
-
+    
+    def newRenderContext(self, slot, window_id, z=0):
+        return self.core.newRenderContextCall(
+            slot, window_id, z)  # returns token
+    
     def delRenderContext(self, token):
         return self.core.delRenderContextCall(token)
 

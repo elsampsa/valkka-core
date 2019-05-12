@@ -28,7 +28,7 @@
  *  @file    constant.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief   Constant/default values, version numbers
  */ 
@@ -40,7 +40,7 @@
 #define GLX_CONTEXT_MINOR_VERSION       0x2092
 
 static const int VERSION_MAJOR = 0; // <pyapi>
-static const int VERSION_MINOR = 10; // <pyapi>
+static const int VERSION_MINOR = 11; // <pyapi>
 static const int VERSION_PATCH = 0; // <pyapi>
 
 static const unsigned DEFAULT_OPENGLTHREAD_BUFFERING_TIME  = 300;   // in milliseconds // <pyapi>
@@ -48,7 +48,7 @@ static const bool DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL        = false; // <pyapi>
 static const bool DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL  = false; // <pyapi>
 static const long int DEFAULT_TIMESTAMP_RESET_TIME         = 60000; // <pyapi>
 static const long int TIMESTAMP_CORRECT_TRESHOLD           = 30000; // <pyapi> // timestamp correctors start correcting timestamps if they are this much off (in milliseconds)
-
+static const std::size_t FS_GRAIN_SIZE                     = 4096;  // <pyapi> // grain size for ValkkaFS
 
 namespace Timeout { ///< Various thread timeouts in milliseconds
   const static long unsigned thread       =250; // Timeout::thread
@@ -57,7 +57,9 @@ namespace Timeout { ///< Various thread timeouts in milliseconds
   const static long unsigned openglthread =250; // Timeout::openglthread
   const static long unsigned valkkafswriterthread = 250; // Timeout::valkkafswriterthread
   const static long unsigned valkkafsreaderthread = 250; // Timeout::valkkafswriterthread
-  const static long unsigned usbthread    =250;
+  const static long unsigned filecachethread = 1000; // Timeout::valkkacachethread
+  // const static long unsigned filecachethread = 500; // Timeout::valkkacachethread
+  const static long unsigned usbthread    =250; // Timeout::usbthread
   const static long int filethread        =2000; // Timeout::filethread
 }
 
@@ -67,6 +69,7 @@ enum PayloadSizes {
   
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024*100, ///< Default buffer size in Live555 for h264
   DEFAULT_PAYLOAD_SIZE_H264       = 1024*300, ///< Default buffer size in Live555 for h264 
+  // DEFAULT_PAYLOAD_SIZE_H264       = 1024*500, ///< Default buffer size in Live555 for h264
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024*10,  ///< Default buffer size in Live555 for h264 // debug
   // DEFAULT_PAYLOAD_SIZE_H264       = 1024, // use this small value for debugging (( debug
   
@@ -88,6 +91,7 @@ typedef unsigned short SlotNumber;   // <pyapi>
 typedef std::size_t    IdNumber;     // <pyapi>
 
 static const SlotNumber I_MAX_SLOTS = 255; // Slot number maximum index.  Max number of slots = I_MAX_SLOTS+1
+static const int I_MAX_SUBSESSIONS = 3;
 
 
 /** 
@@ -142,6 +146,10 @@ struct BitmapPars {
   int           u_linesize;
   int           v_linesize;
 };
+
+bool operator==(BitmapPars const &a, BitmapPars const &b) { // is copyable ?
+    return ( (a.y_linesize == b.y_linesize) and (a.u_linesize == b.u_linesize) and (a.v_linesize == b.v_linesize) );
+}
 
 inline std::ostream &operator<<(std::ostream &os, BitmapPars const &m) {
   return os << "<BitmapPars: type=" << int(m.type) << " w, h=" << m.width << ", " << m.height << ">";

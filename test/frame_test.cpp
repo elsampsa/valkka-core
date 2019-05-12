@@ -26,7 +26,7 @@
  *  @file    frame_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief Testing Frame classes.  Compile with "make tests" and run with valgrind
  *
@@ -81,6 +81,22 @@ void test_2() {
 
 
 void test_3() {
+    const char* name = "@TEST: frames_test: test 3: ";
+    std::cout << name <<"** @@Copy RGB frames **" << std::endl;
+
+    AVRGBFrame *f1 = new AVRGBFrame();
+    AVRGBFrame *f2 = new AVRGBFrame();
+    
+    f1->reserve(720,1920);
+    f2->reserve(720,1920);
+    
+    std::cout << "f1: " << *f1 << std::endl;
+    std::cout << "f2: " << *f2 << std::endl;
+    
+    f1->copyPayloadFrom(f2);
+    
+    delete f1;
+    delete f2;
 }
 
 

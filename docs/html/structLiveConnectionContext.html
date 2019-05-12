@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.10.0</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -138,7 +138,7 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Identifies a stream and encapsulates information about the type of connection the user is requesting to <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a>. </p>
-<p><a class="el" href="structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection the user is requesting ...">LiveConnectionContext</a> is also included in LiveThread::SignalContext, i.e. it carries the signal information to <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> (for the thread signaling system, see <a class="el" href="group__threading__tag.html">multithreads</a>).</p>
+<p><a class="el" href="structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection the user is requesting ...">LiveConnectionContext</a> is also included in LiveThread::SignalContext, i.e. it carries the signal information to <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> (for the thread signaling system, see <a class="el" href="group__threading__tag.html">multithreading</a>).</p>
 <p>(A side note: this class is not nested inside the <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> class for one simple reason: swig does not like nested classes, so it would make it harder to create Python bindings)</p>
 <p>Information in <a class="el" href="structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection the user is requesting ...">LiveConnectionContext</a> is further passed by <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread. ">LiveThread</a> to <a class="el" href="classRTSPConnection.html" title="A negotiated RTSP connection. ">RTSPConnection</a> and <a class="el" href="classSDPConnection.html" title="Connection is is defined in an SDP file. ">SDPConnection</a></p>
 <p>Comes with two different versions of the constructor. First is for primary use and the second is a "dummy" constructor. </p>

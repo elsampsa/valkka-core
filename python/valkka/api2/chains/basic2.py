@@ -25,7 +25,7 @@ basic2.py : Some basic classes encapsulating filter chains.  User must define th
 @file    basic.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.10.0 
+@version 0.11.0 
   
 @brief Some basic classes encapsulating filter chains.  User must define the endpoints of the filterchains
 """
@@ -42,9 +42,11 @@ pre_mod="valkka.api2.chains.basic2 : "
 class OpenFilterchain:
   """This class implements the following filterchain:
   
-  ::
-    
-    (LiveThread:livethread) -->> (AVThread:avthread) --> {ForkFrameFilterN:forkfilter}
+  :: 
+                                                                                           ...
+                                                                                          |
+    (LiveThread:livethread) -->> (AVThread:avthread) --> {ForkFrameFilterN:forkfilter} ---+  request forked streams with method "connect"
+                                                                                          |...
   
   """
   

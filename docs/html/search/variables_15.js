@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['y_5findex',['y_index',['../classYUVFrame.html#a53297c25620fff0b103dc632f24cb54e',1,'YUVFrame::y_index()'],['../classYUVTEX.html#aa802e9989e23ef9128eb596e2df4e24b',1,'YUVTEX::y_index()']]],
-  ['y_5fpayload',['y_payload',['../classAVBitmapFrame.html#a5537d57dcecc97d726f2e50d8314de95',1,'AVBitmapFrame::y_payload()'],['../classYUVFrame.html#a1d5ff7dd6cbe576891535a442aa63b96',1,'YUVFrame::y_payload()']]],
-  ['yuv_5freservoirs',['yuv_reservoirs',['../classOpenGLFrameFifo.html#a3d14e532754c28ccdbedc015f4ed99e4',1,'OpenGLFrameFifo']]],
-  ['yuv_5fshader',['yuv_shader',['../classOpenGLThread.html#ab4704fdd9c8cc5279bddf526a9eb7946',1,'OpenGLThread']]],
-  ['yuv_5fstacks',['yuv_stacks',['../classOpenGLFrameFifo.html#ac40d9a0c592bbf9c4dcd9c237b8beb7c',1,'OpenGLFrameFifo']]],
-  ['yuvtex',['yuvtex',['../classSlotContext.html#a58022f51371b002a544e44cd56066d62',1,'SlotContext']]]
+  ['x_5fconnection',['x_connection',['../classOpenGLThread.html#aada09c6f2a9e4bda4302c035bc025154',1,'OpenGLThread']]],
+  ['x_5fwindow_5fattr',['x_window_attr',['../classRenderContext.html#a3e0a39c93825918a48e4fb19211320ff',1,'RenderContext::x_window_attr()'],['../classRenderGroup.html#a2458060e92043e030beb82c4db923a8c',1,'RenderGroup::x_window_attr()']]],
+  ['x_5fwindow_5fid',['x_window_id',['../structOpenGLSignalPars.html#a73bcba1307d2282f3d35ff881924be60',1,'OpenGLSignalPars']]]
 ];

@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.10.0</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -83,7 +83,11 @@ $(function() {
 <li><a class="el" href="classLiveThread.html#a3da513578a82adf0d121e6b134fd6f52" title="Triggered when an empty fifo gets a frame. Schedules readFrameFifoTask. See Live streaming. ">LiveThread::gotFramesEvent</a> inserts a new (immediate) task to the live555 event loop, namely <a class="el" href="classLiveThread.html#a2e68caeedbc0166262a833003059e147" title="This task registers itself if there are frames in the fifo. ">LiveThread::readFrameFifoTask</a></li>
 <li><a class="el" href="classLiveThread.html#a2e68caeedbc0166262a833003059e147" title="This task registers itself if there are frames in the fifo. ">LiveThread::readFrameFifoTask</a> (i) calls <a class="el" href="classLiveThread.html#a88b224ee73f6c63b4c073eb23351e806" title="Handle incoming frames. See Live streaming. ">LiveThread::handleFrame</a> and (ii) re-schedules itself if there are more than one frame in the fifo</li>
 <li><a class="el" href="classLiveThread.html#a88b224ee73f6c63b4c073eb23351e806" title="Handle incoming frames. See Live streaming. ">LiveThread::handleFrame</a> checks the slot of the outgoing frame, takes the corresponding <a class="el" href="classOutbound.html" title="A base class that unifies all kinds of outgoing streams (i.e. ">Outbound</a> instance and calls <a class="el" href="classOutbound.html#aa79c5b31b4c4d7fa0d5a8b409232bb68" title="Setup session and subsessions, writes payload. ">Outbound::handleFrame</a></li>
-<li><a class="el" href="classOutbound.html" title="A base class that unifies all kinds of outgoing streams (i.e. ">Outbound</a> has a set of <a class="el" href="classStream.html" title="An outbound Stream. ">Stream</a> instances in Outbound::streams. There is a <a class="el" href="classStream.html" title="An outbound Stream. ">Stream</a> instance per media substream.</li>
+</ul>
+<h2>SDP Streams </h2>
+<p>Streams sent directly to UDP ports, as defined in an SDP file ("SDP" streams)</p>
+<ul>
+<li><a class="el" href="classSDPOutbound.html" title="Sending a stream without rtsp negotiation (i.e. ">SDPOutbound</a> has a set of <a class="el" href="classStream.html" title="An outbound Stream. ">Stream</a> instances in Outbound::streams. There is a <a class="el" href="classStream.html" title="An outbound Stream. ">Stream</a> instance per media substream.</li>
 <li><a class="el" href="classStream.html" title="An outbound Stream. ">Stream</a> instances encapsulate the usual live555 stuff per substream: RTPSink, RTCPInstance, Groupsock, FramedSource, etc.</li>
 <li>Each <a class="el" href="classStream.html" title="An outbound Stream. ">Stream</a> has also a reference to <a class="el" href="classLiveFifo.html" title="This is a special FrameFifo class for feeding frames into live555, i.e. ">LiveFifo</a> and <a class="el" href="classStream.html#a79b7e99786a5e067c83e3bba9c970300" title="Reserved in the child classes (depends on the payload type) ">Stream::buffer_source</a> which is a <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> instance.</li>
 <li><a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> is a subclass of live555 FramedSource that is used for sending frames.</li>
@@ -96,7 +100,33 @@ sink           = H264VideoRTPSink::createNew(env,rtpGroupsock, 96);
 
 sink-&gt;startPlaying(*(terminal), this-&gt;afterPlaying, this);
 </pre></li>
-<li>Frames flow like this: <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> =&gt; H264VideoStreamDiscreteFramer =&gt; H264VideoRTPSink</li>
+<li><p class="startli">Frames flow like this: <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> =&gt; H264VideoStreamDiscreteFramer =&gt; H264VideoRTPSink</p>
+<p class="startli">This diagram, where "{}" means enclosing object will help you to understand this: </p><pre class="fragment">BufferSource (.., fifo) {
+   - Live555 FramedSource class with method "doGetNextFrame"
+   - Recycles frames back to fifo (in doGetNextFrame)
+}
+
+Stream {
+   RTPSink,
+   RTCPInstance,
+   Groupsock,
+   BufferSource *buffer_source,
+   FrameFifo &amp;fifo,
+   
+   methods:
+       startPlaying
+           - issues startPlaying on the live555 
+             event loop (for the internal live555 
+             filterchain defined in the Stream subclasses)
+       afterPlaying
+           - a live555 callback
+}
+
+H264 : public Stream {
+   - Instantiates buffer_source = new BufferSource (.., fifo)
+   - Creates the live555 internal filterchain
+}
+</pre></li>
 </ul>
 <h2>RTSP Server </h2>
 <p>Some misc. observations / code walkthrough:</p>
@@ -108,9 +138,23 @@ sink-&gt;startPlaying(*(terminal), this-&gt;afterPlaying, this);
 <li>.. this basically closes our <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> instance (that's using a fifo), so we need to check if <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> has been destructed</li>
 <li>.. this is done using a reference variable that's given to <a class="el" href="classBufferSource.html" title="Implements a FramedSource for sending frames. ">BufferSource</a> (<a class="el" href="classValkkaServerMediaSubsession.html#a40c93db49c8364ea71b22288c3a5eab4" title="A canary variable that tells us if live555 event loop has closed the buffer_source. ">ValkkaServerMediaSubsession::source_alive</a>). That variable is checked before calling <a class="el" href="classBufferSource.html#a04cb4018658d080aec540054e5936761" title="Copies a Frame from BufferSource::fifo into BufferSource::internal_fifo. Sets BufferSource::active. Checks that FrameClass is FrameClass::basic. ">BufferSource::handleFrame</a>.</li>
 <li>There is a tricky inner event loop that generates sps/pps info into the sdp string at H264ServerMediaSubsession::getAuxSDPLine .. (as this has been hacked from H264VideoFileServerMediaSubsession). That can get stuck sometimes (!)</li>
-<li>Media sessions can be removed from the server with RTSPServer::removeServerMediaSession(media_session) </li>
+<li>Media sessions can be removed from the server with RTSPServer::removeServerMediaSession(media_session)</li>
 </ul>
-</div></div><!-- contents -->
+<p>To get this into one's head, let's take a look at this diagram. "{}" means enclosing object: </p><pre class="fragment">RTSPServer {
+
+   H264ServerMediaSubsession {
+       - member "fifo" is a reference to FrameFifo
+   
+       - method : createNewStreamSource
+           - creates buffer_source = BufferSource (.., fifo)
+           - creates H264VideoStreamDiscreteFramer(buffer_source)
+           =&gt; returns to RTPServer: H264VideoStreamDiscreteFramer(buffer_source)
+           
+       - inherited method sdpLines
+       - inherited method closeStreamSource
+   }
+}
+</pre> </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

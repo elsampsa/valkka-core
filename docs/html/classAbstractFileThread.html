@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.10.0</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -63,6 +63,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classAbstractFileThread-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">AbstractFileThread Class Reference<div class="ingroups"><a class="el" href="group__file__tag.html">file streaming</a></div></div>  </div>
@@ -78,6 +79,8 @@ Inheritance diagram for AbstractFileThread:</div>
 <div class="dyncontent">
 <div class="center"><img src="classAbstractFileThread__inherit__graph.png" border="0" usemap="#AbstractFileThread_inherit__map" alt="Inheritance graph"/></div>
 <map name="AbstractFileThread_inherit__map" id="AbstractFileThread_inherit__map">
+<area shape="rect" id="node3" href="classFileCacheThread.html" title="Thread that caches frames and streams them into output at play speed. " alt="" coords="11,155,132,181"/>
+<area shape="rect" id="node2" href="classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="40,5,103,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -85,14 +88,19 @@ Collaboration diagram for AbstractFileThread:</div>
 <div class="dyncontent">
 <div class="center"><img src="classAbstractFileThread__coll__graph.png" border="0" usemap="#AbstractFileThread_coll__map" alt="Collaboration graph"/></div>
 <map name="AbstractFileThread_coll__map" id="AbstractFileThread_coll__map">
+<area shape="rect" id="node2" href="classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="5,184,68,211"/>
+<area shape="rect" id="node3" href="classFifoFrameFilter.html" title="Passes frames to a FrameFifo. " alt="" coords="92,184,203,211"/>
+<area shape="rect" id="node4" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="45,95,133,121"/>
+<area shape="rect" id="node5" href="classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack. " alt="" coords="211,95,292,121"/>
+<area shape="rect" id="node6" href="structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo. " alt="" coords="188,5,315,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a60670ee5d88eea05086482db1d7f24ad"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAbstractFileThread.html#a60670ee5d88eea05086482db1d7f24ad">AbstractFileThread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>)</td></tr>
-<tr class="memdesc:a60670ee5d88eea05086482db1d7f24ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a60670ee5d88eea05086482db1d7f24ad">More...</a><br /></td></tr>
-<tr class="separator:a60670ee5d88eea05086482db1d7f24ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a146e9ad6658694692f64080a95085e5b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAbstractFileThread.html#a146e9ad6658694692f64080a95085e5b">AbstractFileThread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, <a class="el" href="structFrameFifoContext.html">FrameFifoContext</a> fifo_ctx=<a class="el" href="structFrameFifoContext.html">FrameFifoContext</a>(10))</td></tr>
+<tr class="memdesc:a146e9ad6658694692f64080a95085e5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a146e9ad6658694692f64080a95085e5b">More...</a><br /></td></tr>
+<tr class="separator:a146e9ad6658694692f64080a95085e5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:a893a5e029b5111961f7501d2edd65ebe inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a893a5e029b5111961f7501d2edd65ebe">Thread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>)</td></tr>
 <tr class="memdesc:a893a5e029b5111961f7501d2edd65ebe inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classThread.html#a893a5e029b5111961f7501d2edd65ebe">More...</a><br /></td></tr>
@@ -100,6 +108,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">~Thread</a> ()</td></tr>
 <tr class="memdesc:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor:<b>not</b> virtual.  <a href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">More...</a><br /></td></tr>
 <tr class="separator:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a544545691c206a095aefeafc7b52a408 inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a544545691c206a095aefeafc7b52a408"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a544545691c206a095aefeafc7b52a408">preJoin</a> ()</td></tr>
+<tr class="memdesc:a544545691c206a095aefeafc7b52a408 inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called before the thread is joined. <br /></td></tr>
+<tr class="separator:a544545691c206a095aefeafc7b52a408 inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="af1d76230f621bf4139ee5dd52e23fa8a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#af1d76230f621bf4139ee5dd52e23fa8a">postJoin</a> ()</td></tr>
+<tr class="memdesc:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the thread has been joined. <br /></td></tr>
+<tr class="separator:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20db67a3ec14a198b5444f3214d6155d inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a20db67a3ec14a198b5444f3214d6155d"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a20db67a3ec14a198b5444f3214d6155d">sendSignal</a> (<a class="el" href="structSignalContext.html">SignalContext</a> signal_ctx)</td></tr>
 <tr class="memdesc:a20db67a3ec14a198b5444f3214d6155d inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a signal to the thread. <br /></td></tr>
@@ -148,12 +164,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memdesc:a4428ec86c8bc7da14b558f25fb723ce0 inherit pro_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set <a class="el" href="classThread.html#a9e604c94f8ee52771ffbc1dac03b93ad" title="true if thread has been started ">Thread::has_thread</a> to false. <br /></td></tr>
 <tr class="separator:a4428ec86c8bc7da14b558f25fb723ce0 inherit pro_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_static_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
-<tr class="memitem:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="ad9d3cca144a41f08e791b451838a51fc"></a>
-static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b> (void *p)</td></tr>
-<tr class="separator:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a0ab2e3ca22c1cabcf1aeb1bc644988ac"><td class="memItemLeft" align="right" valign="top"><a id="a0ab2e3ca22c1cabcf1aeb1bc644988ac"></a>
+<a class="el" href="classFrameFifo.html">FrameFifo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAbstractFileThread.html#a0ab2e3ca22c1cabcf1aeb1bc644988ac">infifo</a></td></tr>
+<tr class="memdesc:a0ab2e3ca22c1cabcf1aeb1bc644988ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incoming frames are read from here. <br /></td></tr>
+<tr class="separator:a0ab2e3ca22c1cabcf1aeb1bc644988ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf7c9658601eb93ebbb5406fea623275"><td class="memItemLeft" align="right" valign="top"><a id="abf7c9658601eb93ebbb5406fea623275"></a>
+<a class="el" href="classFifoFrameFilter.html">FifoFrameFilter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAbstractFileThread.html#abf7c9658601eb93ebbb5406fea623275">infilter</a></td></tr>
+<tr class="memdesc:abf7c9658601eb93ebbb5406fea623275"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write incoming frames here. <br /></td></tr>
+<tr class="separator:abf7c9658601eb93ebbb5406fea623275"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classThread')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:a2e64f4b9dab400b7b06f2c73da4e465a inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a2e64f4b9dab400b7b06f2c73da4e465a"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a></td></tr>
@@ -185,6 +205,10 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href
 std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a0a58a652291ba8011b4b100077543af1">condition</a></td></tr>
 <tr class="memdesc:a0a58a652291ba8011b4b100077543af1 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Condition variable for the signal queue (triggered when all signals processed). Not necessarily used by all subclasses. <br /></td></tr>
 <tr class="separator:a0a58a652291ba8011b4b100077543af1 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a3e126419b64924b472a2ee2ffa5a4103"></a>
+std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a3e126419b64924b472a2ee2ffa5a4103">loop_mutex</a></td></tr>
+<tr class="memdesc:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protects thread's main execution loop (if necessary) <br /></td></tr>
+<tr class="separator:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6816c44497ea3ddd732ca3322ca1348 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="ab6816c44497ea3ddd732ca3322ca1348"></a>
 std::deque&lt; <a class="el" href="structSignalContext.html">SignalContext</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#ab6816c44497ea3ddd732ca3322ca1348">signal_fifo</a></td></tr>
 <tr class="memdesc:ab6816c44497ea3ddd732ca3322ca1348 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal queue (fifo). Redefine in child classes. <br /></td></tr>
@@ -206,14 +230,21 @@ cpu_set_t&#160;</td><td class="memItemRight" valign="bottom"><b>cpuset</b></td><
 <tr class="memitem:a30df147ca2dedd5ce9a1c7e39c5e8ab9 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a30df147ca2dedd5ce9a1c7e39c5e8ab9"></a>
 pthread_t&#160;</td><td class="memItemRight" valign="bottom"><b>internal_thread</b></td></tr>
 <tr class="separator:a30df147ca2dedd5ce9a1c7e39c5e8ab9 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_static_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
+<tr class="memitem:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="ad9d3cca144a41f08e791b451838a51fc"></a>
+static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b> (void *p)</td></tr>
+<tr class="separator:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class uses <a class="el" href="classAbstractFileStream.html" title="A general class for on-disk stored streams. ">AbstractFileStream(s)</a> </p>
 <p>A minimal example / model class</p>
 <p>See also <a class="el" href="timing.html">Presention timing and playing</a>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a60670ee5d88eea05086482db1d7f24ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60670ee5d88eea05086482db1d7f24ad">&#9670;&nbsp;</a></span>AbstractFileThread()</h2>
+<a id="a146e9ad6658694692f64080a95085e5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a146e9ad6658694692f64080a95085e5b">&#9670;&nbsp;</a></span>AbstractFileThread()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -222,8 +253,18 @@ pthread_t&#160;</td><td class="memItemRight" valign="bottom"><b>internal_thread<
           <td class="memname">AbstractFileThread::AbstractFileThread </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="structFrameFifoContext.html">FrameFifoContext</a>&#160;</td>
+          <td class="paramname"><em>fifo_ctx</em> = <code><a class="el" href="structFrameFifoContext.html">FrameFifoContext</a>(10)</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

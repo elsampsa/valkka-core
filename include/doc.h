@@ -26,7 +26,7 @@
  *  @file    doc.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief Extra doxygen documentation
  *
@@ -334,7 +334,12 @@
  *
  *- LiveThread::handleFrame checks the slot of the outgoing frame, takes the corresponding Outbound instance and calls Outbound::handleFrame
  *
- *- Outbound has a set of Stream instances in Outbound::streams.  There is a Stream instance per media substream.
+ * SDP Streams
+ * -----------
+ * 
+ * Streams sent directly to UDP ports, as defined in an SDP file ("SDP" streams)
+ * 
+ *- SDPOutbound has a set of Stream instances in Outbound::streams.  There is a Stream instance per media substream.
  *
  *- Stream instances encapsulate the usual live555 stuff per substream: RTPSink, RTCPInstance, Groupsock, FramedSource, etc.
  *
@@ -360,6 +365,35 @@
  *BufferSource => H264VideoStreamDiscreteFramer => H264VideoRTPSink
  * 
  *
+ * This diagram, where "{}" means enclosing object will help you to understand this:
+ \verbatim
+ BufferSource (.., fifo) {
+    - Live555 FramedSource class with method "doGetNextFrame"
+    - Recycles frames back to fifo (in doGetNextFrame)
+ }
+ 
+ Stream {
+    RTPSink,
+    RTCPInstance,
+    Groupsock,
+    BufferSource *buffer_source,
+    FrameFifo &fifo,
+    
+    methods:
+        startPlaying
+            - issues startPlaying on the live555 
+              event loop (for the internal live555 
+              filterchain defined in the Stream subclasses)
+        afterPlaying
+            - a live555 callback
+ }
+ 
+ H264 : public Stream {
+    - Instantiates buffer_source = new BufferSource (.., fifo)
+    - Creates the live555 internal filterchain
+ }
+ \endverbatim
+ *
  * RTSP Server
  * -----------
  *
@@ -374,6 +408,23 @@
  * - There is a tricky inner event loop that generates sps/pps info into the sdp string at H264ServerMediaSubsession::getAuxSDPLine .. (as this has been hacked from H264VideoFileServerMediaSubsession).  That can get stuck sometimes (!)
  * - Media sessions can be removed from the server with RTSPServer::removeServerMediaSession(media_session)
  *
+ * To get this into one's head, let's take a look at this diagram.  "{}" means enclosing object:
+ \verbatim
+ RTSPServer {
+ 
+    H264ServerMediaSubsession {
+        - member "fifo" is a reference to FrameFifo
+    
+        - method : createNewStreamSource
+            - creates buffer_source = BufferSource (.., fifo)
+            - creates H264VideoStreamDiscreteFramer(buffer_source)
+            => returns to RTPServer: H264VideoStreamDiscreteFramer(buffer_source)
+            
+        - inherited method sdpLines
+        - inherited method closeStreamSource
+    }
+ }
+ \endverbatim
  */
 
 
@@ -412,37 +463,54 @@
  */
 
 
-/** @defgroup threading_tag multithreads
+/** @defgroup threading_tag multithreading
  * 
- * The Thread class is a prototype for implementing thread-safe multithreading classes.  There are three pure virtual classes, namely:
+ * - Threads are running independently at the "backend"
+ * - They are started, controlled and stopped from the "frontend Python side"
+ * - This image illustrates the situation:
  * 
- * 1. Thread::preRun() allocates necessary resources for the Thread (of course some resources may be reserved at constructor time)
+ \verbatim
+ +-------------------------+         +-------------------------+-------------------------+           
+ | "backend" thread        |         |                 "frontend" thread                 |
+ | c++ thread              |         |                         |    Python side method   |
+ | running independently   |         |     c++ side            |    (hold GIL)           |
+ |                         |         |                         |     |                   |
+ | - do stuff &            |         |                   <-----|-----+                   |
+ |   get messages from     | [queue] |   - send message to     |                         |
+ |   queue                 |         |     queue         >-----|-----+                   |
+ | - perform callbacks     |         |                         |     |                   |
+ |   to python side        |         |   - for backend         |   continue in Python    |
+ |   (obtain GIL)          |         |     termination         |   side & exit           |
+ |                         |         |     wait for thread     |   (release GIL)         |
+ |                         |         |     join                |                         |
+ |                         |         |                         |                         |
+ +-------------------------+         +-------------------------+-------------------------+
+ \endverbatim
+ * 
+ * The frontend's "Python side" API methods are typically tagged with "Call", i.e. they are named "startCall", "stopCall", etc. and are automatically generated from the c++ methods using SWIG.
+ *
+ * The backend runs std::thread or pthread whose target method is Thread::mainRun().  The Thread class is a prototype for implementing thread-safe multithreading classes.  There are three pure virtual classes, namely:
+ * 
+ * 1. Thread::preRun() allocates necessary resources for the Thread (if not reserved at constructor time)
  * 2. Thread::run() uses the resources and does an infinite loop.  It listens to requests and executes Thread's methods
  * 3. Thread::postRun() deallocates resources
  * 
  * The method Thread::mainRun() simply does the sequence (1-3)
- * 
- * Controlling the thread, once it has been started, follows these principles:
- * 
- * 1. In the "front-end", an API method is called with a some context instance "ctx" (say, ip address of the camera, etc.)
- * 2. That API method, in turn, encapsulates the context instance into Thread::SignalContext (that is characteristic of each thread)
- * 3. .. and uses the thread-safe method Thread::sendSignal(signal_context), to place that request into the request queue Thread::signal_fifo
- * 4. At the "back-end" (i.e. "inside" the running thread), Thread::run() is doing it's infinite loop and get's a new request from Thread::signal_fifo
- * 5. Thread::run() uses Thread::handleSignal that delegates the request to one of Thread's methods
- * 
- * To make distinction between "front-end" (API) and "back-end" (internal) methods, the API method names should be designated with the ending "Call".  
- * 
- * The two API methods in the prototype class, Thread::startCall and Thread::stopCall start and stop the thread, respectively.
- * 
- * When developing and debugging Thread classes, one can write test programs like this: 
- * 
- * Thread::preRun(); <br>
- * [call here thread's internal methods] <br>
- * Thread::postRun(); <br>
- * 
- * For practical Thread implementations, see for examṕle LiveThread and OpenGLThread
+ *
+ * Since we're dealing here with extending python code in c++ (frontend) and with calling python callbacks from c++ (backend), extra care must be taken with the Python Global Interpreter Lock (GIL)
+ *
+ * Frontend methods hold the Python GIL (as they are just normal python methods), which is kept during the whole execution of the c++ "frontend" part (i.e. no Py_BEGIN_ALLOW_THREADS here).  These are just fast calls that exit once they have sent a signal to the message queue.
+ *
+ * An exception to this rule is the special method Thread::requestStopCall() which, after sending a termination signal to the backend, waits for the thread join (for joining Thread::mainRun()).
+ *
+ * If at this moment, the backend is trying to perform a python callback, a deadlock will occur: the frontend is holding the python GIL, while the backend is waiting for its release.
+ *
+ * All Python callbacks from the backend after Thread::run() has been exited, should then be performed in the Thread's destructor, and without touching the GIL (destructors are typically evoked by the Python garbage collector, i.e. the GIL is being hold from the Python side)
+ *
+ * For practical Thread implementations, see for example LiveThread and OpenGLThread
  * 
  * Thread can be bound to a particular processor core, if needed.
+ * 
  * 
  */
 
@@ -770,4 +838,356 @@
  * --> last block to include is 12 (search: first block of all blocks that have max >= 29)
  * 
  */
+
+
+
+/** @page filesystem ValkkaFSManager
+ * 
+ * Writing, reading and caching frames
+ * 
+ * The level 2 API Python class ValkkaFSManager, uses several level 1 API (core) Python class objects
+ * 
+ * - core.ValkkaFS : blocktable and book-keeping
+ * - core.ValkkaFSReaderThread : reads frames from the file or block device
+ * - core.ValkkaFSCacherThread : caches the read frames into memory (typically several blocks of frames)
+ * - core.ValkkaFSWriterThread : writes frames into the file or block device
+ * 
+ * - Frames are requested on per-block basis from core.ValkkaFSReaderThread.  It feeds frames to core.ValkkaFSCacherThread
+ * - Seek, play and stop operations take place within the cached frames in core.ValkkaFSCacherThread
+ * - All Threads share a common core.ValkkaFS object that has the blocktable and is also visible at the Python side
+ * 
+ * The logic of requesting certain blocks in order to show (and buffer) frames for a certain time instant is handled completely at the python side
+ * 
+ * This orchestration is handled by the level 2 API Python class ValkkaFSManager.
+ *
+ * Let's use the following pseudocode notation, to see how objects are contained within other objects:
+\verbatim
+classname(init parameter) {
+    classnames of contained objects
+}
+\endverbatim
+ *
+ * This is how it looks like.  Let's hope you'll get the big picture.  :)
+ *
+\verbatim
+api2.ValkkaFSManager(api2.ValkkaFS) {
+    
+    1: api2.ValkkaFS {
+        core.ValkkaFS
+        
+        # functions called from the c++ side:
+        def new_block_cb__(propagate, par:
+            - propagate indicates if further callbacks should be evoked
+            - par is an integer (block number) or an error string
+        }
+            
+    2: core.ValkkaFSReaderThread {
+        core.ValkkaFS
+        - writes to core.FileCacherThread.getFrameFilter() [4]
+        - frames are requested on per-block basis
+        }
+    3: core.ValkkaFSWriterThread {
+        core.ValkkaFS
+        - input framefilter can be requested with getFrameFilter()
+        }
+    4: core.FileCacherThread {
+        - receives seek, play, stop, operations
+    
+        }   
+    
+    # functions called from the c++ side:
+    
+    def timeCallback__(mstime: int):
+        - originates from core.FileCacherThread
+        - once per 300 ms
+        
+    def timeLimitsCallback__(tup: tuple):
+        - originates from core.FileCacherThread
+        - sent when frame cache has been updated
+    
+    
+    # some important methods:
+    
+    def setOutput(_id, slot, framefilter [**]):
+        """Set id => slot mapping.  Set output framefilter
+        """
+        core.ValkkaFSReaderThread.setSlotIdCall(slot, _id)  # ID-TO-SLOT MAPPING
+        ctx = core.FileStreamContext(slot, framefilter)     # SLOT-TO-FRAMEFILTER MAPPING [**]
+        core.FileCacherThread.registerStreamCall(ctx)
+
+    def setInput(_id, slot):
+        core.ValkkaFSWriterThread.setSlotIdCall(_id, slot)
+
+    def getInputFrameFilter():
+        return ValkkaFSWriterThread.getFrameFilter()
+        
+    }
+\endverbatim
+ * 
+ * Frames are transported like this:
+ *
+\verbatim
+outgoing frames:
+    
+    core.ValkkaFSReaderThread [2] --> core.FileCacherThread [4] --> output framefilter [**]
+    
+     - Request blocks of frames        - Set seek point, play,
+       to be sent downstream             stop, etc. 
+     - Uses shared core.ValkkaFS      
+       instance
+    
+    
+incoming frames:
+
+    --> core.ValkkaFSWriterThread.getFrameFilter() --> core.ValkkaFSWriterThread
+                                                       
+                                                       - Updates shared core.ValkkaFS
+                                                         instance
+\endverbatim
+ *
+ *
+ */
+ 
+/** @page filesystem cpp / Python callbacks
+ * 
+ * ValkkaFS is using both cpp-to-python and python-to-cpp calls
+ * 
+ * This can get tricky, and care must be taken to avoid nasty deadlocks due to the Python Global Interpreter Lock (GIL) 
+ * 
+ * The cpp part of the code can decide to call some python code, that has been defined in the main thread Python part.  This is done by the cpp code "autonomously" and is not initiated from the python side. (*)
+ * 
+ * Python part might evoke some cpp code. (**)
+ * 
+ * Special care must be taken with "callback cascades" that start from cpp and end up back to the cpp side again.
+ * 
+ * The acquisition and release of GIL is illustrated in the following graph.
+\verbatim
+
+(*)      = callback from cpp to Python
+(**)     = callback from Python to cpp
+|        = the instance holding the GIL
+DEADLOCK = example deadlock situations
+
+A program using both (*) and (**) callbacks:
+
+
+            main thread (Python)           cpp thread
+            
+               |
+               |
+               |
+                                           | acquire GIL (*) 
+                                           | - call python method, defined at main thread
+                                           | release GIL
+               |
+               |
+               |
+                                           | acquire GIL (*)
+                                           | - call python method, defined at main thread
+                                           |   - that python method might call cpp code which tries to acquire GIL => DEADLOCK!
+                                           | release GIL
+            
+               |
+               | 
+               | call swig-wrapped   
+               | cpp method (**)           do not acquire GIL           
+               |                           as it's being hold by the main thread
+               |                           return
+               |
+                                           | acquire GIL (*)
+                                           | - call python method, defined at main thread
+                                           | release GIL 
+               
+\endverbatim
+
+
+
+
+\verbatim
+            
+            
+            
+            main thread (Python)           ValkkaFSWriterThread    
+            
+              |
+              |
+                                           | acquire GIL
+                                           | - call ValkkaFSWriterThread::pyfunc
+                                           |   - In the python side, this is set to valkka.api2.valkkafs.new_block_cb__
+                                           |   - .. which in turn continues the callback-cascade into ValkkaFS::setArrayCall
+                                           | release GIL
+              |
+              |
+            
+              | requestStopCall           requestStopCall (cpp side)
+              | (python side)             - sends message to thread's message queue
+              |                           - returns immediately
+             
+              |                           exits thread's running loop
+               
+              | waitStopCall              preJoin 
+              |                           => saveCurrentBlock 
+              |                              => valkkaFS::writeBlock 
+              |                                 - should not acquire GIL as this has been 
+              |                                   requested from the python side
+              |                           thread join & exit
+            
+            --------------------------------------------------
+            
+                                           | CacheStream::run
+                                           | pyfunc
+                                                => valkka.api2.ValkkaFSManager.timeCallback__(mstime)
+                                                    => valkka.api2.ValkkaFSManager.stop()
+                                                        => ValkkaFSWriterThread::stopStreamsCall() # this makes any sense?
+                                                - it's ok to call other thread's functions, as long as they don't return the callback chain to python
+                                                
+            
+            
+            
+\endverbatim
+ *
+ */
+
+
+/** @page Caching Frames
+ * 
+ * 
+ * FileCacherThread::run
+ * 
+ * 
+ * 
+\verbatim
+
+
+walltime == wallclock time 
+
+target_mstimestamp_ = 0 
+    current target frametime, transformed from current walltime : stopStreams, seekStreams, run
+
+next = NULL 
+    points to next frame : run
+    
+reftime = 0 
+    value for transforming frametime <-> walltime : playStreams, seekStreams, run
+
+next_mstimestamp = 0 : run
+    timestamp of the next frame in wallclock time
+
+    
+while True:
+    
+    if next != NULL and reftime > 0:
+        # next frame exists and we can get it's wallclock time
+        next_mstimestamp = next.mstimestamp + reftime # from frametime to walltime
+        # => calculate timeout to the next frame
+        timeout = ..
+    else:
+        timeout = default_timeout
+    
+    f = infifo.read(timeout)
+    
+    # there's either a frame or this was a timeout
+    
+    if TIMEOUT:
+        pass
+        
+    elif GOT_FRAME:
+        
+        if f is signal:
+            # handle the signal => seekStreams, playStreams, stopStreams
+            
+        elif f is marker:
+            if marker == TM_START # transmission start
+                # do nothing .. frames are flowing to tmp cache
+                
+            elif marker == TM_END # transmission end
+                switchCache() # tmp cache becomes the play_cache
+                next = NULL
+                if target_mstimestamp_ <= 0: # no seek time set yet
+                    # this can happen: seek has not yet called, but block transmission has been requested
+                    # that's fixed with the next seek call
+                    print WARNING
+                else:
+                    if state == SEEK or state == STOP:
+                        i = play_cache->keySeek
+                    elif state == PLAY:
+                        i = play_cache->seek
+                    else:
+                        print WARNING
+                        
+                    if seek succeeded:
+                        next = play_cache.pullNextFrame()
+                        
+                    if next != None:
+                        walltime = getCurrentMsTimestamp();
+                        reftime = walltime - target_mstimestamp_; # match walltime to target frametime
+                        
+        
+    # frame handled
+    
+    mstime = getCurrentMsTimestamp() # update current time
+    
+    if reftime > 0 and & state == PLAY: # walltime get's updated constantly
+        walltime = mstime
+        target_mstimestamp_ = walltime - reftime; # update current frametime
+            
+    # FRAME PULL LOOP: pull all necessary frames from the cache
+    while next != NULL and (next_mstimestamp - walltime) <= 0:
+        
+        if reftime == 0: # no reftime set .. take it from the first frame
+            reftime = mstime - target_mstimestamp_
+            stopStreams() # state => STOP, send SetupFrames
+        
+        # create & send a SetupFrame for decoder init if necessary
+        ...
+        
+        # send frame to correct framefilter with this timestamp:
+        frame.mstimestamp = next.mstimestamp + reftime # from frametime to walltime
+        
+        next = play_cache.pullNextFrame()
+        if next != NULL:
+            next_mstimestamp = next.mstimestamp + reftime # from frametime to walltime
+            
+        if next == NULL or next_mstimestamp - walltime > 0: # while loop is about to break
+            if state == SEEK
+                stopStreams() # state => STOP, send SetupFrames
+    
+    # handle signals etc
+
+
+- seek sets the reftime
+- play : stream's been stopped, so there's a fixed target_mstimestamp_ => get reftime == walltime <-> frametime mapping from there
+- stop : stream's been playing / seeking, so there's reftime (wall-time <-> frametime mapping) => get target_mstimestamp_ from walltime
+
+stopStreams:
+    if reftime > 0:
+        walltime = getCurrentMsTimestamp()
+        target_mstimestamp_ = walltime - reftime # get current frametime from walltime
+        
+playStreams:
+    if target_mstimestamp_ > 0:
+        walltime = getCurrentMsTimestamp()
+        reftime = walltime - target_mstimestamp_ # get reftime from current frametime
+        
+seekStreams(mstimestamp_): # if target frame time mstimestamp_ is found in play_cache, do immediate seek, otherwise, set reftime = 0
+    target_mstimestamp_ = mstimestamp_
+    if play_cache has the target frame, then:
+        walltime = getCurrentMsTimestamp()
+        reftime = walltime - target_mstimestamp_
+    else:
+        reftime = 0
+    
+
+
+
+
+\endverbatim
+ * 
+ * 
+ * 
+ */
+ 
+ 
+
+
 

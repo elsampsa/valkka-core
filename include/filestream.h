@@ -28,7 +28,7 @@
  *  @file    filestream.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief
  */ 
@@ -39,18 +39,6 @@
 #include "logging.h"
 #include "tools.h"
 
-
-/** Describes the state of an AbstractFileStream 
- *
- * @ingroup file_tag
- */
-enum class AbstractFileState {                // <pyapi>
-    none,                                     // <pyapi>
-    error,                                    // <pyapi>
-    seek, // in the middle of a seek          // <pyapi>
-    stop, // stream stopped                   // <pyapi>
-    play  // stream is playing                // <pyapi> 
-};                                            // <pyapi>
 
 
 /** A general class for on-disk stored streams
@@ -153,8 +141,12 @@ public:                                                 // <pyapi>
     * @param name          Thread name
     * 
     */
-    AbstractFileThread(const char* name);               // <pyapi>
-    virtual ~AbstractFileThread();                      // <pyapi>
+    AbstractFileThread(const char* name, FrameFifoContext fifo_ctx=FrameFifoContext(10));   // <pyapi>
+    virtual ~AbstractFileThread();                                                          // <pyapi>
+
+protected: // frame input
+    FrameFifo               infifo;           ///< Incoming frames are read from here
+    FifoFrameFilter         infilter;         ///< Write incoming frames here
 
 protected:
     virtual void preRun();

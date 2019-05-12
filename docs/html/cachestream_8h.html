@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.10.0</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -65,18 +65,30 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">cachestream.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="framefifo_8h_source.html">framefifo.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="filestream_8h_source.html">filestream.h</a>&quot;</code><br />
+<code>#include &quot;Python.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for cachestream.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="cachestream_8h__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2include_2cachestream_8h" alt=""/></div>
 <map name="_2home_2sampsa_2C_2valkka_2include_2cachestream_8h" id="_2home_2sampsa_2C_2valkka_2include_2cachestream_8h">
+<area shape="rect" id="node2" href="framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1421,244,1505,271"/>
+<area shape="rect" id="node47" href="filestream_8h.html" title="filestream.h" alt="" coords="1293,95,1384,121"/>
+<area shape="rect" id="node3" href="common_8h.html" title="List of common header files. " alt="" coords="1511,468,1593,495"/>
+<area shape="rect" id="node42" href="frame_8h.html" title="Frame classes. " alt="" coords="1347,319,1413,345"/>
+<area shape="rect" id="node45" href="logging_8h.html" title="Logging utilities. " alt="" coords="1091,468,1165,495"/>
+<area shape="rect" id="node46" href="macro_8h.html" title="macro.h" alt="" coords="1445,393,1515,420"/>
+<area shape="rect" id="node43" href="codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1302,393,1370,420"/>
+<area shape="rect" id="node44" href="tools_8h.html" title="Auxiliary routines. " alt="" coords="1216,393,1277,420"/>
+<area shape="rect" id="node48" href="thread_8h.html" title="Base class for multithreading. " alt="" coords="1500,169,1569,196"/>
+<area shape="rect" id="node50" href="framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1335,169,1425,196"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -84,6 +96,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="cachestream_8h__dep__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2include_2cachestream_8hdep" alt=""/></div>
 <map name="_2home_2sampsa_2C_2valkka_2include_2cachestream_8hdep" id="_2home_2sampsa_2C_2valkka_2include_2cachestream_8hdep">
+<area shape="rect" id="node2" href="cachestream_8cpp.html" title="/home/sampsa/C/valkka\l/src/cachestream.cpp" alt="" coords="5,95,169,136"/>
 </map>
 </div>
 </div>
@@ -91,6 +104,14 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileStreamContext.html">FileStreamContext</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileCacheSignalPars.html">FileCacheSignalPars</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal information for <a class="el" href="classFileCacheThread.html" title="Thread that caches frames and streams them into output at play speed. ">FileCacheThread</a>.  <a href="structFileCacheSignalPars.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encapsulate data sent to <a class="el" href="classFileCacheThread.html" title="Thread that caches frames and streams them into output at play speed. ">FileCacheThread</a>.  <a href="structFileCacheSignalContext.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFrameCacheContext.html">FrameCacheContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameCache.html">FrameCache</a></td></tr>
@@ -99,19 +120,59 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCacheFrameFilter.html">CacheFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Passes frames to a <a class="el" href="classFrameCache.html" title="FrameCache works like FrameFifo, but frames are not pre-reserved. ">FrameCache</a>.  <a href="classCacheFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCacheStream.html">CacheStream</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches (a large amount of) frames and pushes them forward at a rate corresponding to play speed.  <a href="classCacheStream.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html">FileCacheThread</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> that caches frames and streams them into output at play speed.  <a href="classFileCacheThread.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ada9b6bfa4ba1d83563a501d8c4df2d2f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cachestream_8h.html#ada9b6bfa4ba1d83563a501d8c4df2d2f">FileCacheSignal</a> { <br />
+&#160;&#160;<b>none</b>, 
+<b>exit</b>, 
+<b>register_stream</b>, 
+<b>deregister_stream</b>, 
+<br />
+&#160;&#160;<b>play_streams</b>, 
+<b>stop_streams</b>, 
+<b>seek_streams</b>, 
+<b>clear_streams</b>, 
+<br />
+&#160;&#160;<b>report_cache</b>
+<br />
+ }<tr class="memdesc:ada9b6bfa4ba1d83563a501d8c4df2d2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signals for <a class="el" href="classFileCacheThread.html" title="Thread that caches frames and streams them into output at play speed. ">FileCacheThread</a>.  <a href="cachestream_8h.html#ada9b6bfa4ba1d83563a501d8c4df2d2f">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:ada9b6bfa4ba1d83563a501d8c4df2d2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.10.0 </dd></dl>
-</div></div><!-- contents -->
+<dl class="section version"><dt>Version</dt><dd>0.11.0 </dd></dl>
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ada9b6bfa4ba1d83563a501d8c4df2d2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada9b6bfa4ba1d83563a501d8c4df2d2f">&#9670;&nbsp;</a></span>FileCacheSignal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="cachestream_8h.html#ada9b6bfa4ba1d83563a501d8c4df2d2f">FileCacheSignal</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Signals for <a class="el" href="classFileCacheThread.html" title="Thread that caches frames and streams them into output at play speed. ">FileCacheThread</a>. </p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

@@ -28,7 +28,7 @@
  *  @file    decoder.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief FFmpeg decoders
  * 
@@ -68,6 +68,7 @@ public:
     
 protected:
   BasicFrame in_frame; ///< Payload data to be decoded.
+  bool has_frame;
   
 public:
   void input(Frame *f); ///< Create a copy of the frame into the internal storage of the decoder (i.e. to Decoder::in_frame)
@@ -75,6 +76,7 @@ public:
   virtual Frame* output() =0; ///< Return a reference to the internal storage of the decoder where the decoded frame is.  The exact frametype depends on the Decoder class (and decoder library)
   virtual void flush() =0; ///< Reset decoder state.  How to flush depends on the decoder library
   virtual bool pull()  =0; ///< Decode in_frame to out_frame.  Return true if decoder returned a new frame (into out_frame), otherwise false.  Implementation depends on the decoder library.
+  bool hasFrame(); 
 };
 
 
@@ -110,9 +112,12 @@ public:
    * @param av_codec_id  FFmpeg AVCodecId identifying the codec
    * 
    */
-  AVDecoder(AVCodecID av_codec_id);
+  AVDecoder(AVCodecID av_codec_id, int n_threads = 1);
   virtual ~AVDecoder();
 
+protected:
+    int n_threads;
+  
 public:
   AVCodecID       av_codec_id;       ///< FFmpeg AVCodecId, identifying the codec 
   AVPacket*       av_packet;         ///< FFmpeg internal data structure; encoded frame (say, H264)
@@ -136,7 +141,7 @@ public:
 class VideoDecoder : public AVDecoder {
   
 public:
-  VideoDecoder(AVCodecID av_codec_id); ///< Default constructor
+  VideoDecoder(AVCodecID av_codec_id, int n_threads = 1); ///< Default constructor
   virtual ~VideoDecoder();             ///< Default destructor
   
 protected:

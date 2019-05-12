@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.10.0</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -84,6 +84,7 @@ $(function() {
 <code>#include &quot;<a class="el" href="opengl_8h_source.html">opengl.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tools_8h_source.html">tools.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="macro_8h_source.html">macro.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="rawrite_8h_source.html">rawrite.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for frame.h:</div>
 <div class="dyncontent">
@@ -148,7 +149,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Custom payload <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a>.  <a href="classBasicFrame.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSetupFrame.html">SetupFrame</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup frame for decoders.  <a href="classSetupFrame.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup frame.  <a href="classSetupFrame.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVMediaFrame.html">AVMediaFrame</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decoded <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> in FFmpeg format.  <a href="classAVMediaFrame.html#details">More...</a><br /></td></tr>
@@ -162,7 +163,13 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYUVFrame.html">YUVFrame</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A GPU YUV frame.  <a href="classYUVFrame.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRGBFrame.html">RGBFrame</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Our own RGB24 structure.  <a href="classRGBFrame.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalFrame.html">SignalFrame</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A frame signaling internal thread commands, states of recorded video, etc.  <a href="classSignalFrame.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMarkerFrame.html">MarkerFrame</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -185,6 +192,12 @@ typedef std::vector&lt; <a class="el" href="classYUVFrame.html">YUVFrame</a> * &
 <tr class="memitem:abaf59a52c986ed29f1cd4a9a667ff07d"><td class="memItemLeft" align="right" valign="top"><a id="abaf59a52c986ed29f1cd4a9a667ff07d"></a>
 typedef std::deque&lt; <a class="el" href="classYUVFrame.html">YUVFrame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>YUVStack</b></td></tr>
 <tr class="separator:abaf59a52c986ed29f1cd4a9a667ff07d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9db0d7c5a039d6decfbacb96ef5834e"><td class="memItemLeft" align="right" valign="top"><a id="ae9db0d7c5a039d6decfbacb96ef5834e"></a>
+typedef std::vector&lt; <a class="el" href="classRGBFrame.html">RGBFrame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>RGBReservoir</b></td></tr>
+<tr class="separator:ae9db0d7c5a039d6decfbacb96ef5834e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a869ea1526c126d20d6194064b501e027"><td class="memItemLeft" align="right" valign="top"><a id="a869ea1526c126d20d6194064b501e027"></a>
+typedef std::deque&lt; <a class="el" href="classRGBFrame.html">RGBFrame</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>RGBStack</b></td></tr>
+<tr class="separator:a869ea1526c126d20d6194064b501e027"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -199,9 +212,12 @@ Enumerations</h2></td></tr>
 <a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aae7bd4dbd7efa9fc3fc9a7074ef3c1286">FrameClass::avrgb</a>, 
 <a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa0f6895d5d358b563d1b1e9f8c7437acd">FrameClass::yuv</a>, 
 <br />
-&#160;&#160;<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aaa0f848942ce863cf53c0fa6cc684007d">FrameClass::setup</a>, 
+&#160;&#160;<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aaef70a6546536ccd835479f6cddc0188e">FrameClass::rgb</a>, 
+<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aaa0f848942ce863cf53c0fa6cc684007d">FrameClass::setup</a>, 
 <a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee">FrameClass::signal</a>, 
-<b>First</b> =none, 
+<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aab272bda9bf0c1cdcba614b5ed99c4d62">FrameClass::marker</a>, 
+<br />
+&#160;&#160;<b>First</b> =none, 
 <b>Last</b> =signal
 <br />
  }<tr class="memdesc:ga4c17b19991c62a93b7a272b92037d69a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> classes used by Valkka.  <a href="group__frames__tag.html#ga4c17b19991c62a93b7a272b92037d69a">More...</a><br /></td></tr>
@@ -213,6 +229,11 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:ac7e9c7fc4910cfe7eed4025d4505f619"><td class="mdescLeft">&#160;</td><td class="mdescRight">Methods to correct frame timestamps.  <a href="frame_8h.html#ac7e9c7fc4910cfe7eed4025d4505f619">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:ac7e9c7fc4910cfe7eed4025d4505f619"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5579b777599f71f831d62b45345c8482"><td class="memItemLeft" align="right" valign="top"><a id="a5579b777599f71f831d62b45345c8482"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>SetupFrameType</b> { <b>none</b>, 
+<b>stream_init</b>, 
+<b>stream_state</b>
+ }</td></tr>
+<tr class="separator:a5579b777599f71f831d62b45345c8482"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -224,7 +245,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="textblock"><p><a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> classes. </p>
 <dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.10.0 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.11.0 </dd></dl>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="ac7e9c7fc4910cfe7eed4025d4505f619"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac7e9c7fc4910cfe7eed4025d4505f619">&#9670;&nbsp;</a></span>TimeCorrectionType</h2>

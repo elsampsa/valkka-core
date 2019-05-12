@@ -20,12 +20,17 @@ form="udp://"
 #ip="192.168.0.134"
 # # *************************
 # # cam4
-user="admin"
-passwd="nordic12345"
-ip="192.168.1.41"
+#user="admin"
+#passwd="nordic12345"
+#ip="192.168.1.41"
 # # *******
 
 target="224.1.168.91:50000" # multicast comes from here
 
-com="ffmpeg -i rtsp://"$user":"$passwd"@"$ip" -c:v copy -map 0:0 -f rtp "$form""$target
+# com="ffmpeg -i rtsp://"$user":"$passwd"@"$ip" -c:v copy -map 0:0 -f rtp "$form""$target
+
+# # better idea: let's use the "VALKKA_TEST_RTSP_1" environmental variable we use for testing anyway
+
+com="ffmpeg -i "$VALKKA_TEST_RTSP_1" -c:v copy -map 0:0 -f rtp "$form""$target
+
 $com

@@ -28,7 +28,7 @@
  *  @file    macro.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief
  */ 
@@ -87,10 +87,21 @@ virtual CLASS *getClone() {\
 };\
 
 
+// macros for initializing and deallocating SignalFrame's custom_signal_ctx
 
-// macros for dumping and reading variables
-#define dump_bytes(var) os.write( (const char*)&var, sizeof(var));
-#define read_bytes(var) is.read((char*)&var, sizeof(var));
 
+#define init_signal_frames(FIFONAME, CONTEXTCLASS) \
+Reservoir &res = FIFONAME.getReservoir(FrameClass::signal);\
+for(auto it=res.begin(); it!=res.end(); ++it) {\
+    SignalFrame* f = static_cast<SignalFrame*>(*it);\
+    f->custom_signal_ctx = (void*)(new CONTEXTCLASS());\
+};\
+
+#define clear_signal_frames(FIFONAME, CONTEXTCLASS) \
+Reservoir &res = FIFONAME.getReservoir(FrameClass::signal);\
+for(auto it=res.begin(); it!=res.end(); ++it) {\
+    SignalFrame* f = static_cast<SignalFrame*>(*it);\
+    delete (CONTEXTCLASS*)(f->custom_signal_ctx);\
+};\
 
 #endif

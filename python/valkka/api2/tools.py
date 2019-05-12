@@ -25,7 +25,7 @@ tools.py : helper functions
 @file    tools.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.10.0 
+@version 0.11.0 
 
 @brief helper functions
 """
@@ -36,8 +36,28 @@ import types
 import sys
 import os
 import inspect
+import logging
 
 is_py3 = (sys.version_info >= (3, 0))
+
+
+def getLogger(name):
+    # https://docs.python.org/2/howto/logging.html
+    # log levels here : https://docs.python.org/2/howto/logging.html#when-to-use-logging
+    # in the future, migrate this to a logger config file
+    # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+    ch = logging.StreamHandler()
+    # ch.setLevel(level) # no effect ..
+    ch.setFormatter(formatter)
+    
+    logger = logging.getLogger(name)
+    # logger.setLevel(level)
+    
+    logger.addHandler(ch)
+    return logger
+
+
 
 
 # this is module specific!

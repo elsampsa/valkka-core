@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.10.0</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -102,6 +102,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aab82e3812449710e992ea63c1d7ae68f"><td class="memItemLeft" align="right" valign="top"><a id="aab82e3812449710e992ea63c1d7ae68f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>frame_clone</b> (<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aae7bd4dbd7efa9fc3fc9a7074ef3c1286">FrameClass::avrgb</a>, <a class="el" href="classAVRGBFrame.html">AVRGBFrame</a>)</td></tr>
 <tr class="separator:aab82e3812449710e992ea63c1d7ae68f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a267f6d1b3bda3213c0153ab5553d43aa"><td class="memItemLeft" align="right" valign="top"><a id="a267f6d1b3bda3213c0153ab5553d43aa"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVRGBFrame.html#a267f6d1b3bda3213c0153ab5553d43aa">reserve</a> (int width, int height)</td></tr>
+<tr class="memdesc:a267f6d1b3bda3213c0153ab5553d43aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserve RGB image with width &amp; height. <br /></td></tr>
+<tr class="separator:a267f6d1b3bda3213c0153ab5553d43aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56f06ede8897cb8f6f191c7072285f06"><td class="memItemLeft" align="right" valign="top"><a id="a56f06ede8897cb8f6f191c7072285f06"></a>
 virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVRGBFrame.html#a56f06ede8897cb8f6f191c7072285f06">dumpPayload</a> ()</td></tr>
 <tr class="memdesc:a56f06ede8897cb8f6f191c7072285f06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dumps internal payload data. <br /></td></tr>
@@ -129,6 +133,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVBitmapFrame.html#aff0a34fed250bb3c6214f3cac1c7bd14">reset</a> ()</td></tr>
 <tr class="memdesc:aff0a34fed250bb3c6214f3cac1c7bd14 inherit pub_methods_classAVBitmapFrame"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the internal data. <br /></td></tr>
 <tr class="separator:aff0a34fed250bb3c6214f3cac1c7bd14 inherit pub_methods_classAVBitmapFrame"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a1aafb1ddc606cd0be2d1ab8b8de0ad inherit pub_methods_classAVBitmapFrame"><td class="memItemLeft" align="right" valign="top"><a id="a4a1aafb1ddc606cd0be2d1ab8b8de0ad"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>copyPayloadFrom</b> (<a class="el" href="classAVBitmapFrame.html">AVBitmapFrame</a> *frame)</td></tr>
+<tr class="separator:a4a1aafb1ddc606cd0be2d1ab8b8de0ad inherit pub_methods_classAVBitmapFrame"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeae9e20f7bbe26a9926b6987d91b8423 inherit pub_methods_classAVBitmapFrame"><td class="memItemLeft" align="right" valign="top"><a id="aeae9e20f7bbe26a9926b6987d91b8423"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVBitmapFrame.html#aeae9e20f7bbe26a9926b6987d91b8423">update</a> ()</td></tr>
 <tr class="memdesc:aeae9e20f7bbe26a9926b6987d91b8423 inherit pub_methods_classAVBitmapFrame"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uses <a class="el" href="classAVMediaFrame.html#adda0edc926991cdd2cceea52ee897bde" title="The decoded frame. ">AVBitmapFrame::av_frame</a> width and height and <a class="el" href="classAVBitmapFrame.html#a7dac7b382a8f869d42dd2e8c768db9f3" title="From AVCodecContext .. this class implies YUV420P so this is not really required .. ">AVBitmapFrame::av_pixel_format</a> to calculate <a class="el" href="classAVBitmapFrame.html#abf28ea9afbbfed6591ec7f753f161748" title="Calculated bitmap plane dimensions, data sizes, etc. ">AVBitmapFrame::bmpars</a>. <br /></td></tr>
@@ -142,12 +149,6 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVMediaFrame.html#a8240c80d2a09db0e9ab749024fd002f5">~AVMediaFrame</a> ()</td></tr>
 <tr class="memdesc:a8240c80d2a09db0e9ab749024fd002f5 inherit pub_methods_classAVMediaFrame"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default virtual dtor. <br /></td></tr>
 <tr class="separator:a8240c80d2a09db0e9ab749024fd002f5 inherit pub_methods_classAVMediaFrame"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4050f0f7f070445a24a37f5b8520fc6e inherit pub_methods_classAVMediaFrame"><td class="memItemLeft" align="right" valign="top"><a id="a4050f0f7f070445a24a37f5b8520fc6e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>frame_essentials</b> (<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa158e8cd0eee094c1d4975df4c59457d4">FrameClass::avmedia</a>, <a class="el" href="classAVMediaFrame.html">AVMediaFrame</a>)</td></tr>
-<tr class="separator:a4050f0f7f070445a24a37f5b8520fc6e inherit pub_methods_classAVMediaFrame"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5479205c1c2aa3dcbf124ea02cb7605 inherit pub_methods_classAVMediaFrame"><td class="memItemLeft" align="right" valign="top"><a id="ac5479205c1c2aa3dcbf124ea02cb7605"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>frame_clone</b> (<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa158e8cd0eee094c1d4975df4c59457d4">FrameClass::avmedia</a>, <a class="el" href="classAVMediaFrame.html">AVMediaFrame</a>)</td></tr>
-<tr class="separator:ac5479205c1c2aa3dcbf124ea02cb7605 inherit pub_methods_classAVMediaFrame"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classFrame"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classFrame')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classFrame.html">Frame</a></td></tr>
 <tr class="memitem:ad2e5946cf41d4817e750500acf05d02b inherit pub_methods_classFrame"><td class="memItemLeft" align="right" valign="top"><a id="ad2e5946cf41d4817e750500acf05d02b"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrame.html#ad2e5946cf41d4817e750500acf05d02b">Frame</a> ()</td></tr>
@@ -239,8 +240,12 @@ long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <p>public: AVBitmapFrameNP(); ///&lt; Default ctor virtual ~AVBitmapFrameNP(); ///&lt; Default virtual dtor frame_essentials(FrameClass::avbitmap_np, AVBitmapFrameNP); frame_clone(FrameClass::avbitmap_np, AVBitmapFrameNP); // TODO: think about this!</p>
 <p>public: // redefined virtual virtual std::string <a class="el" href="classAVRGBFrame.html#a56f06ede8897cb8f6f191c7072285f06" title="Dumps internal payload data. ">dumpPayload()</a>; virtual void <a class="el" href="classAVRGBFrame.html#a99e23314f56b39bfc25e1e6fdf5abb55" title="How to print this frame to output stream. ">print(std::ostream&amp; os) const</a>; ///&lt; How to print this frame to output stream virtual void <a class="el" href="classAVBitmapFrame.html#aff0a34fed250bb3c6214f3cac1c7bd14" title="Reset the internal data. ">reset()</a>; ///&lt; Reset the internal data virtual void <a class="el" href="classAVBitmapFrame.html#aeae9e20f7bbe26a9926b6987d91b8423" title="Uses AVBitmapFrame::av_frame width and height and AVBitmapFrame::av_pixel_format to calculate AVBitma...">update()</a>; ///&lt; Uses <a class="el" href="classAVMediaFrame.html#adda0edc926991cdd2cceea52ee897bde" title="The decoded frame. ">AVBitmapFrame::av_frame</a> width and height and <a class="el" href="classAVBitmapFrame.html#a7dac7b382a8f869d42dd2e8c768db9f3" title="From AVCodecContext .. this class implies YUV420P so this is not really required .. ">AVBitmapFrame::av_pixel_format</a> to calculate <a class="el" href="classAVBitmapFrame.html#abf28ea9afbbfed6591ec7f753f161748" title="Calculated bitmap plane dimensions, data sizes, etc. ">AVBitmapFrame::bmpars</a></p>
 <p>public: // helper objects AVPixelFormat av_pixel_format; ///&lt; From AVCodecContext .. this class implies YUV422P so this is not really required .. <a class="el" href="structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. ">BitmapPars</a> bmpars; ///&lt; Reference parameters for corresponding YUV420P frame uint8_t* payload; ///&lt; shortcut to the non-planar data }; Decoded RGB frame in FFMpeg format</p>
-<p>This FrameClass is produced by <a class="el" href="classSwScaleFrameFilter.html" title="Interpolate from YUV bitmap to RGB. ">SwScaleFrameFilter</a> (that performs YUV=&gt;RGB interpolation). This FrameClass is used typically when passing frame data to shared memory</p>
-<p>Copiable/Queable : no </p>
+<ul>
+<li>This FrameClass is produced by <a class="el" href="classSwScaleFrameFilter.html" title="Interpolate from YUV bitmap to RGB. ">SwScaleFrameFilter</a> (that performs YUV=&gt;RGB interpolation). This FrameClass is used typically when passing frame data to shared memory</li>
+<li>Constructor does not reserve data for frames. This is done by classes using this class</li>
+<li>Frames of this class can also be pre-reserved after construction, by using the member <a class="el" href="classAVRGBFrame.html#a267f6d1b3bda3213c0153ab5553d43aa" title="Reserve RGB image with width &amp; height. ">AVRGBFrame::reserve</a></li>
+</ul>
+<p>Copiable/Queable : yes </p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="frame_8h_source.html">frame.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="frame_8cpp.html">frame.cpp</a></li>

@@ -26,7 +26,7 @@
  *  @file    file_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief Test file input
  *
@@ -66,7 +66,7 @@ void test_1() {
   
   sleep_for(2s);
   
-  std::cout << name << "registering stream" << std::endl;
+  std::cout << name << "registering stream " << stream_1 << std::endl;
   // LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info); // Request livethread to write into filter info
   LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &file_out); // Request livethread to write into filter info
   livethread.registerStreamCall(ctx);

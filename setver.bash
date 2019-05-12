@@ -37,12 +37,12 @@ do
   sed -i -r "s/VERSION_PATCH=.*/VERSION_PATCH=$3/g" $f
 done
 
-echo
-echo Updating docs
-echo
-cd docs
-./make_doc.bash
-cd ..
+#echo
+#echo Updating docs
+#echo
+#cd docs
+#./make_doc.bash
+#cd ..
 
 echo "Dont forget to use .."
 echo

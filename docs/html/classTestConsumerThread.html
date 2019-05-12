@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.10.0</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -65,7 +65,7 @@ $(function() {
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classTestConsumerThread-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">TestConsumerThread Class Reference<div class="ingroups"><a class="el" href="group__threading__tag.html">multithreads</a></div></div>  </div>
+<div class="title">TestConsumerThread Class Reference<div class="ingroups"><a class="el" href="group__threading__tag.html">multithreading</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -115,6 +115,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">~Thread</a> ()</td></tr>
 <tr class="memdesc:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor:<b>not</b> virtual.  <a href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">More...</a><br /></td></tr>
 <tr class="separator:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a544545691c206a095aefeafc7b52a408 inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a544545691c206a095aefeafc7b52a408"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a544545691c206a095aefeafc7b52a408">preJoin</a> ()</td></tr>
+<tr class="memdesc:a544545691c206a095aefeafc7b52a408 inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called before the thread is joined. <br /></td></tr>
+<tr class="separator:a544545691c206a095aefeafc7b52a408 inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="af1d76230f621bf4139ee5dd52e23fa8a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#af1d76230f621bf4139ee5dd52e23fa8a">postJoin</a> ()</td></tr>
+<tr class="memdesc:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the thread has been joined. <br /></td></tr>
+<tr class="separator:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20db67a3ec14a198b5444f3214d6155d inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a20db67a3ec14a198b5444f3214d6155d"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a20db67a3ec14a198b5444f3214d6155d">sendSignal</a> (<a class="el" href="structSignalContext.html">SignalContext</a> signal_ctx)</td></tr>
 <tr class="memdesc:a20db67a3ec14a198b5444f3214d6155d inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a signal to the thread. <br /></td></tr>
@@ -177,6 +185,10 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href
 std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a0a58a652291ba8011b4b100077543af1">condition</a></td></tr>
 <tr class="memdesc:a0a58a652291ba8011b4b100077543af1 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Condition variable for the signal queue (triggered when all signals processed). Not necessarily used by all subclasses. <br /></td></tr>
 <tr class="separator:a0a58a652291ba8011b4b100077543af1 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a3e126419b64924b472a2ee2ffa5a4103"></a>
+std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a3e126419b64924b472a2ee2ffa5a4103">loop_mutex</a></td></tr>
+<tr class="memdesc:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protects thread's main execution loop (if necessary) <br /></td></tr>
+<tr class="separator:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6816c44497ea3ddd732ca3322ca1348 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="ab6816c44497ea3ddd732ca3322ca1348"></a>
 std::deque&lt; <a class="el" href="structSignalContext.html">SignalContext</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#ab6816c44497ea3ddd732ca3322ca1348">signal_fifo</a></td></tr>
 <tr class="memdesc:ab6816c44497ea3ddd732ca3322ca1348 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal queue (fifo). Redefine in child classes. <br /></td></tr>

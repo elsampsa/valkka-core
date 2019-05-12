@@ -26,7 +26,7 @@
  *  @file    avfilethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief  A thread sending frames from files
  */ 
@@ -185,6 +185,8 @@ FileStream::FileStream(FileContext &ctx) : ctx(ctx) {
   for(i=0;i<input_context->nb_streams;i++) { // send setup frames describing the file contents
     AVCodecID codec_id          =input_context->streams[i]->codec->codec_id;
     AVMediaType media_type      =input_context->streams[i]->codec->codec_type;
+    
+    setupframe.sub_type         =SetupFrameType::stream_init;
     setupframe.codec_id         =codec_id;
     setupframe.media_type       =media_type;
     setupframe.subsession_index =n;

@@ -25,6 +25,7 @@
 #include "valkkafs.h"
 #include "usbthread.h"
 #include "valkkafsreader.h"
+#include "movement.h"
 
 #include <Python.h>
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
@@ -74,10 +75,6 @@ void ValkkaXInitThreads(void) {
   Status status = XInitThreads();
 }
 
-
-void setLiveOutPacketBuffermaxSize(unsigned i) {
-  OutPacketBuffer::maxSize = i;
-}
   
 %}
 

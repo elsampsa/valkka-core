@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.10.0</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -62,7 +62,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classFileCacheThread-members.html">List of all members</a>  </div>
@@ -70,11 +69,18 @@ $(function() {
 <div class="title">FileCacheThread Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> that caches frames and streams them into output at play speed.  
+ <a href="classFileCacheThread.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="cachestream_8h_source.html">cachestream.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for FileCacheThread:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFileCacheThread__inherit__graph.png" border="0" usemap="#FileCacheThread_inherit__map" alt="Inheritance graph"/></div>
 <map name="FileCacheThread_inherit__map" id="FileCacheThread_inherit__map">
+<area shape="rect" id="node2" href="classAbstractFileThread.html" title="This class uses AbstractFileStream(s) " alt="" coords="5,80,137,107"/>
+<area shape="rect" id="node3" href="classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="40,5,103,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -82,6 +88,20 @@ Collaboration diagram for FileCacheThread:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFileCacheThread__coll__graph.png" border="0" usemap="#FileCacheThread_coll__map" alt="Collaboration graph"/></div>
 <map name="FileCacheThread_coll__map" id="FileCacheThread_coll__map">
+<area shape="rect" id="node2" href="classAbstractFileThread.html" title="This class uses AbstractFileStream(s) " alt="" coords="743,47,875,73"/>
+<area shape="rect" id="node3" href="classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="482,97,545,124"/>
+<area shape="rect" id="node4" href="classFifoFrameFilter.html" title="Passes frames to a FrameFifo. " alt="" coords="458,47,569,73"/>
+<area shape="rect" id="node5" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="230,319,318,345"/>
+<area shape="rect" id="node10" href="classTypeFrameFilter.html" title="Passes through frames of certain type only. " alt="" coords="601,224,719,251"/>
+<area shape="rect" id="node13" href="classCacheFrameFilter.html" title="Passes frames to a FrameCache. " alt="" coords="745,267,872,293"/>
+<area shape="rect" id="node14" href="classForkFrameFilter.html" title="Replicates frame flow to two filters Use this frame filter to create frame filter tree structures..." alt="" coords="456,457,571,484"/>
+<area shape="rect" id="node15" href="classSwitchFrameFilter.html" title="Passes frame to one of the two terminals. " alt="" coords="449,377,577,404"/>
+<area shape="rect" id="node6" href="classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack. " alt="" coords="233,16,315,43"/>
+<area shape="rect" id="node7" href="structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo. " alt="" coords="5,16,132,43"/>
+<area shape="rect" id="node8" href="classSetupFrame.html" title="Setup frame. " alt="" coords="762,317,855,344"/>
+<area shape="rect" id="node9" href="classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="484,327,543,353"/>
+<area shape="rect" id="node11" href="classFrameCache.html" title="FrameCache works like FrameFifo, but frames are not pre&#45;reserved. " alt="" coords="465,148,562,175"/>
+<area shape="rect" id="node12" href="structFrameCacheContext.html" title="FrameCacheContext" alt="" coords="203,148,345,175"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -104,24 +124,70 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a67b9bf4fac8545ca3f2503e924e2e38f"><td class="memItemLeft" align="right" valign="top"><a id="a67b9bf4fac8545ca3f2503e924e2e38f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>sendSignal</b> (<a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a> signal_ctx)</td></tr>
 <tr class="separator:a67b9bf4fac8545ca3f2503e924e2e38f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1106f9fd3f4fde9b62cdcbf463a0bfd9"><td class="memItemLeft" align="right" valign="top"><a id="a1106f9fd3f4fde9b62cdcbf463a0bfd9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a1106f9fd3f4fde9b62cdcbf463a0bfd9">registerStreamCall</a> (<a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a> &amp;ctx)</td></tr>
-<tr class="memdesc:a1106f9fd3f4fde9b62cdcbf463a0bfd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: registers a stream // &lt;pyapi&gt; <br /></td></tr>
-<tr class="separator:a1106f9fd3f4fde9b62cdcbf463a0bfd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac683e36c76857e90bd89ddca2221e454"><td class="memItemLeft" align="right" valign="top"><a id="ac683e36c76857e90bd89ddca2221e454"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#ac683e36c76857e90bd89ddca2221e454">deregisterStreamCall</a> (<a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a> &amp;ctx)</td></tr>
-<tr class="memdesc:ac683e36c76857e90bd89ddca2221e454"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: de-registers a stream // &lt;pyapi&gt; <br /></td></tr>
-<tr class="separator:ac683e36c76857e90bd89ddca2221e454"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a595a2ddb77530707c8a4af9f11983b54"><td class="memItemLeft" align="right" valign="top"><a id="a595a2ddb77530707c8a4af9f11983b54"></a>
-const <a class="el" href="classCacheFrameFilter.html">CacheFrameFilter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFrameFilter</b> ()</td></tr>
-<tr class="separator:a595a2ddb77530707c8a4af9f11983b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7855e3ae402a0c9868f7f9afe004e448"><td class="memItemLeft" align="right" valign="top"><a id="a7855e3ae402a0c9868f7f9afe004e448"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>switchCache</b> ()</td></tr>
+<tr class="separator:a7855e3ae402a0c9868f7f9afe004e448"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa467be45634b90ba2330dd094fc6c450"><td class="memItemLeft" align="right" valign="top"><a id="aa467be45634b90ba2330dd094fc6c450"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>dumpPlayCache</b> ()</td></tr>
+<tr class="separator:aa467be45634b90ba2330dd094fc6c450"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f2f96e900d39cf9099229c19315b97b"><td class="memItemLeft" align="right" valign="top"><a id="a2f2f96e900d39cf9099229c19315b97b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>dumpTmpCache</b> ()</td></tr>
+<tr class="separator:a2f2f96e900d39cf9099229c19315b97b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26a54fc0bda523c0fea2c69f6911cc85"><td class="memItemLeft" align="right" valign="top"><a id="a26a54fc0bda523c0fea2c69f6911cc85"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a26a54fc0bda523c0fea2c69f6911cc85">sendSetupFrames</a> (<a class="el" href="classSetupFrame.html">SetupFrame</a> *f)</td></tr>
+<tr class="memdesc:a26a54fc0bda523c0fea2c69f6911cc85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends <a class="el" href="classSetupFrame.html" title="Setup frame. ">SetupFrame</a> s to all active slots. <br /></td></tr>
+<tr class="separator:a26a54fc0bda523c0fea2c69f6911cc85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1f9e2e21ee0a3c16f8e196e4084acf0"><td class="memItemLeft" align="right" valign="top"><a id="ab1f9e2e21ee0a3c16f8e196e4084acf0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>stopStreams</b> (bool send_state=true)</td></tr>
+<tr class="separator:ab1f9e2e21ee0a3c16f8e196e4084acf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fc4dc5618a7f332342fa6d0610afcdf"><td class="memItemLeft" align="right" valign="top"><a id="a3fc4dc5618a7f332342fa6d0610afcdf"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>playStreams</b> (bool send_state=true)</td></tr>
+<tr class="separator:a3fc4dc5618a7f332342fa6d0610afcdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88fc9cea9b874d4e76d8ada743a1a60c"><td class="memItemLeft" align="right" valign="top"><a id="a88fc9cea9b874d4e76d8ada743a1a60c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a88fc9cea9b874d4e76d8ada743a1a60c">setRefTimeAndStop</a> (bool send_state=true)</td></tr>
+<tr class="memdesc:a88fc9cea9b874d4e76d8ada743a1a60c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set reference time and set state to stop. <br /></td></tr>
+<tr class="separator:a88fc9cea9b874d4e76d8ada743a1a60c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a868ae9f7f047017bf52c181847cdd18d"><td class="memItemLeft" align="right" valign="top"><a id="a868ae9f7f047017bf52c181847cdd18d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a868ae9f7f047017bf52c181847cdd18d">seekStreams</a> (long int mstimestamp, bool clear, bool send_state=true)</td></tr>
+<tr class="memdesc:a868ae9f7f047017bf52c181847cdd18d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets target time. Sets FileCacheThread::next = NULL. <br /></td></tr>
+<tr class="separator:a868ae9f7f047017bf52c181847cdd18d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6a7db76cc611a9773116c6909846b88"><td class="memItemLeft" align="right" valign="top"><a id="aa6a7db76cc611a9773116c6909846b88"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setCallback</b> (void func(long int))</td></tr>
+<tr class="separator:aa6a7db76cc611a9773116c6909846b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9541df7ee3833ddbc44efa7c8193b73"><td class="memItemLeft" align="right" valign="top"><a id="af9541df7ee3833ddbc44efa7c8193b73"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setPyCallback</b> (PyObject *pobj)</td></tr>
+<tr class="separator:af9541df7ee3833ddbc44efa7c8193b73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad04a1de17578748cd45157adc8ea837f"><td class="memItemLeft" align="right" valign="top"><a id="ad04a1de17578748cd45157adc8ea837f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setPyCallback2</b> (PyObject *pobj)</td></tr>
+<tr class="separator:ad04a1de17578748cd45157adc8ea837f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab57eb0392990fdfec800fc478c0ee831"><td class="memItemLeft" align="right" valign="top"><a id="ab57eb0392990fdfec800fc478c0ee831"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>registerStreamCall</b> (<a class="el" href="structFileStreamContext.html">FileStreamContext</a> &amp;ctx)</td></tr>
+<tr class="separator:ab57eb0392990fdfec800fc478c0ee831"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86710fd0b0395fbd6e12f6adb41dfe52"><td class="memItemLeft" align="right" valign="top"><a id="a86710fd0b0395fbd6e12f6adb41dfe52"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>deregisterStreamCall</b> (<a class="el" href="structFileStreamContext.html">FileStreamContext</a> &amp;ctx)</td></tr>
+<tr class="separator:a86710fd0b0395fbd6e12f6adb41dfe52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d8b6284190b2fe569c22f9f36814110"><td class="memItemLeft" align="right" valign="top"><a id="a7d8b6284190b2fe569c22f9f36814110"></a>
+<a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFrameFilter</b> ()</td></tr>
+<tr class="separator:a7d8b6284190b2fe569c22f9f36814110"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87b1ae24dc68d731948d658f8ee8bcb3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a87b1ae24dc68d731948d658f8ee8bcb3">requestStopCall</a> ()</td></tr>
 <tr class="memdesc:a87b1ae24dc68d731948d658f8ee8bcb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: stops the thread.  <a href="#a87b1ae24dc68d731948d658f8ee8bcb3">More...</a><br /></td></tr>
 <tr class="separator:a87b1ae24dc68d731948d658f8ee8bcb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3830c347f0e618941548fa75edb1770f"><td class="memItemLeft" align="right" valign="top"><a id="a3830c347f0e618941548fa75edb1770f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>dumpCache</b> ()</td></tr>
+<tr class="separator:a3830c347f0e618941548fa75edb1770f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2688acc46ca1b0845e290f2d44a12d01"><td class="memItemLeft" align="right" valign="top"><a id="a2688acc46ca1b0845e290f2d44a12d01"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>stopStreamsCall</b> ()</td></tr>
+<tr class="separator:a2688acc46ca1b0845e290f2d44a12d01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac06539d5b7cf436d6d64a1cbd18b7a29"><td class="memItemLeft" align="right" valign="top"><a id="ac06539d5b7cf436d6d64a1cbd18b7a29"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>playStreamsCall</b> ()</td></tr>
+<tr class="separator:ac06539d5b7cf436d6d64a1cbd18b7a29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b40899c0a5d24788137383aead711d1"><td class="memItemLeft" align="right" valign="top"><a id="a7b40899c0a5d24788137383aead711d1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>seekStreamsCall</b> (long int mstimestamp, bool clear=false)</td></tr>
+<tr class="separator:a7b40899c0a5d24788137383aead711d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classAbstractFileThread"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classAbstractFileThread')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classAbstractFileThread.html">AbstractFileThread</a></td></tr>
-<tr class="memitem:a60670ee5d88eea05086482db1d7f24ad inherit pub_methods_classAbstractFileThread"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAbstractFileThread.html#a60670ee5d88eea05086482db1d7f24ad">AbstractFileThread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>)</td></tr>
-<tr class="memdesc:a60670ee5d88eea05086482db1d7f24ad inherit pub_methods_classAbstractFileThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classAbstractFileThread.html#a60670ee5d88eea05086482db1d7f24ad">More...</a><br /></td></tr>
-<tr class="separator:a60670ee5d88eea05086482db1d7f24ad inherit pub_methods_classAbstractFileThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a146e9ad6658694692f64080a95085e5b inherit pub_methods_classAbstractFileThread"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAbstractFileThread.html#a146e9ad6658694692f64080a95085e5b">AbstractFileThread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, <a class="el" href="structFrameFifoContext.html">FrameFifoContext</a> fifo_ctx=<a class="el" href="structFrameFifoContext.html">FrameFifoContext</a>(10))</td></tr>
+<tr class="memdesc:a146e9ad6658694692f64080a95085e5b inherit pub_methods_classAbstractFileThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classAbstractFileThread.html#a146e9ad6658694692f64080a95085e5b">More...</a><br /></td></tr>
+<tr class="separator:a146e9ad6658694692f64080a95085e5b inherit pub_methods_classAbstractFileThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:a893a5e029b5111961f7501d2edd65ebe inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a893a5e029b5111961f7501d2edd65ebe">Thread</a> (const char *<a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>)</td></tr>
 <tr class="memdesc:a893a5e029b5111961f7501d2edd65ebe inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classThread.html#a893a5e029b5111961f7501d2edd65ebe">More...</a><br /></td></tr>
@@ -129,6 +195,14 @@ const <a class="el" href="classCacheFrameFilter.html">CacheFrameFilter</a> &amp;
 <tr class="memitem:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">~Thread</a> ()</td></tr>
 <tr class="memdesc:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor:<b>not</b> virtual.  <a href="classThread.html#a37d9edd3a1a776cbc27dedff949c9726">More...</a><br /></td></tr>
 <tr class="separator:a37d9edd3a1a776cbc27dedff949c9726 inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a544545691c206a095aefeafc7b52a408 inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a544545691c206a095aefeafc7b52a408"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a544545691c206a095aefeafc7b52a408">preJoin</a> ()</td></tr>
+<tr class="memdesc:a544545691c206a095aefeafc7b52a408 inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called before the thread is joined. <br /></td></tr>
+<tr class="separator:a544545691c206a095aefeafc7b52a408 inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="af1d76230f621bf4139ee5dd52e23fa8a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#af1d76230f621bf4139ee5dd52e23fa8a">postJoin</a> ()</td></tr>
+<tr class="memdesc:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the thread has been joined. <br /></td></tr>
+<tr class="separator:af1d76230f621bf4139ee5dd52e23fa8a inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20db67a3ec14a198b5444f3214d6155d inherit pub_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a20db67a3ec14a198b5444f3214d6155d"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a20db67a3ec14a198b5444f3214d6155d">sendSignal</a> (<a class="el" href="structSignalContext.html">SignalContext</a> signal_ctx)</td></tr>
 <tr class="memdesc:a20db67a3ec14a198b5444f3214d6155d inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a signal to the thread. <br /></td></tr>
@@ -151,30 +225,91 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memdesc:a0ecff37449db3af69888738f73c8fd04 inherit pub_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">API method: waits until the thread is joined.  <a href="classThread.html#a0ecff37449db3af69888738f73c8fd04">More...</a><br /></td></tr>
 <tr class="separator:a0ecff37449db3af69888738f73c8fd04 inherit pub_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:aeff993fa2cbe2e5e60b3147c5000019f"><td class="memItemLeft" align="right" valign="top"><a id="aeff993fa2cbe2e5e60b3147c5000019f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>handleSignals</b> ()</td></tr>
-<tr class="separator:aeff993fa2cbe2e5e60b3147c5000019f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
-<tr class="memitem:adfeea499c4cc16c4c70eb8449bbee548 inherit pro_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="adfeea499c4cc16c4c70eb8449bbee548"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#adfeea499c4cc16c4c70eb8449bbee548">mainRun</a> ()</td></tr>
-<tr class="memdesc:adfeea499c4cc16c4c70eb8449bbee548 inherit pro_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does the preRun, run, postRun sequence. <br /></td></tr>
-<tr class="separator:adfeea499c4cc16c4c70eb8449bbee548 inherit pro_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4428ec86c8bc7da14b558f25fb723ce0 inherit pro_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a4428ec86c8bc7da14b558f25fb723ce0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a4428ec86c8bc7da14b558f25fb723ce0">closeThread</a> ()</td></tr>
-<tr class="memdesc:a4428ec86c8bc7da14b558f25fb723ce0 inherit pro_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set <a class="el" href="classThread.html#a9e604c94f8ee52771ffbc1dac03b93ad" title="true if thread has been started ">Thread::has_thread</a> to false. <br /></td></tr>
-<tr class="separator:a4428ec86c8bc7da14b558f25fb723ce0 inherit pro_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:aa97211188e62fbcbbab9cd9d86782d4d"><td class="memItemLeft" align="right" valign="top"><a id="aa97211188e62fbcbbab9cd9d86782d4d"></a>
-<a class="el" href="classCacheStream.html">CacheStream</a>&#160;</td><td class="memItemRight" valign="bottom"><b>stream</b></td></tr>
-<tr class="separator:aa97211188e62fbcbbab9cd9d86782d4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60dd0528413d69a34251fec441a6b3f2"><td class="memItemLeft" align="right" valign="top"><a id="a60dd0528413d69a34251fec441a6b3f2"></a>
+<a class="el" href="classForkFrameFilter.html">ForkFrameFilter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a60dd0528413d69a34251fec441a6b3f2">fork</a></td></tr>
+<tr class="memdesc:a60dd0528413d69a34251fec441a6b3f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write incoming frames here. <br /></td></tr>
+<tr class="separator:a60dd0528413d69a34251fec441a6b3f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a836235bc108e2b79ca8a63c15fb172dc"><td class="memItemLeft" align="right" valign="top"><a id="a836235bc108e2b79ca8a63c15fb172dc"></a>
+<a class="el" href="classTypeFrameFilter.html">TypeFrameFilter</a>&#160;</td><td class="memItemRight" valign="bottom"><b>typefilter</b></td></tr>
+<tr class="separator:a836235bc108e2b79ca8a63c15fb172dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78fe254b5e8215f2751e67642492b4a3"><td class="memItemLeft" align="right" valign="top"><a id="a78fe254b5e8215f2751e67642492b4a3"></a>
+<a class="el" href="classSwitchFrameFilter.html">SwitchFrameFilter</a>&#160;</td><td class="memItemRight" valign="bottom"><b>switchfilter</b></td></tr>
+<tr class="separator:a78fe254b5e8215f2751e67642492b4a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9825a26a4bb30e744a8addc8a38c6c7c"><td class="memItemLeft" align="right" valign="top"><a id="a9825a26a4bb30e744a8addc8a38c6c7c"></a>
+<a class="el" href="classCacheFrameFilter.html">CacheFrameFilter</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cache_filter_1</b></td></tr>
+<tr class="separator:a9825a26a4bb30e744a8addc8a38c6c7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfc66944ecd0b76aa90c37b0245ea55f"><td class="memItemLeft" align="right" valign="top"><a id="acfc66944ecd0b76aa90c37b0245ea55f"></a>
+<a class="el" href="classCacheFrameFilter.html">CacheFrameFilter</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cache_filter_2</b></td></tr>
+<tr class="separator:acfc66944ecd0b76aa90c37b0245ea55f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7a890a14dcc4746f3d8533f5529d975"><td class="memItemLeft" align="right" valign="top"><a id="ad7a890a14dcc4746f3d8533f5529d975"></a>
+<a class="el" href="classFrameCache.html">FrameCache</a>&#160;</td><td class="memItemRight" valign="bottom"><b>frame_cache_1</b></td></tr>
+<tr class="separator:ad7a890a14dcc4746f3d8533f5529d975"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca235bdbd39b3fa9def2f7ef14c070bd"><td class="memItemLeft" align="right" valign="top"><a id="aca235bdbd39b3fa9def2f7ef14c070bd"></a>
+<a class="el" href="classFrameCache.html">FrameCache</a>&#160;</td><td class="memItemRight" valign="bottom"><b>frame_cache_2</b></td></tr>
+<tr class="separator:aca235bdbd39b3fa9def2f7ef14c070bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8724a68e4b40f59aa58edb3f068680ba"><td class="memItemLeft" align="right" valign="top"><a id="a8724a68e4b40f59aa58edb3f068680ba"></a>
+<a class="el" href="classFrameCache.html">FrameCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a8724a68e4b40f59aa58edb3f068680ba">play_cache</a></td></tr>
+<tr class="memdesc:a8724a68e4b40f59aa58edb3f068680ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points to the current play cache (default frame_cache_2) <br /></td></tr>
+<tr class="separator:a8724a68e4b40f59aa58edb3f068680ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90dce49573ef4e60546635118d532e9e"><td class="memItemLeft" align="right" valign="top"><a id="a90dce49573ef4e60546635118d532e9e"></a>
+<a class="el" href="classFrameCache.html">FrameCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a90dce49573ef4e60546635118d532e9e">tmp_cache</a></td></tr>
+<tr class="memdesc:a90dce49573ef4e60546635118d532e9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points to current cache receiving frames. <br /></td></tr>
+<tr class="separator:a90dce49573ef4e60546635118d532e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cc266f1447c99e30995afe9d6d5992a"><td class="memItemLeft" align="right" valign="top"><a id="a5cc266f1447c99e30995afe9d6d5992a"></a>
+void(*&#160;</td><td class="memItemRight" valign="bottom"><b>callback</b> )(long int mstimestamp)</td></tr>
+<tr class="separator:a5cc266f1447c99e30995afe9d6d5992a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accfc96092a9d55b4b320f5375e4368ab"><td class="memItemLeft" align="right" valign="top"><a id="accfc96092a9d55b4b320f5375e4368ab"></a>
+PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#accfc96092a9d55b4b320f5375e4368ab">pyfunc</a></td></tr>
+<tr class="memdesc:accfc96092a9d55b4b320f5375e4368ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Python callback that emits current time. <br /></td></tr>
+<tr class="separator:accfc96092a9d55b4b320f5375e4368ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5538cfa239c10bf128410434adc0d3e"><td class="memItemLeft" align="right" valign="top"><a id="aa5538cfa239c10bf128410434adc0d3e"></a>
+PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#aa5538cfa239c10bf128410434adc0d3e">pyfunc2</a></td></tr>
+<tr class="memdesc:aa5538cfa239c10bf128410434adc0d3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Python callback that emits current loaded time limits. <br /></td></tr>
+<tr class="separator:aa5538cfa239c10bf128410434adc0d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a996269b3f6ffe6cb09a5afd224eada7b"><td class="memItemLeft" align="right" valign="top"><a id="a996269b3f6ffe6cb09a5afd224eada7b"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a996269b3f6ffe6cb09a5afd224eada7b">target_mstimestamp_</a></td></tr>
+<tr class="memdesc:a996269b3f6ffe6cb09a5afd224eada7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">We should be at this time instant (streamtime) <br /></td></tr>
+<tr class="separator:a996269b3f6ffe6cb09a5afd224eada7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96de6568b38cea57f55fcc4200f29676"><td class="memItemLeft" align="right" valign="top"><a id="a96de6568b38cea57f55fcc4200f29676"></a>
+<a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>next</b></td></tr>
+<tr class="separator:a96de6568b38cea57f55fcc4200f29676"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55d43033c7b5089d14b0d152ccb697cb"><td class="memItemLeft" align="right" valign="top"><a id="a55d43033c7b5089d14b0d152ccb697cb"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a55d43033c7b5089d14b0d152ccb697cb">reftime</a></td></tr>
+<tr class="memdesc:a55d43033c7b5089d14b0d152ccb697cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">walltime = frametime_ + reftime <br /></td></tr>
+<tr class="separator:a55d43033c7b5089d14b0d152ccb697cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74409e2a59a56cc3a591e6502876fc15"><td class="memItemLeft" align="right" valign="top"><a id="a74409e2a59a56cc3a591e6502876fc15"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><b>walltime</b></td></tr>
+<tr class="separator:a74409e2a59a56cc3a591e6502876fc15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ae9cf9c16e0346d88a5fac0a756409e"><td class="memItemLeft" align="right" valign="top"><a id="a8ae9cf9c16e0346d88a5fac0a756409e"></a>
+<a class="el" href="group__file__tag.html#gacb30a600a83bdef34fc93f9df11b3fae">AbstractFileState</a>&#160;</td><td class="memItemRight" valign="bottom"><b>state</b></td></tr>
+<tr class="separator:a8ae9cf9c16e0346d88a5fac0a756409e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ae63dbecf1ef64a63f62ea590795283"><td class="memItemLeft" align="right" valign="top"><a id="a3ae63dbecf1ef64a63f62ea590795283"></a>
+<a class="el" href="classSetupFrame.html">SetupFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a3ae63dbecf1ef64a63f62ea590795283">state_setupframe</a></td></tr>
+<tr class="memdesc:a3ae63dbecf1ef64a63f62ea590795283"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSetupFrame.html" title="Setup frame. ">SetupFrame</a> for sending the stream state (seek, play, etc.) <br /></td></tr>
+<tr class="separator:a3ae63dbecf1ef64a63f62ea590795283"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c0f30c52b9b7b1333020a58f99c573e"><td class="memItemLeft" align="right" valign="top"><a id="a8c0f30c52b9b7b1333020a58f99c573e"></a>
 std::deque&lt; <a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a8c0f30c52b9b7b1333020a58f99c573e">signal_fifo</a></td></tr>
 <tr class="memdesc:a8c0f30c52b9b7b1333020a58f99c573e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redefinition of signal fifo. <br /></td></tr>
 <tr class="separator:a8c0f30c52b9b7b1333020a58f99c573e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadae42836bc9abc20ea3cd713e7077d0"><td class="memItemLeft" align="right" valign="top"><a id="aadae42836bc9abc20ea3cd713e7077d0"></a>
+std::vector&lt; <a class="el" href="classFrameFilter.html">FrameFilter</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#aadae42836bc9abc20ea3cd713e7077d0">slots_</a></td></tr>
+<tr class="memdesc:aadae42836bc9abc20ea3cd713e7077d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot number =&gt; output framefilter mapping. <br /></td></tr>
+<tr class="separator:aadae42836bc9abc20ea3cd713e7077d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd89047ca32d8aa9b1c0af753f8860e4"><td class="memItemLeft" align="right" valign="top"><a id="abd89047ca32d8aa9b1c0af753f8860e4"></a>
+std::vector&lt; std::vector&lt; <a class="el" href="classSetupFrame.html">SetupFrame</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#abd89047ca32d8aa9b1c0af753f8860e4">setup_frames</a></td></tr>
+<tr class="memdesc:abd89047ca32d8aa9b1c0af753f8860e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot number, subsession_index =&gt; <a class="el" href="classSetupFrame.html" title="Setup frame. ">SetupFrame</a> mapping. Book-keeping of SetupFrames. <br /></td></tr>
+<tr class="separator:abd89047ca32d8aa9b1c0af753f8860e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classAbstractFileThread"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classAbstractFileThread')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classAbstractFileThread.html">AbstractFileThread</a></td></tr>
+<tr class="memitem:a0ab2e3ca22c1cabcf1aeb1bc644988ac inherit pro_attribs_classAbstractFileThread"><td class="memItemLeft" align="right" valign="top"><a id="a0ab2e3ca22c1cabcf1aeb1bc644988ac"></a>
+<a class="el" href="classFrameFifo.html">FrameFifo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAbstractFileThread.html#a0ab2e3ca22c1cabcf1aeb1bc644988ac">infifo</a></td></tr>
+<tr class="memdesc:a0ab2e3ca22c1cabcf1aeb1bc644988ac inherit pro_attribs_classAbstractFileThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incoming frames are read from here. <br /></td></tr>
+<tr class="separator:a0ab2e3ca22c1cabcf1aeb1bc644988ac inherit pro_attribs_classAbstractFileThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf7c9658601eb93ebbb5406fea623275 inherit pro_attribs_classAbstractFileThread"><td class="memItemLeft" align="right" valign="top"><a id="abf7c9658601eb93ebbb5406fea623275"></a>
+<a class="el" href="classFifoFrameFilter.html">FifoFrameFilter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAbstractFileThread.html#abf7c9658601eb93ebbb5406fea623275">infilter</a></td></tr>
+<tr class="memdesc:abf7c9658601eb93ebbb5406fea623275 inherit pro_attribs_classAbstractFileThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write incoming frames here. <br /></td></tr>
+<tr class="separator:abf7c9658601eb93ebbb5406fea623275 inherit pro_attribs_classAbstractFileThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classThread')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:a2e64f4b9dab400b7b06f2c73da4e465a inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a2e64f4b9dab400b7b06f2c73da4e465a"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a></td></tr>
@@ -206,6 +341,10 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href
 std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a0a58a652291ba8011b4b100077543af1">condition</a></td></tr>
 <tr class="memdesc:a0a58a652291ba8011b4b100077543af1 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Condition variable for the signal queue (triggered when all signals processed). Not necessarily used by all subclasses. <br /></td></tr>
 <tr class="separator:a0a58a652291ba8011b4b100077543af1 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a3e126419b64924b472a2ee2ffa5a4103"></a>
+std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a3e126419b64924b472a2ee2ffa5a4103">loop_mutex</a></td></tr>
+<tr class="memdesc:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protects thread's main execution loop (if necessary) <br /></td></tr>
+<tr class="separator:a3e126419b64924b472a2ee2ffa5a4103 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6816c44497ea3ddd732ca3322ca1348 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="ab6816c44497ea3ddd732ca3322ca1348"></a>
 std::deque&lt; <a class="el" href="structSignalContext.html">SignalContext</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#ab6816c44497ea3ddd732ca3322ca1348">signal_fifo</a></td></tr>
 <tr class="memdesc:ab6816c44497ea3ddd732ca3322ca1348 inherit pro_attribs_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal queue (fifo). Redefine in child classes. <br /></td></tr>
@@ -230,21 +369,56 @@ pthread_t&#160;</td><td class="memItemRight" valign="bottom"><b>internal_thread<
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a33ae05ecceaaa37863fceed2b841e1ad"><td class="memItemLeft" align="right" valign="top"><a id="a33ae05ecceaaa37863fceed2b841e1ad"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>registerStream</b> (<a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a> &amp;ctx)</td></tr>
-<tr class="separator:a33ae05ecceaaa37863fceed2b841e1ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c9cd3eaab568c9c0d34ef6c2e1a3b0f"><td class="memItemLeft" align="right" valign="top"><a id="a8c9cd3eaab568c9c0d34ef6c2e1a3b0f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>deregisterStream</b> (<a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a> &amp;ctx)</td></tr>
-<tr class="separator:a8c9cd3eaab568c9c0d34ef6c2e1a3b0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f37316e4e914356bf621a23e94ce1b6"><td class="memItemLeft" align="right" valign="top"><a id="a3f37316e4e914356bf621a23e94ce1b6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>handleSignal</b> (<a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a> &amp;signal_ctx)</td></tr>
+<tr class="separator:a3f37316e4e914356bf621a23e94ce1b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeff993fa2cbe2e5e60b3147c5000019f"><td class="memItemLeft" align="right" valign="top"><a id="aeff993fa2cbe2e5e60b3147c5000019f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>handleSignals</b> ()</td></tr>
+<tr class="separator:aeff993fa2cbe2e5e60b3147c5000019f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae492f6f50b4adafd20202700ed4d5d5d"><td class="memItemLeft" align="right" valign="top"><a id="ae492f6f50b4adafd20202700ed4d5d5d"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>safeGetSlot</b> (SlotNumber slot, <a class="el" href="classFrameFilter.html">FrameFilter</a> *&amp;ff)</td></tr>
+<tr class="separator:ae492f6f50b4adafd20202700ed4d5d5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64858c259b381116e653e52a538a6340"><td class="memItemLeft" align="right" valign="top"><a id="a64858c259b381116e653e52a538a6340"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>registerStream</b> (<a class="el" href="structFileStreamContext.html">FileStreamContext</a> &amp;ctx)</td></tr>
+<tr class="separator:a64858c259b381116e653e52a538a6340"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f490b7788be95f3527c00e0facca7d8"><td class="memItemLeft" align="right" valign="top"><a id="a6f490b7788be95f3527c00e0facca7d8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>deregisterStream</b> (<a class="el" href="structFileStreamContext.html">FileStreamContext</a> &amp;ctx)</td></tr>
+<tr class="separator:a6f490b7788be95f3527c00e0facca7d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
+<tr class="memitem:adfeea499c4cc16c4c70eb8449bbee548 inherit pro_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="adfeea499c4cc16c4c70eb8449bbee548"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#adfeea499c4cc16c4c70eb8449bbee548">mainRun</a> ()</td></tr>
+<tr class="memdesc:adfeea499c4cc16c4c70eb8449bbee548 inherit pro_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does the preRun, run, postRun sequence. <br /></td></tr>
+<tr class="separator:adfeea499c4cc16c4c70eb8449bbee548 inherit pro_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4428ec86c8bc7da14b558f25fb723ce0 inherit pro_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a4428ec86c8bc7da14b558f25fb723ce0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThread.html#a4428ec86c8bc7da14b558f25fb723ce0">closeThread</a> ()</td></tr>
+<tr class="memdesc:a4428ec86c8bc7da14b558f25fb723ce0 inherit pro_methods_classThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set <a class="el" href="classThread.html#a9e604c94f8ee52771ffbc1dac03b93ad" title="true if thread has been started ">Thread::has_thread</a> to false. <br /></td></tr>
+<tr class="separator:a4428ec86c8bc7da14b558f25fb723ce0 inherit pro_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_static_methods_classThread"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classThread')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classThread.html">Thread</a></td></tr>
 <tr class="memitem:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memItemLeft" align="right" valign="top"><a id="ad9d3cca144a41f08e791b451838a51fc"></a>
 static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b> (void *p)</td></tr>
 <tr class="separator:ad9d3cca144a41f08e791b451838a51fc inherit pro_static_methods_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="classThread.html" title="A class for multithreading with a signaling system. ">Thread</a> that caches frames and streams them into output at play speed. </p>
+<ul>
+<li>Has two FrameCaches: other one is used to stream, while other one is caching the incoming frames</li>
+<li>This framefilter chain is typically driven by another thread (<a class="el" href="classValkkaFSReaderThread.html" title="ValkkaFS reader thread. ">ValkkaFSReaderThread</a>)</li>
+</ul>
+<pre class="fragment">* 
+*                                                       +----&gt; FrameCache
+*                                                       |
+*                           +----&gt; SwitchFrameFilter ---+                This part of the framefilter chain is typically 
+*                           |                           |                driven by another thread (ValkkaFSReaderThread)
+*                           |                           +----&gt; FrameCache
+*  ---&gt; ForkFrameFilter ----+
+*                           |
+*                           |
+*                           +----&gt; ClassFrameFilter (MarkerFrame) ---&gt; FileCacheThread event loop
+* 
+* </pre> </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a87b1ae24dc68d731948d658f8ee8bcb3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a87b1ae24dc68d731948d658f8ee8bcb3">&#9670;&nbsp;</a></span>requestStopCall()</h2>
 

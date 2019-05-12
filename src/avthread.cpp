@@ -26,7 +26,7 @@
  *  @file    avthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  @brief   FFmpeg decoding thread
  */ 
 
@@ -34,7 +34,7 @@
 #include "logging.h"
 
 
-AVThread::AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) : Thread(name), outfilter(outfilter), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), is_decoding(false), mstimetolerance(0) {
+AVThread::AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) : Thread(name), outfilter(outfilter), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), is_decoding(false), mstimetolerance(0), state(AbstractFileState::none), n_threads(1) {
     avthreadlogger.log(LogLevel::debug) << "AVThread : constructor : N_MAX_DECODERS ="<<int(N_MAX_DECODERS)<<std::endl;
     decoders.resize(int(N_MAX_DECODERS),NULL);
 }
@@ -58,9 +58,9 @@ AVThread::~AVThread() {
 void AVThread::run() {
     bool ok;
     bool got_frame;
-    unsigned short subsession_index;
+    int subsession_index;
     Frame* f;
-    Decoder* decoder; // alias
+    Decoder* decoder = NULL; // alias
 
     long int dt=0;
     long int mstime, oldmstime;
@@ -68,6 +68,8 @@ void AVThread::run() {
     mstime = getCurrentMsTimestamp();
     oldmstime = mstime;
     loop=true;
+    
+    int n_decoders = int(decoders.size()); // std::size_t to int
     
     while(loop) {
         f=infifo.read(Timeout::avthread);
@@ -84,54 +86,87 @@ void AVThread::run() {
             // info frame    : init decoder
             // regular frame : make a copy
             
-            if (subsession_index>=decoders.size()) { // got frame: subsession_index too big
-                avthreadlogger.log(LogLevel::fatal) << "AVThread: "<< this->name <<" : run : decoder slot overlow : "<<subsession_index<<"/"<<decoders.size()<< std::endl; // we can only have that many decoder for one stream
+            if (subsession_index >= n_decoders) { // got frame: subsession_index too big
+                avthreadlogger.log(LogLevel::fatal) << "AVThread: "<< this->name <<" : run : decoder slot overlow : "<<subsession_index<<"/"<<n_decoders<< std::endl; // we can only have that many decoder for one stream
                 infifo.recycle(f); // return frame to the stack - never forget this!
             } // got frame: subsession_index too big
             
-            else if (f->getFrameClass()==FrameClass::setup) { // got frame: DECODER INIT
-                
-                if (decoders[subsession_index]!=NULL) { // slot is occupied
-                    avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : decoder reinit " << std::endl;
-                    delete decoders[subsession_index];
-                    decoders[subsession_index]=NULL;
-                }
-                
-                // register a new decoder
+            else if (f->getFrameClass()==FrameClass::setup) { // got frame : SETUP
                 SetupFrame *setupframe = static_cast<SetupFrame*>(f);
-                avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : registering decoder for subsession " <<subsession_index<< std::endl;
                 
-                if (setupframe->media_type==AVMEDIA_TYPE_AUDIO) { // AUDIO
-                    
-                    switch (setupframe->codec_id) { // switch: audio codecs
-                        case AV_CODEC_ID_PCM_MULAW:
-                            decoders[subsession_index]=new DummyDecoder();
-                            break;
-                        default:
-                            break;
-                            
-                    } // switch: audio codecs
-                } // AUDIO
-                else if (setupframe->media_type==AVMEDIA_TYPE_VIDEO) { // VIDEO
-                    
-                    switch (setupframe->codec_id) { // switch: video codecs
-                        case AV_CODEC_ID_H264:
-                            decoders[subsession_index]=new VideoDecoder(AV_CODEC_ID_H264);
-                            break;
-                        default:
-                            break;
-                            
-                    } // switch: video codecs
-                    
-                } // VIDEO
-                else { // UNKNOW MEDIA TYPE
-                    decoders[subsession_index]=new DummyDecoder();
-                }
+                // avthreadlogger.log(LogLevel::debug) << "AVThread: " << name << " got SetupFrame: " << *setupframe << std::endl;
                 
+                if (setupframe->sub_type == SetupFrameType::stream_init) { // SETUP: STREAM INIT
+                
+                    if (decoders[subsession_index]!=NULL) { // slot is occupied
+                        avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : decoder reinit " << std::endl;
+                        delete decoders[subsession_index];
+                        decoders[subsession_index]=NULL;
+                    }
+                    
+                    // register a new decoder
+                    avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : registering decoder for subsession " <<subsession_index<< std::endl;
+                    
+                    if (setupframe->media_type==AVMEDIA_TYPE_AUDIO) { // AUDIO
+                        
+                        switch (setupframe->codec_id) { // switch: audio codecs
+                            case AV_CODEC_ID_PCM_MULAW:
+                                decoders[subsession_index]=new DummyDecoder();
+                                break;
+                            default:
+                                break;
+                                
+                        } // switch: audio codecs
+                    } // AUDIO
+                    else if (setupframe->media_type==AVMEDIA_TYPE_VIDEO) { // VIDEO
+                        
+                        switch (setupframe->codec_id) { // switch: video codecs
+                            case AV_CODEC_ID_H264:
+                                decoders[subsession_index]=new VideoDecoder(AV_CODEC_ID_H264, n_threads = this->n_threads);
+                                break;
+                            default:
+                                break;
+                                
+                        } // switch: video codecs
+                        
+                    } // VIDEO
+                    else { // UNKNOW MEDIA TYPE
+                        decoders[subsession_index]=new DummyDecoder();
+                    }
+                } // SETUP STREAM INIT
+                
+                else if (setupframe->sub_type == SetupFrameType::stream_state) { // SETUP STREAM STATE
+                    
+                    // std::cout << "AVThread: setupframe: stream_state: " << *f << std::endl;
+                    
+                    outfilter.run(f); // pass the setupframe downstream (they'll go all the way to OpenGLThread)
+                    if (setupframe->stream_state == AbstractFileState::seek) {
+                        // go into seek state .. don't forward frames
+                        state = AbstractFileState::seek;
+                        avthreadlogger.log(LogLevel::debug) << "AVThread: " << name << " setupframe: seek mode " << *f << std::endl;
+                    
+                    }
+                    else if (setupframe->stream_state == AbstractFileState::play) {
+                        state = AbstractFileState::play;
+                    }
+                    else if (setupframe->stream_state == AbstractFileState::stop) { // typically, marks end of seek
+                        avthreadlogger.log(LogLevel::debug) << "AVThread: " << name << " setupframe: stop mode " << *f << std::endl;
+                        state = AbstractFileState::stop;
+                        // during seek, frames, starting from the latest I-frame to the required frame, are decoded in a sprint
+                        // because of this, the frames typically arrive late to the final destination (say, OpenGLThread)
+                        // so we take the last decoded frame and send it again with a corrected timestamp (current time)
+                        if (decoder and decoder->hasFrame()) {
+                            Frame *tmpf = decoder->output();
+                            tmpf->mstimestamp = getCurrentMsTimestamp();
+                            avthreadlogger.log(LogLevel::debug) << "AVThread: " << name << " resend: " << *((AVMediaFrame*)tmpf) << std::endl;
+                            outfilter.run(tmpf);
+                        }
+                    }
+                    else {
+                    }
+                } // SETUP STREAM STATE
                 infifo.recycle(f); // return frame to the stack - never forget this!
-                
-                
-            } // got frame: DECODER INIT
+            } // got frame : SETUP
             
             else if (decoders[subsession_index]==NULL) { // woops, no decoder registered yet..
                 avthreadlogger.log(LogLevel::debug) << "AVThread: "<< this->name <<" : run : no decoder registered for stream " << subsession_index << std::endl;
@@ -170,12 +205,18 @@ void AVThread::run() {
                                 outfilter.run(decoder->output()); // returns a reference to a decoded frame
                             }
                             else {
-                                avthreadlogger.log(LogLevel::debug) << "AVThread: not sending late frame " << *(decoder->output()) << std::endl;
+                                avthreadlogger.log(LogLevel::debug) << "AVThread: " << name << " : not sending late frame " << *(decoder->output()) << std::endl;
                             }
                         }
                         else { // no time tolerance defined
                             //outfilter.run(&(decoder->out_frame));
-                            outfilter.run(decoder->output()); // return a reference to a decoded frame
+                            if (state != AbstractFileState::seek) { // frames during seek are discarded
+                                outfilter.run(decoder->output()); // return a reference to a decoded frame
+                            }
+                            else {
+                                avthreadlogger.log(LogLevel::debug) << "AVThread: seek: " << name << " scrapping frame: " << *(decoder->output()) << std::endl;
+                            }
+                            
                             #ifdef PROFILE_TIMING
                             dt=(getCurrentMsTimestamp()-decoder->getMsTimestamp());
                             // std::cout << "[PROFILE_TIMING] AVThread: " << this->name <<" run: decoder sending frame at " << dt << " ms" << std::endl;
@@ -284,6 +325,11 @@ void AVThread::handleSignals() {
 }
 
 // API
+
+
+void AVThread::setNumberOfThreads(int n_threads) {
+    this->n_threads = n_threads;
+}
 
 void AVThread::decodingOnCall() {
     AVSignalContext signal_ctx;

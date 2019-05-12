@@ -26,7 +26,7 @@
  *  @file    filestream.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief 
  */ 
@@ -189,7 +189,7 @@ long int AbstractFileStream::pullNextFrame() {
 }
 
 
-AbstractFileThread::AbstractFileThread(const char *name) : Thread(name) {
+AbstractFileThread::AbstractFileThread(const char *name, FrameFifoContext fifo_ctx) : Thread(name), infifo(name,fifo_ctx), infilter(name,&infifo) {
 }
 
 AbstractFileThread::~AbstractFileThread() { // TODO : a model method

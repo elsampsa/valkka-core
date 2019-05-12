@@ -59,3 +59,4 @@ ppa_checklist.txt
 paska
 python/valkka/core/*.so.*
 schemes/
+log.txt

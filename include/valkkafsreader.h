@@ -28,7 +28,7 @@
  *  @file    valkkafsreader.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief
  */ 
@@ -38,24 +38,26 @@
 #include "framefifo.h"
 #include "framefilter.h"
 #include "valkkafs.h"
+#include "rawrite.h"
 
 /** ValkkaFS reader thread
  * 
- * - Reads frames from a ValkkaFS device file and writes them to output framefilter
+ * - Reads frames from a ValkkaFS device file and writes them (one block at a time) to output framefilter
  * - Frames are requested on per-block basis
  * 
  */
 class ValkkaFSReaderThread : public Thread {                                                // <pyapi>
 
 public:                                                                                     // <pyapi>
-    ValkkaFSReaderThread(const char *name, ValkkaFS &valkkafs, FrameFilter &outfilter, FrameFifoContext fifo_ctx=FrameFifoContext(10));     // <pyapi>
+    ValkkaFSReaderThread(const char *name, ValkkaFS &valkkafs, FrameFilter &outfilter, FrameFifoContext fifo_ctx=FrameFifoContext(10), bool o_direct = false);     // <pyapi>
     ~ValkkaFSReaderThread();                                                                // <pyapi>
 
 protected:
     ValkkaFS                        &valkkafs;
     FrameFilter                     &outfilter;
     std::map<IdNumber, SlotNumber>  id_to_slot;
-    std::fstream                    filestream;
+    // std::fstream                    filestream;
+    RawReader                       raw_reader;
     
 protected: // frame input
     FrameFifo               infifo;           ///< Incoming frames are read from here

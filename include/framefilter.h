@@ -28,7 +28,7 @@
  *  @file    framefilter.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief   Definition of FrameFilter and derived classes for various purposes
  */ 
@@ -363,6 +363,52 @@ public:                     // <pyapi>
 };                                                                   // <pyapi>
 
 
+/** Passes frame to one of the two terminals
+ * 
+ * 
+ */
+class SwitchFrameFilter : public FrameFilter {                                                // <pyapi>
+    
+public:                                                                                       // <pyapi>
+    SwitchFrameFilter(const char* name, FrameFilter* next1=NULL, FrameFilter* next2=NULL);    // <pyapi>
+    
+protected:
+    FrameFilter* next1;
+    FrameFilter* next2;
+    
+protected:
+    int         index;
+    std::mutex  mutex;
+    
+protected:
+    void run(Frame* frame);
+    void go(Frame* frame);
+    
+public:
+    void set1();            // <pyapi>
+    void set2();            // <pyapi>
+};                          // <pyapi>
+
+/** Passes through frames of certain type only
+ * 
+ * - Not part of the Python API
+ * 
+ */
+class TypeFrameFilter : public FrameFilter {                                                
+    
+public:                                                                                     
+    TypeFrameFilter(const char* name, FrameClass frameclass, FrameFilter* next=NULL);       
+    
+protected:
+    FrameClass  frameclass;
+    
+protected:
+    void go(Frame* frame);
+    void run(Frame* frame);
+};                                                                                      
+
+
+
 /** Caches SetupFrame s
  * 
  * Like GateFrameFilter, but caches SetupFrame s and re-emits them always when the gate is activated
@@ -376,7 +422,7 @@ public:                                                               // <pyapi>
 protected:
   bool        on;
   std::mutex  mutex;
-  SetupFrame  setupframe;
+  SetupFrame  setupframe;   // TODO: shouldn't we have array of setupframes here?
   bool        got_setup;
   
 protected: 

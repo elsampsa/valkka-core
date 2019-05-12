@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['multithreads',['multithreads',['../group__threading__tag.html',1,'']]]
+  ['multithreading',['multithreading',['../group__threading__tag.html',1,'']]]
 ];

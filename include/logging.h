@@ -29,7 +29,7 @@
  *  @file    logging.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief Logging utilities
  *
@@ -48,6 +48,17 @@ namespace LogLevel { ///< Verbosity levels
 }; //                                                                                                                         
 
 
+/** Logging facility
+ * 
+ * logger.log(LogLevel::crazy) << a << b << c << etc. gets evaluated as:
+ * 
+ * ( ( (logger.log(LogLevel::crazy)) << a) << b ) << c )
+ * 
+ * so first, logger.log(LogLevel::crazy) returns an object that consumers a, which returns an object that consumes b, etc.
+ * 
+ * For extremely frequent logging, just use std::cout encapsulated inside preprocessor statements
+ * 
+ */
 struct Logger
 {
   // Logger(int log_level=LogLevel::normal) : log_level(log_level), current_level(log_level), special_level(0), current_special_level(-1) {};
@@ -163,8 +174,8 @@ extern void setLogLevel_fifologger(int level);           // <pyapi>
 extern void setLogLevel_opengllogger(int level);         // <pyapi>
 extern void setLogLevel_filelogger(int level);           // <pyapi>
 extern void setLogLevel_filethreadlogger(int level);     // <pyapi>
-extern void setLogLevel_usblogger(int level);     // <pyapi>
-extern void setLogLevel_valkkafslogger(int level);     // <pyapi>
+extern void setLogLevel_usblogger(int level);            // <pyapi>
+extern void setLogLevel_valkkafslogger(int level);       // <pyapi>
 
 extern void crazy_log_all();   // <pyapi>
 extern void debug_log_all();   // <pyapi>

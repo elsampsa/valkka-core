@@ -26,7 +26,7 @@
  *  @file    live_thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief Testing the LiveThread class
  *  
@@ -461,6 +461,8 @@ void test_10() {
   }
   std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
   
+  setLiveOutPacketBuffermaxSize(300*1024); // 300 kB
+  
   // filtergraph:
   // (LiveThread:livethread) --> {InfoFrameFilter:info_filter) --> {FifoFrameFilter:fifo_filter} --> [LiveFifo:live_fifo] -->> (LiveThread:livethread2) 
   LiveThread  livethread("livethread");
@@ -549,16 +551,17 @@ void test_12() {
   }
   std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
   
+  setLiveOutPacketBuffermaxSize(300*1024); // 300 kB
+  
   // filtergraph:
   // (LiveThread:livethread) --> {InfoFrameFilter:info_filter) --> {FifoFrameFilter:fifo_filter} --> [LiveFifo:live_fifo] -->> (LiveThread:livethread2) 
   LiveThread  livethread("livethread");
   LiveThread  livethread2("livethread2"); // stack size for incoming fifo
   
-  
   FifoFrameFilter& fifo_filter =livethread2.getFrameFilter();
   
-  BriefInfoFrameFilter info_filter("info_filter",&fifo_filter);
-  // CountFrameFilter info_filter("info_filter",&fifo_filter);
+  BriefInfoFrameFilter info_filter("info_filter", &fifo_filter);
+  // CountFrameFilter info_filter("info_filter", &fifo_filter);
   
   std::cout << "starting live threads" << std::endl;
   livethread. startCall();
@@ -576,6 +579,8 @@ void test_12() {
   livethread.playStreamCall(ctx);
   
   sleep_for(120s);
+  
+  std::cout << "STOPPING" << std::endl;
   
   livethread.stopStreamCall(ctx);
   

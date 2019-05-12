@@ -28,12 +28,26 @@
  *  @file    signal.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief   Signals used by thread classes
  */ 
 
 #include "constant.h"
+
+
+/** Describes the state of a stream
+ *
+ * @ingroup file_tag
+ */
+enum class AbstractFileState {                
+    none,                                     
+    error,                                    
+    seek,   // seek start
+    stop,   // stream stopped
+    play    // stream is playing
+};                                          
+
 
 
 /** Different signal types understood by Threads (sending them to the Thread by an interrupt (Thread::sendSignal) or in the Frame stream)
@@ -183,11 +197,6 @@ struct ValkkaFSReaderSignalContext {
     ValkkaFSReaderSignal        signal;
     ValkkaFSReaderSignalPars    pars;
 };
-
-
-
-
-
 
 
 #endif

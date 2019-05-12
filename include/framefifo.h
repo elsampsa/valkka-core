@@ -28,7 +28,7 @@
  *  @file    framefifo.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.10.0 
+ *  @version 0.11.0 
  *  
  *  @brief   Thread safe system of fifo and a stack
  */ 
@@ -43,17 +43,18 @@
  * @ingroup queues_tag
  */
 struct FrameFifoContext {                                                                                                                                       // <pyapi>
-  FrameFifoContext() : n_basic(50), n_avpkt(0), n_avframe(0), n_yuvpbo(0), n_setup(20), n_signal(20), flush_when_full(DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL) {}     // <pyapi>
+  FrameFifoContext() : n_basic(50), n_avpkt(0), n_avframe(0), n_yuvpbo(0), n_setup(20), n_signal(20), n_marker(20), flush_when_full(DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL) {}     // <pyapi>
   FrameFifoContext(int n_basic, int n_avpkt, int n_avframe, int n_yuvpbo, int n_setup, int n_signal, bool flush_when_full) :                                    // <pyapi>
-  n_basic(n_basic), n_avpkt(n_avpkt), n_avframe(n_avframe), n_yuvpbo(n_yuvpbo), n_setup(n_setup), n_signal(n_signal), flush_when_full(flush_when_full) {}       // <pyapi>
+  n_basic(n_basic), n_avpkt(n_avpkt), n_avframe(n_avframe), n_yuvpbo(n_yuvpbo), n_setup(n_setup), n_signal(n_signal), n_marker(n_signal), flush_when_full(flush_when_full) {}       // <pyapi>
   FrameFifoContext(int n_signal) :                                                                                                                              // <pyapi>
-  n_basic(0), n_avpkt(0), n_avframe(0), n_yuvpbo(0), n_setup(0), n_signal(n_signal), flush_when_full(DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL) {}                      // <pyapi>
+  n_basic(0), n_avpkt(0), n_avframe(0), n_yuvpbo(0), n_setup(0), n_signal(n_signal), n_marker(n_signal), flush_when_full(DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL) {}  // <pyapi>
   int n_basic;     ///< data at payload                                                                                                                         // <pyapi>
   int n_avpkt;     ///< data at ffmpeg avpkt                                                                                                                    // <pyapi>
   int n_avframe;   ///< data at ffmpeg av_frame and ffmpeg av_codec_context                                                                                     // <pyapi>
   int n_yuvpbo;    ///< data at yuvpbo struct                                                                                                                   // <pyapi>
   int n_setup;     ///< setup data                                                                                                                              // <pyapi>
   int n_signal;    ///< signal to AVThread or OpenGLThread                                                                                                      // <pyapi>
+  int n_marker;    ///< marks start/end of frame emission.  defaults to n_signal                                                                                // <pyapi>    
   bool flush_when_full; ///< Flush when filled                                                                                                                  // <pyapi>
 };                                                                                                                                                              // <pyapi>
 
@@ -93,6 +94,9 @@ protected: // mutex synchro
 protected:
   virtual void recycle_(Frame* f);  ///< Return Frame f back into the stack.  Update target_size if necessary
   virtual void recycleAll_();       ///< Recycle all frames back to the stack
+  
+public:
+    Reservoir &getReservoir(FrameClass cl) {return this->reservoirs[cl];}  ///< Get the reservoir .. in the case you want to manipulate the frames
   
 public:
   virtual bool writeCopy(Frame* f, bool wait=false);     ///< Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").  The size of "ftmp" is also checked and set to target_size, if necessary.  If wait is set to true, will wait until there are frames available in the stack.

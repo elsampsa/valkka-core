@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.10.0</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -70,6 +70,11 @@ $(function() {
 <div class="title">Logger Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Logging facility.  
+ <a href="structLogger.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="logging_8h_source.html">logging.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -120,7 +125,13 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>log_level</b></td></tr
 int&#160;</td><td class="memItemRight" valign="bottom"><b>current_level</b></td></tr>
 <tr class="separator:ac0404f13a79e800d618fa2f71997cabb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this struct was generated from the following files:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Logging facility. </p>
+<p>logger.log(LogLevel::crazy) &lt;&lt; a &lt;&lt; b &lt;&lt; c &lt;&lt; etc. gets evaluated as:</p>
+<p>( ( (logger.log(LogLevel::crazy)) &lt;&lt; a) &lt;&lt; b ) &lt;&lt; c )</p>
+<p>so first, logger.log(LogLevel::crazy) returns an object that consumers a, which returns an object that consumes b, etc.</p>
+<p>For extremely frequent logging, just use std::cout encapsulated inside preprocessor statements </p>
+</div><hr/>The documentation for this struct was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="logging_8h_source.html">logging.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="logging_8cpp.html">logging.cpp</a></li>
 </ul>
