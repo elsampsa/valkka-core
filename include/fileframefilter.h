@@ -71,49 +71,50 @@ Extend LiveThread into sending frames over rtsp (or sdp)
 class FileFrameFilter : public FrameFilter {                              // <pyapi>
   
 public:                                                                   // <pyapi>  
-  /** Default constructor 
-   *
-   * @param name    name
-   * @param next    next framefilter to be applied in the filterchain
-   */
-  FileFrameFilter(const char *name, FrameFilter *next=NULL);              // <pyapi>
-  /** Default destructor */
-  ~FileFrameFilter();                                                     // <pyapi>
-  
+    /** Default constructor 
+    *
+    * @param name    name
+    * @param next    next framefilter to be applied in the filterchain
+    */
+    FileFrameFilter(const char *name, FrameFilter *next=NULL);              // <pyapi>
+    /** Default destructor */
+    ~FileFrameFilter();                                                     // <pyapi>
+
 protected:
-  bool active;                       ///< Writing to file has been requested (but not necessarily achieved..)
-  bool ready;                        ///< Got enough setup frames
-  bool initialized;                  ///< File was opened ok : contexes, streams and output_context reserved (should be freed at some point)
-  long int mstimestamp0;             ///< Time of activation (i.e. when the recording started)
-  long int zerotime;                 ///< Start time set explicitly by the user
-  bool zerotimeset;
-  std::string filename;
+    bool active;                       ///< Writing to file has been requested (but not necessarily achieved..)
+    bool ready;                        ///< Got enough setup frames
+    bool initialized;                  ///< File was opened ok : codec_contexes, streams and av_format_context reserved (should be freed at some point)
+    long int mstimestamp0;             ///< Time of activation (i.e. when the recording started)
+    long int zerotime;                 ///< Start time set explicitly by the user
+    bool zerotimeset;
+    std::string filename;
   
 protected: //libav stuff
-  AVRational timebase;
-  std::vector<AVCodecContext*>  contexes;
-  std::vector<AVStream*>        streams;
-  AVFormatContext               *output_context;
-  AVPacket                      *avpkt;
+    AVRational timebase;
+    std::vector<AVCodecContext*>  codec_contexes;
+    std::vector<AVStream*>        streams;
+    AVFormatContext               *av_format_context;
+    AVPacket                      *avpkt;
   
 protected: //mutex stuff
-  std::mutex              mutex;     ///< Mutex protecting the "active" boolean
-  std::condition_variable condition; ///< Condition variable for the mutex
-  
+    std::mutex              mutex;     ///< Mutex protecting the "active" boolean
+    std::condition_variable condition; ///< Condition variable for the mutex
+
 protected: //frames
-  std::vector<SetupFrame>       setupframes;        ///< deep copies of the arrived setup frames
-  BasicFrame                    internal_frame;     ///< copy of the arrived frame and payload
+    std::vector<SetupFrame>       setupframes;        ///< deep copies of the arrived setup frames
+    BasicFrame                    internal_frame;     ///< copy of the arrived frame and payload
   
 protected:
-  void go(Frame* frame);
-  void initFile();           ///< Open file, reserve contexes, streams, write preamble, set initialized=true if success
-  void closeFile();          ///< Close file, dealloc contexes, streams
-  void deActivate_();
+    void go(Frame* frame);
+    void initFile();           ///< Open file, reserve codec_contexes, streams, write preamble, set initialized=true if success
+    void closeFile();          ///< Close file, dealloc codec_contexes, streams
+    void deActivate_();
+    void writeHeader();
   
 public: // API calls                                                                         // <pyapi>
-  // setFileName(const char* fname); ///< Sets the output filename                           // <pyapi>
-  void activate(const char* fname, long int zerotime=0);       ///< Request streaming to disk asap (when config frames have arrived) // <pyapi>
-  void deActivate();                                           ///< Stop streaming to disk   // <pyapi>
+    // setFileName(const char* fname); ///< Sets the output filename                           // <pyapi>
+    void activate(const char* fname, long int zerotime=0);       ///< Request streaming to disk asap (when config frames have arrived) // <pyapi>
+    void deActivate();                                           ///< Stop streaming to disk   // <pyapi>
 };                                                                                           // <pyapi>
 
 
