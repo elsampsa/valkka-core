@@ -36,7 +36,7 @@ git merge dev
 docs/compile.bash
 ```
 
-Now the code & docs are as they should be or the new version.
+Now the code & docs are as they should be in the new version.
 
 
 #### 4. Run tests at your build dir
