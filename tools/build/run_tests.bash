@@ -513,6 +513,26 @@ printf "END: live_av_openglthread_test 6\n\n" &>> test.out
 fi
 
 
+if true; then
+echo "live_av_openglthread_test2"
+echo "NOTICE: these tests must be run either (i) with valgrind and VALGRIND_DEBUG enabled or (ii) without valgrind and with visual inspection"
+# valgrind="valgrind" # enable valgrind
+valgrind="" # disable valgrind
+
+echo 1
+$valgrind ./live_av_openglthread_test2 1 $LOGLEVEL &>> test.out
+printf "END: live_av_openglthread_test2 1\n\n" &>> test.out
+
+echo 2
+$valgrind ./live_av_openglthread_test2 2 $LOGLEVEL &>> test.out
+printf "END: live_av_openglthread_test2 2\n\n" &>> test.out
+
+echo 3
+$valgrind ./live_av_openglthread_test2 3 $LOGLEVEL &>> test.out
+printf "END: live_av_openglthread_test2 3\n\n" &>> test.out
+fi
+
+
 # if false; then
 if true; then
 echo "openglframefifo_test"
@@ -596,4 +616,53 @@ $valgrind ./usbthread_test 3 $LOGLEVEL &>> test.out
 printf "END: usbthread_test 3\n\n" &>> test.out
 
 fi
+
+
+# *** ValkkaFS tests ***
+
+# if false; then
+if true; then
+echo "valkkafswriter_test"
+valgrind="valgrind" # enable valgrind
+# valgrind="" # disable valgrind
+
+echo 3
+$valgrind ./valkkafswriter_test 3 $LOGLEVEL &>> test.out
+printf "END: valkkafswriter_test 3\n\n" &>> test.out
+
+echo 4
+$valgrind ./valkkafswriter_test 4 $LOGLEVEL &>> test.out
+printf "END: valkkafswriter_test 4\n\n" &>> test.out
+fi
+
+
+if true; then
+echo "cache_test"
+valgrind="valgrind" # enable valgrind
+# valgrind="" # disable valgrind
+
+echo 1
+$valgrind ./cache_test 1 $LOGLEVEL &>> test.out
+printf "END: cache_test 1\n\n" &>> test.out
+
+echo 2
+$valgrind ./cache_test 2 $LOGLEVEL &>> test.out
+printf "END: cache_test 2\n\n" &>> test.out
+fi
+
+
+if true; then
+echo "cachestream_test"
+valgrind="valgrind" # enable valgrind
+# valgrind="" # disable valgrind
+
+echo 1
+$valgrind ./cachestream_test 1 $LOGLEVEL &>> test.out
+printf "END: cachestream_test 1\n\n" &>> test.out
+
+echo 4
+$valgrind ./cachestream_test 4 $LOGLEVEL &>> test.out
+printf "END: cachestream_test 4\n\n" &>> test.out
+fi
+
 
