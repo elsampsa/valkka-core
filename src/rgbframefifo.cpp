@@ -25,7 +25,7 @@
 /** 
  *  @file    rgbframefifo.cpp
  *  @author  Sampsa Riikonen
- *  @date    2017
+ *  @date    2019
  *  @version 0.11.0 
  *  
  *  @brief 
@@ -55,6 +55,9 @@ RGBFrameFifo::~RGBFrameFifo() {
 
 
 bool RGBFrameFifo::writeCopy(Frame* f, bool wait) {
+    
+    std::cout << "RGBFrameFifo : writeCopy : " << *f << std::endl;
+    
     if (f->getFrameClass() != FrameClass::avrgb) {
         return FrameFifo::writeCopy(f, wait); // call motherclass "standard" writeCopy
     }

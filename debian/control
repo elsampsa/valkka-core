@@ -8,6 +8,6 @@ Homepage: http://www.iki.fi/sampsa.riikonen
 
 Package: valkka
 Architecture: any
-Depends: python3, mesa-utils, libstdc++5, glew-utils, python3-numpy, v4l-utils
+Depends: python3, mesa-utils, libstdc++5, glew-utils, python3-numpy, v4l-utils, python3-pip
 Description: Valkka
  OpenSource Video Management for Linux

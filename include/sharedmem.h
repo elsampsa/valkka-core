@@ -41,6 +41,7 @@
 #include <fcntl.h>           /* For O_* constants */
 #include <semaphore.h> // semaphores
 #include "framefilter.h"
+#include "Python.h"
 
 /** Shared memory segment with metadata (the segment size)
  * 
@@ -50,8 +51,12 @@
  *
  * Never instantiate both server and client side from the same process.
  * 
+ * This is a virtual class.  Child classes should define metadata and its serialization.  This is done in serverInit, serverClose, clientInit and clientClose
+ * 
  * @ingroup shmem_tag
  */
+
+// https://stackoverflow.com/questions/115703/storing-c-template-function-definitions-in-a-cpp-file
 class SharedMemSegment {
 
 public:
@@ -66,11 +71,18 @@ public:
   /** Default destructor */
   ~SharedMemSegment();
   
-protected: // used by the constructor if is_server=true
-  void serverInit();  ///< Uses shmem_open with write rights
-  void serverClose(); ///< Erases the shmem segment
-  bool clientInit();  ///< Uses shmem_open with read-only rights
-  void clientClose();
+protected:
+    virtual void serverInit() = 0;            ///< Server: Uses shmem_open with write rights.  used by the constructor if is_server=true.  Init with correct metadata serialization.
+    virtual bool clientInit() = 0;       ///< Client: Uses shmem_open with read-only rights.  Init with correct metadata serialization.
+    
+public:
+    virtual std::size_t getSize() = 0;        ///< Client: return size of payload
+    virtual void put(std::vector<uint8_t> &inp_payload, void *meta_) = 0; ///< Server: copy byte chunk into payload accompanied with metadata.  Corrent typecast in child class methods.
+  
+protected:
+    void init();            ///< Must be called after construction
+    void serverClose();     ///< Erases the shmem segment.  used by the constructor if is_server=true
+    void clientClose();
   
 protected:
   std::string   name;         ///< Name to identify the posix objects
@@ -82,14 +94,79 @@ protected:
   
 public:
   uint8_t     *payload;   ///< Pointer to payload
-  std::size_t *meta;      ///< Metadata == the size of the payload
-  std::size_t  n_bytes;   ///< Maximum size of the payload (this much is reserved)
+  // void        *meta;      ///< Metadata (define in child classes);
+  std::size_t n_bytes;    ///< Maximum size of the payload (this much is reserved)
   
+public: // client
+    bool        getClientState();                       ///< Was the shmem acquisition succesfull?
+};
+
+
+/** Shared mem segment with simple metadata : just the payload length
+ * 
+ * 
+ */
+class SimpleSharedMemSegment : public SharedMemSegment {
+   
 public:
-  void        put(std::vector<uint8_t> &inp_payload); ///< Server: copy this vector into payload
-  void        putAVRGBFrame(AVRGBFrame *f);           ///< Copy from AVFrame->data directly
-  std::size_t getSize();                              ///< Client: return metadata = the size of the payload (not the maximum size)
-  bool        getClientState();                       ///< Was the shmem acquisition succesfull?
+    SimpleSharedMemSegment(const char* name, std::size_t n_bytes, bool is_server=false);
+    virtual ~SimpleSharedMemSegment();
+
+protected:
+    virtual void serverInit();            ///< Uses shmem_open with write rights.  used by the constructor if is_server=true.  Init with correct metadata serialization.
+    virtual bool clientInit();       ///< Uses shmem_open with read-only rights.  Init with correct metadata serialization.
+    
+public:
+    virtual std::size_t  getSize();               ///< Client: return metadata = the size of the payload (not the maximum size).  Uses SharedMemSegment::getMeta.
+    virtual void put(std::vector<uint8_t> &inp_payload, void* meta_); ///< typecast void to std::size_t
+    
+    
+public:
+    std::size_t  *meta;
+    
+public:
+    void         put(std::vector<uint8_t> &inp_payload);    ///< for legacy API
+    void         putAVRGBFrame(AVRGBFrame *f);              ///< Copy from AVFrame->data directly.  Only metadata used: payload size
+};
+
+
+/** A seriazable metadata object
+ * 
+ * 
+ */
+struct RGB24Meta {
+    std::size_t size; ///< Actual size copied
+    int width;
+    int height;
+    SlotNumber slot;
+    long int mstimestamp;
+};
+
+
+/** A Shmem segment describing an RGB24 frame
+ * 
+ * - Metadata includes width, height, slot, mstimestamp
+ * 
+ */
+class RGB24SharedMemSegment : public SharedMemSegment {
+    
+public:
+    RGB24SharedMemSegment(const char* name, int width, int height, bool is_server=false);
+    virtual ~RGB24SharedMemSegment();
+    
+protected:
+    virtual void serverInit();            ///< Uses shmem_open with write rights.  used by the constructor if is_server=true.  Init with correct metadata serialization.
+    virtual bool clientInit();       ///< Uses shmem_open with read-only rights.  Init with correct metadata serialization.
+    
+public:
+    virtual std::size_t  getSize();               ///< Client: return metadata = the size of the payload (not the maximum size).  Uses SharedMemSegment::getMeta.
+    virtual void put(std::vector<uint8_t> &inp_payload, void* meta_); ///< typecast void to std::size_t
+    
+public:
+    RGB24Meta    *meta;
+    
+public:
+    void         putAVRGBFrame(AVRGBFrame *f);                        ///< Copy from AVFrame->data directly.  Copies more metadata: width, height, slot & mstimestamp
 };
 
 
@@ -103,70 +180,84 @@ public:
  * 
  * @ingroup shmem_tag
  */
-class SharedMemRingBuffer { // <pyapi>
+class SharedMemRingBufferBase { // <pyapi>
 
 public: // <pyapi>
-  /** Default constructor
-   * 
-   * @param name        Name of the ring buffer.  This name is used as unique identifier for the posix semaphores and shmem segments.  Don't use weird characters.
-   * @param n_cells     Number of cells in the ring buffer
-   * @param n_bytes     Size of each ring buffer cell in bytes
-   * @param mstimeout   Semaphore timeout in milliseconds.  SharedMemRingBuffer::clientPull returns after this many milliseconds even if data was not received.  Default 0 = waits forever.
-   * @param is_server   Set this to true if you are starting this from the server multiprocess
-   * 
-   * 
-   */
-  SharedMemRingBuffer(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0, bool is_server=false); // <pyapi>
-  /** Default destructor */
-  virtual ~SharedMemRingBuffer(); // <pyapi>
+    /** Default constructor
+    * 
+    * @param name        Name of the ring buffer.  This name is used as unique identifier for the posix semaphores and shmem segments.  Don't use weird characters.
+    * @param n_cells     Number of cells in the ring buffer
+    * @param n_bytes     Size of each ring buffer cell in bytes
+    * @param mstimeout   Semaphore timeout in milliseconds.  SharedMemRingBuffer::clientPull returns after this many milliseconds even if data was not received.  Default 0 = waits forever.
+    * @param is_server   Set this to true if you are starting this from the server multiprocess
+    * 
+    * Child classes should reserve correct SharedMemSegment type
+    * 
+    */
+    SharedMemRingBufferBase(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0, bool is_server=false); // <pyapi>
+    /** Default destructor */
+    virtual ~SharedMemRingBufferBase(); // <pyapi>
 
 protected: // at constructor init list
-  std::string  name;
-  int          n_cells, n_bytes; ///< Parameters defining the shmem ring buffer (number, size)
-  int          mstimeout;        ///< Semaphore timeout in milliseconds
-  bool         is_server;        ///< Are we on the server side or not?
-  
+    std::string  name;
+    int          n_cells, n_bytes; ///< Parameters defining the shmem ring buffer (number, size)
+    int          mstimeout;        ///< Semaphore timeout in milliseconds
+    bool         is_server;        ///< Are we on the server side or not?
+    
 protected: // posix semaphores and mmap'd files
-  sem_t         *sema, *flagsema;///< Posix semaphore objects (semaphore counter, semaphore for the overflow flag)
-  std::string   sema_name;       ///< Name to identify the posix semaphore counter
-  std::string   flagsema_name;   ///< Name to identify the posix semaphore used for the overflow flag
-  int  index;                    ///< The index of cell that has just been written.  Remember: server and client see their own copies of this
-  struct timespec ts;            ///< Timespec for semaphore timeouts
-  
+    sem_t         *sema, *flagsema;///< Posix semaphore objects (semaphore counter, semaphore for the overflow flag)
+    std::string   sema_name;       ///< Name to identify the posix semaphore counter
+    std::string   flagsema_name;   ///< Name to identify the posix semaphore used for the overflow flag
+    int  index;                    ///< The index of cell that has just been written.  Remember: server and client see their own copies of this
+    struct timespec ts;            ///< Timespec for semaphore timeouts
+    
 public:
-  std::vector<SharedMemSegment*> shmems; ///< Shared memory segments
-                
+    std::vector<SharedMemSegment*> shmems; ///< Shared memory segments
+
 protected: // internal methods - not for the api user
-  void  setFlag();       ///< Server: call this to indicate a ring-buffer overflow 
-  bool  flagIsSet();     ///< Client: call this to see if there has been a ring-buffer overflow
-  void  clearFlag();     ///< Client: call this after handling the ring-buffer overflow
-  int   getFlagValue();  ///< Used by SharedMemoryRingBuffer::flagIsSet()
-  void  zero();          ///< Force reset.  Semaphore value is set to 0
-  
+    void  setFlag();       ///< Server: call this to indicate a ring-buffer overflow 
+    bool  flagIsSet();     ///< Client: call this to see if there has been a ring-buffer overflow
+    void  clearFlag();     ///< Client: call this after handling the ring-buffer overflow
+    int   getFlagValue();  ///< Used by SharedMemoryRingBuffer::flagIsSet()
+    void  zero();          ///< Force reset.  Semaphore value is set to 0
+    
 public: // <pyapi>
-  int   getValue();       ///< Returns the current index (next to be read) of the shmem buffer // <pyapi>
-  bool  getClientState(); ///< Are the shmem segments available for client? // <pyapi>
+  int   getValue();       ///< Returns the current index (next to be read) of the shmem buffer
+  bool  getClientState(); ///< Are the shmem segments available for client?
   
 public: // server side routines - call these only from the server
-  /** Copies payload to ring buffer
-   * 
-   * @param inp_payload : std::vector bytebuffer (passed by reference)
-   * 
-   * After copying the payload, releases (increases) the semaphore.
-   */
-  void serverPush(std::vector<uint8_t> &inp_payload);
+    /** Copies payload to ring buffer
+    * 
+    * @param inp_payload : std::vector bytebuffer (passed by reference)
+    * 
+    * After copying the payload, releases (increases) the semaphore.
+    */
+    void serverPush(std::vector<uint8_t> &inp_payload, void* meta);
   
 public: // client side routines - call only from the client side // <pyapi>
-  /** Returns the index of SharedMemoryRingBuffer::shmems that was just written.
-   * 
-   * @param index_out : returns the index of the shmem ringbuffer just written
-   * @param size_out  : returns the size of the payload written to the shmem ringbuffer
-   * 
-   * returns true if data was obtained, false if semaphore timed out
-   * 
-   */
-  bool clientPull(int &index_out, int &size_out); // <pyapi>
+    /** Returns the index of SharedMemoryRingBuffer::shmems that was just written.
+    * 
+    * @param index_out : returns the index of the shmem ringbuffer just written
+    * @param size_out  : returns the size of the payload written to the shmem ringbuffer
+    * 
+    * returns true if data was obtained, false if semaphore timed out
+    * 
+    */
+    bool clientPull(int &index_out, int &size_out); // <pyapi>
 }; // <pyapi>
+
+
+
+class SharedMemRingBuffer : public SharedMemRingBufferBase { // <pyapi>
+
+public: // <pyapi>
+    SharedMemRingBuffer(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0, bool is_server=false); // <pyapi>
+    /** Default destructor */
+    virtual ~SharedMemRingBuffer(); // <pyapi>
+    
+public:                                                     // <pyapi>
+    void serverPush(std::vector<uint8_t> &inp_payload);     // <pyapi>
+};                                                          // <pyapi>
 
 
 
@@ -174,17 +265,26 @@ public: // client side routines - call only from the client side // <pyapi>
  * 
  * @ingroup shmem_tag
  */
-class SharedMemRingBufferRGB : public SharedMemRingBuffer { // <pyapi>
+class SharedMemRingBufferRGB : public SharedMemRingBufferBase { // <pyapi>
 
 public:                                                     // <pyapi>
-  /** Default ctor */
-  SharedMemRingBufferRGB(const char* name, int n_cells, int width, int height, int mstimeout=0, bool is_server=false); // <pyapi>
-  /** Default destructor */
-  ~SharedMemRingBufferRGB(); // <pyapi>
-  
+    /** Default ctor */
+    SharedMemRingBufferRGB(const char* name, int n_cells, int width, int height, int mstimeout=0, bool is_server=false); // <pyapi>
+    /** Default destructor */
+    ~SharedMemRingBufferRGB(); // <pyapi>
+
+protected:
+    int width, height;
+
 public:
-  void serverPushAVRGBFrame(AVRGBFrame *f);
-};                           // <pyapi>
+    void serverPushAVRGBFrame(AVRGBFrame *f);
+  
+public:                              // <pyapi>
+    /** Returns a python tuple of metadata
+     * (index, width, height, slot, timestamp)
+     */
+    PyObject* clientPullPy();        // <pyapi>
+};                                   // <pyapi>
 
 
 
@@ -212,14 +312,13 @@ protected: // initialized at constructor
   //int                    n_cells;
   //std::size_t            n_bytes;
   //int                    mstimeout;
-  SharedMemRingBuffer    shmembuf;
+  SharedMemRingBuffer shmembuf;
   
 protected:
   virtual void go(Frame* frame);
   
 };                                                                                       // <pyapi>
   
-
 
 /** Like ShmemFrameFilter.  Writes frames into SharedMemRingBufferRGB
  * 
@@ -244,5 +343,6 @@ protected:
   virtual void go(Frame* frame);
   
 }; // <pyapi>
+  
   
 #endif

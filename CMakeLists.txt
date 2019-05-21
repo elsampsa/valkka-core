@@ -270,7 +270,7 @@ add_dependencies(valkka_core ${PROJECT_NAME}) # swig .so depends on the main sha
 # set(TESTNAMES "av_live_thread_test" "av_thread_test" "classes_test" "fifo_test" "file_test" "frames_test" "live_stream_check_test" "live_streaming_test" "live_thread_test" "log_test" "opengl_test" "opengl_thread_test" "render_test" "shmem_test" "swscale_test" "threads_test")
 # set(TESTNAMES "shmem_test" "swscale_test")
 # set(TESTNAMES "file_test")
-set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test" "avthread_test" "av_live_thread_test" "openglframefifo_test" "openglthread_test" "live_av_openglthread_test" "live_av_openglthread_test2" "live_av_shmem_test" "file_test" "filethread_test" "filethread_test0" "livethread_rtsp_test" "switch_test" "framefilter_test" "cache_test" "usbthread_test" "valkkafs_test" "valkkafswriter_test" "cachestream_test" "cachestream_decode_test" "rawrite_test" "movement_test")
+set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test" "avthread_test" "av_live_thread_test" "openglframefifo_test" "openglthread_test" "live_av_openglthread_test" "live_av_openglthread_test2" "live_av_shmem_test" "file_test" "filethread_test" "filethread_test0" "livethread_rtsp_test" "switch_test" "framefilter_test" "cache_test" "usbthread_test" "valkkafs_test" "valkkafswriter_test" "cachestream_test" "cachestream_decode_test" "rawrite_test" "movement_test" "rgbframefifo_test")
 
 add_custom_target(tests) # Note: without 'ALL'
 foreach( testname ${TESTNAMES} )
@@ -311,7 +311,7 @@ SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MY_ARCH})
 # The dependencies: keep these consistent with debian/control
 # SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libpython3.5(>= 3.5.2), libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0), python3-numpy") # ubuntu 16
 # NEW: Avoid version numbers, use "utils" packages to imply a dependency, for example, to libglew (without hardcoding the version number into the package name)
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, mesa-utils, libstdc++5, glew-utils, python3-numpy, v4l-utils")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, mesa-utils, libstdc++5, glew-utils, python3-numpy, v4l-utils, python3-pip")
 
 #
 # objdump -p libValkka.so

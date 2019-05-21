@@ -75,7 +75,8 @@ class BasicFilterchain:
         "recv_buffer_size": (int, 0),
         # Reordering buffer time for Live555 packets in MILLIseconds # 0 means
         # default
-        "reordering_mstime": (int, 0)
+        "reordering_mstime": (int, 0),
+        "n_threads": (int, 1)
     }
 
     def __init__(self, **kwargs):
@@ -121,7 +122,14 @@ class BasicFilterchain:
             "avthread_" + self.idst,
             self.gl_in_filter,
             self.framefifo_ctx)
+        
+        if self.affinity > -1 and self.n_threads > 1:
+            print("WARNING: can't use affinity with multiple threads")
+        
         self.avthread.setAffinity(self.affinity)
+        if self.affinity > -1:
+            self.avthread.setNumberOfThreads(self.n_threads)
+        
         # get input FrameFilter from AVThread
         self.av_in_filter = self.avthread.getFrameFilter()
 

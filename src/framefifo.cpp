@@ -97,19 +97,22 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) {
   
   // get an alias for the stack corresponding to this Frame
   
-  /*
+  Stack *stack;
+  
+  ///*
   try {
-    Stack &stack = stacks.at(f->getFrameClass());
+    // Stack &stack = stacks.at(f->getFrameClass());
+    stack = &stacks.at(f->getFrameClass());
   }
   catch (std::out_of_range) {
     fifologger.log(LogLevel::normal) << "FrameFifo: "<<name<<" writeCopy: no stack for FrameClass "<<int(f->getFrameClass());
     return false;
   }
-  */
+  //*/
   
-  Stack &stack = stacks.at(f->getFrameClass());
+  // Stack &stack = stacks.at(f->getFrameClass());
   
-  while (stack.empty()) { // deal with spurious wake-ups
+  while (stack->empty()) { // deal with spurious wake-ups
     if (wait) {
       fifologger.log(LogLevel::normal) << "FrameFifo: "<<name<<" writeCopy: waiting for stack frames.  Frame="<<(*f)<<std::endl;
       this->ready_condition.wait(lk);
@@ -124,12 +127,12 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) {
     }
   }
   
-  //std::cout << "FrameFifo : writeCopy : stack size0=" << stack.size() << std::endl;
+  //std::cout << "FrameFifo : writeCopy : stack size0=" << stack->size() << std::endl;
   
-  Frame *tmpframe=stack.front();  // .. the Frame* pointer to the Frame object is in reservoirs[FrameClass].  Frame*'s in stacks[FrameClass] are same Frame*'s as in reservoirs[FrameClass]
-  stack.pop_front();              // .. remove that pointer from the stack
+  Frame *tmpframe=stack->front();  // .. the Frame* pointer to the Frame object is in reservoirs[FrameClass].  Frame*'s in stacks[FrameClass] are same Frame*'s as in reservoirs[FrameClass]
+  stack->pop_front();              // .. remove that pointer from the stack
   
-  //std::cout << "FrameFifo : writeCopy : stack size=" << stack.size() << std::endl;
+  //std::cout << "FrameFifo : writeCopy : stack size=" << stack->size() << std::endl;
   
   tmpframe->copyFrom(f);      // makes a copy with the correct typecast
   fifo.push_front(tmpframe);  // push_front takes a copy of the pointer // fifo: push: front, read: back

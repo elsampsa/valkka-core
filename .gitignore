@@ -60,3 +60,5 @@ paska
 python/valkka/core/*.so.*
 schemes/
 log.txt
+include/save/
+src/save/
