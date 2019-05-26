@@ -114,7 +114,7 @@ void test_2() {
   InfoFrameFilter     out_filter("encoded",&in_filter);
   LiveThread          livethread("live");
   
-  const char* name = "@TEST: live_av_shmem_test: test 2: ";
+  const char* name = "@TEST: live_av_shmem_test: test 2: SERVER SIDE ";
   std::cout << name <<"** @@YUV->RGB interpolation on the CPU, pass RGB frames to shared memory **" << std::endl;
   
   if (!stream_1) {
@@ -141,6 +141,7 @@ void test_2() {
   livethread.playStreamCall(ctx);
   
   sleep_for(10s);
+  // sleep_for(5s);
   // sleep_for(604800s); //one week
   
   std::cout << name << "stopping threads" << std::endl;
@@ -149,7 +150,7 @@ void test_2() {
 
 
 void test_3() {
-  const char* name = "@TEST: live_av_shmem_test: test 3: ";
+  const char* name = "@TEST: live_av_shmem_test: test 3: CLIENT SIDE ";
   std::cout << name <<"** @@Read RGB frame data from the shared memory.  Start this after starting test 2.  Must be started separataly while the server-side is running**" << std::endl;
   
   SharedMemRingBufferRGB rb("rgb_shmem", 10, 100, 100, 1000, false);
@@ -174,10 +175,50 @@ void test_3() {
 
 
 void test_4() {
+  // (LiveThread:livethread) --> {FrameFilter:info} --> {FifoFrameFilter:in_filter} -->> (AVThread:avthread) --> {SwScaleFrameFilter:sw_scale} --> {InfoFrameFilter:scaled} --> {RGBShmemFrameFilter:shmem}
+  RGBShmemFrameFilter shmem("rgb_shmem", 10, 100, 100, 1000);
+  InfoFrameFilter     decoded_info("scaled",&shmem);
+  SwScaleFrameFilter  sw_scale("sws_scale",300,300,&decoded_info); // test sending oversized image
+  // InfoFrameFilter     decoded_info("decoded",&sws_scale);
+  TimeIntervalFrameFilter
+                      interval("interval",1000,&sw_scale); // pass a frame each 1000 ms
+  AVThread            avthread("avthread",interval);
+  FifoFrameFilter     &in_filter = avthread.getFrameFilter(); // request framefilter from AVThread
+  InfoFrameFilter     out_filter("encoded",&in_filter);
+  LiveThread          livethread("live");
   
-  const char* name = "@TEST: live_av_shmem_test: test 4: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+  const char* name = "@TEST: live_av_shmem_test: test 2: ";
+  std::cout << name <<"** @@YUV->RGB interpolation on the CPU, pass RGB frames to shared memory.  Use oversized images. **" << std::endl;
   
+  if (!stream_1) {
+    std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+    exit(2);
+  }
+  std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+  
+  std::cout << name << "starting threads" << std::endl;
+  livethread.startCall();
+  avthread.  startCall();
+
+  avthread.decodingOnCall();
+  
+  // sleep_for(2s);
+  
+  std::cout << name << "registering stream" << std::endl;
+  LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
+  livethread.registerStreamCall(ctx);
+  
+  // sleep_for(1s);
+  
+  std::cout << name << "playing stream !" << std::endl;
+  livethread.playStreamCall(ctx);
+  
+  // sleep_for(10s);
+  sleep_for(5s);
+  // sleep_for(604800s); //one week
+  
+  std::cout << name << "stopping threads" << std::endl;
+  livethread.stopCall();  
 }
 
 

@@ -69,36 +69,37 @@ public:
    */
   SharedMemSegment(const char* name, std::size_t n_bytes, bool is_server=false);
   /** Default destructor */
-  ~SharedMemSegment();
+  virtual ~SharedMemSegment();
   
 protected:
-    virtual void serverInit() = 0;            ///< Server: Uses shmem_open with write rights.  used by the constructor if is_server=true.  Init with correct metadata serialization.
-    virtual bool clientInit() = 0;       ///< Client: Uses shmem_open with read-only rights.  Init with correct metadata serialization.
-    
+    virtual void serverInit() = 0;      ///< Server: Uses shmem_open with write rights.  used by the constructor if is_server=true.  Init with correct metadata serialization.
+    virtual bool clientInit() = 0;      ///< Client: Uses shmem_open with read-only rights.  Init with correct metadata serialization.
+    virtual void serverClose() = 0;     ///< Erases the shmem segment.  used by the constructor if is_server=true
+    virtual void clientClose() = 0;
+  
 public:
     virtual std::size_t getSize() = 0;        ///< Client: return size of payload
     virtual void put(std::vector<uint8_t> &inp_payload, void *meta_) = 0; ///< Server: copy byte chunk into payload accompanied with metadata.  Corrent typecast in child class methods.
+    virtual void copyMetaFrom(void *meta_) = 0; ///< Dereference metadata pointer correctly and copy the contents into this memory segment's metadata
+    virtual void copyMetaTo(void *meta_)   = 0; ///< Dereference metadata pointer correctly and copy the contents from this memory segment's metadata
   
 protected:
-    void init();            ///< Must be called after construction
-    void serverClose();     ///< Erases the shmem segment.  used by the constructor if is_server=true
-    void clientClose();
-  
-protected:
-  std::string   name;         ///< Name to identify the posix objects
-  std::string   payload_name; ///< Name to identify the posix memory mapped file
-  std::string   meta_name;    ///< Name to identify the posix memory mapped file for the metadata
-  bool          is_server;    ///< Client or server process?
-  void          *ptr,*ptr_;   ///< Raw pointers to shared memory
-  bool          client_state; ///< Was the shmem acquisition succesfull?
-  
+    std::string   name;         ///< Name to identify the posix objects
+    std::string   payload_name; ///< Name to identify the posix memory mapped file
+    std::string   meta_name;    ///< Name to identify the posix memory mapped file for the metadata
+    bool          is_server;    ///< Client or server process?
+    void          *ptr,*ptr_;   ///< Raw pointers to shared memory
+    bool          client_state; ///< Was the shmem acquisition succesfull?
+    
 public:
-  uint8_t     *payload;   ///< Pointer to payload
-  // void        *meta;      ///< Metadata (define in child classes);
-  std::size_t n_bytes;    ///< Maximum size of the payload (this much is reserved)
-  
+    uint8_t     *payload;   ///< Pointer to payload
+    // void        *meta;      ///< Metadata (define in child classes);
+    std::size_t n_bytes;    ///< Maximum size of the payload (this much is reserved)
+    
 public: // client
-    bool        getClientState();                       ///< Was the shmem acquisition succesfull?
+    void init();                           ///< Must be called after construction.  Reserves shmem payload and correct metadata (depending on the subclass)
+    void close_();                         ///< Must be called before destruction. Releases correct amount of metadata bytes (depending on the subclass)
+    bool getClientState();                 ///< Was the shmem acquisition succesfull?
 };
 
 
@@ -113,14 +114,17 @@ public:
     virtual ~SimpleSharedMemSegment();
 
 protected:
-    virtual void serverInit();            ///< Uses shmem_open with write rights.  used by the constructor if is_server=true.  Init with correct metadata serialization.
+    virtual void serverInit();       ///< Uses shmem_open with write rights.  used by the constructor if is_server=true.  Init with correct metadata serialization.
     virtual bool clientInit();       ///< Uses shmem_open with read-only rights.  Init with correct metadata serialization.
+    virtual void serverClose();      ///< Erases the shmem segment.  used by the constructor if is_server=true
+    virtual void clientClose();
     
 public:
     virtual std::size_t  getSize();               ///< Client: return metadata = the size of the payload (not the maximum size).  Uses SharedMemSegment::getMeta.
     virtual void put(std::vector<uint8_t> &inp_payload, void* meta_); ///< typecast void to std::size_t
-    
-    
+    virtual void copyMetaFrom(void *meta_);       ///< Dereference metadata pointer correctly and copy the contents into this memory segment's metadata
+    virtual void copyMetaTo(void *meta_);         ///< Dereference metadata pointer correctly and copy the contents from this memory segment's metadata
+  
 public:
     std::size_t  *meta;
     
@@ -134,13 +138,13 @@ public:
  * 
  * 
  */
-struct RGB24Meta {
-    std::size_t size; ///< Actual size copied
-    int width;
-    int height;
-    SlotNumber slot;
-    long int mstimestamp;
-};
+struct RGB24Meta {                                  // <pyapi>
+    std::size_t size; ///< Actual size copied       // <pyapi>
+    int width;                                      // <pyapi>
+    int height;                                     // <pyapi>
+    SlotNumber slot;                                // <pyapi>
+    long int mstimestamp;                           // <pyapi>
+};                                                  // <pyapi>
 
 
 /** A Shmem segment describing an RGB24 frame
@@ -155,13 +159,17 @@ public:
     virtual ~RGB24SharedMemSegment();
     
 protected:
-    virtual void serverInit();            ///< Uses shmem_open with write rights.  used by the constructor if is_server=true.  Init with correct metadata serialization.
+    virtual void serverInit();       ///< Uses shmem_open with write rights.  used by the constructor if is_server=true.  Init with correct metadata serialization.
     virtual bool clientInit();       ///< Uses shmem_open with read-only rights.  Init with correct metadata serialization.
+    virtual void serverClose();      ///< Erases the shmem segment.  used by the constructor if is_server=true
+    virtual void clientClose();
     
 public:
-    virtual std::size_t  getSize();               ///< Client: return metadata = the size of the payload (not the maximum size).  Uses SharedMemSegment::getMeta.
+    virtual std::size_t getSize();                                    ///< Client: return metadata = the size of the payload (not the maximum size).  Uses SharedMemSegment::getMeta.
     virtual void put(std::vector<uint8_t> &inp_payload, void* meta_); ///< typecast void to std::size_t
-    
+    virtual void copyMetaFrom(void *meta_);       ///< Dereference metadata pointer correctly and copy the contents into this memory segment's metadata
+    virtual void copyMetaTo(void *meta_);         ///< Dereference metadata pointer correctly and copy the contents from this memory segment's metadata
+  
 public:
     RGB24Meta    *meta;
     
@@ -243,7 +251,7 @@ public: // client side routines - call only from the client side // <pyapi>
     * returns true if data was obtained, false if semaphore timed out
     * 
     */
-    bool clientPull(int &index_out, int &size_out); // <pyapi>
+    bool clientPull(int &index_out, void* meta); // shmem index, metadata object to be filled
 }; // <pyapi>
 
 
@@ -257,6 +265,7 @@ public: // <pyapi>
     
 public:                                                     // <pyapi>
     void serverPush(std::vector<uint8_t> &inp_payload);     // <pyapi>
+    bool clientPull(int &index_out, int &size_out);         // <pyapi>
 };                                                          // <pyapi>
 
 
@@ -283,8 +292,10 @@ public:                              // <pyapi>
     /** Returns a python tuple of metadata
      * (index, width, height, slot, timestamp)
      */
-    PyObject* clientPullPy();        // <pyapi>
-};                                   // <pyapi>
+    // PyObject* clientPullPy();                              // <pyapi>
+    bool clientPull(int &index_out, int &size_out);           // legacy <pyapi>
+    bool clientPull2(int &index_out, RGB24Meta &meta);        // <pyapi>
+};                                                            // <pyapi>
 
 
 
@@ -307,6 +318,7 @@ public:                                                                         
    * 
    */
   ShmemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0);  // <pyapi>
+  //~ShmemFrameFilter(); // <pyapi>
 
 protected: // initialized at constructor                                                  
   //int                    n_cells;
@@ -331,6 +343,7 @@ public: // <pyapi>
   /** Default constructor
    */
   RGBShmemFrameFilter(const char* name, int n_cells, int width, int height, int mstimeout=0); // <pyapi>
+  //~RGBShmemFrameFilter(); // <pyapi>
   
 protected: // initialized at constructor                                                  
   //int                    n_cells;

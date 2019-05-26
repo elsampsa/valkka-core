@@ -381,7 +381,7 @@ public: // helper objects
 /** Decoded RGB frame in FFMpeg format
  * 
  * - This FrameClass is produced by SwScaleFrameFilter (that performs YUV=>RGB interpolation).  This FrameClass is used typically when passing frame data to shared memory
- * - Constructor does not reserve data for frames.  This is done by classes using this class
+ * - Constructor does not reserve data for frames.  This is done by classes using this class (see SwScaleFrameFilter)
  * - Frames of this class can also be pre-reserved after construction, by using the member AVRGBFrame::reserve
  * 
  * Copiable/Queable : yes

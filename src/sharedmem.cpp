@@ -47,36 +47,23 @@ void SharedMemSegment::init() {
         serverInit();
     }
     else {
-        client_state=clientInit();
+        client_state = clientInit();
     }
 }
 
 
-SharedMemSegment:: ~SharedMemSegment() {
-  if (is_server) {
-    serverClose();
-  }
-  else {
-    clientClose();
-  }
+void SharedMemSegment::close_() {
+    if (is_server) {
+        serverClose();
+    }
+    else {
+        clientClose();
+    }
 }
 
 
-
-void SharedMemSegment::serverClose() {
- if (munmap(ptr, n_bytes)!=0 or munmap(ptr_, sizeof(std::size_t)!=0)) {
-    perror("valkka_core: sharedmem.cpp: SharedMemSegment::serverClose: munmap failed");
-    exit(2);
-  }
-  
-  if (shm_unlink(payload_name.c_str())!=0 or shm_unlink(meta_name.c_str())!=0) {
-    perror("valkka_core: sharedmem.cpp: SharedMemSegment::serverClose: shm_unlink failed");
-    exit(2);
-  }
-} 
-
-
-void SharedMemSegment::clientClose() {
+SharedMemSegment::~SharedMemSegment() {
+    // std::cout << "SharedMemSegment: dtor" << std::endl;
 }
 
 
@@ -158,8 +145,43 @@ bool CLASSNAME::clientInit() { \
 };\
 
 
+#define server_close(CLASSNAME, TYPENAME) \
+void CLASSNAME::serverClose() { \
+ if (munmap(ptr, n_bytes)!=0 or munmap(ptr_, sizeof(TYPENAME)!=0)) { \
+    perror("valkka_core: sharedmem.cpp: CLASSNAME::serverClose: munmap failed"); \
+    exit(2); \
+  } \
+  if (shm_unlink(payload_name.c_str())!=0 or shm_unlink(meta_name.c_str())!=0) { \
+    perror("valkka_core: sharedmem.cpp: CLASSNAME::serverClose: shm_unlink failed"); \
+    exit(2); \
+  } \
+} \
+
+
+#define client_close(CLASSNAME, TYPENAME) \
+void CLASSNAME::clientClose() { \
+} \
+
+
+#define copy_meta_from(CLASSNAME, TYPENAME) \
+void CLASSNAME::copyMetaFrom(void *meta_) { \
+    *meta = *((TYPENAME*)(meta_)); \
+}\
+
+#define copy_meta_to(CLASSNAME, TYPENAME) \
+void CLASSNAME::copyMetaTo(void *meta_) { \
+    *((TYPENAME*)(meta_)) = *meta; \
+}\
+
+
+
 server_init(SimpleSharedMemSegment, std::size_t);
 client_init(SimpleSharedMemSegment, std::size_t);
+server_close(SimpleSharedMemSegment, std::size_t);
+client_close(SimpleSharedMemSegment, std::size_t);
+copy_meta_from(SimpleSharedMemSegment, std::size_t);
+copy_meta_to(SimpleSharedMemSegment, std::size_t);
+
 
 /*
 void SimpleSharedMemSegment::serverInit() {
@@ -271,10 +293,16 @@ RGB24SharedMemSegment::RGB24SharedMemSegment(const char* name, int width, int he
 
 
 RGB24SharedMemSegment::~RGB24SharedMemSegment() {
+    // std::cout << "RGB24SharedMemSegment: dtor" << std::endl;
 }
 
 server_init(RGB24SharedMemSegment, RGB24Meta);
 client_init(RGB24SharedMemSegment, RGB24Meta);
+server_close(RGB24SharedMemSegment, RGB24Meta);
+client_close(RGB24SharedMemSegment, RGB24Meta);
+copy_meta_from(RGB24SharedMemSegment, RGB24Meta);
+copy_meta_to(RGB24SharedMemSegment, RGB24Meta);
+
 
 
 void RGB24SharedMemSegment::put(std::vector<uint8_t> &inp_payload, void* meta_) {
@@ -297,7 +325,7 @@ void RGB24SharedMemSegment::putAVRGBFrame(AVRGBFrame *f) { // copy from AVFrame-
     *meta = meta_; 
     meta->size = std::min(std::size_t(meta_.width*meta_.height*3), n_bytes);
     
-    // std::cout << "SharedMemSegment: putAVRGBFrame: copying " << *meta << " bytes from " << *f << std::endl;
+    std::cout << "RGB24SharedMemSegment: putAVRGBFrame: copying " << meta->size << " bytes from " << *f << std::endl;
     memcpy(payload, av_frame->data[0], meta->size);
 }
 
@@ -339,9 +367,6 @@ SharedMemRingBufferBase::SharedMemRingBufferBase(const char* name, int n_cells, 
 
 
 SharedMemRingBufferBase::~SharedMemRingBufferBase() {
-  for (auto it=shmems.begin(); it!=shmems.end(); ++it) {
-    delete *it;
-  }
   sem_close(sema);
   sem_close(flagsema);
 }
@@ -449,89 +474,103 @@ void SharedMemRingBufferBase::serverPush(std::vector<uint8_t> &inp_payload, void
 
 
 
-bool SharedMemRingBufferBase::clientPull(int &index_out, int &size_out) {
-  int i;
-  
-  index_out =0;
-  size_out  =0;
-  
-  if (mstimeout==0) {
-    while ((i = sem_wait(sema)) == -1 && errno == EINTR)
-      continue; // Restart if interrupted by handler
-  }
-  else {
-    if (clock_gettime(CLOCK_REALTIME, &ts) == -1)
-    {
-      perror("SharedMemRingBufferBase: clientPull: clock_gettime failed");
-      exit(2);
+bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {
+    int i;
+    
+    index_out =0;
+    // size_out  =0;
+    
+    if (mstimeout==0) {
+        while ((i = sem_wait(sema)) == -1 && errno == EINTR)
+        continue; // Restart if interrupted by handler
+    }
+    else {
+        if (clock_gettime(CLOCK_REALTIME, &ts) == -1)
+        {
+            perror("SharedMemRingBufferBase: clientPull: clock_gettime failed");
+            exit(2);
+        }
+        
+        // void set_normalized_timespec(struct timespec *ts, time_t sec, s64 nsec)
+        // std::cout << "SharedMemoryRingBuffer: clientPull: using "<< mstimeout <<" ms timeout" << std::endl;
+        // std::cout << "SharedMemoryRingBuffer: clientPull: time0 " << ts.tv_sec << " " << ts.tv_nsec << std::endl;
+        normalize_timespec(&ts, ts.tv_sec, ts.tv_nsec+(int64_t(mstimeout)*1000000));
+        /*
+        ts.tv_nsec+=(mstimeout*1000000);
+        ts.tv_sec +=ts.tv_nsec/1000000000; // integer division
+        ts.tv_nsec =ts.tv_nsec%1000000000;
+        */
+        // std::cout << "SharedMemoryRingBuffer: clientPull: time1 " << ts.tv_sec << " " << ts.tv_nsec << std::endl;
+        
+        // i=sem_timedwait(sema, &ts);
+        while ((i = sem_timedwait(sema, &ts)) == -1 && errno == EINTR)
+        continue; // Restart if interrupted by handler
     }
     
-    // void set_normalized_timespec(struct timespec *ts, time_t sec, s64 nsec)
-    // std::cout << "SharedMemoryRingBuffer: clientPull: using "<< mstimeout <<" ms timeout" << std::endl;
-    // std::cout << "SharedMemoryRingBuffer: clientPull: time0 " << ts.tv_sec << " " << ts.tv_nsec << std::endl;
-    normalize_timespec(&ts, ts.tv_sec, ts.tv_nsec+(int64_t(mstimeout)*1000000));
-    /*
-    ts.tv_nsec+=(mstimeout*1000000);
-    ts.tv_sec +=ts.tv_nsec/1000000000; // integer division
-    ts.tv_nsec =ts.tv_nsec%1000000000;
-    */
-    // std::cout << "SharedMemoryRingBuffer: clientPull: time1 " << ts.tv_sec << " " << ts.tv_nsec << std::endl;
-    
-    // i=sem_timedwait(sema, &ts);
-    while ((i = sem_timedwait(sema, &ts)) == -1 && errno == EINTR)
-      continue; // Restart if interrupted by handler
-  }
-  
-  /* Check what happened */
-  if (i == -1)
-  {
-    if (errno == ETIMEDOUT) {
-      // printf("sem_timedwait() timed out\n");
-      return false;
-    }
-    else 
+    /* Check what happened */
+    if (i == -1)
     {
-      perror("SharedMemRingBufferBase: clientPull: sem_timedwait failed");
-      exit(2);
-    } 
-  }
+        if (errno == ETIMEDOUT) {
+        // printf("sem_timedwait() timed out\n");
+            return false;
+        }
+        else 
+        {
+            perror("SharedMemRingBufferBase: clientPull: sem_timedwait failed");
+            exit(2);
+        } 
+    }
+        
+    if (flagIsSet()) {
+        index=-1;
+        clearFlag();
+    }
+    ++index;
+    if (index>=n_cells) {
+        index=0;
+    }
+    // TODO: read data here // what if read/write at the same moment at same cell..?  is locking a better idea ..? nope .. no locking needed!   This is process-safe by architecture..
+    // std::cout << "RingBuffer: clientPull: read index "<<index<<std::endl;
     
-  if (flagIsSet()) {
-    index=-1;
-    clearFlag();
-  }
-  ++index;
-  if (index>=n_cells) {
-    index=0;
-  }
-  // TODO: read data here // what if read/write at the same moment at same cell..?  is locking a better idea ..? nope .. no locking needed!   This is process-safe by architecture..
-  // std::cout << "RingBuffer: clientPull: read index "<<index<<std::endl;
-  
-  index_out=index;
-  size_out =shmems[index]->getSize();
-  // return index;
-  return true;
+    index_out = index;
+    // size_out  = shmems[index]->getSize();
+    shmems[index]->copyMetaTo(meta_); // copy metadata from the shmem segment's internal memory into variable referenced by the meta_ pointer.  Subclassing takes care of the correct typecast.
+    // return index;
+    return true;
 }
 
 
 
 SharedMemRingBuffer::SharedMemRingBuffer(const char* name, int n_cells, std::size_t n_bytes, int mstimeout, bool is_server) : SharedMemRingBufferBase(name, n_cells, n_bytes, mstimeout, is_server)  {
     int i;
-    for(i=0; i<n_cells; i++) {
+    for(i=0; i < n_cells; i++) {
         shmems.push_back(
         new SimpleSharedMemSegment((name+std::to_string(i)).c_str(), n_bytes, is_server)
             );
+    }
+    for(auto it = shmems.begin(); it != shmems.end(); ++it) {
+        (*it)->init(); // init reserves the shmem at the correct subclass
     }
 }
 
 
 SharedMemRingBuffer::~SharedMemRingBuffer() {
+    for(auto it = shmems.begin(); it != shmems.end(); ++it) {
+        (*it)->close_();
+        delete *it;
+    }
 }
 
 
 void SharedMemRingBuffer::serverPush(std::vector<uint8_t> &inp_payload) {
     std::size_t size = inp_payload.size();
     SharedMemRingBufferBase::serverPush(inp_payload, (void*)(&size));
+}
+
+
+bool SharedMemRingBuffer::clientPull(int &index_out, int &size_out) {
+    // std::size_t *size_out_ptr;
+    return SharedMemRingBufferBase::clientPull(index_out, (void*)(&size_out));
 }
 
 
@@ -542,10 +581,18 @@ SharedMemRingBufferRGB::SharedMemRingBufferRGB(const char* name, int n_cells, in
         new RGB24SharedMemSegment((name+std::to_string(i)).c_str(), width, height, is_server)
             );
     }
+    for(auto it = shmems.begin(); it != shmems.end(); ++it) {
+        (*it)->init(); // init reserves the shmem at the correct subclass
+    }
 }
 
 
 SharedMemRingBufferRGB::~SharedMemRingBufferRGB() {
+    // std::cout << "SharedMemRingBufferRGB: dtor" << std::endl;
+    for(auto it = shmems.begin(); it != shmems.end(); ++it) {
+        (*it)->close_();
+        delete *it;
+    }
 }
 
 
@@ -571,6 +618,22 @@ void SharedMemRingBufferRGB::serverPushAVRGBFrame(AVRGBFrame *f) {
 }
 
 
+bool SharedMemRingBufferRGB::clientPull(int &index_out, int &size_out) { // fix to support legacy code
+    RGB24Meta meta_ = RGB24Meta();
+    bool ok;
+    
+    ok = SharedMemRingBufferBase::clientPull(index_out, (void*)(&meta_));
+    size_out = (int)(meta_.size);
+    return ok;
+}
+
+
+bool SharedMemRingBufferRGB::clientPull2(int &index_out, RGB24Meta &meta_) {
+    return SharedMemRingBufferBase::clientPull(index_out, (void*)(&meta_));
+}
+
+
+/*
 PyObject* SharedMemRingBufferRGB::clientPullPy() {
     int i;
     
@@ -588,12 +651,6 @@ PyObject* SharedMemRingBufferRGB::clientPullPy() {
         // std::cout << "SharedMemoryRingBuffer: clientPull: using "<< mstimeout <<" ms timeout" << std::endl;
         // std::cout << "SharedMemoryRingBuffer: clientPull: time0 " << ts.tv_sec << " " << ts.tv_nsec << std::endl;
         normalize_timespec(&ts, ts.tv_sec, ts.tv_nsec + (int64_t(mstimeout)*1000000));
-        /*
-        ts.tv_nsec+=(mstimeout*1000000);
-        ts.tv_sec +=ts.tv_nsec/1000000000; // integer division
-        ts.tv_nsec =ts.tv_nsec%1000000000;
-        */
-        // std::cout << "SharedMemoryRingBuffer: clientPull: time1 " << ts.tv_sec << " " << ts.tv_nsec << std::endl;
         
         // i=sem_timedwait(sema, &ts);
         while ((i = sem_timedwait(sema, &ts)) == -1 && errno == EINTR)
@@ -601,7 +658,7 @@ PyObject* SharedMemRingBufferRGB::clientPullPy() {
     }
     PyObject *tup;
     
-    /* Check what happened */
+    // Check what happened
     if (i == -1)
     {
         if (errno == ETIMEDOUT) {
@@ -642,13 +699,13 @@ PyObject* SharedMemRingBufferRGB::clientPullPy() {
     PyTuple_SET_ITEM(tup, 5, PyLong_FromLong(meta->mstimestamp));
     return tup;
 }
-
+*/
 
 
 
 ShmemFrameFilter::ShmemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout) : FrameFilter(name,NULL), shmembuf(name, n_cells, n_bytes, mstimeout, true) {
 }
-  
+
 
 void ShmemFrameFilter::go(Frame* frame) {
   // shmembuf.serverPush(frame->payload); // this depends on the FrameClass this shmemfilter is supposed to manipulate

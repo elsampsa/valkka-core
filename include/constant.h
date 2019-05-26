@@ -39,6 +39,21 @@
 #define GLX_CONTEXT_MAJOR_VERSION       0x2091
 #define GLX_CONTEXT_MINOR_VERSION       0x2092
 
+#define ALIGNMENT 1
+/*
+ 
+https://stackoverflow.com/questions/35678041/what-is-linesize-alignment-meaning
+https://softwareengineering.stackexchange.com/questions/328775/how-important-is-memory-alignment-does-it-still-matter
+ 
+- decoder returns YUV frames that are aligned
+- ..during YUV => RGB interpolation (SwScaleFrameFilter, etc.), we get rid of the alignment (i.e. the extra padding bytes)
+- ..anyway, that must be done at some moment before passing the frames downstream (for analyzers, etc.)
+ 
+=> KEEP ALIGNMENT = 1
+
+- ..there might be performance benefits in using, for the final rgb bitmap images, widths that are multiples of 32
+*/
+ 
 static const int VERSION_MAJOR = 0; // <pyapi>
 static const int VERSION_MINOR = 11; // <pyapi>
 static const int VERSION_PATCH = 0; // <pyapi>

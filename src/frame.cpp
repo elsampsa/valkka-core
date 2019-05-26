@@ -531,7 +531,7 @@ void AVRGBFrame::reserve(int width, int height) {
     av_pixel_format = AV_PIX_FMT_RGB24;
     av_frame->width = width;
     av_frame->height = height;
-    int i = av_frame_get_buffer(av_frame, 32); // int align;
+    int i = av_frame_get_buffer(av_frame, ALIGNMENT); // ALIGNMENT at constant.h
     update();
 }
 

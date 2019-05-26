@@ -28,6 +28,8 @@
 #include "movement.h"
 
 #include <Python.h>
+// https://github.com/numpy/numpy/issues/9309
+// https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 // #define PY_ARRAY_UNIQUE_SYMBOL shmem_array_api
 #include "numpy/ndarraytypes.h"

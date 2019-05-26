@@ -553,9 +553,9 @@ void BlockingFifoFrameFilter::go(Frame* frame) {
  */
 SwScaleFrameFilter::SwScaleFrameFilter(const char* name, int target_width, int target_height, FrameFilter* next) : FrameFilter(name,next), target_width(target_width), target_height(target_height), width(0), height(0), sws_ctx(NULL) {
   // shorthand
-  AVFrame *output_frame =outputframe.av_frame;
+  AVFrame *output_frame =outputframe.av_frame; // AVRGBFrame => AVBitmapFrame => AVMediaFrame constructor has reserved av_frame member
   
-  int nb = av_image_alloc(output_frame->data, output_frame->linesize, target_width, target_height, AV_PIX_FMT_RGB24, 1);
+  int nb = av_image_alloc(output_frame->data, output_frame->linesize, target_width, target_height, AV_PIX_FMT_RGB24, ALIGNMENT); // ALIGNMENT at constant.h
   if (nb <= 0) {
     std::cout << "SwScaleFrameFilter: could not reserve frame " << std::endl;
     exit(5);
@@ -618,6 +618,8 @@ void SwScaleFrameFilter::go(Frame* frame) { // do the scaling
   }
   
   sws_scale(sws_ctx, (const uint8_t * const*)input_frame->data, input_frame->linesize, 0, input_frame->height, output_frame->data, output_frame->linesize);
+  // NOTE: input_frame's are YUV, coming from the decoder.  They are aligned.  We can then decide to scrap the alignment here .. in any case, we must do it at some moment
+  // before passing RGB frames further downstream (to analyzers etc.)
   
   // std::cout << "SwScaleFrameFilter: go: output frame: " << outputframe << std::endl;
   
