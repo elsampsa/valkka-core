@@ -53,7 +53,11 @@ https://softwareengineering.stackexchange.com/questions/328775/how-important-is-
 
 - ..there might be performance benefits in using, for the final rgb bitmap images, widths that are multiples of 32
 */
- 
+
+const char* get_numpy_version() {  // <pyapi>
+    return NUMPY_VERSION;          // <pyapi>
+}                                  // <pyapi> 
+    
 static const int VERSION_MAJOR = 0; // <pyapi>
 static const int VERSION_MINOR = 11; // <pyapi>
 static const int VERSION_PATCH = 0; // <pyapi>

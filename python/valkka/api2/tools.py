@@ -58,6 +58,33 @@ def getLogger(name):
     return logger
 
 
+def import_file(full_name, path):
+    """Import a python module from a path. 3.4+ only.
+
+    Does not call sys.modules[full_name] = path
+    
+    WARNING: this only works for single-file modules, not for packages
+    """
+    from importlib import util
+
+    spec = util.spec_from_file_location(full_name, path)
+    mod = util.module_from_spec(spec)
+
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def get_system_numpy():
+    """This doesn't work always..
+    """
+    from distutils import sysconfig
+    # stupid hack: temporarily modify package search order
+    sys.path.insert(0, sysconfig.get_python_lib())
+    import importlib
+    mod = importlib.import_module("numpy")
+    # print(mod)
+    sys.path.pop(0)
+    return mod
 
 
 # this is module specific!

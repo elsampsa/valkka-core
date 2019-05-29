@@ -147,8 +147,14 @@ message("*** PYTHON INTERFACE ***")
 # execute_process(COMMAND python3 -c "from distutils import sysconfig; print(sysconfig.get_python_lib(),end='')" OUTPUT_VARIABLE PYTHON_DIR)
 set(PYTHON_DIR "lib/python3/dist-packages") # just hard-code it
 message("PYTHON INSTALL DIR           : " ${PYTHON_DIR})
-execute_process(COMMAND python3 -c "import numpy; print(numpy.get_include())" OUTPUT_VARIABLE NUMPY_INCLUDE_DIR)
+
+execute_process(COMMAND python3 -c "import numpy; print(numpy.get_include(), end='')" OUTPUT_VARIABLE NUMPY_INCLUDE_DIR)
+execute_process(COMMAND python3 -c "import numpy; print(numpy.__version__, end='')" OUTPUT_VARIABLE NUMPY_VERSION)
+
 message("PYTHON NUMPY HEADER FILES IN : " ${NUMPY_INCLUDE_DIR})
+
+add_definitions(-DNUMPY_VERSION="${NUMPY_VERSION}")
+
 # pip3 install: (1.14.5)
 # /home/sampsa/.local/lib/python3.5/site-packages/numpy/__init__.py
 # pip3 install as sudo:

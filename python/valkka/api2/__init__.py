@@ -1,6 +1,13 @@
-__all__=["logging","chains","threads","multiprocess","shmem","tools"]
+__all__=["logging","chains","threads","multiprocess","shmem","tools","raise_numpy_version", "warn_numpy_version", "check_numpy_version"]
+
+# import importlib
+# import imp
+# from distutils import sysconfig
 
 # import everything from from valkka.api2.* to valkka.api2
+
+from valkka.core import get_numpy_version
+from valkka.api2.tools import *
 
 # from .logging import setValkkaLogLevel, loglevel_silent, loglevel_normal, loglevel_debug, loglevel_crazy
 from valkka.api2.logging import *
@@ -13,6 +20,26 @@ from valkka.api2.chains import BasicFilterchain, BasicFilterchain1, ShmemFilterc
 from valkka.api2.threads import LiveThread, USBDeviceThread, FileThread, OpenGLThread, Namespace
 from valkka.api2.multiprocess import ValkkaProcess, ValkkaShmemRGBProcess, safe_select
 from valkka.api2.shmem import ShmemClient, ShmemRGBClient
-from valkka.api2.tools import *
 from valkka.api2.valkkafs import ValkkaFS, findBlockDevices, ValkkaFSManager, formatMstimestamp
+
+
+def raise_numpy_version():
+    import numpy
+    if numpy.__version__ != get_numpy_version():
+        raise(AssertionError("Inconsistent numpy versions: libValkka compiled with %s / your system is using %s" % \
+            (get_numpy_version(), numpy.__version__)))
+    
+    
+def warn_numpy_version():
+    import numpy
+    if numpy.__version__ != get_numpy_version():
+        print("WARNING : Inconsistent numpy versions: libValkka compiled with %s / your system is using %s" % \
+            (get_numpy_version(), numpy.__version__))
+    
+    
+def check_numpy_version():
+    if numpy.__version__ != get_numpy_version():
+        return False
+    else:
+        return True
 
