@@ -33,6 +33,7 @@
 
 #include "tools.h"
 #include "sharedmem.h"
+#include "numpy_no_import.h"
 
 
 
@@ -472,6 +473,20 @@ void SharedMemRingBufferBase::serverPush(std::vector<uint8_t> &inp_payload, void
   i=sem_post(sema);
 }
 
+
+PyObject *SharedMemRingBufferBase::getBufferListPy() {
+    PyObject *plis, *pa;
+    npy_intp dims[1];
+    
+    plis = PyList_New(0);
+    for (auto it = shmems.begin(); it != shmems.end(); ++it) {
+        dims[0] = (*it)->n_bytes;
+        pa = PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)((*it)->n_bytes));
+        PyList_Append(plis, pa);
+    }
+    
+    return plis;
+}
 
 
 bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {

@@ -233,7 +233,7 @@ public: // <pyapi>
   int   getValue();       ///< Returns the current index (next to be read) of the shmem buffer
   bool  getClientState(); ///< Are the shmem segments available for client?
   
-public: // server side routines - call these only from the server
+public: // server side routines - call these only from the server           
     /** Copies payload to ring buffer
     * 
     * @param inp_payload : std::vector bytebuffer (passed by reference)
@@ -241,7 +241,8 @@ public: // server side routines - call these only from the server
     * After copying the payload, releases (increases) the semaphore.
     */
     void serverPush(std::vector<uint8_t> &inp_payload, void* meta);
-  
+    
+    
 public: // client side routines - call only from the client side // <pyapi>
     /** Returns the index of SharedMemoryRingBuffer::shmems that was just written.
     * 
@@ -251,7 +252,8 @@ public: // client side routines - call only from the client side // <pyapi>
     * returns true if data was obtained, false if semaphore timed out
     * 
     */
-    bool clientPull(int &index_out, void* meta); // shmem index, metadata object to be filled
+    bool clientPull(int &index_out, void* meta); // shmem index, metadata object to be filled   // <pyapi>
+    PyObject *getBufferListPy();                                // <pyapi>
 }; // <pyapi>
 
 

@@ -94,6 +94,8 @@
 #include<GL/glx.h>
 #include<GL/glxext.h>
 
+#define PY_ARRAY_UNIQUE_SYMBOL valkka_shmem_array_api
+
 #endif
 
 

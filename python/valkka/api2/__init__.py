@@ -6,7 +6,7 @@ __all__=["logging","chains","threads","multiprocess","shmem","tools","raise_nump
 
 # import everything from from valkka.api2.* to valkka.api2
 
-from valkka.core import get_numpy_version
+from valkka.core import get_numpy_version, numpy_version_ok
 from valkka.api2.tools import *
 
 # from .logging import setValkkaLogLevel, loglevel_silent, loglevel_normal, loglevel_debug, loglevel_crazy
@@ -24,22 +24,22 @@ from valkka.api2.valkkafs import ValkkaFS, findBlockDevices, ValkkaFSManager, fo
 
 
 def raise_numpy_version():
+    """
     import numpy
     if numpy.__version__ != get_numpy_version():
+    """
+    if not numpy_version_ok():
         raise(AssertionError("Inconsistent numpy versions: libValkka compiled with %s / your system is using %s" % \
             (get_numpy_version(), numpy.__version__)))
     
     
 def warn_numpy_version():
+    """
     import numpy
     if numpy.__version__ != get_numpy_version():
+    """
+    if not numpy_version_ok():
         print("WARNING : Inconsistent numpy versions: libValkka compiled with %s / your system is using %s" % \
             (get_numpy_version(), numpy.__version__))
     
-    
-def check_numpy_version():
-    if numpy.__version__ != get_numpy_version():
-        return False
-    else:
-        return True
 

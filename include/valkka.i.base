@@ -28,12 +28,12 @@
 #include "movement.h"
 
 #include <Python.h>
-// https://github.com/numpy/numpy/issues/9309
+
 // https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-// #define PY_ARRAY_UNIQUE_SYMBOL shmem_array_api
 #include "numpy/ndarraytypes.h"
 #include "numpy/arrayobject.h"
+
 %}
 
 %init %{
@@ -64,12 +64,18 @@ ffmpeg_av_register_all();  // register all avcodecs, muxers, etc.
 
 %inline %{
 
-PyObject* getNumpyShmem(SharedMemRingBuffer* rb, int i) {
+PyObject* getNumpyShmem(SharedMemRingBuffer* rb, int i) { // legacy stuff
   PyObject* pa;
   npy_intp dims[1];                                                               
   dims[0]=((rb->shmems)[i])->n_bytes;
   pa=PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)(((rb->shmems)[i])->payload));
   return pa;                                                                       
+}
+
+
+bool numpy_version_ok() {
+    // https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
+    return NPY_VERSION == PyArray_GetNDArrayCVersion();
 }
 
 
