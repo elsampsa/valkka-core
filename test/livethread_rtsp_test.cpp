@@ -36,6 +36,8 @@
 #include "framefilter.h"
 #include "logging.h"
 #include "avdep.h"
+#include "test_import.h"
+
 
 
 using namespace std::chrono_literals;

@@ -37,6 +37,8 @@
 #include "framefilter.h"
 #include "logging.h"
 #include "avdep.h"
+#include "test_import.h"
+
 
 using namespace std::chrono_literals;
 using std::this_thread::sleep_for;  // http://en.cppreference.com/w/cpp/thread/sleep_for

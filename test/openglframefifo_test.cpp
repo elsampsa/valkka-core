@@ -39,6 +39,8 @@
 #include "openglframefifo.h"
 #include "avthread.h"
 #include "livethread.h"
+#include "test_import.h"
+
 
 using namespace std::chrono_literals;
 using std::this_thread::sleep_for;

@@ -229,7 +229,7 @@ protected: // internal methods - not for the api user
     int   getFlagValue();  ///< Used by SharedMemoryRingBuffer::flagIsSet()
     void  zero();          ///< Force reset.  Semaphore value is set to 0
     
-public: // <pyapi>
+public:
   int   getValue();       ///< Returns the current index (next to be read) of the shmem buffer
   bool  getClientState(); ///< Are the shmem segments available for client?
   

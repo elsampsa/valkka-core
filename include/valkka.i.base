@@ -64,7 +64,7 @@ ffmpeg_av_register_all();  // register all avcodecs, muxers, etc.
 
 %inline %{
 
-PyObject* getNumpyShmem(SharedMemRingBuffer* rb, int i) { // legacy stuff
+PyObject* getNumpyShmem(SharedMemRingBufferRGB* rb, int i) { // legacy stuff
   PyObject* pa;
   npy_intp dims[1];                                                               
   dims[0]=((rb->shmems)[i])->n_bytes;

@@ -36,6 +36,7 @@
 #include "logging.h"
 #include "livethread.h"
 #include "sharedmem.h"
+#include "test_import.h"
 
 
 using namespace std::chrono_literals;

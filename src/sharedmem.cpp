@@ -479,9 +479,12 @@ PyObject *SharedMemRingBufferBase::getBufferListPy() {
     npy_intp dims[1];
     
     plis = PyList_New(0);
+    
+    // return plis;
+    
     for (auto it = shmems.begin(); it != shmems.end(); ++it) {
         dims[0] = (*it)->n_bytes;
-        pa = PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)((*it)->n_bytes));
+        pa = PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)((*it)->payload));
         PyList_Append(plis, pa);
     }
     

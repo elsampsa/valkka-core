@@ -36,6 +36,8 @@
 #include "framefilter.h"
 #include "logging.h"
 #include "avdep.h"
+#include "test_import.h"
+
 
 const char* stream_1   =std::getenv("VALKKA_TEST_RTSP_1");
 const char* stream_2   =std::getenv("VALKKA_TEST_RTSP_2");

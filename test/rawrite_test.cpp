@@ -35,6 +35,8 @@
 #include "logging.h"
 #include "avdep.h"
 #include "rawrite.h"
+#include "test_import.h"
+
 
 using namespace std::chrono_literals;
 using std::this_thread::sleep_for;

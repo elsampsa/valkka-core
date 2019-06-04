@@ -135,7 +135,7 @@ class ShmemRGBClient:
         self.isize_p = core.new_intp()
         # self.rgb_meta = RGB24Meta()
 
-        # print(self.pre,"shmem name=",self.name)
+        print(self.pre,"shmem name=",self.name)
         # shmem ring buffer on the client side
         self.core = core.SharedMemRingBufferRGB(
             self.name,
@@ -152,7 +152,12 @@ class ShmemRGBClient:
             # :)
             self.shmem_list.append(core.getNumpyShmem(self.core, i))
         """
+        
+        #"""
+        #print(self.pre,"shmem get list")
         self.shmem_list = self.core.getBufferListPy()
+        #print(self.pre,"shmem got list")
+        #"""
 
     def pull(self):
         """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
@@ -171,8 +176,8 @@ class ShmemRGBClient:
     def pull2(self):
         """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
         """
-        rgb_meta = RGB24Meta()
-        got = self.core.clientPull2(self.index_p, rgb_meta)
+        self.rgb_meta = core.RGB24Meta()
+        got = self.core.clientPull2(self.index_p, self.rgb_meta)
         index = core.intp_value(self.index_p)
         if (self.verbose):
             print(self.pre, "current index, info", index, ShmemRGBClient.metaToString(rgb_meta))
@@ -190,7 +195,7 @@ class ShmemRGBClient:
         SlotNumber slot;                                // <pyapi>
         long int mstimestamp;                           // <pyapi>
         """
-        return "width = %i / height = %i / slot = %i / mstimestamp = %i / size = %i" %
+        return "width = %i / height = %i / slot = %i / mstimestamp = %i / size = %i" % \
             (rgb_meta.width, rgb_meta.height, rgb_meta.slot, rgb_meta.mstimestamp, rgb_meta.size)
 
 

@@ -33,15 +33,13 @@
  *  @brief
  */ 
 
+#include "common.h"
 #include "thread.h"
 #include "framefilter.h"
 #include "framefifo.h"
 #include "rawrite.h"
 #include "logging.h"
-
 #include "Python.h"
-#include "numpy/ndarraytypes.h"
-#include "numpy/arrayobject.h"
 
 /*
 #include "boost/python/numpy.hpp"
