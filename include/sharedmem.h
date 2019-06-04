@@ -252,7 +252,10 @@ public: // client side routines - call only from the client side // <pyapi>
     * returns true if data was obtained, false if semaphore timed out
     * 
     */
-    bool clientPull(int &index_out, void* meta); // shmem index, metadata object to be filled   // <pyapi>
+    /** shmem index, metadata object to be filled */
+    bool clientPull(int &index_out, void* meta);                // <pyapi>
+    /** multithreading version: releases GIL */
+    bool clientPullThread(int &index_out, void* meta);          // <pyapi>
     PyObject *getBufferListPy();                                // <pyapi>
 }; // <pyapi>
 
@@ -294,10 +297,14 @@ public:                              // <pyapi>
     /** Returns a python tuple of metadata
      * (index, width, height, slot, timestamp)
      */
-    // PyObject* clientPullPy();                              // <pyapi>
-    bool clientPull(int &index_out, int &size_out);           // legacy <pyapi>
-    bool clientPull2(int &index_out, RGB24Meta &meta);        // <pyapi>
-};                                                            // <pyapi>
+    // PyObject* clientPullPy();                                  // <pyapi>
+    /** Legacy support */
+    bool clientPull(int &index_out, int &size_out);               // <pyapi>
+    /** Pulls payload and extended metadata */
+    bool clientPullFrame(int &index_out, RGB24Meta &meta);        // <pyapi>
+    /** For multithreading (instead of multiprocessing) applications: releases python GIL */
+    bool clientPullFrameThread(int &index_out, RGB24Meta &meta);  // <pyapi>
+};                                                                // <pyapi>
 
 
 

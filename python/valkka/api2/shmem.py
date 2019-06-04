@@ -173,11 +173,11 @@ class ShmemRGBClient:
         else:
             return None, None
 
-    def pull2(self):
+    def pullFrame(self):
         """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
         """
         self.rgb_meta = core.RGB24Meta()
-        got = self.core.clientPull2(self.index_p, self.rgb_meta)
+        got = self.core.clientPullFrame(self.index_p, self.rgb_meta)
         index = core.intp_value(self.index_p)
         if (self.verbose):
             print(self.pre, "current index, info", index, ShmemRGBClient.metaToString(rgb_meta))
@@ -185,6 +185,21 @@ class ShmemRGBClient:
             return index, self.rgb_meta
         else:
             return None, None
+
+    def pullFrameThread(self):
+        """Use with multithreading
+        """
+        self.rgb_meta = core.RGB24Meta()
+        got = self.core.clientPullFrameThread(self.index_p, self.rgb_meta)
+        index = core.intp_value(self.index_p)
+        if (self.verbose):
+            print(self.pre, "current index, info", index, ShmemRGBClient.metaToString(rgb_meta))
+        if (got):
+            return index, self.rgb_meta
+        else:
+            return None, None
+
+
 
     @staticmethod
     def metaToString(rgb_meta):

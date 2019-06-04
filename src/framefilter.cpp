@@ -627,7 +627,7 @@ void SwScaleFrameFilter::go(Frame* frame) { // do the scaling
     outputframe.copyMetaFrom(frame);
     next->run(&outputframe);
   }
-} 
+}
 
 
 

@@ -435,7 +435,22 @@ echo
 
 fi
 
+# if false; then
+if true; then
+echo "ringbuffer_test"
+echo "non-interactive shmem ringbuffer test"
+valgrind="valgrind" # enable valgrind
+# valgrind="" # disable valgrind
 
+echo 1
+$valgrind ./ringbuffer_test 1 $LOGLEVEL &>> test.out
+printf "END: ringbuffer_test 1\n\n" &>> test.out
+
+echo 2
+$valgrind ./ringbuffer_test 2 $LOGLEVEL &>> test.out
+printf "END: ringbuffer_test 2\n\n" &>> test.out
+
+fi
 
 # if false; then
 if true; then

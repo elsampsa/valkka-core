@@ -111,11 +111,11 @@ void test_2() {
   f->n_slot = 3;
   server.serverPushAVRGBFrame(f);
   
-  ok = client.clientPull2(index_out, meta);
+  ok = client.clientPullFrame(index_out, meta);
   std::cout << "index_out = " << index_out << std::endl;  
   std::cout << "meta: size:" << meta.size << " width:" << meta.width << " height:" << meta.height << " slot:" << meta.slot << std::endl;
   
-  ok = client.clientPull2(index_out, meta);
+  ok = client.clientPullFrame(index_out, meta);
   std::cout << "index_out = " << index_out << std::endl;  
   std::cout << "meta: size:" << meta.size << " width:" << meta.width << " height:" << meta.height << " slot:" << meta.slot << std::endl;
   

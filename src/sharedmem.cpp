@@ -319,14 +319,14 @@ void RGB24SharedMemSegment::putAVRGBFrame(AVRGBFrame *f) { // copy from AVFrame-
     
     RGB24Meta meta_ = RGB24Meta();
     
-    meta_.width = av_frame->linesize[0];
+    meta_.width = av_frame->width;
     meta_.height = av_frame->height;
     meta_.slot = f->n_slot;
     meta_.mstimestamp = f->mstimestamp;
     *meta = meta_; 
     meta->size = std::min(std::size_t(meta_.width*meta_.height*3), n_bytes);
     
-    std::cout << "RGB24SharedMemSegment: putAVRGBFrame: copying " << meta->size << " bytes from " << *f << std::endl;
+    // std::cout << "RGB24SharedMemSegment: putAVRGBFrame: copying " << meta->size << " bytes from " << *f << std::endl;
     memcpy(payload, av_frame->data[0], meta->size);
 }
 
@@ -341,7 +341,7 @@ std::size_t RGB24SharedMemSegment::getSize() {
 SharedMemRingBufferBase::SharedMemRingBufferBase(const char* name, int n_cells, std::size_t n_bytes, int mstimeout, bool is_server) : name(name), n_cells(n_cells), n_bytes(n_bytes), mstimeout(mstimeout), is_server(is_server) {
     int i;
 
-    std::cout << "SharedMemRingBufferBase: constructor: n_cells " << n_cells << std::endl;
+    // std::cout << "SharedMemRingBufferBase: constructor: n_cells " << n_cells << std::endl;
 
     sema_name    =std::string("/")+name+std::string("_valkka_ringbuffer");
     flagsema_name=std::string("/")+name+std::string("_valkka_ringflag");
@@ -558,6 +558,14 @@ bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {
 }
 
 
+bool SharedMemRingBufferBase::clientPullThread(int &index_out, void *meta_) {
+    bool val;
+    Py_BEGIN_ALLOW_THREADS
+    val = clientPull(index_out, meta_);
+    Py_END_ALLOW_THREADS
+    return val;
+}
+
 
 SharedMemRingBuffer::SharedMemRingBuffer(const char* name, int n_cells, std::size_t n_bytes, int mstimeout, bool is_server) : SharedMemRingBufferBase(name, n_cells, n_bytes, mstimeout, is_server)  {
     int i;
@@ -636,18 +644,22 @@ void SharedMemRingBufferRGB::serverPushAVRGBFrame(AVRGBFrame *f) {
 }
 
 
-bool SharedMemRingBufferRGB::clientPull(int &index_out, int &size_out) { // fix to support legacy code
+bool SharedMemRingBufferRGB::clientPull(int &index_out, int &size_out) { // support for legacy code
     RGB24Meta meta_ = RGB24Meta();
-    bool ok;
-    
+    bool ok;    
     ok = SharedMemRingBufferBase::clientPull(index_out, (void*)(&meta_));
     size_out = (int)(meta_.size);
     return ok;
 }
 
 
-bool SharedMemRingBufferRGB::clientPull2(int &index_out, RGB24Meta &meta_) {
+bool SharedMemRingBufferRGB::clientPullFrame(int &index_out, RGB24Meta &meta_) {
     return SharedMemRingBufferBase::clientPull(index_out, (void*)(&meta_));
+}
+
+
+bool SharedMemRingBufferRGB::clientPullFrameThread(int &index_out, RGB24Meta &meta_) {
+    return SharedMemRingBufferBase::clientPullThread(index_out, (void*)(&meta_));
 }
 
 
