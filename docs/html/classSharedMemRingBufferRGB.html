@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.11.0</span>
+   &#160;<span id="projectnumber">0.12.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -62,13 +62,14 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classSharedMemRingBufferRGB-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">SharedMemRingBufferRGB Class Reference<div class="ingroups"><a class="el" href="group__shmem__tag.html">shmem</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. ">SharedMemRingBuffer</a> for <a class="el" href="classAVRGBFrame.html" title="Decoded YUV frame in a non-planar format (thus &quot;NP&quot;) ">AVRGBFrame</a>.  
+<p><a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a> for <a class="el" href="classAVRGBFrame.html" title="Decoded YUV frame in a non-planar format (thus &quot;NP&quot;) ">AVRGBFrame</a>.  
  <a href="classSharedMemRingBufferRGB.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sharedmem_8h_source.html">sharedmem.h</a>&gt;</code></p>
@@ -77,7 +78,7 @@ Inheritance diagram for SharedMemRingBufferRGB:</div>
 <div class="dyncontent">
 <div class="center"><img src="classSharedMemRingBufferRGB__inherit__graph.png" border="0" usemap="#SharedMemRingBufferRGB_inherit__map" alt="Inheritance graph"/></div>
 <map name="SharedMemRingBufferRGB_inherit__map" id="SharedMemRingBufferRGB_inherit__map">
-<area shape="rect" id="node2" href="classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. " alt="" coords="19,5,174,32"/>
+<area shape="rect" id="node2" href="classSharedMemRingBufferBase.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. " alt="" coords="5,5,189,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -85,14 +86,14 @@ Collaboration diagram for SharedMemRingBufferRGB:</div>
 <div class="dyncontent">
 <div class="center"><img src="classSharedMemRingBufferRGB__coll__graph.png" border="0" usemap="#SharedMemRingBufferRGB_coll__map" alt="Collaboration graph"/></div>
 <map name="SharedMemRingBufferRGB_coll__map" id="SharedMemRingBufferRGB_coll__map">
-<area shape="rect" id="node2" href="classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. " alt="" coords="19,5,174,32"/>
+<area shape="rect" id="node2" href="classSharedMemRingBufferBase.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. " alt="" coords="5,5,189,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a133619b0ab04a656e77a1a6238a2743b"><td class="memItemLeft" align="right" valign="top"><a id="a133619b0ab04a656e77a1a6238a2743b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferRGB.html#a133619b0ab04a656e77a1a6238a2743b">SharedMemRingBufferRGB</a> (const char *name, int n_cells, int width, int height, int <a class="el" href="classSharedMemRingBuffer.html#aa671684f01190c97587c730a33ad579c">mstimeout</a>=0, bool <a class="el" href="classSharedMemRingBuffer.html#a4816abf3d49033b084ce8a458c855707">is_server</a>=false)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferRGB.html#a133619b0ab04a656e77a1a6238a2743b">SharedMemRingBufferRGB</a> (const char *name, int n_cells, int width, int height, int <a class="el" href="classSharedMemRingBufferBase.html#a8546fd9baa42b8ec0265a28bf56a577e">mstimeout</a>=0, bool <a class="el" href="classSharedMemRingBufferBase.html#abfca8858808e9bd224477dc5cdd50c8f">is_server</a>=false)</td></tr>
 <tr class="memdesc:a133619b0ab04a656e77a1a6238a2743b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default ctor. <br /></td></tr>
 <tr class="separator:a133619b0ab04a656e77a1a6238a2743b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a229ed4b5319d9760ad29dda07784807d"><td class="memItemLeft" align="right" valign="top"><a id="a229ed4b5319d9760ad29dda07784807d"></a>
@@ -102,103 +103,170 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a00acbe9fc0eb34e91f472966e928ff06"><td class="memItemLeft" align="right" valign="top"><a id="a00acbe9fc0eb34e91f472966e928ff06"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>serverPushAVRGBFrame</b> (<a class="el" href="classAVRGBFrame.html">AVRGBFrame</a> *f)</td></tr>
 <tr class="separator:a00acbe9fc0eb34e91f472966e928ff06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classSharedMemRingBuffer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classSharedMemRingBuffer')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a></td></tr>
-<tr class="memitem:a44ab33e4c4fbe3031d4b1850dcdb6edb inherit pub_methods_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a44ab33e4c4fbe3031d4b1850dcdb6edb">SharedMemRingBuffer</a> (const char *name, int n_cells, std::size_t <a class="el" href="classSharedMemRingBuffer.html#a146b8bc580741ca0ccf88a2bb2649493">n_bytes</a>, int <a class="el" href="classSharedMemRingBuffer.html#aa671684f01190c97587c730a33ad579c">mstimeout</a>=0, bool <a class="el" href="classSharedMemRingBuffer.html#a4816abf3d49033b084ce8a458c855707">is_server</a>=false)</td></tr>
-<tr class="memdesc:a44ab33e4c4fbe3031d4b1850dcdb6edb inherit pub_methods_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classSharedMemRingBuffer.html#a44ab33e4c4fbe3031d4b1850dcdb6edb">More...</a><br /></td></tr>
-<tr class="separator:a44ab33e4c4fbe3031d4b1850dcdb6edb inherit pub_methods_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed3935561cba74230a9b63c724578f5d inherit pub_methods_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="aed3935561cba74230a9b63c724578f5d"></a>
-virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#aed3935561cba74230a9b63c724578f5d">~SharedMemRingBuffer</a> ()</td></tr>
-<tr class="memdesc:aed3935561cba74230a9b63c724578f5d inherit pub_methods_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
-<tr class="separator:aed3935561cba74230a9b63c724578f5d inherit pub_methods_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae750505ebf56872f95072fb1ad14bed7 inherit pub_methods_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="ae750505ebf56872f95072fb1ad14bed7"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#ae750505ebf56872f95072fb1ad14bed7">getValue</a> ()</td></tr>
-<tr class="memdesc:ae750505ebf56872f95072fb1ad14bed7 inherit pub_methods_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current index (next to be read) of the shmem buffer // &lt;pyapi&gt; <br /></td></tr>
-<tr class="separator:ae750505ebf56872f95072fb1ad14bed7 inherit pub_methods_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5c5d30addf55288ea9228101be025c0 inherit pub_methods_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="aa5c5d30addf55288ea9228101be025c0"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#aa5c5d30addf55288ea9228101be025c0">getClientState</a> ()</td></tr>
-<tr class="memdesc:aa5c5d30addf55288ea9228101be025c0 inherit pub_methods_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Are the shmem segments available for client? // &lt;pyapi&gt; <br /></td></tr>
-<tr class="separator:aa5c5d30addf55288ea9228101be025c0 inherit pub_methods_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8bec32b4a67cf6e2aa2865db379525a inherit pub_methods_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#af8bec32b4a67cf6e2aa2865db379525a">serverPush</a> (std::vector&lt; uint8_t &gt; &amp;inp_payload)</td></tr>
-<tr class="memdesc:af8bec32b4a67cf6e2aa2865db379525a inherit pub_methods_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies payload to ring buffer.  <a href="classSharedMemRingBuffer.html#af8bec32b4a67cf6e2aa2865db379525a">More...</a><br /></td></tr>
-<tr class="separator:af8bec32b4a67cf6e2aa2865db379525a inherit pub_methods_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7285c34c4732ba4633d16bbcfbc7c24c inherit pub_methods_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a7285c34c4732ba4633d16bbcfbc7c24c">clientPull</a> (int &amp;index_out, int &amp;size_out)</td></tr>
-<tr class="memdesc:a7285c34c4732ba4633d16bbcfbc7c24c inherit pub_methods_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of SharedMemoryRingBuffer::shmems that was just written.  <a href="classSharedMemRingBuffer.html#a7285c34c4732ba4633d16bbcfbc7c24c">More...</a><br /></td></tr>
-<tr class="separator:a7285c34c4732ba4633d16bbcfbc7c24c inherit pub_methods_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75015924b786d93d1e96faa362c92cbc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferRGB.html#a75015924b786d93d1e96faa362c92cbc">clientPull</a> (int &amp;index_out, int &amp;size_out)</td></tr>
+<tr class="memdesc:a75015924b786d93d1e96faa362c92cbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a python tuple of metadata (index, width, height, slot, timestamp)  <a href="#a75015924b786d93d1e96faa362c92cbc">More...</a><br /></td></tr>
+<tr class="separator:a75015924b786d93d1e96faa362c92cbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac639222e011c19a50506ac04a98c33ee"><td class="memItemLeft" align="right" valign="top"><a id="ac639222e011c19a50506ac04a98c33ee"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferRGB.html#ac639222e011c19a50506ac04a98c33ee">clientPullFrame</a> (int &amp;index_out, <a class="el" href="structRGB24Meta.html">RGB24Meta</a> &amp;meta)</td></tr>
+<tr class="memdesc:ac639222e011c19a50506ac04a98c33ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pulls payload and extended metadata. <br /></td></tr>
+<tr class="separator:ac639222e011c19a50506ac04a98c33ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79df944d091aa0948f3d448f1f103d15"><td class="memItemLeft" align="right" valign="top"><a id="a79df944d091aa0948f3d448f1f103d15"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferRGB.html#a79df944d091aa0948f3d448f1f103d15">clientPullFrameThread</a> (int &amp;index_out, <a class="el" href="structRGB24Meta.html">RGB24Meta</a> &amp;meta)</td></tr>
+<tr class="memdesc:a79df944d091aa0948f3d448f1f103d15"><td class="mdescLeft">&#160;</td><td class="mdescRight">For multithreading (instead of multiprocessing) applications: releases python GIL. <br /></td></tr>
+<tr class="separator:a79df944d091aa0948f3d448f1f103d15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classSharedMemRingBufferBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classSharedMemRingBufferBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classSharedMemRingBufferBase.html">SharedMemRingBufferBase</a></td></tr>
+<tr class="memitem:a9395dabb42e184bf2bf8fa1411f4851b inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a9395dabb42e184bf2bf8fa1411f4851b">SharedMemRingBufferBase</a> (const char *name, int n_cells, std::size_t <a class="el" href="classSharedMemRingBufferBase.html#a1d7f860886907cc45c89a13b0ff1b391">n_bytes</a>, int <a class="el" href="classSharedMemRingBufferBase.html#a8546fd9baa42b8ec0265a28bf56a577e">mstimeout</a>=0, bool <a class="el" href="classSharedMemRingBufferBase.html#abfca8858808e9bd224477dc5cdd50c8f">is_server</a>=false)</td></tr>
+<tr class="memdesc:a9395dabb42e184bf2bf8fa1411f4851b inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classSharedMemRingBufferBase.html#a9395dabb42e184bf2bf8fa1411f4851b">More...</a><br /></td></tr>
+<tr class="separator:a9395dabb42e184bf2bf8fa1411f4851b inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f17611a053fdd1f8d979890b7c43bbb inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a7f17611a053fdd1f8d979890b7c43bbb"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a7f17611a053fdd1f8d979890b7c43bbb">~SharedMemRingBufferBase</a> ()</td></tr>
+<tr class="memdesc:a7f17611a053fdd1f8d979890b7c43bbb inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor. <br /></td></tr>
+<tr class="separator:a7f17611a053fdd1f8d979890b7c43bbb inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac72651d9cdec37be8c21a2f62ba18dc4 inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="ac72651d9cdec37be8c21a2f62ba18dc4"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#ac72651d9cdec37be8c21a2f62ba18dc4">getValue</a> ()</td></tr>
+<tr class="memdesc:ac72651d9cdec37be8c21a2f62ba18dc4 inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current index (next to be read) of the shmem buffer. <br /></td></tr>
+<tr class="separator:ac72651d9cdec37be8c21a2f62ba18dc4 inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02a9b0add3cd8563f0ed48ca16ce8679 inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a02a9b0add3cd8563f0ed48ca16ce8679"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a02a9b0add3cd8563f0ed48ca16ce8679">getClientState</a> ()</td></tr>
+<tr class="memdesc:a02a9b0add3cd8563f0ed48ca16ce8679 inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Are the shmem segments available for client? <br /></td></tr>
+<tr class="separator:a02a9b0add3cd8563f0ed48ca16ce8679 inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac29b12d053f86dcb95f58e7aa3a54bbf inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#ac29b12d053f86dcb95f58e7aa3a54bbf">serverPush</a> (std::vector&lt; uint8_t &gt; &amp;inp_payload, void *meta)</td></tr>
+<tr class="memdesc:ac29b12d053f86dcb95f58e7aa3a54bbf inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies payload to ring buffer.  <a href="classSharedMemRingBufferBase.html#ac29b12d053f86dcb95f58e7aa3a54bbf">More...</a><br /></td></tr>
+<tr class="separator:ac29b12d053f86dcb95f58e7aa3a54bbf inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa189c657836046557f5e3c3d0417e6b inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#aaa189c657836046557f5e3c3d0417e6b">clientPull</a> (int &amp;index_out, void *meta)</td></tr>
+<tr class="memdesc:aaa189c657836046557f5e3c3d0417e6b inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of SharedMemoryRingBuffer::shmems that was just written.  <a href="classSharedMemRingBufferBase.html#aaa189c657836046557f5e3c3d0417e6b">More...</a><br /></td></tr>
+<tr class="separator:aaa189c657836046557f5e3c3d0417e6b inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b65de6cd1dffc2936458a09d6a225e5 inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a2b65de6cd1dffc2936458a09d6a225e5"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a2b65de6cd1dffc2936458a09d6a225e5">clientPullThread</a> (int &amp;index_out, void *meta)</td></tr>
+<tr class="memdesc:a2b65de6cd1dffc2936458a09d6a225e5 inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">multithreading version: releases GIL <br /></td></tr>
+<tr class="separator:a2b65de6cd1dffc2936458a09d6a225e5 inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f6e04c2678433c9fd2a43b08dad5356 inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a5f6e04c2678433c9fd2a43b08dad5356"></a>
+PyObject *&#160;</td><td class="memItemRight" valign="bottom"><b>getBufferListPy</b> ()</td></tr>
+<tr class="separator:a5f6e04c2678433c9fd2a43b08dad5356 inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a75d099e5748222a20334e5e08ffc3a38"><td class="memItemLeft" align="right" valign="top"><a id="a75d099e5748222a20334e5e08ffc3a38"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>width</b></td></tr>
+<tr class="separator:a75d099e5748222a20334e5e08ffc3a38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8461430cf8f9d7351d1fab67af3017e8"><td class="memItemLeft" align="right" valign="top"><a id="a8461430cf8f9d7351d1fab67af3017e8"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>height</b></td></tr>
+<tr class="separator:a8461430cf8f9d7351d1fab67af3017e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classSharedMemRingBufferBase"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classSharedMemRingBufferBase')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classSharedMemRingBufferBase.html">SharedMemRingBufferBase</a></td></tr>
+<tr class="memitem:a0d55d98b06324b17c661a5ca57fdbb31 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a0d55d98b06324b17c661a5ca57fdbb31"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
+<tr class="separator:a0d55d98b06324b17c661a5ca57fdbb31 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad61024c8c32124c709050ab9ee56b7d6 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="ad61024c8c32124c709050ab9ee56b7d6"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>n_cells</b></td></tr>
+<tr class="separator:ad61024c8c32124c709050ab9ee56b7d6 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d7f860886907cc45c89a13b0ff1b391 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a1d7f860886907cc45c89a13b0ff1b391"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a1d7f860886907cc45c89a13b0ff1b391">n_bytes</a></td></tr>
+<tr class="memdesc:a1d7f860886907cc45c89a13b0ff1b391 inherit pro_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters defining the shmem ring buffer (number, size) <br /></td></tr>
+<tr class="separator:a1d7f860886907cc45c89a13b0ff1b391 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8546fd9baa42b8ec0265a28bf56a577e inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a8546fd9baa42b8ec0265a28bf56a577e"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a8546fd9baa42b8ec0265a28bf56a577e">mstimeout</a></td></tr>
+<tr class="memdesc:a8546fd9baa42b8ec0265a28bf56a577e inherit pro_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Semaphore timeout in milliseconds. <br /></td></tr>
+<tr class="separator:a8546fd9baa42b8ec0265a28bf56a577e inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfca8858808e9bd224477dc5cdd50c8f inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="abfca8858808e9bd224477dc5cdd50c8f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#abfca8858808e9bd224477dc5cdd50c8f">is_server</a></td></tr>
+<tr class="memdesc:abfca8858808e9bd224477dc5cdd50c8f inherit pro_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Are we on the server side or not? <br /></td></tr>
+<tr class="separator:abfca8858808e9bd224477dc5cdd50c8f inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58304ac11145e1f1b424a74a1440d6d9 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a58304ac11145e1f1b424a74a1440d6d9"></a>
+sem_t *&#160;</td><td class="memItemRight" valign="bottom"><b>sema</b></td></tr>
+<tr class="separator:a58304ac11145e1f1b424a74a1440d6d9 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03e6b5e07df6556077c15048c4c49a1a inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a03e6b5e07df6556077c15048c4c49a1a"></a>
+sem_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a03e6b5e07df6556077c15048c4c49a1a">flagsema</a></td></tr>
+<tr class="memdesc:a03e6b5e07df6556077c15048c4c49a1a inherit pro_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Posix semaphore objects (semaphore counter, semaphore for the overflow flag) <br /></td></tr>
+<tr class="separator:a03e6b5e07df6556077c15048c4c49a1a inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2db57b1cdad8ccf38534b3c08dcd953 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="ad2db57b1cdad8ccf38534b3c08dcd953"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#ad2db57b1cdad8ccf38534b3c08dcd953">sema_name</a></td></tr>
+<tr class="memdesc:ad2db57b1cdad8ccf38534b3c08dcd953 inherit pro_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name to identify the posix semaphore counter. <br /></td></tr>
+<tr class="separator:ad2db57b1cdad8ccf38534b3c08dcd953 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5f588e3d34812a0078274000c2efb3c inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="aa5f588e3d34812a0078274000c2efb3c"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#aa5f588e3d34812a0078274000c2efb3c">flagsema_name</a></td></tr>
+<tr class="memdesc:aa5f588e3d34812a0078274000c2efb3c inherit pro_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name to identify the posix semaphore used for the overflow flag. <br /></td></tr>
+<tr class="separator:aa5f588e3d34812a0078274000c2efb3c inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6e06e3efa7ead60c7044c36e51bb7df inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="ae6e06e3efa7ead60c7044c36e51bb7df"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#ae6e06e3efa7ead60c7044c36e51bb7df">index</a></td></tr>
+<tr class="memdesc:ae6e06e3efa7ead60c7044c36e51bb7df inherit pro_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">The index of cell that has just been written. Remember: server and client see their own copies of this. <br /></td></tr>
+<tr class="separator:ae6e06e3efa7ead60c7044c36e51bb7df inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24674058463a7df67c68140c718ac695 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a24674058463a7df67c68140c718ac695"></a>
+struct timespec&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a24674058463a7df67c68140c718ac695">ts</a></td></tr>
+<tr class="memdesc:a24674058463a7df67c68140c718ac695 inherit pro_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timespec for semaphore timeouts. <br /></td></tr>
+<tr class="separator:a24674058463a7df67c68140c718ac695 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_attribs_classSharedMemRingBuffer"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classSharedMemRingBuffer')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a></td></tr>
-<tr class="memitem:a9fdcb261979b88a997cf25f2451c9492 inherit pub_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="a9fdcb261979b88a997cf25f2451c9492"></a>
-std::vector&lt; <a class="el" href="classSharedMemSegment.html">SharedMemSegment</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a9fdcb261979b88a997cf25f2451c9492">shmems</a></td></tr>
-<tr class="memdesc:a9fdcb261979b88a997cf25f2451c9492 inherit pub_attribs_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared memory segments. <br /></td></tr>
-<tr class="separator:a9fdcb261979b88a997cf25f2451c9492 inherit pub_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_classSharedMemRingBuffer"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classSharedMemRingBuffer')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a></td></tr>
-<tr class="memitem:ad27804902351c02aa666ca4c3febc824 inherit pro_methods_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="ad27804902351c02aa666ca4c3febc824"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#ad27804902351c02aa666ca4c3febc824">setFlag</a> ()</td></tr>
-<tr class="memdesc:ad27804902351c02aa666ca4c3febc824 inherit pro_methods_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Server: call this to indicate a ring-buffer overflow. <br /></td></tr>
-<tr class="separator:ad27804902351c02aa666ca4c3febc824 inherit pro_methods_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09d467d30d7688766f2b2dcab7f4cb41 inherit pro_methods_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="a09d467d30d7688766f2b2dcab7f4cb41"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a09d467d30d7688766f2b2dcab7f4cb41">flagIsSet</a> ()</td></tr>
-<tr class="memdesc:a09d467d30d7688766f2b2dcab7f4cb41 inherit pro_methods_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Client: call this to see if there has been a ring-buffer overflow. <br /></td></tr>
-<tr class="separator:a09d467d30d7688766f2b2dcab7f4cb41 inherit pro_methods_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a156b27e9e115f4c73c0e9992cb115ded inherit pro_methods_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="a156b27e9e115f4c73c0e9992cb115ded"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a156b27e9e115f4c73c0e9992cb115ded">clearFlag</a> ()</td></tr>
-<tr class="memdesc:a156b27e9e115f4c73c0e9992cb115ded inherit pro_methods_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Client: call this after handling the ring-buffer overflow. <br /></td></tr>
-<tr class="separator:a156b27e9e115f4c73c0e9992cb115ded inherit pro_methods_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d82b75607988d7aae119893483d4488 inherit pro_methods_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="a2d82b75607988d7aae119893483d4488"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a2d82b75607988d7aae119893483d4488">getFlagValue</a> ()</td></tr>
-<tr class="memdesc:a2d82b75607988d7aae119893483d4488 inherit pro_methods_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by SharedMemoryRingBuffer::flagIsSet() <br /></td></tr>
-<tr class="separator:a2d82b75607988d7aae119893483d4488 inherit pro_methods_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3557c3940e78d605c25ad060a5cc8a2 inherit pro_methods_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="af3557c3940e78d605c25ad060a5cc8a2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#af3557c3940e78d605c25ad060a5cc8a2">zero</a> ()</td></tr>
-<tr class="memdesc:af3557c3940e78d605c25ad060a5cc8a2 inherit pro_methods_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Force reset. Semaphore value is set to 0. <br /></td></tr>
-<tr class="separator:af3557c3940e78d605c25ad060a5cc8a2 inherit pro_methods_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classSharedMemRingBuffer"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classSharedMemRingBuffer')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a></td></tr>
-<tr class="memitem:acb0857e691d3170eb34c97cecd4e64a0 inherit pro_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="acb0857e691d3170eb34c97cecd4e64a0"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
-<tr class="separator:acb0857e691d3170eb34c97cecd4e64a0 inherit pro_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2c9d1b96814086a9ed1153644668fba inherit pro_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="ac2c9d1b96814086a9ed1153644668fba"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>n_cells</b></td></tr>
-<tr class="separator:ac2c9d1b96814086a9ed1153644668fba inherit pro_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a146b8bc580741ca0ccf88a2bb2649493 inherit pro_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="a146b8bc580741ca0ccf88a2bb2649493"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a146b8bc580741ca0ccf88a2bb2649493">n_bytes</a></td></tr>
-<tr class="memdesc:a146b8bc580741ca0ccf88a2bb2649493 inherit pro_attribs_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters defining the shmem ring buffer (number, size) <br /></td></tr>
-<tr class="separator:a146b8bc580741ca0ccf88a2bb2649493 inherit pro_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa671684f01190c97587c730a33ad579c inherit pro_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="aa671684f01190c97587c730a33ad579c"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#aa671684f01190c97587c730a33ad579c">mstimeout</a></td></tr>
-<tr class="memdesc:aa671684f01190c97587c730a33ad579c inherit pro_attribs_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Semaphore timeout in milliseconds. <br /></td></tr>
-<tr class="separator:aa671684f01190c97587c730a33ad579c inherit pro_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4816abf3d49033b084ce8a458c855707 inherit pro_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="a4816abf3d49033b084ce8a458c855707"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a4816abf3d49033b084ce8a458c855707">is_server</a></td></tr>
-<tr class="memdesc:a4816abf3d49033b084ce8a458c855707 inherit pro_attribs_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Are we on the server side or not? <br /></td></tr>
-<tr class="separator:a4816abf3d49033b084ce8a458c855707 inherit pro_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e320c868fa1d4ffe1436e389487cb4d inherit pro_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="a9e320c868fa1d4ffe1436e389487cb4d"></a>
-sem_t *&#160;</td><td class="memItemRight" valign="bottom"><b>sema</b></td></tr>
-<tr class="separator:a9e320c868fa1d4ffe1436e389487cb4d inherit pro_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7906316dfb2620cf0b7bc17da83def9 inherit pro_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="ae7906316dfb2620cf0b7bc17da83def9"></a>
-sem_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#ae7906316dfb2620cf0b7bc17da83def9">flagsema</a></td></tr>
-<tr class="memdesc:ae7906316dfb2620cf0b7bc17da83def9 inherit pro_attribs_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Posix semaphore objects (semaphore counter, semaphore for the overflow flag) <br /></td></tr>
-<tr class="separator:ae7906316dfb2620cf0b7bc17da83def9 inherit pro_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58ff63c26e895b2971a53a51d491dbf6 inherit pro_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="a58ff63c26e895b2971a53a51d491dbf6"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a58ff63c26e895b2971a53a51d491dbf6">sema_name</a></td></tr>
-<tr class="memdesc:a58ff63c26e895b2971a53a51d491dbf6 inherit pro_attribs_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name to identify the posix semaphore counter. <br /></td></tr>
-<tr class="separator:a58ff63c26e895b2971a53a51d491dbf6 inherit pro_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a932e5c59aea1575d8a17195ddd3e6085 inherit pro_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="a932e5c59aea1575d8a17195ddd3e6085"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a932e5c59aea1575d8a17195ddd3e6085">flagsema_name</a></td></tr>
-<tr class="memdesc:a932e5c59aea1575d8a17195ddd3e6085 inherit pro_attribs_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name to identify the posix semaphore used for the overflow flag. <br /></td></tr>
-<tr class="separator:a932e5c59aea1575d8a17195ddd3e6085 inherit pro_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a673f45eba85818d15f674dbc28b7024e inherit pro_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="a673f45eba85818d15f674dbc28b7024e"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a673f45eba85818d15f674dbc28b7024e">index</a></td></tr>
-<tr class="memdesc:a673f45eba85818d15f674dbc28b7024e inherit pro_attribs_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">The index of cell that has just been written. Remember: server and client see their own copies of this. <br /></td></tr>
-<tr class="separator:a673f45eba85818d15f674dbc28b7024e inherit pro_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76a892713f68e36620074a9de3493723 inherit pro_attribs_classSharedMemRingBuffer"><td class="memItemLeft" align="right" valign="top"><a id="a76a892713f68e36620074a9de3493723"></a>
-struct timespec&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html#a76a892713f68e36620074a9de3493723">ts</a></td></tr>
-<tr class="memdesc:a76a892713f68e36620074a9de3493723 inherit pro_attribs_classSharedMemRingBuffer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timespec for semaphore timeouts. <br /></td></tr>
-<tr class="separator:a76a892713f68e36620074a9de3493723 inherit pro_attribs_classSharedMemRingBuffer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_classSharedMemRingBufferBase"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classSharedMemRingBufferBase')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classSharedMemRingBufferBase.html">SharedMemRingBufferBase</a></td></tr>
+<tr class="memitem:abef5d3e2819bd91b8540915d3b01ac87 inherit pub_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="abef5d3e2819bd91b8540915d3b01ac87"></a>
+std::vector&lt; <a class="el" href="classSharedMemSegment.html">SharedMemSegment</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#abef5d3e2819bd91b8540915d3b01ac87">shmems</a></td></tr>
+<tr class="memdesc:abef5d3e2819bd91b8540915d3b01ac87 inherit pub_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared memory segments. <br /></td></tr>
+<tr class="separator:abef5d3e2819bd91b8540915d3b01ac87 inherit pub_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classSharedMemRingBufferBase"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classSharedMemRingBufferBase')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classSharedMemRingBufferBase.html">SharedMemRingBufferBase</a></td></tr>
+<tr class="memitem:a605448004d9694030d05c68b87cacba2 inherit pro_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a605448004d9694030d05c68b87cacba2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a605448004d9694030d05c68b87cacba2">setFlag</a> ()</td></tr>
+<tr class="memdesc:a605448004d9694030d05c68b87cacba2 inherit pro_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Server: call this to indicate a ring-buffer overflow. <br /></td></tr>
+<tr class="separator:a605448004d9694030d05c68b87cacba2 inherit pro_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2a765b9af9948dee93a91570f634447 inherit pro_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="ad2a765b9af9948dee93a91570f634447"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#ad2a765b9af9948dee93a91570f634447">flagIsSet</a> ()</td></tr>
+<tr class="memdesc:ad2a765b9af9948dee93a91570f634447 inherit pro_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Client: call this to see if there has been a ring-buffer overflow. <br /></td></tr>
+<tr class="separator:ad2a765b9af9948dee93a91570f634447 inherit pro_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a546c922f85b339bdf2b5e7364d198b87 inherit pro_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a546c922f85b339bdf2b5e7364d198b87"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a546c922f85b339bdf2b5e7364d198b87">clearFlag</a> ()</td></tr>
+<tr class="memdesc:a546c922f85b339bdf2b5e7364d198b87 inherit pro_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Client: call this after handling the ring-buffer overflow. <br /></td></tr>
+<tr class="separator:a546c922f85b339bdf2b5e7364d198b87 inherit pro_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a776609c562f0b05b1ceb5675bd01a994 inherit pro_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a776609c562f0b05b1ceb5675bd01a994"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a776609c562f0b05b1ceb5675bd01a994">getFlagValue</a> ()</td></tr>
+<tr class="memdesc:a776609c562f0b05b1ceb5675bd01a994 inherit pro_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by SharedMemoryRingBuffer::flagIsSet() <br /></td></tr>
+<tr class="separator:a776609c562f0b05b1ceb5675bd01a994 inherit pro_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6318f858ef7384e09961669c6bc9f03b inherit pro_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a6318f858ef7384e09961669c6bc9f03b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a6318f858ef7384e09961669c6bc9f03b">zero</a> ()</td></tr>
+<tr class="memdesc:a6318f858ef7384e09961669c6bc9f03b inherit pro_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Force reset. Semaphore value is set to 0. <br /></td></tr>
+<tr class="separator:a6318f858ef7384e09961669c6bc9f03b inherit pro_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. ">SharedMemRingBuffer</a> for <a class="el" href="classAVRGBFrame.html" title="Decoded YUV frame in a non-planar format (thus &quot;NP&quot;) ">AVRGBFrame</a>. </p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+<div class="textblock"><p><a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a> for <a class="el" href="classAVRGBFrame.html" title="Decoded YUV frame in a non-planar format (thus &quot;NP&quot;) ">AVRGBFrame</a>. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a75015924b786d93d1e96faa362c92cbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75015924b786d93d1e96faa362c92cbc">&#9670;&nbsp;</a></span>clientPull()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool SharedMemRingBufferRGB::clientPull </td>
+          <td>(</td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>index_out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>size_out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a python tuple of metadata (index, width, height, slot, timestamp) </p>
+<p>Legacy support </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classSharedMemRingBufferRGB_a75015924b786d93d1e96faa362c92cbc_cgraph.png" border="0" usemap="#classSharedMemRingBufferRGB_a75015924b786d93d1e96faa362c92cbc_cgraph" alt=""/></div>
+<map name="classSharedMemRingBufferRGB_a75015924b786d93d1e96faa362c92cbc_cgraph" id="classSharedMemRingBufferRGB_a75015924b786d93d1e96faa362c92cbc_cgraph">
+<area shape="rect" id="node2" href="classSharedMemRingBufferBase.html#aaa189c657836046557f5e3c3d0417e6b" title="Returns the index of SharedMemoryRingBuffer::shmems that was just written. " alt="" coords="236,5,420,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="sharedmem_8h_source.html">sharedmem.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="sharedmem_8cpp.html">sharedmem.cpp</a></li>
 </ul>

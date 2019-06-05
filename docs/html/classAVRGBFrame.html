@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.11.0</span>
+   &#160;<span id="projectnumber">0.12.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -242,7 +242,7 @@ long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <p>public: // helper objects AVPixelFormat av_pixel_format; ///&lt; From AVCodecContext .. this class implies YUV422P so this is not really required .. <a class="el" href="structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. ">BitmapPars</a> bmpars; ///&lt; Reference parameters for corresponding YUV420P frame uint8_t* payload; ///&lt; shortcut to the non-planar data }; Decoded RGB frame in FFMpeg format</p>
 <ul>
 <li>This FrameClass is produced by <a class="el" href="classSwScaleFrameFilter.html" title="Interpolate from YUV bitmap to RGB. ">SwScaleFrameFilter</a> (that performs YUV=&gt;RGB interpolation). This FrameClass is used typically when passing frame data to shared memory</li>
-<li>Constructor does not reserve data for frames. This is done by classes using this class</li>
+<li>Constructor does not reserve data for frames. This is done by classes using this class (see <a class="el" href="classSwScaleFrameFilter.html" title="Interpolate from YUV bitmap to RGB. ">SwScaleFrameFilter</a>)</li>
 <li>Frames of this class can also be pre-reserved after construction, by using the member <a class="el" href="classAVRGBFrame.html#a267f6d1b3bda3213c0153ab5553d43aa" title="Reserve RGB image with width &amp; height. ">AVRGBFrame::reserve</a></li>
 </ul>
 <p>Copiable/Queable : yes </p>

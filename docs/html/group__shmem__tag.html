@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.11.0</span>
+   &#160;<span id="projectnumber">0.12.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -88,14 +88,14 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemSegment.html">SharedMemSegment</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared memory segment with metadata (the segment size)  <a href="classSharedMemSegment.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interprocess shared memory ring buffer synchronized with posix semaphores.  <a href="classSharedMemRingBuffer.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html">SharedMemRingBufferBase</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interprocess shared memory ring buffer synchronized with posix semaphores.  <a href="classSharedMemRingBufferBase.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferRGB.html">SharedMemRingBufferRGB</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. ">SharedMemRingBuffer</a> for <a class="el" href="classAVRGBFrame.html" title="Decoded YUV frame in a non-planar format (thus &quot;NP&quot;) ">AVRGBFrame</a>.  <a href="classSharedMemRingBufferRGB.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a> for <a class="el" href="classAVRGBFrame.html" title="Decoded YUV frame in a non-planar format (thus &quot;NP&quot;) ">AVRGBFrame</a>.  <a href="classSharedMemRingBufferRGB.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShmemFrameFilter.html">ShmemFrameFilter</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> writes frames into a <a class="el" href="classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. ">SharedMemRingBuffer</a>.  <a href="classShmemFrameFilter.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> writes frames into a <a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a>.  <a href="classShmemFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRGBShmemFrameFilter.html">RGBShmemFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like <a class="el" href="classShmemFrameFilter.html" title="This FrameFilter writes frames into a SharedMemRingBuffer. ">ShmemFrameFilter</a>.  <a href="classRGBShmemFrameFilter.html#details">More...</a><br /></td></tr>
@@ -105,7 +105,7 @@ Classes</h2></td></tr>
 <p>Posix shared memory and semaphores. </p>
 <p>Using shared memory, multiprocesses, especially python processes, can interchange frames. Used typically for sending frames from <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a> to a python multiprocess at the python API side.</p>
 <p>According to my experience, this is good for passing, say, one full-hd frame per second (good enough to do ok image analysis). However, don't expect this to work for high-throughput 30 fps per second for several cameras..!</p>
-<p>In the <a class="el" href="classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. ">SharedMemRingBuffer</a> the name is important. It identifies the POSIX shared memory segments both in the server and client side. </p>
+<p>In the <a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a> the name is important. It identifies the POSIX shared memory segments both in the server and client side. </p>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

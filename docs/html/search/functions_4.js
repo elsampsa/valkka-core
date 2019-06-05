@@ -12,7 +12,7 @@ var searchData=
   ['filterfromavpacket',['filterFromAVPacket',['../classBasicFrame.html#a5067fbad84e4862c5cdc95d8c90cdb58',1,'BasicFrame']]],
   ['findvars',['findVars',['../classShader.html#a736e7f2738dfda3d7f7ed9a935926086',1,'Shader::findVars()'],['../classYUVShader.html#a5ee5a884a1018b52d3d89fc459867ea9',1,'YUVShader::findVars()']]],
   ['finish',['finish',['../classRaWriter.html#a84248d8bdd33fbcba64d76b348975411',1,'RaWriter']]],
-  ['flagisset',['flagIsSet',['../classSharedMemRingBuffer.html#a09d467d30d7688766f2b2dcab7f4cb41',1,'SharedMemRingBuffer']]],
+  ['flagisset',['flagIsSet',['../classSharedMemRingBufferBase.html#ad2a765b9af9948dee93a91570f634447',1,'SharedMemRingBufferBase']]],
   ['flush',['flush',['../classDecoder.html#a582c617021bf1b26d86f97d8ce342541',1,'Decoder::flush()'],['../classDummyDecoder.html#a576b85d8abb55d47fa12b997bc8e4593',1,'DummyDecoder::flush()'],['../classAVDecoder.html#af28490aea460e9e6ae29166b04bce6c7',1,'AVDecoder::flush()']]],
   ['forceclose',['forceClose',['../classConnection.html#a7215a1f954c4a517128a55a769d3f1c0',1,'Connection::forceClose()'],['../classRTSPConnection.html#a01624f7a575ce9776b3f7152be42f138',1,'RTSPConnection::forceClose()']]],
   ['forkframefilter',['ForkFrameFilter',['../classForkFrameFilter.html#adab702ac80f3e9df32b7ee16b7e34f8e',1,'ForkFrameFilter']]],

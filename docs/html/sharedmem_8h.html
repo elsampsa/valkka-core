@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.11.0</span>
+   &#160;<span id="projectnumber">0.12.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -80,22 +80,20 @@ $(function() {
 <code>#include &lt;fcntl.h&gt;</code><br />
 <code>#include &lt;semaphore.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="framefilter_8h_source.html">framefilter.h</a>&quot;</code><br />
+<code>#include &quot;Python.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for sharedmem.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="sharedmem_8h__incl.png" border="0" usemap="#_2home_2sampsa_2C_2valkka_2include_2sharedmem_8h" alt=""/></div>
 <map name="_2home_2sampsa_2C_2valkka_2include_2sharedmem_8h" id="_2home_2sampsa_2C_2valkka_2include_2sharedmem_8h">
-<area shape="rect" id="node2" href="common_8h.html" title="List of common header files. " alt="" coords="1160,468,1243,495"/>
-<area shape="rect" id="node37" href="framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="885,95,976,121"/>
-<area shape="rect" id="node38" href="frame_8h.html" title="Frame classes. " alt="" coords="897,244,964,271"/>
-<area shape="rect" id="node50" href="framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="733,169,817,196"/>
-<area shape="rect" id="node39" href="codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="969,319,1037,345"/>
-<area shape="rect" id="node40" href="threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1061,319,1163,345"/>
-<area shape="rect" id="node41" href="constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="889,393,972,420"/>
-<area shape="rect" id="node42" href="avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1454,319,1522,345"/>
-<area shape="rect" id="node47" href="opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="822,319,893,345"/>
-<area shape="rect" id="node48" href="tools_8h.html" title="Auxiliary routines. " alt="" coords="736,319,797,345"/>
-<area shape="rect" id="node49" href="logging_8h.html" title="Logging utilities. " alt="" coords="224,468,299,495"/>
+<area shape="rect" id="node2" href="common_8h.html" title="List of common header files. " alt="" coords="1769,468,1851,495"/>
+<area shape="rect" id="node43" href="framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="2079,95,2170,121"/>
+<area shape="rect" id="node44" href="frame_8h.html" title="Frame classes. " alt="" coords="2051,244,2118,271"/>
+<area shape="rect" id="node49" href="framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="2003,169,2087,196"/>
+<area shape="rect" id="node45" href="codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="2051,319,2119,345"/>
+<area shape="rect" id="node46" href="threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1924,319,2027,345"/>
+<area shape="rect" id="node47" href="constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1934,393,2017,420"/>
+<area shape="rect" id="node48" href="avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="2143,319,2211,345"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -114,14 +112,25 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemSegment.html">SharedMemSegment</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared memory segment with metadata (the segment size)  <a href="classSharedMemSegment.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimpleSharedMemSegment.html">SimpleSharedMemSegment</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared mem segment with simple metadata : just the payload length.  <a href="classSimpleSharedMemSegment.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRGB24Meta.html">RGB24Meta</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A seriazable metadata object.  <a href="structRGB24Meta.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRGB24SharedMemSegment.html">RGB24SharedMemSegment</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A Shmem segment describing an RGB24 frame.  <a href="classRGB24SharedMemSegment.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html">SharedMemRingBufferBase</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interprocess shared memory ring buffer synchronized with posix semaphores.  <a href="classSharedMemRingBufferBase.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interprocess shared memory ring buffer synchronized with posix semaphores.  <a href="classSharedMemRingBuffer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferRGB.html">SharedMemRingBufferRGB</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. ">SharedMemRingBuffer</a> for <a class="el" href="classAVRGBFrame.html" title="Decoded YUV frame in a non-planar format (thus &quot;NP&quot;) ">AVRGBFrame</a>.  <a href="classSharedMemRingBufferRGB.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a> for <a class="el" href="classAVRGBFrame.html" title="Decoded YUV frame in a non-planar format (thus &quot;NP&quot;) ">AVRGBFrame</a>.  <a href="classSharedMemRingBufferRGB.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShmemFrameFilter.html">ShmemFrameFilter</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> writes frames into a <a class="el" href="classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. ">SharedMemRingBuffer</a>.  <a href="classShmemFrameFilter.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> writes frames into a <a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a>.  <a href="classShmemFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRGBShmemFrameFilter.html">RGBShmemFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like <a class="el" href="classShmemFrameFilter.html" title="This FrameFilter writes frames into a SharedMemRingBuffer. ">ShmemFrameFilter</a>.  <a href="classRGBShmemFrameFilter.html#details">More...</a><br /></td></tr>
@@ -131,7 +140,7 @@ Classes</h2></td></tr>
 <div class="textblock"><p>Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores. </p>
 <dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.11.0 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.12.0 </dd></dl>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

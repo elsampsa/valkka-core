@@ -2,6 +2,7 @@ var searchData=
 [
   ['ind',['ind',['../classValkkaFS.html#a833d62218d812ccb9482e42c923333a9',1,'ValkkaFS']]],
   ['infocall',['infoCall',['../classOpenGLThread.html#a4510108836ef5727ebc63e468bb963fb',1,'OpenGLThread']]],
+  ['init',['init',['../classSharedMemSegment.html#ac32adbe5d3a37c4c36874d7a369faa91',1,'SharedMemSegment']]],
   ['initfile',['initFile',['../classFileFrameFilter.html#a1ee12c02c0865196551d4dc12428a06c',1,'FileFrameFilter']]],
   ['initglx',['initGLX',['../classOpenGLThread.html#abde6e36adfa45693fac38444f93ab81a',1,'OpenGLThread']]],
   ['input',['input',['../classDecoder.html#acb57ca0c4301f22ffd58890577d296e8',1,'Decoder']]],

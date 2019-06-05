@@ -4,7 +4,7 @@ var searchData=
   ['n_5favpkt',['n_avpkt',['../structFrameFifoContext.html#a07bb37d4500dd1167c66210a9d7efa92',1,'FrameFifoContext']]],
   ['n_5fbasic',['n_basic',['../structFrameFifoContext.html#a2d17c05a5a4270c25fa2f07a44e2ca85',1,'FrameFifoContext']]],
   ['n_5fblock',['n_block',['../structValkkaFSWriterSignalPars.html#afc4c293ca59855fb3d54373a8856b83b',1,'ValkkaFSWriterSignalPars']]],
-  ['n_5fbytes',['n_bytes',['../classSharedMemSegment.html#ab32950dffd4a0f7ed1a15164871c056b',1,'SharedMemSegment::n_bytes()'],['../classSharedMemRingBuffer.html#a146b8bc580741ca0ccf88a2bb2649493',1,'SharedMemRingBuffer::n_bytes()']]],
+  ['n_5fbytes',['n_bytes',['../classSharedMemSegment.html#ab32950dffd4a0f7ed1a15164871c056b',1,'SharedMemSegment::n_bytes()'],['../classSharedMemRingBufferBase.html#a1d7f860886907cc45c89a13b0ff1b391',1,'SharedMemRingBufferBase::n_bytes()']]],
   ['n_5fchannel',['n_channel',['../classSwitch.html#a0445c8bb47aacff250596bd82655b0fd',1,'Switch']]],
   ['n_5fmarker',['n_marker',['../structFrameFifoContext.html#acb1a29f1392747b2ef0f26265d9dc1e7',1,'FrameFifoContext']]],
   ['n_5fsetup',['n_setup',['../structFrameFifoContext.html#a1a20461522f6b86444433676f28997cd',1,'FrameFifoContext::n_setup()'],['../structOpenGLFrameFifoContext.html#af427a897a93ca7de6c16900e3bcbe84a',1,'OpenGLFrameFifoContext::n_setup()']]],

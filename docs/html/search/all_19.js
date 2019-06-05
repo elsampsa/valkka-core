@@ -26,6 +26,7 @@ var searchData=
   ['_7esetupframe',['~SetupFrame',['../classSetupFrame.html#a21958219e3685d4698a55f17b26cb1c1',1,'SetupFrame']]],
   ['_7eshader',['~Shader',['../classShader.html#aff01df87e8a102f270b5b135a295e59d',1,'Shader']]],
   ['_7esharedmemringbuffer',['~SharedMemRingBuffer',['../classSharedMemRingBuffer.html#aed3935561cba74230a9b63c724578f5d',1,'SharedMemRingBuffer']]],
+  ['_7esharedmemringbufferbase',['~SharedMemRingBufferBase',['../classSharedMemRingBufferBase.html#a7f17611a053fdd1f8d979890b7c43bbb',1,'SharedMemRingBufferBase']]],
   ['_7esharedmemringbufferrgb',['~SharedMemRingBufferRGB',['../classSharedMemRingBufferRGB.html#a229ed4b5319d9760ad29dda07784807d',1,'SharedMemRingBufferRGB']]],
   ['_7esharedmemsegment',['~SharedMemSegment',['../classSharedMemSegment.html#aa2a20b7e8c3ae2b53a5c6791f6e3d552',1,'SharedMemSegment']]],
   ['_7esignalframe',['~SignalFrame',['../classSignalFrame.html#afa85165b6466fba20b1b739d877d40b0',1,'SignalFrame']]],

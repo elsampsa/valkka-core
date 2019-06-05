@@ -11,7 +11,7 @@ find src/ -name "*.cpp" -exec sed -i -r "s/@version (.*)/@version $1.$2.$3 /g" {
 find test/ -name "*.cpp" -exec sed -i -r "s/@version (.*)/@version $1.$2.$3 /g" {} \;
 
 # mod python setup script:
-sed -i -r "s/version = (.*)/version = \"$1.$2.$3\", /g" python/setup.py
+# sed -i -r "s/version = (.*)/version = \"$1.$2.$3\", /g" python/setup.py
 # mod python files:
 find python/valkka/ -name "*.py" -exec sed -i -r "s/@version (.*)/@version $1.$2.$3 /g" {} \;
 

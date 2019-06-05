@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.11.0</span>
+   &#160;<span id="projectnumber">0.12.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -84,9 +84,7 @@ $(function() {
 </td></tr>
 <tr><td><img src="inherit_graph_3.png" border="0" alt="" usemap="#BufferSource"/>
 <map name="BufferSource" id="BufferSource">
-<area shape="rect" id="node1" href="classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP). " alt="" coords="5,31,93,57"/>
-<area shape="rect" id="node2" href="classRTSPConnection.html" title="A negotiated RTSP connection. " alt="" coords="141,5,265,32"/>
-<area shape="rect" id="node3" href="classSDPConnection.html" title="Connection is is defined in an SDP file. " alt="" coords="145,56,261,83"/>
+<area shape="rect" id="node2" href="classBufferSource.html" title="Implements a FramedSource for sending frames. " alt="" coords="160,5,259,32"/>
 </map>
 </td></tr>
 <tr><td><img src="inherit_graph_4.png" border="0" alt="" usemap="#Connection"/>
@@ -211,7 +209,7 @@ $(function() {
 </td></tr>
 <tr><td><img src="inherit_graph_21.png" border="0" alt="" usemap="#FrameSink"/>
 <map name="FrameSink" id="FrameSink">
-<area shape="rect" id="node1" href="structOpenGLFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for an OpenGLFrameFifo. " alt="" coords="5,5,180,32"/>
+<area shape="rect" id="node2" href="classFrameSink.html" title="Live555 handling of media frames. " alt="" coords="136,5,221,32"/>
 </map>
 </td></tr>
 <tr><td><img src="inherit_graph_22.png" border="0" alt="" usemap="#H264Pars"/>
@@ -290,83 +288,85 @@ $(function() {
 <area shape="rect" id="node1" href="classSwitch.html" title="Switch between two input streams. " alt="" coords="5,5,68,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_36.png" border="0" alt="" usemap="#RGBFrameFifoContext"/>
+<tr><td><img src="inherit_graph_36.png" border="0" alt="" usemap="#RGB24Meta"/>
+<map name="RGB24Meta" id="RGB24Meta">
+<area shape="rect" id="node1" href="structRGB24Meta.html" title="A seriazable metadata object. " alt="" coords="5,5,100,32"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_37.png" border="0" alt="" usemap="#RGBFrameFifoContext"/>
 <map name="RGBFrameFifoContext" id="RGBFrameFifoContext">
-<area shape="rect" id="node1" href="classTestFileStream.html" title="TestFileStream" alt="" coords="5,5,116,32"/>
+<area shape="rect" id="node1" href="structRGBFrameFifoContext.html" title="RGBFrameFifoContext" alt="" coords="5,5,161,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_37.png" border="0" alt="" usemap="#SetupPars"/>
+<tr><td><img src="inherit_graph_38.png" border="0" alt="" usemap="#SetupPars"/>
 <map name="SetupPars" id="SetupPars">
-<area shape="rect" id="node1" href="structTestSignalContext.html" title="TestSignalContext" alt="" coords="5,5,136,32"/>
+<area shape="rect" id="node1" href="structSetupPars.html" title="SetupPars" alt="" coords="5,5,88,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_38.png" border="0" alt="" usemap="#Shader"/>
+<tr><td><img src="inherit_graph_39.png" border="0" alt="" usemap="#Shader"/>
 <map name="Shader" id="Shader">
-<area shape="rect" id="node1" href="classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids..." alt="" coords="5,5,53,32"/>
-<area shape="rect" id="node2" href="classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.) " alt="" coords="101,5,177,32"/>
+<area shape="rect" id="node1" href="classShader.html" title="A general purpose shader class. " alt="" coords="5,31,68,57"/>
+<area shape="rect" id="node2" href="classRGBShader.html" title="RGBShader" alt="" coords="116,5,208,32"/>
+<area shape="rect" id="node3" href="classYUVShader.html" title="YUVShader" alt="" coords="117,56,207,83"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_39.png" border="0" alt="" usemap="#SharedMemRingBuffer"/>
-<map name="SharedMemRingBuffer" id="SharedMemRingBuffer">
-<area shape="rect" id="node1" href="classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="5,157,68,184"/>
-<area shape="rect" id="node2" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. " alt="" coords="150,5,230,32"/>
-<area shape="rect" id="node3" href="classFileThread.html" title="This class in analogous to LiveThread, but it handles files instead of live streams. " alt="" coords="149,56,231,83"/>
-<area shape="rect" id="node4" href="classLiveThread.html" title="Live555, running in a separate thread. " alt="" coords="147,107,233,133"/>
-<area shape="rect" id="node5" href="classOpenGLThread.html" title="This class does a lot of things: " alt="" coords="135,157,245,184"/>
-<area shape="rect" id="node6" href="classTestConsumerThread.html" title="A demo thread for testing the producer/consumer module for fifos. " alt="" coords="116,208,264,235"/>
-<area shape="rect" id="node7" href="classTestProducerThread.html" title="A demo thread for testing the producer/consumer module for fifos. " alt="" coords="120,259,260,285"/>
-<area shape="rect" id="node8" href="classTestThread.html" title="TestThread" alt="" coords="146,309,234,336"/>
+<tr><td><img src="inherit_graph_40.png" border="0" alt="" usemap="#SharedMemRingBufferBase"/>
+<map name="SharedMemRingBufferBase" id="SharedMemRingBufferBase">
+<area shape="rect" id="node1" href="classSharedMemRingBufferBase.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. " alt="" coords="5,31,189,57"/>
+<area shape="rect" id="node2" href="classSharedMemRingBuffer.html" title="SharedMemRingBuffer" alt="" coords="251,5,406,32"/>
+<area shape="rect" id="node3" href="classSharedMemRingBufferRGB.html" title="SharedMemRingBuffer for AVRGBFrame. " alt="" coords="237,56,420,83"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_40.png" border="0" alt="" usemap="#SharedMemSegment"/>
+<tr><td><img src="inherit_graph_41.png" border="0" alt="" usemap="#SharedMemSegment"/>
 <map name="SharedMemSegment" id="SharedMemSegment">
-<area shape="rect" id="node1" href="structThreadContext.html" title="An example of information context sent to the Thread inside Thread::SignalContext. " alt="" coords="5,5,113,32"/>
+<area shape="rect" id="node1" href="classSharedMemSegment.html" title="Shared memory segment with metadata (the segment size) " alt="" coords="5,31,149,57"/>
+<area shape="rect" id="node2" href="classRGB24SharedMemSegment.html" title="A Shmem segment describing an RGB24 frame. " alt="" coords="197,5,384,32"/>
+<area shape="rect" id="node3" href="classSimpleSharedMemSegment.html" title="Shared mem segment with simple metadata : just the payload length. " alt="" coords="199,56,383,83"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_41.png" border="0" alt="" usemap="#SignalContext"/>
+<tr><td><img src="inherit_graph_42.png" border="0" alt="" usemap="#SignalContext"/>
 <map name="SignalContext" id="SignalContext">
-<area shape="rect" id="node2" href="classValkkaRTSPClient.html" title="Handles a live555 RTSP connection. " alt="" coords="145,5,277,32"/>
+<area shape="rect" id="node1" href="structSignalContext.html" title="Encapsulates data sent by the signal. " alt="" coords="5,5,109,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_42.png" border="0" alt="" usemap="#SlotContext"/>
+<tr><td><img src="inherit_graph_43.png" border="0" alt="" usemap="#SlotContext"/>
 <map name="SlotContext" id="SlotContext">
-<area shape="rect" id="node2" href="classValkkaServerMediaSubsession.html" title="ValkkaServerMediaSubsession" alt="" coords="283,5,485,32"/>
-<area shape="rect" id="node3" href="classH264ServerMediaSubsession.html" title="H264ServerMediaSubsession" alt="" coords="533,5,728,32"/>
+<area shape="rect" id="node1" href="classSlotContext.html" title="Each Frame carries information about it&#39;s slot number in Frame::slot. " alt="" coords="5,5,96,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_43.png" border="0" alt="" usemap="#Stream"/>
+<tr><td><img src="inherit_graph_44.png" border="0" alt="" usemap="#Stream"/>
 <map name="Stream" id="Stream">
 <area shape="rect" id="node1" href="classStream.html" title="An outbound Stream. " alt="" coords="5,5,69,32"/>
 <area shape="rect" id="node2" href="classH264Stream.html" title="H264Stream" alt="" coords="117,5,212,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_44.png" border="0" alt="" usemap="#StreamClientState"/>
+<tr><td><img src="inherit_graph_45.png" border="0" alt="" usemap="#StreamClientState"/>
 <map name="StreamClientState" id="StreamClientState">
 <area shape="rect" id="node1" href="classStreamClientState.html" title="Class to hold per&#45;stream state that we maintain throughout each stream&#39;s lifetime. " alt="" coords="5,5,135,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_45.png" border="0" alt="" usemap="#Switch"/>
+<tr><td><img src="inherit_graph_46.png" border="0" alt="" usemap="#Switch"/>
 <map name="Switch" id="Switch">
 <area shape="rect" id="node1" href="classSwitch.html" title="Switch between two input streams. " alt="" coords="5,5,68,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_46.png" border="0" alt="" usemap="#TestFileStream"/>
+<tr><td><img src="inherit_graph_47.png" border="0" alt="" usemap="#TestFileStream"/>
 <map name="TestFileStream" id="TestFileStream">
 <area shape="rect" id="node1" href="classTestFileStream.html" title="TestFileStream" alt="" coords="5,5,116,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_47.png" border="0" alt="" usemap="#TestSignalContext"/>
+<tr><td><img src="inherit_graph_48.png" border="0" alt="" usemap="#TestSignalContext"/>
 <map name="TestSignalContext" id="TestSignalContext">
 <area shape="rect" id="node1" href="structTestSignalContext.html" title="TestSignalContext" alt="" coords="5,5,136,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_48.png" border="0" alt="" usemap="#TEX"/>
+<tr><td><img src="inherit_graph_49.png" border="0" alt="" usemap="#TEX"/>
 <map name="TEX" id="TEX">
 <area shape="rect" id="node1" href="classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids..." alt="" coords="5,5,53,32"/>
 <area shape="rect" id="node2" href="classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.) " alt="" coords="101,5,177,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_49.png" border="0" alt="" usemap="#Thread"/>
+<tr><td><img src="inherit_graph_50.png" border="0" alt="" usemap="#Thread"/>
 <map name="Thread" id="Thread">
 <area shape="rect" id="node1" href="classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="5,259,68,285"/>
 <area shape="rect" id="node2" href="classAbstractFileThread.html" title="This class uses AbstractFileStream(s) " alt="" coords="131,5,263,32"/>
@@ -383,63 +383,63 @@ $(function() {
 <area shape="rect" id="node3" href="classFileCacheThread.html" title="Thread that caches frames and streams them into output at play speed. " alt="" coords="325,5,447,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_50.png" border="0" alt="" usemap="#ThreadContext"/>
+<tr><td><img src="inherit_graph_51.png" border="0" alt="" usemap="#ThreadContext"/>
 <map name="ThreadContext" id="ThreadContext">
 <area shape="rect" id="node1" href="structThreadContext.html" title="An example of information context sent to the Thread inside Thread::SignalContext. " alt="" coords="5,5,113,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_51.png" border="0" alt="" usemap="#USBCameraConnectionContext"/>
+<tr><td><img src="inherit_graph_52.png" border="0" alt="" usemap="#USBCameraConnectionContext"/>
 <map name="USBCameraConnectionContext" id="USBCameraConnectionContext">
 <area shape="rect" id="node1" href="structUSBCameraConnectionContext.html" title="Parameters for connecting to a usb camera. " alt="" coords="5,5,213,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_52.png" border="0" alt="" usemap="#USBDevice"/>
+<tr><td><img src="inherit_graph_53.png" border="0" alt="" usemap="#USBDevice"/>
 <map name="USBDevice" id="USBDevice">
 <area shape="rect" id="node1" href="classUSBDevice.html" title="USBDevice" alt="" coords="5,5,96,32"/>
 <area shape="rect" id="node2" href="classV4LDevice.html" title="V4LDevice" alt="" coords="144,5,231,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_53.png" border="0" alt="" usemap="#USBDeviceSignalContext"/>
+<tr><td><img src="inherit_graph_54.png" border="0" alt="" usemap="#USBDeviceSignalContext"/>
 <map name="USBDeviceSignalContext" id="USBDeviceSignalContext">
 <area shape="rect" id="node1" href="structUSBDeviceSignalContext.html" title="Redefinition of characteristic signal contexts (info that goes with the signal) " alt="" coords="5,5,179,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_54.png" border="0" alt="" usemap="#ValkkaFS"/>
+<tr><td><img src="inherit_graph_55.png" border="0" alt="" usemap="#ValkkaFS"/>
 <map name="ValkkaFS" id="ValkkaFS">
 <area shape="rect" id="node1" href="classValkkaFS.html" title="Book&#45;keeping for ValkkaFS. " alt="" coords="5,5,84,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_55.png" border="0" alt="" usemap="#ValkkaFSReaderSignalContext"/>
+<tr><td><img src="inherit_graph_56.png" border="0" alt="" usemap="#ValkkaFSReaderSignalContext"/>
 <map name="ValkkaFSReaderSignalContext" id="ValkkaFSReaderSignalContext">
 <area shape="rect" id="node1" href="structValkkaFSReaderSignalContext.html" title="Encapsulate data sent in the ValkkaFSReaderSignal. " alt="" coords="5,5,208,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_56.png" border="0" alt="" usemap="#ValkkaFSReaderSignalPars"/>
+<tr><td><img src="inherit_graph_57.png" border="0" alt="" usemap="#ValkkaFSReaderSignalPars"/>
 <map name="ValkkaFSReaderSignalPars" id="ValkkaFSReaderSignalPars">
 <area shape="rect" id="node1" href="structValkkaFSReaderSignalPars.html" title="Signal information for ValkkaFSReaderThread. " alt="" coords="5,5,189,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_57.png" border="0" alt="" usemap="#ValkkaFSTool"/>
+<tr><td><img src="inherit_graph_58.png" border="0" alt="" usemap="#ValkkaFSTool"/>
 <map name="ValkkaFSTool" id="ValkkaFSTool">
 <area shape="rect" id="node1" href="classValkkaFSTool.html" title="Analyzer tool for ValkkaFS. " alt="" coords="5,5,109,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_58.png" border="0" alt="" usemap="#ValkkaFSWriterSignalContext"/>
+<tr><td><img src="inherit_graph_59.png" border="0" alt="" usemap="#ValkkaFSWriterSignalContext"/>
 <map name="ValkkaFSWriterSignalContext" id="ValkkaFSWriterSignalContext">
 <area shape="rect" id="node1" href="structValkkaFSWriterSignalContext.html" title="Encapsulate data sent in the ValkkaFSWriterSignal. " alt="" coords="5,5,201,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_59.png" border="0" alt="" usemap="#ValkkaFSWriterSignalPars"/>
+<tr><td><img src="inherit_graph_60.png" border="0" alt="" usemap="#ValkkaFSWriterSignalPars"/>
 <map name="ValkkaFSWriterSignalPars" id="ValkkaFSWriterSignalPars">
 <area shape="rect" id="node1" href="structValkkaFSWriterSignalPars.html" title="Signal information for ValkkaFSWriterThread. " alt="" coords="5,5,183,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_60.png" border="0" alt="" usemap="#ValkkaRTSPClient"/>
+<tr><td><img src="inherit_graph_61.png" border="0" alt="" usemap="#ValkkaRTSPClient"/>
 <map name="ValkkaRTSPClient" id="ValkkaRTSPClient">
 <area shape="rect" id="node2" href="classValkkaRTSPClient.html" title="Handles a live555 RTSP connection. " alt="" coords="145,5,277,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_61.png" border="0" alt="" usemap="#ValkkaServerMediaSubsession"/>
+<tr><td><img src="inherit_graph_62.png" border="0" alt="" usemap="#ValkkaServerMediaSubsession"/>
 <map name="ValkkaServerMediaSubsession" id="ValkkaServerMediaSubsession">
 <area shape="rect" id="node2" href="classValkkaServerMediaSubsession.html" title="ValkkaServerMediaSubsession" alt="" coords="283,5,485,32"/>
 <area shape="rect" id="node3" href="classH264ServerMediaSubsession.html" title="H264ServerMediaSubsession" alt="" coords="533,5,728,32"/>

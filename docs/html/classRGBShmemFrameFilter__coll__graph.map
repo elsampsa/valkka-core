@@ -1,5 +1,5 @@
 <map id="RGBShmemFrameFilter" name="RGBShmemFrameFilter">
 <area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="5,81,93,108"/>
 <area shape="rect" id="node3" href="$classSharedMemRingBufferRGB.html" title="SharedMemRingBuffer for AVRGBFrame. " alt="" coords="171,81,354,108"/>
-<area shape="rect" id="node4" href="$classSharedMemRingBuffer.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. " alt="" coords="185,5,340,32"/>
+<area shape="rect" id="node4" href="$classSharedMemRingBufferBase.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. " alt="" coords="171,5,355,32"/>
 </map>
