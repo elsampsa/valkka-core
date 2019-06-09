@@ -1,3 +1,15 @@
+valkka (0.12.0-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * Implemented shmem extended metadata, clean numpy import, etc.
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Wed, 05 Jun 2019 08:17:54 +0300
+
+valkka (0.12.0-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * Implemented shmem extended metadata, clean numpy import, etc.
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Wed, 05 Jun 2019 08:17:54 +0300
+
 valkka (0.11.0-0ubuntu1-xenialppa1) xenial; urgency=low
 
   * Live555 bugfixes, etc.

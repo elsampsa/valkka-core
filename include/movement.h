@@ -46,7 +46,7 @@ public:                                                                         
      * @param duration  Duration of a single event (milliseconds)
      * 
      */
-    MovementFrameFilter(const char* name, long int interval, float treshold, long int duration, PyObject* pycallback, FrameFilter* next=NULL);     // <pyapi>
+    MovementFrameFilter(const char* name, long int interval, float treshold, long int duration, FrameFilter* next=NULL);     // <pyapi>
     virtual ~MovementFrameFilter(); // <pyapi>
     
 protected:
@@ -67,6 +67,8 @@ protected:
     
 public:
     void reset();                                                                         // <pyapi>
+    /** Set a python callable on movement start & stop events */
+    void setCallback(PyObject* pycallback);                                               // <pyapi>
 };                                                                                        // <pyapi>
 
 

@@ -33,15 +33,26 @@
 
 #include "movement.h"
 
+// #define MOVEMENTFILTER_DEBUG 1
 
 
-MovementFrameFilter::MovementFrameFilter(const char* name, long int interval, float treshold, long int duration, PyObject* pycallback, FrameFilter* next) : FrameFilter(name, next), interval(interval), treshold(treshold), duration(duration), pycallback(pycallback), movement_start(0), luma(NULL), mstimestamp(0), y_size(0) {
+MovementFrameFilter::MovementFrameFilter(const char* name, long int interval, float treshold, long int duration, FrameFilter* next) : FrameFilter(name, next), interval(interval), treshold(treshold), duration(duration), pycallback(NULL), movement_start(0), luma(NULL), mstimestamp(0), y_size(0) {
 }
 
 MovementFrameFilter::~MovementFrameFilter() {
     this->reset();
 }
-    
+
+void MovementFrameFilter::setCallback(PyObject* pycallback) {
+    if (PyCallable_Check(pycallback) == 1) {
+        this->pycallback = pycallback;
+    }
+    else {
+        std::cout << "MovementFrameFilter: setCallback: could not set callback" << std::endl;
+    }
+}
+
+
 void MovementFrameFilter::reset() {
     mstimestamp = 0;
     if (luma) {
@@ -59,7 +70,7 @@ void MovementFrameFilter::go(Frame* frame) {
   
 void MovementFrameFilter::run(Frame* frame) {
     if (frame->getFrameClass()!=FrameClass::avbitmap) {
-        std::cout << "MovementFrameFilter: wrong kind of frame" << std::endl;
+        filterlogger.log(LogLevel::fatal) << "MovementFrameFilter: wrong kind of frame" << std::endl;
         return;
     }
     
@@ -75,8 +86,10 @@ void MovementFrameFilter::run(Frame* frame) {
         return;
     }
     
+#ifdef MOVEMENTFILTER_DEBUG
     std::cout << "MovementFrameFilter: going forward: dt: " << (f->mstimestamp - mstimestamp) << std::endl;
-        
+#endif
+    
     mstimestamp = f->mstimestamp; // time to update the timestamp ..
 
     if ( (luma == NULL) or (y_size != f->bmpars.y_size) ) { // time to re-allocate the luma plane
@@ -105,12 +118,18 @@ void MovementFrameFilter::run(Frame* frame) {
     memcpy(luma, f->y_payload, y_size); // cache the new frame
     float res = float(su) / float(y_size) / float(255); // normalize
     
+#ifdef MOVEMENTFILTER_DEBUG
     std::cout << "MovementFrameFilter: result: " << res << std::endl;
+#endif
     
     if (res >= treshold) {
+        #ifdef MOVEMENTFILTER_DEBUG
         std::cout << "MovementFrameFilter: movement" << std::endl;
+        #endif
         if (movement_start == 0) { // new movement event
+            #ifdef MOVEMENTFILTER_DEBUG
             std::cout << "MovementFrameFilter: new movement event" << std::endl;
+            #endif
             movement_start = mstimestamp;
             
             if (pycallback != NULL) { // PYCALLBACK
@@ -130,7 +149,7 @@ void MovementFrameFilter::run(Frame* frame) {
                 res = PyObject_CallFunctionObjArgs(pycallback, tup, NULL);
                 // send a tuple with : (True, slot, mstimestamp)
                 if (!res) {
-                    std::cout << "MovementFrameFilter: movement callback failed" << std::endl;
+                    filterlogger.log(LogLevel::fatal) << "MovementFrameFilter: movement callback failed" << std::endl;
                 }
                 PyGILState_Release(gstate);
             } // PYCALLBACK
@@ -139,7 +158,9 @@ void MovementFrameFilter::run(Frame* frame) {
     }
     else if ( movement_start > 0 and ( (mstimestamp - movement_start) >= duration ) ) { // no movement detected, but old movement event was on and max event duration is due
         movement_start = 0;
+        #ifdef MOVEMENTFILTER_DEBUG
         std::cout << "MovementFrameFilter: movement stopped" << std::endl;
+        #endif
 
         if (pycallback != NULL) { // PYCALLBACK
             PyGILState_STATE gstate;
@@ -151,17 +172,20 @@ void MovementFrameFilter::run(Frame* frame) {
             // res = Py_BuildValue("(ii)", 123, 456); // debug : crassssh
             
             tup = PyTuple_New(3);
-            PyTuple_SET_ITEM(tup, 0, Py_True);
+            PyTuple_SET_ITEM(tup, 0, Py_False);
             PyTuple_SET_ITEM(tup, 1, PyLong_FromUnsignedLong((unsigned long)(f->n_slot))); // unsigned short
             PyTuple_SET_ITEM(tup, 2, PyLong_FromLong(mstimestamp));
             
             res = PyObject_CallFunctionObjArgs(pycallback, tup, NULL);
             // send a tuple with : (True, slot, mstimestamp)
             if (!res) {
-                std::cout << "MovementFrameFilter: movement callback failed" << std::endl;
+                filterlogger.log(LogLevel::fatal) << "MovementFrameFilter: movement callback failed" << std::endl;
             }
             PyGILState_Release(gstate);
         } // PYCALLBACK
+    }
+    else if ( movement_start > 0 ) { // movement event is on
+        next->run(frame); // pass the frame
     }
     
 }

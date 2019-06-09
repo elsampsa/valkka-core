@@ -113,6 +113,35 @@ protected:
 };                                                                              // <pyapi>
 
 
+/** FrameFilter s that are fed from various different threads, should be protected with this
+ * 
+ * 
+ * Thread --> framefilter --+
+ *                          + --> ThreadSafeFrameFilter --> Final frame filter
+ * Thread --> framefilter --+
+ * 
+ * @ingroup filters_tag
+ */
+class ThreadSafeFrameFilter : public FrameFilter {                               // <pyapi>
+  
+private:
+    std::mutex mutex;
+    
+public:                                                                          // <pyapi>
+    ThreadSafeFrameFilter(const char* name, FrameFilter* next=NULL);             // <pyapi>
+    
+protected:
+    void go(Frame* frame);
+  
+public:
+    void run(Frame* frame);
+};                                                                              // <pyapi>
+
+
+
+
+
+
 /** Replicates frame flow to two filters
  * Use this frame filter to create frame filter tree structures
  * @ingroup filters_tag

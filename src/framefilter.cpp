@@ -87,6 +87,24 @@ void BriefInfoFrameFilter::go(Frame* frame) {
 }
 
 
+ThreadSafeFrameFilter::ThreadSafeFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next) {
+}
+
+void ThreadSafeFrameFilter::run(Frame* frame) {
+    if (!this->next) { return; } // call next filter .. if there is any
+    {
+        std::unique_lock<std::mutex> lk(this->mutex); 
+        (this->next)->run(frame);
+    }
+}
+
+void ThreadSafeFrameFilter::go(Frame* frame) {
+}
+
+
+
+
+
 ForkFrameFilter::ForkFrameFilter(const char* name, FrameFilter* next, FrameFilter* next2) : FrameFilter(name,next), next2(next2) {
 }
 
