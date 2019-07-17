@@ -45,6 +45,12 @@
  * - Reads frames from a ValkkaFS device file and writes them (one block at a time) to output framefilter
  * - Frames are requested on per-block basis
  * 
+ *  This thread just knows how to send a block of frames, so its sending "stateless stream"
+ * 
+ *  That means that there's no notion of stream start = no SetupFrames are sent
+ * 
+ *  SetupFrames are typically added to the stream later on the filterchain, for example, using FileCacherThread.
+ * 
  */
 class ValkkaFSReaderThread : public Thread {                                                // <pyapi>
 
@@ -60,7 +66,7 @@ protected:
     RawReader                       raw_reader;
     
 protected: // frame input
-    FrameFifo               infifo;           ///< Incoming frames are read from here
+    FrameFifo               infifo;           ///< Incoming frames are read from here.  The stream is "stateless", so you have to add SetupFrames (for example, by using FileCacherThread)
     FifoFrameFilter         infilter;         ///< Write incoming frames here.  Only for SignalFrames.
 
 protected: // Thread member redefinitions

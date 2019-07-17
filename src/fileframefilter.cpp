@@ -34,6 +34,66 @@
 #include "fileframefilter.h"
 
 
+
+
+InitStreamFrameFilter::InitStreamFrameFilter(const char* name, FrameFilter *next) : FrameFilter(name, next) {
+    setupframes.resize(I_MAX_SUBSESSIONS+1);
+}
+    
+    
+InitStreamFrameFilter::~InitStreamFrameFilter() {
+}
+    
+void InitStreamFrameFilter::go(Frame* frame) {
+}
+
+
+void InitStreamFrameFilter::run(Frame* frame) {
+    // this->go(frame); // manipulate frame
+    
+    // std::cout << "\nInitStreamFrameFilter: got: " << *frame << std::endl;
+    
+    if (frame->subsession_index > I_MAX_SUBSESSIONS) {
+        filelogger.log(LogLevel::fatal) << "InitStreamFrameFilter: subsession_index is bigger than " << I_MAX_SUBSESSIONS << " for frame " << *frame << std::endl;
+        return;
+    }
+    
+    if (frame->getFrameClass() != FrameClass::basic) {
+        // std::cout << "InitStreamFrameFilter: not a basic frame" << std::endl;
+        // filelogger.log(LogLevel::fatal) << "InitStreamFrameFilter: must be BasicFrame.  Got " << *frame << std::endl;
+        // nopes .. any other frame, pass as-is
+        if (!this->next) { return; } // call next filter .. if there is any
+        (this->next)->run(frame);
+        return;
+    }
+    
+    BasicFrame *basicframe = static_cast<BasicFrame*>(frame);
+    SetupFrame *setupframe = &setupframes[basicframe->subsession_index];
+    
+    /*
+    std::cout << "InitStreamFrameFilter: BasicFrame: media_type, codec_id, n_slot " << int(basicframe->media_type) << ", " << int(basicframe->codec_id) << ", " << int(basicframe->n_slot) << std::endl;
+    std::cout << "InitStreamFrameFilter: current SetupFrame: " << int(setupframe->media_type) << ", " << int(setupframe->codec_id) << ", " << int(setupframe->n_slot) << std::endl;
+    */
+    
+    if ( (setupframe->media_type != basicframe->media_type) or (setupframe->codec_id != basicframe->codec_id) or (setupframe->n_slot != basicframe->n_slot) ) {
+        filelogger.log(LogLevel::debug) << "InitStreamFrameFilter: creating SetupFrame, based on " << *frame << std::endl;
+        // update SetupFrame for this subsession_index
+        setupframe->media_type = basicframe->media_type;
+        setupframe->codec_id = basicframe->codec_id;
+        setupframe->sub_type = SetupFrameType::stream_init;
+        setupframe->copyMetaFrom(frame); //mstimestamp, n_slot, subsession_index
+        // emit the SetupFrame
+        if (!this->next) { return; } // call next filter .. if there is any
+        (this->next)->run((Frame*)setupframe);
+    }
+    
+    // emit the payload frame
+    if (!this->next) { return; } // call next filter .. if there is any
+    (this->next)->run(frame);
+}
+    
+    
+
 FileFrameFilter::FileFrameFilter(const char *name, FrameFilter *next) : FrameFilter(name, next), active(false), initialized(false), mstimestamp0(0), zerotimeset(false), ready(false) {
   int i;
   // two substreams per stream

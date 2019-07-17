@@ -268,18 +268,44 @@ private: // internal
 public: // API must be called before thread start
     void setCallback(void func(long int));
     
-public: // API                                              // <pyapi>
+public: // API // <pyapi>
+    /** Define callback 
+     * - Give python function that is called frequently as the play time changes
+     * - Function should have a single argument (int)
+     */
     void setPyCallback(PyObject* pobj);                     // <pyapi>
+    
+    /** Define callback
+     * - Give python function that is called when new frames are cached
+     * - Function should have a single argument (tuple)
+     * - first element is the minimum timestamp
+     * - second element is the maximum timestamp
+     */
     void setPyCallback2(PyObject* pobj);                    // <pyapi>
+    
+    /** Pass frames downstream
+     * - Define filter where frames are passed downstream
+     * - map from ValkkaFS id number to slot number
+     */
     void registerStreamCall   (FileStreamContext &ctx);     // <pyapi> 
     void deregisterStreamCall (FileStreamContext &ctx);     // <pyapi>
+    
+    /** Framefilter for writing frames to FileCacheThread */
     FrameFilter &getFrameFilter();                          // <pyapi>
     void requestStopCall();                                 // <pyapi>
     void dumpCache();                                       // <pyapi>
     void stopStreamsCall();                                 // <pyapi>
     void playStreamsCall();                                 // <pyapi>
+    
+    /** Seek
+     * - Seek to a certain millisecond timestamp
+     * @param mstimestamp The unix millisecond timestamp
+     * @param clear       False (default) = Seek within frames already in the cache.  Don't clear internal reference time.  True = We're expecting a burst of new frames into the cache (new transmission).  Clear internal reference time.
+     *  
+     * 
+     */
     void seekStreamsCall(long int mstimestamp, bool clear = false); // <pyapi>
-};                                                          // <pyapi>
+};                                                                  // <pyapi>
 
 
 

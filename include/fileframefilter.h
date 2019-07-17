@@ -59,6 +59,30 @@ Extend LiveThread into sending frames over rtsp (or sdp)
 #include "constant.h"
 #include "framefilter.h"
 
+
+/** Add state information to stream
+ * 
+ * - Add SetupFrames to a stream
+ * - If codec change is detected, then send a new set of SetupFrames
+ * - This is only for one slot (i.e. not for multiple streams)
+ * 
+ */
+class InitStreamFrameFilter : public FrameFilter {                          // <pyapi>
+    
+public:                                                                     // <pyapi>
+    InitStreamFrameFilter(const char* name, FrameFilter *next = NULL);      // <pyapi>
+    ~InitStreamFrameFilter();                                               // <pyapi>
+    
+protected:
+    std::vector<SetupFrame> setupframes;  ///< cached setupframes
+
+protected:
+    void go(Frame* frame);
+    void run(Frame* frame);
+};                                                                          // <pyapi>
+
+
+
 /** Pipe stream into a matroska (mkv) file
  * 
  * This FrameFilter should be connected to the live stream at all times: it observes the setup frames (FrameTypes::setup) and saves them internally.

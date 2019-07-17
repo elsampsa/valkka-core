@@ -259,6 +259,24 @@ protected:
 };                                                                          // <pyapi>
 
 
+/** Passes through frames with a certain slot number only
+ * @ingroup filters_tag
+ * 
+ */
+class PassSlotFrameFilter : public FrameFilter {                            // <pyapi>
+    
+public:                                                                     // <pyapi>
+    PassSlotFrameFilter(const char* name, SlotNumber n_slot, FrameFilter* next = NULL); // <pyapi>
+    
+protected:
+    unsigned n_slot;
+    
+protected:
+    void go(Frame* frame);
+    void run(Frame* frame);
+};                                                                          // <pyapi>
+
+
 /** Dumps each received packet to a file: use with care!  For debugging purposes only.
  * @ingroup filters_tag
  */
@@ -468,6 +486,8 @@ public:                     // <pyapi>
 /** Changes the slot number of the Frame
  *
  * Mutex-protected (calls to SetSlotFrameFilter::setSlot happen during streaming)
+ * 
+ * This is a mutex-protected version of SlotFrameFilter.  Not used that much at.  Should deprecate this.
  * 
  * @ingroup filters_tag 
  */

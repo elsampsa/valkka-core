@@ -1,4 +1,4 @@
-__all__=["logging","chains","threads","multiprocess","shmem","tools","raise_numpy_version", "warn_numpy_version", "check_numpy_version"]
+__all__=["logging","chains","threads","multiprocess","shmem","tools","raise_numpy_version", "warn_numpy_version"]
 
 # import importlib
 # import imp

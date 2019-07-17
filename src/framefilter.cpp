@@ -224,6 +224,22 @@ void SlotFrameFilter::go(Frame* frame) {
 
 
 
+PassSlotFrameFilter::PassSlotFrameFilter(const char* name, SlotNumber n_slot, FrameFilter* next) : FrameFilter(name,next), n_slot(n_slot) {
+}
+    
+void PassSlotFrameFilter::go(Frame* frame) {
+}
+
+void PassSlotFrameFilter::run(Frame* frame) {
+    if (!next) { return; }
+    if (frame->n_slot == n_slot) {
+        next->run(frame);
+    }
+}
+
+
+
+
 DumpFrameFilter::DumpFrameFilter(const char* name, FrameFilter* next) : FrameFilter(name,next), count(0) {
 }
 
