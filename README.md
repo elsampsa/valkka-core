@@ -69,14 +69,16 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.12.0
+### Current stable version is 0.13.0
+- Matroska export from ValkkaFS, etc.
+- Lightweight OnVif client
+
+### Older versions
 
 0.12.0 Version
 - Shared memory frame transport now includes more metadata about the frames: slot, timestamp, etc.  Now it also works with python multithreading.
 - Numpy was included to valkkafs in an incorrect way, this might have resulted in mysterious segfaults.  Fixed that.
 - At valkka-examples, fixed the multiprocessing/analyzer example (fork first, then spawn threads)
-
-### Older versions
 
 0.11.0 Version
 - Bug fixes at the live555 bridge by Petri
