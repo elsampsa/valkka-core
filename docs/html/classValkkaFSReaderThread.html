@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.12.0</span>
+   &#160;<span id="projectnumber">0.13.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -234,7 +234,7 @@ std::map&lt; IdNumber, SlotNumber &gt;&#160;</td><td class="memItemRight" valign
 <tr class="separator:a5ab55c650292da3a8c4277ba0d3e6d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef5c50e53882b13a462fd135efb009ef"><td class="memItemLeft" align="right" valign="top"><a id="aef5c50e53882b13a462fd135efb009ef"></a>
 <a class="el" href="classFrameFifo.html">FrameFifo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#aef5c50e53882b13a462fd135efb009ef">infifo</a></td></tr>
-<tr class="memdesc:aef5c50e53882b13a462fd135efb009ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incoming frames are read from here. <br /></td></tr>
+<tr class="memdesc:aef5c50e53882b13a462fd135efb009ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incoming frames are read from here. The stream is "stateless", so you have to add SetupFrames (for example, by using FileCacherThread) <br /></td></tr>
 <tr class="separator:aef5c50e53882b13a462fd135efb009ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91b5c2f1c0181d1812e92c201b8ff1c5"><td class="memItemLeft" align="right" valign="top"><a id="a91b5c2f1c0181d1812e92c201b8ff1c5"></a>
 <a class="el" href="classFifoFrameFilter.html">FifoFrameFilter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSReaderThread.html#a91b5c2f1c0181d1812e92c201b8ff1c5">infilter</a></td></tr>
@@ -312,7 +312,11 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 <div class="textblock"><p><a class="el" href="classValkkaFS.html" title="Book-keeping for ValkkaFS. ">ValkkaFS</a> reader thread. </p>
 <ul>
 <li>Reads frames from a <a class="el" href="classValkkaFS.html" title="Book-keeping for ValkkaFS. ">ValkkaFS</a> device file and writes them (one block at a time) to output framefilter</li>
-<li>Frames are requested on per-block basis </li>
+<li><p class="startli">Frames are requested on per-block basis</p>
+<p class="startli">This thread just knows how to send a block of frames, so its sending "stateless stream"</p>
+<p class="startli">That means that there's no notion of stream start = no SetupFrames are sent</p>
+<p class="startli">SetupFrames are typically added to the stream later on the filterchain, for example, using FileCacherThread. </p>
+</li>
 </ul>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ad8e18f32f1e86803ee9056fad49163c7"></a>

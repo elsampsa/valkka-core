@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['passslotframefilter',['PassSlotFrameFilter',['../classPassSlotFrameFilter.html',1,'']]],
   ['payload',['payload',['../classBasicFrame.html#ae7e1bbebda141eebc16fc0ef52f947eb',1,'BasicFrame::payload()'],['../classRGBFrame.html#a0fee86e779bed1ab5df66963c5fd5e5b',1,'RGBFrame::payload()'],['../classSharedMemSegment.html#a09657143b07848c1ec0e6e963a032eab',1,'SharedMemSegment::payload()']]],
   ['payload_5fname',['payload_name',['../classSharedMemSegment.html#a25475cf77bb7cb63494146928fc2043c',1,'SharedMemSegment']]],
   ['payloadsizes',['PayloadSizes',['../constant_8h.html#ac54159dfcf89ea1a904276dc94cc7e8f',1,'constant.h']]],

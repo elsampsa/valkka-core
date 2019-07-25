@@ -7,7 +7,7 @@ var searchData=
   ['session',['session',['../classStreamClientState.html#a0138ee34d79cc5651d23e8d0a9bf17ef',1,'StreamClientState']]],
   ['setup_5fframes',['setup_frames',['../classFileCacheThread.html#abd89047ca32d8aa9b1c0af753f8860e4',1,'FileCacheThread']]],
   ['setupframe',['setupframe',['../classFileStream.html#a707a1b9b6aae925d14a2f345c97fc70a',1,'FileStream::setupframe()'],['../classFrameSink.html#a016afd578ddf610c0330a33ec49a2d22',1,'FrameSink::setupframe()'],['../classUSBDevice.html#a23dcf1589aafe5f814e093ceebf6a50a',1,'USBDevice::setupframe()']]],
-  ['setupframes',['setupframes',['../classFileFrameFilter.html#aa25af4a5cc4a8e45246bc9c58c46f926',1,'FileFrameFilter']]],
+  ['setupframes',['setupframes',['../classInitStreamFrameFilter.html#a08bdda57749b7f5065a17daf871bb9e1',1,'InitStreamFrameFilter::setupframes()'],['../classFileFrameFilter.html#aa25af4a5cc4a8e45246bc9c58c46f926',1,'FileFrameFilter::setupframes()']]],
   ['shader',['shader',['../classSlotContext.html#a73f47b6bfd1e88f0c9bb0b583ca33435',1,'SlotContext']]],
   ['shmems',['shmems',['../classSharedMemRingBufferBase.html#abef5d3e2819bd91b8540915d3b01ac87',1,'SharedMemRingBufferBase']]],
   ['signal',['signal',['../structOpenGLSignalContext.html#add9bbe247ce40a2b0d7aa4405b1f6c27',1,'OpenGLSignalContext']]],
