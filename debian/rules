@@ -6,6 +6,7 @@ EXTDIR    = $(MAINDIR)/ext
 BUILDDIR  = $(MAINDIR)/build_dir
 LIVEDIR   = $(MAINDIR)/ext/live
 FFMPEGDIR = $(MAINDIR)/ext/ffmpeg
+LIBDIR    = $(MAINDIR)/python/valkka/core
 
 # this wont work .. (cant find live and ffmpeg dirs)
 #MAINDIR   = ..
@@ -50,6 +51,8 @@ clean:
 	cd $(EXTDIR); ./configure_ffmpeg.bash
 	cd $(LIVEDIR); make clean
 	cd $(FFMPEGDIR); make clean
+	cd $(LIBDIR); rm -f *.so.*
+	cd $(LIBDIR); rm -f *.so
 
 # this is for people building valkka from scratch
 package:

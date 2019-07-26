@@ -28,7 +28,7 @@
  *  @file    constant.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.0 
+ *  @version 0.13.1 
  *  
  *  @brief   Constant/default values, version numbers
  */ 
@@ -60,7 +60,7 @@ const char* get_numpy_version() {  // <pyapi>
     
 static const int VERSION_MAJOR = 0; // <pyapi>
 static const int VERSION_MINOR = 13; // <pyapi>
-static const int VERSION_PATCH = 0; // <pyapi>
+static const int VERSION_PATCH = 1; // <pyapi>
 
 static const unsigned DEFAULT_OPENGLTHREAD_BUFFERING_TIME  = 300;   // in milliseconds // <pyapi>
 static const bool DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL        = false; // <pyapi>

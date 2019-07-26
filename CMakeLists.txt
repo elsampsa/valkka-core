@@ -120,7 +120,7 @@ endif (cachestream_verbose)
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "0") 
 SET(MINOR_VERSION "13") 
-SET(PATCH_VERSION "0") 
+SET(PATCH_VERSION "1") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
 # *** define build type: Debug or Release # now from the command line
@@ -370,6 +370,7 @@ install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.so*")
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.png")
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka"  DESTINATION ${PYTHON_DIR}  FILES_MATCHING PATTERN "*.yuv")
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/valkka/onvif/wsdl"  DESTINATION "${PYTHON_DIR}/valkka/onvif"  FILES_MATCHING PATTERN "*")
 
 # install(DIRECTORY "${FFMPEG_ROOT}" DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
 

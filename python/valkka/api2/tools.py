@@ -25,7 +25,7 @@ tools.py : helper functions
 @file    tools.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.13.0 
+@version 0.13.1 
 
 @brief helper functions
 """

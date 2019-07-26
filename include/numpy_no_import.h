@@ -28,7 +28,7 @@
  *  @file    numpy_no_import.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.0 
+ *  @version 0.13.1 
  *  
  *  @brief
  */ 

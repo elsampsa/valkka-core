@@ -69,7 +69,7 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Current stable version is 0.13.0
+### Current stable version is 0.13.1
 - Matroska export from ValkkaFS, etc.
 - Lightweight OnVif client
 
