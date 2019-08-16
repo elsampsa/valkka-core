@@ -26,7 +26,7 @@
  *  @file    live_thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.1 
+ *  @version 0.13.2 
  *  
  *  @brief Testing the LiveThread class
  *  

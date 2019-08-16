@@ -25,7 +25,7 @@ logging.py : Interface to cpp-level logging
 @file    logging.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.13.1 
+@version 0.13.2 
   
 @brief Interface to cpp-level logging
 """
@@ -35,6 +35,7 @@ loglevel_silent =0
 loglevel_normal =1
 loglevel_debug  =2
 loglevel_crazy  =3
+loglevel_nuts   =4
 
 from valkka import core
 
@@ -46,14 +47,21 @@ def setValkkaLogLevel(i=loglevel_normal):
   if   (i==loglevel_silent):   # just fatal messages
     core.fatal_log_all()
     core.ffmpeg_av_log_set_level(-8)
+    
   elif (i==loglevel_normal):   # just necessary messages
     core.normal_log_all()
     core.ffmpeg_av_log_set_level(8)
+    
   elif (i==loglevel_debug):    # verbose
     core.debug_log_all()
     core.ffmpeg_av_log_set_level(8)
+    
   elif (i==loglevel_crazy):    # loglevel crazy here at the python side means more verbosity to ffmpeg
     core.debug_log_all()
+    core.ffmpeg_av_log_set_level(32)
+    
+  elif (i==loglevel_nuts):     # absolutely verbose
+    core.crazy_log_all()
     core.ffmpeg_av_log_set_level(32)
     
   else:

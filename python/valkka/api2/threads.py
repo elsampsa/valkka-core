@@ -25,7 +25,7 @@ threads.py : api level 1 => api level 2 encapsulation for LiveThread and OpenGLT
 @file    threads.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.13.1 
+@version 0.13.2 
 
 @brief api level 1 => api level 2 encapsulation for LiveThread and OpenGLThread
 """

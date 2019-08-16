@@ -26,7 +26,7 @@
  *  @file    live.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.1 
+ *  @version 0.13.2 
  *  
  *  @brief Interface to live555
  *
@@ -483,7 +483,7 @@ FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter&
     setReceiveBuffer(DEFAULT_PAYLOAD_SIZE_H264); // sets nbuf
   }
   else {
-    return;
+    // return; // no return here!  You won't do sendParameteSets() ..!
   }
   
   // some beautifull day enable audio.  At the moment, it messes up some things (for example, re-transmitting streams, etc.)
