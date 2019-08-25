@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.13.2</span>
+   &#160;<span id="projectnumber">0.13.3</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -96,6 +96,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab0173dbe76d3d23c033d4f16c350949e"><td class="memItemLeft" align="right" valign="top"><a id="ab0173dbe76d3d23c033d4f16c350949e"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SwitchFrameFilter</b> (const char *name, <a class="el" href="classFrameFilter.html">FrameFilter</a> *next1=NULL, <a class="el" href="classFrameFilter.html">FrameFilter</a> *next2=NULL)</td></tr>
 <tr class="separator:ab0173dbe76d3d23c033d4f16c350949e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada8fb8b4748256599cb48b9a8d313c42"><td class="memItemLeft" align="right" valign="top"><a id="ada8fb8b4748256599cb48b9a8d313c42"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSwitchFrameFilter.html#ada8fb8b4748256599cb48b9a8d313c42">run</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
+<tr class="memdesc:ada8fb8b4748256599cb48b9a8d313c42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls this-&gt;<a class="el" href="classSwitchFrameFilter.html#a9e27f94cd802ea418cac36214ca42bdf" title="Does the actual filtering/modification to the Frame. Define in subclass. ">go(Frame* frame)</a> and then calls the this-&gt;next-&gt;<a class="el" href="classSwitchFrameFilter.html#ada8fb8b4748256599cb48b9a8d313c42" title="Calls this-&gt;go(Frame* frame) and then calls the this-&gt;next-&gt;run(Frame* frame) (if this-&gt;next != NULL)...">run(Frame* frame)</a> (if this-&gt;next != NULL) <br /></td></tr>
+<tr class="separator:ada8fb8b4748256599cb48b9a8d313c42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81845c68d8d7bd8cdb4b817df750707c"><td class="memItemLeft" align="right" valign="top"><a id="a81845c68d8d7bd8cdb4b817df750707c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set1</b> ()</td></tr>
 <tr class="separator:a81845c68d8d7bd8cdb4b817df750707c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -113,10 +117,6 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:ada8fb8b4748256599cb48b9a8d313c42"><td class="memItemLeft" align="right" valign="top"><a id="ada8fb8b4748256599cb48b9a8d313c42"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSwitchFrameFilter.html#ada8fb8b4748256599cb48b9a8d313c42">run</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
-<tr class="memdesc:ada8fb8b4748256599cb48b9a8d313c42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls this-&gt;<a class="el" href="classSwitchFrameFilter.html#a9e27f94cd802ea418cac36214ca42bdf" title="Does the actual filtering/modification to the Frame. Define in subclass. ">go(Frame* frame)</a> and then calls the this-&gt;next-&gt;<a class="el" href="classSwitchFrameFilter.html#ada8fb8b4748256599cb48b9a8d313c42" title="Calls this-&gt;go(Frame* frame) and then calls the this-&gt;next-&gt;run(Frame* frame) (if this-&gt;next != NULL)...">run(Frame* frame)</a> (if this-&gt;next != NULL) <br /></td></tr>
-<tr class="separator:ada8fb8b4748256599cb48b9a8d313c42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e27f94cd802ea418cac36214ca42bdf"><td class="memItemLeft" align="right" valign="top"><a id="a9e27f94cd802ea418cac36214ca42bdf"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSwitchFrameFilter.html#a9e27f94cd802ea418cac36214ca42bdf">go</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
 <tr class="memdesc:a9e27f94cd802ea418cac36214ca42bdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does the actual filtering/modification to the <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a>. Define in subclass. <br /></td></tr>

@@ -26,7 +26,7 @@
  *  @file    framefilter_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.13.2 
+ *  @version 0.13.3 
  *  
  *  @brief   Testing some (more complex) FrameFilters
  *
@@ -118,10 +118,91 @@ void test_1() {
 
 
 void test_2() {
-  
-  const char* name = "@TEST: framefilter_test: test 2: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+    const char* name = "@TEST: framefilter_test: test 2: ";
+    std::cout << name <<"** @@Test RepeatH264ParsFrameFilter **" << std::endl;
+    
+    if (!stream_1) {
+        std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+        exit(2);
+    }
+    std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+    
+    // construct a dummy frame
+    BasicFrame *f = new BasicFrame();
+    f->resize(1024);
+    f->subsession_index=0;
+    f->n_slot=1;
+    f->media_type =AVMEDIA_TYPE_VIDEO;
+    f->codec_id   =AV_CODEC_ID_H264;
+    
+    // f->payload[4]=(31 & H264SliceType::sps); // mark fake sps frame
+    // f->payload[4]=(31 & H264SliceType::pps); // mark fake pps frame
+    // f->payload[4]=(31 & H264SliceType::i);   // mark fake i frame
+    
+    InfoFrameFilter info_ff = InfoFrameFilter("end");
+    RepeatH264ParsFrameFilter ff = RepeatH264ParsFrameFilter("test", &info_ff);
+    
+    std::cout << "TEST 1" << std::endl;
+    f->payload[4]=(31 & H264SliceType::pb);  
+    f->fillPars();
+    ff.run((Frame*)f);
+    
+    std::cout << "TEST 2" << std::endl; // i frame without sps & pps + without cached sps & pps
+    f->payload[4]=(31 & H264SliceType::i);  
+    f->fillPars();
+    ff.run((Frame*)f);
+    
+    std::cout << "TEST 3" << std::endl; // got pps => cache
+    f->payload[4]=(31 & H264SliceType::pps);  
+    f->fillPars();
+    ff.run((Frame*)f);
+    
+    std::cout << "TEST 4" << std::endl; // got sps = cache
+    f->payload[4]=(31 & H264SliceType::sps);  
+    f->fillPars();
+    ff.run((Frame*)f);
+    
+    std::cout << "TEST 5" << std::endl; // got i (preceding order was not sps, pps, so resend)
+    f->payload[4]=(31 & H264SliceType::i);  
+    f->fillPars();
+    ff.run((Frame*)f);
+    
+    std::cout << "TEST 6" << std::endl; // got sps
+    f->payload[4]=(31 & H264SliceType::sps);  
+    f->fillPars();
+    ff.run((Frame*)f);
+    
+    std::cout << "TEST 7" << std::endl; // got pps
+    f->payload[4]=(31 & H264SliceType::pps);  
+    f->fillPars();
+    ff.run((Frame*)f);
+    
+    std::cout << "TEST 8" << std::endl; // preceding order was ok, don't resend
+    f->payload[4]=(31 & H264SliceType::i);  
+    f->fillPars();
+    ff.run((Frame*)f);
+ 
+    std::cout << "TEST 6" << std::endl; // got sps
+    f->payload[4]=(31 & H264SliceType::sps);  
+    f->fillPars();
+    ff.run((Frame*)f);
+    
+    std::cout << "TEST 7" << std::endl; // got pps
+    f->payload[4]=(31 & H264SliceType::pps);  
+    f->fillPars();
+    ff.run((Frame*)f);
+    
+    std::cout << "TEST 8" << std::endl; // preceding order was ok, don't resend
+    f->payload[4]=(31 & H264SliceType::i);  
+    f->fillPars();
+    ff.run((Frame*)f);
+ 
+    std::cout << "TEST 8" << std::endl; // stray i-frame
+    f->payload[4]=(31 & H264SliceType::i);  
+    f->fillPars();
+    ff.run((Frame*)f);
+ 
+    delete f;
 }
 
 

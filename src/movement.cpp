@@ -26,7 +26,7 @@
  *  @file    movement.cpp
  *  @author  Petri Eranko
  *  @date    2019
- *  @version 0.13.2 
+ *  @version 0.13.3 
  *  
  *  @brief 
  */ 

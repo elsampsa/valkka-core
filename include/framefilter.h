@@ -28,7 +28,7 @@
  *  @file    framefilter.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.2 
+ *  @version 0.13.3 
  *  
  *  @brief   Definition of FrameFilter and derived classes for various purposes
  */ 
@@ -273,6 +273,8 @@ protected:
     
 protected:
     void go(Frame* frame);
+    
+public:
     void run(Frame* frame);
 };                                                                          // <pyapi>
 
@@ -362,20 +364,24 @@ protected:
 
 /** For H264, some cameras don't send sps and pps packets again before every keyframe.  In that case, this filter sends sps and pps before each keyframe.
  * 
- * WARNING: not ready .. in the TODO list
+ * WARNING: UNTESTED!  // TODO: make tests with dummy H264 packets
  * 
  * @ingroup filters_tag
  */
 class RepeatH264ParsFrameFilter : public FrameFilter {                  // <pyapi>
   
 public:                                                                 // <pyapi>
-  RepeatH264ParsFrameFilter(const char* name, FrameFilter* next=NULL);  // <pyapi>
+    RepeatH264ParsFrameFilter(const char* name, FrameFilter* next=NULL);  // <pyapi>
     
 protected:
-  Frame sps_frame, pps_frame;
+    BasicFrame sps, pps;
+    int phase;
   
 protected:
-  void go(Frame* frame);
+    void go(Frame* frame);
+  
+public:
+    void run(Frame* frame);
   
 };                                                                      // <pyapi>
 
@@ -394,19 +400,21 @@ public:                                                               // <pyapi>
   GateFrameFilter(const char* name, FrameFilter* next=NULL);          // <pyapi>
   
 protected:
-  bool        on;
-  bool        config_frames;
-  std::mutex  mutex;
+    bool        on;
+    bool        config_frames;
+    std::mutex  mutex;
   
 protected: 
-  void run(Frame* frame);
-  void go(Frame* frame);
+    void go(Frame* frame);
+  
+public:
+    void run(Frame* frame);  
   
 public:                     // <pyapi>
-  void set();               // <pyapi>
-  void unSet();             // <pyapi>
-  void passConfigFrames();  // <pyapi>
-  void noConfigFrames();    // <pyapi>
+    void set();               // <pyapi>
+    void unSet();             // <pyapi>
+    void passConfigFrames();  // <pyapi>
+    void noConfigFrames();    // <pyapi>
 };                                                                   // <pyapi>
 
 
@@ -428,8 +436,10 @@ protected:
     std::mutex  mutex;
     
 protected:
-    void run(Frame* frame);
     void go(Frame* frame);
+    
+public:
+    void run(Frame* frame);
     
 public:
     void set1();            // <pyapi>
@@ -464,21 +474,24 @@ protected:
 class CachingGateFrameFilter : public FrameFilter {                   // <pyapi> 
  
 public:                                                               // <pyapi>
-  CachingGateFrameFilter(const char* name, FrameFilter* next=NULL);   // <pyapi>
+    CachingGateFrameFilter(const char* name, FrameFilter* next=NULL);   // <pyapi>
   
 protected:
-  bool        on;
-  std::mutex  mutex;
-  SetupFrame  setupframe;   // TODO: shouldn't we have array of setupframes here?
-  bool        got_setup;
+    bool        on;
+    std::mutex  mutex;
+    SetupFrame  setupframe;   // TODO: shouldn't we have array of setupframes here?
+    bool        got_setup;
   
 protected: 
-  void run(Frame* frame);
-  void go(Frame* frame);
+    void go(Frame* frame);
+  
+public:
+    void run(Frame* frame);
+    
   
 public:                     // <pyapi>
-  void set();               // <pyapi>
-  void unSet();             // <pyapi>
+    void set();               // <pyapi>
+    void unSet();             // <pyapi>
 };                                                                   // <pyapi>
 
 

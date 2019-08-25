@@ -63,3 +63,4 @@ log.txt
 include/save/
 src/save/
 include/playground
+debian/comment.tmp

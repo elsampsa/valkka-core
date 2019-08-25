@@ -98,6 +98,8 @@ Exclude files using "debian/source/options"
 
 Edit "debian/changelog" (get the date stamp with "date -R")
 
+NEW: use instead the script "addlog.py" in the debian directory
+
 Create debian package with
 ```
 clear; debuild -S -sa

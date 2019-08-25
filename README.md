@@ -69,11 +69,16 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Latest version is 0.13.2
-- Extracting SPS & PPS packets from RTSP negotiation was disabled..!
-- Now it's on, so cameras that don't send them explicitly (like Axis) should work
+### Latest version is 0.13.3
+- Yet another fix for Axis cameras
+- Low-quality camera firmware (like the one in Axis), that doesn't use the RTCP packets to synchronize with the client, requires constant dummy communication "pings" to the camera.  We're using the ```GET_PARAMETER``` RTSP call.
+- Axis cameras do not send repeated SPS & PPS packets before keyframes, so libValkka's streaming pipeline now also does that
 
 ### Older versions
+
+0.13.2 Version
+- Extracting SPS & PPS packets from RTSP negotiation was disabled..!
+- Now it's on, so cameras that don't send them explicitly (like Axis) should work
 
 0.13.1 Version
 - Matroska export from ValkkaFS, etc.

@@ -26,7 +26,7 @@
  *  @file    livethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.2 
+ *  @version 0.13.3 
  *  
  *  @brief A live555 thread
  *
@@ -122,18 +122,21 @@ bool LiveFifo::writeCopy(Frame* f, bool wait) {
 Connection::Connection(UsageEnvironment& env, LiveConnectionContext& ctx) : env(env), ctx(ctx), is_playing(false), frametimer(0) {
     if       (ctx.time_correction==TimeCorrectionType::none) {
         // no timestamp correction: LiveThread --> {SlotFrameFilter: inputfilter} --> ctx.framefilter
-        timestampfilter = new TimestampFrameFilter2("timestampfilter",NULL);
-        inputfilter     = new SlotFrameFilter("input_filter",ctx.slot,ctx.framefilter);
+        timestampfilter    = new TimestampFrameFilter2("timestampfilter", NULL); // dummy
+        repeat_sps_filter  = new RepeatH264ParsFrameFilter("repeat_sps_filter", ctx.framefilter);
+        inputfilter        = new SlotFrameFilter("input_filter", ctx.slot, repeat_sps_filter);
     }
     else if  (ctx.time_correction==TimeCorrectionType::dummy) {
         // smart timestamp correction:  LiveThread --> {SlotFrameFilter: inputfilter} --> {TimestampFrameFilter2: timestampfilter} --> ctx.framefilter
-        timestampfilter = new DummyTimestampFrameFilter("dummy_timestamp_filter",ctx.framefilter);
-        inputfilter     = new SlotFrameFilter("input_filter",ctx.slot,timestampfilter);
+        timestampfilter    = new DummyTimestampFrameFilter("dummy_timestamp_filter", ctx.framefilter);
+        repeat_sps_filter  = new RepeatH264ParsFrameFilter("repeat_sps_filter", timestampfilter);
+        inputfilter        = new SlotFrameFilter("input_filter", ctx.slot, repeat_sps_filter);
     }
     else { // smart corrector
         // brute-force timestamp correction: LiveThread --> {SlotFrameFilter: inputfilter} --> {DummyTimestampFrameFilter: timestampfilter} --> ctx.framefilter
-        timestampfilter = new TimestampFrameFilter2("smart_timestamp_filter",ctx.framefilter);
-        inputfilter     = new SlotFrameFilter("input_filter",ctx.slot,timestampfilter);
+        timestampfilter    = new TimestampFrameFilter2("smart_timestamp_filter", ctx.framefilter);
+        repeat_sps_filter  = new RepeatH264ParsFrameFilter("repeat_sps_filter", timestampfilter);
+        inputfilter        = new SlotFrameFilter("input_filter", ctx.slot, repeat_sps_filter);
     }
 }
 
@@ -141,6 +144,7 @@ Connection::Connection(UsageEnvironment& env, LiveConnectionContext& ctx) : env(
 Connection::~Connection() {
     delete timestampfilter;
     delete inputfilter;
+    delete repeat_sps_filter;
 };
 
 void Connection::reStartStream() {
@@ -272,7 +276,7 @@ void RTSPConnection::playStream() {
         livestatus=LiveStatus::pending;
         frametimer=0;
         livethreadlogger.log(LogLevel::crazy) << "RTSPConnection : playStream" << std::endl;
-        client=ValkkaRTSPClient::createNew(env, ctx.address, *inputfilter, &livestatus);
+        client = ValkkaRTSPClient::createNew(env, ctx.address, *inputfilter, &livestatus);
         if (ctx.request_multicast)   { client->requestMulticast(); }
         if (ctx.request_tcp)         { client->requestTCP(); }
         if (ctx.recv_buffer_size>0)  { client->setRecvBufferSize(ctx.recv_buffer_size); }

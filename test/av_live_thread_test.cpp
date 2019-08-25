@@ -26,7 +26,7 @@
  *  @file    av_live_thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.2 
+ *  @version 0.13.3 
  *  
  *  @brief Test producer (live thread) consumer (av thread)
  *

@@ -26,7 +26,7 @@
  *  @file    shmem_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.2 
+ *  @version 0.13.3 
  *  
  *  @brief 
  *

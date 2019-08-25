@@ -28,7 +28,7 @@
  *  @file    live.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.2 
+ *  @version 0.13.3 
  *  @brief Interface to live555
  * 
  *  Acknowledgements: Ross Finlayson for his advice
@@ -86,6 +86,8 @@ public:
   MediaSession* session;          ///< Created by RTSPClient or SDPClient.  Closed by StreamClientState::~StreamClientState
   MediaSubsession* subsession;    ///< Created by RTSPClient or SDPClient.  Closed by StreamClientState::close
   TaskToken streamTimerTask;
+  TaskToken pingGetParameterTask;      ///< Ping the camera periodically with GET_PARAMETER query
+  
   double duration;
   bool frame_flag;                ///< Set always when a frame is received
   
@@ -143,6 +145,7 @@ public: // some extra parameters and their setters
 public: 
   // Response handlers
   static void continueAfterDESCRIBE(RTSPClient* rtspClient, int resultCode, char* resultString); ///< Called after rtsp DESCRIBE command gets a reply
+  static void continueAfterGET_PARAMETER(RTSPClient* rtspClient, int resultCode, char* resultString); ///< Used by pingGET_PARAMETER: a dummy callback to GET_PARAMETER
   static void continueAfterSETUP(RTSPClient* rtspClient, int resultCode, char* resultString);    ///< Called after rtsp SETUP command gets a reply
   static void continueAfterPLAY(RTSPClient* rtspClient, int resultCode, char* resultString);     ///< Called after rtsp PLAY command gets a reply
 
@@ -152,7 +155,7 @@ public:
   static void streamTimerHandler(void* clientData);     ///< Called at the end of a stream's expected duration (if the stream has not already signaled its end using a RTCP "BYE")
   static void setupNextSubsession(RTSPClient* rtspClient); ///< Used to iterate through each stream's 'subsessions', setting up each one
   static void shutdownStream(RTSPClient* rtspClient, int exitCode = 1); ///< Used to shut down and close a stream (including its "RTSPClient" object):
-  
+  static void pingGetParameter(void* clientData); ///< Send a periodic GET_PARAMETER "ping" to the camera
 };
 
 

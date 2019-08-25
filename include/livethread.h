@@ -28,7 +28,7 @@
  *  @file    livethread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.2 
+ *  @version 0.13.3 
  *  
  *  @brief A live555 thread
  *
@@ -205,6 +205,7 @@ protected:
   
   FrameFilter*            timestampfilter;
   FrameFilter*            inputfilter;
+  FrameFilter*            repeat_sps_filter;        ///< Repeat sps & pps packets before i-frame (if they were not there before the i-frame)
   
   long int                frametimer;      ///< Measures time when the last frame was received
   

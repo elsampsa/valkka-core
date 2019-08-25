@@ -26,7 +26,7 @@
  *  @file    live.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.2 
+ *  @version 0.13.3 
  *  
  *  @brief Interface to live555
  *
@@ -124,6 +124,21 @@ void ValkkaRTSPClient::continueAfterDESCRIBE(RTSPClient* rtspClient, int resultC
   // An unrecoverable error occurred with this stream.
   shutdownStream(rtspClient); // sets *livestatus=LiveStatus::closed;
 }
+
+void ValkkaRTSPClient::continueAfterGET_PARAMETER(RTSPClient* rtspClient, int resultCode, char* resultString) {
+    // do nothing! (or maybe something)
+    std::cout << "ValkkaRTSPClient::continueAfterGET_PARAMETER\n";
+    if (resultCode != 0) {
+      livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << "Failed to get GET_PARAMETER description: " << resultString << "\n";
+      delete[] resultString;
+      return;
+    }
+
+    char* const sdpDescription = resultString;
+    // livelogger.log(LogLevel::normal) << *rtspClient << "Got a SDP description:\n" << sdpDescription << "\n";
+    livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: Got GET_PARAMETER description:\n" << sdpDescription << "\n";
+}
+
 
 void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
   // aliases:
@@ -263,10 +278,10 @@ void ValkkaRTSPClient::continueAfterSETUP(RTSPClient* rtspClient, int resultCode
 void ValkkaRTSPClient::continueAfterPLAY(RTSPClient* rtspClient, int resultCode, char* resultString) {
   Boolean success = False;
   LiveStatus* livestatus = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
+  UsageEnvironment& env = rtspClient->envir(); // alias
+  StreamClientState& scs = ((ValkkaRTSPClient*)rtspClient)->scs; // alias
 
   do {
-    UsageEnvironment& env = rtspClient->envir(); // alias
-    StreamClientState& scs = ((ValkkaRTSPClient*)rtspClient)->scs; // alias
 
     if (resultCode != 0) {
       livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << " Failed to start playing session: " << resultString << "\n";
@@ -299,12 +314,38 @@ void ValkkaRTSPClient::continueAfterPLAY(RTSPClient* rtspClient, int resultCode,
     shutdownStream(rtspClient);
   }
   else {
-   *livestatus=LiveStatus::alive;
+    *livestatus=LiveStatus::alive;
+    // start periodic GET_PARAMETER pinging of the camera.  Required for buggy 3-tier cameras, like AXIS
+    livelogger.log(LogLevel::fatal) << "ValkkaRTSPClient: Buggy AXIS firmware does not comply with the RTCP protocol => starting regular GET_PARAMETER pings to the camera" << std::endl;
+    scs.pingGetParameterTask = env.taskScheduler().scheduleDelayedTask(1000000*LIVE_GET_PARAMETER_PING, (TaskFunc*)pingGetParameter, rtspClient);
   }
 }
 
 
 // Implementation of the other event handlers:
+void ValkkaRTSPClient::pingGetParameter(void* clientData) {
+    // clientData is an instance of RTSPClient
+    ValkkaRTSPClient* client = (ValkkaRTSPClient*)(clientData);
+    StreamClientState& scs = client->scs;
+    LiveStatus* livestatus = client->livestatus;
+    UsageEnvironment& env = client->envir();
+    
+    livelogger.log(LogLevel::crazy) << "ValkkaRTSPClient: sending GET_PARAMETER ping \n";
+    
+    // client->sendGetParameterCommand(*scs.session, ValkkaRTSPClient::continueAfterGET_PARAMETER, "");
+    client->sendGetParameterCommand(*scs.session, NULL, ""); // just use this : no callback
+    // unsigned sendGetParameterCommand (MediaSession &session, responseHandler *responseHandler, char const *parameterName, Authenticator *authenticator=NULL)
+    livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: sent GET_PARAMETER ping \n";
+    
+    if (scs.pingGetParameterTask != NULL and *livestatus == LiveStatus::alive) {
+        scs.pingGetParameterTask = env.taskScheduler().scheduleDelayedTask(1000000*LIVE_GET_PARAMETER_PING, (TaskFunc*)pingGetParameter, clientData);
+    }
+    else {
+        scs.pingGetParameterTask = NULL;
+    }
+}
+
+
 
 void ValkkaRTSPClient::subsessionAfterPlaying(void* clientData) {
   MediaSubsession* subsession = (MediaSubsession*)clientData;
@@ -386,6 +427,8 @@ void ValkkaRTSPClient::shutdownStream(RTSPClient* rtspClient, int exitCode) {
 
   livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: " << *rtspClient << " closing the stream.\n";
   *livestatus=LiveStatus::closed;
+  
+  
   Medium::close(rtspClient);
   // Note that this will also cause this stream's "StreamClientState" structure to get reclaimed.
   // Uh-oh: how do we tell the event loop that this particular client does not exist anymore..?
@@ -403,8 +446,7 @@ void ValkkaRTSPClient::shutdownStream(RTSPClient* rtspClient, int exitCode) {
 
 // Implementation of "StreamClientState":
 
-StreamClientState::StreamClientState() : iter(NULL), session(NULL), subsession(NULL), streamTimerTask(NULL), duration(0.0), subsession_index(-1), frame_flag(false)
-{
+StreamClientState::StreamClientState() : iter(NULL), session(NULL), subsession(NULL), streamTimerTask(NULL), pingGetParameterTask(NULL), duration(0.0), subsession_index(-1), frame_flag(false) {
 }
 
 
@@ -428,6 +470,10 @@ StreamClientState::~StreamClientState() {
     // We also need to delete "session", and unschedule "streamTimerTask" (if set)
     UsageEnvironment& env = session->envir(); // alias
     env.taskScheduler().unscheduleDelayedTask(streamTimerTask);
+    if (pingGetParameterTask != NULL) {
+        env.taskScheduler().unscheduleDelayedTask(pingGetParameterTask);
+        pingGetParameterTask = NULL;
+    }
     Medium::close(session);
   }
 }
