@@ -15,7 +15,7 @@
  -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Fri, 16 Aug 2019 10:18:29 +0300
 """
 
-
+import os
 import sys
 import subprocess
 
@@ -39,14 +39,32 @@ def write(version, distro, comment):
 
     print(">>>\n"+st+"\n<<<<")
     # return
+    # do_write = True
+    do_write = False
+    
+    if do_write:
+        f = open("changelog", "r")
+        dump = f.read()
+        f.close()
+        f = open("changelog", "w")
+        f.write(st)
+        f.write(dump)
+        f.close()
 
-    f = open("changelog", "r")
-    dump = f.read()
-    f.close()
-    f = open("changelog", "w")
-    f.write(st)
-    f.write(dump)
-    f.close()
+    print("\nWriting 'rundeb.bash' for easy building & uploading\n")
+    fname = "valkka_{VERSION}-0ubuntu1-{DISTRO}ppa1_source.changes".format(VERSION = version, DISTRO = distro)
+    st = """#!/bin/bash
+clear; debuild -S -sa
+DIRTMP=$PWD
+cd ../..
+dput ppa:sampsa-riikonen/valkka %s
+cd $DIRTMP
+""" % fname
+
+    with open("rundeb.bash", "w") as f:
+        f.write(st)
+    
+    os.system("chmod a+x rundeb.bash")
 
     
 

@@ -1,3 +1,15 @@
+valkka (0.13.3-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * Fixes for Axis cameras: ping cameras with get_parameter, repeat sps and pps packets
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Sun, 25 Aug 2019 21:26:11 +0300
+
+valkka (0.13.3-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * Fixes for Axis cameras: ping cameras with get_parameter, repeat sps and pps packets
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Sun, 25 Aug 2019 21:22:49 +0300
+
 valkka (0.13.2-0ubuntu1-xenialppa1) xenial; urgency=low
 
   * Fixed sending initial SPS & PPS packets from the rtsp setup string

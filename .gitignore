@@ -64,3 +64,4 @@ include/save/
 src/save/
 include/playground
 debian/comment.tmp
+debian/rundeb.bash
