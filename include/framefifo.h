@@ -100,7 +100,7 @@ public:
   
 public:
   virtual bool writeCopy(Frame* f, bool wait=false);     ///< Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").  The size of "ftmp" is also checked and set to target_size, if necessary.  If wait is set to true, will wait until there are frames available in the stack.
-  virtual Frame* read(unsigned short int mstimeout=0);   ///< Pop a frame from the end of the fifo and return the frame to the reservoir stack
+  virtual Frame* read(unsigned short int mstimeout=0);   ///< Pop a frame from the end of the fifo when available
   virtual void recycle(Frame* f);                        ///< Like FrameFifo::recycle_ but with mutex protection
   virtual void recycleAll();                             ///< Recycle all frames from fifo back to stack (make a "flush")
   virtual void dumpStacks();    ///< Dump frames in the stacks
@@ -108,6 +108,36 @@ public:
   virtual void diagnosis();     ///< Print a resumen of fifo and stack usage
   bool isEmpty();               ///< Tell if fifo is empty
 };                                                                      // <pyapi>
+
+
+/** FrameFifo using file descriptors 
+ * 
+ * - Similar to FrameFifo, but write and read are using the linux evenfd file
+ * - ..so this can be used with select and poll system calls
+ * 
+ * 
+ */
+
+class FDFrameFifo : public FrameFifo {
+    
+public:
+    FDFrameFifo(const char *name, FrameFifoContext ctx =FrameFifoContext()); ///< Default ctor          // <pyapi>
+    virtual ~FDFrameFifo();                                                  ///< Default virtual dtor  // <pyapi>
+    //ban_copy_ctor(FDFrameFifo);
+    //ban_copy_asm(FDFrameFifo);
+    
+private:
+    int fd;
+    
+public:
+    virtual bool writeCopy(Frame* f, bool wait=false);     ///< Take a frame "ftmp" from the stack, copy contents of "f" into "ftmp" and insert "ftmp" into the beginning of the fifo (i.e. perform "copy-on-insert").  The size of "ftmp" is also checked and set to target_size, if necessary.  If wait is set to true, will wait until there are frames available in the stack.
+    /** Pop a frame from the end of the fifo when available.  Should be called only after using read on the file descriptor.  May return NULL pointer. */
+    virtual Frame* read(unsigned short int mstimeout=0);
+    
+public:
+    const int getFD() {return this->fd;}
+};
+
 
 
 #endif

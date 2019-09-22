@@ -262,6 +262,77 @@ void test_5() {
 }
 
 
+void test_6() {
+    const char* name = "@TEST: fifo_test: test 6: ";
+    std::cout << name <<"** @@Test FileDescriptor FrameFifo (FDFrameFifo) **" << std::endl;
+
+    FrameFifoContext ctx = FrameFifoContext();
+    ctx.n_basic = 10;
+    ctx.flush_when_full = False;
+
+    FDFrameFifo fifo("fifo", ctx);
+    BasicFrame *f = new BasicFrame();
+
+    f->resize(10);
+
+    
+    std::cout << "insert 1" << std::endl;
+    fifo.writeCopy(f);
+    //fifo.dumpStacks(); 
+    //fifo.dumpFifo();
+    std::cout << std::endl;
+
+    f->resize(20);
+
+    std::cout << "insert 2" << std::endl;
+    fifo.writeCopy(f);
+    //fifo.dumpStacks(); 
+    //fifo.dumpFifo();
+    std::cout << std::endl;
+
+    f->resize(30);
+
+    std::cout << "insert 3" << std::endl;
+    fifo.writeCopy(f);
+    //fifo.dumpStacks(); 
+    //fifo.dumpFifo();
+    std::cout << std::endl;
+
+    Frame *ff;
+
+    int fd = fifo.getFD();
+    ssize_t i;
+    uint64_t out;
+    
+    int cc;
+    
+    for(cc=0; cc<4; cc++) {
+        std::cout << "read " << cc+1 << std::endl;
+        i = read(fd, &out, sizeof(uint64_t));
+        std::cout << "got: " << i << std::endl;
+        if (i > 0) {
+            ff = fifo.read();
+            std::cout << "frame: " << *ff << std::endl;
+            //fifo.dumpStacks(); 
+            //fifo.dumpFifo();
+            std::cout << std::endl;
+            // do stuff with the frame
+
+            std::cout << "recycle" << std::endl;
+            fifo.recycle(ff);
+            //fifo.dumpStacks(); 
+            //fifo.dumpFifo();
+            std::cout << std::endl;
+        }
+    }
+    
+    delete f;
+}
+
+
+
+
+
 int main(int argc, char** argcv) {
   if (argc<2) {
     std::cout << argcv[0] << " needs an integer argument.  Second interger argument (optional) is verbosity" << std::endl;
@@ -306,6 +377,9 @@ int main(int argc, char** argcv) {
         break;
       case(5):
         test_5();
+        break;
+      case(6):
+        test_6();
         break;
       default:
         std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;

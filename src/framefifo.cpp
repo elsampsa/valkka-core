@@ -269,3 +269,108 @@ bool FrameFifo::isEmpty() {
 }
 
 
+
+FDFrameFifo::FDFrameFifo(const char *name, FrameFifoContext ctx) : FrameFifo(name, ctx) {
+    this->fd = eventfd(0, EFD_NONBLOCK | EFD_SEMAPHORE); // https://linux.die.net/man/2/eventfd
+    if (this->fd == -1) {
+        handle_error("FDFrameFifo: ctor: could not get eventfd handle");
+    }
+}
+
+
+FDFrameFifo::~FDFrameFifo() {
+    close(this->fd);
+}
+
+
+bool FDFrameFifo::writeCopy(Frame* f, bool wait) {
+    std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
+    
+    // get an alias for the stack corresponding to this Frame
+    
+    Stack *stack;
+    
+    ///*
+    try {
+        // Stack &stack = stacks.at(f->getFrameClass());
+        stack = &stacks.at(f->getFrameClass());
+    }
+    catch (std::out_of_range) {
+        fifologger.log(LogLevel::normal) << "FDFrameFifo: "<<name<<" writeCopy: no stack for FrameClass "<<int(f->getFrameClass());
+        return false;
+    }
+    //*/
+    
+    // Stack &stack = stacks.at(f->getFrameClass());
+    
+    while (stack->empty()) { // deal with spurious wake-ups
+        if (wait) {
+            fifologger.log(LogLevel::normal) << "FDFrameFifo: "<<name<<" writeCopy: waiting for stack frames.  Frame="<<(*f)<<std::endl;
+            this->ready_condition.wait(lk);
+            // fifologger.log(LogLevel::normal) << "FDFrameFifo: "<<name<<" writeCopy: .. got stack frame.  " << std::endl;
+        }
+        else {
+            fifologger.log(LogLevel::fatal) << "FDFrameFifo: "<<name<<" writeCopy: OVERFLOW! No more frames in stack.  Frame="<<(*f)<<std::endl;
+            if (ctx.flush_when_full) {
+                recycleAll_();
+            }
+            return false;
+        }
+    }
+    
+    //std::cout << "FDFrameFifo : writeCopy : stack size0=" << stack->size() << std::endl;
+    
+    Frame *tmpframe=stack->front();  // .. the Frame* pointer to the Frame object is in reservoirs[FrameClass].  Frame*'s in stacks[FrameClass] are same Frame*'s as in reservoirs[FrameClass]
+    stack->pop_front();              // .. remove that pointer from the stack
+    
+    //std::cout << "FDFrameFifo : writeCopy : stack size=" << stack->size() << std::endl;
+    
+    tmpframe->copyFrom(f);      // makes a copy with the correct typecast
+    fifo.push_front(tmpframe);  // push_front takes a copy of the pointer // fifo: push: front, read: back
+    
+    #ifdef FIFO_VERBOSE
+    if (fifo.size()>1) {std::cout << "FDFrameFifo: "<<name<<" writeCopy: count=" << fifo.size() << std::endl;}
+    #endif
+    
+    #ifdef TIMING_VERBOSE
+    long int dt=(getCurrentMsTimestamp()-tmpframe->mstimestamp);
+    if (dt>100) {
+        std::cout << "FDFrameFifo: "<<name<<" writeCopy : timing : inserting frame " << dt << " ms late" << std::endl;
+    }
+    #endif
+    
+    // this->condition.notify_one(); // after receiving
+    // in this version of the FDFrameFifo, we use semaphore-like file descriptor
+    uint64_t u = 1; // one frame
+    ssize_t s;
+    
+    s = write(fd, &u, sizeof(uint64_t));
+    if (s != sizeof(uint64_t)) {
+        handle_error("FDFrameFifo: writeCopy: write failed");
+    }
+    
+    return true;
+}
+
+
+Frame* FDFrameFifo::read(unsigned short int mstimeout) {
+    std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context  
+    
+    #ifdef FIFO_VERBOSE
+    // std::cout << "FrameFifo: "<<name<<"      read: mstimeout=" << mstimeout << std::endl;
+    #endif
+  
+    #ifdef FIFO_VERBOSE
+    if (fifo.size()>1) {std::cout << "FrameFifo: "<<name<<" read: count=" << fifo.size() << std::endl;}
+    #endif
+    
+    if (fifo.size() < 1) {
+        return NULL;
+    }
+    
+    Frame* tmpframe = fifo.back(); // fifo: push: front, read: back
+    fifo.pop_back(); // remove the last element
+    return tmpframe;
+}
+
+

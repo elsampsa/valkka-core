@@ -74,6 +74,7 @@
 
 #include <mutex>
 #include <condition_variable>
+#include <sys/eventfd.h>
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -104,4 +104,11 @@ for(auto it=res.begin(); it!=res.end(); ++it) {\
     delete (CONTEXTCLASS*)(f->custom_signal_ctx);\
 };\
 
+
+
+// generic error handling
+#define handle_error(msg) \
+    do { perror(msg); exit(EXIT_FAILURE); } while (0)
+
+
 #endif
