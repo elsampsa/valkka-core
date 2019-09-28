@@ -82,6 +82,7 @@ namespace Timeout { ///< Various thread timeouts in milliseconds
   // const static long unsigned filecachethread = 500; // Timeout::valkkacachethread
   const static long unsigned usbthread    =250; // Timeout::usbthread
   const static long int filethread        =2000; // Timeout::filethread
+  const static long int fdwritethread        =250; // Timeout::filethread
 }
 
 

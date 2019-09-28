@@ -69,11 +69,11 @@ struct FrameFifoContext {                                                       
  * 
  * @ingroup queues_tag
  */
-class FrameFifo {                                                                                   // <pyapi>
+class FrameFifo {                                                                                   
 
-public:                                                                                             // <pyapi>
-  FrameFifo(const char *name, FrameFifoContext ctx =FrameFifoContext()); ///< Default ctor          // <pyapi>
-  virtual ~FrameFifo();                                                  ///< Default virtual dtor  // <pyapi>
+public:                                                                                             
+  FrameFifo(const char *name, FrameFifoContext ctx =FrameFifoContext()); ///< Default ctor          
+  virtual ~FrameFifo();                                                  ///< Default virtual dtor  
   ban_copy_ctor(FrameFifo);
   ban_copy_asm(FrameFifo);
   
@@ -107,7 +107,7 @@ public:
   virtual void dumpFifo();      ///< Dump frames in the fifo
   virtual void diagnosis();     ///< Print a resumen of fifo and stack usage
   bool isEmpty();               ///< Tell if fifo is empty
-};                                                                      // <pyapi>
+};                                                                      
 
 
 /** FrameFifo using file descriptors 
@@ -121,8 +121,8 @@ public:
 class FDFrameFifo : public FrameFifo {
     
 public:
-    FDFrameFifo(const char *name, FrameFifoContext ctx =FrameFifoContext()); ///< Default ctor          // <pyapi>
-    virtual ~FDFrameFifo();                                                  ///< Default virtual dtor  // <pyapi>
+    FDFrameFifo(const char *name, FrameFifoContext ctx =FrameFifoContext()); ///< Default ctor          
+    virtual ~FDFrameFifo();                                                  ///< Default virtual dtor  
     //ban_copy_ctor(FDFrameFifo);
     //ban_copy_asm(FDFrameFifo);
     

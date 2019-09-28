@@ -1,5 +1,5 @@
 /*
- * NAME.cpp :
+ * fdwritethread.cpp :
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -23,7 +23,7 @@
  */
 
 /** 
- *  @file    NAME.cpp
+ *  @file    fdwritethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
  *  @version 0.1
@@ -32,13 +32,8 @@
  *
  */ 
 
-#include "framefifo.h"
-#include "framefilter.h"
-#include "logging.h"
-#include "avdep.h"
-
-#include "test_import.h" // don't forget this
-
+#include "fdwritethread.h"
+#include "test_import.h"
 
 using namespace std::chrono_literals;
 using std::this_thread::sleep_for;
@@ -49,16 +44,19 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 
 void test_1() {
-  
-  const char* name = "@TEST: NAME: test 1: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+    FDWriteThread thread("test");
+    
+    thread.startCall();
+    thread.stopCall(); // TODO: continue from here
+
+    const char* name = "@TEST: fdwritethread: test 1: ";
+    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
 }
 
 
 void test_2() {
   
-  const char* name = "@TEST: NAME: test 2: ";
+  const char* name = "@TEST: fdwritethread: test 2: ";
   std::cout << name <<"** @@DESCRIPTION **" << std::endl;
   
 }
@@ -66,7 +64,7 @@ void test_2() {
 
 void test_3() {
   
-  const char* name = "@TEST: NAME: test 3: ";
+  const char* name = "@TEST: fdwritethread: test 3: ";
   std::cout << name <<"** @@DESCRIPTION **" << std::endl;
   
 }
@@ -74,7 +72,7 @@ void test_3() {
 
 void test_4() {
   
-  const char* name = "@TEST: NAME: test 4: ";
+  const char* name = "@TEST: fdwritethread: test 4: ";
   std::cout << name <<"** @@DESCRIPTION **" << std::endl;
   
 }
@@ -82,7 +80,7 @@ void test_4() {
 
 void test_5() {
   
-  const char* name = "@TEST: NAME: test 5: ";
+  const char* name = "@TEST: fdwritethread: test 5: ";
   std::cout << name <<"** @@DESCRIPTION **" << std::endl;
   
 }

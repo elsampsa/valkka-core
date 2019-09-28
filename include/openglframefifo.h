@@ -66,18 +66,18 @@ std::ostream& operator<< (std::ostream& os, const OpenGLFrameFifoContext& ctx) {
  * @ingroup openglthread_tag
  * @ingroup queues_tag
  */
-class OpenGLFrameFifo : public FrameFifo { // <pyapi>
+class OpenGLFrameFifo : public FrameFifo { 
   
 friend class OpenGLThread; // can manipulate reservoirs, stacks, etc.
   
-public: // <pyapi>
+public: 
   /** Default constructor
    * 
    */
-  OpenGLFrameFifo(OpenGLFrameFifoContext ctx=OpenGLFrameFifoContext()); // <pyapi>
+  OpenGLFrameFifo(OpenGLFrameFifoContext ctx=OpenGLFrameFifoContext()); 
   /** Default destructor
    */
-  ~OpenGLFrameFifo(); // <pyapi>
+  ~OpenGLFrameFifo(); 
   
 protected:
   OpenGLFrameFifoContext             gl_ctx;          ///< Stack profile and overflow behaviour
@@ -104,6 +104,6 @@ public: // setters
   
 private:
   bool debug;
-}; // <pyapi>
+}; 
 
 #endif

@@ -26,6 +26,7 @@
 #include "usbthread.h"
 #include "valkkafsreader.h"
 #include "movement.h"
+#include "fdwritethread.h"
 
 #include <Python.h>
 

@@ -53,13 +53,13 @@ void setLiveOutPacketBuffermaxSize(unsigned i); // <pyapi>
  * @ingroup livethread_tag
  * @ingroup queues_tag
  */
-class LiveFifo : public FrameFifo {                       // <pyapi>
+class LiveFifo : public FrameFifo {                       
   
-public:                                                   // <pyapi> 
+public:                                                    
   /** Default constructor */
-  LiveFifo(const char* name, FrameFifoContext ctx);       // <pyapi>
+  LiveFifo(const char* name, FrameFifoContext ctx);       
   /** Default virtual destructor */
-  ~LiveFifo();                                            // <pyapi>
+  ~LiveFifo();                                            
   
 protected:
   void* live_thread;
@@ -67,7 +67,7 @@ protected:
 public:
   void setLiveThread(void* live_thread);
   bool writeCopy(Frame* f, bool wait=false);
-};                                                        // <pyapi>
+};                                                        
 
 
 /** LiveThread connection types
