@@ -89,6 +89,35 @@ protected:
  * 
  * When the FileFrameFilter::activate method is called, it configures the files accordingly, and starts streaming into disk.
  * 
+ * Notes about FFmpeg muxing & file output:
+ * 
+ * 
+ * AVCodecContext  : defines the codec
+ * AVFormatContext : defines the (de)muxing & has pointers to AVIOContext (in the ->pb member)
+ * AVIOContext     : defines the input / output file
+ * AVStream        : raw payload (video track, audio track)
+ * 
+ * 
+ * 
+ * avformat_alloc_output_context2(AVFormatContext* av_format_context, NULL, "matroska", NULL);
+ * 
+ * avio_open(AVIOContext* av_format_context->pb, filename.c_str(), AVIO_FLAG_WRITE);
+ * 
+ * AVStream* av_stream = avformat_new_stream(AVFormatContext* av_format_context, AVCodec* av_codec_context->codec);
+ * 
+ * Actual writing like this:
+ * 
+ * av_interleaved_write_frame(AVFormatContext* av_format_context, avpkt);
+ * 
+ * For an actual muxer implementation, see for example libavformat/movenc.c : ff_mov_write_packet
+ * => avio_write(pb, reformatted_data, size);  (i.e. it uses the AVIOContext) ==> https://ffmpeg.org/doxygen/2.8/aviobuf_8c_source.html#l00178
+ * 
+ * AVIOContext is C-style "class" that can be re-defined: https://ffmpeg.org/doxygen/2.8/structAVIOContext.html
+ * 
+ * A custom AVIOContext can be created with "avio_alloc_context"
+ * 
+ * 
+ * 
  * @ingroup filters_tag
  * @ingroup file_tag
  */

@@ -35,7 +35,6 @@
 
 #endif
 
-#include <sys/select.h>
 #include "thread.h"
 #include "framefilter.h"
 #include "framefifo.h"
@@ -70,10 +69,8 @@ public:
     virtual ~FDWrite(); ///< Default virtual destructor
 
 public: // init'd at constructor time
-    const FDWriteContext     &ctx;     ///< Identifies the connection type, stream address, etc.
-    FrameFifo                &fifo;    ///< Outgoing Frames are finally recycled here
-    std::deque<Frame*>       internal_fifo;
-    
+    const FDWriteContext  &ctx;     ///< Identifies the connection type, stream address, etc.
+    FrameFifo             &fifo;    ///< Outgoing Frames are finally recycled here
 };
 
 
@@ -133,15 +130,10 @@ public:                                                                         
     virtual ~FDWriteThread();                                                         // <pyapi>
         
 protected: // frame input
-    FDFrameFifo             infifo;           ///< Incoming frames (also signal frames) are read from here
+    FrameFifo               infifo;           ///< Incoming frames (also signal frames) are read from here
     FifoFrameFilter         infilter;         ///< Write incoming frames here // TODO: add a chain of correcting FrameFilter(s)
     BlockingFifoFrameFilter infilter_block;   ///< Incoming frames can also be written here.  If stack runs out of frames, writing will block
-    std::vector<FDWrite*>   slots_;           ///< For fast, pointer-arithmetic-based indexing of the slots
-    std::list<FDWrite*>     fd_writes;        ///< For iterating over the FDWrite entries
-    fd_set                  write_fds, read_fds; ///< File descriptor sets used by select
-    int                     nfds;             ///< Max file descriptor number
-    struct timeval          timeout;
-    
+    std::vector<FDWrite*>   slots_;
     
 public: // redefined virtual functions
     void run();
@@ -154,7 +146,6 @@ protected:
     void handleSignal(const FDWriteSignalContext &signal_ctx); ///< Handle an individual signal.  
     
 private: // internal
-    void setMaxFD         ();
     int  safeGetSlot      (const SlotNumber slot, FDWrite*& fd_write);  
     void registerStream   (const FDWriteContext &ctx);
     void deregisterStream (const FDWriteContext &ctx);

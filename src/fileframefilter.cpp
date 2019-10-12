@@ -168,7 +168,7 @@ void FileFrameFilter::go(Frame* frame) {
             filelogger.log(LogLevel::debug) << "FileFrameFilter : writing frame with mstimestamp " << dt << std::endl;
             //av_stream=streams[frame->subsession_index];
             
-            internal_frame.copyFrom(basicframe);
+            internal_frame.copyFrom(basicframe); // TODO: remove extra copying
             internal_frame.mstimestamp=dt;
             internal_frame.fillAVPacket(avpkt);
             av_interleaved_write_frame(av_format_context,avpkt);

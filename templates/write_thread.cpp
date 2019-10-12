@@ -41,14 +41,11 @@ FDWrite::FDWrite(FrameFifo& fifo, const FDWriteContext& ctx) : fifo(fifo), ctx(c
 
 
 FDWrite::~FDWrite() {
-    for(auto it=internal_fifo.begin(); it!=internal_fifo.end(); ++it) {
-        fifo.recycle(*it);
-    }
 }
 
 
 
-FDWriteThread::FDWriteThread(const char* name, FrameFifoContext fifo_ctx) : Thread(name), infifo(name,fifo_ctx), infilter(name, &infifo), infilter_block(name, &infifo), write_fds(), read_fds(), timeout(msToTimeval(Timeout::fdwritethread)) {
+FDWriteThread::FDWriteThread(const char* name, FrameFifoContext fifo_ctx) : Thread(name), infifo(name,fifo_ctx), infilter(name, &infifo), infilter_block(name, &infifo) {
     this->slots_.resize(I_MAX_SLOTS+1,NULL);
 }
     
@@ -66,156 +63,31 @@ FDWriteThread::~FDWriteThread() {
 }
  
  
-/*
-FDWriterThread::run:
-    
-    map a slot to a file descriptor
-    
-                             +--[    ] fd = 5
-                     fd=10   |
-    FrameFilter --> [   ]----+--[||  ] fd = 6
-                             |
-                             +--[|   ] fd = 7
-    
-    
-    thread loop:
-    
-        select([10], [6,7])
-        => if (10) => update all queues => if others, use write => inspect queues, update lists
-        commands come through fd 10
-        
-        
-    read file-descriptor triggered
-    => put frame to right queue = n .. add fd that corresponds to n into write-list
-    
-    write file-descriptor triggered
-    => write stuff, inspect n .. if there's frames, add n's fd into write-list
-        
-    std::list<FDWrite*> writer_by_fd
-    
-    writer_by_fd[i]
-    
-*/
-
-
-
-/*
-void updateListsByWrite(int fd) {
-    // manipulates select write list
-    FDWrite *w = writer_by_fd[fd];
-    // better to do a single iteration over writer_by_fd, instead of several calls to []
-    
-    if (w->internal_fifo.empty()) {
-        writer_by_fd.pop(w);
-    }
-    else {
-        // writer_by_fd[w] ==> into select write list
-    }    
-}
-
-
-void updateListsByRead(int fd) {
-    // manipulates select write list
-    FDWrite *w = writer_by_fd[fd];
-    
-    if (w->internal_fifo.empty()) {
-        writer_by_fd.pop(w);
-    }
-    else {
-        // writer_by_fd[w] ==> into select write list
-    }    
-}
-*/
-
 void FDWriteThread::run() {
     loop = True;
     Frame *f;
-    Frame *f2;
-    FDWrite *fd_write_;
-    int si;
-    int read_fd = infifo.getFD();
     
-    FD_ZERO(&read_fds);
-    FD_ZERO(&write_fds);
-    FD_SET(read_fd, &read_fds);
-    
-    while(loop) { // MAIN LOOP
-        timeout = msToTimeval(Timeout::fdwritethread);
-        
-        si = select(nfds, &read_fds, &write_fds, NULL, &timeout);
-        
-        // (1) loop all writable fds .. write into them from frame queues of each FDWrite entry
-        for(auto it = fd_writes.begin(); it != fd_writes.end(); ++it) { // WRITE FD LOOP
-            if (FD_ISSET((*it)->ctx.fd, &write_fds)) { // CAN WRITE
-                if ((*it)->internal_fifo.empty()) { 
-                    // nothing to write ..
-                }
-                else {
-                    // for valkka internal streaming, use BasicFrame::dump and raw_writer
-                    // for muxed streams, use MuxedFrame::dump and file descriptor
-                    // .. better to subclass.  Let's start with MuxFrame
-                    f2 = (*it)->internal_fifo.back();
-                    (*it)->internal_fifo.pop_back();
-                    // TODO: this->sendFrame(f2); .. f2.dump((*it)->ctx.fd);
-                    infifo.recycle(f2);
-                }
-            } // CAN WRITE
-        } // WRITE FD LOOP
-            
-        
-        // (2) read the incoming queue .. execute commands or push frame to a queue
-        if (si == -1) {
-            perror("FDWriterThread : run : select()");
-        }
-        else if (si) { // SELECT OK
-        
-            if (FD_ISSET(read_fd, &read_fds)) { // GOT FRAME // this must ALWAYS BE ACCOMPANIED WITH A RECYCLE CALL
-                logger.log(LogLevel::crazy) << "FDWriteThread: got frame " << *f << std::endl;
-                
-                if (f->getFrameClass()==FrameClass::signal) { // SIGNALFRAME
-                    SignalFrame *signalframe = static_cast<SignalFrame*>(f);
-                    logger.log(LogLevel::crazy) << "FDWriteThread: signalframe " << *signalframe << std::endl;
-                    FDWriteSignalContext *fd_write_signal_ctx = static_cast<FDWriteSignalContext*>(signalframe->custom_signal_ctx);
-                    handleSignal(*fd_write_signal_ctx);                
-                    delete fd_write_signal_ctx;
-                } // SIGNALFRAME
-                else { // PAYLOAD FRAME
-                    // BasicFrame or MuxFrame .. depends on the subclass
-                    // TODO: this->queueFrame(f):
-                    if (safeGetSlot(f->n_slot, fd_write_) > 0) {
-                        fd_write_->internal_fifo.push_front(f); // TODO check allowed fifo size ==> FDWrite.pushIf()
-                    }
-                    
-                } // PAYLOAD FRAME
-                infifo.recycle(f);
-                
-            } // GOT FRAME
-                
-        } // SELECT OK
-        else { // TIMEOUT
+    while(loop) { // LOOP
+        f = infifo.read(Timeout::fdwritethread);
+        if (!f) { // TIMEOUT
             logger.log(LogLevel::crazy) << "FDWriteThread: "<< this->name <<" timeout expired!" << std::endl;
-        } // TIMEOUT
-            
-        // reconstruct read list
-        nfds = read_fd;
-        FD_SET(read_fd, &read_fds);
-        
-        // reconstruct the lists
-        FD_ZERO(&read_fds);
-        FD_ZERO(&write_fds);
-        
-        // reconstruct write list
-        for(auto it = fd_writes.begin(); it != fd_writes.end(); ++it) { // WRITE FD LOOP
-            if ((*it)->internal_fifo.empty()) { // write ready but nothing to write: remove this write desciptor
-                // in the next round there will be nothing to write ..
-            }
-            else {
-                nfds = std::max(nfds, (*it)->ctx.fd); // recalculate max file descriptor
-                FD_SET((*it)->ctx.fd, &write_fds);
-            }
-        } // WRITE FD LOOP
-        
-    } // MAIN LOOP
+        }
+        else { // GOT FRAME // this must ALWAYS BE ACCOMPANIED WITH A RECYCLE CALL
+            // Handle signal frames
+            logger.log(LogLevel::crazy) << "FDWriteThread: got frame " << *f << std::endl;
+            if (f->getFrameClass()==FrameClass::signal) { // SIGNALFRAME
+                SignalFrame *signalframe = static_cast<SignalFrame*>(f);
+                logger.log(LogLevel::crazy) << "FDWriteThread: signalframe " << *signalframe << std::endl;
+                FDWriteSignalContext *fd_write_signal_ctx = static_cast<FDWriteSignalContext*>(signalframe->custom_signal_ctx);
+                
+                handleSignal(*fd_write_signal_ctx);                
+                delete fd_write_signal_ctx;
+            } // SIGNALFRAME
+            // so something with the other frames
+
+            infifo.recycle(f);
+        } // GOT FRAME
+    }
 }
     
 
@@ -283,14 +155,6 @@ int FDWriteThread::safeGetSlot(const SlotNumber slot, FDWrite*& fd_write) { // -
 }
 
 
-void FDWriteThread::setMaxFD() {
-    nfds = infifo.getFD();
-    for (auto it = fd_writes.begin(); it != fd_writes.end(); ++it) { // TODO: use fd_writes instead
-        nfds = std::max(nfds, (*it)->ctx.fd);
-    }
-}
-
-
 void FDWriteThread::registerStream(const FDWriteContext &ctx) {
     FDWrite* fd_write;
     
@@ -301,8 +165,6 @@ void FDWriteThread::registerStream(const FDWriteContext &ctx) {
             
         case 0: // slot is free
             this->slots_[ctx.slot] = new FDWrite(infifo, ctx); 
-            FD_SET(ctx.fd, &write_fds);
-            setMaxFD();
             logger.log(LogLevel::debug) << "FDWriteThread: registerStream : stream registered at slot " << ctx.slot << " with ptr " << this->slots_[ctx.slot] << std::endl;
             break;
             
@@ -327,8 +189,6 @@ void FDWriteThread::deregisterStream(const FDWriteContext &ctx) {
             logger.log(LogLevel::debug) << "FDWriteThread: deregisterStream : de-registering " << ctx.slot << std::endl;
             delete this->slots_[ctx.slot];
             this->slots_[ctx.slot] = NULL;
-            FD_CLR(ctx.fd, &write_fds);
-            setMaxFD();
             break;
     } // switch
 }

@@ -1,5 +1,5 @@
 /*
- * fdwritethread.cpp :
+ * mux_test.cpp :
  * 
  * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
  * 
@@ -23,7 +23,7 @@
  */
 
 /** 
- *  @file    fdwritethread.cpp
+ *  @file    mux_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
  *  @version 0.1
@@ -32,8 +32,15 @@
  *
  */ 
 
-#include "fdwritethread.h"
-#include "test_import.h"
+#include "framefifo.h"
+#include "framefilter.h"
+#include "logging.h"
+#include "avdep.h"
+#include "muxer.h"
+#include "livethread.h"
+
+#include "test_import.h" // don't forget this
+
 
 using namespace std::chrono_literals;
 using std::this_thread::sleep_for;
@@ -43,31 +50,41 @@ const char* stream_2   =std::getenv("VALKKA_TEST_RTSP_2");
 const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 
-void test_1() {
-    FDWriteThread thread("test");
+void test_1() {  
+    const char* name = "@TEST: live_thread_test: test 1: ";
+    std::cout << name <<"** @@Feeding frames to muxer from an rtsp connection **" << std::endl;
     
-    thread.startCall();
+    if (!stream_1) {
+        std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+        exit(2);
+    }
+    std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
     
-    FDWriteContext ctx = FDWriteContext();
+    // filtergraph:
+    // (LiveThread:livethread) --> {FrameFilter:dummyfilter)
+    LiveThread      livethread("livethread");
+    MuxFrameFilter  muxfilter("muxer");
+    InfoFrameFilter info("info", &muxfilter);
+  
+    std::cout << "starting live thread" << std::endl;
+    livethread.startCall();
     
-    ctx.slot = 1;
-    ctx.fd = 2;
+    LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &info);
+    livethread.registerStreamCall(ctx);
+    livethread.playStreamCall(ctx);
+  
+    muxfilter.activate();
     
-    thread.registerStreamCall(ctx);
-    
-    thread.deregisterStreamCall(ctx);
-    
-    
-    thread.stopCall();
-
-    const char* name = "@TEST: fdwritethread: test 1: ";
-    std::cout << name <<"** @@DESCRIPTION **" << std::endl;
+    sleep_for(5s);
+  
+    std::cout << "stopping live thread" << std::endl;
+    livethread.stopCall();  
 }
 
 
 void test_2() {
   
-  const char* name = "@TEST: fdwritethread: test 2: ";
+  const char* name = "@TEST: mux_test: test 2: ";
   std::cout << name <<"** @@DESCRIPTION **" << std::endl;
   
 }
@@ -75,7 +92,7 @@ void test_2() {
 
 void test_3() {
   
-  const char* name = "@TEST: fdwritethread: test 3: ";
+  const char* name = "@TEST: mux_test: test 3: ";
   std::cout << name <<"** @@DESCRIPTION **" << std::endl;
   
 }
@@ -83,7 +100,7 @@ void test_3() {
 
 void test_4() {
   
-  const char* name = "@TEST: fdwritethread: test 4: ";
+  const char* name = "@TEST: mux_test: test 4: ";
   std::cout << name <<"** @@DESCRIPTION **" << std::endl;
   
 }
@@ -91,7 +108,7 @@ void test_4() {
 
 void test_5() {
   
-  const char* name = "@TEST: fdwritethread: test 5: ";
+  const char* name = "@TEST: mux_test: test 5: ";
   std::cout << name <<"** @@DESCRIPTION **" << std::endl;
   
 }
@@ -103,7 +120,8 @@ int main(int argc, char** argcv) {
     std::cout << argcv[0] << " needs an integer argument.  Second interger argument (optional) is verbosity" << std::endl;
   }
   else {
-    
+    ffmpeg_av_register_all(); // never forget!
+  
     if  (argc>2) { // choose verbosity
       switch (atoi(argcv[2])) {
         case(0): // shut up
