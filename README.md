@@ -76,6 +76,10 @@ We're currently at alpha
 
 ### Older versions
 
+0.14.0
+- Muxing part progressing (but not yet functional)
+- python API 2 level updates
+
 0.13.2 Version
 - Extracting SPS & PPS packets from RTSP negotiation was disabled..!
 - Now it's on, so cameras that don't send them explicitly (like Axis) should work

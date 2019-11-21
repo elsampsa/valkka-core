@@ -1,3 +1,15 @@
+valkka (0.14.0-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * changes to python api level 2. Muxing progressing but not yet functional.
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Thu, 21 Nov 2019 18:18:33 +0200
+
+valkka (0.14.0-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * changes to python api level 2. Muxing progressing but not yet functional.
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Thu, 21 Nov 2019 18:16:30 +0200
+
 valkka (0.13.3-0ubuntu1-xenialppa1) xenial; urgency=low
 
   * Fixes for Axis cameras: ping cameras with get_parameter, repeat sps and pps packets
