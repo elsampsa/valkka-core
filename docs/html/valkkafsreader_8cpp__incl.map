@@ -1,12 +1,11 @@
 <map id="/home/sampsa/C/valkka/src/valkkafsreader.cpp" name="/home/sampsa/C/valkka/src/valkkafsreader.cpp">
-<area shape="rect" id="node2" href="$valkkafsreader_8h.html" title="valkkafsreader.h" alt="" coords="1270,95,1389,121"/>
-<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1511,543,1593,569"/>
-<area shape="rect" id="node42" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1179,244,1248,271"/>
-<area shape="rect" id="node44" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1143,319,1227,345"/>
-<area shape="rect" id="node47" href="$rawrite_8h.html" title="Write directly to files and devices with POSIX O_DIRECT. " alt="" coords="1436,468,1508,495"/>
-<area shape="rect" id="node49" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1323,244,1413,271"/>
-<area shape="rect" id="node50" href="$valkkafs_8h.html" title="valkkafs.h" alt="" coords="1249,169,1332,196"/>
-<area shape="rect" id="node45" href="$frame_8h.html" title="Frame classes. " alt="" coords="1335,393,1401,420"/>
-<area shape="rect" id="node46" href="$macro_8h.html" title="macro.h" alt="" coords="1253,468,1323,495"/>
-<area shape="rect" id="node48" href="$logging_8h.html" title="Logging utilities. " alt="" coords="312,543,387,569"/>
+<area shape="rect" id="node2" href="$valkkafsreader_8h.html" title="valkkafsreader.h" alt="" coords="1493,95,1611,121"/>
+<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1671,543,1753,569"/>
+<area shape="rect" id="node43" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1555,244,1624,271"/>
+<area shape="rect" id="node45" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1374,319,1458,345"/>
+<area shape="rect" id="node47" href="$rawrite_8h.html" title="Write directly to files and devices with POSIX O_DIRECT. " alt="" coords="1553,468,1625,495"/>
+<area shape="rect" id="node49" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1288,244,1379,271"/>
+<area shape="rect" id="node50" href="$valkkafs_8h.html" title="valkkafs.h" alt="" coords="1472,169,1555,196"/>
+<area shape="rect" id="node46" href="$frame_8h.html" title="Frame classes. " alt="" coords="1363,393,1429,420"/>
+<area shape="rect" id="node48" href="$logging_8h.html" title="Logging utilities. " alt="" coords="515,468,589,495"/>
 </map>

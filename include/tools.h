@@ -29,7 +29,7 @@
  *  @file    tools.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.3 
+ *  @version 0.14.0 
  *  
  *  @brief Auxiliary routines
  *
@@ -63,5 +63,33 @@ long int timevalToMs(struct timeval time); /// Timeval to milliseconds
 bool slotOk(SlotNumber n_slot); ///< Checks the slot number range
 
 void normalize_timespec(struct timespec *ts, time_t sec, int64_t nanosec);
+
+
+#ifdef BIG_ENDIAN
+uint32_t deserialize_uint32_big_endian(unsigned char *buffer)
+{
+    uint32_t value = 0;
+
+    value |= buffer[0] << 24;
+    value |= buffer[1] << 16;
+    value |= buffer[2] << 8;
+    value |= buffer[3];
+    return value;
+}
+#else // either not defined or little endian
+// deserialize value from big endian in little endian system
+// byte1 byte2 byte3 byte4 => byte4 byte3 ..
+uint32_t deserialize_uint32_big_endian(unsigned char *buffer)
+{
+    uint32_t value = 0;
+
+    value |= buffer[3] << 24;
+    value |= buffer[2] << 16;
+    value |= buffer[1] << 8;
+    value |= buffer[0];
+    return value;
+}
+#endif
+
 
 #endif

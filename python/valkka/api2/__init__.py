@@ -21,6 +21,7 @@ from valkka.api2.threads import LiveThread, USBDeviceThread, FileThread, OpenGLT
 from valkka.api2.multiprocess import ValkkaProcess, ValkkaShmemRGBProcess, safe_select
 from valkka.api2.shmem import ShmemClient, ShmemRGBClient
 from valkka.api2.valkkafs import ValkkaFS, findBlockDevices, ValkkaFSManager, formatMstimestamp
+from valkka.api2.exceptions import *
 
 
 def raise_numpy_version():

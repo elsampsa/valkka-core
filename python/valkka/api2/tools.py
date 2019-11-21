@@ -25,7 +25,7 @@ tools.py : helper functions
 @file    tools.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.13.3 
+@version 0.14.0 
 
 @brief helper functions
 """
@@ -247,7 +247,7 @@ def parameterInitCheck(definitions, parameters, obj, undefined_ok=False):
         elif (definition is None):            # this is a generic object - no checking whatsoever
             #print("parameterInitCheck: None")
             setattr(obj, key, parameter)  # parameters2.pop(key)
-        elif (definition.__class__ == type):  # Check the type
+        elif isinstance(definition.__class__, type):  # Check the type
             #print("parameterInitCheck: type")
             required_type = definition
             if (parameter.__class__ != required_type):
@@ -260,7 +260,7 @@ def parameterInitCheck(definitions, parameters, obj, undefined_ok=False):
             else:
                 setattr(obj, key, parameter)  # parameters2.pop(key)
         else:
-            raise(AttributeError("Check your definitions syntax"))
+            raise(AttributeError("Check your definitions syntax for " + key))
 
     # in definitions, there might still some leftover parameters the user did
     # not bother to give

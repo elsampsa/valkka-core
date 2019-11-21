@@ -1,7 +1,7 @@
 var searchData=
 [
   ['basic',['basic',['../group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aaf17aaabc20bfe045075927934fed52d2',1,'frame.h']]],
-  ['basicframe',['BasicFrame',['../classBasicFrame.html',1,'BasicFrame'],['../classFrameSink.html#adff9bf4613c12eb9726886e532ffa13f',1,'FrameSink::basicframe()'],['../classUSBDevice.html#aa4def041374ed5615666c3233623c9e5',1,'USBDevice::basicframe()'],['../classBasicFrame.html#aff1c4f3cedac6a686c9e0c3db5b042b8',1,'BasicFrame::BasicFrame()']]],
+  ['basicframe',['BasicFrame',['../classBasicFrame.html',1,'BasicFrame'],['../classBasicFrame.html#aff1c4f3cedac6a686c9e0c3db5b042b8',1,'BasicFrame::BasicFrame()'],['../classFrameSink.html#adff9bf4613c12eb9726886e532ffa13f',1,'FrameSink::basicframe()'],['../classUSBDevice.html#aa4def041374ed5615666c3233623c9e5',1,'USBDevice::basicframe()']]],
   ['bindtextures',['bindTextures',['../classRenderContext.html#a6bcc666153aa735d266e5ee41e078b43',1,'RenderContext']]],
   ['bindvars',['bindVars',['../classRenderContext.html#a88ab37322c33571a7855a02df7ecaa43',1,'RenderContext']]],
   ['bindvarsobj',['bindVarsObj',['../classRenderContext.html#af546f9da5eaf0c582037b4d324e36194',1,'RenderContext']]],

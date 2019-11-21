@@ -1,13 +1,11 @@
 <map id="/home/sampsa/C/valkka/src/thread.cpp" name="/home/sampsa/C/valkka/src/thread.cpp">
-<area shape="rect" id="node2" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="2206,95,2275,121"/>
-<area shape="rect" id="node46" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2407,393,2482,420"/>
-<area shape="rect" id="node3" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="2132,169,2216,196"/>
-<area shape="rect" id="node4" href="$common_8h.html" title="List of common header files. " alt="" coords="1285,468,1367,495"/>
-<area shape="rect" id="node34" href="$frame_8h.html" title="Frame classes. " alt="" coords="2075,244,2142,271"/>
-<area shape="rect" id="node35" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1315,319,1383,345"/>
-<area shape="rect" id="node36" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="2168,319,2271,345"/>
-<area shape="rect" id="node37" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="2206,393,2289,420"/>
-<area shape="rect" id="node38" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1859,319,1927,345"/>
-<area shape="rect" id="node44" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="2073,319,2144,345"/>
-<area shape="rect" id="node45" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="2295,319,2357,345"/>
+<area shape="rect" id="node2" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="2795,95,2864,121"/>
+<area shape="rect" id="node50" href="$logging_8h.html" title="Logging utilities. " alt="" coords="3269,393,3344,420"/>
+<area shape="rect" id="node4" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1942,169,2026,196"/>
+<area shape="rect" id="node5" href="$common_8h.html" title="List of common header files. " alt="" coords="1737,468,1820,495"/>
+<area shape="rect" id="node45" href="$frame_8h.html" title="Frame classes. " alt="" coords="1813,244,1880,271"/>
+<area shape="rect" id="node49" href="$macro_8h.html" title="macro.h" alt="" coords="1556,319,1625,345"/>
+<area shape="rect" id="node46" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1777,319,1845,345"/>
+<area shape="rect" id="node47" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1650,319,1753,345"/>
+<area shape="rect" id="node48" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1737,393,1820,420"/>
 </map>

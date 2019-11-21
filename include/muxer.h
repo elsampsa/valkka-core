@@ -28,7 +28,7 @@
  *  @file    muxer.h
  *  @author  Sampsa Riikonen
  *  @date    2019
- *  @version 0.1
+ *  @version 0.14.0 
  *  
  *  @brief   FFmpeg muxers, implemented as Valkka framefilters
  * 
@@ -60,6 +60,7 @@ protected:
     long int zerotime;                 ///< Start time set explicitly by the user
     bool zerotimeset;
     uint32_t missing, ccf;
+    std::string format_name;
     
 protected: //libav stuff
     AVFormatContext               *av_format_ctx;
@@ -72,6 +73,7 @@ protected: //libav stuff
     AVPacket                      *avpkt;
     AVDictionary                  *av_dict;
     
+    
     static const size_t avio_ctx_buffer_size = 4096;
   
 protected: //mutex stuff
@@ -79,14 +81,15 @@ protected: //mutex stuff
     std::condition_variable condition; ///< Condition variable for the mutex
 
 protected: //frames
-    std::vector<SetupFrame>       setupframes;        ///< deep copies of the arrived setup frames
+    std::vector<SetupFrame>     setupframes;        ///< deep copies of the arrived setup frames
     
 public:
-    BasicFrame                    internal_frame;     ///< copy of the arrived frame and payload
+    // MuxFrame                    internal_frame;     ///< outgoing muxed frame // TODO
+    BasicFrame                     internal_frame; 
   
 protected:
+    virtual void defineMux() = 0; ///< Define container format (format_name) & muxing parameters (av_dict).  Define in child classes.
     virtual void go(Frame* frame);
-    //virtual void run(Frame* frame);
     void initMux();           ///< Open file, reserve codec_contexes, streams, write preamble, set initialized=true if success
     void closeMux();          ///< Close file, dealloc codec_contexes, streams
     void deActivate_();
@@ -100,36 +103,24 @@ public:
     static int write_packet(void *opaque, uint8_t *buf, int buf_size);
     static int read_packet(void *opaque, uint8_t *buf, int buf_size) {return 0;} // dummy function
     static int64_t seek(void *opaque, int64_t offset, int whence) {return 0;} // dummy function
-};                                                                   // <pyapi>
+};                                                                                             // <pyapi>
 
 
 
+class FragMP4MuxFrameFilter : public MuxFrameFilter {                       // <pyapi>
+    
+public:                                                                     // <pyapi>
+    FragMP4MuxFrameFilter(const char* name, FrameFilter *next = NULL);      // <pyapi>
+    virtual ~FragMP4MuxFrameFilter();                                       // <pyapi>
+    
+public:
+    // MP4MuxFrame internal_frame; // TODO
+    BasicFrame internal_frame;
+    
+protected:
+    virtual void defineMux();
+};                                                                           // <pyapi>
 
-#ifdef BIG_ENDIAN
-uint32_t deserialize_uint32_big_endian(unsigned char *buffer)
-{
-    uint32_t value = 0;
-
-    value |= buffer[0] << 24;
-    value |= buffer[1] << 16;
-    value |= buffer[2] << 8;
-    value |= buffer[3];
-    return value;
-}
-#else // either not defined or little endian
-// deserialize value from big endian in little endian system
-// byte1 byte2 byte3 byte4 => byte4 byte3 ..
-uint32_t deserialize_uint32_big_endian(unsigned char *buffer)
-{
-    uint32_t value = 0;
-
-    value |= buffer[3] << 24;
-    value |= buffer[2] << 16;
-    value |= buffer[1] << 8;
-    value |= buffer[0];
-    return value;
-}
-#endif
 
 
 

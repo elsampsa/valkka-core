@@ -25,7 +25,7 @@ valkkafs.py : api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFS
 @file    valkkafs.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.13.3 
+@version 0.14.0 
 
 @brief   api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFSThreads
 """
@@ -37,6 +37,7 @@ import numpy
 import logging
 from valkka import core
 from valkka.api2.tools import *
+from valkka.api2.exceptions import ValkkaFSLoadError
 import datetime
 import traceback
 
@@ -45,7 +46,6 @@ pre_mod = "valkka.api2.valkkafs: "
 # https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs
 guid_linux_swap="0657FD6D-A4AB-43C4-84E5-0933C84B4F4F" # GPT partition table
 mbr_linux_swap="82" # MBR partition table
-
 
 
 def findBlockDevices():
@@ -149,12 +149,17 @@ class ValkkaFS:
     @staticmethod
     def loadFromDirectory(dirname, verbose=False):
         jsonfile = os.path.join(dirname,"valkkafs.json")
-        assert(os.path.exists(dirname))
-        assert(os.path.exists(jsonfile))
+        #assert(os.path.exists(dirname))
+        #assert(os.path.exists(jsonfile))
+        if not os.path.exists(dirname):
+            raise ValkkaFSLoadError("no such dir "+dirname)
+        if not os.path.exists(jsonfile):
+            raise ValkkaFSLoadError("no such file "+jsonfile)
+
         f=open(jsonfile, "r")
         dic=json.loads(f.read())
         f.close()
-        
+
         partition_uuid  = dic["partition_uuid"]
         dumpfile        = dic["dumpfile"]
         blockfile       = dic["blockfile"]
@@ -166,10 +171,17 @@ class ValkkaFS:
         # assert((partition_uuid is None) or (dumpfile is None)) # nopes .. dumpfile refers to the correct /dev/name taken earlier from partition_uuid
         
         if partition_uuid is None:
-            assert(os.path.exists(dumpfile))
+            if not os.path.exists(dumpfile):
+                raise ValkkaFSLoadError("no such dumpfile "+dumpfile)
+            #assert(os.path.exists(dumpfile))
         
-        assert(os.path.exists(blockfile))
-        assert(current_block < n_blocks)
+        if not os.path.exists(blockfile):
+            raise ValkkaFSLoadError("missing blockfile "+blockfile)
+        if current_block > n_blocks:
+            raise ValkkaFSLoadError("Inconstent FS: current_block, n_blocks "
+                +str(current_block)+", "+str(n_blocks))
+        #assert(os.path.exists(blockfile))
+        #assert(current_block < n_blocks)
         
         fs = ValkkaFS(
             partition_uuid = partition_uuid,
@@ -188,6 +200,8 @@ class ValkkaFS:
         
     @staticmethod
     def newFromDirectory(dirname=None, blocksize=None, n_blocks=None, device_size=None, partition_uuid=None, verbose=False):
+        """If partition_uuid is defined, then use a dedicated block device
+        """
         assert(isinstance(dirname, str))
         
         jsonfile  =os.path.join(dirname,"valkkafs.json")
@@ -195,9 +209,9 @@ class ValkkaFS:
         dumpfile  =os.path.join(dirname,"dumpfile")
 
         if (os.path.exists(dirname)): # clear directory
-            os.remove(jsonfile)
-            os.remove(blockfile)
-            if os.path.exists(dumpfile): os.remove(dumpfile)
+            if os.path.exists(jsonfile)  : os.remove(jsonfile)
+            if os.path.exists(blockfile) : os.remove(blockfile)
+            if os.path.exists(dumpfile)  : os.remove(dumpfile)
         else:
             os.makedirs(dirname)
         
@@ -272,6 +286,8 @@ class ValkkaFS:
     parameter_defs.update(filesystem_defs)
     
     def __init__(self, **kwargs):
+        """If partition_uuid defined, the dumpfile is set by ctor to the device defined by partition_uuid
+        """
         self.pre = self.__class__.__name__ + " : "
         # checks kwargs agains parameter_defs, attach ok'd parameters to this
         # object as attributes
@@ -307,6 +323,20 @@ class ValkkaFS:
         # self.analyzer = core.ValkkaFSTool(self.core)
         
         self.verbose = True
+
+
+    def is_same(self, **dic):
+        """Compare this ValkkaFS to given parameters
+
+        Use parameters that are not modified by the ctor
+        """
+        return (\
+        (self.partition_uuid  == dic["partition_uuid"]) and \
+        (self.blocksize       == dic["blocksize"]) and \
+        (self.n_blocks        == dic["n_blocks"]) \
+        )
+
+
 
 
     def new_block_cb__(self, propagate, par):
@@ -661,6 +691,30 @@ ManagedFilterChain.getInputFrameFilter(framefilter)
 ValkkaFSManager.setOutput(id, slot, framefilter)
 """
 class ValkkaFSManager:
+    """Takes as an input a (api level 2) ValkkaFS
+    
+    Instantiates & encapsulates api 1 level objects:
+    
+    - ValkkaFSWriterThread : Writes stream to disk
+    - ValkkaFSReaderThread : Reads stream from disk & passes them to FileCacheThread
+    - FileCacheThread : Caches frames & passes them at play speed downstream
+    
+        - ValkkaFSManager attaches FileCacheThread callbacks for various events
+    
+    All those objects operate on a common ValkkaFS object (ValkkaFS manages the blocktable)
+    
+    Frame writing API:
+    
+    ::
+    
+        setInput(_id, slot)   :  declare slot to id mapping for writing frames
+        TODO: remove mapping
+        getFrameFilter()      :  returns framefilter for writing frames
+        
+    
+    """
+    
+    
     
     timetolerance = 2000 # if frames are missing at this distance or further, request for more blocks
     timediff = 5 # blocktable can be inquired max this frequency (secs)
@@ -846,7 +900,13 @@ class ValkkaFSManager:
     def setInput(self, _id, slot):
         """Map incoming frames from slot to id number
         """
-        self.writerthread.setSlotIdCall(_id, slot)
+        self.writerthread.setSlotIdCall(slot, _id)
+    
+    
+    def clearInput(self, slot):
+        """Unmap incoming frames from slot to id number
+        """
+        self.writerthread.unSetSlotIdCall(slot)
     
     
     def getFrameFilter(self):

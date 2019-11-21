@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.13.3</span>
+   &#160;<span id="projectnumber">0.14.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -79,8 +79,10 @@ Inheritance diagram for FrameFifo:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFrameFifo__inherit__graph.png" border="0" usemap="#FrameFifo_inherit__map" alt="Inheritance graph"/></div>
 <map name="FrameFifo_inherit__map" id="FrameFifo_inherit__map">
-<area shape="rect" id="node2" href="classLiveFifo.html" title="This is a special FrameFifo class for feeding frames into live555, i.e. " alt="" coords="5,80,73,107"/>
-<area shape="rect" id="node3" href="classOpenGLFrameFifo.html" title="A FrameFifo managed and used by OpenGLThread. " alt="" coords="97,80,227,107"/>
+<area shape="rect" id="node2" href="classFDFrameFifo.html" title="FrameFifo using file descriptors. " alt="" coords="5,80,104,107"/>
+<area shape="rect" id="node3" href="classLiveFifo.html" title="This is a special FrameFifo class for feeding frames into live555, i.e. " alt="" coords="129,80,197,107"/>
+<area shape="rect" id="node4" href="classOpenGLFrameFifo.html" title="A FrameFifo managed and used by OpenGLThread. " alt="" coords="221,80,350,107"/>
+<area shape="rect" id="node5" href="classRGBFrameFifo.html" title="A FrameFifo for RGBFrame s. " alt="" coords="374,80,485,107"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -96,11 +98,11 @@ Collaboration diagram for FrameFifo:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5ceec27cf18728b0e35601078f1e40b8"><td class="memItemLeft" align="right" valign="top"><a id="a5ceec27cf18728b0e35601078f1e40b8"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a5ceec27cf18728b0e35601078f1e40b8">FrameFifo</a> (const char *name, <a class="el" href="structFrameFifoContext.html">FrameFifoContext</a> <a class="el" href="classFrameFifo.html#ab6d88bd74b419961219af1a25931664f">ctx</a>=<a class="el" href="structFrameFifoContext.html">FrameFifoContext</a>())</td></tr>
-<tr class="memdesc:a5ceec27cf18728b0e35601078f1e40b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default ctor // &lt;pyapi&gt; <br /></td></tr>
+<tr class="memdesc:a5ceec27cf18728b0e35601078f1e40b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default ctor. <br /></td></tr>
 <tr class="separator:a5ceec27cf18728b0e35601078f1e40b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa85de58431db509135505e7956a0715e"><td class="memItemLeft" align="right" valign="top"><a id="aa85de58431db509135505e7956a0715e"></a>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#aa85de58431db509135505e7956a0715e">~FrameFifo</a> ()</td></tr>
-<tr class="memdesc:aa85de58431db509135505e7956a0715e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default virtual dtor // &lt;pyapi&gt; <br /></td></tr>
+<tr class="memdesc:aa85de58431db509135505e7956a0715e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default virtual dtor. <br /></td></tr>
 <tr class="separator:aa85de58431db509135505e7956a0715e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e6bbad25bfd919e293c22542c44f2a6"><td class="memItemLeft" align="right" valign="top"><a id="a4e6bbad25bfd919e293c22542c44f2a6"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ban_copy_ctor</b> (<a class="el" href="classFrameFifo.html">FrameFifo</a>)</td></tr>
@@ -117,7 +119,7 @@ Reservoir &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el"
 <tr class="separator:a01765bd79b616a2425ba84d94a15d737"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae984545cb5d40a1d0fe8b8e369d9c64"><td class="memItemLeft" align="right" valign="top"><a id="aae984545cb5d40a1d0fe8b8e369d9c64"></a>
 virtual <a class="el" href="classFrame.html">Frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#aae984545cb5d40a1d0fe8b8e369d9c64">read</a> (unsigned short int mstimeout=0)</td></tr>
-<tr class="memdesc:aae984545cb5d40a1d0fe8b8e369d9c64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pop a frame from the end of the fifo and return the frame to the reservoir stack. <br /></td></tr>
+<tr class="memdesc:aae984545cb5d40a1d0fe8b8e369d9c64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pop a frame from the end of the fifo when available. <br /></td></tr>
 <tr class="separator:aae984545cb5d40a1d0fe8b8e369d9c64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09f514fe06c5e737cd74691f8b5d9d52"><td class="memItemLeft" align="right" valign="top"><a id="a09f514fe06c5e737cd74691f8b5d9d52"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52">recycle</a> (<a class="el" href="classFrame.html">Frame</a> *f)</td></tr>
@@ -234,7 +236,7 @@ std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a cl
 <li></li>
 </ul>
 
-<p>Reimplemented in <a class="el" href="classOpenGLFrameFifo.html#a71356c2eeea511481876d53675855a6c">OpenGLFrameFifo</a>, <a class="el" href="classRGBFrameFifo.html#a44a701b05febe9b9210563b441bbccb4">RGBFrameFifo</a>, and <a class="el" href="classLiveFifo.html#af1040c40ceafed60fe2d60a5f24baa9b">LiveFifo</a>.</p>
+<p>Reimplemented in <a class="el" href="classFDFrameFifo.html#ac1e5e35425e0d7bbee0195acea31171c">FDFrameFifo</a>, <a class="el" href="classOpenGLFrameFifo.html#a71356c2eeea511481876d53675855a6c">OpenGLFrameFifo</a>, <a class="el" href="classRGBFrameFifo.html#a44a701b05febe9b9210563b441bbccb4">RGBFrameFifo</a>, and <a class="el" href="classLiveFifo.html#af1040c40ceafed60fe2d60a5f24baa9b">LiveFifo</a>.</p>
 
 </div>
 </div>

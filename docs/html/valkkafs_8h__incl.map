@@ -1,12 +1,11 @@
 <map id="/home/sampsa/C/valkka/include/valkkafs.h" name="/home/sampsa/C/valkka/include/valkkafs.h">
-<area shape="rect" id="node2" href="$common_8h.html" title="List of common header files. " alt="" coords="1674,468,1757,495"/>
-<area shape="rect" id="node41" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1999,95,2069,121"/>
-<area shape="rect" id="node43" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1924,169,2008,196"/>
-<area shape="rect" id="node48" href="$rawrite_8h.html" title="Write directly to files and devices with POSIX O_DIRECT. " alt="" coords="1691,319,1763,345"/>
-<area shape="rect" id="node49" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2802,393,2877,420"/>
-<area shape="rect" id="node50" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1834,95,1925,121"/>
-<area shape="rect" id="node44" href="$frame_8h.html" title="Frame classes. " alt="" coords="1846,244,1913,271"/>
-<area shape="rect" id="node47" href="$macro_8h.html" title="macro.h" alt="" coords="1931,319,2001,345"/>
-<area shape="rect" id="node45" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1788,319,1856,345"/>
-<area shape="rect" id="node46" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1753,393,1835,420"/>
+<area shape="rect" id="node2" href="$common_8h.html" title="List of common header files. " alt="" coords="1719,468,1802,495"/>
+<area shape="rect" id="node42" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1974,95,2043,121"/>
+<area shape="rect" id="node44" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1895,169,1979,196"/>
+<area shape="rect" id="node48" href="$rawrite_8h.html" title="Write directly to files and devices with POSIX O_DIRECT. " alt="" coords="1738,319,1810,345"/>
+<area shape="rect" id="node49" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2858,393,2933,420"/>
+<area shape="rect" id="node50" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1809,95,1899,121"/>
+<area shape="rect" id="node45" href="$frame_8h.html" title="Frame classes. " alt="" coords="1814,244,1881,271"/>
+<area shape="rect" id="node47" href="$macro_8h.html" title="macro.h" alt="" coords="1885,319,1954,345"/>
+<area shape="rect" id="node46" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1798,393,1881,420"/>
 </map>

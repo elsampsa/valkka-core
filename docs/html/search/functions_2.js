@@ -21,6 +21,7 @@ var searchData=
   ['closefile',['closeFile',['../classFileFrameFilter.html#ad22610b13629b7bb22cc31fb05820ed6',1,'FileFrameFilter']]],
   ['closefilestreamcall',['closeFileStreamCall',['../classFileThread.html#a0dacbcfa480ceff7f6688c3b8961694a',1,'FileThread']]],
   ['closeglx',['closeGLX',['../classOpenGLThread.html#aad619c3ffcaeb78cdc79877700e103a6',1,'OpenGLThread']]],
+  ['closemux',['closeMux',['../classMuxFrameFilter.html#aff0e073af094dbbc092ac21976aa8397',1,'MuxFrameFilter']]],
   ['closepending',['closePending',['../classLiveThread.html#a1df392961ac29623d27a50ed4d81d986',1,'LiveThread']]],
   ['closethread',['closeThread',['../classThread.html#a4428ec86c8bc7da14b558f25fb723ce0',1,'Thread']]],
   ['compile',['compile',['../classShader.html#a5be69e48ac2436651ead777bf5fb5c9f',1,'Shader']]],

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['active',['active',['../classFileFrameFilter.html#a0e6cdb3beb767afecbecf3daece1d62a',1,'FileFrameFilter::active()'],['../classBufferSource.html#af2891d20315d560f9e30924d1be25557',1,'BufferSource::active()'],['../classSlotContext.html#a950b167cf90911ed67a8af57730347e9',1,'SlotContext::active()']]],
+  ['active',['active',['../classFileFrameFilter.html#a0e6cdb3beb767afecbecf3daece1d62a',1,'FileFrameFilter::active()'],['../classBufferSource.html#af2891d20315d560f9e30924d1be25557',1,'BufferSource::active()'],['../classMuxFrameFilter.html#afe8282dbb91d5ded707126dcd2915745',1,'MuxFrameFilter::active()'],['../classSlotContext.html#a950b167cf90911ed67a8af57730347e9',1,'SlotContext::active()']]],
   ['active_5fslots',['active_slots',['../classFileThread.html#a38e115da765b12cb03bc52208b079fa8',1,'FileThread']]],
   ['address',['address',['../structLiveConnectionContext.html#a2ccb8cede419858ffee6fd6cf5ca8c81',1,'LiveConnectionContext::address()'],['../structLiveOutboundContext.html#ac08aac088340671c56ccdadb602744fe',1,'LiveOutboundContext::address()']]],
   ['at_5fsetup',['at_setup',['../classOutbound.html#a511d26bf58e218eeffc323c1aa3e75d2',1,'Outbound']]],

@@ -26,7 +26,7 @@
  *  @file    movement_test.cpp
  *  @author  Petri Eranko <petri.eranko@dasys.fi>
  *  @date    2019
- *  @version 0.13.3 
+ *  @version 0.14.0 
  *  
  *  @brief 
  *

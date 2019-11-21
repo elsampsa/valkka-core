@@ -1,9 +1,9 @@
 <map id="/home/sampsa/C/valkka/src/sharedmem.cpp" name="/home/sampsa/C/valkka/src/sharedmem.cpp">
-<area shape="rect" id="node2" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1840,95,1901,121"/>
-<area shape="rect" id="node43" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="3207,169,3308,196"/>
-<area shape="rect" id="node48" href="$numpy__no__import_8h.html" title="numpy_no_import.h" alt="" coords="3340,95,3476,121"/>
-<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1828,244,1911,271"/>
-<area shape="rect" id="node41" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1868,169,1951,196"/>
+<area shape="rect" id="node2" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1868,95,1929,121"/>
+<area shape="rect" id="node43" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="3237,169,3339,196"/>
+<area shape="rect" id="node48" href="$numpy__no__import_8h.html" title="numpy_no_import.h" alt="" coords="3371,95,3507,121"/>
+<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1856,244,1939,271"/>
+<area shape="rect" id="node41" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1896,169,1979,196"/>
 <area shape="rect" id="node42" href="$logging_8h.html" title="Logging utilities. " alt="" coords="96,244,171,271"/>
-<area shape="rect" id="node46" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="3575,244,3665,271"/>
+<area shape="rect" id="node46" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="3605,244,3696,271"/>
 </map>

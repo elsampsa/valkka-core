@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.13.3</span>
+   &#160;<span id="projectnumber">0.14.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -216,7 +216,17 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td><
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Pipe stream into a matroska (mkv) file. </p>
 <p>This <a class="el" href="classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. ">FrameFilter</a> should be connected to the live stream at all times: it observes the setup frames (FrameTypes::setup) and saves them internally.</p>
-<p>When the <a class="el" href="classFileFrameFilter.html#a7c7fe5a052012e7004584880614da606" title="Request streaming to disk asap (when config frames have arrived) // &lt;pyapi&gt; ">FileFrameFilter::activate</a> method is called, it configures the files accordingly, and starts streaming into disk. </p>
+<p>When the <a class="el" href="classFileFrameFilter.html#a7c7fe5a052012e7004584880614da606" title="Request streaming to disk asap (when config frames have arrived) // &lt;pyapi&gt; ">FileFrameFilter::activate</a> method is called, it configures the files accordingly, and starts streaming into disk.</p>
+<p>Notes about FFmpeg muxing &amp; file output:</p>
+<p>AVCodecContext : defines the codec AVFormatContext : defines the (de)muxing &amp; has pointers to AVIOContext (in the -&gt;pb member) AVIOContext : defines the input / output file AVStream : raw payload (video track, audio track)</p>
+<p>avformat_alloc_output_context2(AVFormatContext* av_format_context, NULL, "matroska", NULL);</p>
+<p>avio_open(AVIOContext* av_format_context-&gt;pb, filename.c_str(), AVIO_FLAG_WRITE);</p>
+<p>AVStream* av_stream = avformat_new_stream(AVFormatContext* av_format_context, AVCodec* av_codec_context-&gt;codec);</p>
+<p>Actual writing like this:</p>
+<p>av_interleaved_write_frame(AVFormatContext* av_format_context, avpkt);</p>
+<p>For an actual muxer implementation, see for example libavformat/movenc.c : ff_mov_write_packet =&gt; avio_write(pb, reformatted_data, size); (i.e. it uses the AVIOContext) ==&gt; <a href="https://ffmpeg.org/doxygen/2.8/aviobuf_8c_source.html#l00178">https://ffmpeg.org/doxygen/2.8/aviobuf_8c_source.html#l00178</a></p>
+<p>AVIOContext is C-style "class" that can be re-defined: <a href="https://ffmpeg.org/doxygen/2.8/structAVIOContext.html">https://ffmpeg.org/doxygen/2.8/structAVIOContext.html</a></p>
+<p>A custom AVIOContext can be created with "avio_alloc_context" </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad574ff26061537687aa1c9568b28dc09"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad574ff26061537687aa1c9568b28dc09">&#9670;&nbsp;</a></span>FileFrameFilter()</h2>

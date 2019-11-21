@@ -26,7 +26,7 @@
  *  @file    mux_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 0.14.0 
  *  
  *  @brief 
  *
@@ -51,6 +51,7 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 
 void test_1() {  
+    /*
     const char* name = "@TEST: live_thread_test: test 1: ";
     std::cout << name <<"** @@Feeding frames to muxer from an rtsp connection **" << std::endl;
     
@@ -79,6 +80,7 @@ void test_1() {
   
     std::cout << "stopping live thread" << std::endl;
     livethread.stopCall();  
+    */ // TODO
 }
 
 

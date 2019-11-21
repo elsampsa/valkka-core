@@ -1,51 +1,51 @@
 <map id="/home/sampsa/C/valkka/include/common.h" name="/home/sampsa/C/valkka/include/common.h">
-<area shape="rect" id="node2" href="$frame_8h.html" title="Frame classes. " alt="" coords="2177,273,2341,315"/>
-<area shape="rect" id="node11" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1068,363,1232,404"/>
-<area shape="rect" id="node20" href="$usbthread_8h.html" title="USB Camera control and streaming. " alt="" coords="528,541,692,583"/>
-<area shape="rect" id="node22" href="$valkkafs_8h.html" title="/home/sampsa/C/valkka\l/include/valkkafs.h" alt="" coords="187,541,351,583"/>
-<area shape="rect" id="node23" href="$valkkafsreader_8h.html" title="/home/sampsa/C/valkka\l/include/valkkafsreader.h" alt="" coords="5,631,172,672"/>
-<area shape="rect" id="node33" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="2716,541,2880,583"/>
-<area shape="rect" id="node41" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="2929,95,3093,136"/>
-<area shape="rect" id="node43" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="2057,184,2221,225"/>
-<area shape="rect" id="node45" href="$rawrite_8h.html" title="Write directly to files and devices with POSIX O_DIRECT. " alt="" coords="872,184,1036,225"/>
-<area shape="rect" id="node47" href="$openglobject_8h.html" title="OpenGL objects, i.e. stuff that can be drawn on the OpenGL canvas on top the textures (boxes..." alt="" coords="3508,184,3672,225"/>
-<area shape="rect" id="node49" href="$shader_8h_source.html" title="/home/sampsa/C/valkka\l/include/shader.h" alt="" coords="3644,95,3808,136"/>
-<area shape="rect" id="node3" href="$avfilethread_8h.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="1435,541,1599,583"/>
-<area shape="rect" id="node5" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="2809,363,2973,404"/>
-<area shape="rect" id="node9" href="$tex_8h.html" title="Handling OpenGL textures. " alt="" coords="3100,452,3264,493"/>
-<area shape="rect" id="node13" href="$avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="2528,541,2692,583"/>
-<area shape="rect" id="node15" href="$filestream_8h.html" title="/home/sampsa/C/valkka\l/include/filestream.h" alt="" coords="1144,541,1308,583"/>
-<area shape="rect" id="node27" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1963,452,2127,493"/>
-<area shape="rect" id="node30" href="$live_8h.html" title="Interface to live555. " alt="" coords="2340,541,2504,583"/>
-<area shape="rect" id="node36" href="$liveserver_8h.html" title="Live555 interface for server side: streaming to udp sockets directly or by using an on&#45;demand rtsp se..." alt="" coords="1488,452,1652,493"/>
-<area shape="rect" id="node39" href="$decoder_8h.html" title="FFmpeg decoders. " alt="" coords="2357,363,2521,404"/>
-<area shape="rect" id="node40" href="$frame_8cpp.html" title="/home/sampsa/C/valkka\l/src/frame.cpp" alt="" coords="2117,363,2281,404"/>
-<area shape="rect" id="node4" href="$avfilethread_8cpp.html" title="A thread sending frames from files. " alt="" coords="1503,631,1667,672"/>
-<area shape="rect" id="node6" href="$openglframefifo_8h_source.html" title="/home/sampsa/C/valkka\l/include/openglframefifo.h" alt="" coords="3006,541,3177,583"/>
-<area shape="rect" id="node10" href="$opengl_8cpp.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="2800,452,2964,493"/>
-<area shape="rect" id="node7" href="$openglthread_8h.html" title="FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU. " alt="" coords="3277,631,3441,672"/>
-<area shape="rect" id="node8" href="$openglthread_8cpp.html" title="FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU. " alt="" coords="1719,720,1883,761"/>
-<area shape="rect" id="node12" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="768,452,932,493"/>
-<area shape="rect" id="node16" href="$cachestream_8h.html" title="/home/sampsa/C/valkka\l/include/cachestream.h" alt="" coords="828,631,992,672"/>
-<area shape="rect" id="node18" href="$livethread_8h.html" title="A live555 thread. " alt="" coords="1315,631,1479,672"/>
-<area shape="rect" id="node37" href="$rgbframefifo_8h.html" title="/home/sampsa/C/valkka\l/include/rgbframefifo.h" alt="" coords="956,452,1120,493"/>
-<area shape="rect" id="node38" href="$framefifo_8cpp.html" title="/home/sampsa/C/valkka\l/src/framefifo.cpp" alt="" coords="1144,452,1308,493"/>
-<area shape="rect" id="node19" href="$testthread_8h.html" title="/home/sampsa/C/valkka\l/include/testthread.h" alt="" coords="904,541,1068,583"/>
-<area shape="rect" id="node26" href="$thread_8cpp.html" title="A class for multithreading, similar to Python&#39;s standard library &quot;threading.Thread&quot;. " alt="" coords="716,541,880,583"/>
-<area shape="rect" id="node14" href="$avthread_8cpp.html" title="FFmpeg decoding thread. " alt="" coords="2528,631,2692,672"/>
-<area shape="rect" id="node17" href="$filestream_8cpp.html" title="/home/sampsa/C/valkka\l/src/filestream.cpp" alt="" coords="1127,631,1291,672"/>
-<area shape="rect" id="node21" href="$usbthread_8cpp.html" title="USB Camera control and streaming. " alt="" coords="528,631,692,672"/>
-<area shape="rect" id="node25" href="$valkkafs_8cpp.html" title="A simple block file system for streaming media. " alt="" coords="196,631,360,672"/>
-<area shape="rect" id="node24" href="$valkkafsreader_8cpp.html" title="/home/sampsa/C/valkka\l/src/valkkafsreader.cpp" alt="" coords="7,720,171,761"/>
-<area shape="rect" id="node28" href="$fileframefilter_8h_source.html" title="/home/sampsa/C/valkka\l/include/fileframefilter.h" alt="" coords="3252,541,3416,583"/>
-<area shape="rect" id="node29" href="$framefilterset_8h.html" title="Classes using several framefilters. " alt="" coords="1964,541,2128,583"/>
-<area shape="rect" id="node32" href="$movement_8h.html" title="Framefilter implementing a movement detector. " alt="" coords="2152,541,2316,583"/>
-<area shape="rect" id="node35" href="$framefilter_8cpp.html" title="/home/sampsa/C/valkka\l/src/framefilter.cpp" alt="" coords="1623,541,1787,583"/>
-<area shape="rect" id="node31" href="$live_8cpp.html" title="Interface to live555. " alt="" coords="2904,631,3068,672"/>
-<area shape="rect" id="node34" href="$sharedmem_8cpp.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="2716,631,2880,672"/>
-<area shape="rect" id="node42" href="$threadsignal_8h_source.html" title="/home/sampsa/C/valkka\l/include/threadsignal.h" alt="" coords="3049,184,3213,225"/>
-<area shape="rect" id="node44" href="$tools_8cpp.html" title="Auxiliary routines. " alt="" coords="1197,273,1361,315"/>
-<area shape="rect" id="node46" href="$rawrite_8cpp.html" title="/home/sampsa/C/valkka\l/src/rawrite.cpp" alt="" coords="872,273,1036,315"/>
-<area shape="rect" id="node48" href="$openglobject_8cpp.html" title="/home/sampsa/C/valkka\l/src/openglobject.cpp" alt="" coords="3644,273,3808,315"/>
-<area shape="rect" id="node50" href="$shader_8cpp.html" title="/home/sampsa/C/valkka\l/src/shader.cpp" alt="" coords="3696,184,3860,225"/>
+<area shape="rect" id="node2" href="$frame_8h.html" title="Frame classes. " alt="" coords="2253,273,2417,315"/>
+<area shape="rect" id="node11" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="991,363,1155,404"/>
+<area shape="rect" id="node20" href="$usbthread_8h.html" title="USB Camera control and streaming. " alt="" coords="688,541,852,583"/>
+<area shape="rect" id="node22" href="$valkkafs_8h.html" title="/home/sampsa/C/valkka\l/include/valkkafs.h" alt="" coords="397,541,561,583"/>
+<area shape="rect" id="node23" href="$valkkafsreader_8h.html" title="/home/sampsa/C/valkka\l/include/valkkafsreader.h" alt="" coords="216,631,383,672"/>
+<area shape="rect" id="node33" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="5,541,169,583"/>
+<area shape="rect" id="node41" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="2912,95,3076,136"/>
+<area shape="rect" id="node43" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1743,184,1907,225"/>
+<area shape="rect" id="node45" href="$rawrite_8h.html" title="Write directly to files and devices with POSIX O_DIRECT. " alt="" coords="473,184,637,225"/>
+<area shape="rect" id="node47" href="$openglobject_8h.html" title="OpenGL objects, i.e. stuff that can be drawn on the OpenGL canvas on top the textures (boxes..." alt="" coords="3807,184,3971,225"/>
+<area shape="rect" id="node49" href="$shader_8h_source.html" title="/home/sampsa/C/valkka\l/include/shader.h" alt="" coords="3545,95,3709,136"/>
+<area shape="rect" id="node3" href="$avfilethread_8h.html" title="A Thread handling files and sending frames to fifo. " alt="" coords="1459,541,1623,583"/>
+<area shape="rect" id="node5" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="2732,363,2896,404"/>
+<area shape="rect" id="node9" href="$tex_8h.html" title="Handling OpenGL textures. " alt="" coords="2919,452,3083,493"/>
+<area shape="rect" id="node13" href="$avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="2604,541,2768,583"/>
+<area shape="rect" id="node15" href="$filestream_8h.html" title="/home/sampsa/C/valkka\l/include/filestream.h" alt="" coords="1168,541,1332,583"/>
+<area shape="rect" id="node26" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1811,452,1975,493"/>
+<area shape="rect" id="node29" href="$live_8h.html" title="Interface to live555. " alt="" coords="2364,541,2528,583"/>
+<area shape="rect" id="node36" href="$liveserver_8h.html" title="Live555 interface for server side: streaming to udp sockets directly or by using an on&#45;demand rtsp se..." alt="" coords="1520,452,1684,493"/>
+<area shape="rect" id="node39" href="$decoder_8h.html" title="FFmpeg decoders. " alt="" coords="2441,363,2605,404"/>
+<area shape="rect" id="node40" href="$frame_8cpp.html" title="/home/sampsa/C/valkka\l/src/frame.cpp" alt="" coords="2253,363,2417,404"/>
+<area shape="rect" id="node4" href="$avfilethread_8cpp.html" title="A thread sending frames from files. " alt="" coords="1527,631,1691,672"/>
+<area shape="rect" id="node6" href="$openglframefifo_8h_source.html" title="/home/sampsa/C/valkka\l/include/openglframefifo.h" alt="" coords="2793,541,2963,583"/>
+<area shape="rect" id="node10" href="$opengl_8cpp.html" title="X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines..." alt="" coords="2679,452,2843,493"/>
+<area shape="rect" id="node7" href="$openglthread_8h.html" title="FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU. " alt="" coords="3157,631,3321,672"/>
+<area shape="rect" id="node8" href="$openglthread_8cpp.html" title="FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU. " alt="" coords="1727,720,1891,761"/>
+<area shape="rect" id="node12" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1179,452,1343,493"/>
+<area shape="rect" id="node16" href="$cachestream_8h.html" title="/home/sampsa/C/valkka\l/include/cachestream.h" alt="" coords="920,631,1084,672"/>
+<area shape="rect" id="node18" href="$fdwritethread_8h_source.html" title="/home/sampsa/C/valkka\l/include/fdwritethread.h" alt="" coords="928,541,1092,583"/>
+<area shape="rect" id="node19" href="$livethread_8h.html" title="A live555 thread. " alt="" coords="1339,631,1503,672"/>
+<area shape="rect" id="node37" href="$rgbframefifo_8h.html" title="/home/sampsa/C/valkka\l/include/rgbframefifo.h" alt="" coords="803,452,967,493"/>
+<area shape="rect" id="node38" href="$framefifo_8cpp.html" title="/home/sampsa/C/valkka\l/src/framefifo.cpp" alt="" coords="991,452,1155,493"/>
+<area shape="rect" id="node14" href="$avthread_8cpp.html" title="FFmpeg decoding thread. " alt="" coords="2637,631,2801,672"/>
+<area shape="rect" id="node17" href="$filestream_8cpp.html" title="/home/sampsa/C/valkka\l/src/filestream.cpp" alt="" coords="1151,631,1315,672"/>
+<area shape="rect" id="node21" href="$usbthread_8cpp.html" title="USB Camera control and streaming. " alt="" coords="688,631,852,672"/>
+<area shape="rect" id="node25" href="$valkkafs_8cpp.html" title="A simple block file system for streaming media. " alt="" coords="407,631,571,672"/>
+<area shape="rect" id="node24" href="$valkkafsreader_8cpp.html" title="/home/sampsa/C/valkka\l/src/valkkafsreader.cpp" alt="" coords="217,720,381,761"/>
+<area shape="rect" id="node27" href="$fileframefilter_8h_source.html" title="/home/sampsa/C/valkka\l/include/fileframefilter.h" alt="" coords="3039,541,3203,583"/>
+<area shape="rect" id="node28" href="$framefilterset_8h.html" title="Classes using several framefilters. " alt="" coords="1800,541,1964,583"/>
+<area shape="rect" id="node31" href="$movement_8h.html" title="Framefilter implementing a movement detector. " alt="" coords="1988,541,2152,583"/>
+<area shape="rect" id="node32" href="$muxer_8h.html" title="FFmpeg muxers, implemented as Valkka framefilters. " alt="" coords="3227,541,3391,583"/>
+<area shape="rect" id="node35" href="$framefilter_8cpp.html" title="/home/sampsa/C/valkka\l/src/framefilter.cpp" alt="" coords="2176,541,2340,583"/>
+<area shape="rect" id="node30" href="$live_8cpp.html" title="Interface to live555. " alt="" coords="2449,631,2613,672"/>
+<area shape="rect" id="node34" href="$sharedmem_8cpp.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="21,631,185,672"/>
+<area shape="rect" id="node42" href="$threadsignal_8h_source.html" title="/home/sampsa/C/valkka\l/include/threadsignal.h" alt="" coords="2852,184,3016,225"/>
+<area shape="rect" id="node44" href="$tools_8cpp.html" title="Auxiliary routines. " alt="" coords="1179,273,1343,315"/>
+<area shape="rect" id="node46" href="$rawrite_8cpp.html" title="/home/sampsa/C/valkka\l/src/rawrite.cpp" alt="" coords="448,273,612,315"/>
+<area shape="rect" id="node48" href="$openglobject_8cpp.html" title="/home/sampsa/C/valkka\l/src/openglobject.cpp" alt="" coords="3687,273,3851,315"/>
+<area shape="rect" id="node50" href="$shader_8cpp.html" title="/home/sampsa/C/valkka\l/src/shader.cpp" alt="" coords="3619,184,3783,225"/>
 </map>

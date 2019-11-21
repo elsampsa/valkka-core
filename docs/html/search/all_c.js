@@ -25,6 +25,7 @@ var searchData=
   ['newrendergroupcall',['newRenderGroupCall',['../classOpenGLThread.html#aa836bb0e21ad549dd78f4d6e5adfa7ff',1,'OpenGLThread']]],
   ['next',['next',['../classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818',1,'FrameFilter']]],
   ['next_5fframe',['next_frame',['../classAbstractFileStream.html#a603b28e27b43306e19ce31e1d3a79368',1,'AbstractFileStream']]],
+  ['nfds',['nfds',['../classFDWriteThread.html#ac0301725516bc28ace96af144c85b4a0',1,'FDWriteThread']]],
   ['none',['none',['../usbthread_8h.html#ab193ba186f9e1e0d948dcc659ad9084dab7e4e0120a041dbe6528b050c04269e0',1,'none():&#160;usbthread.h'],['../group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa334c4a4c42fdb79d7ebc3e73b517e6f8',1,'none():&#160;frame.h'],['../group__live__tag.html#gga267e2aa9269281d26f54d6c0371a8e76a334c4a4c42fdb79d7ebc3e73b517e6f8',1,'none():&#160;live.h'],['../group__openglthread__tag.html#ggaa7275dda16349b828b8c7e9672e3a2aca334c4a4c42fdb79d7ebc3e73b517e6f8',1,'none():&#160;threadsignal.h']]],
   ['not_5fdevice',['not_device',['../usbthread_8h.html#ab193ba186f9e1e0d948dcc659ad9084da4dc5a73c0af7d7d2297c50972c9b6348',1,'usbthread.h']]],
   ['not_5fformat',['not_format',['../usbthread_8h.html#ab193ba186f9e1e0d948dcc659ad9084da881e901cb1f017ad11eb75bf5bf2e17e',1,'usbthread.h']]],

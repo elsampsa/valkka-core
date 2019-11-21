@@ -29,7 +29,7 @@
  *  @file    frame.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.13.3 
+ *  @version 0.14.0 
  *  
  *  @brief   Frame classes
  */ 
@@ -207,10 +207,45 @@ public:
   void filterFromAVPacket(AVPacket *avpkt, AVCodecContext *codec_ctx, AVBitStreamFilterContext *filter);  ///< Copy data from AVPacket structure
   
 public: // frame serialization
-  std::size_t calcSize();                             ///< How much this frame occupies in bytes when serialized
-  bool dump(IdNumber device_id, RaWriter &raw_writer);    ///< Write the frame to filestream with a certain device id
+  std::size_t calcSize();                                  ///< How much this frame occupies in bytes when serialized
+  bool dump(IdNumber device_id, RaWriter &raw_writer);     ///< Write the frame to filestream with a certain device id
   IdNumber read(RawReader &raw_reader);                    ///< Read the frame from filestream.  Returns device id
 };
+
+
+/** A muxed packet (in some container format)
+ * 
+ * 
+ */
+/* // TODO
+class MuxFrame : public Frame {
+
+public:
+    MuxFrame(); ///< Default ctor
+    virtual ~MuxFrame(); ///< Default virtual dtor
+    frame_essentials(FrameClass::mux, MuxFrame);
+    frame_clone(FrameClass::mux, MuxFrame);
+        
+public: // redefined virtual
+    virtual void print(std::ostream& os) const;             ///< Produces frame output
+    virtual std::string dumpPayload();                      ///< Dumps internal payload data
+    virtual void dumpPayloadToFile(std::ofstream& fout);    ///< Dumps internal payload data into a file
+    virtual void update();                                  ///< Update internal auxiliary state variables
+    virtual void reset();                                   ///< Reset the internal data
+    virtual bool isSeekable();                              ///< Can we seek to this frame? (e.g. is it a key-frame .. for H264 sps packets are used as seek markers)
+
+    
+// container-dependent parameters
+public:
+    MP4Pars   mp4_pars;
+    WebMPars  webm_pars;
+    
+public:
+    void fillPars();      ///< Fill container-dependent parameters, based on the payload
+    void fillMP4Pars();   ///< Inspect MP4 payload & fill mp4_pars
+};
+*/
+
 
 
 enum class SetupFrameType {

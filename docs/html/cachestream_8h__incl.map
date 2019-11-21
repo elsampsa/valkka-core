@@ -1,12 +1,11 @@
 <map id="/home/sampsa/C/valkka/include/cachestream.h" name="/home/sampsa/C/valkka/include/cachestream.h">
-<area shape="rect" id="node2" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1421,244,1505,271"/>
-<area shape="rect" id="node47" href="$filestream_8h.html" title="filestream.h" alt="" coords="1293,95,1384,121"/>
-<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1511,468,1593,495"/>
-<area shape="rect" id="node42" href="$frame_8h.html" title="Frame classes. " alt="" coords="1347,319,1413,345"/>
-<area shape="rect" id="node45" href="$logging_8h.html" title="Logging utilities. " alt="" coords="1091,468,1165,495"/>
-<area shape="rect" id="node46" href="$macro_8h.html" title="macro.h" alt="" coords="1445,393,1515,420"/>
-<area shape="rect" id="node43" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1302,393,1370,420"/>
-<area shape="rect" id="node44" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1216,393,1277,420"/>
-<area shape="rect" id="node48" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1500,169,1569,196"/>
-<area shape="rect" id="node50" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1335,169,1425,196"/>
+<area shape="rect" id="node2" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1474,244,1558,271"/>
+<area shape="rect" id="node47" href="$filestream_8h.html" title="filestream.h" alt="" coords="1325,95,1416,121"/>
+<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1555,468,1637,495"/>
+<area shape="rect" id="node43" href="$frame_8h.html" title="Frame classes. " alt="" coords="1400,319,1467,345"/>
+<area shape="rect" id="node45" href="$logging_8h.html" title="Logging utilities. " alt="" coords="1180,468,1255,495"/>
+<area shape="rect" id="node46" href="$macro_8h.html" title="macro.h" alt="" coords="1489,393,1559,420"/>
+<area shape="rect" id="node44" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1353,393,1415,420"/>
+<area shape="rect" id="node48" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1481,169,1551,196"/>
+<area shape="rect" id="node50" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1367,169,1457,196"/>
 </map>

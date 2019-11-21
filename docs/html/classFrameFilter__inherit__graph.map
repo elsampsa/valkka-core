@@ -16,17 +16,19 @@
 <area shape="rect" id="node16" href="$classInfoFrameFilter.html" title="Dump the beginning of Frame&#39;s payload into stdout. " alt="" coords="185,715,296,741"/>
 <area shape="rect" id="node17" href="$classInitStreamFrameFilter.html" title="Add state information to stream. " alt="" coords="167,765,315,792"/>
 <area shape="rect" id="node18" href="$classMovementFrameFilter.html" title="MovementFrameFilter" alt="" coords="166,816,315,843"/>
-<area shape="rect" id="node19" href="$classPassSlotFrameFilter.html" title="Passes through frames with a certain slot number only. " alt="" coords="170,867,311,893"/>
-<area shape="rect" id="node20" href="$classRepeatH264ParsFrameFilter.html" title="For H264, some cameras don&#39;t send sps and pps packets again before every keyframe. " alt="" coords="147,917,335,944"/>
-<area shape="rect" id="node21" href="$classRGBShmemFrameFilter.html" title="Like ShmemFrameFilter. " alt="" coords="159,968,322,995"/>
-<area shape="rect" id="node22" href="$classSetSlotFrameFilter.html" title="Changes the slot number of the Frame. " alt="" coords="175,1019,306,1045"/>
-<area shape="rect" id="node23" href="$classShmemFrameFilter.html" title="This FrameFilter writes frames into a SharedMemRingBuffer. " alt="" coords="174,1069,307,1096"/>
-<area shape="rect" id="node24" href="$classSlotFrameFilter.html" title="Sets the frame slot value. " alt="" coords="185,1120,296,1147"/>
-<area shape="rect" id="node25" href="$classSwitchFrameFilter.html" title="Passes frame to one of the two terminals. " alt="" coords="177,1171,305,1197"/>
-<area shape="rect" id="node26" href="$classSwScaleFrameFilter.html" title="Interpolate from YUV bitmap to RGB. " alt="" coords="171,1221,311,1248"/>
-<area shape="rect" id="node27" href="$classThreadSafeFrameFilter.html" title="FrameFilter s that are fed from various different threads, should be protected with this..." alt="" coords="163,1272,318,1299"/>
-<area shape="rect" id="node28" href="$classTimeIntervalFrameFilter.html" title="Pass frames, but not all of them &#45; only on regular intervals. " alt="" coords="161,1323,321,1349"/>
-<area shape="rect" id="node29" href="$classTimestampFrameFilter.html" title="Corrects erroneous timestamps (while preserving timestamp distances). " alt="" coords="164,1373,317,1400"/>
-<area shape="rect" id="node30" href="$classTimestampFrameFilter2.html" title="Corrects erroneous timestamps (while preserving timestamp distances). " alt="" coords="161,1424,321,1451"/>
-<area shape="rect" id="node31" href="$classTypeFrameFilter.html" title="Passes through frames of certain type only. " alt="" coords="182,1475,299,1501"/>
+<area shape="rect" id="node19" href="$classMuxFrameFilter.html" title="MuxFrameFilter" alt="" coords="184,867,297,893"/>
+<area shape="rect" id="node21" href="$classPassSlotFrameFilter.html" title="Passes through frames with a certain slot number only. " alt="" coords="170,917,311,944"/>
+<area shape="rect" id="node22" href="$classRepeatH264ParsFrameFilter.html" title="For H264, some cameras don&#39;t send sps and pps packets again before every keyframe. " alt="" coords="147,968,335,995"/>
+<area shape="rect" id="node23" href="$classRGBShmemFrameFilter.html" title="Like ShmemFrameFilter. " alt="" coords="159,1019,322,1045"/>
+<area shape="rect" id="node24" href="$classSetSlotFrameFilter.html" title="Changes the slot number of the Frame. " alt="" coords="175,1069,306,1096"/>
+<area shape="rect" id="node25" href="$classShmemFrameFilter.html" title="This FrameFilter writes frames into a SharedMemRingBuffer. " alt="" coords="174,1120,307,1147"/>
+<area shape="rect" id="node26" href="$classSlotFrameFilter.html" title="Sets the frame slot value. " alt="" coords="185,1171,296,1197"/>
+<area shape="rect" id="node27" href="$classSwitchFrameFilter.html" title="Passes frame to one of the two terminals. " alt="" coords="177,1221,305,1248"/>
+<area shape="rect" id="node28" href="$classSwScaleFrameFilter.html" title="Interpolate from YUV bitmap to RGB. " alt="" coords="171,1272,311,1299"/>
+<area shape="rect" id="node29" href="$classThreadSafeFrameFilter.html" title="FrameFilter s that are fed from various different threads, should be protected with this..." alt="" coords="163,1323,318,1349"/>
+<area shape="rect" id="node30" href="$classTimeIntervalFrameFilter.html" title="Pass frames, but not all of them &#45; only on regular intervals. " alt="" coords="161,1373,321,1400"/>
+<area shape="rect" id="node31" href="$classTimestampFrameFilter.html" title="Corrects erroneous timestamps (while preserving timestamp distances). " alt="" coords="164,1424,317,1451"/>
+<area shape="rect" id="node32" href="$classTimestampFrameFilter2.html" title="Corrects erroneous timestamps (while preserving timestamp distances). " alt="" coords="161,1475,321,1501"/>
+<area shape="rect" id="node33" href="$classTypeFrameFilter.html" title="Passes through frames of certain type only. " alt="" coords="182,1525,299,1552"/>
+<area shape="rect" id="node20" href="$classFragMP4MuxFrameFilter.html" title="FragMP4MuxFrameFilter" alt="" coords="388,867,555,893"/>
 </map>
