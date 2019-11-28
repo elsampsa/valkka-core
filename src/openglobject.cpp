@@ -26,7 +26,7 @@
  *  @file    openglobject.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.0 
+ *  @version 0.14.1 
  *  
  *  @brief 
  */ 

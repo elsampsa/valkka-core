@@ -18,7 +18,6 @@ var searchData=
   ['_7eframesink',['~FrameSink',['../classFrameSink.html#ae30847026a1a57d3bf93df03e33ba202',1,'FrameSink']]],
   ['_7elivefifo',['~LiveFifo',['../classLiveFifo.html#adbbf73f74b5ddd174207eddbac8905a6',1,'LiveFifo']]],
   ['_7emarkerframe',['~MarkerFrame',['../classMarkerFrame.html#a694625d78327cdaa29c9831ef23867df',1,'MarkerFrame']]],
-  ['_7emuxframe',['~MuxFrame',['../classMuxFrame.html#aa0e7fc890b2e363af0168bac31af5426',1,'MuxFrame']]],
   ['_7eopenglframefifo',['~OpenGLFrameFifo',['../classOpenGLFrameFifo.html#a73b7f37bc6891626677cc96ce5b547c2',1,'OpenGLFrameFifo']]],
   ['_7eopenglthread',['~OpenGLThread',['../classOpenGLThread.html#a2e717cf423eb5e219cbce12615739d53',1,'OpenGLThread']]],
   ['_7eoutbound',['~Outbound',['../classOutbound.html#a7f3817099d18c92479fa8cc5d69ad751',1,'Outbound']]],

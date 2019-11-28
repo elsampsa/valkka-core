@@ -69,13 +69,10 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Latest version is 0.13.3
-- Yet another fix for Axis cameras
-- Low-quality camera firmware (like the one in Axis), that doesn't use the RTCP packets to synchronize with the client, requires constant dummy communication "pings" to the camera.  We're using the ```GET_PARAMETER``` RTSP call.
-- Axis cameras do not send repeated SPS & PPS packets before keyframes, so libValkka's streaming pipeline now also does that
+### Latest version is 0.14.1
+- Minor changes to valkkafs
 
 ### Older versions
-
 0.14.0
 - Muxing part progressing (but not yet functional)
 - python API 2 level updates

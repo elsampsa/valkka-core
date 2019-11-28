@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.14.0</span>
+   &#160;<span id="projectnumber">0.14.1</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -127,7 +127,7 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <tr class="separator:a03a7d62773d7caaeeacf5f224d5806b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2a6d075cb0eaba832a7b2c681865535"><td class="memItemLeft" align="right" valign="top"><a id="ae2a6d075cb0eaba832a7b2c681865535"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#ae2a6d075cb0eaba832a7b2c681865535">clearDevice</a> (bool writethrough=false, bool verbose=false)</td></tr>
-<tr class="memdesc:ae2a6d075cb0eaba832a7b2c681865535"><td class="mdescLeft">&#160;</td><td class="mdescRight">write <br /></td></tr>
+<tr class="memdesc:ae2a6d075cb0eaba832a7b2c681865535"><td class="mdescLeft">&#160;</td><td class="mdescRight">writes zero bytes to the device <br /></td></tr>
 <tr class="separator:ae2a6d075cb0eaba832a7b2c681865535"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3136f5451b3e9429719518d99eaf46c"><td class="memItemLeft" align="right" valign="top"><a id="ad3136f5451b3e9429719518d99eaf46c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#ad3136f5451b3e9429719518d99eaf46c">clearTable</a> ()</td></tr>
@@ -246,7 +246,7 @@ static const std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n
 <li>At python, maintain a json file with these parameters and with the current_row (i.e. block)</li>
 <li>.. current_row is informed by using callbacks to the python side</li>
 <li>At python, use also setCurrentBlock(n_block)</li>
-<li>At python, use also <a class="el" href="classValkkaFS.html#ad3136f5451b3e9429719518d99eaf46c" title="clears the blocktable and writes it to the disk ">clearTable()</a> [and <a class="el" href="classValkkaFS.html#ae2a6d075cb0eaba832a7b2c681865535" title="write ">clearDevice()</a>] if needed</li>
+<li>At python, use also <a class="el" href="classValkkaFS.html#ad3136f5451b3e9429719518d99eaf46c" title="clears the blocktable and writes it to the disk ">clearTable()</a> [and <a class="el" href="classValkkaFS.html#ae2a6d075cb0eaba832a7b2c681865535" title="writes zero bytes to the device ">clearDevice()</a>] if needed</li>
 <li>The last block that's currently being written (current_row) is overwritten from start when the writing starts the next time</li>
 </ul>
 <p>Actual reading and writing of frames are done by other classes (<a class="el" href="classValkkaFSWriterThread.html" title="Writes frames to ValkkaFS. ">ValkkaFSWriterThread</a> and <a class="el" href="classValkkaFSReaderThread.html" title="ValkkaFS reader thread. ">ValkkaFSReaderThread</a>)</p>

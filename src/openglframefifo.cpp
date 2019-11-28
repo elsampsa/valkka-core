@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.0 
+ *  @version 0.14.1 
  *  
  *  @brief FrameFifo for OpenGLThread: stack of YUV frames and uploading to GPU
  *
@@ -153,7 +153,7 @@ YUVFrame* OpenGLFrameFifo::prepareAVBitmapFrame(AVBitmapFrame* bmframe) {// Go f
   { // mutex protected 
     std::unique_lock<std::mutex> lk(this->mutex); // this acquires the lock and releases it once we get out of context
     if (stack.empty()) {
-      opengllogger.log(LogLevel::fatal) << "OpenGLFrameFifo: prepareAVFrame: OVERFLOW! No more frames in stack for bitmap type "<< bmtype <<std::endl;
+      opengllogger.log(LogLevel::normal) << "OpenGLFrameFifo: prepareAVFrame: OVERFLOW! No more frames in stack for bitmap type "<< bmtype <<std::endl;
       return NULL;
     }
     yuvframe =stack.front(); 

@@ -26,7 +26,7 @@
  *  @file    cachestream.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.0 
+ *  @version 0.14.1 
  *  
  *  @brief 
  */ 
@@ -527,7 +527,15 @@ void FileCacheThread::seekStreams(long int mstimestamp_, bool clear, bool send_s
 }
     
 
-        
+void FileCacheThread::clear() {
+    reftime = 0;
+    walltime = 0;
+    next = NULL;
+    state = AbstractFileState::stop;
+    target_mstimestamp_ = 0;
+}
+
+
 void FileCacheThread::run() {
     std::unique_lock<std::mutex> lk(this->loop_mutex);
     bool ok;
@@ -808,6 +816,9 @@ void FileCacheThread::handleSignal(FileCacheSignalContext &signal_ctx) {
         case FileCacheSignal::play_streams:
             playStreams();
             break;
+        case FileCacheSignal::clear:
+            clear();
+            break;    
         case FileCacheSignal::seek_streams:
             seekStreams(signal_ctx.pars.mstimestamp, signal_ctx.pars.clear);
             break;
@@ -961,6 +972,23 @@ void FileCacheThread::playStreamsCall() {
     f.custom_signal_ctx = (void*)(signal_ctx);
     infilter.run(&f);
 }
+
+
+void FileCacheThread::clearCall() {
+    SignalFrame f = SignalFrame();
+    FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
+    
+    // encapsulate parameters
+    FileCacheSignalPars pars;
+    
+    // encapsulate signal and parameters into signal context of the frame
+    signal_ctx->signal = FileCacheSignal::clear;
+    signal_ctx->pars   = pars;
+    
+    f.custom_signal_ctx = (void*)(signal_ctx);
+    infilter.run(&f);
+}
+
 
 void FileCacheThread::seekStreamsCall(long int mstimestamp, bool clear) {
     SignalFrame f = SignalFrame();

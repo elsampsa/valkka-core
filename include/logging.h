@@ -29,7 +29,7 @@
  *  @file    logging.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.0 
+ *  @version 0.14.1 
  *  
  *  @brief Logging utilities
  *
@@ -39,12 +39,13 @@
 #include <iostream>
 
 
-namespace LogLevel { ///< Verbosity levels                                                                                    
-  const static int fatal =-2; ///< messages with this log level are printed always                                            
-  const static int silent=-1; ///< messages with this log level are printed, even if the user requested a silent terminal     
-  const static int normal=0;  ///< the default                                                                                
-  const static int debug =2;  ///< report frame drops and other anomalies                                                     
-  const static int crazy =3;  ///< print all you can                                                                          
+namespace LogLevel { ///< Verbosity levels
+    const static int quiet =-3;                                                                                 
+    const static int fatal =-2; ///< messages with this log level are printed always                                            
+    const static int silent=-1; ///< messages with this log level are printed, even if the user requested a silent terminal     
+    const static int normal=0;  ///< the default                                                                                
+    const static int debug =2;  ///< report frame drops and other anomalies                                                     
+    const static int crazy =3;  ///< print all you can                                                                          
 }; //                                                                                                                         
 
 
@@ -181,5 +182,6 @@ extern void crazy_log_all();   // <pyapi>
 extern void debug_log_all();   // <pyapi>
 extern void normal_log_all();  // <pyapi>
 extern void fatal_log_all();   // <pyapi>
+extern void quiet_log_all();   // <pyapi>
 
 #endif

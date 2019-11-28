@@ -28,7 +28,7 @@
  *  @file    cachestream.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.0 
+ *  @version 0.14.1 
  *  
  *  @brief
  */
@@ -88,6 +88,7 @@ enum class FileCacheSignal {
     deregister_stream,
     play_streams,
     stop_streams,
+    clear,
     seek_streams,
     clear_streams,
     report_cache
@@ -257,6 +258,7 @@ public: // internal
     void playStreams(bool send_state = true);
     void setRefTimeAndStop(bool send_state = true);                     ///< Set reference time and set state to stop
     void seekStreams(long int mstimestamp, bool clear, bool send_state = true);     ///< Sets target time.  Sets FileCacheThread::next = NULL
+    void clear();                                                       ///< Removes any reference time.  Stops stream.
     
 private: // internal
     void handleSignal(FileCacheSignalContext &signal_ctx);
@@ -296,6 +298,7 @@ public: // API // <pyapi>
     void dumpCache();                                       // <pyapi>
     void stopStreamsCall();                                 // <pyapi>
     void playStreamsCall();                                 // <pyapi>
+    void clearCall();                                       // <pyapi>
     
     /** Seek
      * - Seek to a certain millisecond timestamp

@@ -14,7 +14,7 @@ var searchData=
   ['checkbuffersize',['checkBufferSize',['../classFrameSink.html#ab1d5c7e50bcdd2463f2e384c300d578f',1,'FrameSink']]],
   ['checkifdead',['checkIfDead',['../classSlotContext.html#ac8cf39535fc3599cd626c09823c2aa69',1,'SlotContext']]],
   ['child_5fid',['child_id',['../classRenderGroup.html#a6eb2340dba794074fdd91bfb912241a7',1,'RenderGroup']]],
-  ['clear',['clear',['../classFrameCache.html#a3cbe0661a2ce14ffedece5c9573b3b05',1,'FrameCache']]],
+  ['clear',['clear',['../classFrameCache.html#a3cbe0661a2ce14ffedece5c9573b3b05',1,'FrameCache::clear()'],['../classFileCacheThread.html#a14aafb395b9edcf6c69774983010ba0e',1,'FileCacheThread::clear()']]],
   ['clear_5fobjects',['clear_objects',['../group__openglthread__tag.html#ggaa7275dda16349b828b8c7e9672e3a2aca81264942ef06e341a1e964611326f910',1,'threadsignal.h']]],
   ['cleardevice',['clearDevice',['../classValkkaFS.html#ae2a6d075cb0eaba832a7b2c681865535',1,'ValkkaFS']]],
   ['clearflag',['clearFlag',['../classSharedMemRingBufferBase.html#a546c922f85b339bdf2b5e7364d198b87',1,'SharedMemRingBufferBase']]],

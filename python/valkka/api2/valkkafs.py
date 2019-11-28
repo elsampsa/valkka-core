@@ -25,7 +25,7 @@ valkkafs.py : api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFS
 @file    valkkafs.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.14.0 
+@version 0.14.1 
 
 @brief   api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFSThreads
 """
@@ -241,7 +241,7 @@ class ValkkaFS:
             verbose    = verbose
             )
         
-        fs.reinit()
+        fs.reinit() # striped the device
         return fs
         
         
@@ -379,6 +379,7 @@ class ValkkaFS:
         
     def getBlockTable(self):
         print("ValkkaFS: getBlockTable")
+        # traceback.print_stack()
         self.core.setArrayCall(self.blocktable_) # copy data from cpp to python (this is thread safe)
         # self.blocktable[:,:] = self.blocktable_[:,:] # copy the data .. self.blocktable can be accessed without fear of being overwritten during accesss
         # return self.blocktable
@@ -877,7 +878,11 @@ class ValkkaFSManager:
             return False
         return True
     
-   
+
+    def clearTime(self):
+        self.cacherthread.clearCall()
+
+
     def setOutput(self, _id, slot, framefilter):
         """Set id => slot mapping.  Send to defined framefilter
         """
@@ -1019,11 +1024,15 @@ class ValkkaFSManager:
         if not self.active:
             return
         self.logger.debug("close: stopping threads")
+        """
         self.writerthread.stopCall()
         self.readerthread.stopCall()
         self.cacherthread.stopCall()
         self.active = False
-
+        """
+        self.requestClose()
+        self.waitClose()
+        
 
     def requestClose(self):
         self.writerthread.requestStopCall()

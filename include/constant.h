@@ -28,7 +28,7 @@
  *  @file    constant.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.0 
+ *  @version 0.14.1 
  *  
  *  @brief   Constant/default values, version numbers
  */ 
@@ -60,7 +60,7 @@ const char* get_numpy_version() {  // <pyapi>
     
 static const int VERSION_MAJOR = 0; // <pyapi>
 static const int VERSION_MINOR = 14; // <pyapi>
-static const int VERSION_PATCH = 0; // <pyapi>
+static const int VERSION_PATCH = 1; // <pyapi>
 
 static const unsigned LIVE_GET_PARAMETER_PING = 50; // ping the camera with GET_PARAMETER_PING every N:th second while the connection is active
 
@@ -68,7 +68,9 @@ static const unsigned DEFAULT_OPENGLTHREAD_BUFFERING_TIME  = 300;   // in millis
 static const bool DEFAULT_FRAMEFIFO_FLUSH_WHEN_FULL        = false; // <pyapi>
 static const bool DEFAULT_OPENGLFRAMEFIFO_FLUSH_WHEN_FULL  = false; // <pyapi>
 static const long int DEFAULT_TIMESTAMP_RESET_TIME         = 60000; // <pyapi>
-static const long int TIMESTAMP_CORRECT_TRESHOLD           = 30000; // <pyapi> // timestamp correctors start correcting timestamps if they are this much off (in milliseconds)
+// static const long int TIMESTAMP_CORRECT_TRESHOLD           = 30000; // <pyapi> // timestamp correctors start correcting timestamps if they are this much off (in milliseconds)
+static const long int TIMESTAMP_CORRECT_TRESHOLD           = 2000; // <pyapi> // people don't get it.. and besides, it might be difficult to adjust camera's internal clock.  So, if frame is 2+ seconds late,
+// the timestamp will be step-corrected
 static const std::size_t FS_GRAIN_SIZE                     = 4096;  // <pyapi> // grain size for ValkkaFS
 
 namespace Timeout { ///< Various thread timeouts in milliseconds

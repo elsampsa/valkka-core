@@ -28,7 +28,7 @@
  *  @file    usbthread.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.14.0 
+ *  @version 0.14.1 
  *  
  *  @brief   USB Camera control and streaming
  */ 

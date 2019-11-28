@@ -26,7 +26,7 @@
  *  @file    framefifo.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.0 
+ *  @version 0.14.1 
  *  
  *  @brief 
  */ 
@@ -105,7 +105,7 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) {
     stack = &stacks.at(f->getFrameClass());
   }
   catch (std::out_of_range) {
-    fifologger.log(LogLevel::normal) << "FrameFifo: "<<name<<" writeCopy: no stack for FrameClass "<<int(f->getFrameClass());
+    fifologger.log(LogLevel::fatal) << "FrameFifo: "<<name<<" writeCopy: no stack for FrameClass "<<int(f->getFrameClass());
     return false;
   }
   //*/
@@ -119,7 +119,7 @@ bool FrameFifo::writeCopy(Frame* f, bool wait) {
       // fifologger.log(LogLevel::normal) << "FrameFifo: "<<name<<" writeCopy: .. got stack frame.  " << std::endl;
     }
     else {
-      fifologger.log(LogLevel::fatal) << "FrameFifo: "<<name<<" writeCopy: OVERFLOW! No more frames in stack.  Frame="<<(*f)<<std::endl;
+      fifologger.log(LogLevel::normal) << "FrameFifo: "<<name<<" writeCopy: OVERFLOW! No more frames in stack.  Frame="<<(*f)<<std::endl;
       if (ctx.flush_when_full) {
         recycleAll_();
       }
@@ -305,12 +305,12 @@ bool FDFrameFifo::writeCopy(Frame* f, bool wait) {
     
     while (stack->empty()) { // deal with spurious wake-ups
         if (wait) {
-            fifologger.log(LogLevel::normal) << "FDFrameFifo: "<<name<<" writeCopy: waiting for stack frames.  Frame="<<(*f)<<std::endl;
+            fifologger.log(LogLevel::debug) << "FDFrameFifo: "<<name<<" writeCopy: waiting for stack frames.  Frame="<<(*f)<<std::endl;
             this->ready_condition.wait(lk);
             // fifologger.log(LogLevel::normal) << "FDFrameFifo: "<<name<<" writeCopy: .. got stack frame.  " << std::endl;
         }
         else {
-            fifologger.log(LogLevel::fatal) << "FDFrameFifo: "<<name<<" writeCopy: OVERFLOW! No more frames in stack.  Frame="<<(*f)<<std::endl;
+            fifologger.log(LogLevel::normal) << "FDFrameFifo: "<<name<<" writeCopy: OVERFLOW! No more frames in stack.  Frame="<<(*f)<<std::endl;
             if (ctx.flush_when_full) {
                 recycleAll_();
             }

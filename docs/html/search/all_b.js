@@ -30,7 +30,6 @@ var searchData=
   ['mutex',['mutex',['../classFrameCache.html#a709a6dc29acda8a577a92df59aef4c77',1,'FrameCache::mutex()'],['../classFileFrameFilter.html#a7051cc96ca7695d66feb0ed7ebe57b7a',1,'FileFrameFilter::mutex()'],['../classFrameFifo.html#a937f07e8345eeced5fcb2447e4c234ea',1,'FrameFifo::mutex()'],['../classMuxFrameFilter.html#a68abb68134b0f777075adbbbf39c0b6b',1,'MuxFrameFilter::mutex()'],['../classThread.html#a6383ead608b8e4be6debb9f25bcfe80a',1,'Thread::mutex()']]],
   ['muxer_2ecpp',['muxer.cpp',['../muxer_8cpp.html',1,'']]],
   ['muxer_2eh',['muxer.h',['../muxer_8h.html',1,'']]],
-  ['muxframe',['MuxFrame',['../classMuxFrame.html',1,'MuxFrame'],['../classMuxFrame.html#ae281bf7c2d34ea6aabfb3da7de6a92ad',1,'MuxFrame::MuxFrame()']]],
   ['muxframefilter',['MuxFrameFilter',['../classMuxFrameFilter.html',1,'']]],
   ['multithreading',['multithreading',['../group__threading__tag.html',1,'']]]
 ];

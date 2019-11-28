@@ -13,5 +13,5 @@ var searchData=
   ['isclosed',['isClosed',['../classConnection.html#a261f8e241f8949f979a169753617db91',1,'Connection::isClosed()'],['../classRTSPConnection.html#ad9ffc91bbb8866bf7ad8588be16a9324',1,'RTSPConnection::isClosed()']]],
   ['isempty',['isEmpty',['../classFrameCache.html#af069f459c53a0d78cf02a0e1b4f70ed3',1,'FrameCache::isEmpty()'],['../classFrameFifo.html#a37e3264d8b8f8a787cd305c79e568645',1,'FrameFifo::isEmpty()'],['../classRenderGroup.html#ac87250ee2becf66758815bd6c8f1f527',1,'RenderGroup::isEmpty()']]],
   ['ispending',['isPending',['../classSlotContext.html#a9f9c1f818b2f8b60c18d5552923e4ca0',1,'SlotContext']]],
-  ['isseekable',['isSeekable',['../classFrame.html#a67a25cfc2631c607e731468acc933f3d',1,'Frame::isSeekable()'],['../classBasicFrame.html#a55a01b913aa55b0c3b65448b052fa625',1,'BasicFrame::isSeekable()'],['../classMuxFrame.html#a12368f0f33ad341afeab3aea4fe31bf5',1,'MuxFrame::isSeekable()']]]
+  ['isseekable',['isSeekable',['../classFrame.html#a67a25cfc2631c607e731468acc933f3d',1,'Frame::isSeekable()'],['../classBasicFrame.html#a55a01b913aa55b0c3b65448b052fa625',1,'BasicFrame::isSeekable()']]]
 ];

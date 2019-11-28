@@ -9,6 +9,5 @@ var searchData=
   ['markkeyframe',['markKeyFrame',['../classValkkaFS.html#a58570faf000b9847019bbf7141a97dd8',1,'ValkkaFS']]],
   ['maxframesize',['maxFrameSize',['../classValkkaFS.html#ac3ecbb3e823e243cb39d7676e05b8918',1,'ValkkaFS']]],
   ['movementframefilter',['MovementFrameFilter',['../classMovementFrameFilter.html#afbcd7f4b57d07393cddd0171f10be9a6',1,'MovementFrameFilter']]],
-  ['mstotimeval',['msToTimeval',['../tools_8h.html#a6b263f324f19945af28ebde686acc6d6',1,'msToTimeval(long int mstimestamp):&#160;tools.cpp'],['../tools_8cpp.html#a6b263f324f19945af28ebde686acc6d6',1,'msToTimeval(long int mstimestamp):&#160;tools.cpp']]],
-  ['muxframe',['MuxFrame',['../classMuxFrame.html#ae281bf7c2d34ea6aabfb3da7de6a92ad',1,'MuxFrame']]]
+  ['mstotimeval',['msToTimeval',['../tools_8h.html#a6b263f324f19945af28ebde686acc6d6',1,'msToTimeval(long int mstimestamp):&#160;tools.cpp'],['../tools_8cpp.html#a6b263f324f19945af28ebde686acc6d6',1,'msToTimeval(long int mstimestamp):&#160;tools.cpp']]]
 ];

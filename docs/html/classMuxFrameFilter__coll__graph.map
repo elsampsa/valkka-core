@@ -1,5 +1,6 @@
 <map id="MuxFrameFilter" name="MuxFrameFilter">
-<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="5,81,93,108"/>
-<area shape="rect" id="node3" href="$classMuxFrame.html" title="A muxed packet (in some container format) " alt="" coords="171,81,255,108"/>
-<area shape="rect" id="node4" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="184,5,243,32"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="5,95,93,121"/>
+<area shape="rect" id="node3" href="$classBasicFrame.html" title="Custom payload Frame. " alt="" coords="171,95,263,121"/>
+<area shape="rect" id="node4" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="141,5,200,32"/>
+<area shape="rect" id="node5" href="$structH264Pars.html" title="H264Pars" alt="" coords="224,5,304,32"/>
 </map>

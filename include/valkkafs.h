@@ -28,7 +28,7 @@
  *  @file    valkkafs.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.0 
+ *  @version 0.14.1 
  *  
  *  @brief
  */ 
@@ -139,7 +139,7 @@ public:                                  // <pyapi>
     std::string     getDevice();         // <pyapi>
     /** returns device file size */
     std::size_t     getDeviceSize();     // <pyapi>
-    /** write   */
+    /** writes zero bytes to the device */
     void            clearDevice(bool writethrough=false, bool verbose=false);       // <pyapi>
     /** clears the blocktable and writes it to the disk */
     void            clearTable();        // <pyapi>

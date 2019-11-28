@@ -26,7 +26,7 @@
  *  @file    logging.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.0 
+ *  @version 0.14.1 
  *  @brief   Logging with various log levels
  */ 
 
@@ -184,3 +184,18 @@ void fatal_log_all() { // only critical / fatal msgs
   valkkafslogger    .setLevel(LogLevel::fatal);
 }
 
+void quiet_log_all() {
+  framelogger         .setLevel(LogLevel::quiet);
+  filterlogger        .setLevel(LogLevel::quiet);
+  livelogger          .setLevel(LogLevel::quiet);
+  threadlogger        .setLevel(LogLevel::quiet);
+  livethreadlogger    .setLevel(LogLevel::quiet);
+  avthreadlogger      .setLevel(LogLevel::quiet);
+  decoderlogger       .setLevel(LogLevel::quiet);
+  fifologger          .setLevel(LogLevel::quiet);
+  opengllogger        .setLevel(LogLevel::quiet);
+  filelogger          .setLevel(LogLevel::quiet);
+  filethreadlogger    .setLevel(LogLevel::quiet);
+  usblogger    .setLevel(LogLevel::quiet);
+  valkkafslogger    .setLevel(LogLevel::quiet);
+}

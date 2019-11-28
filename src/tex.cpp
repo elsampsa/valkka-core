@@ -26,7 +26,7 @@
  *  @file    opengl.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.0 
+ *  @version 0.14.1 
  *  
  *  @brief X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines
  *
