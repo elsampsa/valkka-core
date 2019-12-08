@@ -1042,8 +1042,11 @@ class ValkkaFSManager:
         
     def waitClose(self):
         self.writerthread.waitStopCall()
+        self.logger.debug("waitClose: writerthread exit")
         self.cacherthread.waitStopCall()
+        self.logger.debug("waitClose: cacherthread exit")
         self.readerthread.waitStopCall()
+        self.logger.debug("waitClose: readerthread exit")
         self.active = False
 
 

@@ -47,13 +47,14 @@ const char* stream_2   =std::getenv("VALKKA_TEST_RTSP_2");
 const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 
+
 void test_1() { // open two terminals, start this from terminal 1 and "test 2" from terminal 2
   int inp;
   const char* name = "@TEST: shmem_test: test 1: ";
   std::cout << name <<"** @@Create shared memory on the SERVER side : INTERACTIVE TEST **" << std::endl;
   
   std::vector<uint8_t> payload;
-  SharedMemSegment shmem("testing", 30*1024*1024, true);
+  SimpleSharedMemSegment shmem("testing", 30*1024*1024, true);
   
   payload.resize(10,0);
   
@@ -74,7 +75,7 @@ void test_2() {
   const char* name = "@TEST: shmem_test: test 2: ";
   std::cout << name <<"** @@Create shared memory on the CLIENT side : INTERACTIVE TEST **" << std::endl;
   
-  SharedMemSegment shmem("testing", 30*1024*1024, false);
+  SimpleSharedMemSegment shmem("testing", 30*1024*1024, false);
   std::cout << "Enter an integer to read from shared mem" << std::endl;
   std::cin >> inp;
   n=shmem.getSize();
@@ -165,10 +166,56 @@ void test_4() {
 
 
 void test_5() {
-  // TODO: make a hard-core shmem ringbuffer write/read test - random reads/writes within milliseconds
-  const char* name = "@TEST: shmem_test: test 5: ";
-  std::cout << name <<"** @@DESCRIPTION : TODO **" << std::endl;
+    Py_Initialize();
+    import_array1(); // don't forget this!
+
+    const char* name = "@TEST: shmem_test: test 5: ";
+    std::cout << name <<"** @@Create shmem ring buffer on the SERVER side : INTERACTIVE TEST : push python arrays **" << std::endl;
+    int inp, cc, i, index;
+    std::vector<uint8_t> payload;
+
+    // const char* name, int n_cells, int width, int height, int mstimeout, bool is_server
+    SharedMemRingBufferRGB rb("testing",10, 400, 300, 1000, true); // name, ncells, bytes per cell, timeout, server or not
+
+    payload.resize(400*300*3);
+
+    ///*
+    npy_intp dims[3];
+    dims[0] = 400;
+    dims[1] = 300;
+    dims[2] = 3;
+    //*/
+    /*
+    npy_intp *dims = new npy_intp[3];
+    dims[0] = 400;
+    dims[1] = 300;
+    dims[2] = 3;
+    */
+
+    PyObject* po = PyArray_SimpleNew(3, dims, NPY_UBYTE);
+    // PyObject* po = PyArray_SimpleNew(3, dims, NPY_UINT8);
+    // PyArray* po = PyArray_SimpleNewFromData(3, dims, NPY_UBYTE, (char*)(payload.data()));
+
+    cc=0;
+    std::cout << "Give number of cells to write. 0 = exit"<<std::endl;
+    while (true) {
+        std::cout << std::endl << "> ";
+        std::cin >> inp;
+        if (inp==0) { 
+            break; 
+        }
+        
+        for(i=0;i<inp;++i) {   
+            rb.serverPushPyRGB(po, 1, 1);
+            cc++;
+            std::cout << std::endl;
+        }
+    }
+
+    Py_DECREF(po);
+    Py_Finalize();
 }
+
 
 
 void test_6() { // open two terminals.  Start this from first terminal and test_4 from the second terminal
@@ -217,7 +264,7 @@ int main(int argc, char** argcv) {
     std::cout << argcv[0] << " needs an integer argument.  Second interger argument (optional) is verbosity" << std::endl;
   }
   else {
-    
+ 
     if  (argc>2) { // choose verbosity
       switch (atoi(argcv[2])) {
         case(0): // shut up

@@ -35,6 +35,27 @@
 #include "sharedmem.h"
 #include "numpy_no_import.h"
 
+// #define shmem_verbose
+
+
+
+EventFd::EventFd() {
+    this->fd = eventfd(0, EFD_NONBLOCK); // https://linux.die.net/man/2/eventfd
+    if (fd == -1) {
+        handle_error("SharedMemRingBufferBase: ctor: could not get eventfd handle");
+    }
+}
+
+EventFd::~EventFd() {
+    close(this->fd);
+}
+
+int EventFd::getFd() {
+    return fd;
+}
+
+
+
 
 
 SharedMemSegment::SharedMemSegment(const char* name, std::size_t n_bytes, bool is_server) : name(name), n_bytes(n_bytes), is_server(is_server), client_state(false) {
@@ -45,9 +66,15 @@ SharedMemSegment::SharedMemSegment(const char* name, std::size_t n_bytes, bool i
 
 void SharedMemSegment::init() {
     if (is_server) {
+        #ifdef shmem_verbose
+        std::cout << "SharedMemSegment::init : server" << std::endl;
+        #endif
         serverInit();
     }
     else {
+        #ifdef shmem_verbose
+        std::cout << "SharedMemSegment::init : client" << std::endl;
+        #endif
         client_state = clientInit();
     }
 }
@@ -94,7 +121,7 @@ void CLASSNAME::serverInit() {\
   shm_unlink(payload_name.c_str());\
   shm_unlink(meta_name.c_str());\
   fd = shm_open(payload_name.c_str(),O_CREAT | O_EXCL | O_TRUNC | O_RDWR, 0600);\
-  fd_= shm_open(meta_name.c_str(),    O_CREAT | O_EXCL | O_TRUNC | O_RDWR, 0600);\
+  fd_= shm_open(meta_name.c_str(),   O_CREAT | O_EXCL | O_TRUNC | O_RDWR, 0600);\
   if (fd == -1 or fd_==-1) {\
     perror("valkka_core: sharedmem.cpp: SharedMemSegment::serverInit: shm_open failed");\
     exit(2);\
@@ -106,7 +133,7 @@ void CLASSNAME::serverInit() {\
     perror("valkka_core: sharedmem.cpp: SharedMemSegment::serverInit: ftruncate failed");\
     exit(2);\
   }\
-  ptr = mmap(0, n_bytes,             PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);\
+  ptr = mmap(0, n_bytes,          PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);\
   ptr_= mmap(0, sizeof(TYPENAME), PROT_READ | PROT_WRITE, MAP_SHARED, fd_, 0);\
   if (ptr == MAP_FAILED or ptr_ == MAP_FAILED) {\
     perror("valkka_core: sharedmem.cpp: SharedMemSegment::serverInit: mmap failed");\
@@ -116,6 +143,7 @@ void CLASSNAME::serverInit() {\
   meta    = (TYPENAME*) ptr_;\
   close(fd);\
   close(fd_);\
+  /*std::cout << "Server reserved " << sizeof(TYPENAME) << "bytes" << std::endl;*/\
 };\
 
 
@@ -131,7 +159,7 @@ bool CLASSNAME::clientInit() { \
   }\
   /* std::cout << "got shmem" << std::endl; */\
   ptr  =mmap(0, n_bytes, PROT_READ, MAP_SHARED, fd,  0);\
-  ptr_ =mmap(0, sizeof(std::size_t), PROT_READ, MAP_SHARED, fd_, 0);\
+  ptr_ =mmap(0, sizeof(TYPENAME), PROT_READ, MAP_SHARED, fd_, 0);\
   if (ptr == MAP_FAILED or ptr_ == MAP_FAILED) {\
     std::cout << "valkka_core: sharedmem.cpp: SharedMemSegment::clientInit: mmap failed" << std::endl;\
     /* perror("valkka_core: sharedmem.cpp: SharedMemSegment::clientInit: mmap failed"); */\
@@ -142,6 +170,7 @@ bool CLASSNAME::clientInit() { \
   meta    = (TYPENAME*) ptr_;\
   close(fd);\
   close(fd_);\
+  /*std::cout << "Client reserved " << sizeof(TYPENAME) << "bytes" << std::endl;*/\
   return true;\
 };\
 
@@ -268,11 +297,15 @@ void SimpleSharedMemSegment::put(std::vector<uint8_t> &inp_payload, void* meta_)
     memcpy(payload, inp_payload.data(), *meta);
     // std::cout << "SharedMemSegment: put: payload now: " << int(payload[0]) << " " << int(payload[1]) << " " << int(payload[2]) << std::endl;
 }
-    
+
+void SimpleSharedMemSegment::put(uint8_t* buf, void* meta_) {
+    *meta = *((std::size_t*)(meta_));
+    memcpy(payload, buf, *meta);
+    // std::cout << "SharedMemSegment: put: payload now: " << int(payload[0]) << " " << int(payload[1]) << " " << int(payload[2]) << std::endl;
+}   
     
 void SimpleSharedMemSegment::put(std::vector<uint8_t> &inp_payload) {
-    std::size_t size = std::min(inp_payload.size(), n_bytes);
-    
+    std::size_t size = std::min(inp_payload.size(), n_bytes);    
     this->put(inp_payload, (void*)(&size));
 }
     
@@ -312,6 +345,12 @@ void RGB24SharedMemSegment::put(std::vector<uint8_t> &inp_payload, void* meta_) 
     memcpy(payload, inp_payload.data(), meta->size);
 }
 
+void RGB24SharedMemSegment::put(uint8_t* buf, void* meta_) {
+    *meta = *((RGB24Meta*)(meta_));
+    meta->size = std::min(std::size_t(meta->width*meta->height*3), n_bytes);
+    memcpy(payload, buf, meta->size);
+}
+
 
 void RGB24SharedMemSegment::putAVRGBFrame(AVRGBFrame *f) { // copy from AVFrame->data directly    
     // FFmpeg libav rgb has everything in av_frame->data[0].  The number of bytes is av_frame->linesize[0]*av_frame->height.
@@ -338,7 +377,10 @@ std::size_t RGB24SharedMemSegment::getSize() {
 
 
 
-SharedMemRingBufferBase::SharedMemRingBufferBase(const char* name, int n_cells, std::size_t n_bytes, int mstimeout, bool is_server) : name(name), n_cells(n_cells), n_bytes(n_bytes), mstimeout(mstimeout), is_server(is_server) {
+SharedMemRingBufferBase::SharedMemRingBufferBase(const char* name, int n_cells, 
+    std::size_t n_bytes, int mstimeout, bool is_server) : 
+    name(name), n_cells(n_cells), n_bytes(n_bytes), 
+    mstimeout(mstimeout), is_server(is_server), fd(0) {
     int i;
 
     // std::cout << "SharedMemRingBufferBase: constructor: n_cells " << n_cells << std::endl;
@@ -365,37 +407,82 @@ SharedMemRingBufferBase::SharedMemRingBufferBase(const char* name, int n_cells, 
     }
 }
 
+/*
+- Server: create eventfd: .serverCreateFd() => returns file descriptor number
+- Client: use eventfd: .clientUseFd()
+- ..after that, client can poll the eventfd
+*/
 
 
 SharedMemRingBufferBase::~SharedMemRingBufferBase() {
-  sem_close(sema);
-  sem_close(flagsema);
+    sem_close(sema);
+    sem_close(flagsema);
+    if (fd > 0) {
+        close(this->fd);
+    }
 }
-  
+
+
+void SharedMemRingBufferBase::serverUseFd(EventFd &event_fd) {
+    fd = event_fd.getFd();
+}
+
+void SharedMemRingBufferBase::clientUseFd(EventFd &event_fd) {
+    fd = event_fd.getFd();
+}
+
+void SharedMemRingBufferBase::setEventFd() { // used only at the server side
+    //call after se_post
+    //fd_is_set = false; // TODO: poll for the eventfd
+    //if (fd > 0 and !fd_is_set) {
+    if (fd > 0 and getValue() == 1) {
+        // TODO: write only if the eventfd is not set
+        // TODO: sync all semaphore operations with the fd
+        uint64_t u = 1; // one frame
+        ssize_t s;
+        s = write(fd, &u, sizeof(uint64_t));
+        if (s != sizeof(uint64_t)) {
+            handle_error("RingBuffer: ServerPush: eventfd write failed");
+        }
+    }
+}
+
+
+void SharedMemRingBufferBase::clearEventFd() { // used only at the client
+    if (fd > 0) {
+        if (getValue() > 0) { // clear eventfd if no more frames in the queue
+            return;
+        }
+        uint64_t u = 1; // one frame
+        ssize_t s;
+        s = read(fd, &u, sizeof(uint64_t));
+        if (s != sizeof(uint64_t)) {
+            handle_error("RingBuffer: clearEventFd: eventfd read failed");
+        }
+    }
+}
 
 
 void  SharedMemRingBufferBase::setFlag() {       //Server: call this to indicate a ring-buffer overflow
-  int i;
-  if (getFlagValue()>0) { // flag already set ..
-    return;
-  }
-  else { // flag not set, increment semaphore
-    i=sem_post(flagsema);
-  }  
+    int i;
+    if (getFlagValue()>0) { // flag already set ..
+        return;
+    }
+    else { // flag not set, increment semaphore
+        i=sem_post(flagsema);
+    }  
 }
-
 
 
 bool  SharedMemRingBufferBase::flagIsSet() {     //Client: call this to see if there has been a ring-buffer overflow
-  if (this->getFlagValue()>0) {
-    return true;
-  }
-  else {
-    return false;
-  }
+    if (this->getFlagValue()>0) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
   
-
 
 void  SharedMemRingBufferBase::clearFlag() {    //Client: call this after handling the ring-buffer overflow
   int i;
@@ -408,14 +495,12 @@ void  SharedMemRingBufferBase::clearFlag() {    //Client: call this after handli
 }
   
 
-
 int SharedMemRingBufferBase::getFlagValue() {  //Used by SharedMemoryRingBuffer::flagIsSet()
   int i;
   int semaval;
   i = sem_getvalue(flagsema, &semaval);
   return semaval;  
 }
-
 
 
 void  SharedMemRingBufferBase::zero() {          //Force reset.  Semaphore value is set to 0
@@ -428,14 +513,12 @@ void  SharedMemRingBufferBase::zero() {          //Force reset.  Semaphore value
 }
 
 
-
 int   SharedMemRingBufferBase::getValue() {      //Returns the current index (next to be read) of the shmem buffer
   int i;
   int semaval;
   i=sem_getvalue(sema, &semaval);
   return semaval;
 }  
-
 
 
 bool SharedMemRingBufferBase::getClientState() {
@@ -451,26 +534,26 @@ bool SharedMemRingBufferBase::getClientState() {
 }
 
 
-
 void SharedMemRingBufferBase::serverPush(std::vector<uint8_t> &inp_payload, void *meta) {
-  int i;
+    int i;
+        
+    if (getValue()>=n_cells) { // so, semaphore will overflow
+        zero();
+        std::cout << "RingBuffer: ServerPush: zeroed, value now="<<getValue()<<std::endl;
+        index=-1;
+        setFlag();
+        std::cout << "RingBuffer: ServerPush: OVERFLOW "<<std::endl;
+    }
     
-  if (getValue()>=n_cells) { // so, semaphore will overflow
-    zero();
-    std::cout << "RingBuffer: ServerPush: zeroed, value now="<<getValue()<<std::endl;
-    index=-1;
-    setFlag();
-    std::cout << "RingBuffer: ServerPush: OVERFLOW "<<std::endl;
-  }
-  
-  ++index;
-  if (index>=n_cells) {
-    index=0;
-  }
-  shmems[index]->put(inp_payload, meta); // SharedMemSegment takes care of the correct typecast from void*
-  // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
-  
-  i=sem_post(sema);
+    ++index;
+    if (index>=n_cells) {
+        index=0;
+    }
+    shmems[index]->put(inp_payload, meta); // SharedMemSegment takes care of the correct typecast from void*
+    // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
+    
+    i=sem_post(sema);
+    setEventFd();
 }
 
 
@@ -554,6 +637,9 @@ bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {
     // size_out  = shmems[index]->getSize();
     shmems[index]->copyMetaTo(meta_); // copy metadata from the shmem segment's internal memory into variable referenced by the meta_ pointer.  Subclassing takes care of the correct typecast.
     // return index;
+    
+    clearEventFd();
+
     return true;
 }
 
@@ -603,11 +689,17 @@ bool SharedMemRingBuffer::clientPull(int &index_out, int &size_out) {
 SharedMemRingBufferRGB::SharedMemRingBufferRGB(const char* name, int n_cells, int width, int height, int mstimeout, bool is_server) : SharedMemRingBufferBase(name, n_cells, (std::size_t)(width*height*3), mstimeout, is_server), width(width), height(height) {
     int i;
     for(i=0; i<n_cells; i++) {
+        #ifdef shmem_verbose
+        std::cout << "create RGB24SharedMemSegment " << i << " is server =" << int(is_server) << std::endl;
+        #endif
         shmems.push_back(
         new RGB24SharedMemSegment((name+std::to_string(i)).c_str(), width, height, is_server)
             );
     }
     for(auto it = shmems.begin(); it != shmems.end(); ++it) {
+        #ifdef shmem_verbose
+        std::cout << "call RGB24SharedMemSegment init " << std::endl;
+        #endif
         (*it)->init(); // init reserves the shmem at the correct subclass
     }
 }
@@ -641,7 +733,59 @@ void SharedMemRingBufferRGB::serverPushAVRGBFrame(AVRGBFrame *f) {
   // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
   
   i=sem_post(sema);
+  setEventFd();
 }
+
+
+bool SharedMemRingBufferRGB::serverPushPyRGB(PyObject *po, SlotNumber slot, long int mstimestamp) {
+    Py_INCREF(po);
+    int i;
+    PyArrayObject *pa = (PyArrayObject*)po;
+
+    if (PyArray_NDIM(pa) < 3) {
+        std::cout << "RingBuffer: ServerPushPyRGB: incorrect dimensions" << std::endl;
+        return false;
+    }
+
+    npy_intp *dims = PyArray_DIMS(pa);
+
+    RGB24Meta meta_ = RGB24Meta();
+    meta_.size = dims[0]*dims[1]*dims[2];
+    meta_.width = dims[1];
+    meta_.height = dims[2];
+    meta_.slot = slot;
+    meta_.mstimestamp = mstimestamp;
+    
+    uint8_t* buf = (uint8_t*)PyArray_BYTES(pa);
+
+    if (getValue()>=n_cells) { // so, semaphore will overflow
+        zero();
+        std::cout << "RingBuffer: ServerPush: zeroed, value now="<<getValue()<<std::endl;
+        index=-1;
+        setFlag();
+        std::cout << "RingBuffer: ServerPush: OVERFLOW "<<std::endl;
+    }
+    
+    ++index;
+    if (index >= n_cells) {
+        index=0;
+    }
+
+    // std::cout << "meta_.size = " << meta_.size << std::endl;
+
+    ( (RGB24SharedMemSegment*)(shmems[index]) )->put(buf, (void*)&meta_);
+    // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
+    
+    Py_DECREF(po);
+
+    i=sem_post(sema);
+    setEventFd();
+    return true;
+}
+
+
+
+
 
 
 bool SharedMemRingBufferRGB::clientPull(int &index_out, int &size_out) { // support for legacy code
@@ -661,6 +805,8 @@ bool SharedMemRingBufferRGB::clientPullFrame(int &index_out, RGB24Meta &meta_) {
 bool SharedMemRingBufferRGB::clientPullFrameThread(int &index_out, RGB24Meta &meta_) {
     return SharedMemRingBufferBase::clientPullThread(index_out, (void*)(&meta_));
 }
+
+
 
 
 /*
@@ -736,6 +882,10 @@ PyObject* SharedMemRingBufferRGB::clientPullPy() {
 ShmemFrameFilter::ShmemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout) : FrameFilter(name,NULL), shmembuf(name, n_cells, n_bytes, mstimeout, true) {
 }
 
+void ShmemFrameFilter::useFd(EventFd &event_fd) {
+    shmembuf.serverUseFd(event_fd);
+}
+
 
 void ShmemFrameFilter::go(Frame* frame) {
   // shmembuf.serverPush(frame->payload); // this depends on the FrameClass this shmemfilter is supposed to manipulate
@@ -751,6 +901,11 @@ void ShmemFrameFilter::go(Frame* frame) {
 //RGBShmemFrameFilter::RGBShmemFrameFilter(const char* name, int n_cells, int width, int height, int mstimeout) : ShmemFrameFilter(name, n_cells, width*height*3, mstimeout) {
 //}
 RGBShmemFrameFilter::RGBShmemFrameFilter(const char* name, int n_cells, int width, int height, int mstimeout) : FrameFilter(name,NULL), shmembuf(name, n_cells, width, height, mstimeout, true) {
+}
+
+
+void RGBShmemFrameFilter::useFd(EventFd &event_fd) {
+    shmembuf.serverUseFd(event_fd);
 }
 
 

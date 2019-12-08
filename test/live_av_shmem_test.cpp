@@ -41,6 +41,7 @@
 #include "livethread.h"
 #include "sharedmem.h"
 #include "test_import.h"
+#include <sys/select.h>
 
 
 using namespace std::chrono_literals;
@@ -225,11 +226,98 @@ void test_4() {
 
 
 void test_5() {
-  
-  const char* name = "@TEST: live_av_shmem_test: test 5: ";
-  std::cout << name <<"** @@DESCRIPTION **" << std::endl;
-  
+    const char* name = "@TEST: live_av_shmem_test: test 5: SERVER SIDE with file descriptor ";
+    std::cout << name <<"** @@YUV->RGB interpolation on the CPU, pass RGB frames to shared memory **" << std::endl;
+    
+    if (!stream_1) {
+        std::cout << name <<"ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1"<< std::endl;
+        exit(2);
+    }
+    std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
+
+    EventFd efd = EventFd(); // create the event file descriptor before fork
+
+    int pid = fork();
+    
+    if (pid > 0)  // in parent
+    {
+        // (LiveThread:livethread) --> {FrameFilter:info} --> {FifoFrameFilter:in_filter} -->> (AVThread:avthread) --> {SwScaleFrameFilter:sw_scale} --> {InfoFrameFilter:scaled} --> {RGBShmemFrameFilter:shmem}
+        RGBShmemFrameFilter shmem("rgb_shmem", 10, 100, 100, 1000);
+        InfoFrameFilter     decoded_info("scaled",&shmem);
+        SwScaleFrameFilter  sw_scale("sws_scale",100,100,&decoded_info);
+        // InfoFrameFilter     decoded_info("decoded",&sws_scale);
+        TimeIntervalFrameFilter
+                            interval("interval",100,&sw_scale); // pass a frame each 100 ms
+        AVThread            avthread("avthread",interval);
+        FifoFrameFilter     &in_filter = avthread.getFrameFilter(); // request framefilter from AVThread
+        InfoFrameFilter     out_filter("encoded",&in_filter);
+        LiveThread          livethread("live");
+
+        shmem.useFd(efd);
+
+        std::cout << name << "starting threads" << std::endl;
+        livethread.startCall();
+        avthread.  startCall();
+
+        avthread.decodingOnCall();
+        
+        // sleep_for(2s);
+        
+        std::cout << name << "registering stream" << std::endl;
+        LiveConnectionContext ctx =LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
+        livethread.registerStreamCall(ctx);
+        
+        // sleep_for(1s);
+        
+        std::cout << name << "playing stream !" << std::endl;
+        livethread.playStreamCall(ctx);
+        
+        // sleep_for(10s);
+        sleep_for(5s);
+        // sleep_for(604800s); //one week
+        
+        std::cout << name << "stopping threads" << std::endl;
+        livethread.stopCall(); 
+    }
+    else  // in child
+    {
+        sleep_for(1s); // must use this in order to work with valgrind
+        // .. otherwise valgrind does some strange shit!  It doesn't reserve memory for the client:
+        SharedMemRingBufferRGB rb("rgb_shmem", 10, 100, 100, 1000, false);
+        rb.clientUseFd(efd);
+        int index, n, ii;
+        bool ok;
+        int deadcount = 0;
+        int retval;
+        fd_set rfds;
+        
+        while (true) {
+            // before pulling from client, do poll / select
+            FD_ZERO(&rfds);
+            FD_SET(efd.getFd(), &rfds);
+            std::cout << "SELECT" << std::endl;
+            retval = select(efd.getFd()+1, &rfds, NULL, NULL, NULL);
+            ok=rb.clientPull(index, n);
+            if (ok) {
+                std::cout << "CLIENT: cell index " << index << " has " << n << " bytes" << std::endl;
+                for(ii=0; ii<std::min(n,10); ii++) {
+                    std::cout << int(rb.shmems[index]->payload[ii]) << std::endl;
+                }
+                std::cout << std::endl;
+            }
+            else {
+                std::cout << "CLIENT: semaphore timed out!" << std::endl;
+                std::cout << std::endl;
+                deadcount++;
+            }
+            if (deadcount >= 10) {
+                break;
+            }
+        }
+        std::cout << "CLIENT: exit" << std::endl;
+    }
 }
+
 
 
 
@@ -278,6 +366,11 @@ int main(int argc, char** argcv) {
       case(5):
         test_5();
         break;
+      /*
+      case(6):
+        test_6();
+        break;
+      */
       default:
         std::cout << "No such test "<<argcv[1]<<" for "<<argcv[0]<<std::endl;
     }

@@ -43,6 +43,23 @@
 #include "framefilter.h"
 #include "Python.h"
 
+
+/** A file descriptor for running select and poll with shmem ring buffers 
+ */
+class EventFd {     // <pyapi>
+
+public:             // <pyapi>
+    EventFd();      // <pyapi>
+    ~EventFd();     // <pyapi>
+
+private:
+    int fd;
+
+public:             // <pyapi>
+    int getFd();    // <pyapi>
+};                  // <pyapi>
+
+
 /** Shared memory segment with metadata (the segment size)
  * 
  * First, instantiate a shared memory segment in the server side, with is_server=true
@@ -55,7 +72,6 @@
  * 
  * @ingroup shmem_tag
  */
-
 // https://stackoverflow.com/questions/115703/storing-c-template-function-definitions-in-a-cpp-file
 class SharedMemSegment {
 
@@ -79,7 +95,10 @@ protected:
   
 public:
     virtual std::size_t getSize() = 0;        ///< Client: return size of payload
+    
     virtual void put(std::vector<uint8_t> &inp_payload, void *meta_) = 0; ///< Server: copy byte chunk into payload accompanied with metadata.  Corrent typecast in child class methods.
+    virtual void put(uint8_t* buf_, void* meta_) = 0;
+
     virtual void copyMetaFrom(void *meta_) = 0; ///< Dereference metadata pointer correctly and copy the contents into this memory segment's metadata
     virtual void copyMetaTo(void *meta_)   = 0; ///< Dereference metadata pointer correctly and copy the contents from this memory segment's metadata
   
@@ -121,7 +140,12 @@ protected:
     
 public:
     virtual std::size_t  getSize();               ///< Client: return metadata = the size of the payload (not the maximum size).  Uses SharedMemSegment::getMeta.
+
+    /* virtual method, since metadata depends on the shared mem segment type */
     virtual void put(std::vector<uint8_t> &inp_payload, void* meta_); ///< typecast void to std::size_t
+    virtual void put(uint8_t* buf_, void* meta_);
+    virtual void putAVRGBFrame(AVRGBFrame *f);                        ///< Copy from AVFrame->data directly.  Only metadata used: payload size
+
     virtual void copyMetaFrom(void *meta_);       ///< Dereference metadata pointer correctly and copy the contents into this memory segment's metadata
     virtual void copyMetaTo(void *meta_);         ///< Dereference metadata pointer correctly and copy the contents from this memory segment's metadata
   
@@ -129,8 +153,8 @@ public:
     std::size_t  *meta;
     
 public:
-    void         put(std::vector<uint8_t> &inp_payload);    ///< for legacy API
-    void         putAVRGBFrame(AVRGBFrame *f);              ///< Copy from AVFrame->data directly.  Only metadata used: payload size
+    void         put(std::vector<uint8_t> &inp_payload);              ///< for legacy API
+    
 };
 
 
@@ -166,15 +190,17 @@ protected:
     
 public:
     virtual std::size_t getSize();                                    ///< Client: return metadata = the size of the payload (not the maximum size).  Uses SharedMemSegment::getMeta.
+  
     virtual void put(std::vector<uint8_t> &inp_payload, void* meta_); ///< typecast void to std::size_t
+    virtual void put(uint8_t* buf_, void* meta_);
+    virtual void putAVRGBFrame(AVRGBFrame *f);                        ///< Copy from AVFrame->data directly.  Only metadata used: payload size
+
     virtual void copyMetaFrom(void *meta_);       ///< Dereference metadata pointer correctly and copy the contents into this memory segment's metadata
     virtual void copyMetaTo(void *meta_);         ///< Dereference metadata pointer correctly and copy the contents from this memory segment's metadata
   
 public:
     RGB24Meta    *meta;
     
-public:
-    void         putAVRGBFrame(AVRGBFrame *f);                        ///< Copy from AVFrame->data directly.  Copies more metadata: width, height, slot & mstimestamp
 };
 
 
@@ -218,7 +244,8 @@ protected: // posix semaphores and mmap'd files
     std::string   flagsema_name;   ///< Name to identify the posix semaphore used for the overflow flag
     int  index;                    ///< The index of cell that has just been written.  Remember: server and client see their own copies of this
     struct timespec ts;            ///< Timespec for semaphore timeouts
-    
+    int fd;                        ///< A file descriptor for poll and select
+
 public:
     std::vector<SharedMemSegment*> shmems; ///< Shared memory segments
 
@@ -228,12 +255,15 @@ protected: // internal methods - not for the api user
     void  clearFlag();     ///< Client: call this after handling the ring-buffer overflow
     int   getFlagValue();  ///< Used by SharedMemoryRingBuffer::flagIsSet()
     void  zero();          ///< Force reset.  Semaphore value is set to 0
-    
+    void  setEventFd();    ///< Set event file descriptor
+    void  clearEventFd();  ///< Clear event file descriptor
+
+
 public:
   int   getValue();       ///< Returns the current index (next to be read) of the shmem buffer
   bool  getClientState(); ///< Are the shmem segments available for client?
   
-public: // server side routines - call these only from the server           
+public: // server side routines - call these only from the server  // <pyapi>         
     /** Copies payload to ring buffer
     * 
     * @param inp_payload : std::vector bytebuffer (passed by reference)
@@ -241,8 +271,10 @@ public: // server side routines - call these only from the server
     * After copying the payload, releases (increases) the semaphore.
     */
     void serverPush(std::vector<uint8_t> &inp_payload, void* meta);
-    
-    
+    /** Activate the file descriptor api for usage with select and poll */
+    void serverUseFd(EventFd &event_fd);                            // <pyapi>
+
+
 public: // client side routines - call only from the client side // <pyapi>
     /** Returns the index of SharedMemoryRingBuffer::shmems that was just written.
     * 
@@ -257,6 +289,8 @@ public: // client side routines - call only from the client side // <pyapi>
     /** multithreading version: releases GIL */
     bool clientPullThread(int &index_out, void* meta);          // <pyapi>
     PyObject *getBufferListPy();                                // <pyapi>
+    /** Activate the file descriptor api for usage with select and poll */
+    void clientUseFd(EventFd &event_fd);                        // <pyapi>
 }; // <pyapi>
 
 
@@ -304,6 +338,7 @@ public:                              // <pyapi>
     bool clientPullFrame(int &index_out, RGB24Meta &meta);        // <pyapi>
     /** For multithreading (instead of multiprocessing) applications: releases python GIL */
     bool clientPullFrameThread(int &index_out, RGB24Meta &meta);  // <pyapi>
+    bool serverPushPyRGB(PyObject *po, SlotNumber slot, long int mstimestamp); // <pyapi>
 };                                                                // <pyapi>
 
 
@@ -316,29 +351,31 @@ public:                              // <pyapi>
 class ShmemFrameFilter : public FrameFilter {                                               // <pyapi>
   
 public:                                                                                     // <pyapi>
-  /** Default constructor
-   * 
-   * Creates and initializes a SharedMemoryRingBuffer.  Frames fed into this FrameFilter are written into that buffer.
-   * 
-   * @param   name. Important!  Identifies the SharedMemoryRingBuffer where the frames are being written
-   * @param   n_cells. Number of shared memory segments in the ring buffer
-   * @param   n_bytes. Size of shared memory segments in the ringbuffer
-   * @param   mstimeout. Semaphore timeout wait for the ringbuffer
-   * 
-   */
-  ShmemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0);  // <pyapi>
-  //~ShmemFrameFilter(); // <pyapi>
+    /** Default constructor
+     * 
+     * Creates and initializes a SharedMemoryRingBuffer.  Frames fed into this FrameFilter are written into that buffer.
+     * 
+     * @param   name. Important!  Identifies the SharedMemoryRingBuffer where the frames are being written
+     * @param   n_cells. Number of shared memory segments in the ring buffer
+     * @param   n_bytes. Size of shared memory segments in the ringbuffer
+     * @param   mstimeout. Semaphore timeout wait for the ringbuffer
+     * 
+     */
+    ShmemFrameFilter(const char* name, int n_cells, std::size_t n_bytes, int mstimeout=0);  // <pyapi>
+    //~ShmemFrameFilter(); // <pyapi>
 
 protected: // initialized at constructor                                                  
-  //int                    n_cells;
-  //std::size_t            n_bytes;
-  //int                    mstimeout;
-  SharedMemRingBuffer shmembuf;
-  
+    //int                    n_cells;
+    //std::size_t            n_bytes;
+    //int                    mstimeout;
+    SharedMemRingBuffer shmembuf;
+    
 protected:
-  virtual void go(Frame* frame);
-  
-};                                                                                       // <pyapi>
+    virtual void go(Frame* frame);
+    
+public:                                                                                   // <pyapi>
+    void useFd(EventFd &event_fd);                                                        // <pyapi>
+};                                                                                        // <pyapi>
   
 
 /** Like ShmemFrameFilter.  Writes frames into SharedMemRingBufferRGB
@@ -349,21 +386,23 @@ protected:
 class RGBShmemFrameFilter : public FrameFilter { // <pyapi> 
   
 public: // <pyapi>
-  /** Default constructor
-   */
-  RGBShmemFrameFilter(const char* name, int n_cells, int width, int height, int mstimeout=0); // <pyapi>
-  //~RGBShmemFrameFilter(); // <pyapi>
+    /** Default constructor
+     */
+    RGBShmemFrameFilter(const char* name, int n_cells, int width, int height, int mstimeout=0); // <pyapi>
+    //~RGBShmemFrameFilter(); // <pyapi>
   
 protected: // initialized at constructor                                                  
-  //int                    n_cells;
-  //int                    width;
-  //int                    height;
-  //int                    mstimeout;
-  SharedMemRingBufferRGB shmembuf;
+    //int                    n_cells;
+    //int                    width;
+    //int                    height;
+    //int                    mstimeout;
+    SharedMemRingBufferRGB shmembuf;
   
 protected:
-  virtual void go(Frame* frame);
-  
+    virtual void go(Frame* frame);
+
+public:                                                                                   // <pyapi>
+    void useFd(EventFd &event_fd);                                                        // <pyapi>
 }; // <pyapi>
   
   

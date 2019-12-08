@@ -41,7 +41,7 @@ class MovementFrameFilter : public FrameFilter {                                
   
 public:                                                                                    // <pyapi>
     /**
-     * @param interval  How often the frame is checked (milliseconds)
+     * @param interval  How often the frame is checked (milliseconds).  This also defines how often a frame is passed downstream, if the movement is on.
      * @param treshold  Treshold value for movement
      * @param duration  Duration of a single event (milliseconds)
      * 
