@@ -25,7 +25,7 @@ valkkafs.py : api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFS
 @file    valkkafs.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.14.1 
+@version 0.15.0 
 
 @brief   api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFSThreads
 """
@@ -330,6 +330,10 @@ class ValkkaFS:
 
         Use parameters that are not modified by the ctor
         """
+        print("partition_uuid:",self.partition_uuid,dic["partition_uuid"])
+        print("blocksize     :",self.blocksize, dic["blocksize"])
+        print("n_blocks      :", self.n_blocks, dic["n_blocks"])
+
         return (\
         (self.partition_uuid  == dic["partition_uuid"]) and \
         (self.blocksize       == dic["blocksize"]) and \
@@ -723,8 +727,9 @@ class ValkkaFSManager:
     def __init__(self, valkkafs: ValkkaFS, write = True, read = True, cache = True):
         """ValkkaFSReaderThread --> FileCacheThread
         """
-        self.logger = getLogger(__name__ + "." + self.__class__.__name__)
-        self.logger.setLevel(logging.DEBUG)
+        self.pre = __name__ + "." + self.__class__.__name__
+        self.logger = getLogger(self.pre)
+        setLogger(self.pre, logging.DEBUG)
         # self.logger.setLevel(logging.INFO)
         # self.logger.setLevel(logging.WARNING)
         
@@ -1042,11 +1047,11 @@ class ValkkaFSManager:
         
     def waitClose(self):
         self.writerthread.waitStopCall()
-        self.logger.debug("waitClose: writerthread exit")
+        self.logger.debug("waitClose: writerthread %s exit", id(self.writerthread))
         self.cacherthread.waitStopCall()
-        self.logger.debug("waitClose: cacherthread exit")
+        self.logger.debug("waitClose: cacherthread %s exit", id(self.cacherthread))
         self.readerthread.waitStopCall()
-        self.logger.debug("waitClose: readerthread exit")
+        self.logger.debug("waitClose: readerthread %s exit", id(self.readerthread))
         self.active = False
 
 

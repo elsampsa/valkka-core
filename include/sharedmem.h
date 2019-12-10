@@ -28,7 +28,7 @@
  *  @file    sharedmem.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.1 
+ *  @version 0.15.0 
  *  
  *  @brief Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  */ 
@@ -319,7 +319,7 @@ public:                                                     // <pyapi>
     /** Default ctor */
     SharedMemRingBufferRGB(const char* name, int n_cells, int width, int height, int mstimeout=0, bool is_server=false); // <pyapi>
     /** Default destructor */
-    ~SharedMemRingBufferRGB(); // <pyapi>
+    virtual ~SharedMemRingBufferRGB(); // <pyapi>
 
 protected:
     int width, height;

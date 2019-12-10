@@ -69,10 +69,17 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Latest version is 0.14.1
-- Minor changes to valkkafs
+### Latest version is 0.15.0
+- A nasty memory overflow in the shared memory server / client part fixed
+- Added eventfd to the shared mem server / client API.  Now several streams can be multiplexed with select at client side
+- Sharing streams between python processes only implemented
+- Forgot to call sem_unlink for shared mem semaphores, so they started to cumulate at /dev/shm.  That's now fixed
 
 ### Older versions
+
+0.14.1
+- Minor changes to valkkafs
+
 0.14.0
 - Muxing part progressing (but not yet functional)
 - python API 2 level updates

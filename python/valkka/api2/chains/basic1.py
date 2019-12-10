@@ -25,7 +25,7 @@ basic1.py : Some more custom filterchain classes for different use cases
 @file    basic1.py
 @author  Sampsa Riikonen
 @date    2018
-@version 0.14.1 
+@version 0.15.0 
   
 @brief Some more custom filterchain classes for different use cases
 """

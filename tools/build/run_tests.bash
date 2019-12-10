@@ -480,10 +480,15 @@ echo 4
 valgrind ./live_av_shmem_test 4 $LOGLEVEL &>> test.out
 printf "END: live_av_shmem_test 4\n\n" &>> test.out
 
-# @@DESCRIPTION **
+# @Full multiprocess test with server & client for rgb shmem frames **
 echo 5
 valgrind ./live_av_shmem_test 5 $LOGLEVEL &>> test.out
 printf "END: live_av_shmem_test 5\n\n" &>> test.out
+
+# @Full multiprocess test with server & client for vanilla shmem frames **
+echo 6
+valgrind ./live_av_shmem_test 6 $LOGLEVEL &>> test.out
+printf "END: live_av_shmem_test 6\n\n" &>> test.out
 
 fi
 

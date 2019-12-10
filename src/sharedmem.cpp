@@ -26,7 +26,7 @@
  *  @file    sharedmem.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.14.1 
+ *  @version 0.15.0 
  *  
  *  @brief   Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  */ 
@@ -415,8 +415,11 @@ SharedMemRingBufferBase::SharedMemRingBufferBase(const char* name, int n_cells,
 
 
 SharedMemRingBufferBase::~SharedMemRingBufferBase() {
+    // std::cout << "SharedMemRigBufferBase: closing sema" << std::endl;
     sem_close(sema);
     sem_close(flagsema);
+    sem_unlink(sema_name.c_str());
+    sem_unlink(flagsema_name.c_str());
     if (fd > 0) {
         close(this->fd);
     }

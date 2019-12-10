@@ -25,7 +25,7 @@ tools.py : helper functions
 @file    tools.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.14.1 
+@version 0.15.0 
 
 @brief helper functions
 """
@@ -41,21 +41,50 @@ import logging
 is_py3 = (sys.version_info >= (3, 0))
 
 
+loggers = {}
+
 def getLogger(name):
+    global loggers
+    logger = loggers.get(name)
+    if logger: return logger
+
     # https://docs.python.org/2/howto/logging.html
     # log levels here : https://docs.python.org/2/howto/logging.html#when-to-use-logging
     # in the future, migrate this to a logger config file
     # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    """ # use external config
     formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
     ch = logging.StreamHandler()
-    # ch.setLevel(level) # no effect ..
     ch.setFormatter(formatter)
+    """
     
     logger = logging.getLogger(name)
-    # logger.setLevel(level)
+    loggers[name] = logger 
     
-    logger.addHandler(ch)
+    # logger.setLevel(level) # use external config
+    # logger.addHandler(ch) # use external config
+    
     return logger
+    
+    
+def setLogger(name, level):
+    """Give either logger name or the logger itself
+    """
+    
+    if (isinstance(name,str)):
+        logger = getLogger(name)
+    else:
+        logger = name 
+    
+    if not logger.hasHandlers():
+        formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+        ch = logging.StreamHandler()
+        ch.setFormatter(formatter)
+        logger.setLevel(level)
+        logger.addHandler(ch)
+
+
 
 
 def import_file(full_name, path):
