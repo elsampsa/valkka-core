@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.14.1</span>
+   &#160;<span id="projectnumber">0.16.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -118,6 +118,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:ac29b12d053f86dcb95f58e7aa3a54bbf inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#ac29b12d053f86dcb95f58e7aa3a54bbf">serverPush</a> (std::vector&lt; uint8_t &gt; &amp;inp_payload, void *meta)</td></tr>
 <tr class="memdesc:ac29b12d053f86dcb95f58e7aa3a54bbf inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies payload to ring buffer.  <a href="classSharedMemRingBufferBase.html#ac29b12d053f86dcb95f58e7aa3a54bbf">More...</a><br /></td></tr>
 <tr class="separator:ac29b12d053f86dcb95f58e7aa3a54bbf inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb8e40f446158e280372577e387d5d68 inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="afb8e40f446158e280372577e387d5d68"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#afb8e40f446158e280372577e387d5d68">serverUseFd</a> (<a class="el" href="classEventFd.html">EventFd</a> &amp;event_fd)</td></tr>
+<tr class="memdesc:afb8e40f446158e280372577e387d5d68 inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activate the file descriptor api for usage with select and poll. <br /></td></tr>
+<tr class="separator:afb8e40f446158e280372577e387d5d68 inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa189c657836046557f5e3c3d0417e6b inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#aaa189c657836046557f5e3c3d0417e6b">clientPull</a> (int &amp;index_out, void *meta)</td></tr>
 <tr class="memdesc:aaa189c657836046557f5e3c3d0417e6b inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of SharedMemoryRingBuffer::shmems that was just written.  <a href="classSharedMemRingBufferBase.html#aaa189c657836046557f5e3c3d0417e6b">More...</a><br /></td></tr>
 <tr class="separator:aaa189c657836046557f5e3c3d0417e6b inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,6 +132,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a5f6e04c2678433c9fd2a43b08dad5356 inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a5f6e04c2678433c9fd2a43b08dad5356"></a>
 PyObject *&#160;</td><td class="memItemRight" valign="bottom"><b>getBufferListPy</b> ()</td></tr>
 <tr class="separator:a5f6e04c2678433c9fd2a43b08dad5356 inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6157c433d80defe239d1d54a9bac99c inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="ad6157c433d80defe239d1d54a9bac99c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#ad6157c433d80defe239d1d54a9bac99c">clientUseFd</a> (<a class="el" href="classEventFd.html">EventFd</a> &amp;event_fd)</td></tr>
+<tr class="memdesc:ad6157c433d80defe239d1d54a9bac99c inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activate the file descriptor api for usage with select and poll. <br /></td></tr>
+<tr class="separator:ad6157c433d80defe239d1d54a9bac99c inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -157,6 +165,14 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a6318f858ef7384e09961669c6bc9f03b">zero</a> ()</td></tr>
 <tr class="memdesc:a6318f858ef7384e09961669c6bc9f03b inherit pro_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Force reset. Semaphore value is set to 0. <br /></td></tr>
 <tr class="separator:a6318f858ef7384e09961669c6bc9f03b inherit pro_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3de3d31bd901f1dc448c53312250533 inherit pro_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="ab3de3d31bd901f1dc448c53312250533"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#ab3de3d31bd901f1dc448c53312250533">setEventFd</a> ()</td></tr>
+<tr class="memdesc:ab3de3d31bd901f1dc448c53312250533 inherit pro_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set event file descriptor. <br /></td></tr>
+<tr class="separator:ab3de3d31bd901f1dc448c53312250533 inherit pro_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a005e6164902f93ec05ccaf7138b08d1b inherit pro_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a005e6164902f93ec05ccaf7138b08d1b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a005e6164902f93ec05ccaf7138b08d1b">clearEventFd</a> ()</td></tr>
+<tr class="memdesc:a005e6164902f93ec05ccaf7138b08d1b inherit pro_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear event file descriptor. <br /></td></tr>
+<tr class="separator:a005e6164902f93ec05ccaf7138b08d1b inherit pro_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classSharedMemRingBufferBase"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classSharedMemRingBufferBase')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classSharedMemRingBufferBase.html">SharedMemRingBufferBase</a></td></tr>
 <tr class="memitem:a0d55d98b06324b17c661a5ca57fdbb31 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a0d55d98b06324b17c661a5ca57fdbb31"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
@@ -199,6 +215,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 struct timespec&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a24674058463a7df67c68140c718ac695">ts</a></td></tr>
 <tr class="memdesc:a24674058463a7df67c68140c718ac695 inherit pro_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timespec for semaphore timeouts. <br /></td></tr>
 <tr class="separator:a24674058463a7df67c68140c718ac695 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4ee28ba9da94eea9d7fdc36a4b73836 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="ab4ee28ba9da94eea9d7fdc36a4b73836"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#ab4ee28ba9da94eea9d7fdc36a4b73836">fd</a></td></tr>
+<tr class="memdesc:ab4ee28ba9da94eea9d7fdc36a4b73836 inherit pro_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">A file descriptor for poll and select. <br /></td></tr>
+<tr class="separator:ab4ee28ba9da94eea9d7fdc36a4b73836 inherit pro_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="sharedmem_8h_source.html">sharedmem.h</a></li>

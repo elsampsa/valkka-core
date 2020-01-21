@@ -26,7 +26,7 @@
  *  @file    sharedmem.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.15.0 
+ *  @version 0.16.0 
  *  
  *  @brief   Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  */ 
@@ -183,7 +183,7 @@ void CLASSNAME::serverClose() { \
   } \
   if (shm_unlink(payload_name.c_str())!=0 or shm_unlink(meta_name.c_str())!=0) { \
     perror("valkka_core: sharedmem.cpp: CLASSNAME::serverClose: shm_unlink failed"); \
-    exit(2); \
+    /*exit(2);*/ \
   } \
 } \
 
@@ -293,13 +293,15 @@ std::size_t SimpleSharedMemSegment::getSize() {
 
 
 void SimpleSharedMemSegment::put(std::vector<uint8_t> &inp_payload, void* meta_) {
-    *meta = *((std::size_t*)(meta_));
+    // *meta = *((std::size_t*)(meta_));
+    *meta = std::min(*((std::size_t*)(meta_)), n_bytes); // correct size aka metadata
     memcpy(payload, inp_payload.data(), *meta);
     // std::cout << "SharedMemSegment: put: payload now: " << int(payload[0]) << " " << int(payload[1]) << " " << int(payload[2]) << std::endl;
 }
 
 void SimpleSharedMemSegment::put(uint8_t* buf, void* meta_) {
-    *meta = *((std::size_t*)(meta_));
+    // *meta = *((std::size_t*)(meta_));
+    *meta = std::min(*((std::size_t*)(meta_)), n_bytes); // correct size aka metadata
     memcpy(payload, buf, *meta);
     // std::cout << "SharedMemSegment: put: payload now: " << int(payload[0]) << " " << int(payload[1]) << " " << int(payload[2]) << std::endl;
 }   
@@ -418,8 +420,10 @@ SharedMemRingBufferBase::~SharedMemRingBufferBase() {
     // std::cout << "SharedMemRigBufferBase: closing sema" << std::endl;
     sem_close(sema);
     sem_close(flagsema);
-    sem_unlink(sema_name.c_str());
-    sem_unlink(flagsema_name.c_str());
+    if (is_server) {
+        sem_unlink(sema_name.c_str());
+        sem_unlink(flagsema_name.c_str());
+    }
     if (fd > 0) {
         close(this->fd);
     }
@@ -554,7 +558,8 @@ void SharedMemRingBufferBase::serverPush(std::vector<uint8_t> &inp_payload, void
     }
     shmems[index]->put(inp_payload, meta); // SharedMemSegment takes care of the correct typecast from void*
     // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
-    
+
+    // std::cout << "sema pointer:" << long(sema) << std::endl;
     i=sem_post(sema);
     setEventFd();
 }
@@ -754,8 +759,8 @@ bool SharedMemRingBufferRGB::serverPushPyRGB(PyObject *po, SlotNumber slot, long
 
     RGB24Meta meta_ = RGB24Meta();
     meta_.size = dims[0]*dims[1]*dims[2];
-    meta_.width = dims[1];
-    meta_.height = dims[2];
+    meta_.width = dims[1]; 
+    meta_.height = dims[0];  // slowest index (y) is the first
     meta_.slot = slot;
     meta_.mstimestamp = mstimestamp;
     
@@ -774,7 +779,7 @@ bool SharedMemRingBufferRGB::serverPushPyRGB(PyObject *po, SlotNumber slot, long
         index=0;
     }
 
-    // std::cout << "meta_.size = " << meta_.size << std::endl;
+    // std::cout << name << " push: meta_.size = " << meta_.size << std::endl;
 
     ( (RGB24SharedMemSegment*)(shmems[index]) )->put(buf, (void*)&meta_);
     // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
@@ -787,21 +792,21 @@ bool SharedMemRingBufferRGB::serverPushPyRGB(PyObject *po, SlotNumber slot, long
 }
 
 
-
-
-
-
 bool SharedMemRingBufferRGB::clientPull(int &index_out, int &size_out) { // support for legacy code
     RGB24Meta meta_ = RGB24Meta();
     bool ok;    
-    ok = SharedMemRingBufferBase::clientPull(index_out, (void*)(&meta_));
+    ok = SharedMemRingBufferBase::clientPull(index_out, (void*)(&meta_)); // writes to index_out and meta
     size_out = (int)(meta_.size);
     return ok;
 }
 
 
 bool SharedMemRingBufferRGB::clientPullFrame(int &index_out, RGB24Meta &meta_) {
+    //bool ok;
+    //ok = SharedMemRingBufferBase::clientPull(index_out, (void*)(&meta_));
+    // std::cout << name << " --> pull: meta_.size = " << meta_.size << std::endl;
     return SharedMemRingBufferBase::clientPull(index_out, (void*)(&meta_));
+    // return ok;
 }
 
 
@@ -914,7 +919,7 @@ void RGBShmemFrameFilter::useFd(EventFd &event_fd) {
 
 void RGBShmemFrameFilter::go(Frame* frame) {
   if (frame->getFrameClass()!=FrameClass::avrgb) {
-    std::cout << "BitmapShmemFrameFilter: go: ERROR: AVBitmapFrame required" << std::endl;
+    std::cout << "RGBShmemFrameFilter: go: ERROR: AVBitmapFrame required" << std::endl;
     return;
   }
   AVRGBFrame *rgbframe =static_cast<AVRGBFrame*>(frame);

@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.14.1</span>
+   &#160;<span id="projectnumber">0.16.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -104,6 +104,13 @@ virtual std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class=
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimpleSharedMemSegment.html#a9b7ef167db738b77d8ba4b987d6880bc">put</a> (std::vector&lt; uint8_t &gt; &amp;inp_payload, void *meta_)</td></tr>
 <tr class="memdesc:a9b7ef167db738b77d8ba4b987d6880bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">typecast void to std::size_t <br /></td></tr>
 <tr class="separator:a9b7ef167db738b77d8ba4b987d6880bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41d35880c6d7d840554f210b84042676"><td class="memItemLeft" align="right" valign="top"><a id="a41d35880c6d7d840554f210b84042676"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>put</b> (uint8_t *buf_, void *meta_)</td></tr>
+<tr class="separator:a41d35880c6d7d840554f210b84042676"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a88a4a351ea2fca67219e54166e14c4"><td class="memItemLeft" align="right" valign="top"><a id="a9a88a4a351ea2fca67219e54166e14c4"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimpleSharedMemSegment.html#a9a88a4a351ea2fca67219e54166e14c4">putAVRGBFrame</a> (<a class="el" href="classAVRGBFrame.html">AVRGBFrame</a> *f)</td></tr>
+<tr class="memdesc:a9a88a4a351ea2fca67219e54166e14c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy from AVFrame-&gt;data directly. Only metadata used: payload size. <br /></td></tr>
+<tr class="separator:a9a88a4a351ea2fca67219e54166e14c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c4b5b23b83f62242fa263925c619b13"><td class="memItemLeft" align="right" valign="top"><a id="a3c4b5b23b83f62242fa263925c619b13"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimpleSharedMemSegment.html#a3c4b5b23b83f62242fa263925c619b13">copyMetaFrom</a> (void *meta_)</td></tr>
 <tr class="memdesc:a3c4b5b23b83f62242fa263925c619b13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dereference metadata pointer correctly and copy the contents into this memory segment's metadata. <br /></td></tr>
@@ -116,10 +123,6 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimpleSharedMemSegment.html#aa5646b8fcea51791ac12904aef8ba110">put</a> (std::vector&lt; uint8_t &gt; &amp;inp_payload)</td></tr>
 <tr class="memdesc:aa5646b8fcea51791ac12904aef8ba110"><td class="mdescLeft">&#160;</td><td class="mdescRight">for legacy API <br /></td></tr>
 <tr class="separator:aa5646b8fcea51791ac12904aef8ba110"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a88a4a351ea2fca67219e54166e14c4"><td class="memItemLeft" align="right" valign="top"><a id="a9a88a4a351ea2fca67219e54166e14c4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimpleSharedMemSegment.html#a9a88a4a351ea2fca67219e54166e14c4">putAVRGBFrame</a> (<a class="el" href="classAVRGBFrame.html">AVRGBFrame</a> *f)</td></tr>
-<tr class="memdesc:a9a88a4a351ea2fca67219e54166e14c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy from AVFrame-&gt;data directly. Only metadata used: payload size. <br /></td></tr>
-<tr class="separator:a9a88a4a351ea2fca67219e54166e14c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classSharedMemSegment"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classSharedMemSegment')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classSharedMemSegment.html">SharedMemSegment</a></td></tr>
 <tr class="memitem:af87f64953fe028fb8e242f4473770e8e inherit pub_methods_classSharedMemSegment"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemSegment.html#af87f64953fe028fb8e242f4473770e8e">SharedMemSegment</a> (const char *<a class="el" href="classSharedMemSegment.html#a6b7d9c36dfee22cf2799c9ddf5d7fa33">name</a>, std::size_t <a class="el" href="classSharedMemSegment.html#ab32950dffd4a0f7ed1a15164871c056b">n_bytes</a>, bool <a class="el" href="classSharedMemSegment.html#afa1992fa63c3da6d26c2d65975ec17c3">is_server</a>=false)</td></tr>
 <tr class="memdesc:af87f64953fe028fb8e242f4473770e8e inherit pub_methods_classSharedMemSegment"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classSharedMemSegment.html#af87f64953fe028fb8e242f4473770e8e">More...</a><br /></td></tr>

@@ -26,7 +26,7 @@
  *  @file    doc.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.15.0 
+ *  @version 0.16.0 
  *  
  *  @brief Extra doxygen documentation
  *
@@ -1188,6 +1188,15 @@ seekStreams(mstimestamp_): # if target frame time mstimestamp_ is found in play_
  */
  
  
+/** @page Sharing frames from python
+ 
+\verbatim
+
+valkka.api2.shmem.ShmemRGBServer.
+
+
+\endverbatim
+*/
 
 
 

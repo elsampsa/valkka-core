@@ -26,7 +26,7 @@
  *  @file    live_av_shmem_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.15.0 
+ *  @version 0.16.0 
  *  
  *  @brief   Test shmem and swscaling
  *
@@ -331,7 +331,10 @@ void test_6() {
 
     // EventFd efd = EventFd(); // create the event file descriptor before fork
 
-    int pid = fork();
+    int pid;
+
+    pid = fork();
+    // pid = 1;
     
     if (pid > 0)  // in parent
     {

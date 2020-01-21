@@ -26,7 +26,7 @@
  *  @file    rgbframefifo_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2019
- *  @version 0.15.0 
+ *  @version 0.16.0 
  *  
  *  @brief 
  *

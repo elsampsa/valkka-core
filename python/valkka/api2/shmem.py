@@ -25,10 +25,11 @@ shmem.py : Encapsulation for Valkka's cpp shared memory client
 @file    shmem.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.15.0 
+@version 0.16.0 
 
 @brief   Encapsulation for Valkka's cpp shared memory client
 """
+import logging
 from valkka import core
 from valkka.api2.tools import *
 
@@ -61,7 +62,8 @@ class ShmemClient:
 
     def __init__(self, **kwargs):
         # auxiliary string for debugging output
-        self.pre = self.__class__.__name__ + " : "
+        self.pre = self.__class__.__name__
+        self.logger = getLogger(self.pre)
         # check kwargs agains parameter_defs, attach ok'd parameters to this
         # object as attributes
         parameterInitCheck(ShmemClient.parameter_defs, kwargs, self)
@@ -84,6 +86,10 @@ class ShmemClient:
         self.shmem_list = self.core.getBufferListPy()
 
 
+    def setDebug(self):
+        setLogger(self.logger, logging.DEBUG)
+
+
     def pull(self):
         """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
         """
@@ -92,7 +98,7 @@ class ShmemClient:
             self.index_p)
         isize = core.intp_value(self.isize_p)
         if (self.verbose):
-            print(self.pre, "current index, size=", index, isize)
+            self.logger.debug("current index, size= %s %s", index, isize)
         if (got):
             return index, isize
         else:
@@ -126,7 +132,8 @@ class ShmemRGBClient:
 
     def __init__(self, **kwargs):
         # auxiliary string for debugging output
-        self.pre = self.__class__.__name__ + " : "
+        self.pre = self.__class__.__name__
+        self.logger = getLogger(self.pre)
         # check kwargs agains parameter_defs, attach ok'd parameters to this
         # object as attributes
         parameterInitCheck(ShmemRGBClient.parameter_defs, kwargs, self)
@@ -135,7 +142,7 @@ class ShmemRGBClient:
         self.isize_p = core.new_intp()
         # self.rgb_meta = RGB24Meta()
 
-        print(self.pre,"shmem name=",self.name)
+        # print(self.pre,"shmem name=",self.name)
         # shmem ring buffer on the client side
         self.core = core.SharedMemRingBufferRGB(
             self.name,
@@ -159,6 +166,15 @@ class ShmemRGBClient:
         #print(self.pre,"shmem got list")
         #"""
 
+
+    def setDebug(self):
+        setLogger(self.logger, logging.DEBUG)
+
+
+    def useEventFd(self, event_fd):
+        self.core.clientUseFd(event_fd)
+
+
     def pull(self):
         """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
         """
@@ -166,8 +182,8 @@ class ShmemRGBClient:
         index = core.intp_value(
             self.index_p)
         isize = core.intp_value(self.isize_p)
-        if (self.verbose):
-            print(self.pre, "current index, size=", index, isize)
+        # if (self.verbose):
+        self.logger.debug("current index, size= %s %s", index, isize)
         if (got):
             return index, isize
         else:
@@ -179,8 +195,9 @@ class ShmemRGBClient:
         self.rgb_meta = core.RGB24Meta()
         got = self.core.clientPullFrame(self.index_p, self.rgb_meta)
         index = core.intp_value(self.index_p)
-        if (self.verbose):
-            print(self.pre, "current index, info", index, ShmemRGBClient.metaToString(rgb_meta))
+        # if (self.verbose):
+        self.logger.debug("current index %s", index) # , ShmemRGBClient.metaToString(self.rgb_meta))
+        # print(">", ShmemRGBClient.metaToString(self.rgb_meta))
         if (got):
             return index, self.rgb_meta
         else:
@@ -192,14 +209,12 @@ class ShmemRGBClient:
         self.rgb_meta = core.RGB24Meta()
         got = self.core.clientPullFrameThread(self.index_p, self.rgb_meta)
         index = core.intp_value(self.index_p)
-        if (self.verbose):
-            print(self.pre, "current index, info", index, ShmemRGBClient.metaToString(rgb_meta))
+        # if (self.verbose):
+        self.logger.debug("current index %s ", index) # ShmemRGBClient.metaToString(self.rgb_meta))
         if (got):
             return index, self.rgb_meta
         else:
             return None, None
-
-
 
     @staticmethod
     def metaToString(rgb_meta):
@@ -212,6 +227,69 @@ class ShmemRGBClient:
         """
         return "width = %i / height = %i / slot = %i / mstimestamp = %i / size = %i" % \
             (rgb_meta.width, rgb_meta.height, rgb_meta.slot, rgb_meta.mstimestamp, rgb_meta.size)
+
+
+
+class ShmemRGBServer:
+    """A shared memory ringbuffer server for RGB images.  
+
+    :param name:               name identifying the shared mem segment.  Must be same as in the server side.
+    :param n_ringbuffer:       Number of elements in the ringbuffer.  Must be same as in the server side.
+    :param width:              RGB image width
+    :param height:             RGb image height
+    :param verbose:            Be verbose or not.  Default=False.
+
+    """
+
+    parameter_defs = {
+        # :param name:               name identifying the shared mem segment.  Must be same as in the server side.
+        "name"        : str,
+        # :param n_ringbuffer:       Number of elements in the ringbuffer.  Must be same as in the server side.
+        "n_ringbuffer": (int, 10),
+        "width"       : int,         # :param width:              RGB image width
+        "height"      : int,         # :param height:             RGb image height
+        # :param mstimeout:          Timeout for semaphores.  Default=0=no timeout.
+        "verbose"     : (bool, False),
+        "use_event_fd": (bool, False)
+    }
+
+    def __init__(self, **kwargs):
+        # auxiliary string for debugging output
+        self.pre = self.__class__.__name__
+        self.logger = getLogger(self.pre)
+        # check kwargs agains parameter_defs, attach ok'd parameters to this
+        # object as attributes
+        parameterInitCheck(ShmemRGBServer.parameter_defs, kwargs, self)
+        # shmem ring buffer on the server side
+        self.core = core.SharedMemRingBufferRGB(
+            self.name,
+            self.n_ringbuffer,
+            self.width,
+            self.height,
+            1000, # dummy value
+            True) # True indicates server-side
+        
+        if self.use_event_fd:
+            self.core.useEventFd()
+
+
+    def setDebug(self):
+        setLogger(self.logger, logging.DEBUG)
+
+
+    def useEventFd(self, event_fd):
+        self.core.serverUseFd(event_fd)
+
+
+    def pushFrame(self, frame, slot, mstimestamp):
+        # if self.verbose: print("pushFrame: ", frame.shape)
+        ok = self.core.serverPushPyRGB(
+            frame,
+            slot, 
+            mstimestamp)
+
+
+
 
 
 def test4():

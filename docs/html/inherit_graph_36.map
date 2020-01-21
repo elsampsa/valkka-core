@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classRawReader.html" title="RawReader" alt="" coords="5,5,96,32"/>
+<area shape="rect" id="node1" href="$classOverlayObject.html" title="A generic object that&#39;s drawn on top of the bitmaps. " alt="" coords="5,5,111,32"/>
+<area shape="rect" id="node2" href="$classRectangle.html" title="A rectangle that&#39;s drawn on top of the video bitmap. " alt="" coords="159,5,240,32"/>
 </map>

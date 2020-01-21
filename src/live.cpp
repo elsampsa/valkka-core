@@ -26,7 +26,7 @@
  *  @file    live.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.15.0 
+ *  @version 0.16.0 
  *  
  *  @brief Interface to live555
  *
@@ -316,7 +316,8 @@ void ValkkaRTSPClient::continueAfterPLAY(RTSPClient* rtspClient, int resultCode,
   else {
     *livestatus=LiveStatus::alive;
     // start periodic GET_PARAMETER pinging of the camera.  Required for buggy 3-tier cameras, like AXIS
-    livelogger.log(LogLevel::fatal) << "ValkkaRTSPClient: Buggy AXIS firmware does not comply with the RTCP protocol => starting regular GET_PARAMETER pings to the camera" << std::endl;
+    // livelogger.log(LogLevel::fatal) << "ValkkaRTSPClient: Buggy AXIS firmware does not comply with the RTCP protocol => starting regular GET_PARAMETER pings to the camera" << std::endl;
+    // ..Sampsa, I commented that stupid pun since it only creates confusion (Petri)
     scs.pingGetParameterTask = env.taskScheduler().scheduleDelayedTask(1000000*LIVE_GET_PARAMETER_PING, (TaskFunc*)pingGetParameter, rtspClient);
   }
 }

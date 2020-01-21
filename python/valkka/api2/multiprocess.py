@@ -25,7 +25,7 @@ multiprocess.py : Multiprocessing with a pipe signal scheme
 @file    multiprocess.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.15.0 
+@version 0.16.0 
 
 @brief   Multiprocessing with a pipe signal scheme
 """

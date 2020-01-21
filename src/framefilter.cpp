@@ -26,7 +26,7 @@
  *  @file    framefilter.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.15.0 
+ *  @version 0.16.0 
  *  
  *  @brief 
  */ 
@@ -592,17 +592,25 @@ TimeIntervalFrameFilter::TimeIntervalFrameFilter(const char* name, long int msti
 void TimeIntervalFrameFilter::go(Frame* frame) { // this does nothing
 }
 
+// #define INTERVAL_VERBOSE = 1
 
 void TimeIntervalFrameFilter::run(Frame* frame) {
-  // std::cout << std::endl << "TimeIntervalFrameFilter: " << std::endl;
-  if (!this->next) { return; } // calls next filter .. if there is any
-  // std::cout << std::endl << "TimeIntervalFrameFilter: mstimestamps=" << frame->mstimestamp << " " << prevmstimestamp << std::endl;
-  // std::cout << std::endl << "TimeIntervalFrameFilter: delta       =" << (frame->mstimestamp-prevmstimestamp) << std::endl;
-  if ( (frame->mstimestamp-prevmstimestamp)>=mstimedelta ) {
-    // std::cout << std::endl << "TimeIntervalFrameFilter: WRITE" << std::endl;
-    prevmstimestamp=frame->mstimestamp;
-    (this->next)->run(frame);
-  }
+
+    #ifdef INTERVAL_VERBOSE
+        std::cout << std::endl << "TimeIntervalFrameFilter: " << std::endl;
+    #endif
+    if (!this->next) { return; } // calls next filter .. if there is any
+    #ifdef INTERVAL_VERBOSE
+        std::cout << std::endl << "TimeIntervalFrameFilter: mstimestamps=" << frame->mstimestamp << " " << prevmstimestamp << std::endl;
+        std::cout << std::endl << "TimeIntervalFrameFilter: delta       =" << (frame->mstimestamp-prevmstimestamp) << std::endl;
+    #endif
+    if ( (frame->mstimestamp-prevmstimestamp)>=mstimedelta ) {
+        #ifdef INTERVAL_VERBOSE
+            std::cout << std::endl << "TimeIntervalFrameFilter: WRITE" << std::endl;
+        #endif
+        prevmstimestamp=frame->mstimestamp;
+        (this->next)->run(frame);
+    }
 }
 
 
