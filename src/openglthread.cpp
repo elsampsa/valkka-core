@@ -109,6 +109,7 @@ bool SlotContext::manageTimer(long int mstime) {
         return false;
     }
     else {
+        std::cout << "OpenGLThread: dt " << mstime-lastmstime << std::endl;
         lastmstime=mstime;
         return true;
     }
@@ -197,6 +198,10 @@ RenderContext::RenderContext(SlotContext *slot_context, int id, unsigned int z) 
      *  id=time.tv_sec*1000+time.tv_usec/1000;
      */
     // id = std::rand();
+
+    render_mstime = 0;
+    render_mstime_old = 0;
+
     slot_context->inc_ref_count();
     activate();
 }
@@ -426,6 +431,11 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
     shader->use_obj(); // use the shader for drawing overlay objects
     bindVarsObj();
     renderObjects();
+
+    render_mstime = getCurrentMsTimestamp();
+    std::cout << "render timing: " << render_mstime - render_mstime_old << std::endl;
+    render_mstime_old = render_mstime;
+
 }
 
 

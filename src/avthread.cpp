@@ -33,6 +33,7 @@
 #include "avthread.h"
 #include "logging.h"
 
+// #define AVTHREAD_VERBOSE 1
 
 AVThread::AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) : Thread(name), outfilter(outfilter), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), is_decoding(false), mstimetolerance(0), state(AbstractFileState::none), n_threads(1) {
     avthreadlogger.log(LogLevel::debug) << "AVThread : constructor : N_MAX_DECODERS ="<<int(N_MAX_DECODERS)<<std::endl;
@@ -70,6 +71,14 @@ void AVThread::run() {
     loop=true;
     
     int n_decoders = int(decoders.size()); // std::size_t to int
+
+    long int mstimestamp, mstimestamp_old, mstimestamp_frame, mstimestamp_frame_old;
+
+    mstimestamp = 0;
+    mstimestamp_old = 0;
+    mstimestamp_frame = 0;
+    mstimestamp_frame_old = 0;
+    
     
     while(loop) {
         f=infifo.read(Timeout::avthread);
@@ -226,6 +235,16 @@ void AVThread::run() {
                             }
                             #endif
                         }
+
+                        mstimestamp = getCurrentMsTimestamp();
+                        std::cout << "Decoder: dt " << mstimestamp - mstimestamp_old << std::endl;
+                        mstimestamp_old = mstimestamp;
+
+                        mstimestamp_frame = decoder->output()->mstimestamp;
+                        std::cout << "Decoder: frame dt " << mstimestamp_frame - mstimestamp_frame_old << std::endl;
+                        mstimestamp_frame_old = mstimestamp_frame;
+
+
                     } // decode
                     else {
                         #ifdef AVTHREAD_VERBOSE

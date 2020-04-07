@@ -1,4 +1,4 @@
-#ifndef decoder_HEADER_GUARD 
+#ifndef decoder_HEADER_GUARD
 #define decoder_HEADER_GUARD
 /*
  * decoder.h : FFmpeg decoders
@@ -32,26 +32,21 @@
  *  
  *  @brief FFmpeg decoders
  * 
- */ 
+ */
 
 #include "frame.h"
 #include <random>
 
-
 // AVThread has std::vector<Decoder*> decoders
 // decoders[1]->output() returns reference to Decoder::out_frame
 // (VideoDecoder*)(..) returns reference to VideoDecoder::out_frame, right? (Decoder::out_frame) is hidden
-// 
+//
 // decoders[1] .. is a VideoDecoder.. but decoders has been declared as a vector Decoder
 // Decoder* decoder = VideoDecoder()
 // .. so, decoder->getWhatever, where getWhatever is virtual method, will always give the correct object
 // but decoder->out_frame returns frame that depends on the cast
 
-
-
-
-// VideoDecoder->output() returns 
-
+// VideoDecoder->output() returns
 
 /** A Virtual class for decoders
  * 
@@ -60,25 +55,25 @@
  * 
  * @ingroup decoding_tag
  */
-class Decoder {
-  
-public:
-  Decoder();          ///< Default constructor
-  virtual ~Decoder(); ///< Default destructor
-    
-protected:
-  BasicFrame in_frame; ///< Payload data to be decoded.
-  bool has_frame;
-  
-public:
-  void input(Frame *f); ///< Create a copy of the frame into the internal storage of the decoder (i.e. to Decoder::in_frame)
-  long int getMsTimestamp(); /// < Return in_frame timestamp
-  virtual Frame* output() =0; ///< Return a reference to the internal storage of the decoder where the decoded frame is.  The exact frametype depends on the Decoder class (and decoder library)
-  virtual void flush() =0; ///< Reset decoder state.  How to flush depends on the decoder library
-  virtual bool pull()  =0; ///< Decode in_frame to out_frame.  Return true if decoder returned a new frame (into out_frame), otherwise false.  Implementation depends on the decoder library.
-  bool hasFrame(); 
-};
+class Decoder
+{
 
+public:
+    Decoder();          ///< Default constructor
+    virtual ~Decoder(); ///< Default destructor
+
+protected:
+    BasicFrame in_frame; ///< Payload data to be decoded.
+    bool has_frame;
+
+public:
+    void input(Frame *f);        ///< Create a copy of the frame into the internal storage of the decoder (i.e. to Decoder::in_frame)
+    long int getMsTimestamp();   /// < Return in_frame timestamp
+    virtual Frame *output() = 0; ///< Return a reference to the internal storage of the decoder where the decoded frame is.  The exact frametype depends on the Decoder class (and decoder library)
+    virtual void flush() = 0;    ///< Reset decoder state.  How to flush depends on the decoder library
+    virtual bool pull() = 0;     ///< Decode in_frame to out_frame.  Return true if decoder returned a new frame (into out_frame), otherwise false.  Implementation depends on the decoder library.
+    bool hasFrame();
+};
 
 /** A Dummy decoder
  * 
@@ -86,17 +81,17 @@ public:
  * 
  * @ingroup decoding_tag
  */
-class DummyDecoder : public Decoder {
+class DummyDecoder : public Decoder
+{
 
 private:
-  BasicFrame    out_frame; ///< Output frame: no decoding, just copy input here
-  
-public:
-  virtual Frame* output();  ///< Return a reference to the internal storage of the decoder where the decoded frame is
-  virtual void flush();
-  virtual bool pull();
-};
+    BasicFrame out_frame; ///< Output frame: no decoding, just copy input here
 
+public:
+    virtual Frame *output(); ///< Return a reference to the internal storage of the decoder where the decoded frame is
+    virtual void flush();
+    virtual bool pull();
+};
 
 /** Decoder using FFmpeg/libav
  * 
@@ -104,31 +99,31 @@ public:
  * 
  * @ingroup decoding_tag
  */
-class AVDecoder : public Decoder {
-  
+class AVDecoder : public Decoder
+{
+
 public:
-  /** Default constructor
+    /** Default constructor
    * 
    * @param av_codec_id  FFmpeg AVCodecId identifying the codec
    * 
    */
-  AVDecoder(AVCodecID av_codec_id, int n_threads = 1);
-  virtual ~AVDecoder();
+    AVDecoder(AVCodecID av_codec_id, int n_threads = 1);
+    virtual ~AVDecoder();
 
 protected:
     int n_threads;
-  
-public:
-  AVCodecID       av_codec_id;       ///< FFmpeg AVCodecId, identifying the codec 
-  AVPacket*       av_packet;         ///< FFmpeg internal data structure; encoded frame (say, H264)
-  AVCodecContext* av_codec_context;  ///< FFmpeg internal data structure
-  AVCodec*        av_codec;          ///< FFmpeg internal data structure
-  
-public:
-  // needs virtual void output, virtual void pull 
-  virtual void flush();  
-};
 
+public:
+    AVCodecID av_codec_id;            ///< FFmpeg AVCodecId, identifying the codec
+    AVPacket *av_packet;              ///< FFmpeg internal data structure; encoded frame (say, H264)
+    AVCodecContext *av_codec_context; ///< FFmpeg internal data structure
+    AVCodec *av_codec;                ///< FFmpeg internal data structure
+
+public:
+    // needs virtual void output, virtual void pull
+    virtual void flush();
+};
 
 /** Video decoder using FFmpeg/libav
  * 
@@ -138,29 +133,32 @@ public:
  * 
  * @ingroup decoding_tag
  */
-class VideoDecoder : public AVDecoder {
-  
+class VideoDecoder : public AVDecoder
+{
+
 public:
-  VideoDecoder(AVCodecID av_codec_id, int n_threads = 1); ///< Default constructor
-  virtual ~VideoDecoder();             ///< Default destructor
-  
+    VideoDecoder(AVCodecID av_codec_id, int n_threads = 1); ///< Default constructor
+    virtual ~VideoDecoder();                                ///< Default destructor
+
 protected:
-  AVBitmapFrame out_frame;
-  int width;
-  int height;
-  // AVPixelFormat av_pixel_format;
-  
+    AVBitmapFrame out_frame;
+    int width;
+    int height;
+    AVFrame *aux_av_frame;
+    AVPixelFormat current_pixel_format;
+    SwsContext *sws_ctx;
+    float secs_per_frame;
+
 public:
-  virtual Frame* output();      ///< Return a reference to the internal storage of the decoder where the decoded frame is
-  virtual bool pull();
-  
-/*
+    virtual Frame *output(); ///< Return a reference to the internal storage of the decoder where the decoded frame is
+    virtual bool pull();
+
+    /*
 private: // for simulating decoder slow down
   std::random_device rd;  //Will be used to obtain a seed for the random number engine
   std::mt19937       gen; //Standard mersenne_twister_engine seeded with rd()
   std::uniform_int_distribution<> dis;
 */
-  
 };
 
 #endif

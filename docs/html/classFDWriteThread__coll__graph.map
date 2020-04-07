@@ -1,9 +1,0 @@
-<map id="FDWriteThread" name="FDWriteThread">
-<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="5,184,68,211"/>
-<area shape="rect" id="node3" href="$classFifoFrameFilter.html" title="Passes frames to a FrameFifo. " alt="" coords="277,184,388,211"/>
-<area shape="rect" id="node4" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="130,95,218,121"/>
-<area shape="rect" id="node8" href="$classBlockingFifoFrameFilter.html" title="Passes frames to a multiprocessing fifo. " alt="" coords="93,184,253,211"/>
-<area shape="rect" id="node5" href="$classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack. " alt="" coords="296,95,377,121"/>
-<area shape="rect" id="node7" href="$classFDFrameFifo.html" title="FrameFifo using file descriptors. " alt="" coords="413,184,511,211"/>
-<area shape="rect" id="node6" href="$structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo. " alt="" coords="273,5,400,32"/>
-</map>

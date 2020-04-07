@@ -137,6 +137,9 @@ private: // Initialized at RenderContext::init that calls RenderContext::activat
   std::array<GLfloat,20> vertices;  ///< data of the vertex buffer object
   std::array<GLuint, 6>  indices;   ///< data of the element buffer object
   
+private: // some aux timing variables
+    long int render_mstime, render_mstime_old;
+
 private: 
   std::list<OverlayObject*> overlays;
   
