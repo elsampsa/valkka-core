@@ -1,0 +1,4 @@
+<map id="FDWriteSignalContext" name="FDWriteSignalContext">
+<area shape="rect" id="node2" href="$structFDWriteSignalPars.html" title="Information sent with a signal to FDWriteThread. " alt="" coords="15,95,149,121"/>
+<area shape="rect" id="node3" href="$structFDWriteContext.html" title="Describes an outgoing file descriptor connection. " alt="" coords="23,5,141,32"/>
+</map>
