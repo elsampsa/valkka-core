@@ -1,3 +1,9 @@
+valkka (0.17.0-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * Correct timestamps from decoder. General pixmap support.
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Mon, 13 Apr 2020 11:23:18 +0300
+
 valkka (0.16.0-0ubuntu1-xenialppa1) xenial; urgency=low
 
   * Some shmem issues fixed
