@@ -20,21 +20,22 @@ Source: valkka
 Section: libs
 Priority: optional
 Maintainer: Sampsa Riikonen <sampsa.riikonen@iki.fi>
-Build-Depends: build-essential, libc6-dev, yasm, cmake, pkg-config, swig, libglew-dev, mesa-common-dev, libstdc++-5-dev, python3-dev, python3-numpy, libasound2-dev
+Build-Depends: build-essential, yasm, cmake, pkg-config, swig, libglew-dev, mesa-common-dev, libstdc++-5-dev, python3-dev, python3-numpy, libasound2-dev, libstdc++-6-dev, libc6-dev
 Standards-Version: 3.9.7
 Homepage: http://www.iki.fi/sampsa.riikonen
 
 Package: valkka
 Architecture: any
-Depends: python3, mesa-utils, glew-utils, python3-numpy, v4l-utils, python3-pip
+Depends: python3, mesa-utils, glew-utils, python3-numpy, v4l-utils, python3-pip, libstdc++6
 Description: Valkka
  OpenSource Video Management for Linux
 ```
 
 ## libstdc++
 
-That's wrong!
+Which version?
 
+In my system:
 ```
 build-essential => g++ => g++-7 => libstdc++-7-dev
 ```
@@ -47,17 +48,8 @@ How about just "libstdc++N" ?
 apt-cache depends package-name
 ```
 
-Let's change:
+Removed libstdc++ and libc dependencies from both Build-Depends & Depends.  Compiled fine.
 
-```
-Build-Depends: build-essential, libc6-dev, yasm, cmake, pkg-config, swig, libglew-dev, mesa-common-dev, libstdc++-5-dev, python3-dev, python3-numpy, libasound2-dev
-Depends: python3, mesa-utils, libstdc++5, glew-utils, python3-numpy, v4l-utils, python3-pip
-```
 
-into:
 
-```
-Build-Depends: build-essential, yasm, cmake, pkg-config, swig, libglew-dev, mesa-common-dev, python3-dev, python3-numpy, libasound2-dev
-Depends: python3, mesa-utils, glew-utils, python3-numpy, v4l-utils, python3-pip
-```
 

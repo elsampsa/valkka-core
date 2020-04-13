@@ -80,7 +80,7 @@ enum class FrameClass
 /** Methods to correct frame timestamps
  * 
  */
-enum class TimeCorrectionType
+enum class TimeCorrectionType // <pyapi>
 {          // <pyapi>
     none,  // <pyapi>
     smart, // <pyapi>

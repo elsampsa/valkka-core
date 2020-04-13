@@ -3,7 +3,6 @@ Section: libs
 Priority: optional
 Maintainer: Sampsa Riikonen <sampsa.riikonen@iki.fi>
 Build-Depends: build-essential, yasm, cmake, pkg-config, swig, libglew-dev, mesa-common-dev, python3-dev, python3-numpy, libasound2-dev
-Standards-Version: 3.9.7
 Homepage: http://www.iki.fi/sampsa.riikonen
 
 Package: valkka
