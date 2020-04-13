@@ -26,7 +26,7 @@
  *  @file    av_live_thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.16.0 
+ *  @version 0.17.0 
  *  
  *  @brief Test producer (live thread) consumer (av thread)
  *
@@ -207,7 +207,7 @@ void test_5()
 void test_6()
 {
     const char *name = "@TEST: av_live_thread_test: test 6: ";
-    std::cout << name << "** @@Send frames from live to av thread.  Test sdp source. **" << std::endl;
+    std::cout << name << "** @@Send frames from live to av thread.  Test sdp source & exotic bitmaps **" << std::endl;
 
     if (!stream_sdp)
     {
@@ -216,7 +216,7 @@ void test_6()
     }
     std::cout << name << "** test sdp stream: " << stream_sdp << std::endl;
 
-    // avthread.setNumberOfThreads(4);
+    avthread.setNumberOfThreads(1);
 
     std::cout << name << "starting threads" << std::endl;
     livethread.startCall();

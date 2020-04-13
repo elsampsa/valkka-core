@@ -26,7 +26,7 @@
  *  @file    frame.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.16.0 
+ *  @version 0.17.0 
  *  
  *  @brief 
  */ 
@@ -97,8 +97,15 @@ bool Frame::isSeekable() {
 }
 
 
+
+void Frame::updateAux() {
+}
+
+
+
 void Frame::update() {
 }
+
 
   
 BasicFrame::BasicFrame() : Frame(), codec_id(AV_CODEC_ID_NONE), media_type(AVMEDIA_TYPE_UNKNOWN), h264_pars(H264Pars()) {
@@ -434,8 +441,23 @@ AVBitmapFrame::~AVBitmapFrame() {
 std::string AVBitmapFrame::dumpPayload() {
   std::stringstream tmp;  
   int i;
-  for(i=0; i<std::min(bmpars.y_linesize,10); i++) {
-    tmp << int(y_payload[i]) << " ";
+  int val;
+  if (y_payload == NULL) {
+      tmp << "NULL";
+  }
+  else {
+    // I get here:
+    // Conditional jump or move depends on uninitialised value(s)
+    // which doesn't make any ....ing sense
+    for(i=0; i<std::min(bmpars.y_linesize,10); i++) {
+        // std::cout << ">i" << i << std::endl;
+        // val = uint8_t(y_payload[i]);
+        // val = 0;
+        // std::cout << val << std::endl;
+        // std::cout << std::to_string(val) << std::endl;
+        // std::cout << int(y_payload[i]) << std::endl;
+        tmp << uint8_t(y_payload[i]) << " ";
+    }
   }
   return tmp.str();
 }
@@ -461,7 +483,7 @@ void AVBitmapFrame::print(std::ostream& os) const {
 }
  
 
-void AVBitmapFrame::update() {
+void AVBitmapFrame::updateAux() {
   const AVPixFmtDescriptor *desc =av_pix_fmt_desc_get(av_pixel_format);
   // const AVPixFmtDescriptor *desc =av_pix_fmt_desc_get(AV_PIX_FMT_YUV420P);
 
@@ -493,11 +515,21 @@ void AVBitmapFrame::update() {
 #ifdef DECODE_VERBOSE
   std::cout << "AVBitmapFrame: update: bmpars= " << bmpars << std::endl;
 #endif
-  
+  /*
+  // these bloody pointers must be set always
   y_payload =av_frame->data[0];
   u_payload =av_frame->data[1];
   v_payload =av_frame->data[2];  
+  */
 }
+
+
+void AVBitmapFrame::update() {
+    y_payload =av_frame->data[0];
+    u_payload =av_frame->data[1];
+    v_payload =av_frame->data[2];
+}
+
 
 
 void AVBitmapFrame::copyPayloadFrom(AVBitmapFrame *frame) {
@@ -514,6 +546,23 @@ void AVBitmapFrame::copyPayloadFrom(AVBitmapFrame *frame) {
     if (i < 0) {
         std::cout << "AVBitmapFrame : copyPayloadFrom : av_frame_copy_props failed" << std::endl;
     }
+    updateAux();
+    update();
+}
+
+
+void AVBitmapFrame::reserve(int width, int height) {
+    /* // nopes..
+    if (av_frame != NULL) {
+        av_frame_free(&av_frame); // re-reserving
+    }
+    */
+    av_frame->format = AV_PIX_FMT_YUV420P;
+    av_pixel_format = AV_PIX_FMT_YUV420P;
+    av_frame->width = width;
+    av_frame->height = height;
+    int i = av_frame_get_buffer(av_frame, ALIGNMENT); // ALIGNMENT at constant.h
+    updateAux();
     update();
 }
 
@@ -532,6 +581,7 @@ void AVRGBFrame::reserve(int width, int height) {
     av_frame->width = width;
     av_frame->height = height;
     int i = av_frame_get_buffer(av_frame, ALIGNMENT); // ALIGNMENT at constant.h
+    updateAux();
     update();
 }
 

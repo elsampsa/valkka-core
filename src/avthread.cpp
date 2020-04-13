@@ -26,7 +26,7 @@
  *  @file    avthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.16.0 
+ *  @version 0.17.0 
  *  @brief   FFmpeg decoding thread
  */ 
 
@@ -35,10 +35,15 @@
 
 // #define AVTHREAD_VERBOSE 1
 
-AVThread::AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) : Thread(name), outfilter(outfilter), infifo(name,fifo_ctx), infilter(name,&infifo), infilter_block(name,&infifo), is_decoding(false), mstimetolerance(0), state(AbstractFileState::none), n_threads(1) {
-    avthreadlogger.log(LogLevel::debug) << "AVThread : constructor : N_MAX_DECODERS ="<<int(N_MAX_DECODERS)<<std::endl;
-    decoders.resize(int(N_MAX_DECODERS),NULL);
-}
+AVThread::AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) 
+    : Thread(name), outfilter(outfilter), infifo(name,fifo_ctx), infilter(name,&infifo), 
+    infilter_block(name,&infifo), is_decoding(false), mstimetolerance(0), 
+    state(AbstractFileState::none), n_threads(1),
+    timefilter("av_thread_timestamp", &outfilter), use_time_correction(true)
+    {
+        avthreadlogger.log(LogLevel::debug) << "AVThread : constructor : N_MAX_DECODERS ="<<int(N_MAX_DECODERS)<<std::endl;
+        decoders.resize(int(N_MAX_DECODERS),NULL);
+    }
 
 
 AVThread::~AVThread() {
@@ -71,15 +76,14 @@ void AVThread::run() {
     loop=true;
     
     int n_decoders = int(decoders.size()); // std::size_t to int
-
+    /*
     long int mstimestamp, mstimestamp_old, mstimestamp_frame, mstimestamp_frame_old;
 
     mstimestamp = 0;
     mstimestamp_old = 0;
     mstimestamp_frame = 0;
     mstimestamp_frame_old = 0;
-    
-    
+    */
     while(loop) {
         f=infifo.read(Timeout::avthread);
         if (!f) { // TIMEOUT
@@ -220,7 +224,14 @@ void AVThread::run() {
                         else { // no time tolerance defined
                             //outfilter.run(&(decoder->out_frame));
                             if (state != AbstractFileState::seek) { // frames during seek are discarded
-                                outfilter.run(decoder->output()); // return a reference to a decoded frame
+                                // outfilter.run(decoder->output()); // returns a reference to a decoded frame
+                                // std::cout << "decoder feeding" << std::endl;
+                                if (use_time_correction) {
+                                    timefilter.run(decoder->output());
+                                }
+                                else {
+                                    outfilter.run(decoder->output());
+                                }
                             }
                             else {
                                 avthreadlogger.log(LogLevel::debug) << "AVThread: seek: " << name << " scrapping frame: " << *(decoder->output()) << std::endl;
@@ -236,6 +247,7 @@ void AVThread::run() {
                             #endif
                         }
 
+                        /*
                         mstimestamp = getCurrentMsTimestamp();
                         std::cout << "Decoder: dt " << mstimestamp - mstimestamp_old << std::endl;
                         mstimestamp_old = mstimestamp;
@@ -243,6 +255,7 @@ void AVThread::run() {
                         mstimestamp_frame = decoder->output()->mstimestamp;
                         std::cout << "Decoder: frame dt " << mstimestamp_frame - mstimestamp_frame_old << std::endl;
                         mstimestamp_frame_old = mstimestamp_frame;
+                        */
 
 
                     } // decode
@@ -303,6 +316,10 @@ FifoFrameFilter &AVThread::getBlockingFrameFilter() {
 
 void AVThread::setTimeTolerance(long int mstol) {
     mstimetolerance=mstol;
+}
+
+void AVThread::setTimeCorrection(bool val) {
+    use_time_correction = val;
 }
 
 

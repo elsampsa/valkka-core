@@ -26,7 +26,7 @@
  *  @file    live_av_openglthread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.16.0 
+ *  @version 0.17.0 
  *  
  *  @brief   Test the full pipeline: LiveThread => AVThread => OpenGLThread
  *
@@ -173,7 +173,8 @@ void test_3()
     i = glthread.newRenderContextCall(2, window_id, 0);
     std::cout << "got render context id " << i << std::endl;
 
-    sleep_for(30s);
+    sleep_for(10s);
+    // sleep_for(30s);
     // sleep_for(120s);
     // sleep_for(604800s); //one week
 
@@ -237,7 +238,8 @@ void test_4()
     i2 = glthread.newRenderContextCall(2, window_id2, 0);
     std::cout << "got render context id 2 " << i2 << std::endl;
 
-    sleep_for(30s);
+    sleep_for(5s);
+    // sleep_for(30s);
     // sleep_for(604800s); //one week
 
     // del render group & context
@@ -316,7 +318,8 @@ void test_5()
     i2 = glthread.newRenderContextCall(3, window_id2, 0);
     std::cout << "got render context id 2 " << i2 << std::endl;
 
-    sleep_for(10s);
+    sleep_for(5s);
+    // sleep_for(10s);
     // sleep_for(604800s); //one week
 
     // del render group & context
@@ -430,7 +433,8 @@ void test_6()
 
     livethread.playStreamCall(ctx);
 
-    sleep_for(10s);
+    sleep_for(5s);
+    // sleep_for(10s);
     // sleep_for(120s);
     // sleep_for(604800s); //one week
 

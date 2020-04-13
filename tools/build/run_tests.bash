@@ -394,6 +394,13 @@ printf "END: av_live_thread_test 3\n\n" &>> test.out
 # valgrind ./av_live_thread_test 4 $LOGLEVEL &>> test.out
 # printf "END: av_live_thread_test 4\n\n" &>> test.out
 
+# @@ Test reading from SPD source, using yuv422p bitmap
+echo 6
+echo WARNING: for this test to work, you must start 
+echo the script unicast_to_multicast_usb.bash
+valgrind ./av_live_thread_test 6 $LOGLEVEL &>> test.out
+printf "END: av_live_thread_test 3\n\n" &>> test.out
+
 fi
 
 

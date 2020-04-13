@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.16.0</span>
+   &#160;<span id="projectnumber">0.17.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -64,6 +64,7 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classAVThread-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">AVThread Class Reference<div class="ingroups"><a class="el" href="group__decoding__tag.html">decoding</a> &#124; <a class="el" href="group__threading__tag.html">multithreading</a></div></div>  </div>
@@ -123,6 +124,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:aae34b37b6142cfce49ce4b2e4aabf91d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAVThread.html#aae34b37b6142cfce49ce4b2e4aabf91d">setNumberOfThreads</a> (int <a class="el" href="classAVThread.html#acc23de397de735ea2449f3dc6541a810">n_threads</a>)</td></tr>
 <tr class="memdesc:aae34b37b6142cfce49ce4b2e4aabf91d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set number of decoding threads.  <a href="#aae34b37b6142cfce49ce4b2e4aabf91d">More...</a><br /></td></tr>
 <tr class="separator:aae34b37b6142cfce49ce4b2e4aabf91d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1556631f5073ce794518c01ec587686e"><td class="memItemLeft" align="right" valign="top"><a id="a1556631f5073ce794518c01ec587686e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setTimeCorrection</b> (bool val)</td></tr>
+<tr class="separator:a1556631f5073ce794518c01ec587686e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac84f7db987434c6a282c943c3f73913b"><td class="memItemLeft" align="right" valign="top"><a id="ac84f7db987434c6a282c943c3f73913b"></a>
 <a class="el" href="classFifoFrameFilter.html">FifoFrameFilter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFrameFilter</b> ()</td></tr>
 <tr class="separator:ac84f7db987434c6a282c943c3f73913b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -298,6 +302,15 @@ cpu_set_t&#160;</td><td class="memItemRight" valign="bottom"><b>cpuset</b></td><
 <tr class="memitem:a30df147ca2dedd5ce9a1c7e39c5e8ab9 inherit pro_attribs_classThread"><td class="memItemLeft" align="right" valign="top"><a id="a30df147ca2dedd5ce9a1c7e39c5e8ab9"></a>
 pthread_t&#160;</td><td class="memItemRight" valign="bottom"><b>internal_thread</b></td></tr>
 <tr class="separator:a30df147ca2dedd5ce9a1c7e39c5e8ab9 inherit pro_attribs_classThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:afe05efab684735b47ca7012531a6bced"><td class="memItemLeft" align="right" valign="top"><a id="afe05efab684735b47ca7012531a6bced"></a>
+<a class="el" href="classTimestampFrameFilter2.html">TimestampFrameFilter2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>timefilter</b></td></tr>
+<tr class="separator:afe05efab684735b47ca7012531a6bced"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4aa98f5a7594d66c016ffbb11d9409e3"><td class="memItemLeft" align="right" valign="top"><a id="a4aa98f5a7594d66c016ffbb11d9409e3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>use_time_correction</b></td></tr>
+<tr class="separator:a4aa98f5a7594d66c016ffbb11d9409e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>

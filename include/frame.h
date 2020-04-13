@@ -29,10 +29,10 @@
  *  @file    frame.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.16.0 
+ *  @version 0.17.0 
  *  
  *  @brief   Frame classes
- */ 
+ */
 
 #include "common.h"
 #include "codec.h"
@@ -44,48 +44,48 @@
 #include "macro.h"
 #include "rawrite.h"
 
-
 /** Enumeration of Frame classes used by Valkka
  * 
  * @ingroup frames_tag
  */
-enum class FrameClass {
-  none,      ///< unknown
-  
-  basic,     ///< data at payload
-  
-  avpkt,     ///< data at ffmpeg avpkt
-  
-  avmedia,      ///< data at ffmpeg av_frame and ffmpeg av_codec_context
-  avbitmap,     ///< child of avmedia: video
-  // avbitmap_np,  ///< child of avmedia: video, non-planar
-  
-  avaudio,   ///< child of avmedia: audio
-  
-  avrgb,     ///< rgb interpolated from yuv
-  
-  yuv,      ///< data at the GPU
-  
-  rgb,      ///< our own RGB24 data structure
-  
-  setup,     ///< setup data
-  signal,    ///< signal to AVThread or OpenGLThread.  Also custom signals to custom Threads
-  
-  marker,    ///< Used when sending blocks of frames: mark filesystem and block start and end
-  
-  First=none,
-  Last =signal
+enum class FrameClass
+{
+    none, ///< unknown
+
+    basic, ///< data at payload
+
+    avpkt, ///< data at ffmpeg avpkt
+
+    avmedia,  ///< data at ffmpeg av_frame and ffmpeg av_codec_context
+    avbitmap, ///< child of avmedia: video
+    // avbitmap_np,  ///< child of avmedia: video, non-planar
+
+    avaudio, ///< child of avmedia: audio
+
+    avrgb, ///< rgb interpolated from yuv
+
+    yuv, ///< data at the GPU
+
+    rgb, ///< our own RGB24 data structure
+
+    setup,  ///< setup data
+    signal, ///< signal to AVThread or OpenGLThread.  Also custom signals to custom Threads
+
+    marker, ///< Used when sending blocks of frames: mark filesystem and block start and end
+
+    First = none,
+    Last = signal
 };
 
 /** Methods to correct frame timestamps
  * 
  */
-enum class TimeCorrectionType { // <pyapi>
-  none,                         // <pyapi>
-  smart,                        // <pyapi>
-  dummy                         // <pyapi>
-};                              // <pyapi>
-
+enum class TimeCorrectionType
+{          // <pyapi>
+    none,  // <pyapi>
+    smart, // <pyapi>
+    dummy  // <pyapi>
+};         // <pyapi>
 
 /** Frame: An abstract queueable class.
  * 
@@ -105,47 +105,49 @@ enum class TimeCorrectionType { // <pyapi>
  * 
  * @ingroup frames_tag
  */
-class Frame {
-  
+class Frame
+{
+
 public:
-  Frame(); ///< Default ctor
-  virtual ~Frame(); ///< Default virtual dtor
-  frame_essentials(FrameClass::none,Frame);
-  frame_clone(FrameClass::none,Frame);
-  /*Frame(const Frame &f); ///< Default copy ctor
+    Frame();          ///< Default ctor
+    virtual ~Frame(); ///< Default virtual dtor
+    frame_essentials(FrameClass::none, Frame);
+    frame_clone(FrameClass::none, Frame);
+    /*Frame(const Frame &f); ///< Default copy ctor
   
   
 public: // frame essentials : must be defined for each frame subclass
   virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type (also metadata)
   */
-  
-public: // redefined virtual
-  virtual void print(std::ostream& os) const; ///< Produces frame output
-  virtual std::string dumpPayload();          ///< Dumps internal payload data
-  virtual void dumpPayloadToFile(std::ofstream& fout); ///< Dumps internal payload data into a file
-  virtual void update();             ///< Update internal auxiliary state variables
-  virtual void reset();              ///< Reset the internal data
-  virtual bool isSeekable();         ///< Can we seek to this frame? (e.g. is it a key-frame .. for H264 sps packets are used as seek markers)
-  
+
+public:                                                  // redefined virtual
+    virtual void print(std::ostream &os) const;          ///< Produces frame output
+    virtual std::string dumpPayload();                   ///< Dumps internal payload data
+    virtual void dumpPayloadToFile(std::ofstream &fout); ///< Dumps internal payload data into a file
+    virtual void updateAux();                        ///< Update internal auxiliary state variables
+    virtual void update();                           ///< Update helper points (call always)
+    virtual void reset();                                ///< Reset the internal data
+    virtual bool isSeekable();                           ///< Can we seek to this frame? (e.g. is it a key-frame .. for H264 sps packets are used as seek markers)
+
 public:
-  void copyMetaFrom(Frame *f);                         ///< Copy metadata (slot, subsession index, timestamp) to this frame
-  
+    void copyMetaFrom(Frame *f); ///< Copy metadata (slot, subsession index, timestamp) to this frame
+
 protected:
-  FrameClass frameclass;              ///< Declares frametype for correct typecast.  Used by Frame::getFrameClass()
-  
-public: // public metadata
-  SlotNumber      n_slot;                       ///< Slot number identifying the media source
-  int             subsession_index;             ///< Media subsession index
-  long int        mstimestamp;                  ///< Presentation time stamp (PTS) in milliseconds  
+    FrameClass frameclass; ///< Declares frametype for correct typecast.  Used by Frame::getFrameClass()
+
+public:                   // public metadata
+    SlotNumber n_slot;    ///< Slot number identifying the media source
+    int subsession_index; ///< Media subsession index
+    long int mstimestamp; ///< Presentation time stamp (PTS) in milliseconds
 };
 
-inline std::ostream& operator<< (std::ostream& os, const Frame& f) {
-  // https://stackoverflow.com/questions/4571611/making-operator-virtual
-  f.print(os);
-  return os;
+inline std::ostream &operator<<(std::ostream &os, const Frame &f)
+{
+    // https://stackoverflow.com/questions/4571611/making-operator-virtual
+    f.print(os);
+    return os;
 }
-
 
 /** Custom payload Frame
  * 
@@ -155,10 +157,11 @@ inline std::ostream& operator<< (std::ostream& os, const Frame& f) {
  * 
  * @ingroup frames_tag
  */
-class BasicFrame : public Frame {
+class BasicFrame : public Frame
+{
 
 public:
-    BasicFrame(); ///< Default ctor
+    BasicFrame();          ///< Default ctor
     virtual ~BasicFrame(); ///< Default virtual dtor
     frame_essentials(FrameClass::basic, BasicFrame);
     frame_clone(FrameClass::basic, BasicFrame);
@@ -168,24 +171,24 @@ public: // frame essentials
   virtual FrameClass getFrameClass();         ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);            ///< Copies data to this frame from a frame of the same type
   */
-  
-public: // redefined virtual
-    virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
-    virtual std::string dumpPayload();
-    virtual void dumpPayloadToFile(std::ofstream& fout);
-    virtual void reset();              ///< Reset the internal data
-    virtual bool isSeekable();         ///< for H264 true if sps, other codecs, always true
-  
-public: // payload handling
-    void reserve(std::size_t n_bytes);          ///< Reserve space for internal payload
-    void resize (std::size_t n_bytes);          ///< Init space for internal payload
-  
-public: // frame variables
-    std::vector<uint8_t> payload;    ///< Raw payload data (use .data() to get the pointer from std::vector)
-    AVMediaType   media_type;        ///< Type of the media (video/audio)
-    AVCodecID     codec_id;          ///< AVCodeCID of the media
 
-/* // nopes ..
+public:                                         // redefined virtual
+    virtual void print(std::ostream &os) const; ///< How to print this frame to output stream
+    virtual std::string dumpPayload();
+    virtual void dumpPayloadToFile(std::ofstream &fout);
+    virtual void reset();      ///< Reset the internal data
+    virtual bool isSeekable(); ///< for H264 true if sps, other codecs, always true
+
+public:                                // payload handling
+    void reserve(std::size_t n_bytes); ///< Reserve space for internal payload
+    void resize(std::size_t n_bytes);  ///< Init space for internal payload
+
+public:                           // frame variables
+    std::vector<uint8_t> payload; ///< Raw payload data (use .data() to get the pointer from std::vector)
+    AVMediaType media_type;       ///< Type of the media (video/audio)
+    AVCodecID codec_id;           ///< AVCodeCID of the media
+
+    /* // nopes ..
 protected: // for filesystem debugging
     bool force_seekable;
     
@@ -193,25 +196,24 @@ public: // for filesystem debugging
     void setSeekable();
     void unSetSeekable();
 */
-  
-public: // codec-dependent parameters  
-  H264Pars      h264_pars;        ///< H264 parameters, extracted from the payload
-  
-public: // codec-dependent functions
-  void fillPars();      ///< Fill codec-dependent parameters based on the payload
-  void fillH264Pars();  ///< Inspects payload and fills BasicFrame::h264_pars;
+
+public:                 // codec-dependent parameters
+    H264Pars h264_pars; ///< H264 parameters, extracted from the payload
+
+public:                  // codec-dependent functions
+    void fillPars();     ///< Fill codec-dependent parameters based on the payload
+    void fillH264Pars(); ///< Inspects payload and fills BasicFrame::h264_pars;
 
 public:
-  void fillAVPacket(AVPacket *avpkt);      ///< Copy payload to AVPacket structure
-  void copyFromAVPacket(AVPacket *avpkt);  ///< Copy data from AVPacket structure
-  void filterFromAVPacket(AVPacket *avpkt, AVCodecContext *codec_ctx, AVBitStreamFilterContext *filter);  ///< Copy data from AVPacket structure
-  
-public: // frame serialization
-  std::size_t calcSize();                                  ///< How much this frame occupies in bytes when serialized
-  bool dump(IdNumber device_id, RaWriter &raw_writer);     ///< Write the frame to filestream with a certain device id
-  IdNumber read(RawReader &raw_reader);                    ///< Read the frame from filestream.  Returns device id
-};
+    void fillAVPacket(AVPacket *avpkt);                                                                    ///< Copy payload to AVPacket structure
+    void copyFromAVPacket(AVPacket *avpkt);                                                                ///< Copy data from AVPacket structure
+    void filterFromAVPacket(AVPacket *avpkt, AVCodecContext *codec_ctx, AVBitStreamFilterContext *filter); ///< Copy data from AVPacket structure
 
+public:                                                  // frame serialization
+    std::size_t calcSize();                              ///< How much this frame occupies in bytes when serialized
+    bool dump(IdNumber device_id, RaWriter &raw_writer); ///< Write the frame to filestream with a certain device id
+    IdNumber read(RawReader &raw_reader);                ///< Read the frame from filestream.  Returns device id
+};
 
 /** A muxed packet (in some container format)
  * 
@@ -246,14 +248,12 @@ public:
 };
 */
 
-
-
-enum class SetupFrameType {
+enum class SetupFrameType
+{
     none,
     stream_init,
     stream_state
 };
-
 
 /** Setup frame
  * 
@@ -267,34 +267,34 @@ enum class SetupFrameType {
  * 
  * @ingroup frames_tag
  */
-class SetupFrame : public Frame {
-  
+class SetupFrame : public Frame
+{
+
 public:
-  SetupFrame();             ///< Default ctor
-  virtual ~SetupFrame();    ///< Default virtual dtor
-  frame_essentials(FrameClass::setup,SetupFrame);
-  frame_clone(FrameClass::setup,SetupFrame);
-  /*
+    SetupFrame();          ///< Default ctor
+    virtual ~SetupFrame(); ///< Default virtual dtor
+    frame_essentials(FrameClass::setup, SetupFrame);
+    frame_clone(FrameClass::setup, SetupFrame);
+    /*
   SetupFrame(const SetupFrame &f); ///< Default copy ctor
   
 public: // frame essentials
   virtual FrameClass getFrameClass();         ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);            ///< Copies data to this frame from a frame of the same type
   */
-  
-public: // redefined virtual
-  virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
-  virtual void reset();                       ///< Reset the internal data
-  
-public: // managed objects
-    SetupFrameType  sub_type;    ///< Type of the SetupFrame
-    
-    AVMediaType     media_type; ///< For subtype stream_init
-    AVCodecID       codec_id;   ///< For subtype stream_init
-    
-    AbstractFileState   stream_state;   ///< For subtype stream_state
-};
 
+public:                                         // redefined virtual
+    virtual void print(std::ostream &os) const; ///< How to print this frame to output stream
+    virtual void reset();                       ///< Reset the internal data
+
+public:                      // managed objects
+    SetupFrameType sub_type; ///< Type of the SetupFrame
+
+    AVMediaType media_type; ///< For subtype stream_init
+    AVCodecID codec_id;     ///< For subtype stream_init
+
+    AbstractFileState stream_state; ///< For subtype stream_state
+};
 
 /** Decoded Frame in FFmpeg format
  * 
@@ -305,10 +305,11 @@ public: // managed objects
  * 
  * @ingroup frames_tag
  */
-class AVMediaFrame : public Frame {
-  
+class AVMediaFrame : public Frame
+{
+
 public:
-    AVMediaFrame(); ///< Default ctor
+    AVMediaFrame();          ///< Default ctor
     virtual ~AVMediaFrame(); ///< Default virtual dtor
     //frame_essentials(FrameClass::avmedia,AVMediaFrame); // now this is a virtual class ..
     //frame_clone(FrameClass::avmedia,AVMediaFrame);
@@ -319,22 +320,24 @@ public:
     virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
     */
 
+/*
 public:
-    virtual void update() = 0;  ///< update any helper objects 
+    virtual void updateAux() = 0; ///< update any helper objects
+    virtual void update() = 0;
+*/
 
 public: // redefined virtual
     virtual std::string dumpPayload();
-    virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
-    virtual void reset();              ///< Reset the internal data
+    virtual void print(std::ostream &os) const; ///< How to print this frame to output stream
+    virtual void reset();                       ///< Reset the internal data
 
-public: // helper objects : values should correspond to member av_frame
-    AVMediaType   media_type;          ///< helper object: media type
-    AVCodecID     codec_id;            ///< helper object: codec id
-  
-public: // managed objects
-    AVFrame*       av_frame;          ///< The decoded frame
+public:                     // helper objects : values should correspond to member av_frame
+    AVMediaType media_type; ///< helper object: media type
+    AVCodecID codec_id;     ///< helper object: codec id
+
+public:                // managed objects
+    AVFrame *av_frame; ///< The decoded frame
 };
-
 
 /** Decoded YUV/RGB frame in FFMpeg format
  * 
@@ -348,36 +351,38 @@ public: // managed objects
  * 
  * @ingroup frames_tag
  */
-class AVBitmapFrame : public AVMediaFrame {
-  
+class AVBitmapFrame : public AVMediaFrame
+{
+
 public:
-  AVBitmapFrame(); ///< Default ctor
-  virtual ~AVBitmapFrame(); ///< Default virtual dtor
-  frame_essentials(FrameClass::avbitmap, AVBitmapFrame);
-  frame_clone(FrameClass::avbitmap, AVBitmapFrame); // TODO: think about this!
-  /*
+    AVBitmapFrame();          ///< Default ctor
+    virtual ~AVBitmapFrame(); ///< Default virtual dtor
+    frame_essentials(FrameClass::avbitmap, AVBitmapFrame);
+    frame_clone(FrameClass::avbitmap, AVBitmapFrame); // TODO: think about this!
+                                                      /*
   AVBitmapFrame(const AVBitmapFrame &f); ///< Default copy ctor
   
 public: // frame essentials
   virtual FrameClass getFrameClass(); ///< Returns the subclass frame type.  See Frame::frameclass
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
   */
-  
-public: // redefined virtual
-  virtual std::string dumpPayload();
-  virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
-  virtual void reset();              ///< Reset the internal data
-  virtual void copyPayloadFrom(AVBitmapFrame *frame);
-  virtual void update();             ///< Uses AVBitmapFrame::av_frame width and height and AVBitmapFrame::av_pixel_format to calculate AVBitmapFrame::bmpars
-    
-public: // helper objects
-  AVPixelFormat  av_pixel_format; ///< From AVCodecContext .. this class implies YUV420P so this is not really required ..
-  BitmapPars     bmpars;          ///< Calculated bitmap plane dimensions, data sizes, etc.
-  uint8_t*       y_payload;       ///< shortcut to AVMediaFrame::av_frame->data[0]
-  uint8_t*       u_payload;       ///< shortcut to AVMediaFrame::av_frame->data[1]
-  uint8_t*       v_payload;       ///< shortcut to AVMediaFrame::av_frame->data[2]
-};
 
+public: // redefined virtual
+    virtual std::string dumpPayload();
+    virtual void print(std::ostream &os) const; ///< How to print this frame to output stream
+    virtual void reset();                       ///< Reset the internal data
+    virtual void copyPayloadFrom(AVBitmapFrame *frame);
+    virtual void updateAux();                   ///< Uses AVBitmapFrame::av_frame width and height and AVBitmapFrame::av_pixel_format to calculate AVBitmapFrame::bmpars
+    virtual void update();
+    virtual void reserve(int width, int height);
+
+public:                            // helper objects
+    AVPixelFormat av_pixel_format; ///< From AVCodecContext .. this class implies YUV420P so this is not really required ..
+    BitmapPars bmpars;             ///< Calculated bitmap plane dimensions, data sizes, etc.
+    uint8_t *y_payload;            ///< shortcut to AVMediaFrame::av_frame->data[0]
+    uint8_t *u_payload;            ///< shortcut to AVMediaFrame::av_frame->data[1]
+    uint8_t *v_payload;            ///< shortcut to AVMediaFrame::av_frame->data[2]
+};
 
 /** Decoded YUV frame in a non-planar format (thus "NP")
  * 
@@ -411,8 +416,6 @@ public: // helper objects
 };
 */
 
-
-
 /** Decoded RGB frame in FFMpeg format
  * 
  * - This FrameClass is produced by SwScaleFrameFilter (that performs YUV=>RGB interpolation).  This FrameClass is used typically when passing frame data to shared memory
@@ -424,23 +427,22 @@ public: // helper objects
  * @ingroup frames_tag
  * @ingroup shmem_tag
  */
-class AVRGBFrame : public AVBitmapFrame {
-  
+class AVRGBFrame : public AVBitmapFrame
+{
+
 public:
     AVRGBFrame();
     virtual ~AVRGBFrame();
-    frame_essentials(FrameClass::avrgb,AVRGBFrame);
-    frame_clone(FrameClass::avrgb,AVRGBFrame); // TODO: think about this!
-    
+    frame_essentials(FrameClass::avrgb, AVRGBFrame);
+    frame_clone(FrameClass::avrgb, AVRGBFrame); // TODO: think about this!
+
 public:
     virtual void reserve(int width, int height); ///< Reserve RGB image with width & height
-  
+
 public: // redefined virtual
     virtual std::string dumpPayload();
-    virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
+    virtual void print(std::ostream &os) const; ///< How to print this frame to output stream
 };
-
-
 
 /*
 class AVAudioFrame : public AVMediaFrame {
@@ -463,9 +465,7 @@ public: // ffmpeg media parameters
 };
 */
 
-
 // Decoder gives AVBitmapFrame => OpenGLThread internal FrameFilter => OpenGLThread FrameFifo::writeCopy(Frame *f) => .. returns once a copy has been made
-
 
 /** A GPU YUV frame.  The payload is at the GPU.  YUVFrame instances are constructed/destructed by the OpenGLThread.
  * 
@@ -482,14 +482,15 @@ public: // ffmpeg media parameters
  * @ingroup frames_tag
  * @ingroup openglthread_tag
  */
-class YUVFrame : public Frame {
-  
+class YUVFrame : public Frame
+{
+
 public:
-  YUVFrame(BitmapPars bmpars); ///< Default ctor
-  virtual ~YUVFrame(); ///< Default virtual dtor
-  frame_essentials(FrameClass::yuv,YUVFrame);
-  // TODO: frame_clone
-  /*
+    YUVFrame(BitmapPars bmpars); ///< Default ctor
+    virtual ~YUVFrame();         ///< Default virtual dtor
+    frame_essentials(FrameClass::yuv, YUVFrame);
+    // TODO: frame_clone
+    /*
   YUVFrame(const YUVFrame &f); ///< Default copy ctor
   
 public: // frame essentials
@@ -497,35 +498,33 @@ public: // frame essentials
   virtual void copyFrom(Frame *f);    ///< Copies data to this frame from a frame of the same type
 
   */
-  
-public: // variables filled at constructor time
-  BitmapPars bmpars;        // the maximum, pre-reserved size
-  BitmapPars source_bmpars; // the actual size of the image
-  
-  
-private:
-  void reserve();     ///< Reserve data on the GPU.  Used by the constructor only.
-  void release();     ///< Releases data on the GPU.  Used by the destructor only.
-  
-public: // variables used/filled by reserve
-  GLuint   y_index;   ///< internal OpenGL/GPU index
-  GLuint   u_index;   ///< internal OpenGL/GPU index
-  GLuint   v_index;   ///< internal OpenGL/GPU index
-  
-private:
-  GLubyte* y_payload; ///< direct memory access memory address, returned by GPU
-  GLubyte* u_payload; ///< direct memory access memory address, returned by GPU
-  GLubyte* v_payload; ///< direct memory access memory address, returned by GPU
-  
-public: // redefined virtual
-  virtual std::string dumpPayload();
-  virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
-  virtual void reset();
-  
-public:
-  void fromAVBitmapFrame(AVBitmapFrame *f);  ///< Copies data to the GPU from AVBitmapFrame
-};
 
+public:                       // variables filled at constructor time
+    BitmapPars bmpars;        // the maximum, pre-reserved size
+    BitmapPars source_bmpars; // the actual size of the image
+
+private:
+    void reserve(); ///< Reserve data on the GPU.  Used by the constructor only.
+    void release(); ///< Releases data on the GPU.  Used by the destructor only.
+
+public:             // variables used/filled by reserve
+    GLuint y_index; ///< internal OpenGL/GPU index
+    GLuint u_index; ///< internal OpenGL/GPU index
+    GLuint v_index; ///< internal OpenGL/GPU index
+
+private:
+    GLubyte *y_payload; ///< direct memory access memory address, returned by GPU
+    GLubyte *u_payload; ///< direct memory access memory address, returned by GPU
+    GLubyte *v_payload; ///< direct memory access memory address, returned by GPU
+
+public: // redefined virtual
+    virtual std::string dumpPayload();
+    virtual void print(std::ostream &os) const; ///< How to print this frame to output stream
+    virtual void reset();
+
+public:
+    void fromAVBitmapFrame(AVBitmapFrame *f); ///< Copies data to the GPU from AVBitmapFrame
+};
 
 /** Our own RGB24 structure
  * 
@@ -533,78 +532,75 @@ public:
  * - This frame is used in FrameFifo s
  * 
  */
-class RGBFrame : public Frame {
-    
+class RGBFrame : public Frame
+{
+
 public:
     RGBFrame(int max_width, int max_height);
     virtual ~RGBFrame();
     frame_essentials(FrameClass::rgb, RGBFrame);
-    
+
 private:
     std::vector<uint8_t> payload; ///< RGB24 data as continuous bytes.  3 bytes per pixel
     int max_width, max_height;
     int width, height;
-    
+
 public: // redefined virtual
-  virtual std::string dumpPayload();
-  virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
-  virtual void reset();
-  
+    virtual std::string dumpPayload();
+    virtual void print(std::ostream &os) const; ///< How to print this frame to output stream
+    virtual void reset();
+
 public:
-  void fromAVRGBFrame(AVRGBFrame *f);  ///< Copies data from (temporary) AVRGBFrame .. set the width & height members
-    
+    void fromAVRGBFrame(AVRGBFrame *f); ///< Copies data from (temporary) AVRGBFrame .. set the width & height members
 };
 
+typedef std::vector<Frame *> Reservoir;
+typedef std::deque<Frame *> Stack;
+typedef std::deque<Frame *> Fifo;
+typedef std::deque<Frame *> Cache;
 
-typedef std::vector<Frame*>  Reservoir;
-typedef std::deque <Frame*>  Stack;
-typedef std::deque <Frame*>  Fifo;
-typedef std::deque <Frame*>  Cache;
-
-typedef std::vector<YUVFrame*>  YUVReservoir;
-typedef std::deque <YUVFrame*>  YUVStack;
-typedef std::vector<RGBFrame*>  RGBReservoir;
-typedef std::deque <RGBFrame*>  RGBStack;
-
-
+typedef std::vector<YUVFrame *> YUVReservoir;
+typedef std::deque<YUVFrame *> YUVStack;
+typedef std::vector<RGBFrame *> RGBReservoir;
+typedef std::deque<RGBFrame *> RGBStack;
 
 /** A frame signaling internal thread commands, states of recorded video, etc.
  * 
  */
-class SignalFrame : public Frame {
+class SignalFrame : public Frame
+{
 
 public:
-  SignalFrame();           ///< Default ctor
-  virtual ~SignalFrame();  ///< Default virtual dtor
-  frame_essentials(FrameClass::signal,SignalFrame);
-  frame_clone(FrameClass::signal,SignalFrame);
+    SignalFrame();          ///< Default ctor
+    virtual ~SignalFrame(); ///< Default virtual dtor
+    frame_essentials(FrameClass::signal, SignalFrame);
+    frame_clone(FrameClass::signal, SignalFrame);
 
 public:
-  OpenGLSignalContext                 opengl_signal_ctx;            ///< Thread commands to OpenGLThread
-  AVSignalContext                     av_signal_ctx;                ///< Thread commands to AVThread
-  ValkkaFSWriterSignalContext         valkkafswriter_signal_ctx;    ///< Thread commands to ValkkFSWriterThread
-  ValkkaFSReaderSignalContext         valkkafsreader_signal_ctx;    ///< Thread commands to ValkkaFSReaderThread
-  void*                               custom_signal_ctx;            ///< For extensions: thread commands for any thread.  TODO: migrate all signal contexes here
+    OpenGLSignalContext opengl_signal_ctx;                 ///< Thread commands to OpenGLThread
+    AVSignalContext av_signal_ctx;                         ///< Thread commands to AVThread
+    ValkkaFSWriterSignalContext valkkafswriter_signal_ctx; ///< Thread commands to ValkkFSWriterThread
+    ValkkaFSReaderSignalContext valkkafsreader_signal_ctx; ///< Thread commands to ValkkaFSReaderThread
+    void *custom_signal_ctx;                               ///< For extensions: thread commands for any thread.  TODO: migrate all signal contexes here
 };
 
-
-class MarkerFrame : public Frame {
+class MarkerFrame : public Frame
+{
 
 public:
-    MarkerFrame();           ///< Default ctor
-    virtual ~MarkerFrame();  ///< Default virtual dtor
-    frame_essentials(FrameClass::marker,MarkerFrame);
-    frame_clone(FrameClass::marker,MarkerFrame);
-    
+    MarkerFrame();          ///< Default ctor
+    virtual ~MarkerFrame(); ///< Default virtual dtor
+    frame_essentials(FrameClass::marker, MarkerFrame);
+    frame_clone(FrameClass::marker, MarkerFrame);
+
 public: // redefined virtual
-  // virtual std::string dumpPayload();
-  virtual void print(std::ostream& os) const; ///< How to print this frame to output stream
-  virtual void reset();
-    
-public:
-    bool    fs_start, fs_end;   ///< Filesystem start / end  // this controlled better at the python level
-    bool    tm_start, tm_end;   ///< Transmission start / end
-};
+    // virtual std::string dumpPayload();
+    virtual void print(std::ostream &os) const; ///< How to print this frame to output stream
+    virtual void reset();
 
+public:
+    bool fs_start, fs_end; ///< Filesystem start / end  // this controlled better at the python level
+    bool tm_start, tm_end; ///< Transmission start / end
+};
 
 #endif

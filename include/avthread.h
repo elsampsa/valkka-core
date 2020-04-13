@@ -28,7 +28,7 @@
  *  @file    avthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.16.0 
+ *  @version 0.17.0 
  *  
  *  @brief FFmpeg decoding thread
  *
@@ -78,7 +78,11 @@ protected:
     std::vector<Decoder*> decoders;       ///< A vector/list of registered and instantiated decoders
     long int     mstimetolerance;         ///< Drop frames if they are in milliseconds this much late
     AbstractFileState state;             ///< Seek, play, stop or what
-    
+
+private: // framefilter for chaining output for outfilter2
+    TimestampFrameFilter2 timefilter;
+    bool use_time_correction;
+
 protected:
     bool is_decoding; ///< should currently decode or not
         
@@ -104,6 +108,7 @@ public: // API <pyapi>
      * 
      */
     void setNumberOfThreads(int n_threads);       // <pyapi>
+    void setTimeCorrection(bool val);             // <pyapi>
     FifoFrameFilter &getFrameFilter();            // <pyapi>
     FifoFrameFilter &getBlockingFrameFilter();    // <pyapi>
     void setTimeTolerance(long int mstol);    ///< API method: decoder will scrap late frames that are mstol milliseconds late.  Call before starting the thread. // <pyapi>

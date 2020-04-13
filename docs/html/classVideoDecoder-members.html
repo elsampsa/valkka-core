@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.16.0</span>
+   &#160;<span id="projectnumber">0.17.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -67,11 +67,13 @@ $(function() {
 
 <p>This is the complete list of members for <a class="el" href="classVideoDecoder.html">VideoDecoder</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classAVDecoder.html#ae18e601d736b4724cc6152b874bea32d">av_codec</a></td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="classAVDecoder.html#a6675728394628b73f8754c7ae47f3ee3">av_codec_context</a></td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classAVDecoder.html#a86613c05b0ded37d193f7609bd03d1b7">av_codec_id</a></td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="classAVDecoder.html#ac5d67718d461c5237f83dd04d3cf3814">av_packet</a></td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classAVDecoder.html#a0103cf0141e9e990ac3265013ec62e08">AVDecoder</a>(AVCodecID av_codec_id, int n_threads=1)</td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>aux_av_frame</b> (defined in <a class="el" href="classVideoDecoder.html">VideoDecoder</a>)</td><td class="entry"><a class="el" href="classVideoDecoder.html">VideoDecoder</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classAVDecoder.html#ae18e601d736b4724cc6152b874bea32d">av_codec</a></td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classAVDecoder.html#a6675728394628b73f8754c7ae47f3ee3">av_codec_context</a></td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classAVDecoder.html#a86613c05b0ded37d193f7609bd03d1b7">av_codec_id</a></td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classAVDecoder.html#ac5d67718d461c5237f83dd04d3cf3814">av_packet</a></td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classAVDecoder.html#a0103cf0141e9e990ac3265013ec62e08">AVDecoder</a>(AVCodecID av_codec_id, int n_threads=1)</td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>current_pixel_format</b> (defined in <a class="el" href="classVideoDecoder.html">VideoDecoder</a>)</td><td class="entry"><a class="el" href="classVideoDecoder.html">VideoDecoder</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
   <tr><td class="entry"><a class="el" href="classDecoder.html#a691a867940a1c494b77e458ae1325352">Decoder</a>()</td><td class="entry"><a class="el" href="classDecoder.html">Decoder</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classAVDecoder.html#af28490aea460e9e6ae29166b04bce6c7">flush</a>()</td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>getMsTimestamp</b>() (defined in <a class="el" href="classDecoder.html">Decoder</a>)</td><td class="entry"><a class="el" href="classDecoder.html">Decoder</a></td><td class="entry"></td></tr>
@@ -84,6 +86,8 @@ $(function() {
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>out_frame</b> (defined in <a class="el" href="classVideoDecoder.html">VideoDecoder</a>)</td><td class="entry"><a class="el" href="classVideoDecoder.html">VideoDecoder</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
   <tr><td class="entry"><a class="el" href="classVideoDecoder.html#a6212c0d05de36a17fa3283c0e1d3c026">output</a>()</td><td class="entry"><a class="el" href="classVideoDecoder.html">VideoDecoder</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classVideoDecoder.html#abf098d34924e5ecb01154fd30c82b708">pull</a>()</td><td class="entry"><a class="el" href="classVideoDecoder.html">VideoDecoder</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>secs_per_frame</b> (defined in <a class="el" href="classVideoDecoder.html">VideoDecoder</a>)</td><td class="entry"><a class="el" href="classVideoDecoder.html">VideoDecoder</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>sws_ctx</b> (defined in <a class="el" href="classVideoDecoder.html">VideoDecoder</a>)</td><td class="entry"><a class="el" href="classVideoDecoder.html">VideoDecoder</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
   <tr><td class="entry"><a class="el" href="classVideoDecoder.html#a14b1ed42d5e1ca3ad87743e4503616a9">VideoDecoder</a>(AVCodecID av_codec_id, int n_threads=1)</td><td class="entry"><a class="el" href="classVideoDecoder.html">VideoDecoder</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>width</b> (defined in <a class="el" href="classVideoDecoder.html">VideoDecoder</a>)</td><td class="entry"><a class="el" href="classVideoDecoder.html">VideoDecoder</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>~AVDecoder</b>() (defined in <a class="el" href="classAVDecoder.html">AVDecoder</a>)</td><td class="entry"><a class="el" href="classAVDecoder.html">AVDecoder</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>

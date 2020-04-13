@@ -26,7 +26,7 @@
  *  @file    decoders.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.16.0 
+ *  @version 0.17.0 
  *  @brief   FFmpeg decoders
  */
 
@@ -160,7 +160,13 @@ AVDecoder(av_codec_id, n_threads), width(0), height(0),
     dis =std::uniform_int_distribution<>(0,5);
     */
 
-   /* // does this work?
+   // timebase
+   // num = 25
+   // den = 1
+
+/*
+   timebase = av_make_q(1000, 1)
+
    AVRational val;
    val.num = 1000;
    val.den = 1;
@@ -188,7 +194,6 @@ bool VideoDecoder::pull()
     int retcode;
     int got_frame;
     long int pts = 0;
-    long int n_frame = 0;
 
     has_frame = false;
 
@@ -200,29 +205,12 @@ bool VideoDecoder::pull()
 
     av_packet->data = in_frame.payload.data(); // pointer to payload
     av_packet->size = in_frame.payload.size();
-    // av_packet->pts  = in_frame.mstimestamp;
+
+    // std::cout << "num:" << av_codec_context->framerate.num << std::endl;
 
     if (av_codec_context->framerate.num > 0) {
-        // "denominator" = below
-        // std::cout << "num, den " << av_codec_context->framerate.num << " " << av_codec_context->framerate.den
-        // << std::endl; // 25, 1
-
-        // so, the timebase has been resolved
-        // go from mstimestamp to n_frame
-        // TODO: could we set the timebase ourselves to mstimestamp in av_codec_context???
-        
-        /*
-        av_packet->pts = std::lround(
-            float((av_codec_context->framerate.num * in_frame.mstimestamp)) / float(1000)
-        );
-        */
         av_packet->pts = (av_codec_context->framerate.num * in_frame.mstimestamp) / 1000;
-        /*
-        std::cout << (av_codec_context->framerate.num * in_frame.mstimestamp) / 1000 << std::endl;
-        std::cout << ">" << in_frame.mstimestamp << std::endl;
-        std::cout << ">" << av_packet->pts << std::endl;
-        */
-        // now we still have to change back to mstimstamps .. lots of arithmetics
+        // std::cout << "av_packet->pts :" << av_packet->pts << std::endl;
     }
 
     
@@ -250,24 +238,16 @@ bool VideoDecoder::pull()
         av_ref_frame = out_frame.av_frame;
     }
     else {
+        // std::cout << "PIX_FMT" << std::endl;
         retcode = avcodec_decode_video2(av_codec_context, aux_av_frame, &got_frame, av_packet);
         av_ref_frame = aux_av_frame;
     }
 
-
     if (av_codec_context->framerate.num > 0) {
-        // pts = av_ref_frame->pts;
-
-        // (av_codec_context->framerate.num * in_frame.mstimestamp) / 1000
-
+        // std::cout << "av_ref_frame->pts :" << av_ref_frame->pts << std::endl;
         pts = 1000 * av_ref_frame->pts / av_codec_context->framerate.num;
-
-        /*
-        pts = std::lround(
-            float((av_codec_context->framerate.num * av_ref_frame->pts)) / 
-            float(av_codec_context->framerate.den)
-        );
-        */
+        // no problem here.. thousand always divides nicely with
+        // a sane fps number (say, with 20)
     }
 
     if (retcode < 0)
@@ -283,8 +263,6 @@ bool VideoDecoder::pull()
 #endif
         return false;
     }
-
-
     /*
     retcode = avcodec_send_packet(av_codec_context, av_packet); // new API
     avcodec_receive_frame(av_codec_context, out_frame.av_frame); // new API
@@ -302,7 +280,7 @@ bool VideoDecoder::pull()
         {
             sws_freeContext(sws_ctx);
             av_frame_free(&aux_av_frame);
-            av_free(aux_av_frame); // need this?
+            av_free(aux_av_frame);
             sws_ctx = NULL; // implies that no yuv conversion is needed
         }
 
@@ -320,8 +298,8 @@ bool VideoDecoder::pull()
                 new_pixel_format, 
                 out_av_frame->width, out_av_frame->height, 
                 AV_PIX_FMT_YUV420P, 
-                SWS_POINT, 
-                // SWS_FAST_BILINEAR,
+                // SWS_POINT, 
+                SWS_FAST_BILINEAR,
                 NULL, NULL, NULL);
             decoderlogger.log(LogLevel::normal) 
                 << "VideoDecoder: WARNING: scaling your strange YUV format to YUV420P. " 
@@ -330,10 +308,24 @@ bool VideoDecoder::pull()
 
             aux_av_frame =av_frame_alloc();
             // the frame was decoded directly to out_frame.av_frame, assuming it was YUV420P
-            // so an extra step is needed:
+            // so an extra step is needed (only once):
             av_frame_copy(aux_av_frame, out_av_frame); // dst, src
             // now the algorithm can process as normal
             current_pixel_format = new_pixel_format;
+
+            // normally out_av_frame allocation is handled
+            // by avcodec_decode_2
+            // av_frame_free(&out_av_frame);
+            // av_free(out_av_frame);
+            /*
+            av_image_alloc( (*rgbPictInfo)->data,   //data to be filled
+                    (*rgbPictInfo)->linesize,//line sizes to be filled
+                    width, height,
+                    AV_PIX_FMT_YUV420P,           //pixel format
+                    32                       //aling
+                    );
+            */
+           out_frame.reserve(out_av_frame->width, out_av_frame->height);
         }
     }
 
@@ -349,27 +341,39 @@ bool VideoDecoder::pull()
 		const int  	dstStride[] 
 	    ) 	
         */
-        sws_scale(sws_ctx, 
+       // std::cout << "sws_scale!" << std::endl;
+        height = sws_scale(sws_ctx, 
             (const uint8_t * const*)aux_av_frame->data,  // srcSlice[]
             aux_av_frame->linesize, // srcStride
             0,  // srcSliceY
             aux_av_frame->height,  // srcSliceH
+
             out_av_frame->data, // dst[] // written
             out_av_frame->linesize); // dstStride[] // written
     }
     
 
-    if (height != out_av_frame->height || width != out_av_frame->width) // || out_frame.av_pixel_format != new_pixel_format)
+    if (height != out_av_frame->height || width != out_av_frame->width)
     { // update aux objects only if needed
-        out_frame.av_pixel_format = AV_PIX_FMT_YUV420P; // assume always YUV420P
-        out_frame.update(); // uses out_av_frame and out_frame.av_pixel_format
+        out_frame.av_pixel_format = AV_PIX_FMT_YUV420P; // converted: always YUV420P
+        out_frame.updateAux(); // uses av_frame and out_frame.av_pixel_format
         height = out_av_frame->height;
         width = out_av_frame->width;
+        // std::cout << "AUX UPDATE" << std::endl;
     }
+    out_frame.update();
+    // std::cout << "UPDATE" << std::endl;
     out_frame.copyMetaFrom(&in_frame); // after this, the AVBitmapFrame instance is ready to go..
     // std::cout << "mstimestamps: " << out_frame.mstimestamp << " " << pts << std::endl;
     if (pts > 0) {
-        // out_frame.mstimestamp = pts;
+        /*
+        std::cout << "mstimestamps: " 
+        << out_frame.mstimestamp << " "
+        << pts << " "
+        << pts - getCurrentMsTimestamp() << " " 
+        << std::endl;
+        */
+        out_frame.mstimestamp = pts;
     }
     // out_frame.mstimestamp = out_av_frame->pts; // WARNING: TODO: must fix this.. otherwise streams using B-frames do not work at all!
     // timestamp is now the presentation timestamp given by the decoder 

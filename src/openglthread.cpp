@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.16.0 
+ *  @version 0.17.0 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -109,7 +109,7 @@ bool SlotContext::manageTimer(long int mstime) {
         return false;
     }
     else {
-        std::cout << "OpenGLThread: dt " << mstime-lastmstime << std::endl;
+        // std::cout << "OpenGLThread: dt " << mstime-lastmstime << std::endl;
         lastmstime=mstime;
         return true;
     }
@@ -433,7 +433,7 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
     renderObjects();
 
     render_mstime = getCurrentMsTimestamp();
-    std::cout << "render timing: " << render_mstime - render_mstime_old << std::endl;
+    // std::cout << "render timing: " << render_mstime - render_mstime_old << std::endl;
     render_mstime_old = render_mstime;
 
 }

@@ -1,8 +1,13 @@
-### Latest version is 0.16.0
+### Latest version is 0.17.0
+- Timestamps now taken from decoder!  This means that "main" and "high" H264 profiles with B-frames work.  This should also eliminate some "stuttering" effects seen sometimes in live video.
+- "Exotic" bitmaps (YUV422 and other) are now transformed to YUV420, so, for example profiles such as "high422" work (however, this is inefficient, so users should prefer YUV420P streams)
+
+### Older versions
+
+0.16.0
 - Yet another memleak at the shmem server side fixed
 - Some issues with the python shmem server side fixed
 
-### Older versions
 
 0.15.0
 - A nasty memory overflow in the shared memory server / client part fixed

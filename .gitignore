@@ -65,3 +65,5 @@
 /include/playground
 /debian/comment.tmp
 /debian/rundeb.bash
+__pycache__/
+src/scrap/*
