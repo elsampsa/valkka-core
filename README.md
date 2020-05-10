@@ -69,11 +69,15 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Latest version is 0.17.0
-- Timestamps now taken from decoder!  This means that "main" and "high" H264 profiles with B-frames work.  This should also eliminate some "stuttering" effects seen sometimes in live video.
-- "Exotic" bitmaps (YUV422 and other) are now transformed to YUV420, so, for example profiles such as "high422" work (however, this is inefficient, so users should prefer YUV420P streams)
+### Latest version is 0.17.4
+
+- WSDiscovery now included into libValkka
 
 ### Older versions
+
+0.17.0
+- Timestamps now taken from decoder!  This means that "main" and "high" H264 profiles with B-frames work.  This should also eliminate some "stuttering" effects seen sometimes in live video.
+- "Exotic" bitmaps (YUV422 and other) are now transformed to YUV420, so, for example profiles such as "high422" work (however, this is inefficient, so users should prefer YUV420P streams)
 
 0.16.0
 - Yet another memleak at the shmem server side fixed
@@ -227,7 +231,14 @@ Dark Photon
 GClements
 
 ## Copyright
-(C) 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen
+Copyright (c) 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
+
+## Open Source Licenses
+
+- [Live555](http://www.live555.com/) Copyright (c) Live Networks, Inc.  LGPL License.
+- [FFMpeg](https://www.ffmpeg.org/) Copyright (c) The FFMpeg authors.  LGPL Licence.
+- [WSDiscovery](https://github.com/andreikop/python-ws-discovery) Copyright (c) L. A. Fernando.  LGPL License.
+
 
 ## License
 This software is licensed under the GNU Affero General Public License (AGPL) v3 or later.

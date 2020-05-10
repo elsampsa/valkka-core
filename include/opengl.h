@@ -29,7 +29,7 @@
  *  @file    opengl.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.17.0 
+ *  @version 0.17.4 
  *  
  *  @brief OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines
  *  

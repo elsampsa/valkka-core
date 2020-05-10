@@ -26,7 +26,7 @@
  *  @file    cache_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.17.0 
+ *  @version 0.17.4 
  *  
  *  @brief   Test caching frames
  *
