@@ -32,7 +32,7 @@
  *  @file    avfilethread.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.17.4 
+ *  @version 0.17.5 
  *  
  *  @brief A Thread handling files and sending frames to fifo
  */ 
@@ -243,7 +243,7 @@ private: // internal
   void playFileStream       (FileContext &file_ctx);
   void stopFileStream       (FileContext &file_ctx);
   
-public: // *** C & Python API *** .. these routines go through the convar/mutex locking                                     // <pyapi>
+public: // *** C & Python API *** .. these routines go through the condvar/mutex locking                                     // <pyapi>
   void closeFileStreamCall      (FileContext &file_ctx); ///< API method: registers a stream                                // <pyapi> 
   void openFileStreamCall       (FileContext &file_ctx); ///< API method: de-registers a stream                             // <pyapi>
   void seekFileStreamCall       (FileContext &file_ctx); ///< API method: seek to a certain point                           // <pyapi>

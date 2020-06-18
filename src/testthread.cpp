@@ -26,7 +26,7 @@
  *  @file    testthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.17.4 
+ *  @version 0.17.5 
  *  
  *  @brief Launch a cpp thread from python, give that thread a callback that's called by the thread
  */ 

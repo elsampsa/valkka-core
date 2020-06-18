@@ -26,7 +26,7 @@
  *  @file    rawrite_test.cpp
  *  @author  Petri Eranko
  *  @date    2019
- *  @version 0.17.4 
+ *  @version 0.17.5 
  *  
  *  @brief 
  *

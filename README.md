@@ -69,11 +69,15 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Latest version is 0.17.4
+### Latest version is 0.17.5
 
-- WSDiscovery now included into libValkka
+- Discovery now with both WSDiscovery & arp-scan
 
 ### Older versions
+
+0.17.4
+
+- WSDiscovery now included into libValkka
 
 0.17.0
 - Timestamps now taken from decoder!  This means that "main" and "high" H264 profiles with B-frames work.  This should also eliminate some "stuttering" effects seen sometimes in live video.

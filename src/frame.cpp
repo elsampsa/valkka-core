@@ -26,7 +26,7 @@
  *  @file    frame.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.17.4 
+ *  @version 0.17.5 
  *  
  *  @brief 
  */ 
@@ -279,7 +279,7 @@ void BasicFrame::filterFromAVPacket(AVPacket *pkt, AVCodecContext *codec_ctx, AV
   );
   
   payload.resize(out_size);
-  std::cout << "BasicFrame: filterFromAVPacket: " << out_size << " " << (long unsigned)(out) << std::endl; 
+  // std::cout << "BasicFrame: filterFromAVPacket: " << out_size << " " << (long unsigned)(out) << std::endl; 
   memcpy(payload.data(),out,out_size);
   subsession_index=pkt->stream_index;
   mstimestamp=(long int)pkt->pts;

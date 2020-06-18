@@ -19,7 +19,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 @file    base.py
 @author  Sampsa Riikonen
 @date    2019
-@version 0.17.4 
+@version 0.17.5 
 
 @brief   Discovery module for onvif cameras, using wsdiscovery and brute-force scan
 """
@@ -70,6 +70,12 @@ def parse_http_resp(resp: str):
 async def probe(ip, port):
     """Send an RTSP OPTIONS request to ip & port
     """
+    verbose = False
+    # verbose = True
+
+    if verbose:
+        print("arp-scan probe", ip)
+
     writer = None
     ok = True
     st = options_str % (ip, port)
@@ -102,8 +108,8 @@ async def probe(ip, port):
     else:
         header, res = parse_http_resp(res.decode("utf-8").lower())
         if header.find("200 ok") > -1:
-            # IP camera found
-            #print("\nSuccess at %s\n" % (ip))
+            if verbose:
+                print("\nSuccess at %s\n" % (ip))
             pass
         else:
             ok = False
@@ -175,9 +181,16 @@ def runARPScan(exclude_list = []):
     
     coros = [probe(ip, 554) for ip in lis]
 
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    """
     finished, unfinished = asyncio.get_event_loop().run_until_complete(
         asyncio.wait(coros)
         )
+    """
+    finished, unfinished = asyncio.get_event_loop().run_until_complete(
+        asyncio.wait(coros)
+    )
 
     ips = []
     for task in finished:
@@ -185,6 +198,7 @@ def runARPScan(exclude_list = []):
         if ip is not None:
             ips.append(ip)
 
+    loop.close()
     return ips
 
 
