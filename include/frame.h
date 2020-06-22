@@ -36,6 +36,7 @@
 
 #include "common.h"
 #include "codec.h"
+#include "metadata.h"
 #include "threadsignal.h"
 #include "constant.h"
 #include "avdep.h"
@@ -72,6 +73,8 @@ enum class FrameClass
     signal, ///< signal to AVThread or OpenGLThread.  Also custom signals to custom Threads
 
     marker, ///< Used when sending blocks of frames: mark filesystem and block start and end
+
+    mux, ///< Muxed streams, for example, MP4 or matroska
 
     First = none,
     Last = signal
@@ -155,6 +158,8 @@ inline std::ostream &operator<<(std::ostream &os, const Frame &f)
  * 
  * Copiable/Queueable : yes
  * 
+ * TODO: update to the metadata scheme using metadata.h
+ * 
  * @ingroup frames_tag
  */
 class BasicFrame : public Frame
@@ -188,15 +193,6 @@ public:                           // frame variables
     AVMediaType media_type;       ///< Type of the media (video/audio)
     AVCodecID codec_id;           ///< AVCodeCID of the media
 
-    /* // nopes ..
-protected: // for filesystem debugging
-    bool force_seekable;
-    
-public: // for filesystem debugging
-    void setSeekable();
-    void unSetSeekable();
-*/
-
 public:                 // codec-dependent parameters
     H264Pars h264_pars; ///< H264 parameters, extracted from the payload
 
@@ -217,9 +213,10 @@ public:                                                  // frame serialization
 
 /** A muxed packet (in some container format)
  * 
- * 
+ * TODO: isSeekable / Meta / Init:
+ * peek into payload ..
+ * .. or these are set at the ctor? (discovered by the ffmpex muxer demangling)
  */
-/* // TODO
 class MuxFrame : public Frame {
 
 public:
@@ -232,21 +229,31 @@ public: // redefined virtual
     virtual void print(std::ostream& os) const;             ///< Produces frame output
     virtual std::string dumpPayload();                      ///< Dumps internal payload data
     virtual void dumpPayloadToFile(std::ofstream& fout);    ///< Dumps internal payload data into a file
-    virtual void update();                                  ///< Update internal auxiliary state variables
     virtual void reset();                                   ///< Reset the internal data
-    virtual bool isSeekable();                              ///< Can we seek to this frame? (e.g. is it a key-frame .. for H264 sps packets are used as seek markers)
+    //virtual bool isSeekable();                              ///< Can we seek to this frame? 
 
-    
-// container-dependent parameters
+/*
 public:
-    MP4Pars   mp4_pars;
-    WebMPars  webm_pars;
-    
-public:
-    void fillPars();      ///< Fill container-dependent parameters, based on the payload
-    void fillMP4Pars();   ///< Inspect MP4 payload & fill mp4_pars
-};
+    virtual bool isInit();  ///< for frag-MP4: ftyp, moov
+    virtual bool isMeta();  ///< for frag-MP4: moof
+    ///< otherwise its payload
 */
+
+public:                                // payload handling
+    void reserve(std::size_t n_bytes); ///< Reserve space for internal payload
+    void resize(std::size_t n_bytes);  ///< Init space for internal payload
+
+public:
+    std::vector<uint8_t> payload; ///< Raw payload data (use .data() to get the pointer from std::vector)
+    AVMediaType media_type;       ///< Type of the media (video/audio) of the underlying elementary stream
+    AVCodecID codec_id;           ///< AVCodeCID of the underlying elementary stream
+
+public:
+    std::vector<uint8_t> meta_blob; ///< Byte blob that is casted to correct metadata struct
+    MuxMetaType          meta_type;
+
+};
+
 
 enum class SetupFrameType
 {

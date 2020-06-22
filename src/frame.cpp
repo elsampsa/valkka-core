@@ -41,29 +41,7 @@ Frame::Frame() : mstimestamp(0), n_slot(0), subsession_index(-1) {
   
 Frame::~Frame() {
 }
- 
- 
-//frame_essentials(FrameClass::none, Frame);
-/*
-FrameClass Frame::getFrameClass() {
-  return FrameClass::none;
-}
- 
-void Frame::copyFrom(Frame *f) {
-  Frame *cf;
-#ifdef CAST_CHECK
-  cf=dynamic_cast<Frame*>(f);
-  if (!cf) {
-    perror("FATAL : invalid cast at copyFrom")
-    exit(5);
-  }
-#elsed
-  cf=static_cast<Frame*>(f);
-#endif
-  *this =*(cf);
-}
-*/
- 
+  
  
 void Frame::print(std::ostream &os) const {
   os << "<Frame: timestamp="<<mstimestamp<<" subsession_index="<<subsession_index<<" slot="<<n_slot<<">";
@@ -115,29 +93,6 @@ BasicFrame::BasicFrame() : Frame(), codec_id(AV_CODEC_ID_NONE), media_type(AVMED
 BasicFrame::~BasicFrame() {
 }
 
-
-//frame_essentials(FrameClass::basic, BasicFrame);
-/* // that macro expands to..
-
-FrameClass BasicFrame::getFrameClass() {
-  return FrameClass::basic;
-}
-
-
-void BasicFrame::copyFrom(Frame *f) {
-  BasicFrame *cf;
-#ifdef CAST_CHECK
-  cf=dynamic_cast<BasicFrame*>(f);
-  if (!cf) {
-    perror("FATAL : invalid cast at copyFrom")
-    exit(5);
-  }
-#else
-  cf=static_cast<BasicFrame*>(f);
-#endif
-  *this =*(cf);
-}
-*/
 
 
 void BasicFrame::print(std::ostream &os) const {
@@ -194,15 +149,6 @@ bool BasicFrame::isSeekable() {
     }
 }
 
-/*
-void BasicFrame::setSeekable() {
-    force_seekable = true;
-}
-
-void BasicFrame::unSetSeekable() {
-    force_seekable = false;
-}
-*/
 
 
 void BasicFrame::reserve(std::size_t n_bytes) {
@@ -362,8 +308,61 @@ IdNumber BasicFrame::read(RawReader& raw_reader) {
 }
 
 
+
+MuxFrame::MuxFrame() : Frame(), 
+    codec_id(AV_CODEC_ID_NONE), 
+    media_type(AVMEDIA_TYPE_UNKNOWN),  
+    meta_type(MuxMetaType::none)
+    {}
+
+
+MuxFrame::~MuxFrame() {
+}
+
+
+void MuxFrame::print(std::ostream &os) const {
+    os << "<MuxFrame: timestamp="<<mstimestamp<<" subsession_index="<<subsession_index<<" slot="<<n_slot<<" / ";
+    os << "fragment size="<<payload.size();
+    os << ">";
+}
+
+
+std::string MuxFrame::dumpPayload() {
+    std::stringstream tmp;
+    for(std::vector<uint8_t>::iterator it=payload.begin(); it<min(payload.end(),payload.begin()+20); ++it) {
+        tmp << int(*(it)) <<" ";
+    }
+    return tmp.str();
+}
+
+
+void MuxFrame::dumpPayloadToFile(std::ofstream& fout) {
+    std::copy(payload.begin(), payload.end(), std::ostreambuf_iterator<char>(fout));
+}
+
+
+void MuxFrame::reset() {
+    Frame::reset();
+    codec_id   =AV_CODEC_ID_NONE;
+    media_type =AVMEDIA_TYPE_UNKNOWN;
+    meta_type  =MuxMetaType::none;
+}
+
+
+void MuxFrame::reserve(std::size_t n_bytes) {
+    this->payload.reserve(n_bytes);
+    this->meta_blob.reserve(METADATA_MAX_SIZE);
+}
+
+
+void MuxFrame::resize(std::size_t n_bytes) {
+    this->payload.resize(n_bytes, 0);
+}
+
+
+
 SetupFrame::SetupFrame() : Frame(), sub_type(SetupFrameType::stream_init), media_type(AVMEDIA_TYPE_UNKNOWN), codec_id(AV_CODEC_ID_NONE), stream_state(AbstractFileState::none) {
-  reset();
+  // reset(); // done at Frame ctor
 }
   
   

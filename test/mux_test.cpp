@@ -51,7 +51,6 @@ const char* stream_sdp =std::getenv("VALKKA_TEST_SDP");
 
 
 void test_1() {  
-    /*
     const char* name = "@TEST: live_thread_test: test 1: ";
     std::cout << name <<"** @@Feeding frames to muxer from an rtsp connection **" << std::endl;
     
@@ -62,10 +61,10 @@ void test_1() {
     std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
     
     // filtergraph:
-    // (LiveThread:livethread) --> {FrameFilter:dummyfilter)
-    LiveThread      livethread("livethread");
-    MuxFrameFilter  muxfilter("muxer");
-    InfoFrameFilter info("info", &muxfilter);
+    // (LiveThread:livethread) --> {InfoFrameFilter:info} --> {FragMP4MuxFrameFilter:muxfilter}
+    LiveThread             livethread("livethread");
+    FragMP4MuxFrameFilter  muxfilter("mp4_muxer");
+    InfoFrameFilter        info("info", &muxfilter);
   
     std::cout << "starting live thread" << std::endl;
     livethread.startCall();
@@ -80,7 +79,6 @@ void test_1() {
   
     std::cout << "stopping live thread" << std::endl;
     livethread.stopCall();  
-    */ // TODO
 }
 
 

@@ -67,3 +67,4 @@
 /debian/rundeb.bash
 __pycache__/
 src/scrap/*
+memo.md

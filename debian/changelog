@@ -1,3 +1,15 @@
+valkka (0.17.5-0ubuntu1-xenialppa1) xenial; urgency=low
+
+  * discovery with arp-scan
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Thu, 18 Jun 2020 17:44:04 +0300
+ 
+valkka (0.17.5-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * discovery with arp-scan
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Thu, 18 Jun 2020 17:42:08 +0300
+
 valkka (0.17.4-0ubuntu1-xenialppa1) xenial; urgency=low
 
   * included wsdiscovery

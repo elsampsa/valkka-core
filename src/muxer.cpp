@@ -35,7 +35,7 @@
 
 #define logger filterlogger //TODO: create a new logger for muxers
 
-// #define MUXPARSE  //enable if you need to see what the byte parser is doing
+#define MUXPARSE  //enable if you need to see what the byte parser is doing
 
 
 MuxFrameFilter::MuxFrameFilter(const char* name, FrameFilter *next) : FrameFilter(name, next), active(false), initialized(false), mstimestamp0(0), zerotimeset(false), ready(false), av_format_ctx(NULL), avio_ctx(NULL), avio_ctx_buffer(NULL), missing(0), ccf(0), av_dict(NULL), format_name("matroska") {
@@ -49,7 +49,8 @@ MuxFrameFilter::MuxFrameFilter(const char* name, FrameFilter *next) : FrameFilte
     av_init_packet(this->avpkt); 
     
     this->avio_ctx_buffer = (uint8_t*)av_malloc(this->avio_ctx_buffer_size);
-    this->avio_ctx = avio_alloc_context(this->avio_ctx_buffer, this->avio_ctx_buffer_size, 1, this, this->read_packet, this->write_packet, this->seek); // no read, nor seek
+    this->avio_ctx = NULL;
+    // this->avio_ctx = avio_alloc_context(this->avio_ctx_buffer, this->avio_ctx_buffer_size, 1, this, this->read_packet, this->write_packet, this->seek); // no read, nor seek
         
     /*
     // subclasses define format & muxing parameters
@@ -71,7 +72,9 @@ MuxFrameFilter::~MuxFrameFilter() {
     av_free(avio_ctx_buffer);
     av_free_packet(avpkt);
     delete avpkt;
-    av_free(avio_ctx);
+    if (avio_ctx) {
+        av_free(avio_ctx);
+    }
     av_dict_free(&av_dict);
 }
 
@@ -188,6 +191,10 @@ void MuxFrameFilter::initMux() {
 
 }
 
+int MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size)  {
+    std::cout << "dummy" << std::endl;
+    return 0; // re-define in child classes
+}
 
 void MuxFrameFilter::closeMux() {
     int i;
@@ -299,12 +306,62 @@ void MuxFrameFilter::go(Frame* frame) {
 }
 
 
-int MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size) {
-    // what's coming here?  A complete muxed "frame" or a bytebuffer with several frames.  The frames may continue in the next bytebuffer.
-    // Once tje frag_size has been set to a small value, this starts getting complete frames, instead of several frames in the same bytebuffer
+// 
+
+void MuxFrameFilter::activate(long int zerotime) {
+  std::unique_lock<std::mutex> lk(this->mutex);
+  if (active) {
+    deActivate_();
+  }
+  
+  this->zerotime  =zerotime;
+  this->active    =true;
+}  
+
+
+void MuxFrameFilter::deActivate() {
+  std::unique_lock<std::mutex> lk(this->mutex);
+  
+  // std::cout << "FileFrameFilter: deActivate:" << std::endl;
+  deActivate_();
+  // std::cout << "FileFrameFilter: deActivate: bye" << std::endl;
+}
+  
+
+
+
+
+
+FragMP4MuxFrameFilter::FragMP4MuxFrameFilter(const char* name, FrameFilter *next) : MuxFrameFilter(name, next) {
+}
+    
+FragMP4MuxFrameFilter::~FragMP4MuxFrameFilter() {
+}
+
+
+void FragMP4MuxFrameFilter::defineMux() {
+    this->avio_ctx = avio_alloc_context(this->avio_ctx_buffer, this->avio_ctx_buffer_size, 1, 
+        this, this->read_packet, this->write_packet, this->seek); // no read, nor seek
+    // .. must be done here, so that read/write_packet points to the correct static function
+    format_name = std::string("mp4");
+
+    // -movflags empty_moov+omit_tfhd_offset+frag_keyframe+separate_moof -frag_size
+    av_dict_set(&av_dict, "movflags", "empty_moov+omit_tfhd_offset+frag_keyframe+separate_moof", 0);
+
+    // av_dict_set(&av_dict, "frag_size", "500", 500); // nopes
+    av_dict_set(&av_dict, "frag_size", "512", 0);
+}
+
+
+
+int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size) {
+    // what's coming here?  A complete muxed "frame" or a bytebuffer with several frames.  
+    // The frames may continue in the next bytebuffer.
+    // It seems that once "frag_size" has been set to a small value, this starts getting complete frames, 
+    // instead of several frames in the same bytebuffer
     
     MuxFrameFilter* me = static_cast<MuxFrameFilter*>(opaque);
-    BasicFrame& internal_frame = me->internal_frame;
+    MuxFrame& internal_frame = me->internal_frame;
     uint32_t &missing = me->missing;
     uint32_t &ccf = me->ccf;
     
@@ -330,7 +387,8 @@ int MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size) {
     uint32_t cc = 0;
     uint32_t len = 0;
     int i;
-    
+    char boxname[4];
+
     
     #ifdef MUXPARSE
     std::cout << "\nbuf_size: " << buf_size << std::endl;
@@ -350,11 +408,12 @@ int MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size) {
         }
         else {
             #ifdef MUXPARSE
-            std::cout << "start: ";
-            #endif
+            std::cout << std::endl << "start: [";
             for(i=0; i <= 6; i++) {
                 std::cout << int(buf[cc+i]) << " ";
             }
+            std::cout << "]" << std::endl;
+            #endif
             len = deserialize_uint32_big_endian(buf+cc); // resolve the packet length from the mp4 headers
             
             if (len > 99999999) { // absurd value .. this bytestream parser has gone sour.
@@ -391,55 +450,61 @@ int MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size) {
             memcpy(internal_frame.payload.data() + ccf, buf + cc, len);
             missing = 0;
             #ifdef MUXPARSE
-            std::cout << "MuxFrameFilter: OUT: len: " << internal_frame.payload.size() << " dump:" << internal_frame.dumpPayload() << std::endl;
+            std::cout << "FragMP4MuxFrameFilter: OUT: len: " << internal_frame.payload.size() << " dump:" << internal_frame.dumpPayload() << std::endl;
             #endif
             ccf = 0;
             
-            // TODO: internal_frame.inspect() => fills container format specific parameters
-            
-            me->run(&internal_frame);
+            getLenName(internal_frame.payload.data(), len, boxname);
+            #ifdef MUXPARSE
+            std::cout << "FragMP4MuxFrameFilter: got box " << std::string(boxname) << std::endl;
+            #endif
+            if (strcmp(boxname, "moof")) {
+            }
+
+            // set the frame type that also defines the metadata
+            internal_frame.meta_type = MuxMetaType::fragmp4; 
+            FragMP4Meta* metap;
+            metap = (FragMP4Meta*)(internal_frame.meta_blob.data());
+            // set values in-place:
+            memcpy(&metap->name[0], boxname, 4);
+            metap->is_first = false;
+            metap->size = internal_frame.payload.size();
+            metap->slot = internal_frame.n_slot;
+            metap->mstimestamp = internal_frame.mstimestamp;
+            #ifdef MUXPARSE
+            std::cout << "FragMP4MuxFrameFilter: sending frame downstream " << std::endl;
+            #endif
+            // me->run(&internal_frame);
+            #ifdef MUXPARSE
+            std::cout << "FragMP4MuxFrameFilter: frame sent " << std::endl;
+            #endif
         }
         cc += len;
     }
 }
-// 
 
-void MuxFrameFilter::activate(long int zerotime) {
-  std::unique_lock<std::mutex> lk(this->mutex);
-  if (active) {
-    deActivate_();
-  }
   
-  this->zerotime  =zerotime;
-  this->active    =true;
-}  
-
-
-void MuxFrameFilter::deActivate() {
-  std::unique_lock<std::mutex> lk(this->mutex);
-  
-  // std::cout << "FileFrameFilter: deActivate:" << std::endl;
-  deActivate_();
-  // std::cout << "FileFrameFilter: deActivate: bye" << std::endl;
-}
-  
-
-
-
-FragMP4MuxFrameFilter::FragMP4MuxFrameFilter(const char* name, FrameFilter *next) : MuxFrameFilter(name, next) {
-}
-    
-FragMP4MuxFrameFilter::~FragMP4MuxFrameFilter() {
+void getLenName(uint8_t* data, uint32_t& len, char* name) {
+    uint32_t cc = 0;
+    len = deserialize_uint32_big_endian(data + cc); cc += 4;
+    memcpy(name, data + cc, 4); // name consists of 4 bytes
 }
 
-void FragMP4MuxFrameFilter::defineMux() {
-    format_name = std::string("mp4");
+uint32_t getSubBoxIndex(uint8_t* data, const char name[4]) {
+    // returns start index of the subbox
+    uint32_t cc = 0;
+    uint32_t thislen;
+    char thisname[4];
+    char name_[4];
+    uint32_t len_;
 
-    // -movflags empty_moov+omit_tfhd_offset+frag_keyframe+separate_moof -frag_size
-    av_dict_set(&av_dict, "movflags", "empty_moov+omit_tfhd_offset+frag_keyframe+separate_moof", 0);
-
-    // av_dict_set(&av_dict, "frag_size", "500", 500); // nopes
-    av_dict_set(&av_dict, "frag_size", "512", 0);
+    getLenName(data, thislen, &thisname[0]);    
+    while (cc <= thislen) {
+        getLenName(data + cc, len_, &name_[0]);
+        if (strcmp(name, name_) == 0) {
+            return cc;
+        }
+    }
+    return 0;
 }
-  
-  
+
