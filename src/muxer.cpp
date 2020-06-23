@@ -35,7 +35,7 @@
 
 #define logger filterlogger //TODO: create a new logger for muxers
 
-#define MUXPARSE  //enable if you need to see what the byte parser is doing
+//#define MUXPARSE  //enable if you need to see what the byte parser is doing
 
 
 MuxFrameFilter::MuxFrameFilter(const char* name, FrameFilter *next) : FrameFilter(name, next), active(false), initialized(false), mstimestamp0(0), zerotimeset(false), ready(false), av_format_ctx(NULL), avio_ctx(NULL), avio_ctx_buffer(NULL), missing(0), ccf(0), av_dict(NULL), format_name("matroska") {
@@ -354,7 +354,7 @@ void FragMP4MuxFrameFilter::defineMux() {
 
 
 
-int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size) {
+int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size_) {
     // what's coming here?  A complete muxed "frame" or a bytebuffer with several frames.  
     // The frames may continue in the next bytebuffer.
     // It seems that once "frag_size" has been set to a small value, this starts getting complete frames, 
@@ -384,25 +384,26 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
                     missing
     */
     
-    uint32_t cc = 0;
-    uint32_t len = 0;
+    uint32_t cc = 0; // index of box start byte at the current byte buffer
+    uint32_t len = 0; // consume this many bytes from the current byte buffer and add them to the frame buffer
+    uint32_t buf_size = uint32_t(buf_size_); // size of the current byte buffer to be consumed
     int i;
+    uint32_t boxlen;
     char boxname[4];
-
     
     #ifdef MUXPARSE
-    std::cout << "\nbuf_size: " << buf_size << std::endl;
+    std::cout << "\n====>buf_size: " << buf_size << std::endl;
     std::cout << "dump: ";
-    #endif
     for(i=0; i <= 6; i++) {
         std::cout << int(buf[i]) << " ";
     }
     std::cout << std::endl;
-    
+    #endif
+
     while (cc < buf_size) {
         if (missing > 0) {
             #ifdef MUXPARSE
-            std::cout << "taking up missing bytes: " << missing << std::endl;
+            std::cout << "taking up missing bytes " << missing << std::endl;
             #endif
             len = missing;
         }
@@ -412,10 +413,10 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             for(i=0; i <= 6; i++) {
                 std::cout << int(buf[cc+i]) << " ";
             }
-            std::cout << "]" << std::endl;
+            std::cout << "]"; 
             #endif
             len = deserialize_uint32_big_endian(buf+cc); // resolve the packet length from the mp4 headers
-            
+
             if (len > 99999999) { // absurd value .. this bytestream parser has gone sour.
                 std::cout << "MuxFrameFilter: overflow: len: " << len << std::endl;
                 exit(2);
@@ -426,7 +427,7 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
                 continue;
             }
             #ifdef MUXPARSE
-            std::cout << "/ len: " << len << std::endl;
+            std::cout << " ==> len: " << len << std::endl;
             #endif
             
             internal_frame.reserve(len); // does nothing if already has this capacity
@@ -454,7 +455,7 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             #endif
             ccf = 0;
             
-            getLenName(internal_frame.payload.data(), len, boxname);
+            getLenName(internal_frame.payload.data(), boxlen, boxname);
             #ifdef MUXPARSE
             std::cout << "FragMP4MuxFrameFilter: got box " << std::string(boxname) << std::endl;
             #endif
@@ -479,7 +480,10 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             std::cout << "FragMP4MuxFrameFilter: frame sent " << std::endl;
             #endif
         }
-        cc += len;
+        cc += len; // move on to next box
+        #ifdef MUXPARSE
+        std::cout << "FragMP4MuxFrameFilter: cc = " << cc << " / " << buf_size << std::endl;
+        #endif
     }
 }
 

@@ -120,7 +120,7 @@ protected:
     virtual void defineMux();
 
 protected:
-    static int write_packet(void *opaque, uint8_t *buf, int buf_size);
+    static int write_packet(void *opaque, uint8_t *buf, int buf_size_);
     static int read_packet(void *opaque, uint8_t *buf, int buf_size) {return 0;} // dummy function
     static int64_t seek(void *opaque, int64_t offset, int whence) {return 0;} // dummy function
 
