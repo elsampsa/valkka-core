@@ -140,7 +140,8 @@ class ShmemRGBClient:
 
         self.index_p = core.new_intp()
         self.isize_p = core.new_intp()
-        # self.rgb_meta = RGB24Meta()
+        
+        self.rgb_meta = core.RGB24Meta() # TEST2
 
         # print(self.pre,"shmem name=",self.name)
         # shmem ring buffer on the client side
@@ -192,8 +193,8 @@ class ShmemRGBClient:
     def pullFrame(self):
         """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
         """
-        self.rgb_meta = core.RGB24Meta()
-        got = self.core.clientPullFrame(self.index_p, self.rgb_meta)
+        # self.rgb_meta = core.RGB24Meta() # TEST2
+        got = self.core.clientPullFrame(self.index_p, self.rgb_meta) # TEST2
         index = core.intp_value(self.index_p)
         # if (self.verbose):
         self.logger.debug("current index %s", index) # , ShmemRGBClient.metaToString(self.rgb_meta))
@@ -205,14 +206,71 @@ class ShmemRGBClient:
 
     def pullFrameThread(self):
         """Use with multithreading
+
+        We have a segfault mystery here, from line
+
+        ::
+
+            rgb_meta = core.RGB24Meta()
+        
+        1)
+
+        ::
+
+            Traceback (most recent call last):
+            ...
+            SystemError: <class 'type'> returned a result with an error set
+
+
+        https://stackoverflow.com/questions/53796264/systemerror-class-int-returned-a-result-with-an-error-set-in-python
+
+        why this gets triggered several times when refreshing the window..!?
+
+        AnalyzerWindow: setShmem_slot: thread_ <valkka.live.qt.widget.VideoShmemThread(0x7f3f18005ec0) at 0x7f3f299a4dc8>
+
+        ==> that's fixed by now in valkka live
+
+        2)
+
+        ::
+
+            Fatal Python error: GC object already tracked
+
+
+        https://stackoverflow.com/questions/23178606/debugging-python-fatal-error-gc-object-already-tracked
+
+        - multiple c threads accessing same python callback .. but that's not the case here
+
+        rgb_meta struct is used by reference and modified in-place
+
+        - using "TEST2" instead of "TEST1" seems to resolve the issue
+        - this has something to do with swig-wrapped struct variables and the python garbage collector
+        - as if several threads would try to manipulate or re-register the same python object at the same time
+        - that rgb_meta object is passed downstream, but its ownership is transferred downstream as well & a new object is re-created here at every call
+        - .. so not sure what(tf) this is.. help appreciated!
+
+
+        TODO:
+
+        - is this about swig & struct to python => create a proper class instead (be verbose at the dtor etc.)
+        - ..or get rid off instantiation of the object at python side alltogether..?  clientPullFrame could return straight PyObjects..?
+
         """
-        self.rgb_meta = core.RGB24Meta()
-        got = self.core.clientPullFrameThread(self.index_p, self.rgb_meta)
+        #print("rgb_meta>")
+        ## ==> error (2) comes from this line:
+        # rgb_meta = core.RGB24Meta() # TEST1
+        # self.rgb_meta = core.RGB24Meta() # this was used at some point as well
+        #print("pullFrameThread>")
+        # got = self.core.clientPullFrameThread(self.index_p, rgb_meta) # TEST1
+        got = self.core.clientPullFrameThread(self.index_p, self.rgb_meta) # TEST2
+        # got = self.core.clientPullFrame(self.index_p, rgb_meta) # TEST1: occurs also with the version that does not release GIL
+        #print("<pullFrameThread")
         index = core.intp_value(self.index_p)
         # if (self.verbose):
         self.logger.debug("current index %s ", index) # ShmemRGBClient.metaToString(self.rgb_meta))
         if (got):
-            return index, self.rgb_meta
+            # return index, rgb_meta # TEST1
+            return index, self.rgb_meta # TEST2
         else:
             return None, None
 
