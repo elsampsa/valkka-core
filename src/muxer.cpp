@@ -35,7 +35,7 @@
 
 #define logger filterlogger //TODO: create a new logger for muxers
 
-//#define MUXPARSE  //enable if you need to see what the byte parser is doing
+#define MUXPARSE  //enable if you need to see what the byte parser is doing
 
 
 MuxFrameFilter::MuxFrameFilter(const char* name, FrameFilter *next) : FrameFilter(name, next), active(false), initialized(false), mstimestamp0(0), zerotimeset(false), ready(false), av_format_ctx(NULL), avio_ctx(NULL), avio_ctx_buffer(NULL), missing(0), ccf(0), av_dict(NULL), format_name("matroska") {
@@ -230,6 +230,12 @@ void MuxFrameFilter::deActivate_() {
         closeMux();
     }
     active=false;
+}
+
+
+void MuxFrameFilter::run(Frame* frame) {
+    this->go(frame);
+    // chaining of run is done at write_packet
 }
 
 
@@ -469,13 +475,19 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             // set values in-place:
             memcpy(&metap->name[0], boxname, 4);
             metap->is_first = false;
+            // TODO: the keyframe flag should be pulled from the MP4 structure
             metap->size = internal_frame.payload.size();
             metap->slot = internal_frame.n_slot;
-            metap->mstimestamp = internal_frame.mstimestamp;
+            metap->mstimestamp = internal_frame.mstimestamp; 
+            // TODO: timestamp is somewhere deep in the MP4 structure
+            // should be found & put both into metap->mstimestamp and internal_frame.mstimestamp
+            // at the moment, internal_frame does not have any timestamp
             #ifdef MUXPARSE
             std::cout << "FragMP4MuxFrameFilter: sending frame downstream " << std::endl;
             #endif
-            // me->run(&internal_frame);
+            if (me->next) {
+                me->next->run(&internal_frame);
+            }
             #ifdef MUXPARSE
             std::cout << "FragMP4MuxFrameFilter: frame sent " << std::endl;
             #endif

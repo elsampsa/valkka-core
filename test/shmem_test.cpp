@@ -55,7 +55,8 @@ void test_1() { // open two terminals, start this from terminal 1 and "test 2" f
   
   std::vector<uint8_t> payload;
   SimpleSharedMemSegment shmem("testing", 30*1024*1024, true);
-  
+  shmem.init();
+
   payload.resize(10,0);
   
   std::cout << "Enter an integer to write into shared mem" << std::endl;
@@ -76,6 +77,8 @@ void test_2() {
   std::cout << name <<"** @@Create shared memory on the CLIENT side : INTERACTIVE TEST **" << std::endl;
   
   SimpleSharedMemSegment shmem("testing", 30*1024*1024, false);
+  shmem.init();
+
   std::cout << "Enter an integer to read from shared mem" << std::endl;
   std::cin >> inp;
   n=shmem.getSize();
@@ -95,7 +98,7 @@ void test_3() { // open two terminals.  Start this from first terminal and test_
   SharedMemRingBuffer rb("testing",10,30*1024*1024,1000,true); // name, ncells, bytes per cell, timeout, server or not
   
   cc=0;
-  payload.resize(10,cc);
+  payload.resize(10, 0);
   std::cout << "Give number of cells to write. 0 = exit"<<std::endl;
   while (true) {
     std::cout << std::endl << "> ";
@@ -138,7 +141,7 @@ void test_4() {
   std::vector<uint8_t> payload;
   SharedMemRingBuffer rb("testing",10,30*1024*1024,5000,false); // name, ncells, bytes per cell, timeout, server or not
   
-  payload.resize(10,0);
+  payload.resize(10, 0);
   std::cout << "Give number of cells to read. 0 = exit"<<std::endl;
   while (true) {
     std::cout << std::endl << "> ";
@@ -153,7 +156,14 @@ void test_4() {
         std::cout << "cell index " << index << " has " << n << " bytes" << std::endl;
         for(ii=0; ii<n; ii++) {
           std::cout << int(rb.shmems[index]->payload[ii]) << std::endl;
+          // std::cout << int(rb.cache[index][ii]) << std::endl;
         }
+        std::cout << std::endl;
+        for(ii=0; ii<n; ii++) {
+          // std::cout << int(rb.shmems[index]->payload[ii]) << std::endl;
+          std::cout << int(rb.cache[index][ii]) << std::endl;
+        }
+
         std::cout << std::endl;
         }
       else {

@@ -141,6 +141,7 @@ void CLASSNAME::serverInit() {\
   }\
   payload = (uint8_t*) ptr;\
   meta    = (TYPENAME*) ptr_;\
+  /*std::cout << "server meta reserved" << std::endl;*/\
   close(fd);\
   close(fd_);\
   /*std::cout << "Server reserved " << sizeof(TYPENAME) << "bytes" << std::endl;*/\
@@ -168,6 +169,7 @@ bool CLASSNAME::clientInit() { \
   }\
   payload = (uint8_t*) ptr;\
   meta    = (TYPENAME*) ptr_;\
+  /*std::cout << "client meta reserved" << std::endl;*/\
   close(fd);\
   close(fd_);\
   /*std::cout << "Client reserved " << sizeof(TYPENAME) << "bytes" << std::endl;*/\
@@ -307,7 +309,8 @@ void SimpleSharedMemSegment::put(uint8_t* buf, void* meta_) {
 }   
     
 void SimpleSharedMemSegment::put(std::vector<uint8_t> &inp_payload) {
-    std::size_t size = std::min(inp_payload.size(), n_bytes);    
+    std::size_t size = std::min(inp_payload.size(), n_bytes);
+    std::cout << "size " << size << std::endl;
     this->put(inp_payload, (void*)(&size));
 }
     
@@ -397,7 +400,6 @@ SharedMemRingBufferBase::SharedMemRingBufferBase(const char* name, int n_cells,
             );
     }
     */
-
     sema     =sem_open(sema_name.c_str(),    O_CREAT,0600,0);
     flagsema =sem_open(flagsema_name.c_str(),O_CREAT,0600,0);
 
@@ -406,6 +408,12 @@ SharedMemRingBufferBase::SharedMemRingBufferBase(const char* name, int n_cells,
     if (is_server) {
         zero();
         clearFlag();
+    }
+    else{
+        this->cache = new uint8_t*[n_cells];
+        for(i=0; i<n_cells; i++){
+            this->cache[i] = new uint8_t[n_bytes];
+        }
     }
 }
 
@@ -423,6 +431,13 @@ SharedMemRingBufferBase::~SharedMemRingBufferBase() {
     if (is_server) {
         sem_unlink(sema_name.c_str());
         sem_unlink(flagsema_name.c_str());
+    }
+    else {
+        int i;
+        for(i=0; i<n_cells; i++) {
+            delete[] this->cache[i];
+        }
+        delete[] this->cache;
     }
     if (fd > 0) {
         close(this->fd);
@@ -573,12 +588,20 @@ PyObject *SharedMemRingBufferBase::getBufferListPy() {
     
     // return plis;
     
+    // std::cout << name << " cache adr at pylist " << long(cache[0]) << std::endl;
+    int i = 0;
     for (auto it = shmems.begin(); it != shmems.end(); ++it) {
         dims[0] = (*it)->n_bytes;
-        pa = PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)((*it)->payload));
+        // pa = PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)((*it)->payload));
+        ///*
+        // std::cout << name << " cache " << i << " adr at pylist " << long(cache[i]) << std::endl;
+        pa = PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)(
+                this->cache[i]
+            )); // use cache instead
+        //*/
         PyList_Append(plis, pa);
+        i++;
     }
-    
     return plis;
 }
 
@@ -645,7 +668,16 @@ bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {
     // size_out  = shmems[index]->getSize();
     shmems[index]->copyMetaTo(meta_); // copy metadata from the shmem segment's internal memory into variable referenced by the meta_ pointer.  Subclassing takes care of the correct typecast.
     // return index;
-    
+    // std::cout << "size " << shmems[index]->getSize() << std::endl;
+    memcpy(cache[index], shmems[index]->payload, shmems[index]->getSize());
+    // std::cout << name << " cache adr " << long(cache[0]) << std::endl;
+    /*
+    int ii;
+    for(ii=0; ii<10; ii++) {
+        std::cout << int(cache[index][ii]) << " ";
+    }
+    std::cout << std::endl;
+    */
     clearEventFd();
 
     return true;
@@ -654,6 +686,12 @@ bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {
 
 bool SharedMemRingBufferBase::clientPullThread(int &index_out, void *meta_) {
     bool val;
+    // hmm..
+    // Swig python object is created at python side
+    // it is then passed to this method
+    // but here we can't explicitly the reference counter of meta_
+    // since it's not a python object (!)
+    // but in any case, all that should be taken care by swig
     Py_BEGIN_ALLOW_THREADS
     val = clientPull(index_out, meta_);
     Py_END_ALLOW_THREADS

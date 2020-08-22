@@ -160,6 +160,7 @@ class ShmemRGBClient:
             self.shmem_list.append(core.getNumpyShmem(self.core, i))
         """
         
+        self.rgb_meta = core.RGB24Meta()
         #"""
         #print(self.pre,"shmem get list")
         self.shmem_list = self.core.getBufferListPy()
@@ -192,7 +193,7 @@ class ShmemRGBClient:
     def pullFrame(self):
         """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
         """
-        self.rgb_meta = core.RGB24Meta()
+        # self.rgb_meta = core.RGB24Meta()
         got = self.core.clientPullFrame(self.index_p, self.rgb_meta)
         index = core.intp_value(self.index_p)
         # if (self.verbose):
@@ -206,12 +207,13 @@ class ShmemRGBClient:
     def pullFrameThread(self):
         """Use with multithreading
         """
-        self.rgb_meta = core.RGB24Meta()
+        # self.rgb_meta = core.RGB24Meta()
         got = self.core.clientPullFrameThread(self.index_p, self.rgb_meta)
         index = core.intp_value(self.index_p)
         # if (self.verbose):
         self.logger.debug("current index %s ", index) # ShmemRGBClient.metaToString(self.rgb_meta))
         if (got):
+            # print(">>",self.shmem_list[index][0:10])
             return index, self.rgb_meta
         else:
             return None, None

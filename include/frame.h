@@ -77,7 +77,7 @@ enum class FrameClass
     mux, ///< Muxed streams, for example, MP4 or matroska
 
     First = none,
-    Last = signal
+    Last = mux
 };
 
 /** Methods to correct frame timestamps
@@ -250,8 +250,7 @@ public:
 
 public:
     std::vector<uint8_t> meta_blob; ///< Byte blob that is casted to correct metadata struct
-    MuxMetaType          meta_type;
-
+    MuxMetaType          meta_type; ///< Mux type that mandates how meta_blob is casted
 };
 
 

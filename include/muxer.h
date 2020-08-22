@@ -91,6 +91,7 @@ public:
 protected:
     virtual void defineMux() = 0; ///< Define container format (format_name) & muxing parameters (av_dict).  Define in child classes.
     virtual void go(Frame* frame);
+    virtual void run(Frame* frame);
     void initMux();           ///< Open file, reserve codec_contexes, streams, write preamble, set initialized=true if success
     void closeMux();          ///< Close file, dealloc codec_contexes, streams
     void deActivate_();

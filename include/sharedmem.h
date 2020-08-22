@@ -248,6 +248,7 @@ protected: // posix semaphores and mmap'd files
 
 public:
     std::vector<SharedMemSegment*> shmems; ///< Shared memory segments
+    uint8_t** cache; ///< Shmem segments are copied into the cache
 
 protected: // internal methods - not for the api user
     void  setFlag();       ///< Server: call this to indicate a ring-buffer overflow 

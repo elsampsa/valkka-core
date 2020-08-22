@@ -61,9 +61,10 @@ void test_1() {
     std::cout << name <<"** test rtsp stream 1: "<< stream_1 << std::endl;
     
     // filtergraph:
-    // (LiveThread:livethread) --> {InfoFrameFilter:info} --> {FragMP4MuxFrameFilter:muxfilter}
+    // (LiveThread:livethread) --> {InfoFrameFilter:info} --> {FragMP4MuxFrameFilter:muxfilter} --> {InfoFrameFilter:muxinfo}
     LiveThread             livethread("livethread");
-    FragMP4MuxFrameFilter  muxfilter("mp4_muxer");
+    InfoFrameFilter        muxinfo("muxinfo");
+    FragMP4MuxFrameFilter  muxfilter("mp4_muxer", &muxinfo);
     InfoFrameFilter        info("info", &muxfilter);
   
     std::cout << "starting live thread" << std::endl;
