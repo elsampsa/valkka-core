@@ -69,11 +69,20 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Latest version is 0.17.5
+### Latest version is 0.18.0
 
-- Discovery now with both WSDiscovery & arp-scan
+0.18.0
+
+- Extra copy / caching step added to sharedmem client side
+- API level 2 shmem client modified (mysterious crashes due to re-creating RGBMeta cpp type at python side maybe solved)
+- Fragmented mp4 progressing (not yet production level)
+- Migrating ppa support to Ubuntu 18 LTS and 20 LTS only
 
 ### Older versions
+
+0.17.5
+
+- Discovery now with both WSDiscovery & arp-scan
 
 0.17.4
 

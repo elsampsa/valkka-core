@@ -1,3 +1,15 @@
+valkka (0.18.0-0ubuntu1-focalppa1) focal; urgency=low
+
+  * sharedmem fixes etc
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Sun, 23 Aug 2020 10:26:00 +0300
+
+valkka (0.18.0-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * sharedmem fixes etc
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Sun, 23 Aug 2020 10:23:35 +0300
+
 valkka (0.17.5-0ubuntu1-xenialppa1) xenial; urgency=low
 
   * discovery with arp-scan

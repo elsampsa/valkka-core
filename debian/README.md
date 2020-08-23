@@ -1,8 +1,9 @@
 
 ## Generate entries into changelog
 
+Focal == 20
 Bionic == 18
-Xenial == 16
+(Xenial == 16)
 
 ```
 addlog.py 0.13.2 bionic new awesome version
