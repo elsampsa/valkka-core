@@ -29,7 +29,7 @@
  *  @file    tex.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.17.5 
+ *  @version 0.18.0 
  *  
  *  @brief Handling OpenGL textures.
  *  

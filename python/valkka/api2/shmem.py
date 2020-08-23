@@ -25,7 +25,7 @@ shmem.py : Encapsulation for Valkka's cpp shared memory client
 @file    shmem.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.17.5 
+@version 0.18.0 
 
 @brief   Encapsulation for Valkka's cpp shared memory client
 """
@@ -256,10 +256,6 @@ class ShmemRGBClient:
         - ..or get rid off instantiation of the object at python side alltogether..?  clientPullFrame could return straight PyObjects..?
 
         """
-<<<<<<< HEAD
-        # self.rgb_meta = core.RGB24Meta()
-        got = self.core.clientPullFrameThread(self.index_p, self.rgb_meta)
-=======
         #print("rgb_meta>")
         ## ==> error (2) comes from this line:
         # rgb_meta = core.RGB24Meta() # TEST1
@@ -269,18 +265,12 @@ class ShmemRGBClient:
         got = self.core.clientPullFrameThread(self.index_p, self.rgb_meta) # TEST2
         # got = self.core.clientPullFrame(self.index_p, rgb_meta) # TEST1: occurs also with the version that does not release GIL
         #print("<pullFrameThread")
->>>>>>> master
         index = core.intp_value(self.index_p)
         # if (self.verbose):
         self.logger.debug("current index %s ", index) # ShmemRGBClient.metaToString(self.rgb_meta))
         if (got):
-<<<<<<< HEAD
-            # print(">>",self.shmem_list[index][0:10])
-            return index, self.rgb_meta
-=======
             # return index, rgb_meta # TEST1
             return index, self.rgb_meta # TEST2
->>>>>>> master
         else:
             return None, None
 

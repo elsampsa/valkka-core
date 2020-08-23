@@ -28,7 +28,7 @@
  *  @file    framefilter.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.17.5 
+ *  @version 0.18.0 
  *  
  *  @brief   Definition of FrameFilter and derived classes for various purposes
  */
@@ -41,8 +41,7 @@
  * 
  * @ingroup filters_tag
  */
-class FrameFilter
-{ // <pyapi>
+class FrameFilter { // <pyapi>
 
 public: // <pyapi>
     /** Default constructor
@@ -73,8 +72,7 @@ public: // API
 /** A "hello world" demo class: prints its own name if verbose is set to true.
  * @ingroup filters_tag
  */
-class DummyFrameFilter : public FrameFilter
-{ // <pyapi>
+class DummyFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                                                // <pyapi>
     DummyFrameFilter(const char *name, bool verbose = true, FrameFilter *next = NULL); // <pyapi>
@@ -90,8 +88,7 @@ protected:
 /** Dump the beginning of Frame's payload into stdout
  * @ingroup filters_tag
  */
-class InfoFrameFilter : public FrameFilter
-{ // <pyapi>
+class InfoFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                          // <pyapi>
     InfoFrameFilter(const char *name, FrameFilter *next = NULL); // <pyapi>
@@ -103,8 +100,7 @@ protected:
 /** Dump the beginning of Frame's payload into stdout in a one-liner
  * @ingroup filters_tag
  */
-class BriefInfoFrameFilter : public FrameFilter
-{ // <pyapi>
+class BriefInfoFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                               // <pyapi>
     BriefInfoFrameFilter(const char *name, FrameFilter *next = NULL); // <pyapi>
@@ -122,8 +118,7 @@ protected:
  * 
  * @ingroup filters_tag
  */
-class ThreadSafeFrameFilter : public FrameFilter
-{ // <pyapi>
+class ThreadSafeFrameFilter : public FrameFilter { // <pyapi>
 
 private:
     std::mutex mutex;
@@ -142,8 +137,7 @@ public:
  * Use this frame filter to create frame filter tree structures
  * @ingroup filters_tag
  */
-class ForkFrameFilter : public FrameFilter
-{ // <pyapi>
+class ForkFrameFilter : public FrameFilter { // <pyapi>
 
 public: // <pyapi>
     /** @copydoc FrameFilter::FrameFilter
@@ -167,8 +161,7 @@ public:
  * Use this frame filter to create frame filter tree structures
  * @ingroup filters_tag
  */
-class ForkFrameFilter3 : public FrameFilter
-{ // <pyapi>
+class ForkFrameFilter3 : public FrameFilter { // <pyapi>
 
 public: // <pyapi>
     /** @copydoc FrameFilter::FrameFilter
@@ -196,8 +189,7 @@ public:
  *
  * @ingroup filters_tag 
  */
-class ForkFrameFilterN : public FrameFilter
-{ // <pyapi>
+class ForkFrameFilterN : public FrameFilter { // <pyapi>
 
 public: // <pyapi>
     /** Default ctor
@@ -239,8 +231,7 @@ public: // <pyapi>
 /** Sets the frame slot value
  * @ingroup filters_tag
  */
-class SlotFrameFilter : public FrameFilter
-{ // <pyapi>
+class SlotFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                                             // <pyapi>
     SlotFrameFilter(const char *name, SlotNumber n_slot, FrameFilter *next = NULL); // <pyapi>
@@ -257,8 +248,7 @@ protected:
  * @ingroup filters_tag
  * 
  */
-class PassSlotFrameFilter : public FrameFilter
-{ // <pyapi>
+class PassSlotFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                                                 // <pyapi>
     PassSlotFrameFilter(const char *name, SlotNumber n_slot, FrameFilter *next = NULL); // <pyapi>
@@ -276,8 +266,7 @@ public:
 /** Dumps each received packet to a file: use with care!  For debugging purposes only.
  * @ingroup filters_tag
  */
-class DumpFrameFilter : public FrameFilter
-{ // <pyapi>
+class DumpFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                          // <pyapi>
     DumpFrameFilter(const char *name, FrameFilter *next = NULL); // <pyapi>
@@ -293,8 +282,7 @@ protected:
  * @ingroup filters_tag
  */
 
-class CountFrameFilter : public FrameFilter
-{ // <pyapi>
+class CountFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                           // <pyapi>
     CountFrameFilter(const char *name, FrameFilter *next = NULL); // <pyapi>
@@ -309,8 +297,7 @@ protected:
 /** Corrects erroneous timestamps (while preserving timestamp distances).
  * @ingroup filters_tag
  */
-class TimestampFrameFilter : public FrameFilter
-{ // <pyapi>
+class TimestampFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                                                                                 // <pyapi>
     TimestampFrameFilter(const char *name, FrameFilter *next = NULL, long int msdiff_max = TIMESTAMP_CORRECT_TRESHOLD); // <pyapi>
@@ -326,8 +313,7 @@ protected:
 /** Corrects erroneous timestamps (while preserving timestamp distances).  Reset correction every 10 minutes.
  * @ingroup filters_tag
  */
-class TimestampFrameFilter2 : public FrameFilter
-{ // <pyapi>
+class TimestampFrameFilter2 : public FrameFilter { // <pyapi>
 
 public:                                                                                                                  // <pyapi>
     TimestampFrameFilter2(const char *name, FrameFilter *next = NULL, long int msdiff_max = TIMESTAMP_CORRECT_TRESHOLD); // <pyapi>
@@ -344,8 +330,7 @@ protected:
 /** Substitute timestamps with the time they arrive to the client.
  * @ingroup filters_tag
  */
-class DummyTimestampFrameFilter : public FrameFilter
-{ // <pyapi>
+class DummyTimestampFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                                    // <pyapi>
     DummyTimestampFrameFilter(const char *name, FrameFilter *next = NULL); // <pyapi>
@@ -360,8 +345,7 @@ protected:
  * 
  * @ingroup filters_tag
  */
-class RepeatH264ParsFrameFilter : public FrameFilter
-{ // <pyapi>
+class RepeatH264ParsFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                                    // <pyapi>
     RepeatH264ParsFrameFilter(const char *name, FrameFilter *next = NULL); // <pyapi>
@@ -386,8 +370,7 @@ public:
  * 
  * @ingroup filters_tag
  */
-class GateFrameFilter : public FrameFilter
-{ // <pyapi>
+class GateFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                          // <pyapi>
     GateFrameFilter(const char *name, FrameFilter *next = NULL); // <pyapi>
@@ -414,8 +397,7 @@ public:                      // <pyapi>
  * 
  * 
  */
-class SwitchFrameFilter : public FrameFilter
-{ // <pyapi>
+class SwitchFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                                                        // <pyapi>
     SwitchFrameFilter(const char *name, FrameFilter *next1 = NULL, FrameFilter *next2 = NULL); // <pyapi>
@@ -463,8 +445,7 @@ protected:
  * Like GateFrameFilter, but caches SetupFrame s and re-emits them always when the gate is activated
  * 
  */
-class CachingGateFrameFilter : public FrameFilter
-{ // <pyapi>
+class CachingGateFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                                 // <pyapi>
     CachingGateFrameFilter(const char *name, FrameFilter *next = NULL); // <pyapi>
@@ -494,8 +475,7 @@ public:           // <pyapi>
  * 
  * @ingroup filters_tag 
  */
-class SetSlotFrameFilter : public FrameFilter
-{ // <pyapi>
+class SetSlotFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                             // <pyapi>
     SetSlotFrameFilter(const char *name, FrameFilter *next = NULL); // <pyapi>
@@ -522,8 +502,7 @@ public:                             // <pyapi>
  * 
  * @ingroup filters_tag
  */
-class TimeIntervalFrameFilter : public FrameFilter
-{ // <pyapi>
+class TimeIntervalFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                                                        // <pyapi>
     TimeIntervalFrameFilter(const char *name, long int mstimedelta, FrameFilter *next = NULL); // <pyapi>
@@ -547,8 +526,7 @@ public:
  * @ingroup filters_tag
  * @ingroup queues_tag
  */
-class FifoFrameFilter : public FrameFilter
-{ // <pyapi>
+class FifoFrameFilter : public FrameFilter { // <pyapi>
 
 public: // <pyapi>
     /** Default constructor
@@ -572,8 +550,7 @@ protected:
  * @ingroup filters_tag
  * @ingroup queues_tag
  */
-class BlockingFifoFrameFilter : public FrameFilter
-{ // <pyapi>
+class BlockingFifoFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                              // <pyapi>
     BlockingFifoFrameFilter(const char *name, FrameFifo *framefifo); ///< Default constructor // <pyapi>
@@ -594,8 +571,7 @@ protected:
  * 
  * @ingroup filters_tag
  */
-class SwScaleFrameFilter : public FrameFilter
-{ // <pyapi>
+class SwScaleFrameFilter : public FrameFilter { // <pyapi>
 
 public:                                                                                                  // <pyapi>
     SwScaleFrameFilter(const char *name, int target_width, int target_height, FrameFilter *next = NULL); ///< Default constructor // <pyapi>

@@ -26,7 +26,7 @@
  *  @file    livethread_rtsp_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.17.5 
+ *  @version 0.18.0 
  *  
  *  @brief 
  *
