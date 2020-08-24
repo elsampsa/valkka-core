@@ -69,7 +69,12 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Latest version is 0.18.0
+### Newest version is 0.18.1
+
+- Fixed some issues with Ubuntu 20 LTS, for example [this one](https://bugs.python.org/issue36721): not using pkg-config to find python libs anymore
+- Tested with latest live555 version: required a small fix & openssl dependencies
+
+### Older versions
 
 0.18.0
 
@@ -77,8 +82,6 @@ We're currently at alpha
 - API level 2 shmem client modified (mysterious crashes due to re-creating RGBMeta cpp type at python side maybe solved)
 - Fragmented mp4 progressing (not yet production level)
 - Migrating ppa support to Ubuntu 18 LTS and 20 LTS only
-
-### Older versions
 
 0.17.5
 

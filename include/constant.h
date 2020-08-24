@@ -28,7 +28,7 @@
  *  @file    constant.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.18.0 
+ *  @version 0.18.1 
  *  
  *  @brief   Constant/default values, version numbers
  */ 
@@ -60,7 +60,7 @@ const char* get_numpy_version() {  // <pyapi>
     
 static const int VERSION_MAJOR = 0; // <pyapi>
 static const int VERSION_MINOR = 18; // <pyapi>
-static const int VERSION_PATCH = 0; // <pyapi>
+static const int VERSION_PATCH = 1; // <pyapi>
 
 static const unsigned LIVE_GET_PARAMETER_PING = 50; // ping the camera with GET_PARAMETER_PING every N:th second while the connection is active
 
