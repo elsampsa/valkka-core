@@ -141,6 +141,8 @@ pkg_search_module(X11 REQUIRED x11)
 pkg_search_module(GLEW REQUIRED glew)
 pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the latest ffmpeg
 pkg_search_module(PYTHON REQUIRED python3)
+pkg_search_module(OPENSSL REQUIRED openssl)
+
 # no pkg-search for boost ..
 
 message("*** PYTHON INTERFACE ***")
@@ -200,6 +202,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INC
 # # target_link_libraries(${PROJECT_NAME} ${GL_LIBS})
 target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES} ${GLEW_LIBRARIES} ${ALSA_LIBRARIES} ${PYTHON_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} "pthread")
+
+# [add openssl dependencies]
+target_link_libraries(${PROJECT_NAME} ${OPENSSL_LIBRARIES})
 
 message("LIVE555 ROOT: ${LIVE555_ROOT}")
 message("FFMPEG  ROOT: ${FFMPEG_ROOT}")
@@ -300,6 +305,8 @@ foreach( testname ${TESTNAMES} )
   # .. but then it will bust when using the python bindings
   # .. all that crap comes from libavdevice
   
+  target_link_libraries(${testname} ${OPENSSL_LIBRARIES})
+
   add_dependencies(tests ${testname}) # tests depends on the executable
   add_dependencies(${testname} ${PROJECT_NAME}) # test depends on libValkka
 endforeach( testname ${TESTNAMES} )
