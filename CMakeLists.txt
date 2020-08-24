@@ -8,6 +8,7 @@
 
 cmake_minimum_required(VERSION 3.1)
 find_package(PkgConfig REQUIRED)
+# find_package(PythonLibs 2.7 REQUIRED)
 
 project(Valkka)
 
@@ -140,10 +141,20 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 pkg_search_module(X11 REQUIRED x11)
 pkg_search_module(GLEW REQUIRED glew)
 pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the latest ffmpeg
-pkg_search_module(PYTHON REQUIRED python3)
+# pkg_search_module(PYTHON REQUIRED python3) # don't use! https://bugs.python.org/issue36721
+
+# some cmake bullshit for a change: get python libs and cflags
+exec_program(python3-config ARGS --includes OUTPUT_VARIABLE PYTHON_INCLUDE_DIRS_TMP)
+exec_program(python3-config ARGS --libs OUTPUT_VARIABLE PYTHON_LIBRARIES_TMP)
+string(REPLACE "-l" " " PYTHON_LIBRARIES_TMP ${PYTHON_LIBRARIES_TMP})
+string(REPLACE " " ";" PYTHON_LIBRARIES ${PYTHON_LIBRARIES_TMP})
+string(REPLACE "-I" " " PYTHON_INCLUDE_DIRS_TMP ${PYTHON_INCLUDE_DIRS_TMP})
+string(REPLACE " " ";" PYTHON_INCLUDE_DIRS ${PYTHON_INCLUDE_DIRS_TMP})
+
 pkg_search_module(OPENSSL REQUIRED openssl)
 
-# no pkg-search for boost ..
+message("PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
+message("PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")
 
 message("*** PYTHON INTERFACE ***")
 # execute_process(COMMAND python3 -c "from distutils import sysconfig; print(sysconfig.get_python_lib(),end='')" OUTPUT_VARIABLE PYTHON_DIR)
@@ -197,7 +208,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC include)
 # [set shared library version]
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${VERSION_STRING} SOVERSION ${MAJOR_VERSION})
 
-# [add openGL dependencies]
+# [add dependencies]
 target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 # # target_link_libraries(${PROJECT_NAME} ${GL_LIBS})
 target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES} ${GLEW_LIBRARIES} ${ALSA_LIBRARIES} ${PYTHON_LIBRARIES})
