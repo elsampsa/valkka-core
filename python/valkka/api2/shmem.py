@@ -105,6 +105,15 @@ class ShmemClient:
             return None, None
 
 
+
+
+class Namespace:
+
+    def __init__(self):
+        pass
+
+
+
 class ShmemRGBClient:
     """A shared memory ringbuffer client for RGB images.  The idea is here, that the ringbuffer "server" is instantiated at the cpp side.  Client must have exactly the same name (that identifies the shmem segments), and the number of ringbuffer elements.
 
@@ -141,7 +150,7 @@ class ShmemRGBClient:
         self.index_p = core.new_intp()
         self.isize_p = core.new_intp()
         
-        self.rgb_meta = core.RGB24Meta() # TEST2
+        # self.rgb_meta = core.RGB24Meta() # TEST2
 
         # print(self.pre,"shmem name=",self.name)
         # shmem ring buffer on the client side
@@ -194,17 +203,35 @@ class ShmemRGBClient:
         """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
         """
         # self.rgb_meta = core.RGB24Meta() # TEST2
-        got = self.core.clientPullFrame(self.index_p, self.rgb_meta) # TEST2
-        index = core.intp_value(self.index_p)
+        # got = self.core.clientPullFrame(self.index_p, self.rgb_meta) # TEST2
+        # index = core.intp_value(self.index_p)
         # if (self.verbose):
-        self.logger.debug("current index %s", index) # , ShmemRGBClient.metaToString(self.rgb_meta))
+        #self.logger.debug("current index %s", index) # , ShmemRGBClient.metaToString(self.rgb_meta))
         # print(">", ShmemRGBClient.metaToString(self.rgb_meta))
-        if (got):
-            return index, self.rgb_meta
-        else:
+        """
+        PyTuple_SetItem(tup, 0, PyLong_FromLong((long)index_out));
+        PyTuple_SetItem(tup, 1, PyLong_FromSsize_t(meta.size));
+        PyTuple_SetItem(tup, 2, PyLong_FromLong((long)meta.width));
+        PyTuple_SetItem(tup, 3, PyLong_FromLong((long)meta.height));
+        PyTuple_SetItem(tup, 4, PyLong_FromUnsignedLong((unsigned long)(meta.slot))); // unsigned short
+        PyTuple_SetItem(tup, 5, PyLong_FromLong(meta.mstimestamp));
+        """
+        tup = self.core.clientPullPy()
+        index = tup[0]
+        if index < 0:
             return None, None
+        else:
+            rgb_meta = Namespace()
+            rgb_meta.size          = tup[1]
+            rgb_meta.width         = tup[2]
+            rgb_meta.height        = tup[3]
+            rgb_meta.slot          = tup[4]
+            rgb_meta.mstimestamp   = tup[5]
+            return index, rgb_meta
+
 
     def pullFrameThread(self):
+        return self.pullFrame()
         """Use with multithreading
 
         We have a segfault mystery here, from line

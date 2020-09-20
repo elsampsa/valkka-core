@@ -1,3 +1,27 @@
+valkka (0.18.4-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * ffs just do linux 64 bit
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Mon, 24 Aug 2020 20:42:42 +0300
+
+valkka (0.18.3-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * can we find out the architecture in ppa autobuild
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Mon, 24 Aug 2020 20:36:15 +0300
+
+valkka (0.18.2-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * yet another fix for finding python libs in python 3.8
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Mon, 24 Aug 2020 20:22:25 +0300
+
+valkka (0.18.2-0ubuntu1-focalppa1) focal; urgency=low
+
+  * yet another fix for finding python libs in python 3.8
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Mon, 24 Aug 2020 19:17:22 +0300
+
 valkka (0.18.1-0ubuntu1-focalppa1) focal; urgency=low
 
   * live555 and openssl fix, update cmake for finding python libs

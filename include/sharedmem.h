@@ -332,14 +332,24 @@ public:                              // <pyapi>
     /** Returns a python tuple of metadata
      * (index, width, height, slot, timestamp)
      */
-    // PyObject* clientPullPy();                                  // <pyapi>
+    PyObject* clientPullPy();                                     // <pyapi>
+    
     /** Legacy support */
     bool clientPull(int &index_out, int &size_out);               // <pyapi>
+    
     /** Pulls payload and extended metadata */
     bool clientPullFrame(int &index_out, RGB24Meta &meta);        // <pyapi>
     /** For multithreading (instead of multiprocessing) applications: releases python GIL */
     bool clientPullFrameThread(int &index_out, RGB24Meta &meta);  // <pyapi>
+    // ..not sure about passing RGB24Meta from python
+    // by reference.  Not sure if swig handles the refcounting
+    // correctly.
+
     bool serverPushPyRGB(PyObject *po, SlotNumber slot, long int mstimestamp); // <pyapi>
+    
+    // in these versions, modify the python object in-place: TODO
+    //bool clientPullFramePy(int &index_out, PyObject *po)          // <pyapi>
+    //bool clientPullFrameThreadPy(int &index_out, PyObject *po)    // <pyapi>
 };                                                                // <pyapi>
 
 

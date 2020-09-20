@@ -71,6 +71,8 @@ void Thread::mainRun() {// for std::thread version
         std::unique_lock<std::mutex> lk(this->start_mutex);
         this->start_condition.notify_one();
     }
+
+
     this->run();
     this->postRun();
     threadlogger.log(LogLevel::debug) << "Thread: mainRun: (0) bye : "<< this->name <<std::endl;
@@ -163,6 +165,15 @@ void Thread::startCall() {
     
     i=pthread_create(&internal_thread, &thread_attr, this->mainRun_, this);
     if (i!=0) {perror("Thread: startCall: WARNING! could not create thread"); exit(1);}
+
+    /* // this has no effect..
+    std::cout << "SETTING NAME FOR " << name << std::endl;
+    int rc = pthread_setname_np(internal_thread, name.c_str());
+    if (rc != 0) {
+        threadlogger.log(LogLevel::debug) << "Thread: cant set name for " << this->name << std::endl;    
+    }
+    */
+
     #endif
     
     threadlogger.log(LogLevel::debug) << "Thread: startCall: waiting for "<< this->name << " to start"<<std::endl;

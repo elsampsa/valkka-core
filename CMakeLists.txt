@@ -146,7 +146,7 @@ pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the la
 # some cmake bullshit for a change: get python libs and cflags
 exec_program(python3-config ARGS --includes OUTPUT_VARIABLE PYTHON_INCLUDE_DIRS_TMP)
 exec_program(python3-config ARGS --libs --embed OUTPUT_VARIABLE PYTHON_LIBRARIES_TMP RETURN_VALUE RETVAL)
-message("RETVAL: ${RETVAL}")
+#message("RETVAL: ${RETVAL}")
 if(RETVAL)
     message("python3-config failed with --embed, so will re-run without it")
     exec_program(python3-config ARGS --libs OUTPUT_VARIABLE PYTHON_LIBRARIES_TMP RETURN_VALUE RETVAL)

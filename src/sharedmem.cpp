@@ -584,10 +584,10 @@ PyObject *SharedMemRingBufferBase::getBufferListPy() {
     PyObject *plis, *pa;
     npy_intp dims[1];
     
-    plis = PyList_New(0);
-    
+    // plis = PyList_New(0);
+    plis = PyList_New(shmems.size());
+
     // return plis;
-    
     // std::cout << name << " cache adr at pylist " << long(cache[0]) << std::endl;
     int i = 0;
     for (auto it = shmems.begin(); it != shmems.end(); ++it) {
@@ -599,7 +599,8 @@ PyObject *SharedMemRingBufferBase::getBufferListPy() {
                 this->cache[i]
             )); // use cache instead
         //*/
-        PyList_Append(plis, pa);
+        // PyList_Append(plis, pa);
+        PyList_SetItem(plis, i, pa);
         i++;
     }
     return plis;
@@ -852,6 +853,29 @@ bool SharedMemRingBufferRGB::clientPullFrameThread(int &index_out, RGB24Meta &me
     return SharedMemRingBufferBase::clientPullThread(index_out, (void*)(&meta_));
 }
 
+
+PyObject* SharedMemRingBufferRGB::clientPullPy() {
+    PyObject* tup = PyTuple_New(6);
+    RGB24Meta meta = RGB24Meta();
+    int index_out = 0;
+    bool ok;
+    Py_BEGIN_ALLOW_THREADS
+    ok = SharedMemRingBufferBase::clientPull(index_out, (void*)(&meta));
+    Py_END_ALLOW_THREADS
+    if (!ok) {
+        index_out = -1;
+        PyTuple_SetItem(tup, 0, PyLong_FromLong((long)index_out));
+    }
+    else {
+        PyTuple_SetItem(tup, 0, PyLong_FromLong((long)index_out));
+        PyTuple_SetItem(tup, 1, PyLong_FromSsize_t(meta.size));
+        PyTuple_SetItem(tup, 2, PyLong_FromLong((long)meta.width));
+        PyTuple_SetItem(tup, 3, PyLong_FromLong((long)meta.height));
+        PyTuple_SetItem(tup, 4, PyLong_FromUnsignedLong((unsigned long)(meta.slot))); // unsigned short
+        PyTuple_SetItem(tup, 5, PyLong_FromLong(meta.mstimestamp));
+    }
+    return tup;
+}
 
 
 
