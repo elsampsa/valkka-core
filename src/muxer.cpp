@@ -35,7 +35,7 @@
 
 #define logger filterlogger //TODO: create a new logger for muxers
 
-#define MUXPARSE  //enable if you need to see what the byte parser is doing
+// #define MUXPARSE  //enable if you need to see what the byte parser is doing
 
 
 MuxFrameFilter::MuxFrameFilter(const char* name, FrameFilter *next) : FrameFilter(name, next), active(false), initialized(false), mstimestamp0(0), zerotimeset(false), ready(false), av_format_ctx(NULL), avio_ctx(NULL), avio_ctx_buffer(NULL), missing(0), ccf(0), av_dict(NULL), format_name("matroska") {
@@ -242,7 +242,7 @@ void MuxFrameFilter::run(Frame* frame) {
 void MuxFrameFilter::go(Frame* frame) {
     std::unique_lock<std::mutex> lk(this->mutex);
     
-    // std::cout << "MuxFrameFilter: go: frame " << *frame << std::endl;
+    //std::cout << "MuxFrameFilter: go: frame " << *frame << std::endl;
     
     // make a copy of the setup frames ..
     if (frame->getFrameClass() == FrameClass::setup) { // SETUPFRAME
@@ -300,7 +300,8 @@ void MuxFrameFilter::go(Frame* frame) {
                 avpkt->pts=AV_NOPTS_VALUE;
             }
             
-            av_interleaved_write_frame(av_format_context, avpkt); // => this calls write_packet // used to crasssshh here, but not anymore, after we have defined dummy read & seek functions!
+            av_interleaved_write_frame(av_format_context, avpkt); // => this calls write_packet 
+            // used to crasssshh here, but not anymore, after we have defined dummy read & seek functions!
             // av_write_frame(av_format_context, avpkt);
         }
         else {
@@ -339,7 +340,10 @@ void MuxFrameFilter::deActivate() {
 
 
 FragMP4MuxFrameFilter::FragMP4MuxFrameFilter(const char* name, FrameFilter *next) : MuxFrameFilter(name, next) {
+    internal_frame.meta_type = MuxMetaType::fragmp4; 
+    internal_frame.meta_blob.resize(sizeof(FragMP4Meta));
 }
+
     
 FragMP4MuxFrameFilter::~FragMP4MuxFrameFilter() {
 }
@@ -465,23 +469,28 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             #ifdef MUXPARSE
             std::cout << "FragMP4MuxFrameFilter: got box " << std::string(boxname) << std::endl;
             #endif
-            if (strcmp(boxname, "moof")) {
-            }
-
             // set the frame type that also defines the metadata
-            internal_frame.meta_type = MuxMetaType::fragmp4; 
+            // internal_frame.meta_type = MuxMetaType::fragmp4; // at ctor
             FragMP4Meta* metap;
+            // internal_frame.meta_blob.resize(sizeof(FragMP4Meta)); // at ctor
             metap = (FragMP4Meta*)(internal_frame.meta_blob.data());
             // set values in-place:
+            if (strcmp(boxname, "moof") == 0) {
+                metap->is_first = moofHasFirstSampleFlag(internal_frame.payload.data());
+                #ifdef MUXPARSE
+                std::cout << "FragMP4MuxFrameFilter: first sample flag: " << int(metap->is_first) << std::endl;
+                #endif
+            }
             memcpy(&metap->name[0], boxname, 4);
-            metap->is_first = false;
-            // TODO: the keyframe flag should be pulled from the MP4 structure
+
+            // TODO: get timestamp from the MP4 structure
+            // at the moment, internal_frame does not have any timestamp
+            // metap->mstimestamp = internal_frame.mstimestamp; 
+            metap->mstimestamp = 0; // n/a for the moment
+
             metap->size = internal_frame.payload.size();
             metap->slot = internal_frame.n_slot;
-            metap->mstimestamp = internal_frame.mstimestamp; 
-            // TODO: timestamp is somewhere deep in the MP4 structure
-            // should be found & put both into metap->mstimestamp and internal_frame.mstimestamp
-            // at the moment, internal_frame does not have any timestamp
+            
             #ifdef MUXPARSE
             std::cout << "FragMP4MuxFrameFilter: sending frame downstream " << std::endl;
             #endif
@@ -514,13 +523,42 @@ uint32_t getSubBoxIndex(uint8_t* data, const char name[4]) {
     char name_[4];
     uint32_t len_;
 
-    getLenName(data, thislen, &thisname[0]);    
+    getLenName(data, thislen, &thisname[0]);
+    cc += 8; // len & name, both 4 bytes
     while (cc <= thislen) {
-        getLenName(data + cc, len_, &name_[0]);
+        getLenName(data + cc, len_, &name_[0]); // take the next sub-box
+        // std::cout << "NAME:" << name_ << std::endl;
         if (strcmp(name, name_) == 0) {
             return cc;
         }
+        cc += len_;
     }
     return 0;
 }
+
+
+bool moofHasFirstSampleFlag(uint8_t* data) {
+    /*
+    [moof [traf [trun]]]
+    */
+    uint32_t cc = 0;
+    uint8_t* current_box;
+    current_box = data;
+    // std::cout << "looking for traf" << std::endl;
+    cc = getSubBoxIndex(current_box, "traf"); current_box = current_box + cc;
+    // std::cout << "looking for trun" << std::endl;
+    cc = getSubBoxIndex(current_box, "trun"); current_box = current_box + cc;
+    // we're at trun now
+    //ISO/IEC 14496-12:2012(E) .. pages 5 and 57
+    //bytes: (size 4), (name 4), (version 1 + tr_flags 3)
+    return (current_box[10+1] & 4) == 4;
+}
+
+
+
+
+
+
+
+
 

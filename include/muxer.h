@@ -39,8 +39,6 @@
  * 
  */ 
 
-#endif
-
 
 #include "constant.h"
 #include "framefilter.h"
@@ -110,7 +108,6 @@ protected:
 
 
 
-
 class FragMP4MuxFrameFilter : public MuxFrameFilter {                       // <pyapi>
     
 public:                                                                     // <pyapi>
@@ -124,7 +121,6 @@ protected:
     static int write_packet(void *opaque, uint8_t *buf, int buf_size_);
     static int read_packet(void *opaque, uint8_t *buf, int buf_size) {return 0;} // dummy function
     static int64_t seek(void *opaque, int64_t offset, int whence) {return 0;} // dummy function
-
 };                                                                           // <pyapi>
 
 
@@ -156,3 +152,7 @@ if strcmp(name, "moof") == 0 {
 }
 
 */
+
+bool moofHasFirstSampleFlag(uint8_t* data);
+
+#endif

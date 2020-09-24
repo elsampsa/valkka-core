@@ -68,3 +68,4 @@
 __pycache__/
 src/scrap/*
 memo.md
+/debug/
