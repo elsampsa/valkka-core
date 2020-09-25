@@ -497,6 +497,21 @@ echo 6
 valgrind ./live_av_shmem_test 6 $LOGLEVEL &>> test.out
 printf "END: live_av_shmem_test 6\n\n" &>> test.out
 
+echo 6
+valgrind ./live_av_shmem_test 7 $LOGLEVEL &>> test.out
+printf "END: live_av_shmem_test 7\n\n" &>> test.out
+
+fi
+
+if true; then
+echo "live_muxshmem_test"
+echo "testing frag-mp4 muxing and related shmem API in the same go"
+echo
+
+echo 2
+valgrind ./live_muxshmem_test 2 $LOGLEVEL &>> test.out
+printf "END: live_av_shmem_test 1\n\n" &>> test.out
+
 fi
 
 

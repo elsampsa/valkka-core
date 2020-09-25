@@ -46,9 +46,9 @@
 
 class MuxFrameFilter : public FrameFilter {                          // <pyapi>
     
-public:                                                              // <pyapi>
-    MuxFrameFilter(const char* name, FrameFilter *next = NULL);      // <pyapi>
-    virtual ~MuxFrameFilter();                                       // <pyapi>
+public:                                                              //
+    MuxFrameFilter(const char* name, FrameFilter *next = NULL);      //
+    virtual ~MuxFrameFilter();                                       //
     
 protected:
     bool active;                       ///< Writing to file has been requested (but not necessarily achieved..)
@@ -104,7 +104,6 @@ protected:
     static int read_packet(void *opaque, uint8_t *buf, int buf_size) {return 0;} // dummy function
     static int64_t seek(void *opaque, int64_t offset, int whence) {return 0;} // dummy function
 };                                                                                             // <pyapi>
-
 
 
 

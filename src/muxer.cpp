@@ -241,8 +241,7 @@ void MuxFrameFilter::run(Frame* frame) {
 
 void MuxFrameFilter::go(Frame* frame) {
     std::unique_lock<std::mutex> lk(this->mutex);
-    
-    //std::cout << "MuxFrameFilter: go: frame " << *frame << std::endl;
+    // std::cout << "MuxFrameFilter: go: frame " << *frame << std::endl;
     
     // make a copy of the setup frames ..
     if (frame->getFrameClass() == FrameClass::setup) { // SETUPFRAME

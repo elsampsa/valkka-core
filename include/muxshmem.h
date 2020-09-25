@@ -66,7 +66,7 @@ public:
 class FragMP4SharedMemRingBuffer : public SharedMemRingBufferBase { // <pyapi>
 
 public:                                                     // <pyapi>
-    FragMP4SharedMemRingBuffer(const char* name, int n_cells, std::size_t n_size,
+    FragMP4SharedMemRingBuffer(const char* name, int n_cells, std::size_t n_size, // <pyapi>
         int mstimeout=0, bool is_server=false); // <pyapi>
     virtual ~FragMP4SharedMemRingBuffer(); // <pyapi>
 

@@ -192,7 +192,6 @@ PyObject* FragMP4SharedMemRingBuffer::clientPullPy() {
         PyTuple_SetItem(tup, 3, PyLong_FromLong(meta.mstimestamp));
         PyTuple_SetItem(tup, 4, PyBytes_FromString(meta.name));
         PyTuple_SetItem(tup, 5, PyBool_FromLong(long(meta.is_first)));
-        PyTuple_SetItem(tup, 6, PyLong_FromLong(meta.mstimestamp));
         // put here whatever metadata we might
         // add in the future..
     }

@@ -27,6 +27,8 @@
 #include "valkkafsreader.h"
 #include "movement.h"
 #include "fdwritethread.h"
+#include "muxshmem.h"
+#include "muxer.h"
 
 #include <Python.h>
 
@@ -42,9 +44,12 @@ import_array();            // numpy initialization that should be run only once
 ffmpeg_av_register_all();  // register all avcodecs, muxers, etc.
 %}
 
-// Swig should not try to create a default constructor for the following classes as they're abstract (swig interface file should not have the constructors either):
+// Swig should not try to create a default constructor for the following 
+// classes as they're abstract (swig interface file should not have the constructors either)
+// (i.e. no pyapi tags at the ctor/dtor)
 %nodefaultctor FrameFilter;
 %nodefaultctor Thread;
+%nodefaultctor MuxFrameFilter;
 %nodefaultctor AbstractFileThread; // this fucker does not have any effect
 
 // XID types

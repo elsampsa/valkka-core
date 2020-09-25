@@ -1,3 +1,8 @@
+## Resources
+
+https://askubuntu.com/questions/189640/how-to-find-architecture-of-my-pc-and-ubuntu
+https://help.launchpad.net/Packaging/PPA/Uploading
+
 ## Setup
 
 #### 1. Create a dev branch

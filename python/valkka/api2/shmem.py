@@ -315,8 +315,77 @@ class ShmemRGBClient:
 
 
 
+class FragMP4ShmemClient:
+    """A shared memory ringbuffer client for frag-MP4
+
+    :param name:               name identifying the shared mem segment.  Must be same as in the server side.
+    :param n_ringbuffer:       Number of elements in the ringbuffer.  Must be same as in the server side.
+    :param width:              RGB image width
+    :param height:             RGb image height
+    :param mstimeout:          Timeout for semaphores.  Default=0=no timeout.
+    :param verbose:            Be verbose or not.  Default=False.
+    """
+    parameter_defs = {
+        "name": str,
+        "n_ringbuffer": (int, 10),
+        "n_size": (int, 1024*1024),
+        "mstimeout": (int, 0),
+        "verbose": (bool, False)
+    }
+
+    def __init__(self, **kwargs):
+        # auxiliary string for debugging output
+        self.pre = self.__class__.__name__
+        self.logger = getLogger(self.pre)
+        # check kwargs agains parameter_defs, attach ok'd parameters to this
+        # object as attributes
+        parameterInitCheck(FragMP4ShmemClient.parameter_defs, kwargs, self)
+        self.core = core.FragMP4SharedMemRingBuffer(
+            self.name, 
+            self.n_ringbuffer,
+            self.n_size,
+            self.mstimeout,
+            False)
+        self.shmem_list = self.core.getBufferListPy()
+
+
+    def setDebug(self):
+        setLogger(self.logger, logging.DEBUG)
+
+
+    def useEventFd(self, event_fd):
+        self.core.clientUseFd(event_fd)
+
+
+    def pullFrame(self):
+        """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, 
+        returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
+        """
+        """
+        PyTuple_SetItem(tup, 0, PyLong_FromLong((long)index_out));
+        PyTuple_SetItem(tup, 1, PyLong_FromSsize_t(meta.size));
+        PyTuple_SetItem(tup, 2, 
+        PyLong_FromUnsignedLong((unsigned long)(meta.slot))); // unsigned short
+        PyTuple_SetItem(tup, 3, PyLong_FromLong(meta.mstimestamp));
+        PyTuple_SetItem(tup, 4, PyBytes_FromString(meta.name));
+        PyTuple_SetItem(tup, 5, PyBool_FromLong(long(meta.is_first)));
+        """
+        tup = self.core.clientPullPy()
+        index = tup[0]
+        if index < 0:
+            return None, None
+        else:
+            meta = Namespace()
+            meta.size          = tup[1]
+            meta.slot          = tup[2]
+            meta.mstimestamp   = tup[3]
+            meta.name          = tup[4]
+            meta.is_first      = tup[5]
+            return index, meta
+
+
 class ShmemRGBServer:
-    """A shared memory ringbuffer server for RGB images.  
+    """A shared memory ringbuffer server for RGB images at the python side
 
     :param name:               name identifying the shared mem segment.  Must be same as in the server side.
     :param n_ringbuffer:       Number of elements in the ringbuffer.  Must be same as in the server side.
