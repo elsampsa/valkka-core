@@ -1,5 +1,8 @@
 #!/usr/bin/make -f
 
+include /usr/share/dpkg/default.mk
+##..that should include $(DEB_HOST_ARCH) into this Makefile
+
 # we need absolute paths because of CMake ..
 MAINDIR   = $(CURDIR)
 EXTDIR    = $(MAINDIR)/ext
@@ -28,7 +31,6 @@ build:
 	mkdir -p $(BUILDDIR);
 	cd $(BUILDDIR); cmake -Dlive555_root=$(LIVEDIR) -Dffmpeg_root=$(FFMPEGDIR) -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX=$(MAINDIR)/debian/tmp/usr $(MAINDIR)
 	make -C $(BUILDDIR)
-
 	
 # thirdly called by launchpad
 binary: binary-indep binary-arch
@@ -47,7 +49,7 @@ binary-arch:
 clean:
 	rm -f build
 	rm -rf $(BUILDDIR)
-	cd $(EXTDIR); ./configure_live.bash
+	cd $(EXTDIR); ./configure_live.bash $(DEB_HOST_ARCH)
 	cd $(EXTDIR); ./configure_ffmpeg.bash
 	cd $(LIVEDIR); make clean
 	cd $(FFMPEGDIR); make clean
