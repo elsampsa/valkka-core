@@ -69,12 +69,19 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Newest version is 0.18.1
+### Newest version is 1.0.0
+
+- Changed shmem API, more examples added to valkka-examples
+- ..and Python GIL now released by default in shmem operations
+- Frag-MP4 streaming implemented
+- "define analyzer" window & qt bitmap python reference leak still persists..
+
+### Older versions
+
+0.18.1
 
 - Fixed some issues with Ubuntu 20 LTS, for example [this one](https://bugs.python.org/issue36721): not using pkg-config to find python libs anymore
 - Tested with latest live555 version: required a small fix & openssl dependencies
-
-### Older versions
 
 0.18.0
 
