@@ -25,7 +25,7 @@ NAME.py :
 @file    NAME.py
 @author  Sampsa Riikonen
 @date    2017
-@version 0.18.1 
+@version 1.0.0 
   
 @brief 
 """

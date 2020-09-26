@@ -26,7 +26,7 @@
  *  @file    live_av_openglthread_test2.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.18.1 
+ *  @version 1.0.0 
  *  
  *  @brief   Test the full pipeline: LiveThread => AVThread => OpenGLThread .. and draw some boxes!
  *
