@@ -56,7 +56,10 @@ protected:
     bool initialized;                  ///< File was opened ok : codec_contexes, streams and av_format_context reserved (should be freed at some point)
     long int mstimestamp0;             ///< Time of activation (i.e. when the recording started)
     long int zerotime;                 ///< Start time set explicitly by the user
+    long int prevpts;
     bool zerotimeset;
+    // bool sps_ok, pps_ok;
+
     std::string format_name;
     
 public: // so that child static methods can access..
@@ -73,7 +76,8 @@ protected: //libav stuff
     AVFormatContext               *av_format_context;
     AVPacket                      *avpkt;
     AVDictionary                  *av_dict;
-    
+    //AVBufferRef                   *avbuffer;
+
     static const size_t avio_ctx_buffer_size = 4096;
   
 protected: //mutex stuff
@@ -84,6 +88,7 @@ protected: //frames
     std::vector<SetupFrame>     setupframes;        ///< deep copies of the arrived setup frames
     
 public:
+    BasicFrame                  internal_basicframe; // , internal_basicframe2;
     MuxFrame                    internal_frame;     ///< outgoing muxed frame
   
 protected:
@@ -118,8 +123,8 @@ protected:
 
 protected:
     static int write_packet(void *opaque, uint8_t *buf, int buf_size_);
-    static int read_packet(void *opaque, uint8_t *buf, int buf_size) {return 0;} // dummy function
-    static int64_t seek(void *opaque, int64_t offset, int whence) {return 0;} // dummy function
+    static int read_packet(void *opaque, uint8_t *buf, int buf_size) {std::cout << "VITTU" << std::endl; return 0;} // dummy function
+    static int64_t seek(void *opaque, int64_t offset, int whence) {std::cout << "VITTU2" << std::endl; return 0;} // dummy function
 };                                                                           // <pyapi>
 
 
