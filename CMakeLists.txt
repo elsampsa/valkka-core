@@ -317,6 +317,7 @@ foreach( testname ${TESTNAMES} )
   target_include_directories(${testname} PUBLIC "${FFMPEG_ROOT}")
 
   target_include_directories(${testname} PUBLIC ${PYTHON_INCLUDE_DIRS})
+  target_include_directories(${testname} PUBLIC ${NUMPY_INCLUDE_DIR})
   target_link_libraries(${testname} ${PYTHON_LIBRARIES})
   
   target_link_libraries(${testname} "Valkka.so")
