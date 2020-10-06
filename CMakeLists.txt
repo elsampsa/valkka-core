@@ -218,7 +218,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC include)
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${VERSION_STRING} SOVERSION ${MAJOR_VERSION})
 
 # [add dependencies]
-target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS} ${NUMPY_INCLUDE_DIR})
 # # target_link_libraries(${PROJECT_NAME} ${GL_LIBS})
 target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES} ${GLEW_LIBRARIES} ${ALSA_LIBRARIES} ${PYTHON_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} "pthread")
@@ -274,7 +274,7 @@ target_include_directories(valkka_core PUBLIC include)
 target_include_directories(valkka_core PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 target_include_directories(valkka_core PUBLIC "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include")
 target_include_directories(valkka_core PUBLIC "${FFMPEG_ROOT}") # ffmpeg header files are referred in the code with the directory name
-target_include_directories(valkka_core PUBLIC "${NUMPY_INCLUDE_DIR}") # ffmpeg header files are referred in the code with the directory name
+target_include_directories(valkka_core PUBLIC "${NUMPY_INCLUDE_DIR}")
 
 target_link_libraries(valkka_core "Valkka.so")
 target_link_libraries(valkka_core "-L${CMAKE_CURRENT_BINARY_DIR}/lib")
