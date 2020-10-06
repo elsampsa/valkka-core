@@ -171,8 +171,10 @@ and then do:
 
 You need (at least):
 
-    sudo apt-get install git build-essential libc6-dev yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils valgrind 
-    
+    sudo apt-get install git build-essential libc6-dev yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils valgrind pkg-config
+
+If you have upgraded your python interpreter, you might need to define the version, say ```python3.7-dev```
+
 ### Compile
 
 This just got a lot easier: the same CMake file is used to compile the library, generate python wrappings and to compile the wrappings (no more python setup scripts)
