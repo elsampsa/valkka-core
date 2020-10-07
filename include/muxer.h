@@ -123,8 +123,8 @@ protected:
 
 protected:
     static int write_packet(void *opaque, uint8_t *buf, int buf_size_);
-    static int read_packet(void *opaque, uint8_t *buf, int buf_size) {std::cout << "VITTU" << std::endl; return 0;} // dummy function
-    static int64_t seek(void *opaque, int64_t offset, int whence) {std::cout << "VITTU2" << std::endl; return 0;} // dummy function
+    static int read_packet(void *opaque, uint8_t *buf, int buf_size) {std::cout << "muxer: dummy read packet" << std::endl; return 0;} // dummy function
+    static int64_t seek(void *opaque, int64_t offset, int whence) {std::cout << "muxer: dummy seek" << std::endl; return 0;} // dummy function
 };                                                                           // <pyapi>
 
 
