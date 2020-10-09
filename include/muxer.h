@@ -117,9 +117,16 @@ class FragMP4MuxFrameFilter : public MuxFrameFilter {                       // <
 public:                                                                     // <pyapi>
     FragMP4MuxFrameFilter(const char* name, FrameFilter *next = NULL);      // <pyapi>
     virtual ~FragMP4MuxFrameFilter();                                       // <pyapi>
-    
+
+public:
+    bool                        got_ftyp, got_moov;
+    MuxFrame                    ftyp_frame, moov_frame;
+
 protected:
     virtual void defineMux();
+
+public: // API calls    // <pyapi>
+    void sendMeta();    // <pyapi>
 
 protected:
     static int write_packet(void *opaque, uint8_t *buf, int buf_size_);

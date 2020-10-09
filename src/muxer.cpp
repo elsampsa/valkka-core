@@ -415,15 +415,34 @@ void MuxFrameFilter::deActivate() {
   
 
 
-FragMP4MuxFrameFilter::FragMP4MuxFrameFilter(const char* name, FrameFilter *next) : MuxFrameFilter(name, next) {
+FragMP4MuxFrameFilter::FragMP4MuxFrameFilter(const char* name, FrameFilter *next) : 
+    MuxFrameFilter(name, next), got_ftyp(false), got_moov(false) {
     internal_frame.meta_type = MuxMetaType::fragmp4; 
     internal_frame.meta_blob.resize(sizeof(FragMP4Meta));
+
+    ftyp_frame.meta_type = MuxMetaType::fragmp4; 
+    ftyp_frame.meta_blob.resize(sizeof(FragMP4Meta));
+
+    moov_frame.meta_type = MuxMetaType::fragmp4; 
+    moov_frame.meta_blob.resize(sizeof(FragMP4Meta));
 }
 
     
 FragMP4MuxFrameFilter::~FragMP4MuxFrameFilter() {
 }
 
+
+void FragMP4MuxFrameFilter::sendMeta() {
+    std::unique_lock<std::mutex> lk(this->mutex);
+    if (got_ftyp and got_moov and next) {
+        std::cout << "FragMP4MuxFrameFilter: sending metadata!" << std::endl;
+        next->run(&ftyp_frame);
+        next->run(&moov_frame);
+    }
+    else {
+        std::cout << "FragMP4MuxFrameFilter: No metadata!" << std::endl;
+    }
+}
 
 void FragMP4MuxFrameFilter::defineMux() {
     this->avio_ctx = avio_alloc_context(this->avio_ctx_buffer, this->avio_ctx_buffer_size, 1, 
@@ -440,7 +459,7 @@ void FragMP4MuxFrameFilter::defineMux() {
     // av_dict_set(&av_dict, "frag_size", "500", 500); // nopes
     // av_dict_set(&av_dict, "frag_size", "512", 0);
     // av_dict_set(&av_dict, "frag_size", "200000", 0);
-    av_dict_set(&av_dict, "frag_size", "1024", 0);
+    av_dict_set(&av_dict, "frag_size", "10240", 0);
 
 }
 
@@ -454,7 +473,7 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
     // buf_size_ : amount of data libavformat gives us
 
 
-    MuxFrameFilter* me = static_cast<MuxFrameFilter*>(opaque);
+    FragMP4MuxFrameFilter* me = static_cast<FragMP4MuxFrameFilter*>(opaque);
     MuxFrame& internal_frame = me->internal_frame;
     uint32_t &missing = me->missing;
     uint32_t &ccf = me->ccf;
@@ -579,6 +598,16 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             metap->size = boxlen; // internal_frame.payload.size();
             metap->slot = internal_frame.n_slot;
             
+            if (strcmp(boxname, "ftyp") == 0) {
+                me->ftyp_frame.copyFrom(&internal_frame);
+                me->got_ftyp = true;
+            }
+            else if (strcmp(boxname, "moov") == 0) {
+                me->moov_frame.copyFrom(&internal_frame);
+                me->got_moov = true;
+                // std::cout << "FragMP4MuxFrameFilter: metadata cached" << std::endl;
+            }
+
             #ifdef MUXPARSE
             std::cout << "FragMP4MuxFrameFilter: sending frame downstream " << std::endl;
             #endif

@@ -310,6 +310,12 @@ class Duplex:
         """
         return self.reader
 
+    def getReadFd(self):
+        return self.read_fd
+
+    def getWriteFd(self):
+        return self.write_fd
+
     def getWriteIO(self):
         """_io.FileIO object
         """
@@ -391,7 +397,15 @@ class AsyncBackMessageProcess(MessageProcess):
         self.postRun__()
 
 
+    async def asyncPre__(self):
+        pass
+
+    async def asyncPost__(self):
+        pass
+
     async def async_run__(self):
+        await self.asyncPre__()
+
         # print("hello from async")
         loop = asyncio.get_event_loop()
 
@@ -434,6 +448,8 @@ class AsyncBackMessageProcess(MessageProcess):
 
         self.reader_transport.close()
         self.writer_transport.close()
+
+        await self.asyncPost__()
         self.logger.debug("bye!")
         
 
@@ -495,6 +511,7 @@ class AsyncBackMessageProcess(MessageProcess):
         msg = to8ByteMessage(obj)
         # self.back_pipe.send(obj)
         #try:
+        print("send_out__", msg)
         self.writer_transport.write(msg) # woops.. this is _not_ async call (it returns immediately)
         #except Exception as e:
         #    print("send_out__ failed with", e)
