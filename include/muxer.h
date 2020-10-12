@@ -51,13 +51,15 @@ public:                                                              //
     virtual ~MuxFrameFilter();                                       //
     
 protected:
-    bool active;                       ///< Writing to file has been requested (but not necessarily achieved..)
-    bool ready;                        ///< Got enough setup frames
+    bool active;                       ///< Writing to muxer has been requested
+    bool has_extradata;                ///< Got "extradata" (sps & pps)
+    bool ready;                        ///< Got enough setup frames & extradata
     bool initialized;                  ///< File was opened ok : codec_contexes, streams and av_format_context reserved (should be freed at some point)
     long int mstimestamp0;             ///< Time of activation (i.e. when the recording started)
     long int zerotime;                 ///< Start time set explicitly by the user
     long int prevpts;
     bool zerotimeset;
+    bool testflag;
     // bool sps_ok, pps_ok;
 
     std::string format_name;
@@ -88,8 +90,9 @@ protected: //frames
     std::vector<SetupFrame>     setupframes;        ///< deep copies of the arrived setup frames
     
 public:
-    BasicFrame                  internal_basicframe; // , internal_basicframe2;
-    MuxFrame                    internal_frame;     ///< outgoing muxed frame
+    BasicFrame                  internal_basicframe; ///< 
+    MuxFrame                    internal_frame;      ///< outgoing muxed frame
+    BasicFrame                  extradata_frame;     ///< capture decoder extradata here
   
 protected:
     virtual void defineMux() = 0; ///< Define container format (format_name) & muxing parameters (av_dict).  Define in child classes.
@@ -98,6 +101,7 @@ protected:
     void initMux();           ///< Open file, reserve codec_contexes, streams, write preamble, set initialized=true if success
     void closeMux();          ///< Close file, dealloc codec_contexes, streams
     void deActivate_();
+    void writeFrame(BasicFrame* frame);
   
 public: // API calls                                                                           // <pyapi>
     // setFileName(const char* fname); ///< Sets the output filename                           // <pyapi>

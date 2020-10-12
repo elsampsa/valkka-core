@@ -53,7 +53,7 @@ public: // <pyapi>
     FrameFilter(const char *name, FrameFilter *next = NULL); // don't include into the python api (this class is abstract)
     virtual ~FrameFilter();                                  ///< Virtual destructor // <pyapi>
 
-protected:
+public:
     std::string name;
 
 public:                // sometimes ffmpeg static functions need to access this! (in muxing at least)

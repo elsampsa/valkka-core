@@ -511,7 +511,7 @@ class AsyncBackMessageProcess(MessageProcess):
         msg = to8ByteMessage(obj)
         # self.back_pipe.send(obj)
         #try:
-        print("send_out__", msg)
+        # print("send_out__", msg)
         self.writer_transport.write(msg) # woops.. this is _not_ async call (it returns immediately)
         #except Exception as e:
         #    print("send_out__ failed with", e)

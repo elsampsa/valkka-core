@@ -379,7 +379,7 @@ class FragMP4ShmemClient:
             meta.size          = tup[1]
             meta.slot          = tup[2]
             meta.mstimestamp   = tup[3]
-            meta.name          = tup[4].decode("ascii")
+            meta.name          = tup[4][0:4].decode("ascii")
             meta.is_first      = tup[5]
             return index, meta
 
