@@ -69,14 +69,19 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Newest version is 1.0.0
+### Newest version is 1.0.1
+
+- libValkka is now LGPL, hooray!
+- Frag-MP4 debugged
+
+### Older versions
+
+1.0.0
 
 - Changed shmem API, more examples added to valkka-examples
 - ..and Python GIL now released by default in shmem operations
 - Frag-MP4 streaming implemented
 - "define analyzer" window & qt bitmap python reference leak still persists..
-
-### Older versions
 
 0.18.1
 
@@ -266,6 +271,6 @@ Copyright (c) 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
 
 
 ## License
-This software is licensed under the GNU Affero General Public License (AGPL) v3 or later.
+GNU Lesser General Public License v3 or later.
 
-If you need a different license arrangement, please contact us.
+(if you need something else, please contact us)

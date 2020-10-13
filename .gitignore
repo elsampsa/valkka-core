@@ -69,3 +69,5 @@ __pycache__/
 src/scrap/*
 memo.md
 /debug/
+set_copyright.py
+set_license.py

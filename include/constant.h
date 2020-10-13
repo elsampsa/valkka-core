@@ -3,23 +3,23 @@
 /*
  * constant.h : Constant/default values, version numbers
  * 
- * Copyright 2017, 2018 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
  * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
+ * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  *
  */
@@ -28,7 +28,7 @@
  *  @file    constant.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.0.0 
+ *  @version 1.0.1 
  *  
  *  @brief   Constant/default values, version numbers
  */ 
@@ -60,7 +60,7 @@ const char* get_numpy_version() {  // <pyapi>
     
 static const int VERSION_MAJOR = 1; // <pyapi>
 static const int VERSION_MINOR = 0; // <pyapi>
-static const int VERSION_PATCH = 0; // <pyapi>
+static const int VERSION_PATCH = 1; // <pyapi>
 
 static const unsigned LIVE_GET_PARAMETER_PING = 50; // ping the camera with GET_PARAMETER_PING every N:th second while the connection is active
 
