@@ -29,7 +29,9 @@ shmem.py : Encapsulation for Valkka's cpp shared memory client
 
 @brief   Encapsulation for Valkka's cpp shared memory client
 """
+import pickle
 import logging
+import numpy as np
 from valkka import core
 from valkka.api2.tools import *
 
@@ -90,6 +92,10 @@ class ShmemClient:
         setLogger(self.logger, logging.DEBUG)
 
 
+    def useEventFd(self, event_fd):
+        self.core.clientUseFd(event_fd)
+
+
     def pull(self):
         """If semaphore was timed out (i.e. nothing was written to the ringbuffer) in mstimeout milliseconds, returns: None, None.  Otherwise returns the index of the shmem segment and the size of data written.
         """
@@ -105,6 +111,28 @@ class ShmemClient:
             return None, None
 
 
+    def pullArray(self):
+        index, isize = self.pull()
+        if index is None: 
+            return None
+        return self.shmem_list[index][0:isize]
+
+    def pullBytes(self):
+        arr = self.pullArray()
+        if arr is None:
+            return None
+        return arr.tobytes()
+
+    def pullObject(self):
+        b = self.pullBytes()
+        if b is None:
+            return None
+        try:
+            obj = pickle.loads(b)
+        except Exception as e:
+            print("ShmemClient: pullObject failed with", e)
+            return None
+        return pickle.loads(b)
 
 
 class Namespace:
@@ -384,6 +412,68 @@ class FragMP4ShmemClient:
             return index, meta
 
 
+
+class ShmemServer:
+    """A generic shared memory ringbuffer server at Python side
+
+    :param name:               name identifying the shared mem segment.  Must be same as in the server side.
+    :param n_ringbuffer:       Number of elements in the ringbuffer.  Must be same as in the server side.
+    ;param n_size:             Number of bytes in each ringbuffer element
+    :param verbose:            Be verbose or not.  Default=False.
+    """
+
+    parameter_defs = {
+        # :param name:               name identifying the shared mem segment.  Must be same as in the server side.
+        "name"        : str,
+        # :param n_ringbuffer:       Number of elements in the ringbuffer.  Must be same as in the server side.
+        "n_ringbuffer": (int, 10),
+        "n_bytes" : int,
+        # :param mstimeout:          Timeout for semaphores.  Default=0=no timeout.
+        "verbose"     : (bool, False)
+        # "use_event_fd": (bool, False)
+    }
+
+    def __init__(self, **kwargs):
+        # auxiliary string for debugging output
+        self.pre = self.__class__.__name__
+        self.logger = getLogger(self.pre)
+        # check kwargs agains parameter_defs, attach ok'd parameters to this
+        # object as attributes
+        parameterInitCheck(ShmemServer.parameter_defs, kwargs, self)
+        # shmem ring buffer on the server side
+        self.core = core.SharedMemRingBuffer(
+            self.name,
+            self.n_ringbuffer,
+            self.n_bytes,
+            1000, # dummy value
+            True) # True indicates server-side
+        
+        """
+        if self.use_event_fd:
+            self.core.useEventFd()
+        """
+
+    def setDebug(self):
+        setLogger(self.logger, logging.DEBUG)
+
+    def useEventFd(self, event_fd):
+        self.core.serverUseFd(event_fd)
+
+    def pushArray(self, arr):
+        # if self.verbose: print("pushFrame: ", frame.shape)
+        ok = self.core.serverPushPy(arr)
+            
+    def pushBytes(self, b):
+        self.core.serverPushPy(
+            np.frombuffer(b, dtype = np.uint8)
+        )
+
+    def pushObject(self, obj):
+        self.pushBytes(pickle.dumps(obj))
+            
+
+
+
 class ShmemRGBServer:
     """A shared memory ringbuffer server for RGB images at the python side
 
@@ -403,8 +493,8 @@ class ShmemRGBServer:
         "width"       : int,         # :param width:              RGB image width
         "height"      : int,         # :param height:             RGb image height
         # :param mstimeout:          Timeout for semaphores.  Default=0=no timeout.
-        "verbose"     : (bool, False),
-        "use_event_fd": (bool, False)
+        "verbose"     : (bool, False)
+        # "use_event_fd": (bool, False)
     }
 
     def __init__(self, **kwargs):
@@ -423,9 +513,10 @@ class ShmemRGBServer:
             1000, # dummy value
             True) # True indicates server-side
         
+        """
         if self.use_event_fd:
             self.core.useEventFd()
-
+        """
 
     def setDebug(self):
         setLogger(self.logger, logging.DEBUG)

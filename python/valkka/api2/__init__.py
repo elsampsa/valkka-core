@@ -19,7 +19,7 @@ setValkkaLogLevel(loglevel_normal) # default for development # informs about fra
 from valkka.api2.chains import BasicFilterchain, BasicFilterchain1, ShmemFilterchain, ShmemFilterchain1, ManagedFilterchain, ViewPort, ValkkaFSLiveFilterchain, ValkkaFSFileFilterchain
 from valkka.api2.threads import LiveThread, USBDeviceThread, FileThread, OpenGLThread, Namespace
 from valkka.api2.multiprocess import ValkkaProcess, ValkkaShmemRGBProcess, safe_select
-from valkka.api2.shmem import ShmemClient, ShmemRGBClient, ShmemRGBServer, FragMP4ShmemClient
+from valkka.api2.shmem import ShmemClient, ShmemRGBClient, ShmemServer, ShmemRGBServer, FragMP4ShmemClient
 from valkka.api2.valkkafs import ValkkaFS, findBlockDevices, ValkkaFSManager, formatMstimestamp
 from valkka.api2.exceptions import *
 

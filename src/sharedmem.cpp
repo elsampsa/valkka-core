@@ -637,6 +637,44 @@ void SharedMemRingBuffer::serverPush(std::vector<uint8_t> &inp_payload) {
 }
 
 
+bool SharedMemRingBuffer::serverPushPy(PyObject *po) {
+    Py_INCREF(po);
+    PyArrayObject *pa = (PyArrayObject*)po;
+    if (PyArray_NDIM(pa) > 1) {
+        std::cout 
+            << "RingBuffer: ServerPushPy: incorrect dimensions: must be flat" 
+            << std::endl;
+        return false;
+    }
+    npy_intp *dims = PyArray_DIMS(pa);
+    uint8_t* buf = (uint8_t*)PyArray_BYTES(pa);
+    std::size_t size = (std::size_t)(dims[0]);
+
+    // *****************
+    int i;  
+    if (getValue()>=n_cells) { // so, semaphore will overflow
+        zero();
+        std::cout << "RingBuffer: ServerPush: zeroed, value now="<<getValue()<<std::endl;
+        index=-1;
+        setFlag();
+        std::cout << "RingBuffer: ServerPush: OVERFLOW "<<std::endl;
+    }
+    ++index;
+    if (index>=n_cells) {
+        index=0;
+    }
+    shmems[index]->put(buf, (void*)(&size)); // SharedMemSegment takes care of the correct typecast from void*
+    // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
+    // std::cout << "sema pointer:" << long(sema) << std::endl;
+    i=sem_post(sema);
+    setEventFd();
+    // ********************
+
+    Py_DECREF(po);
+    return true;
+}
+
+
 bool SharedMemRingBuffer::clientPull(int &index_out, int &size_out) {
     // std::size_t *size_out_ptr;
     return SharedMemRingBufferBase::clientPull(index_out, (void*)(&size_out));

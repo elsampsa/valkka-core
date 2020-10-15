@@ -1,3 +1,15 @@
+valkka (1.0.1-0ubuntu1-focalppa1) focal; urgency=low
+
+  * frag-mp4 working and new license
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Tue, 13 Oct 2020 19:18:47 +0300
+
+valkka (1.0.1-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * frag-mp4 working and new license
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Tue, 13 Oct 2020 19:17:14 +0300
+
 valkka (1.0.0-0ubuntu1-focalppa1) focal; urgency=low
 
   * shmem api change, frag-mp4 implemented

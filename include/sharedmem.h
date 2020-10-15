@@ -305,6 +305,8 @@ public: // <pyapi>
     
 public:                                                     // <pyapi>
     void serverPush(std::vector<uint8_t> &inp_payload);     // <pyapi>
+    /** Push a numpy array */
+    bool serverPushPy(PyObject *po);                        // <pyapi>
     bool clientPull(int &index_out, int &size_out);         // <pyapi>
 };                                                          // <pyapi>
 

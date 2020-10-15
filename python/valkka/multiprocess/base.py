@@ -423,7 +423,8 @@ class AsyncBackMessageProcess(MessageProcess):
         # print(">>", self.writer_transport)
 
         while self.loop:
-            # watch file descriptors: loop.add_reader(fd, callback, *args)
+            # if you have file descriptors, add them to the event loop
+            # like this: loop.add_reader(fd, callback, *args)
             msg = b''
             N = None
             cc = 0
@@ -456,13 +457,7 @@ class AsyncBackMessageProcess(MessageProcess):
     async def readPipes__(self, timeout):
         """Multiplex all intercom pipes
         """
-        rlis = [self.back_pipe]
-        r, w, e = safe_select(rlis, [], [], timeout = timeout) # timeout = 0 == this is just a poll
-        # handle the main intercom pipe
-        if self.back_pipe in r:
-            self.handleBackPipe__(self.back_pipe)    
-            r.remove(self.back_pipe)
-        # in your subclass, handle rest of the pipes
+        raise(BaseException("not used"))
 
 
     async def handleBackPipe__(self, p):
