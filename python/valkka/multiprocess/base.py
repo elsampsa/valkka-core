@@ -224,6 +224,7 @@ class MessageProcess(Process):
         self.start()
 
     def requestStop(self):
+        # print("MessageProcess: requestStop")
         self.sendMessageToBack(None)
         
     def waitStop(self):
@@ -481,7 +482,7 @@ class AsyncBackMessageProcess(MessageProcess):
         
         => route to "self.c__command(**kwargs)"
         """
-        # print("routeMainPipe__")
+        # print("routeMainPipe__", obj)
         if obj is None:
             self.loop = False
             return

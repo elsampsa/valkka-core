@@ -1,5 +1,6 @@
 #!/bin/bash
 cp config.linux-generic live/
+cp config.linux-arm live/
 cd live
 ## this doesn't work at PPA's autobuild:
 #arch=$(uname --m)
@@ -12,7 +13,10 @@ then
 elif [[ $arch = *"arm"* ]];
 then
     echo "LIVE555: using armlinux"
-    ./genMakefiles armlinux
+    # ./genMakefiles armlinux
+    ## if you're running in a native arm device, the gcc and g++ command
+    ## map automagically into the right executables:
+    ./genMakefiles config.linux-arm
 else
     echo "LIVE555: WARNING: using generic linux"
     ./genMakefiles linux-generic
