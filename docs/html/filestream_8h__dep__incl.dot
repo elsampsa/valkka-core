@@ -1,0 +1,12 @@
+digraph "/home/sampsa/C/valkka/include/filestream.h"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node61 [label="/home/sampsa/C/valkka\l/include/filestream.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node61 -> Node62 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node62 [label="/home/sampsa/C/valkka\l/include/cachestream.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cachestream_8h.html"];
+  Node62 -> Node63 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node63 [label="/home/sampsa/C/valkka\l/src/cachestream.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cachestream_8cpp.html"];
+  Node61 -> Node64 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node64 [label="/home/sampsa/C/valkka\l/src/filestream.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$filestream_8cpp.html"];
+}
