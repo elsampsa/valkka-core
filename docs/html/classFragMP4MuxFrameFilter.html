@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.17.0</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -64,6 +64,7 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="classFragMP4MuxFrameFilter-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">FragMP4MuxFrameFilter Class Reference</div>  </div>
@@ -96,6 +97,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8f521b5b29f04bb59db4b4911de77ecb"><td class="memItemLeft" align="right" valign="top"><a id="a8f521b5b29f04bb59db4b4911de77ecb"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>FragMP4MuxFrameFilter</b> (const char *name, <a class="el" href="classFrameFilter.html">FrameFilter</a> *<a class="el" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a>=NULL)</td></tr>
 <tr class="separator:a8f521b5b29f04bb59db4b4911de77ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa696001a5098cf0092b89539887a503e"><td class="memItemLeft" align="right" valign="top"><a id="aa696001a5098cf0092b89539887a503e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>sendMeta</b> ()</td></tr>
+<tr class="separator:aa696001a5098cf0092b89539887a503e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classMuxFrameFilter"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classMuxFrameFilter')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classMuxFrameFilter.html">MuxFrameFilter</a></td></tr>
 <tr class="memitem:abc22ffeb9a2d6fa2256bd675a724cf28 inherit pub_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="abc22ffeb9a2d6fa2256bd675a724cf28"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>MuxFrameFilter</b> (const char *name, <a class="el" href="classFrameFilter.html">FrameFilter</a> *<a class="el" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a>=NULL)</td></tr>
@@ -116,20 +120,47 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFilter.html#af6165af624786f297386e9f3038ac426">~FrameFilter</a> ()</td></tr>
 <tr class="memdesc:af6165af624786f297386e9f3038ac426 inherit pub_methods_classFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor // &lt;pyapi&gt; <br /></td></tr>
 <tr class="separator:af6165af624786f297386e9f3038ac426 inherit pub_methods_classFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b814f8fd99764b61f49e3106124d8a6 inherit pub_methods_classFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a7b814f8fd99764b61f49e3106124d8a6"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6">run</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
-<tr class="memdesc:a7b814f8fd99764b61f49e3106124d8a6 inherit pub_methods_classFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls this-&gt;<a class="el" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. ">go(Frame* frame)</a> and then calls the this-&gt;next-&gt;<a class="el" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this-&gt;go(Frame* frame) and then calls the this-&gt;next-&gt;run(Frame* frame) (if this-&gt;next != NULL)...">run(Frame* frame)</a> (if this-&gt;next != NULL) <br /></td></tr>
-<tr class="separator:a7b814f8fd99764b61f49e3106124d8a6 inherit pub_methods_classFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a09f7e6ba845f41c03ef83cc978a9fa42"><td class="memItemLeft" align="right" valign="top"><a id="a09f7e6ba845f41c03ef83cc978a9fa42"></a>
-<a class="el" href="classBasicFrame.html">BasicFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><b>internal_frame</b></td></tr>
-<tr class="separator:a09f7e6ba845f41c03ef83cc978a9fa42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0504a81785fb9118579e8b35b01ca54"><td class="memItemLeft" align="right" valign="top"><a id="af0504a81785fb9118579e8b35b01ca54"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>got_ftyp</b></td></tr>
+<tr class="separator:af0504a81785fb9118579e8b35b01ca54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73d6d5aa7783dea28be870a795152e70"><td class="memItemLeft" align="right" valign="top"><a id="a73d6d5aa7783dea28be870a795152e70"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>got_moov</b></td></tr>
+<tr class="separator:a73d6d5aa7783dea28be870a795152e70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada32a3ede2c916399c5d3bcc80c8b74e"><td class="memItemLeft" align="right" valign="top"><a id="ada32a3ede2c916399c5d3bcc80c8b74e"></a>
+<a class="el" href="classMuxFrame.html">MuxFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ftyp_frame</b></td></tr>
+<tr class="separator:ada32a3ede2c916399c5d3bcc80c8b74e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a316135f46871f6bb170de83fd75d0989"><td class="memItemLeft" align="right" valign="top"><a id="a316135f46871f6bb170de83fd75d0989"></a>
+<a class="el" href="classMuxFrame.html">MuxFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><b>moov_frame</b></td></tr>
+<tr class="separator:a316135f46871f6bb170de83fd75d0989"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classMuxFrameFilter"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classMuxFrameFilter')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classMuxFrameFilter.html">MuxFrameFilter</a></td></tr>
-<tr class="memitem:a1d0c1ed73a95f37475cc7cd580619b8e inherit pub_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a1d0c1ed73a95f37475cc7cd580619b8e"></a>
-<a class="el" href="classBasicFrame.html">BasicFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><b>internal_frame</b></td></tr>
-<tr class="separator:a1d0c1ed73a95f37475cc7cd580619b8e inherit pub_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49df1835eaa85021b1afdbaf2e14ad90 inherit pub_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a49df1835eaa85021b1afdbaf2e14ad90"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>missing</b></td></tr>
+<tr class="separator:a49df1835eaa85021b1afdbaf2e14ad90 inherit pub_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac129e561f083104d058a55b7a2b09cc4 inherit pub_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="ac129e561f083104d058a55b7a2b09cc4"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>ccf</b></td></tr>
+<tr class="separator:ac129e561f083104d058a55b7a2b09cc4 inherit pub_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad46209cdbf3c0a8179dc0ffcfd010e89 inherit pub_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="ad46209cdbf3c0a8179dc0ffcfd010e89"></a>
+<a class="el" href="classBasicFrame.html">BasicFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><b>internal_basicframe</b></td></tr>
+<tr class="separator:ad46209cdbf3c0a8179dc0ffcfd010e89 inherit pub_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6d6e0f1cafe8d66a50a5c5ba0a8b681 inherit pub_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="ab6d6e0f1cafe8d66a50a5c5ba0a8b681"></a>
+<a class="el" href="classMuxFrame.html">MuxFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#ab6d6e0f1cafe8d66a50a5c5ba0a8b681">internal_frame</a></td></tr>
+<tr class="memdesc:ab6d6e0f1cafe8d66a50a5c5ba0a8b681 inherit pub_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">outgoing muxed frame <br /></td></tr>
+<tr class="separator:ab6d6e0f1cafe8d66a50a5c5ba0a8b681 inherit pub_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94d2d338ed5416fece3d8eddc58cf760 inherit pub_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a94d2d338ed5416fece3d8eddc58cf760"></a>
+<a class="el" href="classBasicFrame.html">BasicFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#a94d2d338ed5416fece3d8eddc58cf760">extradata_frame</a></td></tr>
+<tr class="memdesc:a94d2d338ed5416fece3d8eddc58cf760 inherit pub_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">capture decoder extradata here <br /></td></tr>
+<tr class="separator:a94d2d338ed5416fece3d8eddc58cf760 inherit pub_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_classFrameFilter"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classFrameFilter')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classFrameFilter.html">FrameFilter</a></td></tr>
+<tr class="memitem:a56531ed5f05cdce0d5ce3accea729aab inherit pub_attribs_classFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a56531ed5f05cdce0d5ce3accea729aab"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
+<tr class="separator:a56531ed5f05cdce0d5ce3accea729aab inherit pub_attribs_classFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a992da6bcdb61db69511f222dbe33e818 inherit pub_attribs_classFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a992da6bcdb61db69511f222dbe33e818"></a>
+<a class="el" href="classFrameFilter.html">FrameFilter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a></td></tr>
+<tr class="memdesc:a992da6bcdb61db69511f222dbe33e818 inherit pub_attribs_classFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">The next frame filter in the chain to be applied. <br /></td></tr>
+<tr class="separator:a992da6bcdb61db69511f222dbe33e818 inherit pub_attribs_classFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -138,10 +169,13 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <tr class="memdesc:ab277808cd1bb2733cdaa1573c9b2b94f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define container format (format_name) &amp; muxing parameters (av_dict). Define in child classes. <br /></td></tr>
 <tr class="separator:ab277808cd1bb2733cdaa1573c9b2b94f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classMuxFrameFilter"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classMuxFrameFilter')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classMuxFrameFilter.html">MuxFrameFilter</a></td></tr>
-<tr class="memitem:aac7d908236e5e3a8eeb67fac3da3fc3a inherit pro_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="aac7d908236e5e3a8eeb67fac3da3fc3a"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#aac7d908236e5e3a8eeb67fac3da3fc3a">go</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
-<tr class="memdesc:aac7d908236e5e3a8eeb67fac3da3fc3a inherit pro_methods_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does the actual filtering/modification to the <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a>. Define in subclass. <br /></td></tr>
+<tr class="memitem:aac7d908236e5e3a8eeb67fac3da3fc3a inherit pro_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#aac7d908236e5e3a8eeb67fac3da3fc3a">go</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
+<tr class="memdesc:aac7d908236e5e3a8eeb67fac3da3fc3a inherit pro_methods_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does the actual filtering/modification to the <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a>. Define in subclass.  <a href="classMuxFrameFilter.html#aac7d908236e5e3a8eeb67fac3da3fc3a">More...</a><br /></td></tr>
 <tr class="separator:aac7d908236e5e3a8eeb67fac3da3fc3a inherit pro_methods_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa178a48b5626f606933090cdb4adfc74 inherit pro_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="aa178a48b5626f606933090cdb4adfc74"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#aa178a48b5626f606933090cdb4adfc74">run</a> (<a class="el" href="classFrame.html">Frame</a> *frame)</td></tr>
+<tr class="memdesc:aa178a48b5626f606933090cdb4adfc74 inherit pro_methods_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls this-&gt;<a class="el" href="classMuxFrameFilter.html#aac7d908236e5e3a8eeb67fac3da3fc3a" title="Does the actual filtering/modification to the Frame. Define in subclass. ">go(Frame* frame)</a> and then calls the this-&gt;next-&gt;<a class="el" href="classMuxFrameFilter.html#aa178a48b5626f606933090cdb4adfc74" title="Calls this-&gt;go(Frame* frame) and then calls the this-&gt;next-&gt;run(Frame* frame) (if this-&gt;next != NULL)...">run(Frame* frame)</a> (if this-&gt;next != NULL) <br /></td></tr>
+<tr class="separator:aa178a48b5626f606933090cdb4adfc74 inherit pro_methods_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf0b0c7219be566f535fdd0f692cd33f inherit pro_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#acf0b0c7219be566f535fdd0f692cd33f">initMux</a> ()</td></tr>
 <tr class="memdesc:acf0b0c7219be566f535fdd0f692cd33f inherit pro_methods_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open file, reserve codec_contexes, streams, write preamble, set initialized=true if success.  <a href="classMuxFrameFilter.html#acf0b0c7219be566f535fdd0f692cd33f">More...</a><br /></td></tr>
 <tr class="separator:acf0b0c7219be566f535fdd0f692cd33f inherit pro_methods_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,31 +186,52 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:ac61d9829342263b1b59a785b0efdfe2c inherit pro_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="ac61d9829342263b1b59a785b0efdfe2c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>deActivate_</b> ()</td></tr>
 <tr class="separator:ac61d9829342263b1b59a785b0efdfe2c inherit pro_methods_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a372b83cee6a0c2be1e5a553f5adfc6 inherit pro_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a7a372b83cee6a0c2be1e5a553f5adfc6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>writeFrame</b> (<a class="el" href="classBasicFrame.html">BasicFrame</a> *frame)</td></tr>
+<tr class="separator:a7a372b83cee6a0c2be1e5a553f5adfc6 inherit pro_methods_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr class="memitem:af9fa9bd90ba3fa4e787c1291dc1ba40c"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFragMP4MuxFrameFilter.html#af9fa9bd90ba3fa4e787c1291dc1ba40c">write_packet</a> (void *opaque, uint8_t *buf, int buf_size_)</td></tr>
+<tr class="separator:af9fa9bd90ba3fa4e787c1291dc1ba40c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d6f413948de71bebb7502ff8607720b"><td class="memItemLeft" align="right" valign="top"><a id="a4d6f413948de71bebb7502ff8607720b"></a>
+static int&#160;</td><td class="memItemRight" valign="bottom"><b>read_packet</b> (void *opaque, uint8_t *buf, int buf_size)</td></tr>
+<tr class="separator:a4d6f413948de71bebb7502ff8607720b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17fa3fc619555faf621149c197919da7"><td class="memItemLeft" align="right" valign="top"><a id="a17fa3fc619555faf621149c197919da7"></a>
+static int64_t&#160;</td><td class="memItemRight" valign="bottom"><b>seek</b> (void *opaque, int64_t offset, int whence)</td></tr>
+<tr class="separator:a17fa3fc619555faf621149c197919da7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_static_methods_classMuxFrameFilter"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classMuxFrameFilter')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classMuxFrameFilter.html">MuxFrameFilter</a></td></tr>
+<tr class="memitem:ada4308ae8b6596438f94067efa77dbef inherit pro_static_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="ada4308ae8b6596438f94067efa77dbef"></a>
+static int&#160;</td><td class="memItemRight" valign="bottom"><b>write_packet</b> (void *opaque, uint8_t *buf, int buf_size)</td></tr>
+<tr class="separator:ada4308ae8b6596438f94067efa77dbef inherit pro_static_methods_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a348c6a849d5d31128ca7585086f99d inherit pro_static_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a1a348c6a849d5d31128ca7585086f99d"></a>
+static int&#160;</td><td class="memItemRight" valign="bottom"><b>read_packet</b> (void *opaque, uint8_t *buf, int buf_size)</td></tr>
+<tr class="separator:a1a348c6a849d5d31128ca7585086f99d inherit pro_static_methods_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e2da7a11473f38d485d1c4e78d62113 inherit pro_static_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a2e2da7a11473f38d485d1c4e78d62113"></a>
+static int64_t&#160;</td><td class="memItemRight" valign="bottom"><b>seek</b> (void *opaque, int64_t offset, int whence)</td></tr>
+<tr class="separator:a2e2da7a11473f38d485d1c4e78d62113 inherit pro_static_methods_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_static_methods_classMuxFrameFilter"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classMuxFrameFilter')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classMuxFrameFilter.html">MuxFrameFilter</a></td></tr>
-<tr class="memitem:ada4308ae8b6596438f94067efa77dbef inherit pub_static_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="ada4308ae8b6596438f94067efa77dbef"></a>
-static int&#160;</td><td class="memItemRight" valign="bottom"><b>write_packet</b> (void *opaque, uint8_t *buf, int buf_size)</td></tr>
-<tr class="separator:ada4308ae8b6596438f94067efa77dbef inherit pub_static_methods_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a348c6a849d5d31128ca7585086f99d inherit pub_static_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a1a348c6a849d5d31128ca7585086f99d"></a>
-static int&#160;</td><td class="memItemRight" valign="bottom"><b>read_packet</b> (void *opaque, uint8_t *buf, int buf_size)</td></tr>
-<tr class="separator:a1a348c6a849d5d31128ca7585086f99d inherit pub_static_methods_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e2da7a11473f38d485d1c4e78d62113 inherit pub_static_methods_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a2e2da7a11473f38d485d1c4e78d62113"></a>
-static int64_t&#160;</td><td class="memItemRight" valign="bottom"><b>seek</b> (void *opaque, int64_t offset, int whence)</td></tr>
-<tr class="separator:a2e2da7a11473f38d485d1c4e78d62113 inherit pub_static_methods_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classMuxFrameFilter"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classMuxFrameFilter')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classMuxFrameFilter.html">MuxFrameFilter</a></td></tr>
 <tr class="memitem:afe8282dbb91d5ded707126dcd2915745 inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="afe8282dbb91d5ded707126dcd2915745"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#afe8282dbb91d5ded707126dcd2915745">active</a></td></tr>
-<tr class="memdesc:afe8282dbb91d5ded707126dcd2915745 inherit pro_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writing to file has been requested (but not necessarily achieved..) <br /></td></tr>
+<tr class="memdesc:afe8282dbb91d5ded707126dcd2915745 inherit pro_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writing to muxer has been requested. <br /></td></tr>
 <tr class="separator:afe8282dbb91d5ded707126dcd2915745 inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95be2fe913e3e160d66b8e7c0c096aff inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a95be2fe913e3e160d66b8e7c0c096aff"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#a95be2fe913e3e160d66b8e7c0c096aff">has_extradata</a></td></tr>
+<tr class="memdesc:a95be2fe913e3e160d66b8e7c0c096aff inherit pro_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Got "extradata" (sps &amp; pps) <br /></td></tr>
+<tr class="separator:a95be2fe913e3e160d66b8e7c0c096aff inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2e00635927534d31001e106a077fe49 inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="af2e00635927534d31001e106a077fe49"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#af2e00635927534d31001e106a077fe49">extradata_count</a></td></tr>
+<tr class="memdesc:af2e00635927534d31001e106a077fe49 inherit pro_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check that we have the sps =&gt; pps sequence. <br /></td></tr>
+<tr class="separator:af2e00635927534d31001e106a077fe49 inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaeecfb365514e46884a400370a6982c1 inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="aaeecfb365514e46884a400370a6982c1"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#aaeecfb365514e46884a400370a6982c1">ready</a></td></tr>
-<tr class="memdesc:aaeecfb365514e46884a400370a6982c1 inherit pro_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Got enough setup frames. <br /></td></tr>
+<tr class="memdesc:aaeecfb365514e46884a400370a6982c1 inherit pro_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Got enough setup frames &amp; extradata. <br /></td></tr>
 <tr class="separator:aaeecfb365514e46884a400370a6982c1 inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c738b959ef71d96caf8a45f2a98b250 inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a8c738b959ef71d96caf8a45f2a98b250"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#a8c738b959ef71d96caf8a45f2a98b250">initialized</a></td></tr>
-<tr class="memdesc:a8c738b959ef71d96caf8a45f2a98b250 inherit pro_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">File was opened ok : codec_contexes, streams and av_format_context reserved (should be freed at some point) <br /></td></tr>
+<tr class="memitem:a8c738b959ef71d96caf8a45f2a98b250 inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#a8c738b959ef71d96caf8a45f2a98b250">initialized</a></td></tr>
+<tr class="memdesc:a8c738b959ef71d96caf8a45f2a98b250 inherit pro_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">After ready &amp; active, initMux is called (set streams, codec ctx, etc.  <a href="classMuxFrameFilter.html#a8c738b959ef71d96caf8a45f2a98b250">More...</a><br /></td></tr>
 <tr class="separator:a8c738b959ef71d96caf8a45f2a98b250 inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b89951dbdd6b20072602af32ee6a6b7 inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a8b89951dbdd6b20072602af32ee6a6b7"></a>
 long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#a8b89951dbdd6b20072602af32ee6a6b7">mstimestamp0</a></td></tr>
@@ -186,15 +241,15 @@ long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#a8a391f9ccb92c9aeacf343ad73b8b25e">zerotime</a></td></tr>
 <tr class="memdesc:a8a391f9ccb92c9aeacf343ad73b8b25e inherit pro_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start time set explicitly by the user. <br /></td></tr>
 <tr class="separator:a8a391f9ccb92c9aeacf343ad73b8b25e inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a886d72265a63e3b3ca7dec0c5e165cef inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a886d72265a63e3b3ca7dec0c5e165cef"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><b>prevpts</b></td></tr>
+<tr class="separator:a886d72265a63e3b3ca7dec0c5e165cef inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea43b1d488a978f16a65e2c4607ae295 inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="aea43b1d488a978f16a65e2c4607ae295"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>zerotimeset</b></td></tr>
 <tr class="separator:aea43b1d488a978f16a65e2c4607ae295 inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49df1835eaa85021b1afdbaf2e14ad90 inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a49df1835eaa85021b1afdbaf2e14ad90"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>missing</b></td></tr>
-<tr class="separator:a49df1835eaa85021b1afdbaf2e14ad90 inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac129e561f083104d058a55b7a2b09cc4 inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="ac129e561f083104d058a55b7a2b09cc4"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>ccf</b></td></tr>
-<tr class="separator:ac129e561f083104d058a55b7a2b09cc4 inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29bd623ef9569cb2ece95e12ffa002ee inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a29bd623ef9569cb2ece95e12ffa002ee"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>testflag</b></td></tr>
+<tr class="separator:a29bd623ef9569cb2ece95e12ffa002ee inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82f6ce68ffac97a59c117492428cf8fd inherit pro_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a82f6ce68ffac97a59c117492428cf8fd"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>format_name</b></td></tr>
 <tr class="separator:a82f6ce68ffac97a59c117492428cf8fd inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,19 +292,57 @@ std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a cl
 std::vector&lt; <a class="el" href="classSetupFrame.html">SetupFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrameFilter.html#a7b403f69f7ac2e0c6562a2be4ee65054">setupframes</a></td></tr>
 <tr class="memdesc:a7b403f69f7ac2e0c6562a2be4ee65054 inherit pro_attribs_classMuxFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">deep copies of the arrived setup frames <br /></td></tr>
 <tr class="separator:a7b403f69f7ac2e0c6562a2be4ee65054 inherit pro_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classFrameFilter"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classFrameFilter')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classFrameFilter.html">FrameFilter</a></td></tr>
-<tr class="memitem:a56531ed5f05cdce0d5ce3accea729aab inherit pro_attribs_classFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a56531ed5f05cdce0d5ce3accea729aab"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
-<tr class="separator:a56531ed5f05cdce0d5ce3accea729aab inherit pro_attribs_classFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a992da6bcdb61db69511f222dbe33e818 inherit pro_attribs_classFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a992da6bcdb61db69511f222dbe33e818"></a>
-<a class="el" href="classFrameFilter.html">FrameFilter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a></td></tr>
-<tr class="memdesc:a992da6bcdb61db69511f222dbe33e818 inherit pro_attribs_classFrameFilter"><td class="mdescLeft">&#160;</td><td class="mdescRight">The next frame filter in the chain to be applied. <br /></td></tr>
-<tr class="separator:a992da6bcdb61db69511f222dbe33e818 inherit pro_attribs_classFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_static_attribs_classMuxFrameFilter"><td colspan="2" onclick="javascript:toggleInherit('pro_static_attribs_classMuxFrameFilter')"><img src="closed.png" alt="-"/>&#160;Static Protected Attributes inherited from <a class="el" href="classMuxFrameFilter.html">MuxFrameFilter</a></td></tr>
 <tr class="memitem:a485b426a11f90ad33c8ea4df3768bec4 inherit pro_static_attribs_classMuxFrameFilter"><td class="memItemLeft" align="right" valign="top"><a id="a485b426a11f90ad33c8ea4df3768bec4"></a>
 static const size_t&#160;</td><td class="memItemRight" valign="bottom"><b>avio_ctx_buffer_size</b> = 4096</td></tr>
 <tr class="separator:a485b426a11f90ad33c8ea4df3768bec4 inherit pro_static_attribs_classMuxFrameFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af9fa9bd90ba3fa4e787c1291dc1ba40c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9fa9bd90ba3fa4e787c1291dc1ba40c">&#9670;&nbsp;</a></span>write_packet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FragMP4MuxFrameFilter::write_packet </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>opaque</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>buf_size_</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<ul>
+<li></li>
+</ul>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="muxer_8h_source.html">muxer.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="muxer_8cpp.html">muxer.cpp</a></li>

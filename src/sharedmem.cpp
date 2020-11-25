@@ -26,11 +26,12 @@
  *  @file    sharedmem.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.0.1 
+ *  @version 1.0.2 
  *  
  *  @brief   Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  */ 
 
+#include <poll.h>
 #include "tools.h"
 #include "sharedmem.h"
 #include "numpy_no_import.h"
@@ -47,6 +48,7 @@ EventFd::EventFd() {
 }
 
 EventFd::~EventFd() {
+    //std::cout << "EventFd: closing event fd " << fd << std::endl;
     close(this->fd);
 }
 
@@ -80,7 +82,7 @@ void SharedMemSegment::init() {
 }
 
 
-void SharedMemSegment::close_() {
+void SharedMemSegment::close_() { 
     if (is_server) {
         serverClose();
     }
@@ -349,14 +351,40 @@ SharedMemRingBufferBase::~SharedMemRingBufferBase() {
         }
         delete[] this->cache;
     }
+    /* // noooooo!
     if (fd > 0) {
         close(this->fd);
     }
+    */
 }
 
 
 void SharedMemRingBufferBase::serverUseFd(EventFd &event_fd) {
     fd = event_fd.getFd();
+    if (fcntl(fd, F_GETFL) < 0 && errno == EBADF) {
+        handle_error("RingBuffer: serverUseFd: invalid/closed fd");
+    }
+    /*
+    // fcntl(fd, F_SETFL|O_NONBLOCK);
+    struct pollfd fds[1];
+    fds[0] = (struct pollfd){fd, POLLIN, 0};
+    //int ppoll(struct pollfd *fds, nfds_t nfds,
+    //           const struct timespec *tmo_p, const sigset_t *sigmask);
+    // len of pollfd array, ms to wait
+    int ret = poll(fds, 1, 0);
+    std::cout << ">>serverUseFd : fd=" << fd << std::endl;
+    std::cout << ">>serverUseFd : " << ret << std::endl;
+    if (ret > 0) { // "reset" this eventfd
+        std::cout << ">>serverUseFd : resetting eventfd " << std::endl;
+        uint64_t u = 1; // one frame
+        ssize_t s;
+        s = read(fd, &u, sizeof(uint64_t));
+        std::cout <<  ">>serverUseFd : s=" << s << std::endl;
+        if (s != sizeof(uint64_t)) {
+            handle_error("RingBuffer: serverUseFd: eventfd read failed");
+        }
+    }
+    */
 }
 
 void SharedMemRingBufferBase::clientUseFd(EventFd &event_fd) {
@@ -367,11 +395,13 @@ void SharedMemRingBufferBase::setEventFd() { // used only at the server side
     //call after se_post
     //fd_is_set = false; // TODO: poll for the eventfd
     //if (fd > 0 and !fd_is_set) {
-    if (fd > 0 and getValue() == 1) {
-        // TODO: write only if the eventfd is not set
-        // TODO: sync all semaphore operations with the fd
+    // std::cout << ">> fd, getValue " << fd << " " << getValue() << std::endl;
+    if (fd > 0 and getValue() >= 1) {
+        // TODO?: write only if the eventfd is not set
+        // TODO?: sync all semaphore operations with the fd
         uint64_t u = 1; // one frame
         ssize_t s;
+        // std::cout << "setting eventfd" << std::endl;
         s = write(fd, &u, sizeof(uint64_t));
         if (s != sizeof(uint64_t)) {
             handle_error("RingBuffer: ServerPush: eventfd write failed");
@@ -523,6 +553,10 @@ bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {
     index_out =0;
     // size_out  =0;
     
+    // std::cout << "::clientPull: mstimeout " << mstimeout << std::endl;
+    // TODO: if server feeds (RGB) frames that are much larger than what
+    // defined for the client, sem_timedwait can get stuck - might be a memflow
+
     if (mstimeout==0) {
         while ((i = sem_wait(sema)) == -1 && errno == EINTR)
         continue; // Restart if interrupted by handler
@@ -546,8 +580,10 @@ bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {
         // std::cout << "SharedMemoryRingBuffer: clientPull: time1 " << ts.tv_sec << " " << ts.tv_nsec << std::endl;
         
         // i=sem_timedwait(sema, &ts);
-        while ((i = sem_timedwait(sema, &ts)) == -1 && errno == EINTR)
-        continue; // Restart if interrupted by handler
+        //std::cout << "::clientPull: sem_timedwait " << std::endl;
+        while ((i = sem_timedwait(sema, &ts)) == -1 && errno == EINTR) {
+            continue; // Restart if interrupted by handler
+        }
     }
     
     /* Check what happened */
@@ -725,10 +761,11 @@ void SharedMemRingBufferRGB::serverPushAVRGBFrame(AVRGBFrame *f) {
     index=0;
   }
   ( (RGB24SharedMemSegment*)(shmems[index]) )->putAVRGBFrame(f);
-  // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
+  //std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
   
   i=sem_post(sema);
   setEventFd();
+  //setEventFd(); // test: double-write ok
 }
 
 
@@ -807,9 +844,13 @@ PyObject* SharedMemRingBufferRGB::clientPullPy() {
     RGB24Meta meta = RGB24Meta();
     int index_out = 0;
     bool ok;
+    // std::cout << ">>allow threads" << std::endl;
     Py_BEGIN_ALLOW_THREADS
+    //std::cout << ">>clientPull" << std::endl;
     ok = SharedMemRingBufferBase::clientPull(index_out, (void*)(&meta));
+    //std::cout << ">>clientPull end" << std::endl;
     Py_END_ALLOW_THREADS
+    //std::cout << ">>end allow threads" << std::endl;
     if (!ok) {
         index_out = -1;
         PyTuple_SetItem(tup, 0, PyLong_FromLong((long)index_out));

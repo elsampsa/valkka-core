@@ -69,12 +69,19 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Newest version is 1.0.1
+### Newest version is 1.0.2
+
+- Subsession-index mess fixed for now: the one-and-only subsession index (as we only support video) is set to 0.
+- Frag-mp4 muxer fixed: there were memleaks when (de/re)activating the muxer.
+- Shmem server-side bug fixed: eventfds we're accidentally closed when shmem server was closed, resulting in mysterious bugs when recycling eventfds.
+- Debian auto-build now hopefully works for arm-based architectures as well (tested in docker).
+
+### Older versions
+
+1.0.1
 
 - libValkka is now LGPL, hooray!
 - Frag-MP4 debugged
-
-### Older versions
 
 1.0.0
 

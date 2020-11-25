@@ -28,7 +28,7 @@
  *  @file    muxer.h
  *  @author  Sampsa Riikonen
  *  @date    2019
- *  @version 1.0.1 
+ *  @version 1.0.2 
  *  
  *  @brief   FFmpeg muxers, implemented as Valkka framefilters
  * 
@@ -53,8 +53,11 @@ public:                                                              //
 protected:
     bool active;                       ///< Writing to muxer has been requested
     bool has_extradata;                ///< Got "extradata" (sps & pps)
+    int extradata_count;               ///< Check that we have the sps => pps sequence
     bool ready;                        ///< Got enough setup frames & extradata
-    bool initialized;                  ///< File was opened ok : codec_contexes, streams and av_format_context reserved (should be freed at some point)
+    /** After ready & active, initMux is called 
+     * (set streams, codec ctx, etc. & initialized is set */
+    bool initialized;                  
     long int mstimestamp0;             ///< Time of activation (i.e. when the recording started)
     long int zerotime;                 ///< Start time set explicitly by the user
     long int prevpts;
@@ -66,7 +69,6 @@ protected:
     
 public: // so that child static methods can access..
     uint32_t missing, ccf;
-    
     
 protected: //libav stuff
     AVFormatContext               *av_format_ctx;
@@ -115,7 +117,6 @@ protected:
 };                                                                                             // <pyapi>
 
 
-
 class FragMP4MuxFrameFilter : public MuxFrameFilter {                       // <pyapi>
     
 public:                                                                     // <pyapi>
@@ -134,8 +135,8 @@ public: // API calls    // <pyapi>
 
 protected:
     static int write_packet(void *opaque, uint8_t *buf, int buf_size_);
-    static int read_packet(void *opaque, uint8_t *buf, int buf_size) {std::cout << "muxer: dummy read packet" << std::endl; return 0;} // dummy function
-    static int64_t seek(void *opaque, int64_t offset, int whence) {std::cout << "muxer: dummy seek" << std::endl; return 0;} // dummy function
+    static int read_packet(void *opaque, uint8_t *buf, int buf_size) {return 0;} // {std::cout << "muxer: dummy read packet" << std::endl; return 0;} // dummy function
+    static int64_t seek(void *opaque, int64_t offset, int whence) {return 0;}// {std::cout << "muxer: dummy seek" << std::endl; return 0;} // dummy function
 };                                                                           // <pyapi>
 
 

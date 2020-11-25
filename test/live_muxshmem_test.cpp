@@ -26,7 +26,7 @@
  *  @file    live_muxshmem_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.0.1 
+ *  @version 1.0.2 
  *  
  *  @brief 
  *
@@ -131,12 +131,21 @@ void test_2() {
         std::cout << name << "playing stream !" << std::endl;
         livethread.playStreamCall(ctx);
 
-        sleep_for(6s);
+        sleep_for(3s);
         // sleep_for(604800s); //one week
+
+        std::cout << name << "deactivate" << std::endl;
+        fragmp4_muxer.deActivate();
+        sleep_for(3s);
+
+        std::cout << name << "reactivate" << std::endl;
+        fragmp4_muxer.activate();
+        sleep_for(3s);
 
         std::cout << name << "stopping threads" << std::endl;
         livethread.stopCall();
         // avthread.  stopCall();
+        fragmp4_muxer.deActivate();
     }
     else
     {

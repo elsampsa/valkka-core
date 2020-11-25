@@ -26,7 +26,7 @@
  *  @file    live.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.0.1 
+ *  @version 1.0.2 
  *  
  *  @brief Interface to live555
  *
@@ -514,6 +514,10 @@ FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter&
   
   // https://ffmpeg.org/doxygen/3.0/avcodec_8h_source.html
   if      (strcmp(codec_name,"H264")==0) { // NEW_CODEC_DEV // when adding new codecs, make changes here
+
+    // WARNING: force subsession index to 0
+    subsession_index = 0;
+
     livelogger.log(LogLevel::debug) << "FrameSink: init H264 Frame"<<std::endl;
     // prepare payload frame
     basicframe.media_type           =AVMEDIA_TYPE_VIDEO;
@@ -533,7 +537,7 @@ FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter&
     // return; // no return here!  You won't do sendParameteSets() ..!
   }
   
-  // some beautifull day enable audio.  At the moment, it messes up some things (for example, re-transmitting streams, etc.)
+  // some beautiful day enable audio.  At the moment, it messes up some things (for example, re-transmitting streams, etc.)
   
   
   /*

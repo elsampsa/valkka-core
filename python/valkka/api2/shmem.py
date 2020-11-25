@@ -25,7 +25,7 @@ shmem.py : Encapsulation for Valkka's cpp shared memory client
 @file    shmem.py
 @author  Sampsa Riikonen
 @date    2017
-@version 1.0.1 
+@version 1.0.2 
 
 @brief   Encapsulation for Valkka's cpp shared memory client
 """
@@ -532,9 +532,6 @@ class ShmemRGBServer:
             frame,
             slot, 
             mstimestamp)
-
-
-
 
 
 def test4():

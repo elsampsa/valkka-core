@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.17.0</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -103,8 +103,13 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memitem:a00acbe9fc0eb34e91f472966e928ff06"><td class="memItemLeft" align="right" valign="top"><a id="a00acbe9fc0eb34e91f472966e928ff06"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>serverPushAVRGBFrame</b> (<a class="el" href="classAVRGBFrame.html">AVRGBFrame</a> *f)</td></tr>
 <tr class="separator:a00acbe9fc0eb34e91f472966e928ff06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75015924b786d93d1e96faa362c92cbc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferRGB.html#a75015924b786d93d1e96faa362c92cbc">clientPull</a> (int &amp;index_out, int &amp;size_out)</td></tr>
-<tr class="memdesc:a75015924b786d93d1e96faa362c92cbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a python tuple of metadata (index, width, height, slot, timestamp)  <a href="#a75015924b786d93d1e96faa362c92cbc">More...</a><br /></td></tr>
+<tr class="memitem:a7dd49730e5e44f518feca2eb0aadce4e"><td class="memItemLeft" align="right" valign="top"><a id="a7dd49730e5e44f518feca2eb0aadce4e"></a>
+PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferRGB.html#a7dd49730e5e44f518feca2eb0aadce4e">clientPullPy</a> ()</td></tr>
+<tr class="memdesc:a7dd49730e5e44f518feca2eb0aadce4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a python tuple of metadata (index, width, height, slot, timestamp) <br /></td></tr>
+<tr class="separator:a7dd49730e5e44f518feca2eb0aadce4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75015924b786d93d1e96faa362c92cbc"><td class="memItemLeft" align="right" valign="top"><a id="a75015924b786d93d1e96faa362c92cbc"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferRGB.html#a75015924b786d93d1e96faa362c92cbc">clientPull</a> (int &amp;index_out, int &amp;size_out)</td></tr>
+<tr class="memdesc:a75015924b786d93d1e96faa362c92cbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Legacy support. <br /></td></tr>
 <tr class="separator:a75015924b786d93d1e96faa362c92cbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac639222e011c19a50506ac04a98c33ee"><td class="memItemLeft" align="right" valign="top"><a id="ac639222e011c19a50506ac04a98c33ee"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferRGB.html#ac639222e011c19a50506ac04a98c33ee">clientPullFrame</a> (int &amp;index_out, <a class="el" href="structRGB24Meta.html">RGB24Meta</a> &amp;meta)</td></tr>
@@ -147,8 +152,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a2b65de6cd1dffc2936458a09d6a225e5">clientPullThread</a> (int &amp;index_out, void *meta)</td></tr>
 <tr class="memdesc:a2b65de6cd1dffc2936458a09d6a225e5 inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">multithreading version: releases GIL <br /></td></tr>
 <tr class="separator:a2b65de6cd1dffc2936458a09d6a225e5 inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f6e04c2678433c9fd2a43b08dad5356 inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a5f6e04c2678433c9fd2a43b08dad5356"></a>
-PyObject *&#160;</td><td class="memItemRight" valign="bottom"><b>getBufferListPy</b> ()</td></tr>
+<tr class="memitem:a5f6e04c2678433c9fd2a43b08dad5356 inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a5f6e04c2678433c9fd2a43b08dad5356">getBufferListPy</a> ()</td></tr>
 <tr class="separator:a5f6e04c2678433c9fd2a43b08dad5356 inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6157c433d80defe239d1d54a9bac99c inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="ad6157c433d80defe239d1d54a9bac99c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#ad6157c433d80defe239d1d54a9bac99c">clientUseFd</a> (<a class="el" href="classEventFd.html">EventFd</a> &amp;event_fd)</td></tr>
@@ -217,6 +221,10 @@ Additional Inherited Members</h2></td></tr>
 std::vector&lt; <a class="el" href="classSharedMemSegment.html">SharedMemSegment</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#abef5d3e2819bd91b8540915d3b01ac87">shmems</a></td></tr>
 <tr class="memdesc:abef5d3e2819bd91b8540915d3b01ac87 inherit pub_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared memory segments. <br /></td></tr>
 <tr class="separator:abef5d3e2819bd91b8540915d3b01ac87 inherit pub_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2247c9358b75d06569564569c92ca4d5 inherit pub_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a2247c9358b75d06569564569c92ca4d5"></a>
+uint8_t **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a2247c9358b75d06569564569c92ca4d5">cache</a></td></tr>
+<tr class="memdesc:a2247c9358b75d06569564569c92ca4d5 inherit pub_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shmem segments are copied into the cache. <br /></td></tr>
+<tr class="separator:a2247c9358b75d06569564569c92ca4d5 inherit pub_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classSharedMemRingBufferBase"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classSharedMemRingBufferBase')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classSharedMemRingBufferBase.html">SharedMemRingBufferBase</a></td></tr>
 <tr class="memitem:a605448004d9694030d05c68b87cacba2 inherit pro_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a605448004d9694030d05c68b87cacba2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a605448004d9694030d05c68b87cacba2">setFlag</a> ()</td></tr>
@@ -249,47 +257,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classSharedMemRingBuffer.html">SharedMemRingBuffer</a> for <a class="el" href="classAVRGBFrame.html" title="Decoded YUV frame in a non-planar format (thus &quot;NP&quot;) ">AVRGBFrame</a>. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a75015924b786d93d1e96faa362c92cbc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a75015924b786d93d1e96faa362c92cbc">&#9670;&nbsp;</a></span>clientPull()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool SharedMemRingBufferRGB::clientPull </td>
-          <td>(</td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>index_out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>size_out</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns a python tuple of metadata (index, width, height, slot, timestamp) </p>
-<p>Legacy support </p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classSharedMemRingBufferRGB_a75015924b786d93d1e96faa362c92cbc_cgraph.png" border="0" usemap="#classSharedMemRingBufferRGB_a75015924b786d93d1e96faa362c92cbc_cgraph" alt=""/></div>
-<map name="classSharedMemRingBufferRGB_a75015924b786d93d1e96faa362c92cbc_cgraph" id="classSharedMemRingBufferRGB_a75015924b786d93d1e96faa362c92cbc_cgraph">
-<area shape="rect" id="node2" href="classSharedMemRingBufferBase.html#aaa189c657836046557f5e3c3d0417e6b" title="Returns the index of SharedMemoryRingBuffer::shmems that was just written. " alt="" coords="236,5,420,47"/>
-</map>
-</div>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="sharedmem_8h_source.html">sharedmem.h</a></li>
 <li>/home/sampsa/C/valkka/src/<a class="el" href="sharedmem_8cpp.html">sharedmem.cpp</a></li>
 </ul>

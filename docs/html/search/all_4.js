@@ -7,5 +7,7 @@ var searchData=
   ['eventfd',['EventFd',['../classEventFd.html',1,'']]],
   ['eventloopwatchvariable',['eventLoopWatchVariable',['../classLiveThread.html#a3a102a260e3ffc14ba4637bef6e28c47',1,'LiveThread']]],
   ['exit',['exit',['../group__openglthread__tag.html#ggaa7275dda16349b828b8c7e9672e3a2acaf24f62eeb789199b9b2e467df3b1876b',1,'threadsignal.h']]],
-  ['exit_5frequested',['exit_requested',['../classLiveThread.html#aa2c57fc92c0bf72a1374781e04b49e7e',1,'LiveThread']]]
+  ['exit_5frequested',['exit_requested',['../classLiveThread.html#aa2c57fc92c0bf72a1374781e04b49e7e',1,'LiveThread']]],
+  ['extradata_5fcount',['extradata_count',['../classMuxFrameFilter.html#af2e00635927534d31001e106a077fe49',1,'MuxFrameFilter']]],
+  ['extradata_5fframe',['extradata_frame',['../classMuxFrameFilter.html#a94d2d338ed5416fece3d8eddc58cf760',1,'MuxFrameFilter']]]
 ];

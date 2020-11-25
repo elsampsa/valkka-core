@@ -19,7 +19,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 @file    base.py
 @author  Sampsa Riikonen
 @date    2020
-@version 1.0.1 
+@version 1.0.2 
 
 @brief   A simple multiprocessing framework with back- and frontend and pipes communicating between them
 """
@@ -118,7 +118,8 @@ class MessageProcess(Process):
         self.pre = self.__class__.__name__ + "." + self.name
         self.logger = getLogger(self.pre)
         super().__init__()
-        self.front_pipe, self.back_pipe = Pipe() # incoming messages
+        self.front_pipe, self.back_pipe = Pipe() # incoming messages & pipe that is read by the main pythn process
+        self.front_pipe_internal, self.back_pipe_internal = Pipe() # used internally, for example, to wait results from the backend
         self.loop = True
         self.listening = False # are we listening something else than just the intercom pipes?
         self.sigint = True
@@ -208,8 +209,11 @@ class MessageProcess(Process):
         """Pickle obj & send to outgoing pipe
         """
         # print("send_out__", obj)
-        self.back_pipe.send(obj) # these are mapped to Qt signals
+        self.back_pipe.send(obj)
 
+
+    def return_out__(self, obj):
+        self.back_pipe_internal.send(obj)
 
 
     # **** frontend ****
@@ -219,6 +223,9 @@ class MessageProcess(Process):
 
     def sendMessageToBack(self, message: MessageObject):
         self.front_pipe.send(message)
+
+    def returnFromBack(self):
+        return self.front_pipe_internal.recv()
 
     def go(self):
         self.start()
@@ -364,6 +371,7 @@ class AsyncBackMessageProcess(MessageProcess):
     
     def __init__(self, name = "AsyncMessageProcess"):
         self.name = name
+        # print("AsyncBackMessageProcess")
         self.pre = self.__class__.__name__ + "." + self.name
         self.logger = getLogger(self.pre)
         super().__init__()
@@ -384,6 +392,7 @@ class AsyncBackMessageProcess(MessageProcess):
 
 
     def run(self):
+        # print("AsyncBackMessageProcess>run")
         if self.sigint == False:
             signal.signal(signal.SIGINT, signal.SIG_IGN) # handle in master process correctly
         self.preRun__()

@@ -28,7 +28,7 @@
  *  @file    livethread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.0.1 
+ *  @version 1.0.2 
  *  
  *  @brief A live555 thread
  *

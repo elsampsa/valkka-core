@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.17.0</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -78,6 +78,7 @@ $(function() {
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="common_8h_source.html">common.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codec_8h_source.html">codec.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="metadata_8h_source.html">metadata.h</a>&quot;</code><br />
 <code>#include &quot;threadsignal.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="constant_8h_source.html">constant.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="avdep_8h_source.html">avdep.h</a>&quot;</code><br />
@@ -167,6 +168,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicFrame.html">BasicFrame</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Custom payload <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a>.  <a href="classBasicFrame.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMuxFrame.html">MuxFrame</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A muxed packet (in some container format)  <a href="classMuxFrame.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSetupFrame.html">SetupFrame</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup frame.  <a href="classSetupFrame.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -236,8 +240,9 @@ Enumerations</h2></td></tr>
 <a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee">FrameClass::signal</a>, 
 <a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aab272bda9bf0c1cdcba614b5ed99c4d62">FrameClass::marker</a>, 
 <br />
-&#160;&#160;<b>First</b> = none, 
-<b>Last</b> = signal
+&#160;&#160;<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aaf1e492ffa7562aa744240b8b3eb403c5">FrameClass::mux</a>, 
+<b>First</b> = none, 
+<b>Last</b> = mux
 <br />
  }<tr class="memdesc:ga4c17b19991c62a93b7a272b92037d69a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> classes used by Valkka.  <a href="group__frames__tag.html#ga4c17b19991c62a93b7a272b92037d69a">More...</a><br /></td></tr>
 </td></tr>
@@ -248,11 +253,10 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:ac7e9c7fc4910cfe7eed4025d4505f619"><td class="mdescLeft">&#160;</td><td class="mdescRight">Methods to correct frame timestamps.  <a href="frame_8h.html#ac7e9c7fc4910cfe7eed4025d4505f619">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:ac7e9c7fc4910cfe7eed4025d4505f619"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5579b777599f71f831d62b45345c8482"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="frame_8h.html#a5579b777599f71f831d62b45345c8482">SetupFrameType</a> { <b>none</b>, 
+<tr class="memitem:a5579b777599f71f831d62b45345c8482"><td class="memItemLeft" align="right" valign="top"><a id="a5579b777599f71f831d62b45345c8482"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>SetupFrameType</b> { <b>none</b>, 
 <b>stream_init</b>, 
 <b>stream_state</b>
- }<tr class="memdesc:a5579b777599f71f831d62b45345c8482"><td class="mdescLeft">&#160;</td><td class="mdescRight">A muxed packet (in some container format)  <a href="frame_8h.html#a5579b777599f71f831d62b45345c8482">More...</a><br /></td></tr>
-</td></tr>
+ }</td></tr>
 <tr class="separator:a5579b777599f71f831d62b45345c8482"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -265,32 +269,8 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="textblock"><p><a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> classes. </p>
 <dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.17.0 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>1.0.2 </dd></dl>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="a5579b777599f71f831d62b45345c8482"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5579b777599f71f831d62b45345c8482">&#9670;&nbsp;</a></span>SetupFrameType</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="frame_8h.html#a5579b777599f71f831d62b45345c8482">SetupFrameType</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>A muxed packet (in some container format) </p>
-
-</div>
-</div>
 <a id="ac7e9c7fc4910cfe7eed4025d4505f619"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac7e9c7fc4910cfe7eed4025d4505f619">&#9670;&nbsp;</a></span>TimeCorrectionType</h2>
 

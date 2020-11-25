@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['payload',['payload',['../classBasicFrame.html#ae7e1bbebda141eebc16fc0ef52f947eb',1,'BasicFrame::payload()'],['../classRGBFrame.html#a0fee86e779bed1ab5df66963c5fd5e5b',1,'RGBFrame::payload()'],['../classSharedMemSegment.html#a09657143b07848c1ec0e6e963a032eab',1,'SharedMemSegment::payload()']]],
+  ['payload',['payload',['../classBasicFrame.html#ae7e1bbebda141eebc16fc0ef52f947eb',1,'BasicFrame::payload()'],['../classMuxFrame.html#a46e216a3b6aaea1cc5662704e617357a',1,'MuxFrame::payload()'],['../classRGBFrame.html#a0fee86e779bed1ab5df66963c5fd5e5b',1,'RGBFrame::payload()'],['../classSharedMemSegment.html#a09657143b07848c1ec0e6e963a032eab',1,'SharedMemSegment::payload()']]],
   ['payload_5fname',['payload_name',['../classSharedMemSegment.html#a25475cf77bb7cb63494146928fc2043c',1,'SharedMemSegment']]],
   ['pending',['pending',['../classLiveThread.html#afec5a699642fab1784d339854e6ec5e9',1,'LiveThread']]],
   ['pinggetparametertask',['pingGetParameterTask',['../classStreamClientState.html#ac82f9fd0f0ae8279551bf371f73d69f5',1,'StreamClientState']]],

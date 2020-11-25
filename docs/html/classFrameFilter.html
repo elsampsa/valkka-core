@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.17.0</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -62,8 +62,8 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classFrameFilter-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">FrameFilter Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group__filters__tag.html">available framefilters</a></div></div>  </div>
@@ -117,6 +117,8 @@ Inheritance diagram for FrameFilter:</div>
 Collaboration diagram for FrameFilter:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFrameFilter__coll__graph.png" border="0" usemap="#FrameFilter_coll__map" alt="Collaboration graph"/></div>
+<map name="FrameFilter_coll__map" id="FrameFilter_coll__map">
+</map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -133,15 +135,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <tr class="memdesc:a7b814f8fd99764b61f49e3106124d8a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls this-&gt;<a class="el" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. ">go(Frame* frame)</a> and then calls the this-&gt;next-&gt;<a class="el" href="classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this-&gt;go(Frame* frame) and then calls the this-&gt;next-&gt;run(Frame* frame) (if this-&gt;next != NULL)...">run(Frame* frame)</a> (if this-&gt;next != NULL) <br /></td></tr>
 <tr class="separator:a7b814f8fd99764b61f49e3106124d8a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:ad518d50e6fffaf6238dabff9fc54f6af"><td class="memItemLeft" align="right" valign="top"><a id="ad518d50e6fffaf6238dabff9fc54f6af"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af">go</a> (<a class="el" href="classFrame.html">Frame</a> *frame)=0</td></tr>
-<tr class="memdesc:ad518d50e6fffaf6238dabff9fc54f6af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does the actual filtering/modification to the <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a>. Define in subclass. <br /></td></tr>
-<tr class="separator:ad518d50e6fffaf6238dabff9fc54f6af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
 <tr class="memitem:a56531ed5f05cdce0d5ce3accea729aab"><td class="memItemLeft" align="right" valign="top"><a id="a56531ed5f05cdce0d5ce3accea729aab"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
 <tr class="separator:a56531ed5f05cdce0d5ce3accea729aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,6 +144,13 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td><
 <a class="el" href="classFrameFilter.html">FrameFilter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a></td></tr>
 <tr class="memdesc:a992da6bcdb61db69511f222dbe33e818"><td class="mdescLeft">&#160;</td><td class="mdescRight">The next frame filter in the chain to be applied. <br /></td></tr>
 <tr class="separator:a992da6bcdb61db69511f222dbe33e818"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ad518d50e6fffaf6238dabff9fc54f6af"><td class="memItemLeft" align="right" valign="top"><a id="ad518d50e6fffaf6238dabff9fc54f6af"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af">go</a> (<a class="el" href="classFrame.html">Frame</a> *frame)=0</td></tr>
+<tr class="memdesc:ad518d50e6fffaf6238dabff9fc54f6af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does the actual filtering/modification to the <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a>. Define in subclass. <br /></td></tr>
+<tr class="separator:ad518d50e6fffaf6238dabff9fc54f6af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The mother class of all frame filters! FrameFilters are used to create "filter chains". </p>

@@ -1,8 +1,10 @@
 var searchData=
 [
   ['maxtime_5f',['maxtime_',['../classFrameCache.html#aa905008742ed955175c4398a3d0ffc6b',1,'FrameCache']]],
-  ['media_5ftype',['media_type',['../classBasicFrame.html#ac97acb7471526e6807e386dcf5b9e8e0',1,'BasicFrame::media_type()'],['../classSetupFrame.html#ab3a3d550b05782027053768d4dec94a1',1,'SetupFrame::media_type()'],['../classAVMediaFrame.html#a90e4bd52b819e23cc0b93012d27f865d',1,'AVMediaFrame::media_type()']]],
+  ['media_5ftype',['media_type',['../classBasicFrame.html#ac97acb7471526e6807e386dcf5b9e8e0',1,'BasicFrame::media_type()'],['../classMuxFrame.html#acf4eb4927758019dae03a6d4e4c5f612',1,'MuxFrame::media_type()'],['../classSetupFrame.html#ab3a3d550b05782027053768d4dec94a1',1,'SetupFrame::media_type()'],['../classAVMediaFrame.html#a90e4bd52b819e23cc0b93012d27f865d',1,'AVMediaFrame::media_type()']]],
+  ['meta_5fblob',['meta_blob',['../classMuxFrame.html#a69dab1eee7204d6f463d06fecd22fabe',1,'MuxFrame']]],
   ['meta_5fname',['meta_name',['../classSharedMemSegment.html#a638452b2e87cce46040638e9b554cda0',1,'SharedMemSegment']]],
+  ['meta_5ftype',['meta_type',['../classMuxFrame.html#a2e3aaf19bc7d29d9f2223566c1ed1b9c',1,'MuxFrame']]],
   ['mintime_5f',['mintime_',['../classFrameCache.html#a9bb1efcc36065fd6d626b897b1c77ee0',1,'FrameCache']]],
   ['movement_5fstart',['movement_start',['../classMovementFrameFilter.html#a395c6ad62c1a54ccc7458da981a463d7',1,'MovementFrameFilter']]],
   ['msbuftime',['msbuftime',['../classOpenGLThread.html#abd95b01df8ebaf9cae08e13d4ba87cda',1,'OpenGLThread']]],

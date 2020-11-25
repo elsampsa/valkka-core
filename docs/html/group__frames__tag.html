@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.17.0</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -130,8 +130,9 @@ Enumerations</h2></td></tr>
 <a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee">FrameClass::signal</a>, 
 <a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aab272bda9bf0c1cdcba614b5ed99c4d62">FrameClass::marker</a>, 
 <br />
-&#160;&#160;<b>First</b> = none, 
-<b>Last</b> = signal
+&#160;&#160;<a class="el" href="group__frames__tag.html#gga4c17b19991c62a93b7a272b92037d69aaf1e492ffa7562aa744240b8b3eb403c5">FrameClass::mux</a>, 
+<b>First</b> = none, 
+<b>Last</b> = mux
 <br />
  }<tr class="memdesc:ga4c17b19991c62a93b7a272b92037d69a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of <a class="el" href="classFrame.html" title="Frame: An abstract queueable class. ">Frame</a> classes used by Valkka.  <a href="group__frames__tag.html#ga4c17b19991c62a93b7a272b92037d69a">More...</a><br /></td></tr>
 </td></tr>
@@ -185,6 +186,8 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="gga4c17b19991c62a93b7a272b92037d69aa521345a9fb579f52117f27be6e0673ee"></a>signal&#160;</td><td class="fielddoc"><p>signal to <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. ">AVThread</a> or <a class="el" href="classOpenGLThread.html" title="This class does a lot of things: ">OpenGLThread</a>. Also custom signals to custom Threads </p>
 </td></tr>
 <tr><td class="fieldname"><a id="gga4c17b19991c62a93b7a272b92037d69aab272bda9bf0c1cdcba614b5ed99c4d62"></a>marker&#160;</td><td class="fielddoc"><p>Used when sending blocks of frames: mark filesystem and block start and end. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga4c17b19991c62a93b7a272b92037d69aaf1e492ffa7562aa744240b8b3eb403c5"></a>mux&#160;</td><td class="fielddoc"><p>Muxed streams, for example, MP4 or matroska. </p>
 </td></tr>
 </table>
 

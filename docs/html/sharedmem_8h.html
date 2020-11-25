@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">0.17.0</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -65,7 +65,8 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">sharedmem.h File Reference</div>  </div>
 </div><!--header-->
@@ -112,7 +113,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A file descriptor for running select and poll with shmem ring buffers.  <a href="classEventFd.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemSegment.html">SharedMemSegment</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared memory segment with metadata (the segment size)  <a href="classSharedMemSegment.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles a shared memory segment with metadata (the segment size)  <a href="classSharedMemSegment.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimpleSharedMemSegment.html">SimpleSharedMemSegment</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared mem segment with simple metadata : just the payload length.  <a href="classSimpleSharedMemSegment.html#details">More...</a><br /></td></tr>
@@ -137,13 +138,197 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRGBShmemFrameFilter.html">RGBShmemFrameFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like <a class="el" href="classShmemFrameFilter.html" title="This FrameFilter writes frames into a SharedMemRingBuffer. ">ShmemFrameFilter</a>.  <a href="classRGBShmemFrameFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a4eb28e73dc61ea85bb568f41c475619a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>server_init</b>(CLASSNAME,  TYPENAME)</td></tr>
+<tr class="separator:a4eb28e73dc61ea85bb568f41c475619a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4ad11c696c2c1d87e27111443e0719f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>client_init</b>(CLASSNAME,  TYPENAME)</td></tr>
+<tr class="separator:ad4ad11c696c2c1d87e27111443e0719f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13bacce274369d312cefd8663ec02af4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>server_close</b>(CLASSNAME,  TYPENAME)</td></tr>
+<tr class="separator:a13bacce274369d312cefd8663ec02af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6736d31e6940b821d94f3c2f462c982f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>client_close</b>(CLASSNAME,  TYPENAME)</td></tr>
+<tr class="separator:a6736d31e6940b821d94f3c2f462c982f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5efaee0301aacd90c1dd7dd6df5756da"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>copy_meta_from</b>(CLASSNAME,  TYPENAME)</td></tr>
+<tr class="separator:a5efaee0301aacd90c1dd7dd6df5756da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac25a158e01e35714d94800f75b0e6991"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>copy_meta_to</b>(CLASSNAME,  TYPENAME)</td></tr>
+<tr class="separator:ac25a158e01e35714d94800f75b0e6991"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores. </p>
 <dl class="section author"><dt>Author</dt><dd>Sampsa Riikonen </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2017 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.17.0 </dd></dl>
-</div></div><!-- contents -->
+<dl class="section version"><dt>Version</dt><dd>1.0.2 </dd></dl>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a6736d31e6940b821d94f3c2f462c982f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6736d31e6940b821d94f3c2f462c982f">&#9670;&nbsp;</a></span>client_close</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define client_close</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CLASSNAME, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TYPENAME&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordtype">void</span> CLASSNAME::clientClose() { \</div><div class="line">} \</div></div><!-- fragment -->
+</div>
+</div>
+<a id="ad4ad11c696c2c1d87e27111443e0719f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4ad11c696c2c1d87e27111443e0719f">&#9670;&nbsp;</a></span>client_init</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define client_init</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CLASSNAME, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TYPENAME&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordtype">bool</span> CLASSNAME::clientInit() { \</div><div class="line">  int fd, fd_;\</div><div class="line">  fd = shm_open(payload_name.c_str(), O_RDONLY, 0400);\</div><div class="line">  fd_= shm_open(meta_name.c_str(), O_RDONLY, 0400);\</div><div class="line">  if (fd == -1 or fd_==-1) {\</div><div class="line">    <span class="comment">/* perror(&quot;valkka_core: sharedmem.cpp: SharedMemSegment::clientInit: shm_open failed&quot;); */</span>\</div><div class="line">    <span class="comment">/* exit(2); */</span>\</div><div class="line">    return <span class="keyword">false</span>;\</div><div class="line">  }\</div><div class="line">  <span class="comment">/* std::cout &lt;&lt; &quot;got shmem&quot; &lt;&lt; std::endl; */</span>\</div><div class="line">  ptr  =mmap(0, n_bytes, PROT_READ, MAP_SHARED, fd,  0);\</div><div class="line">  ptr_ =mmap(0, <span class="keyword">sizeof</span>(TYPENAME), PROT_READ, MAP_SHARED, fd_, 0);\</div><div class="line">  if (ptr == MAP_FAILED or ptr_ == MAP_FAILED) {\</div><div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;valkka_core: sharedmem.cpp: SharedMemSegment::clientInit: mmap failed&quot;</span> &lt;&lt; std::endl;\</div><div class="line">    <span class="comment">/* perror(&quot;valkka_core: sharedmem.cpp: SharedMemSegment::clientInit: mmap failed&quot;); */</span>\</div><div class="line">    <span class="comment">/* exit(2);*/</span>\</div><div class="line">    return <span class="keyword">false</span>;\</div><div class="line">  }\</div><div class="line">  payload = (uint8_t*) ptr;\</div><div class="line">  meta    = (TYPENAME*) ptr_;\</div><div class="line">  <span class="comment">/*std::cout &lt;&lt; &quot;client meta reserved&quot; &lt;&lt; std::endl;*/</span>\</div><div class="line">  close(fd);\</div><div class="line">  close(fd_);\</div><div class="line">  <span class="comment">/*std::cout &lt;&lt; &quot;Client reserved &quot; &lt;&lt; sizeof(TYPENAME) &lt;&lt; &quot;bytes&quot; &lt;&lt; std::endl;*/</span>\</div><div class="line">  return <span class="keyword">true</span>;\</div><div class="line">};\</div></div><!-- fragment -->
+</div>
+</div>
+<a id="a5efaee0301aacd90c1dd7dd6df5756da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5efaee0301aacd90c1dd7dd6df5756da">&#9670;&nbsp;</a></span>copy_meta_from</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define copy_meta_from</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CLASSNAME, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TYPENAME&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordtype">void</span> CLASSNAME::copyMetaFrom(<span class="keywordtype">void</span> *meta_) { \</div><div class="line">    *meta = *((TYPENAME*)(meta_)); \</div><div class="line">}\</div></div><!-- fragment -->
+</div>
+</div>
+<a id="ac25a158e01e35714d94800f75b0e6991"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac25a158e01e35714d94800f75b0e6991">&#9670;&nbsp;</a></span>copy_meta_to</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define copy_meta_to</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CLASSNAME, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TYPENAME&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordtype">void</span> CLASSNAME::copyMetaTo(<span class="keywordtype">void</span> *meta_) { \</div><div class="line">    *((TYPENAME*)(meta_)) = *meta; \</div><div class="line">}\</div></div><!-- fragment -->
+</div>
+</div>
+<a id="a13bacce274369d312cefd8663ec02af4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13bacce274369d312cefd8663ec02af4">&#9670;&nbsp;</a></span>server_close</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define server_close</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CLASSNAME, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TYPENAME&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordtype">void</span> CLASSNAME::serverClose() { \</div><div class="line"> if (munmap(ptr, n_bytes)!=0 or munmap(ptr_, <span class="keyword">sizeof</span>(TYPENAME)!=0)) { \</div><div class="line">    perror(<span class="stringliteral">&quot;valkka_core: sharedmem.cpp: CLASSNAME::serverClose: munmap failed&quot;</span>); \</div><div class="line">    exit(2); \</div><div class="line">  } \</div><div class="line">  if (shm_unlink(payload_name.c_str())!=0 or shm_unlink(meta_name.c_str())!=0) { \</div><div class="line">    perror(<span class="stringliteral">&quot;valkka_core: sharedmem.cpp: CLASSNAME::serverClose: shm_unlink failed&quot;</span>); \</div><div class="line">    <span class="comment">/*exit(2);*/</span> \</div><div class="line">  } \</div><div class="line">} \</div></div><!-- fragment -->
+</div>
+</div>
+<a id="a4eb28e73dc61ea85bb568f41c475619a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eb28e73dc61ea85bb568f41c475619a">&#9670;&nbsp;</a></span>server_init</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define server_init</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CLASSNAME, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TYPENAME&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordtype">void</span> CLASSNAME::serverInit() {\</div><div class="line">  int fd, fd_, r, r_;\</div><div class="line">  shm_unlink(payload_name.c_str());\</div><div class="line">  shm_unlink(meta_name.c_str());\</div><div class="line">  fd = shm_open(payload_name.c_str(),O_CREAT | O_EXCL | O_TRUNC | O_RDWR, 0600);\</div><div class="line">  fd_= shm_open(meta_name.c_str(),   O_CREAT | O_EXCL | O_TRUNC | O_RDWR, 0600);\</div><div class="line">  if (fd == -1 or fd_==-1) {\</div><div class="line">    perror(<span class="stringliteral">&quot;valkka_core: sharedmem.cpp: SharedMemSegment::serverInit: shm_open failed&quot;</span>);\</div><div class="line">    exit(2);\</div><div class="line">  }\</div><div class="line">  <span class="comment">/* std::cout &lt;&lt; &quot;got shmem&quot; &lt;&lt; std::endl; */</span>\</div><div class="line">  r = ftruncate(fd, n_bytes);\</div><div class="line">  r_= ftruncate(fd_,n_bytes);\</div><div class="line">  if (r != 0 or r_ !=0) {\</div><div class="line">    perror(<span class="stringliteral">&quot;valkka_core: sharedmem.cpp: SharedMemSegment::serverInit: ftruncate failed&quot;</span>);\</div><div class="line">    exit(2);\</div><div class="line">  }\</div><div class="line">  ptr = mmap(0, n_bytes,          PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);\</div><div class="line">  ptr_= mmap(0, <span class="keyword">sizeof</span>(TYPENAME), PROT_READ | PROT_WRITE, MAP_SHARED, fd_, 0);\</div><div class="line">  if (ptr == MAP_FAILED or ptr_ == MAP_FAILED) {\</div><div class="line">    perror(<span class="stringliteral">&quot;valkka_core: sharedmem.cpp: SharedMemSegment::serverInit: mmap failed&quot;</span>);\</div><div class="line">    exit(2);\</div><div class="line">  }\</div><div class="line">  payload = (uint8_t*) ptr;\</div><div class="line">  meta    = (TYPENAME*) ptr_;\</div><div class="line">  <span class="comment">/*std::cout &lt;&lt; &quot;server meta reserved&quot; &lt;&lt; std::endl;*/</span>\</div><div class="line">  close(fd);\</div><div class="line">  close(fd_);\</div><div class="line">  <span class="comment">/*std::cout &lt;&lt; &quot;Server reserved &quot; &lt;&lt; sizeof(TYPENAME) &lt;&lt; &quot;bytes&quot; &lt;&lt; std::endl;*/</span>\</div><div class="line">};\</div></div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

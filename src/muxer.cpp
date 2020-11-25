@@ -26,7 +26,7 @@
  *  @file    muxer.cpp
  *  @author  Sampsa Riikonen
  *  @date    2019
- *  @version 1.0.1 
+ *  @version 1.0.2 
  *  
  *  @brief 
  */ 
@@ -36,16 +36,16 @@
 #define logger filterlogger //TODO: create a new logger for muxers
 
 // #define MUXPARSE  //enable if you need to see what the byte parser is doing
-
+// #define MUXSTATE //enable if you need to check the state of the muxer
 
 MuxFrameFilter::MuxFrameFilter(const char* name, FrameFilter *next) : 
     FrameFilter(name, next), active(false), initialized(false), mstimestamp0(0), zerotimeset(false), ready(false), av_format_ctx(NULL), avio_ctx(NULL), 
-    avio_ctx_buffer(NULL), missing(0), ccf(0), av_dict(NULL), format_name("matroska"), has_extradata(false) {
+    avio_ctx_buffer(NULL), missing(0), ccf(0), av_dict(NULL), format_name("matroska"), has_extradata(false), extradata_count(0) {
     // two substreams per stream
     this->codec_contexes.resize(2,NULL);
     this->streams.resize(2, NULL);
 
-    /* some sekouilu..
+    /* some sekoilu..
     this->internal_basicframe2.payload.reserve(1024*500);
     this->internal_basicframe2.payload.resize(0);
 
@@ -86,9 +86,6 @@ MuxFrameFilter::~MuxFrameFilter() {
     av_free(avio_ctx_buffer);
     av_free_packet(avpkt);
     delete avpkt;
-    if (avio_ctx) {
-        av_free(avio_ctx);
-    }
     av_dict_free(&av_dict);
 }
 
@@ -213,7 +210,7 @@ void MuxFrameFilter::initMux() {
 
     ///*
     // codec_contexes, streams, av_format_context reserved !
-    std::cout << "MuxFrameFilter: writing header" << std::endl;
+    // std::cout << "MuxFrameFilter: writing header" << std::endl;
     i = avformat_write_header(av_format_context, &av_dict);
     if (i < 0) {
         logger.log(LogLevel::fatal) << "MuxFrameFilter : initMux : Error occurred while muxing" << std::endl;
@@ -250,7 +247,7 @@ void MuxFrameFilter::initMux() {
 }
 
 int MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size)  {
-    std::cout << "dummy" << std::endl;
+    // std::cout << "dummy" << std::endl;
     return 0; // re-define in child classes
 }
 
@@ -261,12 +258,15 @@ void MuxFrameFilter::closeMux() {
         // std::cout << "MuxFrameFilter: closeMux" << std::endl;
         // avio_closep(&avio_ctx);        
         avformat_free_context(av_format_context);
-        
+        // avformat_close_input(&av_format_context); // nopes
         for (auto it = codec_contexes.begin(); it != codec_contexes.end(); ++it) {
             if (*it != NULL) {
+                // avcodec_free_context should not try to free this!
+                (*it)->extradata = NULL;
+                (*it)->extradata_size = 0;
                 // std::cout << "MuxFrameFilter: closeMux: context " << (long unsigned)(*it) << std::endl;
                 avcodec_close(*it);
-                avcodec_free_context(&*it);
+                avcodec_free_context(&(*it));
                 *it = NULL;
             }
         }
@@ -277,8 +277,12 @@ void MuxFrameFilter::closeMux() {
                 *it = NULL;
             }
         }
+        av_free(avio_ctx);
     }
     initialized = false;
+    has_extradata = false;
+    extradata_count = 0;
+    prevpts = 0;
 }
 
 
@@ -299,7 +303,13 @@ void MuxFrameFilter::run(Frame* frame) {
 
 void MuxFrameFilter::go(Frame* frame) {
     std::unique_lock<std::mutex> lk(this->mutex);
-    // std::cout << "MuxFrameFilter: go: frame " << *frame << std::endl;
+
+    #ifdef MUXSTATE
+    std::cout << "MuxFrameFilter: go: state: ready, active, initd: " << int(ready) << " " << int(active) 
+        << " " << int(initialized) << std::endl;
+    #endif
+
+    //std::cout << "MuxFrameFilter: go: frame " << *frame << std::endl;
     
     internal_frame.n_slot = frame->n_slot;
 
@@ -311,6 +321,9 @@ void MuxFrameFilter::go(Frame* frame) {
                 logger.log(LogLevel::fatal) << "MuxFrameFilter : too many subsessions! " << std::endl;
             }
             else {
+                #ifdef MUXSTATE
+                std::cout << "MuxFrameFilter:  go: state: got setup frame " << *setupframe << std::endl;
+                #endif
                 logger.log(LogLevel::debug) << "MuxFrameFilter :  go : got setup frame " << *setupframe << std::endl;
                 setupframes[setupframe->subsession_index].copyFrom(setupframe);
             }
@@ -330,6 +343,9 @@ void MuxFrameFilter::go(Frame* frame) {
                 if ((basicframe->h264_pars.slice_type == H264SliceType::sps) or
                     (basicframe->h264_pars.slice_type == H264SliceType::pps))
                 {
+                    #ifdef MUXSTATE
+                    std::cout << "MuxFrameFilter: go: state: appending extradata" << std::endl;
+                    #endif
                     logger.log(LogLevel::debug) << "MuxFrameFilter : appending extradata" << std::endl;
                     extradata_frame.payload.insert(
                         extradata_frame.payload.end(),
@@ -337,21 +353,47 @@ void MuxFrameFilter::go(Frame* frame) {
                         basicframe->payload.end()
                     );
                 }
-                if (basicframe->h264_pars.slice_type == H264SliceType::pps) {
+
+                if (basicframe->h264_pars.slice_type == H264SliceType::sps and
+                    extradata_count == 0)
+                    {
+                        extradata_count = 1;
+                    }
+
+                if (basicframe->h264_pars.slice_type == H264SliceType::pps and
+                    extradata_count == 1)
+                    {
+                        extradata_count = 2;
+                    }
+
+                if (extradata_count >= 2) {
                     has_extradata = true;
+                    #ifdef MUXSTATE
+                    std::cout << "MuxFrameFilter: go: state: extradata ok" << std::endl;
+                    #endif
                     extradata_frame.copyMetaFrom(basicframe); // timestamps etc.
                 }
             }
         }
 
         if (!ready) {
-            if ((setupframes[0].subsession_index > -1) and has_extradata) {
+            if ( (setupframes[0].subsession_index > -1) 
+                    or (setupframes[1].subsession_index > -1)  
+                    and has_extradata) { 
+                // TODO: should fix subsession index handling to something more sane
+                // Now the subsession index is forced to 0 in live.cpp
                 // we have got at least one setupframe and after that, payload
+                #ifdef MUXSTATE
+                std::cout << "MuxFrameFilter: go: state: setting ready=true" << std::endl;
+                #endif
                 ready=true;
             }
         }
         
         if (ready and active and !initialized) { // got setup frames, writing has been requested, but file has not been opened yet
+           #ifdef MUXSTATE
+            std::cout << "MuxFrameFilter: go: state: calling initMux & setting initialized=true" << std::endl;
+            #endif
             initMux(); // modifies member initialized
             if (!initialized) { // can't init this file.. de-activate
                 deActivate_();
@@ -361,6 +403,7 @@ void MuxFrameFilter::go(Frame* frame) {
                 // mstimestamp0 = extradata_frame.mstimestamp;
                 mstimestamp0 = basicframe->mstimestamp;
                 extradata_frame.mstimestamp = mstimestamp0;
+                extradata_frame.subsession_index = 0;
                 // std::cout << "writing extradata" << std::endl;
                 writeFrame(&extradata_frame); // send sps & pps data to muxer only once
                 // std::cout << "wrote extradata" << std::endl;
@@ -419,15 +462,29 @@ void MuxFrameFilter::writeFrame(BasicFrame* basicframe) {
     You're welcome.
     */
 
+   #ifdef MUXSTATE
+    std::cout << "MuxFrameFilter: writeFrame: state: ready, active, initd: " << int(ready) << " " << int(active) 
+        << " " << int(initialized) << std::endl;
+    #endif
+
+    if (!initialized) {
+        return;
+    }
 
     long int dt = (basicframe->mstimestamp-mstimestamp0);
     if (dt < 0) { dt = 0; }
+    // std::cout << "MuxFrameFilter : writing frame with mstimestamp " << dt << std::endl;
     logger.log(LogLevel::debug) << "MuxFrameFilter : writing frame with mstimestamp " << dt << std::endl;
     logger.log(LogLevel::debug) << "MuxFrameFilter : writing frame " << *basicframe << std::endl;
     // internal_basicframe2.fillAVPacket(avpkt); // copies metadata to avpkt, points to basicframe's payload
     // internal_basicframe.fillAVPacket(avpkt);
     basicframe->fillAVPacket(avpkt); // copies metadata to avpkt, points to basicframe's payload
 
+    /*
+    std::cout << "DEBUG: frame: " << *basicframe << std::endl;
+    std::cout << "DEBUG: subses index: " << basicframe->subsession_index << std::endl;
+    std::cout << "DEBUG: streams: " << streams.size() << std::endl;
+    */
     AVStream *av_stream = streams[basicframe->subsession_index];
     AVCodecContext *av_codec_context = codec_contexes[basicframe->subsession_index];
 
