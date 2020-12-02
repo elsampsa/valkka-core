@@ -39,6 +39,9 @@
 #include "common.h"
 #include "constant.h"
 #include "logging.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 /** posix time doodle:
 *
@@ -91,5 +94,10 @@ uint32_t deserialize_uint32_big_endian(unsigned char *buffer)
 }
 #endif
 
+// this was removed from live555 at some point
+unsigned our_inet_addr(const char* cp)
+{
+        return inet_addr(cp);
+}
 
 #endif

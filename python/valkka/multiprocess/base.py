@@ -408,14 +408,17 @@ class AsyncBackMessageProcess(MessageProcess):
 
 
     async def asyncPre__(self):
+        """This is started before the main pipe reading loop:
+        
+        If you want to communicate something to the main running loop,
+        then you must launch it as a task
+        """
         pass
 
     async def asyncPost__(self):
         pass
 
     async def async_run__(self):
-        await self.asyncPre__()
-
         # print("hello from async")
         loop = asyncio.get_event_loop()
 
@@ -427,12 +430,35 @@ class AsyncBackMessageProcess(MessageProcess):
         def protocol_factory():
             return asyncio.StreamReaderProtocol(self.stream_reader)
             
-        self.reader_transport, pro = await loop.connect_read_pipe(protocol_factory, back_reader)
-        self.writer_transport, pro = await loop.connect_write_pipe(asyncio.BaseProtocol, back_writer)
+        """the logic here:
+
+        read input (back_reader) is connected to the event loop, using
+        a certain protocol .. protocol == what happens when there is
+        stuff to read.  We'll do the reading "manually" in the loop,
+        so nothing much
+
+        same for writer.. we get writer_transport where we can write
+        """
+        self.reader_transport, pro =\
+            await loop.connect_read_pipe(protocol_factory, back_reader)
+        self.writer_transport, pro =\
+            await loop.connect_write_pipe(asyncio.BaseProtocol, back_writer)
 
         # print(">>", self.writer_transport)
+        try:
+            await self.asyncPre__()
+        except Exception as e:
+            self.logger.critical(
+                "asyncPre__ failed with '%s':\
+                don't call anything that requires intercom with the main loop",
+                e)
 
+        # ..cause the loop starts over here:
         while self.loop:
+            # TODO: we should not have any event/reading loops
+            # when using asyncio, so this is a bit stupid
+            # solution: define a proper protocol instead
+            #
             # if you have file descriptors, add them to the event loop
             # like this: loop.add_reader(fd, callback, *args)
             msg = b''
