@@ -75,7 +75,7 @@ if __name__ == "__main__":
 Typical usecase:
 
     addlog.py 0.13.2 bionic new awesome version
-    addlog.py 0.13.2 xenial
+    addlog.py 0.13.2 focal
 """
     print(st)
 

@@ -103,8 +103,8 @@ digraph "/home/sampsa/C/valkka/src/muxer.cpp"
   Node44 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node44 -> Node48 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node48 [label="avdep.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$avdep_8h.html",tooltip="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..."];
-  Node43 -> Node59 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node59 [label="framefifo.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$framefifo_8h.html",tooltip="Thread safe system of fifo and a stack. "];
-  Node59 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node59 -> Node44 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node43 -> Node62 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node62 [label="framefifo.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$framefifo_8h.html",tooltip="Thread safe system of fifo and a stack. "];
+  Node62 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node62 -> Node44 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
 }

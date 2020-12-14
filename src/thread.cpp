@@ -26,7 +26,7 @@
  *  @file    thread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.0.2 
+ *  @version 1.0.3 
  *  
  *  @brief A class for multithreading, similar to Python's standard library "threading.Thread"
  */ 
@@ -226,6 +226,13 @@ void Thread::sendSignalAndWait(SignalContext signal_ctx) {
     std::unique_lock<std::mutex> lk(this->mutex);
     // this->signal=signal;
     this->signal_fifo.push_back(signal_ctx); 
+    while (!this->signal_fifo.empty()) {
+        this->condition.wait(lk);
+    }
+}
+
+void Thread::waitReady() {
+    std::unique_lock<std::mutex> lk(this->mutex);
     while (!this->signal_fifo.empty()) {
         this->condition.wait(lk);
     }

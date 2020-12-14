@@ -72,3 +72,4 @@ memo.md
 set_copyright.py
 set_license.py
 ext/livesave/
+.vscode/

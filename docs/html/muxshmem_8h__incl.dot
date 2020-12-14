@@ -101,10 +101,10 @@ digraph "/home/sampsa/C/valkka/include/muxshmem.h"
   Node46 [label="codec.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$codec_8h.html",tooltip="Codec definitions (slightly outdated) "];
   Node45 -> Node47 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node47 [label="metadata.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$metadata_8h.html",tooltip="libValkka pre-reserves all frames, both byte payload and metadata payload. After memory reservation..."];
-  Node44 -> Node61 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node61 [label="framefifo.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$framefifo_8h.html",tooltip="Thread safe system of fifo and a stack. "];
-  Node61 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node61 -> Node45 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1 -> Node62 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node62 [label="Python.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node44 -> Node64 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node64 [label="framefifo.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$framefifo_8h.html",tooltip="Thread safe system of fifo and a stack. "];
+  Node64 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node64 -> Node45 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node65 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node65 [label="Python.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
 }

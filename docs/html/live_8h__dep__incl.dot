@@ -2,11 +2,11 @@ digraph "/home/sampsa/C/valkka/include/live.h"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node71 [label="/home/sampsa/C/valkka\l/include/live.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node71 -> Node72 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node72 [label="/home/sampsa/C/valkka\l/include/livethread.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$livethread_8h.html",tooltip="A live555 thread. "];
-  Node72 -> Node73 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node73 [label="/home/sampsa/C/valkka\l/src/livethread.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$livethread_8cpp.html",tooltip="A live555 thread. "];
-  Node71 -> Node74 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node74 [label="/home/sampsa/C/valkka\l/src/live.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$live_8cpp.html",tooltip="Interface to live555. "];
+  Node74 [label="/home/sampsa/C/valkka\l/include/live.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node74 -> Node75 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node75 [label="/home/sampsa/C/valkka\l/include/livethread.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$livethread_8h.html",tooltip="A live555 thread. "];
+  Node75 -> Node76 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node76 [label="/home/sampsa/C/valkka\l/src/livethread.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$livethread_8cpp.html",tooltip="A live555 thread. "];
+  Node74 -> Node77 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node77 [label="/home/sampsa/C/valkka\l/src/live.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$live_8cpp.html",tooltip="Interface to live555. "];
 }

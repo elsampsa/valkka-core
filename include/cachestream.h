@@ -28,7 +28,7 @@
  *  @file    cachestream.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.0.2 
+ *  @version 1.0.3 
  *  
  *  @brief
  */

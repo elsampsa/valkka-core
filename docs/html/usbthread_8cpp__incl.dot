@@ -94,18 +94,18 @@ digraph "/home/sampsa/C/valkka/src/usbthread.cpp"
   Node44 [label="codec.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$codec_8h.html",tooltip="Codec definitions (slightly outdated) "];
   Node43 -> Node45 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node45 [label="metadata.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$metadata_8h.html",tooltip="libValkka pre-reserves all frames, both byte payload and metadata payload. After memory reservation..."];
-  Node42 -> Node59 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node59 [label="framefifo.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$framefifo_8h.html",tooltip="Thread safe system of fifo and a stack. "];
-  Node59 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node59 -> Node43 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node59 -> Node56 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node42 -> Node62 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node62 [label="framefifo.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$framefifo_8h.html",tooltip="Thread safe system of fifo and a stack. "];
+  Node62 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node62 -> Node43 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node62 -> Node56 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node56 [label="logging.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$logging_8h.html",tooltip="Logging utilities. "];
   Node56 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node56 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1 -> Node60 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node60 [label="thread.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$thread_8h.html",tooltip="Base class for multithreading. "];
-  Node60 -> Node61 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node61 [label="Python.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
-  Node60 -> Node59 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node63 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node63 [label="thread.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$thread_8h.html",tooltip="Base class for multithreading. "];
+  Node63 -> Node64 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node64 [label="Python.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node63 -> Node62 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node0 -> Node56 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
 }

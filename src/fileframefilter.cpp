@@ -26,7 +26,7 @@
  *  @file    file.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.0.2 
+ *  @version 1.0.3 
  *  
  *  @brief File input to matroska files
  */ 

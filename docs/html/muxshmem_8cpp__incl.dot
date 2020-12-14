@@ -101,10 +101,10 @@ digraph "/home/sampsa/C/valkka/src/muxshmem.cpp"
   Node46 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node46 -> Node47 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node47 [label="codec.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$codec_8h.html",tooltip="Codec definitions (slightly outdated) "];
-  Node45 -> Node62 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node62 [label="framefifo.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$framefifo_8h.html",tooltip="Thread safe system of fifo and a stack. "];
-  Node62 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node62 -> Node46 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 -> Node63 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node63 [label="Python.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node45 -> Node65 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node65 [label="framefifo.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$framefifo_8h.html",tooltip="Thread safe system of fifo and a stack. "];
+  Node65 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node65 -> Node46 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node66 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node66 [label="Python.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
 }

@@ -101,11 +101,11 @@ digraph "/home/sampsa/C/valkka/include/thread.h"
   Node47 [label="threadsignal.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$threadsignal_8h_source.html"];
   Node47 -> Node46 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node43 -> Node46 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node43 -> Node57 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node57 [label="macro.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$macro_8h.html"];
+  Node43 -> Node60 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node60 [label="macro.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$macro_8h.html"];
   Node2 -> Node56 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node56 [label="logging.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$logging_8h.html",tooltip="Logging utilities. "];
   Node56 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node56 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 -> Node57 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node60 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
 }

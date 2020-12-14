@@ -104,13 +104,13 @@ digraph "/home/sampsa/C/valkka/include/tex.h"
   Node53 [label="tools.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$tools_8h.html",tooltip="Auxiliary routines. "];
   Node53 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node53 -> Node44 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1 -> Node55 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node55 [label="macro.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$macro_8h.html"];
-  Node1 -> Node56 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node56 [label="rawrite.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$rawrite_8h.html",tooltip="Write directly to files and devices with POSIX O_DIRECT. "];
-  Node56 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node56 -> Node44 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node58 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node58 [label="macro.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$macro_8h.html"];
+  Node1 -> Node59 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node59 [label="rawrite.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$rawrite_8h.html",tooltip="Write directly to files and devices with POSIX O_DIRECT. "];
+  Node59 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node59 -> Node44 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node0 -> Node52 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node0 -> Node44 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node0 -> Node55 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node0 -> Node58 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
 }

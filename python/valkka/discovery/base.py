@@ -19,7 +19,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 @file    base.py
 @author  Sampsa Riikonen
 @date    2019
-@version 1.0.2 
+@version 1.0.3 
 
 @brief   Discovery module for onvif cameras, using wsdiscovery and brute-force scan
 """
