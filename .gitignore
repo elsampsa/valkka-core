@@ -51,7 +51,7 @@
 /python/valkka/*.so.*
 /ext/*.tar.gz
 /ext/ffmpeg
-/ext/live
+# /ext/live # lets provide this
 /debian/tmp
 /include/valkka_core.i
 /python/valkka/valkka_core.py
@@ -73,3 +73,9 @@ set_copyright.py
 set_license.py
 ext/livesave/
 .vscode/
+*.o
+*.a
+ext/live/testProgs/
+ext/live/hlsProxy/live555HLSProxy
+ext/live/mediaServer/live555MediaServer
+ext/live/proxyServer/live555ProxyServer
