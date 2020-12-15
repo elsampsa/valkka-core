@@ -16,7 +16,7 @@ then
     # ./genMakefiles armlinux
     ## if you're running in a native arm device, the gcc and g++ command
     ## map automagically into the right executables:
-    ./genMakefiles config.linux-arm
+    ./genMakefiles linux-arm
 else
     echo "LIVE555: WARNING: using generic linux"
     ./genMakefiles linux-generic
