@@ -327,11 +327,19 @@ void RTSPConnection::reStartStreamIf() {
     }
     
     if (livestatus==LiveStatus::pending) { // stream trying to connect .. waiting for tcp socket most likely
+        // std::cout << "RTSPConnection: reStartStreamIf: pending" << std::endl;
         // frametimer=frametimer+Timeout::livethread;
+        // inform downstream that this stream is offline
+        OfflineSignalContext signal_ctx = OfflineSignalContext();
+        SignalFrame signalframe = SignalFrame();
+        put_signal_context(&signalframe, signal_ctx, SignalType::offline);
+        livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: sending signal frame for slot " << ctx.slot << std::endl;
+        ctx.framefilter->run(&signalframe);
         return;
     }
     
     if (livestatus==LiveStatus::alive) { // alive
+        // std::cout << "RTSPConnection: reStartStreamIf: alive" << std::endl;
         if (client->scs.gotFrame()) { // there has been frames .. all is well
             client->scs.clearFrame(); // reset the watch flag
             frametimer=0;
@@ -341,6 +349,7 @@ void RTSPConnection::reStartStreamIf() {
         }
     } // alive
     else if (livestatus==LiveStatus::closed) {
+        // std::cout << "RTSPConnection: reStartStreamIf: closed" << std::endl;
         frametimer=frametimer+Timeout::livethread;
     }
     else {
@@ -353,12 +362,13 @@ void RTSPConnection::reStartStreamIf() {
     #endif
     
     if (frametimer>=ctx.msreconnect) {
-        livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: restart at slot " << ctx.slot << std::endl;
+        // std::cout << "RTSPConnection: reStartStreamIf: msreconnect" << std::endl;
+        // livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: restart at slot " << ctx.slot << std::endl;
         
         // inform downstream that this stream is offline
         OfflineSignalContext signal_ctx = OfflineSignalContext();
         SignalFrame signalframe = SignalFrame();
-        put_signal_context(&signalframe, signal_ctx);
+        put_signal_context(&signalframe, signal_ctx, SignalType::offline);
         livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: sending signal frame for slot " << ctx.slot << std::endl;
         ctx.framefilter->run(&signalframe);
 
@@ -814,6 +824,7 @@ void LiveThread::sendSignal(LiveSignalContext signal_ctx) {
 
 
 void LiveThread::checkAlive() {
+    // std::cout << "LiveThread: checkAlive" << std::endl;
     Connection *connection;
     for (std::vector<Connection*>::iterator it = slots_.begin(); it != slots_.end(); ++it) {
         connection=*it;

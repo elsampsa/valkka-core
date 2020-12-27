@@ -41,6 +41,7 @@ AlertFrameFilter::AlertFrameFilter(const char *name,
     }
     else {
         filterlogger.log(LogLevel::fatal) << "AlertFrameFilter: setCallback: could not set callback" << std::endl;
+        this->pycallback = NULL;
     }
 }
 
@@ -50,9 +51,13 @@ void AlertFrameFilter::go(Frame* frame) {
 void AlertFrameFilter::run(Frame* frame) {
     bool pass = true;
 
+    //std::cout << "AlertFrameFilter 1" << std::endl;
+
     if (frame->getFrameClass()==FrameClass::signal) {    
+        //std::cout << "AlertFrameFilter 2" << std::endl;
         SignalFrame *signalframe = static_cast<SignalFrame*>(frame);
         if (signalframe->signaltype==SignalType::offline) {
+            //std::cout << "AlertFrameFilter 3" << std::endl;
             pass = false;
             OfflineSignalContext ctx = OfflineSignalContext();
             get_signal_context(signalframe, ctx);
@@ -76,7 +81,10 @@ void AlertFrameFilter::run(Frame* frame) {
                     filterlogger.log(LogLevel::fatal) << "AlertFrameFilter: alert callback failed" << std::endl;
                 }
                 PyGILState_Release(gstate);
-            } // PYCALLBACK 
+            } // PYCALLBACK
+            else {
+                filterlogger.log(LogLevel::normal) << "AlertFrameFilter: setCallback: no python callback avail" << std::endl;
+            }
         } // offline signal
     } // signal
 

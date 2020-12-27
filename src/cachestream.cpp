@@ -908,7 +908,7 @@ void FileCacheThread::deregisterStream(FileStreamContext &ctx) {
             break;
     }
 }
-  
+
 void FileCacheThread::registerStreamCall(FileStreamContext &ctx) {
     SignalFrame f = SignalFrame();
     // FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
@@ -923,7 +923,7 @@ void FileCacheThread::registerStreamCall(FileStreamContext &ctx) {
     signal_ctx.pars   = pars;
     
     // f.custom_signal_ctx = (void*)(signal_ctx);
-    put_signal_context(&f, signal_ctx);
+    put_signal_context(&f, signal_ctx, SignalType::filecachethread);
     infilter.run(&f);
 }
 
@@ -942,7 +942,7 @@ void FileCacheThread::deregisterStreamCall (FileStreamContext &ctx) {
     signal_ctx.pars   = pars;
     
     // f.custom_signal_ctx = (void*)(signal_ctx);
-    put_signal_context(&f, signal_ctx);
+    put_signal_context(&f, signal_ctx, SignalType::filecachethread);
     infilter.run(&f);
 }
     
@@ -964,7 +964,7 @@ void FileCacheThread::stopStreamsCall() {
     signal_ctx.pars   = pars;
     
     //f.custom_signal_ctx = (void*)(signal_ctx);
-    put_signal_context(&f, signal_ctx);
+    put_signal_context(&f, signal_ctx, SignalType::filecachethread);
     infilter.run(&f);
 }
     
@@ -981,7 +981,7 @@ void FileCacheThread::playStreamsCall() {
     signal_ctx.pars   = pars;
     
     // f.custom_signal_ctx = (void*)(signal_ctx);
-    put_signal_context(&f, signal_ctx);
+    put_signal_context(&f, signal_ctx, SignalType::filecachethread);
     infilter.run(&f);
 }
 
@@ -999,7 +999,7 @@ void FileCacheThread::clearCall() {
     signal_ctx.pars   = pars;
     
     // f.custom_signal_ctx = (void*)(signal_ctx);
-    put_signal_context(&f, signal_ctx);
+    put_signal_context(&f, signal_ctx, SignalType::filecachethread);
     infilter.run(&f);
 }
 
@@ -1019,7 +1019,7 @@ void FileCacheThread::seekStreamsCall(long int mstimestamp, bool clear) {
     signal_ctx.pars   = pars;
     
     // f.custom_signal_ctx = (void*)(signal_ctx);
-    put_signal_context(&f, signal_ctx);
+    put_signal_context(&f, signal_ctx, SignalType::filecachethread);
     infilter.run(&f);
 }
 

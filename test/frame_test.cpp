@@ -115,7 +115,7 @@ void test_4() {
     signal_ctx.n_slot = 10;
     std::cout << "n_slot in " << signal_ctx.n_slot << std::endl;
 
-    put_signal_context(f1, signal_ctx);
+    put_signal_context(f1, signal_ctx, SignalType::offline);
     f2->copyFrom(f1);
     get_signal_context(f2, signal_ctx2);
 

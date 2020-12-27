@@ -624,7 +624,7 @@ void test_13()
     livethread.registerStreamCall(ctx);
     livethread.playStreamCall(ctx);
 
-    sleep_for(10s);
+    sleep_for(30s);
 
     livethread.deregisterStreamCall(ctx);
 

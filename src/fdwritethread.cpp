@@ -347,7 +347,7 @@ void FDWriteThread::registerStreamCall(const FDWriteContext &ctx) {
     
     // prepare a signal frame
     SignalFrame f = SignalFrame();
-    put_signal_context(&f, signal_ctx);
+    put_signal_context(&f, signal_ctx, SignalType::fdwritethread);
     
     // .. and send it to the queue
     infilter.run(&f);
@@ -367,7 +367,7 @@ void FDWriteThread::deregisterStreamCall(const FDWriteContext &ctx) {
     
     // prepare a signal frame
     SignalFrame f = SignalFrame();
-    put_signal_context(&f, signal_ctx);
+    put_signal_context(&f, signal_ctx, SignalType::fdwritethread);
     
     // .. and send it to the queue
     infilter.run(&f);
@@ -388,7 +388,7 @@ void FDWriteThread::requestStopCall() {
     
     // prepare a signal frame
     SignalFrame f = SignalFrame();
-    put_signal_context(&f, signal_ctx);
+    put_signal_context(&f, signal_ctx, SignalType::fdwritethread);
 
     // .. and send it to the queue
     infilter.run(&f);

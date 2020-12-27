@@ -108,9 +108,10 @@ for(auto it=res.begin(); it!=res.end(); ++it) {\
 #define get_signal_context(SIGNALFRAME, CONTEXT) \
 memcpy((void*)&CONTEXT, (void*)((SIGNALFRAME)->signal_ctx_buf.data()), sizeof(CONTEXT));\
 
-#define put_signal_context(SIGNALFRAME, CONTEXT) \
+#define put_signal_context(SIGNALFRAME, CONTEXT, CONTEXT_NUM) \
 (SIGNALFRAME)->signal_ctx_buf.resize(sizeof(CONTEXT));\
 memcpy((void*)((SIGNALFRAME)->signal_ctx_buf.data()), (void*)&CONTEXT, sizeof(CONTEXT));\
+(SIGNALFRAME)->signaltype=CONTEXT_NUM;\
 
 
 // generic error handling

@@ -37,11 +37,24 @@
 #include "Python.h"
 
 
-/** LiveThread sends a special frame if a camera
- * is detected offline.
+/** LiveThread sends a special frame if a camera is detected offline.
  * 
- * This framefilter catches that frame and
- * executes a python callback
+ * This framefilter catches that frame and executes a python callback
+ * 
+ * Your callback should be a python function like this:
+ *
+ \verbatim 
+ def cb(tup):
+    slot = tup[0]
+    # congrats: now you have the slot that has some 
+    # problems with the rtsp stream
+    print("problems at slot", slot)
+    # this python callback is launched from the cpp side
+    # so it is a good idea to exit asap so that your callback chain
+    # from cpp side exists asap
+ \endverbatim
+ * 
+ * Remember also that the frequency of the check is set by LiveConnectionContext.mstimeout
  * 
  */
 class AlertFrameFilter : public FrameFilter {                                           // <pyapi>
@@ -57,6 +70,5 @@ protected:
     void go(Frame *frame);
 
 };                                                                                      // <pyapi>
-
 
 #endif

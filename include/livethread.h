@@ -97,13 +97,13 @@ struct LiveConnectionContext {                                                  
   /** Default constructor */
   LiveConnectionContext(LiveConnectionType ct, std::string address, SlotNumber slot,                  // <pyapi>
                         FrameFilter* framefilter) :                                                   // <pyapi>
-  connection_type(ct), address(address), slot(slot), framefilter(framefilter), msreconnect(0),        // <pyapi>
+  connection_type(ct), address(address), slot(slot), framefilter(framefilter), msreconnect(10000),       // <pyapi>
   request_multicast(false), request_tcp(false), recv_buffer_size(0), reordering_time(0),              // <pyapi>
   time_correction(TimeCorrectionType::smart)                                                          // <pyapi>
   {}                                                                                                  // <pyapi>
   /** Dummy constructor : remember to set member values by hand */
   LiveConnectionContext() :                                                                           // <pyapi>
-  connection_type(LiveConnectionType::none), address(""), slot(0), framefilter(NULL), msreconnect(0), // <pyapi>
+  connection_type(LiveConnectionType::none), address(""), slot(0), framefilter(NULL), msreconnect(10000), // <pyapi>
   request_multicast(false), request_tcp(false),time_correction(TimeCorrectionType::smart)             // <pyapi>
   {}                                                                                                  // <pyapi>
   LiveConnectionType connection_type;   ///< Identifies the connection type                           // <pyapi>
