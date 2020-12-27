@@ -591,9 +591,13 @@ void FileCacheThread::run() {
             // Handle signal frames
             if (f->getFrameClass()==FrameClass::signal) {
                 SignalFrame *signalframe = static_cast<SignalFrame*>(f);
-                signal_ctx = static_cast<FileCacheSignalContext*>(signalframe->custom_signal_ctx);
-                handleSignal(*signal_ctx);
-                delete signal_ctx; // custom signal context must be freed
+                if (signalframe->signaltype==SignalType::filecachethread) {
+                    FileCacheSignalContext signal_ctx = FileCacheSignalContext();
+                    get_signal_context(signalframe, signal_ctx);
+                    // signal_ctx = static_cast<FileCacheSignalContext*>(signalframe->custom_signal_ctx);
+                    handleSignal(signal_ctx);
+                    //delete signal_ctx; // custom signal context must be freed // not anymore
+                }
             }
             else if (f->getFrameClass()==FrameClass::marker) {
                 MarkerFrame *markerframe = static_cast<MarkerFrame*>(f);
@@ -907,34 +911,38 @@ void FileCacheThread::deregisterStream(FileStreamContext &ctx) {
   
 void FileCacheThread::registerStreamCall(FileStreamContext &ctx) {
     SignalFrame f = SignalFrame();
-    FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
-    
+    // FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
+    FileCacheSignalContext signal_ctx = FileCacheSignalContext();
+
     // encapsulate parameters
     FileCacheSignalPars pars;
     pars.file_stream_ctx = ctx;
     
     // encapsulate signal and parameters into signal context of the frame
-    signal_ctx->signal = FileCacheSignal::register_stream;
-    signal_ctx->pars   = pars;
+    signal_ctx.signal = FileCacheSignal::register_stream;
+    signal_ctx.pars   = pars;
     
-    f.custom_signal_ctx = (void*)(signal_ctx);
+    // f.custom_signal_ctx = (void*)(signal_ctx);
+    put_signal_context(&f, signal_ctx);
     infilter.run(&f);
 }
 
 
 void FileCacheThread::deregisterStreamCall (FileStreamContext &ctx) {
     SignalFrame f = SignalFrame();
-    FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
-    
+    // FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
+    FileCacheSignalContext signal_ctx = FileCacheSignalContext();
+
     // encapsulate parameters
     FileCacheSignalPars pars;
     pars.file_stream_ctx = ctx;
     
     // encapsulate signal and parameters into signal context of the frame
-    signal_ctx->signal = FileCacheSignal::deregister_stream;
-    signal_ctx->pars   = pars;
+    signal_ctx.signal = FileCacheSignal::deregister_stream;
+    signal_ctx.pars   = pars;
     
-    f.custom_signal_ctx = (void*)(signal_ctx);
+    // f.custom_signal_ctx = (void*)(signal_ctx);
+    put_signal_context(&f, signal_ctx);
     infilter.run(&f);
 }
     
@@ -945,54 +953,61 @@ void FileCacheThread::dumpCache() {
 
 void FileCacheThread::stopStreamsCall() {
     SignalFrame f = SignalFrame();
-    FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
-    
+    // FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
+    FileCacheSignalContext signal_ctx = FileCacheSignalContext();
+
     // encapsulate parameters
     FileCacheSignalPars pars;
     
     // encapsulate signal and parameters into signal context of the frame
-    signal_ctx->signal = FileCacheSignal::stop_streams;
-    signal_ctx->pars   = pars;
+    signal_ctx.signal = FileCacheSignal::stop_streams;
+    signal_ctx.pars   = pars;
     
-    f.custom_signal_ctx = (void*)(signal_ctx);
+    //f.custom_signal_ctx = (void*)(signal_ctx);
+    put_signal_context(&f, signal_ctx);
     infilter.run(&f);
 }
     
 void FileCacheThread::playStreamsCall() {
     SignalFrame f = SignalFrame();
-    FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
-    
+    // FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
+    FileCacheSignalContext signal_ctx = FileCacheSignalContext();
+
     // encapsulate parameters
     FileCacheSignalPars pars;
     
     // encapsulate signal and parameters into signal context of the frame
-    signal_ctx->signal = FileCacheSignal::play_streams;
-    signal_ctx->pars   = pars;
+    signal_ctx.signal = FileCacheSignal::play_streams;
+    signal_ctx.pars   = pars;
     
-    f.custom_signal_ctx = (void*)(signal_ctx);
+    // f.custom_signal_ctx = (void*)(signal_ctx);
+    put_signal_context(&f, signal_ctx);
     infilter.run(&f);
 }
 
 
 void FileCacheThread::clearCall() {
     SignalFrame f = SignalFrame();
-    FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
-    
+    // FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
+    FileCacheSignalContext signal_ctx = FileCacheSignalContext();
+
     // encapsulate parameters
     FileCacheSignalPars pars;
     
     // encapsulate signal and parameters into signal context of the frame
-    signal_ctx->signal = FileCacheSignal::clear;
-    signal_ctx->pars   = pars;
+    signal_ctx.signal = FileCacheSignal::clear;
+    signal_ctx.pars   = pars;
     
-    f.custom_signal_ctx = (void*)(signal_ctx);
+    // f.custom_signal_ctx = (void*)(signal_ctx);
+    put_signal_context(&f, signal_ctx);
     infilter.run(&f);
 }
 
 
 void FileCacheThread::seekStreamsCall(long int mstimestamp, bool clear) {
     SignalFrame f = SignalFrame();
-    FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
+    // FileCacheSignalContext* signal_ctx = new FileCacheSignalContext();
+    FileCacheSignalContext signal_ctx = FileCacheSignalContext();
     
     // encapsulate parameters
     FileCacheSignalPars pars;
@@ -1000,12 +1015,13 @@ void FileCacheThread::seekStreamsCall(long int mstimestamp, bool clear) {
     pars.clear       = clear;
     
     // encapsulate signal and parameters into signal context of the frame
-    signal_ctx->signal = FileCacheSignal::seek_streams;
-    signal_ctx->pars   = pars;
+    signal_ctx.signal = FileCacheSignal::seek_streams;
+    signal_ctx.pars   = pars;
     
-    f.custom_signal_ctx = (void*)(signal_ctx);
+    // f.custom_signal_ctx = (void*)(signal_ctx);
+    put_signal_context(&f, signal_ctx);
     infilter.run(&f);
 }
 
-    
+
 

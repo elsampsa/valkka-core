@@ -34,6 +34,7 @@
 
 #include "livethread.h"
 #include "framefilter.h"
+#include "framefilter2.h"
 #include "logging.h"
 #include "avdep.h"
 #include "test_import.h"
@@ -601,6 +602,46 @@ void test_12()
     livethread2.stopCall();
 }
 
+
+void test_13()
+{
+    const char *name = "@TEST: live_thread_test: test 13: ";
+    std::cout << name << "** @@Test offline behaviour **" << std::endl;
+
+    // filtergraph:
+    // (LiveThread:livethread) --> {InfoFrameFilter:dummyfilter1) --> {AlertFrameFilter}
+    LiveThread livethread("livethread");
+    AlertFrameFilter alert("alert", NULL);
+    InfoFrameFilter dummyfilter1("dummy1", &alert);
+
+    std::cout << "starting live thread" << std::endl;
+    livethread.startCall();
+
+    sleep_for(2s);
+
+    LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string("rtsp://doesnot:exists@192.168.0.1"), 2, &dummyfilter1);
+
+    livethread.registerStreamCall(ctx);
+    livethread.playStreamCall(ctx);
+
+    sleep_for(10s);
+
+    livethread.deregisterStreamCall(ctx);
+
+    sleep_for(1s);
+
+    livethread.registerStreamCall(ctx);
+    livethread.playStreamCall(ctx);
+
+    sleep_for(15s);
+
+    std::cout << "stopping live thread" << std::endl;
+
+    livethread.stopCall();
+}
+
+
+
 int main(int argc, char **argcv)
 {
     if (argc < 2)
@@ -672,6 +713,9 @@ int main(int argc, char **argcv)
             break;
         case (12):
             test_12();
+            break;
+        case (13):
+            test_13();
             break;
         default:
             std::cout << "No such test " << argcv[1] << " for " << argcv[0] << std::endl;

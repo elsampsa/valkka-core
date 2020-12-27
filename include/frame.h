@@ -570,8 +570,20 @@ typedef std::deque<YUVFrame *> YUVStack;
 typedef std::vector<RGBFrame *> RGBReservoir;
 typedef std::deque<RGBFrame *> RGBStack;
 
-/** A frame signaling internal thread commands, states of recorded video, etc.
+
+/** A frame, signaling internal thread commands, states of recorded video, etc.
  * 
+ * libValkka threads read a single fifo.   From this fifo they receive both the media frames (payload)
+ * and frames representing API commands given to them.
+ * 
+ * The "frontend" (API) part inserts a SignalFrame into their fifo, which they then process
+ * (most of the libValkka threads have been updated to this technique)
+ * 
+ * SignalFrames are also used to send additional information between threads and along the downstream pipeline.
+ * 
+ * This should also be generalizable for extension modules (new threads, custom signals send downstream, etc.)
+ * 
+ * SignalFrames must be copyable when they are placed into fifos (copy-on-write)
  */
 class SignalFrame : public Frame
 {
@@ -583,11 +595,27 @@ public:
     frame_clone(FrameClass::signal, SignalFrame);
 
 public:
+    unsigned signaltype; /// < For making correct typecast of custom_ctx_buf.  See also threadsignal.h
+
+public:
     OpenGLSignalContext opengl_signal_ctx;                 ///< Thread commands to OpenGLThread
     AVSignalContext av_signal_ctx;                         ///< Thread commands to AVThread
     ValkkaFSWriterSignalContext valkkafswriter_signal_ctx; ///< Thread commands to ValkkFSWriterThread
     ValkkaFSReaderSignalContext valkkafsreader_signal_ctx; ///< Thread commands to ValkkaFSReaderThread
-    void *custom_signal_ctx;                               ///< For extensions: thread commands for any thread.  TODO: migrate all signal contexes here
+    // TODO: those ctxes should be written with the new technique:
+    // this generalizes & is copyable
+    std::vector<uint8_t> signal_ctx_buf;                ///< A byte-buffer where the signal context is serialized
+    /* example of the (revised) signal handling
+    if (signalframe->signaltype==SignalType::offline) {
+        OfflineSignalContext ctx = OfflineSignalContext();
+        get_signal_context(signalframe, ctx);
+        # that's a macro: take a look at macro.h
+    }
+    */
+
+public:
+    virtual void reset();
+
 };
 
 class MarkerFrame : public Frame

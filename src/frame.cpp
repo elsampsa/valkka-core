@@ -870,13 +870,15 @@ void RGBFrame::fromAVRGBFrame(AVRGBFrame *f) {
 }
 
 
-
-
-
-SignalFrame::SignalFrame() : Frame(), opengl_signal_ctx(), av_signal_ctx(), custom_signal_ctx(NULL) {
+SignalFrame::SignalFrame() : Frame(), opengl_signal_ctx(), av_signal_ctx(), signaltype(SignalType::none) {
   mstimestamp =getCurrentMsTimestamp();
 }
-  
+
+void SignalFrame::reset() {
+    Frame::reset();
+    signaltype = SignalType::none;
+}
+
 SignalFrame::~SignalFrame() {
 }
 

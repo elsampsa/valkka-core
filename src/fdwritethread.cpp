@@ -171,13 +171,13 @@ void FDWriteThread::run() {
         
             if (FD_ISSET(read_fd, &read_fds)) { // GOT FRAME // this must ALWAYS BE ACCOMPANIED WITH A RECYCLE CALL
                 logger.log(LogLevel::crazy) << "FDWriteThread: got frame " << *f << std::endl;
-                
                 if (f->getFrameClass()==FrameClass::signal) { // SIGNALFRAME
                     SignalFrame *signalframe = static_cast<SignalFrame*>(f);
-                    logger.log(LogLevel::crazy) << "FDWriteThread: signalframe " << *signalframe << std::endl;
-                    FDWriteSignalContext *fd_write_signal_ctx = static_cast<FDWriteSignalContext*>(signalframe->custom_signal_ctx);
-                    handleSignal(*fd_write_signal_ctx);                
-                    delete fd_write_signal_ctx;
+                    if (signalframe->signaltype==SignalType::fdwritethread) {
+                        FDWriteSignalContext signal_ctx = FDWriteSignalContext();
+                        get_signal_context(signalframe, signal_ctx);
+                        handleSignal(signal_ctx);
+                    }
                 } // SIGNALFRAME
                 else { // PAYLOAD FRAME
                     // BasicFrame or MuxFrame .. depends on the subclass
@@ -336,18 +336,18 @@ void FDWriteThread::deregisterStream(const FDWriteContext &ctx) {
 
 void FDWriteThread::registerStreamCall(const FDWriteContext &ctx) {
     // context for sending the signal
-    FDWriteSignalContext *signal_ctx = new FDWriteSignalContext();
+    FDWriteSignalContext signal_ctx = FDWriteSignalContext();
     FDWriteSignalPars    pars;
     
     // signal parameters
     pars.fd_write_ctx = ctx;
     
-    signal_ctx->signal = FDWriteSignal::register_stream;
-    signal_ctx->pars   = pars;
+    signal_ctx.signal = FDWriteSignal::register_stream;
+    signal_ctx.pars   = pars;
     
     // prepare a signal frame
     SignalFrame f = SignalFrame();
-    f.custom_signal_ctx = (void*)signal_ctx;
+    put_signal_context(&f, signal_ctx);
     
     // .. and send it to the queue
     infilter.run(&f);
@@ -356,18 +356,18 @@ void FDWriteThread::registerStreamCall(const FDWriteContext &ctx) {
     
 void FDWriteThread::deregisterStreamCall(const FDWriteContext &ctx) {
     // context for sending the signal
-    FDWriteSignalContext *signal_ctx = new FDWriteSignalContext();
+    FDWriteSignalContext signal_ctx = FDWriteSignalContext();
     FDWriteSignalPars    pars;
     
     // signal parameters
     pars.fd_write_ctx = ctx;
     
-    signal_ctx->signal = FDWriteSignal::deregister_stream;
-    signal_ctx->pars   = pars;
+    signal_ctx.signal = FDWriteSignal::deregister_stream;
+    signal_ctx.pars   = pars;
     
     // prepare a signal frame
     SignalFrame f = SignalFrame();
-    f.custom_signal_ctx = (void*)signal_ctx;
+    put_signal_context(&f, signal_ctx);
     
     // .. and send it to the queue
     infilter.run(&f);
@@ -379,17 +379,17 @@ void FDWriteThread::requestStopCall() {
     if (stop_requested) { return; }    // can be requested only once
     stop_requested = true;
 
-    FDWriteSignalContext *signal_ctx = new FDWriteSignalContext();
+    FDWriteSignalContext signal_ctx = FDWriteSignalContext();
     FDWriteSignalPars    pars;
     
     // context for sending the signal
-    signal_ctx->signal = FDWriteSignal::exit;
-    signal_ctx->pars   = pars;
+    signal_ctx.signal = FDWriteSignal::exit;
+    signal_ctx.pars   = pars;
     
     // prepare a signal frame
     SignalFrame f = SignalFrame();
-    f.custom_signal_ctx = (void*)signal_ctx;
-    
+    put_signal_context(&f, signal_ctx);
+
     // .. and send it to the queue
     infilter.run(&f);
 }
@@ -398,12 +398,6 @@ void FDWriteThread::requestStopCall() {
 FifoFrameFilter& FDWriteThread::getFrameFilter() {
     return infilter;
 }
-
-
-
-
-
-
 
 
 

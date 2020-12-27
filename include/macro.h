@@ -88,8 +88,8 @@ virtual CLASS *getClone() {\
 
 
 // macros for initializing and deallocating SignalFrame's custom_signal_ctx
-
-
+// nopes.. bad idea
+/*
 #define init_signal_frames(FIFONAME, CONTEXTCLASS) \
 Reservoir &res = FIFONAME.getReservoir(FrameClass::signal);\
 for(auto it=res.begin(); it!=res.end(); ++it) {\
@@ -103,7 +103,14 @@ for(auto it=res.begin(); it!=res.end(); ++it) {\
     SignalFrame* f = static_cast<SignalFrame*>(*it);\
     delete (CONTEXTCLASS*)(f->custom_signal_ctx);\
 };\
+*/
 
+#define get_signal_context(SIGNALFRAME, CONTEXT) \
+memcpy((void*)&CONTEXT, (void*)((SIGNALFRAME)->signal_ctx_buf.data()), sizeof(CONTEXT));\
+
+#define put_signal_context(SIGNALFRAME, CONTEXT) \
+(SIGNALFRAME)->signal_ctx_buf.resize(sizeof(CONTEXT));\
+memcpy((void*)((SIGNALFRAME)->signal_ctx_buf.data()), (void*)&CONTEXT, sizeof(CONTEXT));\
 
 
 // generic error handling

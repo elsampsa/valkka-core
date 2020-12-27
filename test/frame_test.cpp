@@ -103,6 +103,26 @@ void test_3() {
 
 
 void test_4() {
+    const char* name = "@TEST: frames_test: test 4: ";
+    std::cout << name <<"** @@Test copying signalframes **" << std::endl;
+
+    SignalFrame *f1 = new SignalFrame();
+    SignalFrame *f2 = new SignalFrame();
+
+    OfflineSignalContext signal_ctx = OfflineSignalContext();
+    OfflineSignalContext signal_ctx2 = OfflineSignalContext();
+
+    signal_ctx.n_slot = 10;
+    std::cout << "n_slot in " << signal_ctx.n_slot << std::endl;
+
+    put_signal_context(f1, signal_ctx);
+    f2->copyFrom(f1);
+    get_signal_context(f2, signal_ctx2);
+
+    std::cout << "n_slot out " << signal_ctx2.n_slot << std::endl;
+
+    delete f1;
+    delete f2;
 }
 
 

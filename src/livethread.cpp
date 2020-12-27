@@ -354,6 +354,14 @@ void RTSPConnection::reStartStreamIf() {
     
     if (frametimer>=ctx.msreconnect) {
         livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: restart at slot " << ctx.slot << std::endl;
+        
+        // inform downstream that this stream is offline
+        OfflineSignalContext signal_ctx = OfflineSignalContext();
+        SignalFrame signalframe = SignalFrame();
+        put_signal_context(&signalframe, signal_ctx);
+        livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: sending signal frame for slot " << ctx.slot << std::endl;
+        ctx.framefilter->run(&signalframe);
+
         if (livestatus==LiveStatus::alive) {
             stopStream();
         }

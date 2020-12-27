@@ -46,6 +46,11 @@ echo 2
 valgrind ./frame_test 2 $LOGLEVEL &>> test.out
 printf "END: frame_test 2\n\n" &>> test.out
 
+# @@Frame filters **
+echo 4
+valgrind ./frame_test 4 $LOGLEVEL &>> test.out
+printf "END: frame_test 4\n\n" &>> test.out
+
 fi
 
 # if false; then

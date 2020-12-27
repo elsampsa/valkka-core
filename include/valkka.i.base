@@ -29,6 +29,7 @@
 #include "fdwritethread.h"
 #include "muxshmem.h"
 #include "muxer.h"
+#include "framefilter2.h"
 
 #include <Python.h>
 
