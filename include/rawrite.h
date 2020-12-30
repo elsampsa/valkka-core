@@ -28,7 +28,7 @@
  *  @file    rawrite.h
  *  @author  Petri Eranko
  *  @date    2019
- *  @version 1.0.3 
+ *  @version 1.1.0 
  *  
  *  @brief   Write directly to files and devices with POSIX O_DIRECT
  */ 
