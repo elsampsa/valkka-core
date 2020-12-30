@@ -36,15 +36,12 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 // Definition of a type representing a low-level network address.
 // At present, this is 32-bits, for IPv4.  Later, generalize it,
 // to allow for IPv6.
-typedef u_int32_t netAddressBits; // deprecated
-
-typedef u_int32_t ipv4AddressBits;
-typedef u_int8_t ipv6AddressBits[16]; // 128 bits
+typedef u_int32_t netAddressBits;
 
 class NetAddress {
 public:
   NetAddress(u_int8_t const* data,
-	     unsigned length = 4 /* default: 32 bits (for IPv4); use 16 (128 bits) for IPv6 */);
+	     unsigned length = 4 /* default: 32 bits */);
   NetAddress(unsigned length = 4); // sets address data to all-zeros
   NetAddress(NetAddress const& orig);
   NetAddress& operator=(NetAddress const& rightSide);
@@ -61,8 +58,6 @@ private:
   unsigned fLength;
   u_int8_t* fData;
 };
-
-void copyAddress(struct sockaddr_storage& to, NetAddress const& from);
 
 class NetAddressList {
 public:
@@ -86,7 +81,7 @@ public:
   };
   
 private:
-  void assign(unsigned numAddresses, NetAddress** addressArray);
+  void assign(netAddressBits numAddresses, NetAddress** addressArray);
   void clean();
   
   friend class Iterator;
@@ -146,35 +141,22 @@ private:
 Boolean IsMulticastAddress(netAddressBits address);
 
 
-// A mechanism for displaying an IP (v4 or v6) address in ASCII.
-// (This encapsulates the "inet_ntop()" function.)
+// A mechanism for displaying an IPv4 address in ASCII.  This is intended to replace "inet_ntoa()", which is not thread-safe.
 class AddressString {
 public:
-  // IPv4 input:
   AddressString(struct sockaddr_in const& addr);
   AddressString(struct in_addr const& addr);
-  AddressString(ipv4AddressBits const& addr); // "addr" is assumed to be in host byte order
-
-  // IPv6 input:
-  AddressString(struct sockaddr_in6 const& addr);
-  AddressString(struct in6_addr const& addr);
-  AddressString(ipv6AddressBits const& addr); // "addr" is assumed to be in host byte order
-
-  // IPv4 or IPv6 input:
-  AddressString(struct sockaddr_storage const& addr);
+  AddressString(netAddressBits addr); // "addr" is assumed to be in host byte order here
 
   virtual ~AddressString();
 
   char const* val() const { return fVal; }
 
 private:
-  void init(ipv4AddressBits const& addr); // used to implement the IPv4 constructors
-  void init(ipv6AddressBits const& addr); // used to implement the IPv6 constructors
+  void init(netAddressBits addr); // used to implement each of the constructors
 
 private:
   char* fVal; // The result ASCII string: allocated by the constructor; deleted by the destructor
 };
-
-portNumBits portNum(struct sockaddr_storage const& addr);
 
 #endif

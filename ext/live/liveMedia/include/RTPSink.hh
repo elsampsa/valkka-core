@@ -151,7 +151,7 @@ public:
   };
 
   // The following is called whenever a RTCP RR packet is received:
-  void noteIncomingRR(u_int32_t SSRC, struct sockaddr_storage const& lastFromAddress,
+  void noteIncomingRR(u_int32_t SSRC, struct sockaddr_in const& lastFromAddress,
                       unsigned lossStats, unsigned lastPacketNumReceived,
                       unsigned jitter, unsigned lastSRTime, unsigned diffSR_RRTime);
 
@@ -178,7 +178,7 @@ private:
 class RTPTransmissionStats {
 public:
   u_int32_t SSRC() const {return fSSRC;}
-  struct sockaddr_storage const& lastFromAddress() const {return fLastFromAddress;}
+  struct sockaddr_in const& lastFromAddress() const {return fLastFromAddress;}
   unsigned lastPacketNumReceived() const {return fLastPacketNumReceived;}
   unsigned firstPacketNumReported() const {return fFirstPacketNumReported;}
   unsigned totNumPacketsLost() const {return fTotNumPacketsLost;}
@@ -205,7 +205,7 @@ private:
   RTPTransmissionStats(RTPSink& rtpSink, u_int32_t SSRC);
   virtual ~RTPTransmissionStats();
 
-  void noteIncomingRR(struct sockaddr_storage const& lastFromAddress,
+  void noteIncomingRR(struct sockaddr_in const& lastFromAddress,
 		      unsigned lossStats, unsigned lastPacketNumReceived,
                       unsigned jitter,
 		      unsigned lastSRTime, unsigned diffSR_RRTime);
@@ -213,7 +213,7 @@ private:
 private:
   RTPSink& fOurRTPSink;
   u_int32_t fSSRC;
-  struct sockaddr_storage fLastFromAddress;
+  struct sockaddr_in fLastFromAddress;
   unsigned fLastPacketNumReceived;
   u_int8_t fPacketLossRatio;
   unsigned fTotNumPacketsLost;

@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
   const unsigned char ttl = 1; // low, in case routers don't admin scope
 
   struct in_addr destinationAddress;
-  (void)inet_pton(AF_INET, destinationAddressStr, &destinationAddress.s_addr);
+  destinationAddress.s_addr = our_inet_addr(destinationAddressStr);
   const Port rtpPort(rtpPortNum);
   const Port rtcpPort(rtcpPortNum);
 

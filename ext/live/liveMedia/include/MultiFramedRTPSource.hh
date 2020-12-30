@@ -91,7 +91,7 @@ public:
   Boolean hasUsableData() const { return fTail > fHead; }
   unsigned useCount() const { return fUseCount; }
 
-  Boolean fillInData(RTPInterface& rtpInterface, struct sockaddr_storage& fromAddress, Boolean& packetReadWasIncomplete);
+  Boolean fillInData(RTPInterface& rtpInterface, struct sockaddr_in& fromAddress, Boolean& packetReadWasIncomplete);
   void assignMiscParams(unsigned short rtpSeqNo, unsigned rtpTimestamp,
 			struct timeval presentationTime,
 			Boolean hasBeenSyncedUsingRTCP,

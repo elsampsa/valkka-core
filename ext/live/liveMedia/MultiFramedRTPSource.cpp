@@ -236,7 +236,7 @@ void MultiFramedRTPSource::networkReadHandler1() {
   // Read the network packet, and perform sanity checks on the RTP header:
   Boolean readSuccess = False;
   do {
-    struct sockaddr_storage fromAddress;
+    struct sockaddr_in fromAddress;
     Boolean packetReadWasIncomplete = fPacketReadInProgress != NULL;
     if (!bPacket->fillInData(fRTPInterface, fromAddress, packetReadWasIncomplete)) {
       if (bPacket->bytesAvailable() == 0) { // should not happen??
@@ -392,7 +392,7 @@ void BufferedPacket
   frameDurationInMicroseconds = 0; // by default.  Subclasses should correct this.
 }
 
-Boolean BufferedPacket::fillInData(RTPInterface& rtpInterface, struct sockaddr_storage& fromAddress,
+Boolean BufferedPacket::fillInData(RTPInterface& rtpInterface, struct sockaddr_in& fromAddress,
 				   Boolean& packetReadWasIncomplete) {
   if (!packetReadWasIncomplete) reset();
 

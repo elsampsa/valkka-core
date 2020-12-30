@@ -80,43 +80,20 @@ void NetAddress::clean() {
   fLength = 0;
 }
 
-void copyAddress(struct sockaddr_storage& to, NetAddress const& from) {
-  if (from.length() == sizeof (ipv4AddressBits)) {
-    to.ss_family = AF_INET;
-    ((sockaddr_in&)to).sin_addr.s_addr = *(ipv4AddressBits*)(from.data());
-  } else {
-    to.ss_family = AF_INET6;
-    for (unsigned i = 0; i < 16; ++i) {
-      ((sockaddr_in6&)to).sin6_addr.s6_addr[i] = (from.data())[i];
-    }
-  }
-}
 
 ////////// NetAddressList //////////
 
 NetAddressList::NetAddressList(char const* hostname)
   : fNumAddresses(0), fAddressArray(NULL) {
-  if (hostname == NULL) return;
-
-  // First, check whether "hostname" is an IP address string (check IPv4, then IPv6).
-  // If so, return a 1-element list with this address:
-  ipv4AddressBits addr4;
-  if (inet_pton(AF_INET, hostname, (u_int8_t*)&addr4) == 1) {
+  // First, check whether "hostname" is an IP address string:
+  netAddressBits addr = our_inet_addr((char*)hostname);
+  if (addr != INADDR_NONE) {
+    // Yes, it was an IP address string.  Return a 1-element list with this address:
     fNumAddresses = 1;
     fAddressArray = new NetAddress*[fNumAddresses];
     if (fAddressArray == NULL) return;
 
-    fAddressArray[0] = new NetAddress((u_int8_t*)&addr4, sizeof addr4);
-    return;
-  }
-
-  ipv6AddressBits addr6;
-  if (inet_pton(AF_INET6, hostname, (u_int8_t*)&addr6) == 1) {
-    fNumAddresses = 1;
-    fAddressArray = new NetAddress*[fNumAddresses];
-    if (fAddressArray == NULL) return;
-
-    fAddressArray[0] = new NetAddress((u_int8_t*)&addr6, sizeof addr6);
+    fAddressArray[0] = new NetAddress((u_int8_t*)&addr, sizeof (netAddressBits));
     return;
   }
     
@@ -315,60 +292,21 @@ Boolean IsMulticastAddress(netAddressBits address) {
 AddressString::AddressString(struct sockaddr_in const& addr) {
   init(addr.sin_addr.s_addr);
 }
+
 AddressString::AddressString(struct in_addr const& addr) {
   init(addr.s_addr);
 }
-AddressString::AddressString(ipv4AddressBits const& addr) {
+
+AddressString::AddressString(netAddressBits addr) {
   init(addr);
 }
 
-AddressString::AddressString(struct sockaddr_in6 const& addr) {
-  init(addr.sin6_addr.s6_addr);
-}
-AddressString::AddressString(struct in6_addr const& addr) {
-  init(addr.s6_addr);
-}
-AddressString::AddressString(ipv6AddressBits const& addr) {
-  init(addr);
-}
-
-AddressString::AddressString(struct sockaddr_storage const& addr) {
-  switch (addr.ss_family) {
-    case AF_INET: {
-      init(((sockaddr_in&)addr).sin_addr.s_addr);
-      break;
-    }
-    case AF_INET6: {
-      init(((sockaddr_in6&)addr).sin6_addr.s6_addr);
-      break;
-    }
-  }
-}
-
-void AddressString::init(ipv4AddressBits const& addr) {
-  fVal = new char[INET_ADDRSTRLEN];
-  inet_ntop(AF_INET, &addr, fVal, INET_ADDRSTRLEN);
-}
-
-void AddressString::init(ipv6AddressBits const& addr) {
-  fVal = new char[INET6_ADDRSTRLEN];
-  inet_ntop(AF_INET6, &addr, fVal, INET6_ADDRSTRLEN);
+void AddressString::init(netAddressBits addr) {
+  fVal = new char[16]; // large enough for "abc.def.ghi.jkl"
+  netAddressBits addrNBO = htonl(addr); // make sure we have a value in a known byte order: big endian
+  sprintf(fVal, "%u.%u.%u.%u", (addrNBO>>24)&0xFF, (addrNBO>>16)&0xFF, (addrNBO>>8)&0xFF, addrNBO&0xFF);
 }
 
 AddressString::~AddressString() {
   delete[] fVal;
-}
-
-portNumBits portNum(struct sockaddr_storage const& addr) {
-  switch (addr.ss_family) {
-    case AF_INET: {
-      return ((sockaddr_in&)addr).sin_port;
-    }
-    case AF_INET6: {
-      return ((sockaddr_in6&)addr).sin6_port;
-    }
-    default: {
-      return 0;
-    }
-  }
 }

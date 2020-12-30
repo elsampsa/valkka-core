@@ -59,7 +59,7 @@ public:
                            handlerProc);
   Boolean handleRead(unsigned char* buffer, unsigned bufferMaxSize,
 		     // out parameters:
-		     unsigned& bytesRead, struct sockaddr_storage& fromAddress,
+		     unsigned& bytesRead, struct sockaddr_in& fromAddress,
 		     int& tcpSocketNum, unsigned char& tcpStreamChannelId,
 		     Boolean& packetReadWasIncomplete);
   // Note: If "tcpSocketNum" < 0, then the packet was received over UDP, and "tcpStreamChannelId"

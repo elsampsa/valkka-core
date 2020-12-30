@@ -184,7 +184,7 @@ RTPTransmissionStatsDB::~RTPTransmissionStatsDB() {
 }
 
 void RTPTransmissionStatsDB
-::noteIncomingRR(u_int32_t SSRC, struct sockaddr_storage const& lastFromAddress,
+::noteIncomingRR(u_int32_t SSRC, struct sockaddr_in const& lastFromAddress,
                  unsigned lossStats, unsigned lastPacketNumReceived,
                  unsigned jitter, unsigned lastSRTime, unsigned diffSR_RRTime) {
   RTPTransmissionStats* stats = lookup(SSRC);
@@ -259,7 +259,7 @@ RTPTransmissionStats::RTPTransmissionStats(RTPSink& rtpSink, u_int32_t SSRC)
 RTPTransmissionStats::~RTPTransmissionStats() {}
 
 void RTPTransmissionStats
-::noteIncomingRR(struct sockaddr_storage const& lastFromAddress,
+::noteIncomingRR(struct sockaddr_in const& lastFromAddress,
 		 unsigned lossStats, unsigned lastPacketNumReceived,
 		 unsigned jitter, unsigned lastSRTime,
 		 unsigned diffSR_RRTime) {

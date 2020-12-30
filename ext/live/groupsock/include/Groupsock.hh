@@ -41,8 +41,12 @@ public:
   OutputSocket(UsageEnvironment& env);
   virtual ~OutputSocket();
 
-  virtual Boolean write(struct sockaddr_storage const& addressAndPort, u_int8_t ttl,
+  virtual Boolean write(netAddressBits address, portNumBits portNum/*in network order*/, u_int8_t ttl,
 			unsigned char* buffer, unsigned bufferSize);
+  Boolean write(struct sockaddr_in& addressAndPort, u_int8_t ttl,
+		unsigned char* buffer, unsigned bufferSize) {
+    return write(addressAndPort.sin_addr.s_addr, addressAndPort.sin_port, ttl, buffer, bufferSize);
+  }
 
 protected:
   OutputSocket(UsageEnvironment& env, Port port);
@@ -52,7 +56,7 @@ protected:
 private: // redefined virtual function
   virtual Boolean handleRead(unsigned char* buffer, unsigned bufferMaxSize,
 			     unsigned& bytesRead,
-			     struct sockaddr_storage& fromAddressAndPort);
+			     struct sockaddr_in& fromAddressAndPort);
 
 private:
   Port fSourcePort;
@@ -141,13 +145,12 @@ public:
   NetInterfaceTrafficStats statsGroupRelayedIncoming; // *not* static
   NetInterfaceTrafficStats statsGroupRelayedOutgoing; // *not* static
 
-  Boolean wasLoopedBackFromUs(UsageEnvironment& env,
-			      struct sockaddr_storage const& fromAddressAndPort);
+  Boolean wasLoopedBackFromUs(UsageEnvironment& env, struct sockaddr_in& fromAddressAndPort);
 
 public: // redefined virtual functions
   virtual Boolean handleRead(unsigned char* buffer, unsigned bufferMaxSize,
 			     unsigned& bytesRead,
-			     struct sockaddr_storage& fromAddressAndPort);
+			     struct sockaddr_in& fromAddressAndPort);
 
 protected:
   destRecord* lookupDestRecordFromDestination(struct sockaddr_in const& destAddrAndPort) const;

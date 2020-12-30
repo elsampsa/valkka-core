@@ -66,11 +66,10 @@ char* RTSPServer
 }
 
 char* RTSPServer::rtspURLPrefix(int clientSocket) const {
-  struct sockaddr_storage ourAddress;
+  struct sockaddr_in ourAddress;
   if (clientSocket < 0) {
     // Use our default IP address in the URL:
-    ourAddress.ss_family = AF_INET;
-    ((sockaddr_in&)ourAddress).sin_addr.s_addr = ReceivingInterfaceAddr != 0
+    ourAddress.sin_addr.s_addr = ReceivingInterfaceAddr != 0
       ? ReceivingInterfaceAddr
       : ourIPAddress(envir()); // hack
   } else {
@@ -80,16 +79,12 @@ char* RTSPServer::rtspURLPrefix(int clientSocket) const {
   
   char urlBuffer[100]; // more than big enough for "rtsp://<ip-address>:<port>/"
   
-  char const* addressPrefixInURL = ourAddress.ss_family == AF_INET6 ? "[" : "";
-  char const* addressSuffixInURL = ourAddress.ss_family == AF_INET6 ? "]" : "";
-
   portNumBits portNumHostOrder = ntohs(fServerPort.num());
   if (portNumHostOrder == 554 /* the default port number */) {
-    sprintf(urlBuffer, "rtsp://%s%s%s/",
-	    addressPrefixInURL, AddressString(ourAddress).val(), addressSuffixInURL);
+    sprintf(urlBuffer, "rtsp://%s/", AddressString(ourAddress).val());
   } else {
-    sprintf(urlBuffer, "rtsp://%s%s%s:%hu/",
-	    addressPrefixInURL, AddressString(ourAddress).val(), addressSuffixInURL, portNumHostOrder);
+    sprintf(urlBuffer, "rtsp://%s:%hu/",
+	    AddressString(ourAddress).val(), portNumHostOrder);
   }
   
   return strDup(urlBuffer);
@@ -127,12 +122,12 @@ UserAuthenticationDatabase* RTSPServer::getAuthenticationDatabaseForCommand(char
   return fAuthDB;
 }
 
-Boolean RTSPServer::specialClientAccessCheck(int /*clientSocket*/, struct sockaddr_storage const& /*clientAddr*/, char const* /*urlSuffix*/) {
+Boolean RTSPServer::specialClientAccessCheck(int /*clientSocket*/, struct sockaddr_in& /*clientAddr*/, char const* /*urlSuffix*/) {
   // default implementation
   return True;
 }
 
-Boolean RTSPServer::specialClientUserAccessCheck(int /*clientSocket*/, struct sockaddr_storage const& /*clientAddr*/,
+Boolean RTSPServer::specialClientUserAccessCheck(int /*clientSocket*/, struct sockaddr_in& /*clientAddr*/,
 						 char const* /*urlSuffix*/, char const * /*username*/) {
   // default implementation; no further access restrictions:
   return True;
@@ -274,7 +269,7 @@ void RTSPServer::stopTCPStreamingOnSocket(int socketNum) {
 ////////// RTSPServer::RTSPClientConnection implementation //////////
 
 RTSPServer::RTSPClientConnection
-::RTSPClientConnection(RTSPServer& ourServer, int clientSocket, struct sockaddr_storage const& clientAddr)
+::RTSPClientConnection(RTSPServer& ourServer, int clientSocket, struct sockaddr_in clientAddr)
   : GenericMediaServer::ClientConnection(ourServer, clientSocket, clientAddr),
     fOurRTSPServer(ourServer), fClientInputSocket(fOurSocket), fClientOutputSocket(fOurSocket),
     fIsActive(True), fRecursionCount(0), fOurSessionCookie(NULL) {
@@ -488,13 +483,13 @@ Boolean RTSPServer::RTSPClientConnection::parseHTTPRequestString(char* resultCmd
 
 void RTSPServer::RTSPClientConnection::handleHTTPCmd_notSupported() {
   snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,
-	   "HTTP/1.0 405 Method Not Allowed\r\n%s\r\n\r\n",
+	   "HTTP/1.1 405 Method Not Allowed\r\n%s\r\n\r\n",
 	   dateHeader());
 }
 
 void RTSPServer::RTSPClientConnection::handleHTTPCmd_notFound() {
   snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,
-	   "HTTP/1.0 404 Not Found\r\n%s\r\n\r\n",
+	   "HTTP/1.1 404 Not Found\r\n%s\r\n\r\n",
 	   dateHeader());
 }
 
@@ -504,7 +499,7 @@ void RTSPServer::RTSPClientConnection::handleHTTPCmd_OPTIONS() {
 #endif
   // Construct a response to the "OPTIONS" command that notes that our special headers (for RTSP-over-HTTP tunneling) are allowed:
   snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,
-	   "HTTP/1.0 200 OK\r\n"
+	   "HTTP/1.1 200 OK\r\n"
 	   "%s"
 	   "Access-Control-Allow-Origin: *\r\n"
 	   "Access-Control-Allow-Methods: POST, GET, OPTIONS\r\n"
@@ -528,7 +523,7 @@ void RTSPServer::RTSPClientConnection::handleHTTPCmd_TunnelingGET(char const* se
   
   // Construct our response:
   snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,
-	   "HTTP/1.0 200 OK\r\n"
+	   "HTTP/1.1 200 OK\r\n"
 	   "%s"
 	   "Cache-Control: no-cache\r\n"
 	   "Pragma: no-cache\r\n"
@@ -1322,17 +1317,6 @@ void RTSPServer::RTSPClientSession
 	fStreamStates[i].tcpSocketNum = -1; // for now; may get set for RTP-over-TCP streaming
 	fStreamStates[i].streamToken = NULL; // for now; it may be changed by the "getStreamParameters()" call that comes later
       }
-#ifdef LOG_RTSPSERVER_ACCESS
-       FILE* logfid = fopen("live555.log", "a");
-       if (logfid != NULL) {
-	 time_t tm = time(NULL);
-	 char * tmstr = ctime(&tm);
-	 fwrite(streamName, 1, strlen(streamName), logfid);
-	 fwrite(", ",1,2,logfid);
-	 fwrite(tmstr, 1, strlen(tmstr), logfid);
-	 fclose(logfid);
-       }
-#endif
     }
     
     // Look up information for the specified subsession (track):
@@ -1414,10 +1398,7 @@ void RTSPServer::RTSPClientSession
       fStreamStates[trackNum].tcpSocketNum = ourClientConnection->fClientOutputSocket;
       fOurRTSPServer.noteTCPStreamingOnSocket(fStreamStates[trackNum].tcpSocketNum, this, trackNum);
     }
-    struct sockaddr_storage destinationAddress;
-    destinationAddress.ss_family = AF_INET;
-    ((struct sockaddr_in&)destinationAddress).sin_addr.s_addr = 0;
-        // used to indicate that the address is 'unassigned'
+    netAddressBits destinationAddress = 0;
     u_int8_t destinationTTL = 255;
 #ifdef RTSP_ALLOW_CLIENT_DESTINATION_SETTING
     if (clientsDestinationAddressStr != NULL) {
@@ -1425,10 +1406,7 @@ void RTSPServer::RTSPClientSession
       // Note: This potentially allows the server to be used in denial-of-service
       // attacks, so don't enable this code unless you're sure that clients are
       // trusted.
-      NetAddressList destAddresses(clientsDestinationAddressStr);
-      if (destAddresses.numAddresses() > 0) {
-	copyAddress(destinationAddress *(destAddresses.firstAddress()));
-      }
+      destinationAddress = our_inet_addr(clientsDestinationAddressStr);
     }
     // Also use the client-provided TTL.
     destinationTTL = clientsDestinationTTL;
@@ -1437,14 +1415,17 @@ void RTSPServer::RTSPClientSession
     Port serverRTPPort(0);
     Port serverRTCPPort(0);
     
-    // Make sure that we transmit on the same interface that's used by the client
-    // (in case we're a multi-homed server):
-    struct sockaddr_storage sourceAddr; SOCKLEN_T namelen = sizeof sourceAddr;
+    // Make sure that we transmit on the same interface that's used by the client (in case we're a multi-homed server):
+    struct sockaddr_in sourceAddr; SOCKLEN_T namelen = sizeof sourceAddr;
     getsockname(ourClientConnection->fClientInputSocket, (struct sockaddr*)&sourceAddr, &namelen);
     netAddressBits origSendingInterfaceAddr = SendingInterfaceAddr;
     netAddressBits origReceivingInterfaceAddr = ReceivingInterfaceAddr;
+    // NOTE: The following might not work properly, so we ifdef it out for now:
+#ifdef HACK_FOR_MULTIHOMED_SERVERS
+    ReceivingInterfaceAddr = SendingInterfaceAddr = sourceAddr.sin_addr.s_addr;
+#endif
     
-    subsession->getStreamParameters(fOurSessionId, ourClientConnection->fClientAddr,
+    subsession->getStreamParameters(fOurSessionId, ourClientConnection->fClientAddr.sin_addr.s_addr,
 				    clientRTPPort, clientRTCPPort,
 				    fStreamStates[trackNum].tcpSocketNum, rtpChannelId, rtcpChannelId,
 				    destinationAddress, destinationTTL, fIsMulticast,
@@ -1890,7 +1871,7 @@ void RTSPServer::RTSPClientSession
 }
 
 GenericMediaServer::ClientConnection*
-RTSPServer::createNewClientConnection(int clientSocket, struct sockaddr_storage const& clientAddr) {
+RTSPServer::createNewClientConnection(int clientSocket, struct sockaddr_in clientAddr) {
   return new RTSPClientConnection(*this, clientSocket, clientAddr);
 }
 

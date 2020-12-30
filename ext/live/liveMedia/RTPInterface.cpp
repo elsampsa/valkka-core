@@ -263,7 +263,7 @@ void RTPInterface
 }
 
 Boolean RTPInterface::handleRead(unsigned char* buffer, unsigned bufferMaxSize,
-				 unsigned& bytesRead, struct sockaddr_storage& fromAddress,
+				 unsigned& bytesRead, struct sockaddr_in& fromAddress,
 				 int& tcpSocketNum, unsigned char& tcpStreamChannelId,
 				 Boolean& packetReadWasIncomplete) {
   packetReadWasIncomplete = False; // by default
@@ -505,7 +505,7 @@ Boolean SocketDescriptor::tcpReadHandler1(int mask) {
   // However, because the socket is being read asynchronously, this data might arrive in pieces.
   
   u_int8_t c;
-  struct sockaddr_storage fromAddress;
+  struct sockaddr_in fromAddress;
   if (fTCPReadingState != AWAITING_PACKET_DATA) {
     int result = readSocket(fEnv, fOurSocketNum, &c, 1, fromAddress);
     if (result == 0) { // There was no more data to read

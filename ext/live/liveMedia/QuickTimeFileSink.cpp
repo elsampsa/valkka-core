@@ -1878,12 +1878,12 @@ addAtom(avc1);
   size += addWord(0x00480000); // Horizontal resolution
   size += addWord(0x00480000); // Vertical resolution
   size += addWord(0x00000000); // Data size
-  size += addWord(0x00010548); // Frame count+Compressor name (start)
+  size += addWord(0x00010548); // Frame       count+Compressor name (start)
     // "H.264"
   size += addWord(0x2e323634); // Compressor name (continued)
   size += addZeroWords(6); // Compressor name (continued - zero)
   size += addWord(0x00000018); // Compressor name (final)+Depth
-  size += addHalfWord(0xffff); // Color table id
+  size += addHalfWord(0xffff); // Color       table id
   size += addAtom_avcC();
 addAtomEnd;
 

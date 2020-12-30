@@ -211,6 +211,7 @@ void MuxFrameFilter::initMux() {
     ///*
     // codec_contexes, streams, av_format_context reserved !
     // std::cout << "MuxFrameFilter: writing header" << std::endl;
+    
     i = avformat_write_header(av_format_context, &av_dict);
     if (i < 0) {
         logger.log(LogLevel::fatal) << "MuxFrameFilter : initMux : Error occurred while muxing" << std::endl;
@@ -220,6 +221,7 @@ void MuxFrameFilter::initMux() {
         // closeMux();
         // return;
     }
+
     //*/
     
     /*
@@ -255,7 +257,7 @@ void MuxFrameFilter::closeMux() {
     int i;
     
     if (initialized) {
-        // std::cout << "MuxFrameFilter: closeMux" << std::endl;
+        // std::cout << "MuxFrameFilter: closeMux: freeing ctx" << std::endl;
         // avio_closep(&avio_ctx);        
         avformat_free_context(av_format_context);
         // avformat_close_input(&av_format_context); // nopes
@@ -283,6 +285,8 @@ void MuxFrameFilter::closeMux() {
     has_extradata = false;
     extradata_count = 0;
     prevpts = 0;
+    missing = 0;
+    ccf = 0;
 }
 
 
@@ -537,17 +541,22 @@ void MuxFrameFilter::writeFrame(BasicFrame* basicframe) {
     // std::cout << "MuxFrameFilter : avpkt size " << avpkt->size << std::endl;
     int res = av_interleaved_write_frame(av_format_context, avpkt); // => this calls write_packet
     // std::cout << "MuxFrameFilter : av_write_frame returned " << res << std::endl;
-    // used to crasssshh here, but not anymore, after we have defined dummy read & seek functions!
-    // int res = av_write_frame(av_format_context, avpkt);
-    //std::cout << "res =" << res << std::endl;
-    //if ((basicframe->h264_pars.slice_type =! H264SliceType::sps) and
-    //        (basicframe->h264_pars.slice_type =! H264SliceType::pps)) {
-    av_write_frame(av_format_context, NULL); // create a custom fragment
-    //        }
-    /*
-    av_buffer_unref(&(avpkt->buf));
-    av_packet_unref(avpkt);
-    */
+    if (res < 0) {
+        logger.log(LogLevel::fatal) << "MuxFrameFilter: av_write_frame returned < 0 : muxer reset" << std::endl;
+        av_write_trailer(av_format_context); // if we don't call this we'll get massive memleaks!  
+        closeMux();
+        // std::cout << "MuxFrameFilter: initialized now " << int(initialized) << std::endl;
+    }
+    else {
+        // used to crasssshh here, but not anymore, after we have defined dummy read & seek functions!
+        // int res = av_write_frame(av_format_context, avpkt);
+        //std::cout << "res =" << res << std::endl;
+        av_write_frame(av_format_context, NULL); // create a custom fragment
+        /*
+        av_buffer_unref(&(avpkt->buf));
+        av_packet_unref(avpkt);
+        */
+    }
 }
 
 
@@ -691,6 +700,7 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             #endif
             len = deserialize_uint32_big_endian(buf+cc); // resolve the packet length from the mp4 headers
 
+            // if (len > 14000) { // enable to test muxer reinit
             if (len > 99999999) { // absurd value .. this bytestream parser has gone sour.
                 std::cout << "MuxFrameFilter: overflow: len: " << len << std::endl;
                 // exit(2);
@@ -787,6 +797,7 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
         std::cout << "FragMP4MuxFrameFilter: cc = " << cc << " / " << buf_size << std::endl;
         #endif
     }
+    return 0;
 }
 
   

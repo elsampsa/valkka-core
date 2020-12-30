@@ -84,23 +84,20 @@ OnDemandServerMediaSubsession::sdpLines() {
 
 void OnDemandServerMediaSubsession
 ::getStreamParameters(unsigned clientSessionId,
-		      struct sockaddr_storage const& clientAddress,
+		      netAddressBits clientAddress,
 		      Port const& clientRTPPort,
 		      Port const& clientRTCPPort,
 		      int tcpSocketNum,
 		      unsigned char rtpChannelId,
 		      unsigned char rtcpChannelId,
-		      struct sockaddr_storage& destinationAddress,
+		      netAddressBits& destinationAddress,
 		      u_int8_t& /*destinationTTL*/,
 		      Boolean& isMulticast,
 		      Port& serverRTPPort,
 		      Port& serverRTCPPort,
 		      void*& streamToken) {
-  struct in_addr& destinationAddr4 = ((struct sockaddr_in&)destinationAddress).sin_addr;
-  if (destinationAddress.ss_family == AF_INET && destinationAddr4.s_addr == 0) {
-    // normal case - use the client address as the destination address:
-    destinationAddress = clientAddress;
-  }
+  if (destinationAddress == 0) destinationAddress = clientAddress;
+  struct in_addr destinationAddr; destinationAddr.s_addr = destinationAddress;
   isMulticast = False;
 
   if (fLastStreamToken != NULL && fReuseFirstSource) {
@@ -199,7 +196,7 @@ void OnDemandServerMediaSubsession
   // Record these destinations as being for this client session id:
   Destinations* destinations;
   if (tcpSocketNum < 0) { // UDP
-    destinations = new Destinations(destinationAddr4, clientRTPPort, clientRTCPPort);
+    destinations = new Destinations(destinationAddr, clientRTPPort, clientRTCPPort);
   } else { // TCP
     destinations = new Destinations(tcpSocketNum, rtpChannelId, rtcpChannelId);
   }

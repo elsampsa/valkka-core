@@ -123,7 +123,7 @@ public:
 					    handlerClientData);
   }
 
-  void injectReport(u_int8_t const* packet, unsigned packetSize, struct sockaddr_storage const& fromAddress);
+  void injectReport(u_int8_t const* packet, unsigned packetSize, struct sockaddr_in const& fromAddress);
     // Allows an outside party to inject an RTCP report (from other than the network interface)
 
 protected:
@@ -135,7 +135,7 @@ protected:
       // called only by createNew()
   virtual ~RTCPInstance();
 
-  virtual void noteArrivingRR(struct sockaddr_storage const& fromAddressAndPort,
+  virtual void noteArrivingRR(struct sockaddr_in const& fromAddressAndPort,
 			      int tcpSocketNum, unsigned char tcpStreamChannelId);
 
   void incomingReportHandler1();
@@ -161,7 +161,7 @@ private:
   void onExpire1();
 
   static void incomingReportHandler(RTCPInstance* instance, int /*mask*/);
-  void processIncomingReport(unsigned packetSize, struct sockaddr_storage const& fromAddressAndPort,
+  void processIncomingReport(unsigned packetSize, struct sockaddr_in const& fromAddressAndPort,
 			     int tcpSocketNum, unsigned char tcpStreamChannelId);
   void onReceive(int typeOfPacket, int totPacketSize, u_int32_t ssrc);
 

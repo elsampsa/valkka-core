@@ -61,7 +61,7 @@ class AlertFrameFilter : public FrameFilter {                                   
 
 public:                                                                                 // <pyapi>
     AlertFrameFilter(const char *name, PyObject* pycallback, FrameFilter *next = NULL); // <pyapi>
-
+    virtual ~AlertFrameFilter();                                                        // <pyapi>
 protected:
     PyObject* pycallback;
 

@@ -86,7 +86,7 @@ public: // should be protected, but some old compilers complain otherwise
   // The state of a TCP connection used by a client:
   class ClientConnection {
   protected:
-    ClientConnection(GenericMediaServer& ourServer, int clientSocket, struct sockaddr_storage const& clientAddr);
+    ClientConnection(GenericMediaServer& ourServer, int clientSocket, struct sockaddr_in clientAddr);
     virtual ~ClientConnection();
 
     UsageEnvironment& envir() { return fOurServer.envir(); }
@@ -103,7 +103,7 @@ public: // should be protected, but some old compilers complain otherwise
     friend class RTSPServer; // needed to make some broken Windows compilers work; remove this in the future when we end support for Windows
     GenericMediaServer& fOurServer;
     int fOurSocket;
-    struct sockaddr_storage fClientAddr;
+    struct sockaddr_in fClientAddr;
     unsigned char fRequestBuffer[REQUEST_BUFFER_SIZE];
     unsigned char fResponseBuffer[RESPONSE_BUFFER_SIZE];
     unsigned fRequestBytesAlreadySeen, fRequestBufferBytesLeft;
@@ -130,7 +130,7 @@ public: // should be protected, but some old compilers complain otherwise
   };
 
 protected:
-  virtual ClientConnection* createNewClientConnection(int clientSocket, struct sockaddr_storage const& clientAddr) = 0;
+  virtual ClientConnection* createNewClientConnection(int clientSocket, struct sockaddr_in clientAddr) = 0;
   virtual ClientSession* createNewClientSession(u_int32_t sessionId) = 0;
 
   ClientSession* createNewClientSessionWithId();

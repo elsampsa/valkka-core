@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
 #endif
 
   struct in_addr sessionAddress;
-  (void)inet_pton(AF_INET, sessionAddressStr, &sessionAddress.s_addr);
+  sessionAddress.s_addr = our_inet_addr(sessionAddressStr);
   const Port rtpPort(rtpPortNum);
   const Port rtcpPort(rtcpPortNum);
 
@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
   char* sourceAddressStr = "aaa.bbb.ccc.ddd";
                            // replace this with the real source address
   struct in_addr sourceFilterAddress;
-  (void)inet_pton(AF_INET, sourceAddressStr, &sourceFilterAddress.s_addr);
+  sourceFilterAddress.s_addr = our_inet_addr(sourceAddressStr);
 
   Groupsock rtpGroupsock(*env, sessionAddress, sourceFilterAddress, rtpPort);
   Groupsock rtcpGroupsock(*env, sessionAddress, sourceFilterAddress, rtcpPort);

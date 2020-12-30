@@ -94,10 +94,12 @@ uint32_t deserialize_uint32_big_endian(unsigned char *buffer)
 }
 #endif
 
+/*
 // this was removed from live555 at some point
 unsigned our_inet_addr(const char* cp)
 {
         return inet_addr(cp);
 }
+*/
 
 #endif

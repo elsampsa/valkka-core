@@ -48,13 +48,13 @@ protected:
 protected: // redefined virtual functions
   virtual char const* sdpLines();
   virtual void getStreamParameters(unsigned clientSessionId,
-				   struct sockaddr_storage const& clientAddress,
+				   netAddressBits clientAddress,
                                    Port const& clientRTPPort,
                                    Port const& clientRTCPPort,
 				   int tcpSocketNum,
                                    unsigned char rtpChannelId,
                                    unsigned char rtcpChannelId,
-                                   struct sockaddr_storage& destinationAddress,
+                                   netAddressBits& destinationAddress,
 				   u_int8_t& destinationTTL,
                                    Boolean& isMulticast,
                                    Port& serverRTPPort,

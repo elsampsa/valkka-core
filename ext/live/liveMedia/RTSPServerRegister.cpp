@@ -58,7 +58,7 @@ public:
     if (resultCode == 0) {
       // The "REGISTER" request succeeded, so use the still-open RTSP socket to await incoming commands from the remote endpoint:
       int sock;
-      struct sockaddr_storage remoteAddress;
+      struct sockaddr_in remoteAddress;
 
       grabConnection(sock, remoteAddress);
       if (sock >= 0) {

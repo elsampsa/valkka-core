@@ -271,7 +271,7 @@ void AVThread::run() {
             } // basic payload frame
             
             else { // all other possible cases ..
-                std::cout << "AVThread: wtf?" << std::endl;
+                //std::cout << "AVThread: wtf?" << std::endl;
                 infifo.recycle(f);
             }
             

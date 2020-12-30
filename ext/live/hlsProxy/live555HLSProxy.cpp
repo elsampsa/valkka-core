@@ -62,10 +62,6 @@ int main(int argc, char** argv) {
   TaskScheduler* scheduler = BasicTaskScheduler::createNew();
   env = BasicUsageEnvironment::createNew(*scheduler);
 
-  // Output information about the program (and LIVE555 version):
-  *env << "LIVE555 HLS Proxy, documented at http://www.live555.com/hlsProxy/\n";
-  *env << "\t(LIVE555 Streaming Media version " << LIVEMEDIA_LIBRARY_VERSION_STRING << ")\n";
-
   // Parse the command line:
   programName = argv[0];
   while (argc > 1) {
@@ -460,7 +456,7 @@ void segmentationCallback(void* /*clientData*/,
     ++firstSegmentCounter;
   }
 
-  // Then, rewrite our ".m3u8" file with the new list of segments:
+  // Then, rewrite our ".h3u8" file with the new list of segments:
   if (ourM3U8FileName == NULL) {
     ourM3U8FileName = new char[strlen(hlsPrefix) + 5/*strlen(".m3u8")*/ + 1];
     if (ourM3U8FileName == NULL) exit(1);

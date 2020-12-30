@@ -37,7 +37,7 @@ static unsigned char ioBuffer[ioBufferSize];
 
 void socketReadHandler(Socket* sock, int /*mask*/) {
   unsigned bytesRead;
-  struct sockaddr_storage fromAddress;
+  struct sockaddr_in fromAddress;
   UsageEnvironment& saveEnv = sock->env();
       // because handleRead(), if it fails, may delete "sock"
   if (!sock->handleRead(ioBuffer, ioBufferSize, bytesRead, fromAddress)) {

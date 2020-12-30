@@ -208,6 +208,7 @@ protected:
   FrameFilter*            repeat_sps_filter;        ///< Repeat sps & pps packets before i-frame (if they were not there before the i-frame)
   
   long int                frametimer;      ///< Measures time when the last frame was received
+  long int                pendingtimer;    ///< Measures how long stream has been pending
   
 public:
   UsageEnvironment &env;                   ///< UsageEnvironment identifying the Live555 event loop (see \ref live555_page)

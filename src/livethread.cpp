@@ -36,6 +36,7 @@
 #include "logging.h"
 
 // #define RECONNECT_VERBOSE   // by default, disable
+// #define LIVE_SIGNAL_FRAMES // experimental
 
 using namespace std::chrono_literals;
 using std::this_thread::sleep_for; 
@@ -119,7 +120,7 @@ bool LiveFifo::writeCopy(Frame* f, bool wait) {
  */
 
 
-Connection::Connection(UsageEnvironment& env, LiveConnectionContext& ctx) : env(env), ctx(ctx), is_playing(false), frametimer(0) {
+Connection::Connection(UsageEnvironment& env, LiveConnectionContext& ctx) : env(env), ctx(ctx), is_playing(false), frametimer(0), pendingtimer(0) {
     if       (ctx.time_correction==TimeCorrectionType::none) {
         // no timestamp correction: LiveThread --> {SlotFrameFilter: inputfilter} --> ctx.framefilter
         timestampfilter    = new TimestampFrameFilter2("timestampfilter", NULL); // dummy
@@ -326,17 +327,26 @@ void RTSPConnection::reStartStreamIf() {
         return;
     }
     
-    if (livestatus==LiveStatus::pending) { // stream trying to connect .. waiting for tcp socket most likely
+    // std::cout << "RTSPConnection: status: " << int(livestatus) << std::endl;
+
+    if (livestatus==LiveStatus::pending or livestatus==LiveStatus::closed) { // stream trying to connect .. waiting for tcp socket most likely
         // std::cout << "RTSPConnection: reStartStreamIf: pending" << std::endl;
         // frametimer=frametimer+Timeout::livethread;
-        // inform downstream that this stream is offline
-        OfflineSignalContext signal_ctx = OfflineSignalContext();
-        SignalFrame signalframe = SignalFrame();
-        put_signal_context(&signalframe, signal_ctx, SignalType::offline);
-        livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: sending signal frame for slot " << ctx.slot << std::endl;
-        ctx.framefilter->run(&signalframe);
+        pendingtimer=pendingtimer+Timeout::livethread;
+        if (pendingtimer >= ctx.msreconnect) {
+            #ifdef LIVE_SIGNAL_FRAMES
+            OfflineSignalContext signal_ctx = OfflineSignalContext();
+            SignalFrame signalframe = SignalFrame();
+            put_signal_context(&signalframe, signal_ctx, SignalType::offline);
+            livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: pending: sending signal frame for slot " << ctx.slot << std::endl;
+            ctx.framefilter->run(&signalframe);
+            #endif
+            pendingtimer=0;
+        }
         return;
     }
+
+    pendingtimer=0;
     
     if (livestatus==LiveStatus::alive) { // alive
         // std::cout << "RTSPConnection: reStartStreamIf: alive" << std::endl;
@@ -365,14 +375,15 @@ void RTSPConnection::reStartStreamIf() {
         // std::cout << "RTSPConnection: reStartStreamIf: msreconnect" << std::endl;
         // livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: restart at slot " << ctx.slot << std::endl;
         
-        // inform downstream that this stream is offline
-        OfflineSignalContext signal_ctx = OfflineSignalContext();
-        SignalFrame signalframe = SignalFrame();
-        put_signal_context(&signalframe, signal_ctx, SignalType::offline);
-        livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: sending signal frame for slot " << ctx.slot << std::endl;
-        ctx.framefilter->run(&signalframe);
-
         if (livestatus==LiveStatus::alive) {
+            #ifdef LIVE_SIGNAL_FRAMES
+            // inform downstream that this stream is offline
+            OfflineSignalContext signal_ctx = OfflineSignalContext();
+            SignalFrame signalframe = SignalFrame();
+            put_signal_context(&signalframe, signal_ctx, SignalType::offline);
+            livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: sending signal frame for slot " << ctx.slot << std::endl;
+            ctx.framefilter->run(&signalframe);
+            #endif
             stopStream();
         }
         if (livestatus==LiveStatus::closed) {

@@ -64,7 +64,7 @@ public:
 	    Boolean requestStreamingViaTCP = False, char const* proxyURLSuffix = NULL, Boolean reuseConnection = False,
 	    int verbosityLevel = 0, char const* applicationName = NULL);
 
-  void grabConnection(int& sock, struct sockaddr_storage& remoteAddress); // so that the socket doesn't get closed when we're deleted
+  void grabConnection(int& sock, struct sockaddr_in& remoteAddress); // so that the socket doesn't get closed when we're deleted
 
 protected:
   RTSPRegisterSender(UsageEnvironment& env,

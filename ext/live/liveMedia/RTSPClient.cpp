@@ -304,20 +304,11 @@ Boolean RTSPClient::parseRTSPURL(char const* url,
 
     // Next, parse <server-address-or-name>
     char* to = &parseBuffer[0];
-    Boolean isInSquareBrackets = False; //  by default
-    if (*from == '[') {
-      ++from;
-      isInSquareBrackets = True;
-    }
     unsigned i;
     for (i = 0; i < parseBufferSize; ++i) {
-      if (*from == '\0' ||
-	  (*from == ':' && !isInSquareBrackets) ||
-	  *from == '/' ||
-	  (*from == ']' && isInSquareBrackets)) {
+      if (*from == '\0' || *from == ':' || *from == '/') {
 	// We've completed parsing the address
 	*to = '\0';
-	if (*from == ']' && isInSquareBrackets) ++from;
 	break;
       }
       *to++ = *from++;
@@ -758,7 +749,7 @@ Boolean RTSPClient::setRequestFields(RequestRecord* request,
     netAddressBits serverAddress = *(netAddressBits*)(destAddress.data());
     AddressString serverAddressString(serverAddress);
     
-    protocolStr = "HTTP/1.0";
+    protocolStr = "HTTP/1.1";
     
     if (strcmp(request->commandName(), "GET") == 0) {
       // Create a 'session cookie' string, using MD5:
@@ -1986,7 +1977,7 @@ int RTSPClient::read(u_int8_t* buffer, unsigned bufferSize) {
   if (fTLS.isNeeded) {
     return fTLS.read(buffer, bufferSize);
   } else {
-    struct sockaddr_storage dummy; // 'from' address - not used
+    struct sockaddr_in dummy; // 'from' address - not used
     return readSocket(envir(), fInputSocketNum, buffer, bufferSize, dummy);
   }
 }

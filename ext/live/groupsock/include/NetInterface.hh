@@ -84,7 +84,7 @@ public:
 
   virtual Boolean handleRead(unsigned char* buffer, unsigned bufferMaxSize,
 			     unsigned& bytesRead,
-			     struct sockaddr_storage& fromAddress) = 0;
+			     struct sockaddr_in& fromAddress) = 0;
       // Returns False on error; resultData == NULL if data ignored
 
   int socketNum() const { return fSocketNum; }

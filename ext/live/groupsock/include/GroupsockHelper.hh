@@ -31,15 +31,15 @@ int setupStreamSocket(UsageEnvironment& env,
 
 int readSocket(UsageEnvironment& env,
 	       int socket, unsigned char* buffer, unsigned bufferSize,
-	       struct sockaddr_storage& fromAddress);
+	       struct sockaddr_in& fromAddress);
 
 Boolean writeSocket(UsageEnvironment& env,
-		    int socket, struct sockaddr_storage const& addressAndPort,
+		    int socket, struct in_addr address, portNumBits portNum/*network byte order*/,
 		    u_int8_t ttlArg,
 		    unsigned char* buffer, unsigned bufferSize);
 
 Boolean writeSocket(UsageEnvironment& env,
-		    int socket, struct sockaddr_storage const& addressAndPort,
+		    int socket, struct in_addr address, portNumBits portNum/*network byte order*/,
 		    unsigned char* buffer, unsigned bufferSize);
     // An optimized version of "writeSocket" that omits the "setsockopt()" call to set the TTL.
 
@@ -139,6 +139,7 @@ extern int gettimeofday(struct timeval*, int*);
 #endif
 
 // The following are implemented in inet.c:
+extern "C" netAddressBits our_inet_addr(char const*);
 extern "C" void our_srandom(int x);
 extern "C" long our_random();
 extern "C" u_int32_t our_random32(); // because "our_random()" returns a 31-bit number

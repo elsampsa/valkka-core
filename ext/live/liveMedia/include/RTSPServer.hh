@@ -116,11 +116,11 @@ protected:
       // used to implement "RTSPClientConnection::handleCmd_REGISTER()"
 
   virtual UserAuthenticationDatabase* getAuthenticationDatabaseForCommand(char const* cmdName);
-  virtual Boolean specialClientAccessCheck(int clientSocket, struct sockaddr_storage const& clientAddr,
+  virtual Boolean specialClientAccessCheck(int clientSocket, struct sockaddr_in& clientAddr,
 					   char const* urlSuffix);
       // a hook that allows subclassed servers to do server-specific access checking
       // on each client (e.g., based on client IP address), without using digest authentication.
-  virtual Boolean specialClientUserAccessCheck(int clientSocket, struct sockaddr_storage const& clientAddr,
+  virtual Boolean specialClientUserAccessCheck(int clientSocket, struct sockaddr_in& clientAddr,
 					       char const* urlSuffix, char const *username);
       // another hook that allows subclassed servers to do server-specific access checking
       // - this time after normal digest authentication has already taken place (and would otherwise allow access).
@@ -154,7 +154,7 @@ public: // should be protected, but some old compilers complain otherwise
     virtual void handleRequestBytes(int newBytesRead);
 
   protected:
-    RTSPClientConnection(RTSPServer& ourServer, int clientSocket, struct sockaddr_storage const& clientAddr);
+    RTSPClientConnection(RTSPServer& ourServer, int clientSocket, struct sockaddr_in clientAddr);
     virtual ~RTSPClientConnection();
 
     friend class RTSPServer;
@@ -268,7 +268,7 @@ public: // should be protected, but some old compilers complain otherwise
 protected: // redefined virtual functions
   // If you subclass "RTSPClientConnection", then you must also redefine this virtual function in order
   // to create new objects of your subclass:
-  virtual ClientConnection* createNewClientConnection(int clientSocket, struct sockaddr_storage const& clientAddr);
+  virtual ClientConnection* createNewClientConnection(int clientSocket, struct sockaddr_in clientAddr);
 
 protected:
   // If you subclass "RTSPClientSession", then you must also redefine this virtual function in order

@@ -123,13 +123,13 @@ public:
   char const* trackId();
   virtual char const* sdpLines() = 0;
   virtual void getStreamParameters(unsigned clientSessionId, // in
-				   struct sockaddr_storage const& clientAddress, // in
+				   netAddressBits clientAddress, // in
 				   Port const& clientRTPPort, // in
 				   Port const& clientRTCPPort, // in
 				   int tcpSocketNum, // in (-1 means use UDP, not TCP)
 				   unsigned char rtpChannelId, // in (used if TCP)
 				   unsigned char rtcpChannelId, // in (used if TCP)
-				   struct sockaddr_storage& destinationAddress, // in out
+				   netAddressBits& destinationAddress, // in out
 				   u_int8_t& destinationTTL, // in out
 				   Boolean& isMulticast, // out
 				   Port& serverRTPPort, // out

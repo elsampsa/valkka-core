@@ -38,10 +38,17 @@ AlertFrameFilter::AlertFrameFilter(const char *name,
     PyObject* pycallback, FrameFilter *next) : FrameFilter(name, next) {
     if (PyCallable_Check(pycallback) == 1) {
         this->pycallback = pycallback;
+        Py_INCREF(this->pycallback);
     }
     else {
         filterlogger.log(LogLevel::fatal) << "AlertFrameFilter: setCallback: could not set callback" << std::endl;
         this->pycallback = NULL;
+    }
+}
+
+AlertFrameFilter::~AlertFrameFilter() {
+    if (this->pycallback) {
+        Py_DECREF(this->pycallback);
     }
 }
 
@@ -72,7 +79,7 @@ void AlertFrameFilter::run(Frame* frame) {
                 PyObject *res, *tup;
 
                 tup = PyTuple_New(1);
-                PyTuple_SET_ITEM(tup, 1, 
+                PyTuple_SET_ITEM(tup, 0, 
                     PyLong_FromUnsignedLong((unsigned long)(ctx.n_slot)));
                 
                 res = PyObject_CallFunctionObjArgs(pycallback, tup, NULL);

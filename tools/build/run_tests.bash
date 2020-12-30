@@ -8,6 +8,9 @@
 # Do the following on the output file:
 #
 # grep "ERROR SUMMARY" bin/test.out
+# grep -i "invalid" bin/test.out | grep "=="
+# grep "Syscall" bin/test.out | grep "=="
+
 # grep -i "warning" bin/test.out
 # grep "definitely lost" bin/test.out
 # grep "indirectly lost" bin/test.out

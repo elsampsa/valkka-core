@@ -34,42 +34,16 @@ GroupEId::GroupEId(struct in_addr const& groupAddr,
   init(groupAddr, sourceFilterAddr, portNum, 255);
 }
 
-struct in_addr const& GroupEId::groupAddress() const {
-  struct sockaddr_in const& groupAddress4 = (struct sockaddr_in const&)fGroupAddress;
-      // later fix to allow for IPv6
-  return groupAddress4.sin_addr;
-}
-
-struct in_addr const& GroupEId::sourceFilterAddress() const {
-  struct sockaddr_in const& sourceFilterAddress4
-    = (struct sockaddr_in const&)fSourceFilterAddress;
-      // later fix to allow for IPv6
-  return sourceFilterAddress4.sin_addr;
-}
-
 Boolean GroupEId::isSSM() const {
-  struct sockaddr_in const& sourceFilterAddress4
-    = (struct sockaddr_in const&)fSourceFilterAddress;
-      // later fix to allow for IPv6
-  return sourceFilterAddress4.sin_addr.s_addr != netAddressBits(~0);
-}
-
-portNumBits GroupEId::portNum() const {
-  struct sockaddr_in const& groupAddress4 = (struct sockaddr_in const&)fGroupAddress;
-      // later fix to allow for IPv6
-  return groupAddress4.sin_port;
+  return fSourceFilterAddress.s_addr != netAddressBits(~0);
 }
 
 void GroupEId::init(struct in_addr const& groupAddr,
 		    struct in_addr const& sourceFilterAddr,
 		    portNumBits portNum,
 		    u_int8_t ttl) {
-  fGroupAddress.ss_family = AF_INET; // later update to support IPv6
-  ((sockaddr_in&)fGroupAddress).sin_addr = groupAddr;
-  ((sockaddr_in&)fGroupAddress).sin_port = portNum;
-  
-  fSourceFilterAddress.ss_family = AF_INET; // later update to support IPv6
-  ((sockaddr_in&)fSourceFilterAddress).sin_addr = sourceFilterAddr;
-
+  fGroupAddress = groupAddr;
+  fSourceFilterAddress = sourceFilterAddr;
+  fPortNum = portNum;
   fTTL = ttl;
 }
