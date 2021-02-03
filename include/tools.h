@@ -69,7 +69,7 @@ void normalize_timespec(struct timespec *ts, time_t sec, int64_t nanosec);
 
 
 #ifdef BIG_ENDIAN
-uint32_t deserialize_uint32_big_endian(unsigned char *buffer)
+inline uint32_t deserialize_uint32_big_endian(unsigned char *buffer)
 {
     uint32_t value = 0;
 
@@ -82,7 +82,7 @@ uint32_t deserialize_uint32_big_endian(unsigned char *buffer)
 #else // either not defined or little endian
 // deserialize value from big endian in little endian system
 // byte1 byte2 byte3 byte4 => byte4 byte3 ..
-uint32_t deserialize_uint32_big_endian(unsigned char *buffer)
+inline uint32_t deserialize_uint32_big_endian(unsigned char *buffer)
 {
     uint32_t value = 0;
 

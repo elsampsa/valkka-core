@@ -539,8 +539,8 @@ PyObject *SharedMemRingBufferBase::getBufferListPy() {
                 this->cache[i]
             )); // use cache instead
         //*/
-        // PyList_Append(plis, pa);
-        PyList_SetItem(plis, i, pa);
+        // PyList_Append(plis, pa); // keep reference
+        PyList_SetItem(plis, i, pa); // transfer ownership
         i++;
     }
     return plis;

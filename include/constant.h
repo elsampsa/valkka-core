@@ -53,10 +53,6 @@ https://softwareengineering.stackexchange.com/questions/328775/how-important-is-
 
 - ..there might be performance benefits in using, for the final rgb bitmap images, widths that are multiples of 32
 */
-
-const char* get_numpy_version() {  // <pyapi>
-    return NUMPY_VERSION;          // <pyapi>
-}                                  // <pyapi> 
     
 static const int VERSION_MAJOR = 1; // <pyapi>
 static const int VERSION_MINOR = 1; // <pyapi>
@@ -171,7 +167,7 @@ struct BitmapPars {
   int           v_linesize;
 };
 
-bool operator==(BitmapPars const &a, BitmapPars const &b) { // is copyable ?
+inline bool operator==(BitmapPars const &a, BitmapPars const &b) { // is copyable ?
     return ( (a.y_linesize == b.y_linesize) and (a.u_linesize == b.u_linesize) and (a.v_linesize == b.v_linesize) );
 }
 

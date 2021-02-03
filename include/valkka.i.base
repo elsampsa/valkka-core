@@ -34,6 +34,7 @@
 #include <Python.h>
 
 // https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
+// https://github.com/numpy/numpy/issues/9309#issuecomment-311320497
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include "numpy/ndarraytypes.h"
 #include "numpy/arrayobject.h"
@@ -85,6 +86,9 @@ bool numpy_version_ok() {
     return NPY_VERSION == PyArray_GetNDArrayCVersion();
 }
 
+const char* get_numpy_version() { 
+    return NUMPY_VERSION;         
+}
 
 void ValkkaXInitThreads(void) {
   Status status = XInitThreads();
