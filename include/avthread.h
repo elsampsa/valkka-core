@@ -34,14 +34,7 @@
  *
  */
 
-#include "constant.h"
-#include "frame.h"
-#include "thread.h" 
-#include "decoder.h"
-#include "tools.h"
-#include "framefilter.h"
-
-
+#include "decoderthread.h"
 
 /** A thread consuming frames and feeding them to various encoders
  * 
@@ -54,7 +47,7 @@
  * @ingroup decoding_tag
  * @ingroup threading_tag
  */
-class AVThread : public Thread { // <pyapi>
+class AVThread : public DecoderThread { // <pyapi>
   
 public: // <pyapi>
     /** Default constructor
@@ -64,57 +57,9 @@ public: // <pyapi>
     * @param fifo_ctx          Parametrization of the internal FrameFifo
     * 
     */
-    AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx=FrameFifoContext()); // <pyapi>
-    ~AVThread(); ///< Default destructor.  Calls AVThread::stopCall                                   // <pyapi>
-    
-protected: // frame input
-    FrameFifo               infifo;           ///< Incoming frames are read from here
-    FifoFrameFilter         infilter;         ///< Write incoming frames here
-    BlockingFifoFrameFilter infilter_block;   ///< Incoming frames can also be written here.  If stack runs out of frames, writing will block
-    int                     n_threads;        ///< Number of decoding threads
-    
-protected:
-    FrameFilter& outfilter;               ///< Outgoing, decoded frames are written here
-    std::vector<Decoder*> decoders;       ///< A vector/list of registered and instantiated decoders
-    long int     mstimetolerance;         ///< Drop frames if they are in milliseconds this much late
-    AbstractFileState state;             ///< Seek, play, stop or what
+    AVThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx=FrameFifoContext());   // <pyapi>
+    virtual ~AVThread(); ///< Default destructor.  Calls AVThread::stopCall                             // <pyapi>
 
-private: // framefilter for chaining output for outfilter2
-    TimestampFrameFilter2 timefilter;
-    bool use_time_correction;
-
-protected:
-    bool is_decoding; ///< should currently decode or not
-        
-protected: // Thread member redefinitions
-    std::deque<AVSignalContext> signal_fifo;   ///< Redefinition of signal fifo.
-        
-public: // redefined virtual functions
-    void run();
-    void preRun();
-    void postRun();
-    void sendSignal(AVSignalContext signal_ctx); ///< Redefined : Thread::SignalContext has been changed to AVThread::SignalContext
-    
-protected: 
-    FrameFifo &getFifo();
-        
-protected:
-    void handleSignals();
-        
-public: // API <pyapi>
-    /** Set number of decoding threads
-     * 
-     * - Must be called before the thread is run
-     * 
-     */
-    void setNumberOfThreads(int n_threads);       // <pyapi>
-    void setTimeCorrection(bool val);             // <pyapi>
-    FifoFrameFilter &getFrameFilter();            // <pyapi>
-    FifoFrameFilter &getBlockingFrameFilter();    // <pyapi>
-    void setTimeTolerance(long int mstol);    ///< API method: decoder will scrap late frames that are mstol milliseconds late.  Call before starting the thread. // <pyapi>
-    void decodingOnCall();   ///< API method: enable decoding        // <pyapi>
-    void decodingOffCall();  ///< API method: pause decoding         // <pyapi>
-    void requestStopCall();  ///< API method: Like Thread::stopCall() but does not block. // <pyapi>
 }; // <pyapi>
 
 #endif

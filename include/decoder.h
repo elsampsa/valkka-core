@@ -70,6 +70,7 @@ public:
     void input(Frame *f);        ///< Create a copy of the frame into the internal storage of the decoder (i.e. to Decoder::in_frame)
     long int getMsTimestamp();   /// < Return in_frame timestamp
     virtual Frame *output() = 0; ///< Return a reference to the internal storage of the decoder where the decoded frame is.  The exact frametype depends on the Decoder class (and decoder library)
+    virtual void releaseOutput();     ///< Decoder might want to know that it's ok to overwrite the frame
     virtual void flush() = 0;    ///< Reset decoder state.  How to flush depends on the decoder library
     virtual bool pull() = 0;     ///< Decode in_frame to out_frame.  Return true if decoder returned a new frame (into out_frame), otherwise false.  Implementation depends on the decoder library.
     bool hasFrame();

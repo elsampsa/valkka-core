@@ -38,7 +38,8 @@
 
 // #define DECODE_VERBOSE
 
-Decoder::Decoder() : has_frame(false){};
+Decoder::Decoder() : has_frame(false) {
+} ;
 
 Decoder::~Decoder(){};
 
@@ -63,6 +64,14 @@ bool Decoder::hasFrame()
 {
     return has_frame;
 }
+
+void Decoder::releaseOutput()
+{
+    // by default, does nada
+};
+
+
+
 
 Frame *DummyDecoder::output()
 {
@@ -174,6 +183,7 @@ AVDecoder(av_codec_id, n_threads), width(0), height(0),
    */
 };
 
+
 VideoDecoder::~VideoDecoder(){
     if (sws_ctx != NULL)
     {
@@ -184,10 +194,12 @@ VideoDecoder::~VideoDecoder(){
     }
 };
 
+
 Frame *VideoDecoder::output()
 {
     return &out_frame;
 };
+
 
 bool VideoDecoder::pull()
 {
