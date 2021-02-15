@@ -1171,6 +1171,7 @@ long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
     if (f->getFrameClass() == FrameClass::signal) {
         // std::cout << "OpenGLThread: insertFifo: SignalFrame" << std::endl;
         SignalFrame *signalframe = static_cast<SignalFrame*>(f);
+        handleSignal(signalframe->opengl_signal_ctx); // TODO: remove this
         /*
         if (signalframe->signaltype==SignalType::openglthread) { // TODO
             handleSignal(signalframe->opengl_signal_ctx);
