@@ -70,6 +70,10 @@ void Decoder::releaseOutput()
     // by default, does nada
 };
 
+bool Decoder::isOk() 
+{
+    return true;
+}
 
 
 
@@ -359,7 +363,6 @@ bool VideoDecoder::pull()
             aux_av_frame->linesize, // srcStride
             0,  // srcSliceY
             aux_av_frame->height,  // srcSliceH
-
             out_av_frame->data, // dst[] // written
             out_av_frame->linesize); // dstStride[] // written
     }

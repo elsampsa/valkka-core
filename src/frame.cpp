@@ -445,18 +445,20 @@ std::string AVBitmapFrame::dumpPayload() {
       tmp << "NULL";
   }
   else {
-    // I get here:
-    // Conditional jump or move depends on uninitialised value(s)
-    // which doesn't make any ....ing sense
     for(i=0; i<std::min(bmpars.y_linesize,10); i++) {
-        // std::cout << ">i" << i << std::endl;
-        // val = uint8_t(y_payload[i]);
-        // val = 0;
-        // std::cout << val << std::endl;
-        // std::cout << std::to_string(val) << std::endl;
-        // std::cout << int(y_payload[i]) << std::endl;
-        tmp << uint8_t(y_payload[i]) << " ";
+      tmp << int(y_payload[i]) << " ";
     }
+    tmp << " | ";
+
+    for(i=0; i<std::min(bmpars.u_linesize,10); i++) {
+        tmp << int(u_payload[i]) << " ";
+    }
+    tmp << " | ";
+
+    for(i=0; i<std::min(bmpars.u_linesize,10); i++) {
+        tmp << int(v_payload[i]) << " ";
+    }
+
   }
   return tmp.str();
 }
@@ -586,12 +588,25 @@ void AVRGBFrame::reserve(int width, int height) {
 
 
 std::string AVRGBFrame::dumpPayload() {
-  std::stringstream tmp;  
-  int i;
-  for(i=0; i<std::min(bmpars.y_linesize,10); i++) {
-    tmp << int(y_payload[i]) << " ";
-  }
-  return tmp.str();
+    std::stringstream tmp;  
+    int i;
+    for(i=0; i<std::min(bmpars.y_linesize,10); i++) {
+      tmp << int(y_payload[i]) << " ";
+    }
+
+    tmp << " | ";
+
+    for(i=0; i<std::min(bmpars.u_linesize,10); i++) {
+        tmp << int(u_payload[i]) << " ";
+    }
+
+    tmp << " | ";
+
+    for(i=0; i<std::min(bmpars.v_linesize,10); i++) {
+        tmp << int(v_payload[i]) << " ";
+    }
+
+    return tmp.str();
 }
   
   

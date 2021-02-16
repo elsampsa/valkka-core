@@ -34,7 +34,7 @@
 #include "decoderthread.h"
 #include "logging.h"
 
-#define AVTHREAD_VERBOSE 1
+//#define AVTHREAD_VERBOSE 1
 
 DecoderThread::DecoderThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) 
     : Thread(name), outfilter(outfilter), infifo(name,fifo_ctx), infilter(name,&infifo), 
@@ -43,6 +43,7 @@ DecoderThread::DecoderThread(const char* name, FrameFilter& outfilter, FrameFifo
     {
         avthreadlogger.log(LogLevel::debug) << "DecoderThread : constructor : N_MAX_DECODERS ="<<int(N_MAX_DECODERS)<<std::endl;
         decoders.resize(int(N_MAX_DECODERS),NULL);
+        setupframes.resize(int(N_MAX_DECODERS));
     }
 
 
@@ -84,6 +85,18 @@ Decoder* DecoderThread::chooseVideoDecoder(AVCodecID codec_id) {
     } // switch: video codecs
 }
 
+Decoder* DecoderThread::fallbackAudioDecoder(AVCodecID codec_id) {
+    threadlogger.log(LogLevel::fatal) << "DecoderThread: no fallbackAudioDecoder"
+        << std::endl;
+    return NULL;
+}
+
+
+Decoder* DecoderThread::fallbackVideoDecoder(AVCodecID codec_id) {
+    threadlogger.log(LogLevel::fatal) << "DecoderThread: no fallbackVideoDecoder"
+        << std::endl;
+    return NULL;
+}
 
 void DecoderThread::run() {
     bool ok;
@@ -134,7 +147,7 @@ void DecoderThread::run() {
                 // avthreadlogger.log(LogLevel::debug) << "DecoderThread: " << name << " got SetupFrame: " << *setupframe << std::endl;
                 
                 if (setupframe->sub_type == SetupFrameType::stream_init) { // SETUP: STREAM INIT
-                
+                    setupframes[subsession_index].copyFrom(setupframe); // cache the setupframe
                     if (decoders[subsession_index]!=NULL) { // slot is occupied
                         avthreadlogger.log(LogLevel::debug) << "DecoderThread: "<< this->name <<" : run : decoder reinit " << std::endl;
                         delete decoders[subsession_index];
@@ -145,27 +158,9 @@ void DecoderThread::run() {
                     avthreadlogger.log(LogLevel::debug) << "DecoderThread: "<< this->name <<" : run : registering decoder for subsession " <<subsession_index<< std::endl;
                     
                     if (setupframe->media_type==AVMEDIA_TYPE_AUDIO) { // AUDIO
-                        /*
-                        switch (setupframe->codec_id) { // switch: audio codecs
-                            case AV_CODEC_ID_PCM_MULAW:
-                                decoders[subsession_index]=new DummyDecoder();
-                                break;
-                            default:
-                                break;
-                        } // switch: audio codecs
-                        */
                         decoders[subsession_index]=this->chooseAudioDecoder(setupframe->codec_id);
                     } // AUDIO
                     else if (setupframe->media_type==AVMEDIA_TYPE_VIDEO) { // VIDEO
-                        /*
-                        switch (setupframe->codec_id) { // switch: video codecs
-                            case AV_CODEC_ID_H264:
-                                decoders[subsession_index]=new VideoDecoder(AV_CODEC_ID_H264, n_threads = this->n_threads);
-                                break;
-                            default:
-                                break;
-                        } // switch: video codecs
-                        */
                         decoders[subsession_index]=this->chooseVideoDecoder(setupframe->codec_id);
                     } // VIDEO
                     else { // UNKNOW MEDIA TYPE
@@ -219,14 +214,14 @@ void DecoderThread::run() {
             else if (f->getFrameClass()==FrameClass::basic) { // basic payload frame
                 BasicFrame *basicframe = static_cast<BasicFrame*>(f);
                 
-                if (is_decoding) { // is decoding
+                if (is_decoding) { // IS DECODING
                     decoder=decoders[subsession_index]; // alias
                     // Take a local copy of the frame, return the original to the stack, and then start (the time consuming) decoding
                     // decoder->in_frame.copyFrom(basicframe); // deep copy of the BasicFrame.  After performing the copy ..
                     decoder->input(basicframe); // decoder takes as an input a Frame and makes a copy of it.  Decoder must check that it is the correct type
                     infifo.recycle(f); // .. return frame to the stack
                     // infifo->dumpStack();
-                    if (decoder->pull()) { // decode
+                    if (decoder->pull()) { // DECODER HAS STUFF
                         #ifdef AVTHREAD_VERBOSE
                         std::cout << "DecoderThread: "<< this->name <<" : run : decoder num " <<subsession_index<< " got frame " << std::endl;
                         #endif
@@ -298,13 +293,33 @@ void DecoderThread::run() {
                         */
 
 
-                    } // decode
+                    } // DECODER HAS STUFF
                     else {
                         #ifdef AVTHREAD_VERBOSE
                         std::cout << "DecoderThread: "<< this->name <<" : run : decoder num " <<subsession_index<< " no frame " << std::endl;
                         #endif
                     }
-                } // is decoding
+
+                    if (!decoder->isOk()) { // DECODER GONE SOUR
+                        avthreadlogger.log(LogLevel::fatal) << "DecoderThread: a sour decoder.  Will try to get a fallback one" << std::endl;
+                        delete decoders[subsession_index];
+                        SetupFrame *setupframe = &setupframes[subsession_index];
+                        if (setupframe->media_type==AVMEDIA_TYPE_AUDIO) { // AUDIO
+                            decoders[subsession_index]=this->fallbackAudioDecoder(setupframe->codec_id);
+                        } // AUDIO
+                        else if (setupframe->media_type==AVMEDIA_TYPE_VIDEO) { // VIDEO
+                            decoders[subsession_index]=this->fallbackVideoDecoder(setupframe->codec_id);
+                        } // VIDEO
+                        else { // UNKNOW MEDIA TYPE
+                            decoders[subsession_index]=new DummyDecoder();
+                        }
+                        if (!decoders[subsession_index]) {
+                            avthreadlogger.log(LogLevel::fatal) << "DecoderThread: sooo sour.  No fallback decoder either" << std::endl;
+                            //hmm.. maybe should crash the whole program here..?
+                        }
+                    } // DECODER GONE SOUR
+
+                } // IS DECODING
                 else { // not decoding ..
                     infifo.recycle(f);      // .. return frame to the stack
                 }

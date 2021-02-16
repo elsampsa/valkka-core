@@ -73,6 +73,7 @@ public:
     virtual void releaseOutput();     ///< Decoder might want to know that it's ok to overwrite the frame
     virtual void flush() = 0;    ///< Reset decoder state.  How to flush depends on the decoder library
     virtual bool pull() = 0;     ///< Decode in_frame to out_frame.  Return true if decoder returned a new frame (into out_frame), otherwise false.  Implementation depends on the decoder library.
+    virtual bool isOk();         ///< The thread that uses this decoder can check if it has gone sour
     bool hasFrame();
 };
 

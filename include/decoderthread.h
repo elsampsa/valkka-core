@@ -60,10 +60,11 @@ protected: // frame input
     int                     n_threads;
     
 protected:
-    FrameFilter& outfilter;               ///< Outgoing, decoded frames are written here
-    std::vector<Decoder*> decoders;       ///< A vector/list of registered and instantiated decoders
-    long int     mstimetolerance;         ///< Drop frames if they are in milliseconds this much late
-    AbstractFileState state;             ///< Seek, play, stop or what
+    FrameFilter& outfilter;                ///< Outgoing, decoded frames are written here
+    std::vector<Decoder*> decoders;        ///< A vector/list of registered and instantiated decoders
+    long int     mstimetolerance;          ///< Drop frames if they are in milliseconds this much late
+    AbstractFileState state;               ///< Seek, play, stop or what
+    std::vector<SetupFrame> setupframes;   ///< Save decoder(s) setup information
 
 private: // framefilter for chaining output for outfilter2
     TimestampFrameFilter2 timefilter;
@@ -77,7 +78,12 @@ protected: // Thread member redefinitions
 
 protected:
     virtual Decoder* chooseAudioDecoder(AVCodecID codec_id);
-    virtual Decoder* chooseVideoDecoder(AVCodecID codec_id);
+    virtual Decoder* chooseVideoDecoder(AVCodecID codec_id); ///< Chooses a video decoder
+    virtual Decoder* fallbackAudioDecoder(AVCodecID codec_id);
+    /** If the the video decoder obtained from chooseVideoDecoder fails for some reason,
+     * provide a fallback video decoder instead.
+     */
+    virtual Decoder* fallbackVideoDecoder(AVCodecID codec_id);
 
 public: // redefined virtual functions
     void run();
