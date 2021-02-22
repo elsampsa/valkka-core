@@ -10,7 +10,6 @@ var searchData=
   ['n_5fsetup',['n_setup',['../structFrameFifoContext.html#a1a20461522f6b86444433676f28997cd',1,'FrameFifoContext::n_setup()'],['../structOpenGLFrameFifoContext.html#af427a897a93ca7de6c16900e3bcbe84a',1,'OpenGLFrameFifoContext::n_setup()']]],
   ['n_5fsignal',['n_signal',['../structFrameFifoContext.html#aa2036de0df2a76ea54c9e46e59acec83',1,'FrameFifoContext::n_signal()'],['../structOpenGLFrameFifoContext.html#a2bb6e2280cff5939a3067e7113b886ab',1,'OpenGLFrameFifoContext::n_signal()']]],
   ['n_5fslot',['n_slot',['../classFrame.html#afceac675e9e36fdf011aaa605d78c3d9',1,'Frame::n_slot()'],['../structOpenGLSignalPars.html#ae33b8f218338c3893eae827480c8ba4d',1,'OpenGLSignalPars::n_slot()'],['../structValkkaFSWriterSignalPars.html#a7f7fe48d43e74fe1a12679fb817841e6',1,'ValkkaFSWriterSignalPars::n_slot()'],['../structValkkaFSReaderSignalPars.html#afe77f3264e44ed5c72acbb906b52373e',1,'ValkkaFSReaderSignalPars::n_slot()']]],
-  ['n_5fthreads',['n_threads',['../classAVThread.html#acc23de397de735ea2449f3dc6541a810',1,'AVThread']]],
   ['n_5fyuvpbo',['n_yuvpbo',['../structFrameFifoContext.html#acea869589096476981ea00e470817d56',1,'FrameFifoContext']]],
   ['name',['name',['../classSharedMemSegment.html#a6b7d9c36dfee22cf2799c9ddf5d7fa33',1,'SharedMemSegment::name()'],['../classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a',1,'Thread::name()']]],
   ['nbuf',['nbuf',['../classFrameSink.html#ab9af1bc3bde6af91e0dc6bbcad7ec83f',1,'FrameSink']]],

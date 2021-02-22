@@ -1,9 +1,10 @@
 <map id="Stream::Stream" name="Stream::Stream">
 <area shape="rect" id="node2" href="$classBufferSource.html#a04cb4018658d080aec540054e5936761" title="Copies a Frame from BufferSource::fifo into BufferSource::internal_fifo. Sets BufferSource::active. Checks that FrameClass is FrameClass::basic. " alt="" coords="168,31,349,57"/>
-<area shape="rect" id="node3" href="$classFrame.html#ac1f39d349213eafc858e44b7292d54d4" title="Returns the subclass frame type. See Frame::frameclass. " alt="" coords="1065,5,1221,32"/>
-<area shape="rect" id="node4" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Like FrameFifo::recycle_ but with mutex protection. " alt="" coords="676,31,807,57"/>
-<area shape="rect" id="node6" href="$classBufferSource.html#a796bc84e5233c21c379a57f2a3b65e54" title="All the fun happens here. " alt="" coords="397,81,604,108"/>
-<area shape="rect" id="node5" href="$classFrameFifo.html#a5cd4bd7b55780c158d7ee8beeb99cfc2" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="879,31,1017,57"/>
-<area shape="rect" id="node7" href="$classBasicFrame.html#a81f5614e82427d1dcc1bd31fd6258f9f" title="Dumps internal payload data. " alt="" coords="652,81,831,108"/>
-<area shape="rect" id="node8" href="$classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4" title="Print a resumen of fifo and stack usage. " alt="" coords="669,132,813,159"/>
+<area shape="rect" id="node3" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Like FrameFifo::recycle_ but with mutex protection. " alt="" coords="676,5,807,32"/>
+<area shape="rect" id="node6" href="$classBufferSource.html#a796bc84e5233c21c379a57f2a3b65e54" title="All the fun happens here. " alt="" coords="397,56,604,83"/>
+<area shape="rect" id="node4" href="$classFrameFifo.html#a5cd4bd7b55780c158d7ee8beeb99cfc2" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="879,5,1017,32"/>
+<area shape="rect" id="node5" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Reset the internal data. " alt="" coords="1065,5,1161,32"/>
+<area shape="rect" id="node7" href="$classBasicFrame.html#a81f5614e82427d1dcc1bd31fd6258f9f" title="Dumps internal payload data. " alt="" coords="652,56,831,83"/>
+<area shape="rect" id="node8" href="$tools_8h.html#a6b263f324f19945af28ebde686acc6d6" title="Milliseconds to timeval. " alt="" coords="691,107,792,133"/>
+<area shape="rect" id="node9" href="$classFrameFifo.html#a956716c1cc2162314b7f305a8c4ca9e4" title="Print a resumen of fifo and stack usage. " alt="" coords="669,157,813,184"/>
 </map>

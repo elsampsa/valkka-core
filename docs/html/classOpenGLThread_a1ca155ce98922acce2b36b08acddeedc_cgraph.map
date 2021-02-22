@@ -1,6 +1,5 @@
 <map id="OpenGLThread::insertFifo" name="OpenGLThread::insertFifo">
-<area shape="rect" id="node2" href="$classFrame.html#ac1f39d349213eafc858e44b7292d54d4" title="Returns the subclass frame type. See Frame::frameclass. " alt="" coords="627,5,783,32"/>
-<area shape="rect" id="node3" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Like FrameFifo::recycle_ but with mutex protection. " alt="" coords="243,31,374,57"/>
-<area shape="rect" id="node5" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="225,81,392,108"/>
-<area shape="rect" id="node4" href="$classFrameFifo.html#a5cd4bd7b55780c158d7ee8beeb99cfc2" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="440,31,579,57"/>
+<area shape="rect" id="node2" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Like FrameFifo::recycle_ but with mutex protection. " alt="" coords="225,5,356,32"/>
+<area shape="rect" id="node3" href="$classFrameFifo.html#a5cd4bd7b55780c158d7ee8beeb99cfc2" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="404,5,543,32"/>
+<area shape="rect" id="node4" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Reset the internal data. " alt="" coords="591,5,687,32"/>
 </map>

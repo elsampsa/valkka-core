@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">1.0.3</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -82,18 +82,19 @@ Inheritance diagram for Thread:</div>
 <div class="center"><img src="classThread__inherit__graph.png" border="0" usemap="#Thread_inherit__map" alt="Inheritance graph"/></div>
 <map name="Thread_inherit__map" id="Thread_inherit__map">
 <area shape="rect" id="node2" href="classAbstractFileThread.html" title="This class uses AbstractFileStream(s) " alt="" coords="131,5,263,32"/>
-<area shape="rect" id="node4" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. " alt="" coords="157,56,237,83"/>
-<area shape="rect" id="node5" href="classFDWriteThread.html" title="File Descriptor Writer Thread. " alt="" coords="141,107,252,133"/>
-<area shape="rect" id="node6" href="classFileThread.html" title="This class in analogous to LiveThread, but it handles files instead of live streams. " alt="" coords="155,157,238,184"/>
-<area shape="rect" id="node7" href="classLiveThread.html" title="Live555, running in a separate thread. " alt="" coords="153,208,240,235"/>
-<area shape="rect" id="node8" href="classOpenGLThread.html" title="This class does a lot of things: " alt="" coords="141,259,252,285"/>
-<area shape="rect" id="node9" href="classTestConsumerThread.html" title="A demo thread for testing the producer/consumer module for fifos. " alt="" coords="123,309,271,336"/>
-<area shape="rect" id="node10" href="classTestProducerThread.html" title="A demo thread for testing the producer/consumer module for fifos. " alt="" coords="127,360,267,387"/>
-<area shape="rect" id="node11" href="classTestThread.html" title="TestThread" alt="" coords="153,411,241,437"/>
-<area shape="rect" id="node12" href="classUSBDeviceThread.html" title="USBDeviceThread" alt="" coords="131,461,262,488"/>
-<area shape="rect" id="node13" href="classValkkaFSReaderThread.html" title="ValkkaFS reader thread. " alt="" coords="116,512,277,539"/>
-<area shape="rect" id="node14" href="classValkkaFSWriterThread.html" title="Writes frames to ValkkaFS. " alt="" coords="119,563,274,589"/>
+<area shape="rect" id="node4" href="classDecoderThread.html" title="DecoderThread" alt="" coords="141,56,252,83"/>
+<area shape="rect" id="node6" href="classFDWriteThread.html" title="File Descriptor Writer Thread. " alt="" coords="141,107,252,133"/>
+<area shape="rect" id="node7" href="classFileThread.html" title="This class in analogous to LiveThread, but it handles files instead of live streams. " alt="" coords="155,157,238,184"/>
+<area shape="rect" id="node8" href="classLiveThread.html" title="Live555, running in a separate thread. " alt="" coords="153,208,240,235"/>
+<area shape="rect" id="node9" href="classOpenGLThread.html" title="This class does a lot of things: " alt="" coords="141,259,252,285"/>
+<area shape="rect" id="node10" href="classTestConsumerThread.html" title="A demo thread for testing the producer/consumer module for fifos. " alt="" coords="123,309,271,336"/>
+<area shape="rect" id="node11" href="classTestProducerThread.html" title="A demo thread for testing the producer/consumer module for fifos. " alt="" coords="127,360,267,387"/>
+<area shape="rect" id="node12" href="classTestThread.html" title="TestThread" alt="" coords="153,411,241,437"/>
+<area shape="rect" id="node13" href="classUSBDeviceThread.html" title="USBDeviceThread" alt="" coords="131,461,262,488"/>
+<area shape="rect" id="node14" href="classValkkaFSReaderThread.html" title="ValkkaFS reader thread. " alt="" coords="116,512,277,539"/>
+<area shape="rect" id="node15" href="classValkkaFSWriterThread.html" title="Writes frames to ValkkaFS. " alt="" coords="119,563,274,589"/>
 <area shape="rect" id="node3" href="classFileCacheThread.html" title="Thread that caches frames and streams them into output at play speed. " alt="" coords="325,5,447,32"/>
+<area shape="rect" id="node5" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders. " alt="" coords="346,56,426,83"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -346,7 +347,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <p>API method: stops the thread. </p>
 <p>Like <a class="el" href="classThread.html#a9cde638865dccf06b25f1c766f2610ec" title="API method: stops the thread. ">Thread::stopCall()</a> but does not block. Waiting for the thread to join is done in Thread::waitStoppedCall() </p>
 
-<p>Reimplemented in <a class="el" href="classLiveThread.html#af18285da99a99803709752d4de9e8187">LiveThread</a>, <a class="el" href="classOpenGLThread.html#a70bb2bc3a5eca8e123b2a503e53af4d6">OpenGLThread</a>, <a class="el" href="classFileCacheThread.html#a87b1ae24dc68d731948d658f8ee8bcb3">FileCacheThread</a>, <a class="el" href="classValkkaFSWriterThread.html#a45d73f3ca95bc37e10a39344643e5038">ValkkaFSWriterThread</a>, <a class="el" href="classFileThread.html#af78a7e11ac6e03e5abd18835b3dc4048">FileThread</a>, <a class="el" href="classUSBDeviceThread.html#a7ede0ee530b56be4cd6c63618d80e3f5">USBDeviceThread</a>, <a class="el" href="classFDWriteThread.html#a0ab4e7c27bd45656eafd353c51e61075">FDWriteThread</a>, <a class="el" href="classAVThread.html#a30ecda2fa05ce41f8c67af215d67eec7">AVThread</a>, and <a class="el" href="classValkkaFSReaderThread.html#ad8e18f32f1e86803ee9056fad49163c7">ValkkaFSReaderThread</a>.</p>
+<p>Reimplemented in <a class="el" href="classLiveThread.html#af18285da99a99803709752d4de9e8187">LiveThread</a>, <a class="el" href="classOpenGLThread.html#a70bb2bc3a5eca8e123b2a503e53af4d6">OpenGLThread</a>, <a class="el" href="classFileCacheThread.html#a87b1ae24dc68d731948d658f8ee8bcb3">FileCacheThread</a>, <a class="el" href="classValkkaFSWriterThread.html#a45d73f3ca95bc37e10a39344643e5038">ValkkaFSWriterThread</a>, <a class="el" href="classFileThread.html#af78a7e11ac6e03e5abd18835b3dc4048">FileThread</a>, <a class="el" href="classUSBDeviceThread.html#a7ede0ee530b56be4cd6c63618d80e3f5">USBDeviceThread</a>, <a class="el" href="classFDWriteThread.html#a0ab4e7c27bd45656eafd353c51e61075">FDWriteThread</a>, <a class="el" href="classDecoderThread.html#a564d8e1d532a8cf3d32c13595ad9f0c3">DecoderThread</a>, and <a class="el" href="classValkkaFSReaderThread.html#ad8e18f32f1e86803ee9056fad49163c7">ValkkaFSReaderThread</a>.</p>
 
 </div>
 </div>
@@ -375,7 +376,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 <p>Main execution loop is defined here. </p>
 
-<p>Implemented in <a class="el" href="classLiveThread.html#aad109e088d530cbba1115d48fbe05adf">LiveThread</a>, <a class="el" href="classOpenGLThread.html#aea9d886d946b00b12ce01ef0719865f9">OpenGLThread</a>, <a class="el" href="classFileCacheThread.html#aca6046cd2514478da65a4c3dd9532179">FileCacheThread</a>, <a class="el" href="classValkkaFSWriterThread.html#a51102d612786159dbd2d55b0c00cc707">ValkkaFSWriterThread</a>, <a class="el" href="classFileThread.html#a32e46f3b4dd14222563596bf9f41a5c4">FileThread</a>, <a class="el" href="classTestConsumerThread.html#abf4fed7c1f952cbb33a13631089473c3">TestConsumerThread</a>, <a class="el" href="classUSBDeviceThread.html#a177bc09d28dbe5884fa7a567c3234413">USBDeviceThread</a>, <a class="el" href="classTestProducerThread.html#a8f800c7274990c13011ceba1dc828c3d">TestProducerThread</a>, <a class="el" href="classAbstractFileThread.html#a85da1aa77bbd79c25782a7f66d744cfa">AbstractFileThread</a>, <a class="el" href="classFDWriteThread.html#a9a7765c6789ea8a74073a8cac95dad4f">FDWriteThread</a>, <a class="el" href="classAVThread.html#a0a47c8903069531f52634886df841863">AVThread</a>, <a class="el" href="classValkkaFSReaderThread.html#a9391c37a451a490e4de20a6f176c9b8f">ValkkaFSReaderThread</a>, and <a class="el" href="classTestThread.html#aa8b97705464849de965b265ce216d45e">TestThread</a>.</p>
+<p>Implemented in <a class="el" href="classLiveThread.html#aad109e088d530cbba1115d48fbe05adf">LiveThread</a>, <a class="el" href="classOpenGLThread.html#aea9d886d946b00b12ce01ef0719865f9">OpenGLThread</a>, <a class="el" href="classFileCacheThread.html#aca6046cd2514478da65a4c3dd9532179">FileCacheThread</a>, <a class="el" href="classValkkaFSWriterThread.html#a51102d612786159dbd2d55b0c00cc707">ValkkaFSWriterThread</a>, <a class="el" href="classFileThread.html#a32e46f3b4dd14222563596bf9f41a5c4">FileThread</a>, <a class="el" href="classTestConsumerThread.html#abf4fed7c1f952cbb33a13631089473c3">TestConsumerThread</a>, <a class="el" href="classUSBDeviceThread.html#a177bc09d28dbe5884fa7a567c3234413">USBDeviceThread</a>, <a class="el" href="classTestProducerThread.html#a8f800c7274990c13011ceba1dc828c3d">TestProducerThread</a>, <a class="el" href="classAbstractFileThread.html#a85da1aa77bbd79c25782a7f66d744cfa">AbstractFileThread</a>, <a class="el" href="classFDWriteThread.html#a9a7765c6789ea8a74073a8cac95dad4f">FDWriteThread</a>, <a class="el" href="classDecoderThread.html#a43e58ed7966b9aca074c2edaf6d6bc01">DecoderThread</a>, <a class="el" href="classValkkaFSReaderThread.html#a9391c37a451a490e4de20a6f176c9b8f">ValkkaFSReaderThread</a>, and <a class="el" href="classTestThread.html#aa8b97705464849de965b265ce216d45e">TestThread</a>.</p>
 
 </div>
 </div>

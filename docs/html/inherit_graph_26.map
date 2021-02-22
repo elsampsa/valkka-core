@@ -1,3 +1,37 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$classFrameSink.html" title="Live555 handling of media frames. " alt="" coords="136,5,221,32"/>
+<area shape="rect" id="node1" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="5,816,93,843"/>
+<area shape="rect" id="node2" href="$classAlertFrameFilter.html" title="LiveThread sends a special frame if a camera is detected offline. " alt="" coords="183,5,298,32"/>
+<area shape="rect" id="node3" href="$classBlockingFifoFrameFilter.html" title="Passes frames to a multiprocessing fifo. " alt="" coords="161,56,321,83"/>
+<area shape="rect" id="node4" href="$classBriefInfoFrameFilter.html" title="Dump the beginning of Frame&#39;s payload into stdout in a one&#45;liner. " alt="" coords="172,107,309,133"/>
+<area shape="rect" id="node5" href="$classCacheFrameFilter.html" title="Passes frames to a FrameCache. " alt="" coords="177,157,304,184"/>
+<area shape="rect" id="node6" href="$classCachingGateFrameFilter.html" title="Caches SetupFrame s. " alt="" coords="159,208,323,235"/>
+<area shape="rect" id="node7" href="$classCountFrameFilter.html" title="Counts frames passed through this filter. " alt="" coords="179,259,302,285"/>
+<area shape="rect" id="node8" href="$classDummyFrameFilter.html" title="A &quot;hello world&quot; demo class: prints its own name if verbose is set to true. " alt="" coords="173,309,308,336"/>
+<area shape="rect" id="node9" href="$classDummyTimestampFrameFilter.html" title="Substitute timestamps with the time they arrive to the client. " alt="" coords="141,360,340,387"/>
+<area shape="rect" id="node10" href="$classDumpFrameFilter.html" title="Dumps each received packet to a file: use with care! For debugging purposes only. ..." alt="" coords="179,411,302,437"/>
+<area shape="rect" id="node11" href="$classFifoFrameFilter.html" title="Passes frames to a FrameFifo. " alt="" coords="185,461,296,488"/>
+<area shape="rect" id="node12" href="$classFileFrameFilter.html" title="Pipe stream into a matroska (mkv) file. " alt="" coords="186,512,295,539"/>
+<area shape="rect" id="node13" href="$classForkFrameFilter.html" title="Replicates frame flow to two filters Use this frame filter to create frame filter tree structures..." alt="" coords="183,563,298,589"/>
+<area shape="rect" id="node14" href="$classForkFrameFilter3.html" title="Replicates frame flow to three filters Use this frame filter to create frame filter tree structures..." alt="" coords="180,613,301,640"/>
+<area shape="rect" id="node15" href="$classForkFrameFilterN.html" title="Replicates frame flow to arbitrary number of outputs. " alt="" coords="179,664,303,691"/>
+<area shape="rect" id="node16" href="$classFragMP4ShmemFrameFilter.html" title="FragMP4ShmemFrameFilter" alt="" coords="147,715,334,741"/>
+<area shape="rect" id="node17" href="$classGateFrameFilter.html" title="When turned on, passes frames. " alt="" coords="183,765,299,792"/>
+<area shape="rect" id="node18" href="$classInfoFrameFilter.html" title="Dump the beginning of Frame&#39;s payload into stdout. " alt="" coords="185,816,296,843"/>
+<area shape="rect" id="node19" href="$classInitStreamFrameFilter.html" title="Add state information to stream. " alt="" coords="167,867,315,893"/>
+<area shape="rect" id="node20" href="$classMovementFrameFilter.html" title="MovementFrameFilter" alt="" coords="166,917,315,944"/>
+<area shape="rect" id="node21" href="$classMuxFrameFilter.html" title="MuxFrameFilter" alt="" coords="184,968,297,995"/>
+<area shape="rect" id="node23" href="$classPassSlotFrameFilter.html" title="Passes through frames with a certain slot number only. " alt="" coords="170,1019,311,1045"/>
+<area shape="rect" id="node24" href="$classRepeatH264ParsFrameFilter.html" title="For H264, some cameras don&#39;t send sps and pps packets again before every keyframe. " alt="" coords="147,1069,335,1096"/>
+<area shape="rect" id="node25" href="$classRGBShmemFrameFilter.html" title="Like ShmemFrameFilter. " alt="" coords="159,1120,322,1147"/>
+<area shape="rect" id="node26" href="$classSetSlotFrameFilter.html" title="Changes the slot number of the Frame. " alt="" coords="175,1171,306,1197"/>
+<area shape="rect" id="node27" href="$classShmemFrameFilter.html" title="This FrameFilter writes frames into a SharedMemRingBuffer. " alt="" coords="174,1221,307,1248"/>
+<area shape="rect" id="node28" href="$classSlotFrameFilter.html" title="Sets the frame slot value. " alt="" coords="185,1272,296,1299"/>
+<area shape="rect" id="node29" href="$classSwitchFrameFilter.html" title="Passes frame to one of the two terminals. " alt="" coords="177,1323,305,1349"/>
+<area shape="rect" id="node30" href="$classSwScaleFrameFilter.html" title="Interpolate from YUV bitmap to RGB. " alt="" coords="171,1373,311,1400"/>
+<area shape="rect" id="node31" href="$classThreadSafeFrameFilter.html" title="FrameFilter s that are fed from various different threads, should be protected with this..." alt="" coords="163,1424,318,1451"/>
+<area shape="rect" id="node32" href="$classTimeIntervalFrameFilter.html" title="Pass frames, but not all of them &#45; only on regular intervals. " alt="" coords="161,1475,321,1501"/>
+<area shape="rect" id="node33" href="$classTimestampFrameFilter.html" title="Corrects erroneous timestamps (while preserving timestamp distances). " alt="" coords="164,1525,317,1552"/>
+<area shape="rect" id="node34" href="$classTimestampFrameFilter2.html" title="Corrects erroneous timestamps (while preserving timestamp distances). " alt="" coords="161,1576,321,1603"/>
+<area shape="rect" id="node35" href="$classTypeFrameFilter.html" title="Passes through frames of certain type only. " alt="" coords="182,1627,299,1653"/>
+<area shape="rect" id="node22" href="$classFragMP4MuxFrameFilter.html" title="FragMP4MuxFrameFilter" alt="" coords="388,968,555,995"/>
 </map>

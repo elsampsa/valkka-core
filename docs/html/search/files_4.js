@@ -9,6 +9,8 @@ var searchData=
   ['framefifo_2eh',['framefifo.h',['../framefifo_8h.html',1,'']]],
   ['framefilter_2ecpp',['framefilter.cpp',['../framefilter_8cpp.html',1,'']]],
   ['framefilter_2eh',['framefilter.h',['../framefilter_8h.html',1,'']]],
+  ['framefilter2_2ecpp',['framefilter2.cpp',['../framefilter2_8cpp.html',1,'']]],
+  ['framefilter2_2eh',['framefilter2.h',['../framefilter2_8h.html',1,'']]],
   ['framefilterset_2ecpp',['framefilterset.cpp',['../framefilterset_8cpp.html',1,'']]],
   ['framefilterset_2eh',['framefilterset.h',['../framefilterset_8h.html',1,'']]]
 ];

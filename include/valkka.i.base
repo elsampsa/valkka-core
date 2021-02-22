@@ -30,6 +30,7 @@
 #include "muxshmem.h"
 #include "muxer.h"
 #include "framefilter2.h"
+#include "decoderthread.h"
 
 #include <Python.h>
 

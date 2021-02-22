@@ -28,7 +28,7 @@
  *  @file    muxer.h
  *  @author  Sampsa Riikonen
  *  @date    2019
- *  @version 1.1.0 
+ *  @version 1.2.0 
  *  
  *  @brief   FFmpeg muxers, implemented as Valkka framefilters
  * 

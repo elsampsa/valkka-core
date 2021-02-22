@@ -1,17 +1,19 @@
 <map id="/home/sampsa/C/valkka/include/avthread.h" name="/home/sampsa/C/valkka/include/avthread.h">
-<area shape="rect" id="node2" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1156,393,1239,420"/>
-<area shape="rect" id="node36" href="$frame_8h.html" title="Frame classes. " alt="" coords="1376,244,1443,271"/>
-<area shape="rect" id="node41" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1567,319,1628,345"/>
-<area shape="rect" id="node45" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1645,95,1715,121"/>
-<area shape="rect" id="node48" href="$decoder_8h.html" title="FFmpeg decoders. " alt="" coords="1366,95,1445,121"/>
-<area shape="rect" id="node50" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1469,95,1560,121"/>
-<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1415,468,1497,495"/>
-<area shape="rect" id="node37" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1235,319,1303,345"/>
-<area shape="rect" id="node38" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="962,319,1065,345"/>
-<area shape="rect" id="node39" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1327,319,1395,345"/>
-<area shape="rect" id="node40" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="1089,319,1159,345"/>
-<area shape="rect" id="node43" href="$macro_8h.html" title="macro.h" alt="" coords="1652,319,1721,345"/>
-<area shape="rect" id="node44" href="$rawrite_8h.html" title="Write directly to files and devices with POSIX O_DIRECT. " alt="" coords="1420,319,1492,345"/>
-<area shape="rect" id="node42" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2501,468,2576,495"/>
-<area shape="rect" id="node47" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1638,169,1722,196"/>
+<area shape="rect" id="node2" href="$decoderthread_8h.html" title="decoderthread.h" alt="" coords="1537,95,1651,121"/>
+<area shape="rect" id="node3" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1195,468,1278,495"/>
+<area shape="rect" id="node32" href="$frame_8h.html" title="Frame classes. " alt="" coords="1431,319,1498,345"/>
+<area shape="rect" id="node38" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="1943,393,2005,420"/>
+<area shape="rect" id="node45" href="$thread_8h.html" title="Base class for multithreading. " alt="" coords="1718,169,1787,196"/>
+<area shape="rect" id="node48" href="$decoder_8h.html" title="FFmpeg decoders. " alt="" coords="1500,169,1579,196"/>
+<area shape="rect" id="node50" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="1603,169,1694,196"/>
+<area shape="rect" id="node4" href="$common_8h.html" title="List of common header files. " alt="" coords="1195,543,1278,569"/>
+<area shape="rect" id="node33" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1431,393,1499,420"/>
+<area shape="rect" id="node34" href="$metadata_8h.html" title="libValkka pre&#45;reserves all frames, both byte payload and metadata payload. After memory reservation..." alt="" coords="1193,393,1280,420"/>
+<area shape="rect" id="node35" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1304,393,1407,420"/>
+<area shape="rect" id="node36" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1523,393,1591,420"/>
+<area shape="rect" id="node37" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="1047,393,1117,420"/>
+<area shape="rect" id="node43" href="$macro_8h.html" title="macro.h" alt="" coords="1711,393,1781,420"/>
+<area shape="rect" id="node44" href="$rawrite_8h.html" title="Write directly to files and devices with POSIX O_DIRECT. " alt="" coords="1615,393,1687,420"/>
+<area shape="rect" id="node39" href="$logging_8h.html" title="Logging utilities. " alt="" coords="2253,543,2327,569"/>
+<area shape="rect" id="node47" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1704,244,1788,271"/>
 </map>

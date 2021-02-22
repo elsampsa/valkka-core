@@ -9,7 +9,7 @@ echo
 
 headers="frame.h thread.h framefifo.h framefilter.h \
 threadsignal.h livethread.h avfilethread.h fileframefilter.h \
-avthread.h openglthread.h openglframefifo.h sharedmem.h logging.h \
+decoderthread.h avthread.h openglthread.h openglframefifo.h sharedmem.h logging.h \
 constant.h avdep.h testthread.h framefilterset.h filestream.h cachestream.h \
 valkkafs.h usbthread.h valkkafsreader.h movement.h fdwritethread.h metadata.h \
 muxer.h muxshmem.h framefilter2.h"

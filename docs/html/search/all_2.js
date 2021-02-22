@@ -14,6 +14,7 @@ var searchData=
   ['checkbuffersize',['checkBufferSize',['../classFrameSink.html#ab1d5c7e50bcdd2463f2e384c300d578f',1,'FrameSink']]],
   ['checkifdead',['checkIfDead',['../classSlotContext.html#ac8cf39535fc3599cd626c09823c2aa69',1,'SlotContext']]],
   ['child_5fid',['child_id',['../classRenderGroup.html#a6eb2340dba794074fdd91bfb912241a7',1,'RenderGroup']]],
+  ['choosevideodecoder',['chooseVideoDecoder',['../classDecoderThread.html#ab32b0b4ee266afd1abf60ef28da6a31a',1,'DecoderThread']]],
   ['clear',['clear',['../classFrameCache.html#a3cbe0661a2ce14ffedece5c9573b3b05',1,'FrameCache::clear()'],['../classFileCacheThread.html#a14aafb395b9edcf6c69774983010ba0e',1,'FileCacheThread::clear()']]],
   ['clear_5fobjects',['clear_objects',['../group__openglthread__tag.html#ggaa7275dda16349b828b8c7e9672e3a2aca81264942ef06e341a1e964611326f910',1,'threadsignal.h']]],
   ['cleardevice',['clearDevice',['../classValkkaFS.html#ae2a6d075cb0eaba832a7b2c681865535',1,'ValkkaFS']]],
@@ -66,7 +67,6 @@ var searchData=
   ['createwindow',['createWindow',['../classOpenGLThread.html#ac98e61740bebef33797dc05f5f7a82fe',1,'OpenGLThread']]],
   ['ctx',['ctx',['../classFileStream.html#a6b7d4aa732ab99459d323e8d248df6b9',1,'FileStream::ctx()'],['../classFrameCache.html#af136970bbb4be30f22ff9e939df3f920',1,'FrameCache::ctx()'],['../classFDWrite.html#ad3430aab5c7d7ce0eb661079d646a795',1,'FDWrite::ctx()'],['../classFrameFifo.html#ab6d88bd74b419961219af1a25931664f',1,'FrameFifo::ctx()'],['../classConnection.html#a5c17423073e0eae31f3f6d6d9eba8a93',1,'Connection::ctx()'],['../classOutbound.html#a34295a795ac5b6e23f4a7ef165564821',1,'Outbound::ctx()']]],
   ['current_5frow',['current_row',['../classValkkaFS.html#a37e3234bc1c5df3cc1e83bf74d0643c2',1,'ValkkaFS']]],
-  ['custom_5fsignal_5fctx',['custom_signal_ctx',['../classSignalFrame.html#a2ffd2ab7e6335c4572d5caf30037cc03',1,'SignalFrame']]],
   ['code_20walkthrough_3a_20rendering',['Code walkthrough: rendering',['../pipeline.html',1,'']]],
   ['code_20walkthrough_3a_20opengl',['Code walkthrough: OpenGL',['../pipeline2.html',1,'']]]
 ];

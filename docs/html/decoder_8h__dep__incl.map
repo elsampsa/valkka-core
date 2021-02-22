@@ -1,4 +1,6 @@
 <map id="/home/sampsa/C/valkka/include/decoder.h" name="/home/sampsa/C/valkka/include/decoder.h">
-<area shape="rect" id="node2" href="$avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="5,95,169,136"/>
-<area shape="rect" id="node3" href="$avthread_8cpp.html" title="FFmpeg decoding thread. " alt="" coords="5,184,169,225"/>
+<area shape="rect" id="node2" href="$decoderthread_8h.html" title="/home/sampsa/C/valkka\l/include/decoderthread.h" alt="" coords="99,95,263,136"/>
+<area shape="rect" id="node3" href="$avthread_8h.html" title="FFmpeg decoding thread. " alt="" coords="5,184,169,225"/>
+<area shape="rect" id="node5" href="$decoderthread_8cpp.html" title="/home/sampsa/C/valkka\l/src/decoderthread.cpp" alt="" coords="193,184,357,225"/>
+<area shape="rect" id="node4" href="$avthread_8cpp.html" title="FFmpeg decoding thread. " alt="" coords="5,273,169,315"/>
 </map>

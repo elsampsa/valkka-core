@@ -2,10 +2,11 @@
 <area shape="rect" id="node2" href="$classAVMediaFrame.html" title="Decoded Frame in FFmpeg format. " alt="" coords="9,80,121,107"/>
 <area shape="rect" id="node5" href="$classBasicFrame.html" title="Custom payload Frame. " alt="" coords="145,80,237,107"/>
 <area shape="rect" id="node6" href="$classMarkerFrame.html" title="MarkerFrame" alt="" coords="262,80,361,107"/>
-<area shape="rect" id="node7" href="$classRGBFrame.html" title="Our own RGB24 structure. " alt="" coords="385,80,473,107"/>
-<area shape="rect" id="node8" href="$classSetupFrame.html" title="Setup frame. " alt="" coords="497,80,590,107"/>
-<area shape="rect" id="node9" href="$classSignalFrame.html" title="A frame signaling internal thread commands, states of recorded video, etc. " alt="" coords="615,80,709,107"/>
-<area shape="rect" id="node10" href="$classYUVFrame.html" title="A GPU YUV frame. " alt="" coords="733,80,820,107"/>
+<area shape="rect" id="node7" href="$classMuxFrame.html" title="A muxed packet (in some container format) " alt="" coords="385,80,469,107"/>
+<area shape="rect" id="node8" href="$classRGBFrame.html" title="Our own RGB24 structure. " alt="" coords="494,80,582,107"/>
+<area shape="rect" id="node9" href="$classSetupFrame.html" title="Setup frame. " alt="" coords="606,80,699,107"/>
+<area shape="rect" id="node10" href="$classSignalFrame.html" title="A frame, signaling internal thread commands, states of recorded video, etc. " alt="" coords="724,80,819,107"/>
+<area shape="rect" id="node11" href="$classYUVFrame.html" title="A GPU YUV frame. " alt="" coords="843,80,929,107"/>
 <area shape="rect" id="node3" href="$classAVBitmapFrame.html" title="Decoded YUV/RGB frame in FFMpeg format. " alt="" coords="5,155,124,181"/>
 <area shape="rect" id="node4" href="$classAVRGBFrame.html" title="Decoded YUV frame in a non&#45;planar format (thus &quot;NP&quot;) " alt="" coords="11,229,118,256"/>
 </map>

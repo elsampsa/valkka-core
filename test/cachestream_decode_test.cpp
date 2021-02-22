@@ -26,7 +26,7 @@
  *  @file    cachestream_decode_test.cpp
  *  @author  Petri Eranko
  *  @date    2018
- *  @version 1.1.0 
+ *  @version 1.2.0 
  *  
  *  @brief 
  *

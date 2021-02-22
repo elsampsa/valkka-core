@@ -69,12 +69,17 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Newest version is 1.0.3
+### Newest version is 1.2.0
+
+- AVThread subclassing etc. rewritten to allow separate hw decoding modules
+- Accelerated decoding as a separate extension module available [here](https://github.com/xiaoxoxin/valkka-nv)
+
+### Older versions
+
+1.0.3
 
 - Added method ``waitReady`` for libValkka threads: it should be called in the python API at garbage collection, so that active framefilters are not garbage collected while (Live)Thread is still writing into them
 - Fixed a small compatibility issue with the latest live555 version
-
-### Older versions
 
 1.0.2
 

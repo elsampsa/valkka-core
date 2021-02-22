@@ -5,6 +5,7 @@ var searchData=
   ['checkalive',['checkAlive',['../classLiveThread.html#a39ea8a235a429002345797a6ae900113',1,'LiveThread']]],
   ['checkbuffersize',['checkBufferSize',['../classFrameSink.html#ab1d5c7e50bcdd2463f2e384c300d578f',1,'FrameSink']]],
   ['checkifdead',['checkIfDead',['../classSlotContext.html#ac8cf39535fc3599cd626c09823c2aa69',1,'SlotContext']]],
+  ['choosevideodecoder',['chooseVideoDecoder',['../classDecoderThread.html#ab32b0b4ee266afd1abf60ef28da6a31a',1,'DecoderThread']]],
   ['clear',['clear',['../classFrameCache.html#a3cbe0661a2ce14ffedece5c9573b3b05',1,'FrameCache::clear()'],['../classFileCacheThread.html#a14aafb395b9edcf6c69774983010ba0e',1,'FileCacheThread::clear()']]],
   ['cleardevice',['clearDevice',['../classValkkaFS.html#ae2a6d075cb0eaba832a7b2c681865535',1,'ValkkaFS']]],
   ['cleareventfd',['clearEventFd',['../classSharedMemRingBufferBase.html#a005e6164902f93ec05ccaf7138b08d1b',1,'SharedMemRingBufferBase']]],

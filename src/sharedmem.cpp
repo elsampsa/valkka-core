@@ -26,7 +26,7 @@
  *  @file    sharedmem.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.1.0 
+ *  @version 1.2.0 
  *  
  *  @brief   Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  */ 
@@ -539,8 +539,8 @@ PyObject *SharedMemRingBufferBase::getBufferListPy() {
                 this->cache[i]
             )); // use cache instead
         //*/
-        // PyList_Append(plis, pa); // keep reference
-        PyList_SetItem(plis, i, pa); // transfer ownership
+        // PyList_Append(plis, pa); // keep reference of pa
+        PyList_SetItem(plis, i, pa); // transfer ownership of pa
         i++;
     }
     return plis;

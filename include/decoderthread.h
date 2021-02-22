@@ -28,7 +28,7 @@
  *  @file    decoderthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 1.2.0 
  *  
  *  @brief
  */ 

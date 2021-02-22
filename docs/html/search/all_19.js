@@ -6,6 +6,7 @@ var searchData=
   ['_7ebasicframe',['~BasicFrame',['../classBasicFrame.html#abe5c3cacf20bd01f9511b5bcd2585eb4',1,'BasicFrame']]],
   ['_7econnection',['~Connection',['../classConnection.html#a2e4352edf667bea83001569e9da8a24d',1,'Connection']]],
   ['_7edecoder',['~Decoder',['../classDecoder.html#a8b70f4475ae0852b138d63f6d8ddb298',1,'Decoder']]],
+  ['_7edecoderthread',['~DecoderThread',['../classDecoderThread.html#a58787bf40e5e048c2f61e7372e77049f',1,'DecoderThread']]],
   ['_7efdframefifo',['~FDFrameFifo',['../classFDFrameFifo.html#a310492bcf9b041ff5accbc41d915c8b5',1,'FDFrameFifo']]],
   ['_7efdwrite',['~FDWrite',['../classFDWrite.html#ad745060702e6a4fa7b014af80f7c937e',1,'FDWrite']]],
   ['_7efileframefilter',['~FileFrameFilter',['../classFileFrameFilter.html#abe2eea52de2bd61e1880ebbe58d26f28',1,'FileFrameFilter']]],
