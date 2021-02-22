@@ -1,0 +1,9 @@
+<map id="/home/sampsa/C/valkka/include/muxshmem.h" name="/home/sampsa/C/valkka/include/muxshmem.h">
+<area shape="rect" id="node2" href="$sharedmem_8h.html" title="Posix shared memory segment server/client management, shared memory ring buffer synchronized using po..." alt="" coords="3470,95,3571,121"/>
+<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1842,393,1925,420"/>
+<area shape="rect" id="node45" href="$framefilter_8h.html" title="Definition of FrameFilter and derived classes for various purposes. " alt="" coords="2018,169,2109,196"/>
+<area shape="rect" id="node46" href="$frame_8h.html" title="Frame classes. " alt="" coords="1971,319,2038,345"/>
+<area shape="rect" id="node49" href="$framefifo_8h.html" title="Thread safe system of fifo and a stack. " alt="" coords="1941,244,2025,271"/>
+<area shape="rect" id="node47" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1960,393,2028,420"/>
+<area shape="rect" id="node48" href="$metadata_8h.html" title="libValkka pre&#45;reserves all frames, both byte payload and metadata payload. After memory reservation..." alt="" coords="2052,393,2139,420"/>
+</map>
