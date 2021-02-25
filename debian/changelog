@@ -1,3 +1,15 @@
+valkka (1.2.0-0ubuntu1-focalppa1) focal; urgency=low
+
+  * compatible with decoder extension modules
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Mon, 22 Feb 2021 16:26:50 +0200
+
+valkka (1.2.0-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * compatible with decoder extension modules
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Mon, 22 Feb 2021 16:21:17 +0200
+
 valkka (1.0.3-0ubuntu1-focalppa1) focal; urgency=low
 
   * live555 compatibility fix, added waitReady method in libValkka threads
