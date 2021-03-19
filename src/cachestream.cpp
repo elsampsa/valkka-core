@@ -328,9 +328,11 @@ void FileCacheThread::setCallback(void func(long int)) {
 }
 
 void FileCacheThread::setPyCallback(PyObject* pobj) {
+    /* this is called from the main python process, not from a cpp thread, so no need
+    for this..!
     PyGILState_STATE gstate;
     gstate = PyGILState_Ensure();
-    
+    */
     // pass here, say "signal.emit" or a function/method that accepts single argument
     if (PyCallable_Check(pobj)) { // https://docs.python.org/3/c-api/type.html#c.PyTypeObject
         Py_INCREF(pobj);
@@ -341,12 +343,14 @@ void FileCacheThread::setPyCallback(PyObject* pobj) {
         pyfunc=NULL;
     }
     
-    PyGILState_Release(gstate);
+    // PyGILState_Release(gstate);
 }
 
 void FileCacheThread::setPyCallback2(PyObject* pobj) {
+    /*
     PyGILState_STATE gstate;
     gstate = PyGILState_Ensure();
+    */
     
     // pass here, say "signal.emit" or a function/method that accepts single argument
     if (PyCallable_Check(pobj)) { // https://docs.python.org/3/c-api/type.html#c.PyTypeObject
@@ -357,8 +361,7 @@ void FileCacheThread::setPyCallback2(PyObject* pobj) {
         valkkafslogger.log(LogLevel::fatal) << "FileCacheThread: setPyCallback2: needs python callable for emitting loaded frame time limits" << std::endl;
         pyfunc2=NULL;
     }
-    
-    PyGILState_Release(gstate);
+    // PyGILState_Release(gstate);
 }
 
 

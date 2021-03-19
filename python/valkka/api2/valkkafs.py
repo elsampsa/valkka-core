@@ -314,6 +314,11 @@ class ValkkaFS:
         # self.blocktable  = numpy.zeros((self.core.get_n_blocks(), self.core.get_n_cols()),dtype=numpy.int_) # copy of the cpp blocktable
         # self.getBlockTable()
         self.core.setBlockCallback(self.new_block_cb__) # callback when a new block is registered
+        """
+        see valkkafs.cpp: 
+            ValkkaFS::setBlockCallback
+            ValkkaFS::writeBlock
+        """
 
         print("ValkkaFS: resuming writing at block", self.current_block)
 
@@ -341,19 +346,20 @@ class ValkkaFS:
         )
 
 
-
-
     def new_block_cb__(self, propagate, par):
         """input tuple elements:
         
         boolean    : should the callback be propagated or not
         int / str  : int = block number, str = error message
         
+        Called as a callback from the cpp side, see:
+
+        ::
+
+            valkkafs.cpp: 
+                ValkkaFS::writeBlock
+
         """
-        
-        #propagate = tup[0]
-        #par = tup[1]
-        
         try:
             if (self.verbose):
                 print(self.pre, "new_block_cb__:", propagate, par)
@@ -373,8 +379,6 @@ class ValkkaFS:
                 
         except Exception as e:
             print("ValkkaFS: failed with '%s'" % (str(e)))
-            
-        
         
         
     def setBlockCallback(self, cb):
@@ -718,9 +722,6 @@ class ValkkaFSManager:
         
     
     """
-    
-    
-    
     timetolerance = 2000 # if frames are missing at this distance or further, request for more blocks
     timediff = 5 # blocktable can be inquired max this frequency (secs)
     
@@ -751,6 +752,24 @@ class ValkkaFSManager:
         self.current_timerange = (0,0) # time limits of current blocks
         
         # callback coming from cpp, informing about the current time
+
+        """See:
+
+        ::
+
+            cachestream.cpp
+                FileCacheThread
+                    setPyCallback 
+                        pyfunc, used by run
+                    setPyCallback2
+                        pyfunc2, used by switchCache
+
+            valkkafs.cpp
+                ValkkaFS
+                    setBlockCallback
+                        pyfunc, used by writeBlock
+
+        """
         self.cacherthread.setPyCallback(self.timeCallback__)
         self.cacherthread.setPyCallback2(self.timeLimitsCallback__)
         
@@ -771,10 +790,14 @@ class ValkkaFSManager:
         
         
     def setTimeCallback(self, timecallback: callable):
+        """Continue the callback chain, originating from FileCacheThread::run
+        """
         self.timecallback = timecallback
         
         
     def setTimeLimitsCallback(self, timelimitscallback: callable):
+        """Continue the callback chain, originating from FileCacheThread::switchcache
+        """
         self.timelimitscallback = timelimitscallback
         
         
@@ -783,7 +806,29 @@ class ValkkaFSManager:
         
         
     def timeCallback__(self, mstime: int):
-        # return # debug
+        """Called from cpp side, see:
+
+        ::
+
+            cachestream.cpp
+                FileCacheThread
+                    run
+                        calls pyfunc (this method)
+
+        Methods called in this method => back to cpp side
+
+        ::
+
+            self.stop
+                self.cacherthread.stopStreamCall
+            self.readBlockTableIf
+                self.readBlockTable
+                    self.valkkafs.*
+            self.reqBlocks
+                self.valkkafs.*
+                self.readerthread.pullBlocksPyCall
+
+        """
         try:
             """This is called from cpp on regular time intervals
             
@@ -797,9 +842,7 @@ class ValkkaFSManager:
             
             - using try / except blocks we can see the error message even when this is called from cpp
             """
-            
             # self.logger.debug("timeCallback__ : %i == %s", mstime, formatMstimestamp(mstime))
-            
             if mstime <= 0: # time not set
                 # self.logger.debug("timeCallback__ : no time set")
                 return
@@ -846,6 +889,17 @@ class ValkkaFSManager:
             
             
     def timeLimitsCallback__(self, tup):
+        """Called from cpp side, see:
+
+        ::
+
+            cachestream.cpp
+                FileCacheThread
+                    switchCache
+                        calls pyfunc2 (this method)
+
+        TODO: analyzer cpp-python-cpp callchain
+        """
         try:
             self.logger.debug("timeLimitsCallback__ : %s", str(tup))
             self.logger.debug("timeLimitsCallback__ : %s -> %s", formatMstimestamp(tup[0]), formatMstimestamp(tup[1]))
