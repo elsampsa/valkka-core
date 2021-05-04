@@ -48,6 +48,13 @@ https://softwareengineering.stackexchange.com/questions/328775/how-important-is-
 - decoder returns YUV frames that are aligned
 - ..during YUV => RGB interpolation (SwScaleFrameFilter, etc.), we get rid of the alignment (i.e. the extra padding bytes)
 - ..anyway, that must be done at some moment before passing the frames downstream (for analyzers, etc.)
+
+- how to use the alignment parameter?  there is a lot of folklore on this.
+  (should read the ffmpeg source code carefully)
+
+0  == choose automatically
+32 == reasonable padding value (although depends on the CPU)
+1  == ffmpeg itself uses this.  It seems to mean "no aligment"
  
 => KEEP ALIGNMENT = 1
 

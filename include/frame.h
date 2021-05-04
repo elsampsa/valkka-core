@@ -380,7 +380,7 @@ public: // redefined virtual
     virtual void copyPayloadFrom(AVBitmapFrame *frame);
     virtual void updateAux();                   ///< Uses AVBitmapFrame::av_frame width and height and AVBitmapFrame::av_pixel_format to calculate AVBitmapFrame::bmpars
     virtual void update();
-    virtual void reserve(int width, int height);
+    virtual void reserve(int width, int height); ///< Reserves space for underlying av_frame
 
 public:                            // helper objects
     AVPixelFormat av_pixel_format; ///< From AVCodecContext .. this class implies YUV420P so this is not really required ..

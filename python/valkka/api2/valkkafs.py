@@ -299,7 +299,12 @@ class ValkkaFS:
         
         if (self.dumpfile==None): # no dumpfile defined .. so it must be the partition uuid
             assert(isinstance(self.partition_uuid, str))
-            assert(self.partition_uuid in block_device_dic)
+
+            if self.partition_uuid in block_device_dic:
+                pass
+            else:
+                print("block devices", block_device_dic)
+                raise(AssertionError("could not find block device"))
             self.dumpfile = block_device_dic[self.partition_uuid.lower()][0]
         else:
             assert(isinstance(self.dumpfile, str))
@@ -341,8 +346,6 @@ class ValkkaFS:
         )
 
 
-
-
     def new_block_cb__(self, propagate, par):
         """input tuple elements:
         
@@ -350,10 +353,8 @@ class ValkkaFS:
         int / str  : int = block number, str = error message
         
         """
-        
         #propagate = tup[0]
         #par = tup[1]
-        
         try:
             if (self.verbose):
                 print(self.pre, "new_block_cb__:", propagate, par)
@@ -374,9 +375,7 @@ class ValkkaFS:
         except Exception as e:
             print("ValkkaFS: failed with '%s'" % (str(e)))
             
-        
-        
-        
+                
     def setBlockCallback(self, cb):
         self.block_cb = cb
         
@@ -718,9 +717,6 @@ class ValkkaFSManager:
         
     
     """
-    
-    
-    
     timetolerance = 2000 # if frames are missing at this distance or further, request for more blocks
     timediff = 5 # blocktable can be inquired max this frequency (secs)
     
@@ -764,8 +760,8 @@ class ValkkaFSManager:
             
         self.active = True
         self.playing = False
-        
-        
+
+
     def hasFrames(self):
         return len(self.timerange) > 0
         
@@ -919,7 +915,7 @@ class ValkkaFSManager:
         self.writerthread.unSetSlotIdCall(slot)
     
     
-    def getFrameFilter(self):
+    def getInputFrameFilter(self):
         """Push frames here
         """
         return self.writerthread.getFrameFilter()

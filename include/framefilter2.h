@@ -71,4 +71,27 @@ protected:
 
 };                                                                                      // <pyapi>
 
+
+/** Dumps AVBitmapFrame(s) into a files
+ * @ingroup filters_tag
+ * 
+ * You can convert the dumped yuv files into png images like this:
+ * 
+ * ffmpeg -pixel_format yuv420p -video_size 1920x1080 -i image_c10_s0_.yuv kokkelis.png
+ * 
+ */
+class DumpAVBitmapFrameFilter : public FrameFilter { // <pyapi>
+
+public:                                                          // <pyapi>
+    DumpAVBitmapFrameFilter(const char *name, FrameFilter *next = NULL); // <pyapi>
+
+protected:
+    int count;
+
+protected:
+    void go(Frame *frame);
+}; // <pyapi>
+
+
+
 #endif

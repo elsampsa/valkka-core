@@ -344,7 +344,7 @@ void ValkkaFS::setArrayCall(PyObject* pyobj) {
     PyGILState_STATE gstate;
     gstate = PyGILState_Ensure();
     */
-    // Py_INCREF(pyobj);
+    Py_INCREF(pyobj);
     
     PyArrayObject *pyarr = (PyArrayObject*)pyobj;
     // long int *data = (long int*)pyarr->data;
@@ -372,7 +372,7 @@ void ValkkaFS::setArrayCall(PyObject* pyobj) {
     data[3]=22;
     */
     
-    // Py_DECREF(pyobj);
+    Py_DECREF(pyobj);
     // PyGILState_Release(gstate);
 }
 

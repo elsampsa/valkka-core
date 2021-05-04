@@ -30,6 +30,8 @@ multiprocess.py : Multiprocessing with a pipe signal scheme
 @brief   Multiprocessing with a pipe signal scheme
 """
 
+raise(BaseException("use valkka.multiprocess.* instead"))
+
 from multiprocessing import Process, Pipe, Event
 import select
 import time

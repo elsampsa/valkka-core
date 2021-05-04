@@ -79,3 +79,4 @@ ext/live/testProgs/
 ext/live/hlsProxy/live555HLSProxy
 ext/live/mediaServer/live555MediaServer
 ext/live/proxyServer/live555ProxyServer
+test_py/testvalkkafs/
