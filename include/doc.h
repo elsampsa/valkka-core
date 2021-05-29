@@ -26,7 +26,7 @@
  *  @file    doc.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.1 
  *  
  *  @brief Extra doxygen documentation
  *
@@ -820,17 +820,18 @@
 
 \endverbatim
  *    
- * Request time (21, 29)
+ * Request time (21, 29) == (seek_time, end_time)
  *
  * ==>
  *
  * Lower limit: we need that all cameras have stamped a key frame with =< 21.  This way we can seek to t = 21.
+ * 
+ * { all keyframes <= seek_time, at least if max(all keyframes) <= seek_time }
  *
  * if any of the cameras has stamped > 21, needs earlier block 
  * 
  * --> start from block 10 (search: last block of all blocks that have k-max =< 21)
- * 
- * 
+ *  
  * Higher limit: all cameras have stamped >= 29 for any frame
  * 
  * if any of the cameras has stamped < 29, needs later block

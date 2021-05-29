@@ -28,7 +28,7 @@
  *  @file    framefilter.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.1 
  *  
  *  @brief   Definition of FrameFilter and derived classes for various purposes
  */

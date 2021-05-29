@@ -26,7 +26,7 @@
  *  @file    decoderthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2021
- *  @version 1.2.0 
+ *  @version 1.2.1 
  *  
  *  @brief 
  */ 

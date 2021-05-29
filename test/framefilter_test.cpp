@@ -26,7 +26,7 @@
  *  @file    framefilter_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 1.2.0 
+ *  @version 1.2.1 
  *  
  *  @brief   Testing some (more complex) FrameFilters
  *

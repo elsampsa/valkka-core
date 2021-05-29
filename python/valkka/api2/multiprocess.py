@@ -25,12 +25,13 @@ multiprocess.py : Multiprocessing with a pipe signal scheme
 @file    multiprocess.py
 @author  Sampsa Riikonen
 @date    2017
-@version 1.2.0 
+@version 1.2.1 
 
 @brief   Multiprocessing with a pipe signal scheme
 """
 
-raise(BaseException("use valkka.multiprocess.* instead"))
+# raise(BaseException("use valkka.multiprocess.* instead"))
+print("\nWARNING: 'valkka.api2.multiprocess' DEPRECATED.  Use 'valkka.multiprocess' instead\n")
 
 from multiprocessing import Process, Pipe, Event
 import select

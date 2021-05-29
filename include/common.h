@@ -29,7 +29,7 @@
  *  @file    common.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.1 
  *  
  *  @brief List of common header files
  *

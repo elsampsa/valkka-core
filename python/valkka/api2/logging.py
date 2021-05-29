@@ -25,7 +25,7 @@ logging.py : Interface to cpp-level logging
 @file    logging.py
 @author  Sampsa Riikonen
 @date    2017
-@version 1.2.0 
+@version 1.2.1 
   
 @brief Interface to cpp-level logging
 """

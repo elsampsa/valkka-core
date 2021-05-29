@@ -28,7 +28,7 @@
  *  @file    openglobject.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.1 
  *  
  *  @brief   OpenGL objects, i.e. stuff that can be drawn on the OpenGL canvas on top the textures (boxes, etc.)
  */ 
