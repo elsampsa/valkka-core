@@ -1,3 +1,4 @@
 <map id="TimeIntervalFrameFilter" name="TimeIntervalFrameFilter">
-<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="41,5,129,32"/>
+<area shape="rect" id="node1" title="Pass frames, but not all of them &#45; only on regular intervals." alt="" coords="5,80,165,107"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="41,5,129,32"/>
 </map>

@@ -1,3 +1,4 @@
 <map id="Thread::waitStopCall" name="Thread::waitStopCall">
-<area shape="rect" id="node2" href="$classThread.html#a4428ec86c8bc7da14b558f25fb723ce0" title="Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set Thread::has_thread to false. " alt="" coords="197,5,339,32"/>
+<area shape="rect" id="node1" title="API method: waits until the thread is joined." alt="" coords="5,5,149,32"/>
+<area shape="rect" id="node2" href="$classThread.html#a4428ec86c8bc7da14b558f25fb723ce0" title="Sends exit signal to the thread, calls join. This method blocks until thread has exited...." alt="" coords="197,5,339,32"/>
 </map>

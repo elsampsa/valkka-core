@@ -1,10 +1,11 @@
 <map id="VideoDecoder" name="VideoDecoder">
-<area shape="rect" id="node2" href="$classAVDecoder.html" title="Decoder using FFmpeg/libav. " alt="" coords="25,260,115,287"/>
-<area shape="rect" id="node3" href="$classDecoder.html" title="A Virtual class for decoders. " alt="" coords="16,184,87,211"/>
-<area shape="rect" id="node4" href="$classBasicFrame.html" title="Custom payload Frame. " alt="" coords="5,95,97,121"/>
-<area shape="rect" id="node5" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="127,5,186,32"/>
-<area shape="rect" id="node8" href="$classAVMediaFrame.html" title="Decoded Frame in FFmpeg format. " alt="" coords="237,95,349,121"/>
-<area shape="rect" id="node6" href="$structH264Pars.html" title="H264Pars" alt="" coords="11,5,91,32"/>
-<area shape="rect" id="node7" href="$classAVBitmapFrame.html" title="Decoded YUV/RGB frame in FFMpeg format. " alt="" coords="111,184,229,211"/>
-<area shape="rect" id="node9" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. " alt="" coords="122,95,213,121"/>
+<area shape="rect" id="node1" title="Video decoder using FFmpeg/libav." alt="" coords="66,336,170,363"/>
+<area shape="rect" id="node2" href="$classAVDecoder.html" title="Decoder using FFmpeg/libav." alt="" coords="27,260,113,287"/>
+<area shape="rect" id="node3" href="$classDecoder.html" title="A Virtual class for decoders." alt="" coords="16,184,87,211"/>
+<area shape="rect" id="node4" href="$classBasicFrame.html" title="Custom payload Frame." alt="" coords="5,95,97,121"/>
+<area shape="rect" id="node5" href="$classFrame.html" title="Frame: An abstract queueable class." alt="" coords="127,5,186,32"/>
+<area shape="rect" id="node8" href="$classAVMediaFrame.html" title="Decoded Frame in FFmpeg format." alt="" coords="237,95,348,121"/>
+<area shape="rect" id="node6" href="$structH264Pars.html" title=" " alt="" coords="11,5,91,32"/>
+<area shape="rect" id="node7" href="$classAVBitmapFrame.html" title="Decoded YUV/RGB frame in FFMpeg format." alt="" coords="111,184,227,211"/>
+<area shape="rect" id="node9" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes." alt="" coords="122,95,213,121"/>
 </map>

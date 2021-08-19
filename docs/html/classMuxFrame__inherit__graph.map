@@ -1,3 +1,4 @@
 <map id="MuxFrame" name="MuxFrame">
-<area shape="rect" id="node2" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="18,5,77,32"/>
+<area shape="rect" id="node1" title="A muxed packet (in some container format)" alt="" coords="5,80,89,107"/>
+<area shape="rect" id="node2" href="$classFrame.html" title="Frame: An abstract queueable class." alt="" coords="18,5,77,32"/>
 </map>

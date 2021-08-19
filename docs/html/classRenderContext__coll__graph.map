@@ -1,8 +1,9 @@
 <map id="RenderContext" name="RenderContext">
-<area shape="rect" id="node2" href="$classSlotContext.html" title="Each Frame carries information about it&#39;s slot number in Frame::slot. " alt="" coords="55,288,145,315"/>
-<area shape="rect" id="node3" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. " alt="" coords="5,5,96,32"/>
-<area shape="rect" id="node5" href="$classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids..." alt="" coords="67,95,115,121"/>
-<area shape="rect" id="node4" href="$classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.) " alt="" coords="62,184,138,211"/>
-<area shape="rect" id="node6" href="$classYUVShader.html" title="YUVShader" alt="" coords="163,184,253,211"/>
-<area shape="rect" id="node7" href="$classShader.html" title="A general purpose shader class. " alt="" coords="177,95,239,121"/>
+<area shape="rect" id="node1" title="Encapsulates data for rendering a single bitmap: vertex array object (VAO), vertex buffer object (VBO..." alt="" coords="50,377,161,404"/>
+<area shape="rect" id="node2" href="$classSlotContext.html" title="Each Frame carries information about it&#39;s slot number in Frame::slot." alt="" coords="60,288,151,315"/>
+<area shape="rect" id="node3" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes." alt="" coords="5,5,96,32"/>
+<area shape="rect" id="node5" href="$classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids,..." alt="" coords="71,95,119,121"/>
+<area shape="rect" id="node4" href="$classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes,..." alt="" coords="67,184,143,211"/>
+<area shape="rect" id="node6" href="$classYUVShader.html" title=" " alt="" coords="285,184,376,211"/>
+<area shape="rect" id="node7" href="$classShader.html" title="A general purpose shader class." alt="" coords="299,95,362,121"/>
 </map>

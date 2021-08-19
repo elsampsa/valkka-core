@@ -1,3 +1,4 @@
 <map id="RGB24SharedMemSegment" name="RGB24SharedMemSegment">
-<area shape="rect" id="node2" href="$classSharedMemSegment.html" title="Shared memory segment with metadata (the segment size) " alt="" coords="27,5,171,32"/>
+<area shape="rect" id="node1" title="A Shmem segment describing an RGB24 frame." alt="" coords="5,80,192,107"/>
+<area shape="rect" id="node2" href="$classSharedMemSegment.html" title="Handles a shared memory segment with metadata (the segment size)" alt="" coords="27,5,171,32"/>
 </map>

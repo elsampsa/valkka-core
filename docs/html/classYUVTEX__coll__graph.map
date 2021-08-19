@@ -1,4 +1,5 @@
 <map id="YUVTEX" name="YUVTEX">
-<area shape="rect" id="node2" href="$classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids..." alt="" coords="27,95,75,121"/>
-<area shape="rect" id="node3" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. " alt="" coords="5,5,96,32"/>
+<area shape="rect" id="node1" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes,..." alt="" coords="13,171,89,197"/>
+<area shape="rect" id="node2" href="$classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids,..." alt="" coords="27,95,75,121"/>
+<area shape="rect" id="node3" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes." alt="" coords="5,5,96,32"/>
 </map>

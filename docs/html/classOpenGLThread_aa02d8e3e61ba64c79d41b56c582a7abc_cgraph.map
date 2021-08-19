@@ -1,5 +1,5 @@
 <map id="OpenGLThread::clearObjectsCall" name="OpenGLThread::clearObjectsCall">
-<area shape="rect" id="node2" href="$classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next != NULL)..." alt="" coords="268,31,383,57"/>
-<area shape="rect" id="node3" href="$classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass. " alt="" coords="457,5,567,32"/>
-<area shape="rect" id="node4" href="$classFrameFilter.html#a2868cf4879dda1164da6e3ff9e6be761" title="Default constructor. " alt="" coords="431,56,593,83"/>
+<area shape="rect" id="node1" title="API call: clear all objects drawn on the texture." alt="" coords="5,5,220,32"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html#a7b814f8fd99764b61f49e3106124d8a6" title="Calls this&#45;&gt;go(Frame* frame) and then calls the this&#45;&gt;next&#45;&gt;run(Frame* frame) (if this&#45;&gt;next !..." alt="" coords="268,5,383,32"/>
+<area shape="rect" id="node3" href="$classFrameFilter.html#ad518d50e6fffaf6238dabff9fc54f6af" title="Does the actual filtering/modification to the Frame. Define in subclass." alt="" coords="431,5,541,32"/>
 </map>

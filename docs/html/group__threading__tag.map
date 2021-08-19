@@ -1,5 +1,6 @@
-<map id="multithreads" name="multithreads">
-<area shape="rect" id="node1" href="$group__decoding__tag.html" title="DecoderBase is the base class for various decoders. " alt="" coords="238,5,313,32"/>
-<area shape="rect" id="node2" href="$group__openglthread__tag.html" title="Things related to OpenGL. " alt="" coords="245,56,305,83"/>
-<area shape="rect" id="node3" href="$group__livethread__tag.html" title="The LiveThread class implements a &quot;producer&quot; thread (see multithreads) that feeds frames into a Frame..." alt="" coords="236,107,315,133"/>
+<map id="multithreading" name="multithreading">
+<area shape="rect" id="node1" href="$group__decoding__tag.html" title="DecoderBase is the base class for various decoders. AVThread is a Thread subclass that consumes frame..." alt="" coords="247,5,322,31"/>
+<area shape="rect" id="node2" href="$group__openglthread__tag.html" title="Things related to OpenGL." alt="" coords="255,55,315,80"/>
+<area shape="rect" id="node3" href="$group__livethread__tag.html" title="The LiveThread class implements a &quot;producer&quot; thread (see multithreading) that feeds frames into a Fra..." alt="" coords="245,104,324,129"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,55,108,80"/>
 </map>

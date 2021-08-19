@@ -1,3 +1,4 @@
 <map id="RTSPOutbound" name="RTSPOutbound">
-<area shape="rect" id="node2" href="$classOutbound.html" title="A base class that unifies all kinds of outgoing streams (i.e. " alt="" coords="23,5,102,32"/>
+<area shape="rect" id="node1" title="Sending a stream using the on&#45;demand rtsp server." alt="" coords="5,80,120,107"/>
+<area shape="rect" id="node2" href="$classOutbound.html" title="A base class that unifies all kinds of outgoing streams (i.e." alt="" coords="23,5,102,32"/>
 </map>

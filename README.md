@@ -67,11 +67,16 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Newest version is 1.2.1
+### Newest version is 1.2.2
 
-- valkka.multiprocess.base.AsyncBackMessageProcess.run fixed: a separate event loop is needed in the async multiprocess
+- Using ``glFinish`` in Intel graphics driver OpenGL completely clogged the frame presentation pipeline resulting in lots of dropped frames.  Removing ``glFinish`` fixed the issue.
+- Reorganized the Python Qt examples
 
 ### Older versions
+
+1.2.1
+
+- valkka.multiprocess.base.AsyncBackMessageProcess.run fixed: a separate event loop is needed in the async multiprocess
 
 1.2.0
 
@@ -156,7 +161,7 @@ If you have upgraded your python interpreter, you might need to define the versi
 
 ### Compile
 
-This just got a lot easier: the same CMake file is used to compile the library, generate python wrappings and to compile the wrappings (no more python setup scripts)
+The same CMake file is used to compile the library, generate python wrappings and to compile the wrappings (no more python setup scripts)
 
 Valkka uses numerical python (numpy) C API and needs the numpy C headers at the build process.  Be aware of the numpy version and header files being used in your setup.  You can check this with:
 
@@ -164,17 +169,15 @@ Valkka uses numerical python (numpy) C API and needs the numpy C headers at the 
     
 We recommend that you use a "globally" installed numpy (from the debian *python3-numpy* package) instead of a "locally" installed one (installed with pip3 install).  When using your compiled Valkka distribution, the numpy version you're loading at runtime must match the version that was used at the build time.
 
-Next, download live555 and ffmpeg
+First, download ffmpeg source code:
 
     cd ext
-    ./download_live.bash
     ./download_ffmpeg.bash
     cd ..
 
-Next, proceed in building live555, ffmpeg and valkka 
-    
-    make -f debian/rules clean
-    make -f debian/rules build
+Then, just
+
+    ./easy_build.bash
     
 Finally, create a debian package with
 

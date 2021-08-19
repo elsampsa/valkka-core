@@ -1,3 +1,4 @@
 <map id="TestConsumerThread" name="TestConsumerThread">
-<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="48,5,111,32"/>
+<area shape="rect" id="node1" title="A demo thread for testing the producer/consumer module for fifos." alt="" coords="5,80,152,107"/>
+<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system." alt="" coords="47,5,110,32"/>
 </map>

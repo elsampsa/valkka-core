@@ -1,17 +1,18 @@
 <map id="OpenGLThread" name="OpenGLThread">
-<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="5,199,68,225"/>
-<area shape="rect" id="node3" href="$classYUVFrame.html" title="A GPU YUV frame. " alt="" coords="73,109,160,136"/>
-<area shape="rect" id="node4" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="63,5,122,32"/>
-<area shape="rect" id="node5" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes. " alt="" coords="181,5,271,32"/>
-<area shape="rect" id="node15" href="$classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids..." alt="" coords="237,109,285,136"/>
-<area shape="rect" id="node6" href="$classRGBShader.html" title="RGBShader" alt="" coords="323,199,415,225"/>
-<area shape="rect" id="node7" href="$classShader.html" title="A general purpose shader class. " alt="" coords="361,109,424,136"/>
-<area shape="rect" id="node16" href="$classYUVShader.html" title="YUVShader" alt="" coords="439,199,530,225"/>
-<area shape="rect" id="node8" href="$classFifoFrameFilter.html" title="Passes frames to a multiprocessing fifo. " alt="" coords="555,199,665,225"/>
-<area shape="rect" id="node9" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="455,109,543,136"/>
-<area shape="rect" id="node10" href="$classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack. " alt="" coords="621,109,703,136"/>
-<area shape="rect" id="node12" href="$classOpenGLFrameFifo.html" title="A FrameFifo managed and used by OpenGLThread. " alt="" coords="689,199,819,225"/>
-<area shape="rect" id="node11" href="$structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo. " alt="" coords="599,5,725,32"/>
-<area shape="rect" id="node13" href="$structOpenGLFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for an OpenGLFrameFifo. " alt="" coords="727,109,901,136"/>
-<area shape="rect" id="node14" href="$classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.) " alt="" coords="223,199,299,225"/>
+<area shape="rect" id="node1" title="This class does a lot of things:" alt="" coords="431,288,541,315"/>
+<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system." alt="" coords="5,199,68,225"/>
+<area shape="rect" id="node3" href="$classYUVFrame.html" title="A GPU YUV frame." alt="" coords="73,109,160,136"/>
+<area shape="rect" id="node4" href="$classFrame.html" title="Frame: An abstract queueable class." alt="" coords="63,5,122,32"/>
+<area shape="rect" id="node5" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes." alt="" coords="181,5,271,32"/>
+<area shape="rect" id="node15" href="$classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids,..." alt="" coords="237,109,285,136"/>
+<area shape="rect" id="node6" href="$classRGBShader.html" title=" " alt="" coords="440,199,532,225"/>
+<area shape="rect" id="node7" href="$classShader.html" title="A general purpose shader class." alt="" coords="471,109,533,136"/>
+<area shape="rect" id="node16" href="$classYUVShader.html" title=" " alt="" coords="557,199,647,225"/>
+<area shape="rect" id="node8" href="$classFifoFrameFilter.html" title="Passes frames to a FrameFifo." alt="" coords="672,199,783,225"/>
+<area shape="rect" id="node9" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="578,109,666,136"/>
+<area shape="rect" id="node10" href="$classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack." alt="" coords="744,109,825,136"/>
+<area shape="rect" id="node12" href="$classOpenGLFrameFifo.html" title="A FrameFifo managed and used by OpenGLThread." alt="" coords="807,199,936,225"/>
+<area shape="rect" id="node11" href="$structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo." alt="" coords="721,5,848,32"/>
+<area shape="rect" id="node13" href="$structOpenGLFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for an OpenGLFrameFifo." alt="" coords="849,109,1024,136"/>
+<area shape="rect" id="node14" href="$classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes,..." alt="" coords="223,199,299,225"/>
 </map>

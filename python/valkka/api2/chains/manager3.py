@@ -25,7 +25,7 @@ manager3.py : Managed filterchain classes, this time the right way.  Resources a
 @file    manage3.py
 @author  Sampsa Riikonen
 @date    2018
-@version 1.2.1 
+@version 1.2.2 
 
 @brief   Managed filterchain classes, this time the right way.  Resources are managed hierarchically, decoding is turned off if its not required
 """

@@ -1,3 +1,4 @@
 <map id="BriefInfoFrameFilter" name="BriefInfoFrameFilter">
-<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="30,5,118,32"/>
+<area shape="rect" id="node1" title="Dump the beginning of Frame&#39;s payload into stdout in a one&#45;liner." alt="" coords="5,81,143,108"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="30,5,118,32"/>
 </map>

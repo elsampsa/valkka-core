@@ -1,6 +1,8 @@
 import traceback
 from multiprocessing import Event
 from valkka import core
+
+# TODO: this file will be available in the future at the valkka.multiprocess namespace
 """Create a group of Events (EventGroup) and a context manager (SyncIndex) to wait
 in the main python process for operation completion in the multiprocessing backend 
 (i.e. "on the other side" of the fork)
@@ -197,6 +199,9 @@ class EventFdGroup:
         Use at process backend to get corresponding EventFd (as in the frontend)
         """
         return self.events[i]
+
+    def asIndex(self, eventfd: core.EventFd):
+        return self.events.index(eventfd)
 
 
 def main1():

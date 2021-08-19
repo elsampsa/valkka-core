@@ -1,5 +1,6 @@
 <map id="CacheFrameFilter" name="CacheFrameFilter">
-<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="5,95,93,121"/>
-<area shape="rect" id="node3" href="$classFrameCache.html" title="FrameCache works like FrameFifo, but frames are not pre&#45;reserved. " alt="" coords="171,95,269,121"/>
-<area shape="rect" id="node4" href="$structFrameCacheContext.html" title="FrameCacheContext" alt="" coords="149,5,291,32"/>
+<area shape="rect" id="node1" title="Passes frames to a FrameCache." alt="" coords="70,184,197,211"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="5,95,93,121"/>
+<area shape="rect" id="node3" href="$classFrameCache.html" title="FrameCache works like FrameFifo, but frames are not pre&#45;reserved." alt="" coords="171,95,269,121"/>
+<area shape="rect" id="node4" href="$structFrameCacheContext.html" title=" " alt="" coords="149,5,291,32"/>
 </map>

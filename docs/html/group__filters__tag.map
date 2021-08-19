@@ -1,5 +1,6 @@
 <map id="available framefilters" name="available framefilters">
-<area shape="rect" id="node1" href="$group__shmem__tag.html" title="Posix shared memory and semaphores. " alt="" coords="364,13,429,40"/>
-<area shape="rect" id="node2" href="$group__queues__tag.html" title="Multiprocessing queues/fifos. " alt="" coords="337,73,456,100"/>
-<area shape="rect" id="node3" href="$group__file__tag.html" title="Things related to streaming from/into files. " alt="" coords="347,124,447,151"/>
+<area shape="rect" id="node1" href="$group__shmem__tag.html" title="Posix shared memory and semaphores. Using shared memory, multiprocesses, especially python processes,..." alt="" coords="364,17,429,42"/>
+<area shape="rect" id="node2" href="$group__queues__tag.html" title="Multiprocessing queues/fifos. The base class is FrameFifo. Special derived classes (LiveFifo,..." alt="" coords="337,91,456,117"/>
+<area shape="rect" id="node3" href="$group__file__tag.html" title="Things related to streaming from/into files." alt="" coords="347,141,447,166"/>
+<area shape="rect" id="node4" title="Things related to FrameFilters." alt="" coords="5,91,148,117"/>
 </map>

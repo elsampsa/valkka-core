@@ -1,3 +1,4 @@
 <map id="ForkFrameFilterN" name="ForkFrameFilterN">
-<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="23,5,111,32"/>
+<area shape="rect" id="node1" title="Replicates frame flow to arbitrary number of outputs." alt="" coords="5,81,129,108"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="23,5,111,32"/>
 </map>

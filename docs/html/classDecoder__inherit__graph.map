@@ -1,5 +1,6 @@
 <map id="Decoder" name="Decoder">
-<area shape="rect" id="node2" href="$classAVDecoder.html" title="Decoder using FFmpeg/libav. " alt="" coords="13,80,102,107"/>
-<area shape="rect" id="node4" href="$classDummyDecoder.html" title="A Dummy decoder. " alt="" coords="127,80,244,107"/>
-<area shape="rect" id="node3" href="$classVideoDecoder.html" title="Video decoder using FFmpeg/libav. " alt="" coords="5,155,109,181"/>
+<area shape="rect" id="node1" title="A Virtual class for decoders." alt="" coords="85,5,155,32"/>
+<area shape="rect" id="node2" href="$classAVDecoder.html" title="Decoder using FFmpeg/libav." alt="" coords="14,80,101,107"/>
+<area shape="rect" id="node4" href="$classDummyDecoder.html" title="A Dummy decoder." alt="" coords="125,80,243,107"/>
+<area shape="rect" id="node3" href="$classVideoDecoder.html" title="Video decoder using FFmpeg/libav." alt="" coords="5,155,109,181"/>
 </map>

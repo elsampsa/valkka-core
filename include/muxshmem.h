@@ -28,7 +28,7 @@
  *  @file    muxshmem.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.1 
+ *  @version 1.2.2 
  *  
  *  @brief
  */ 

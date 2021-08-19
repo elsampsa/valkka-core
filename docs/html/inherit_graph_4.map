@@ -1,6 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classDecoder.html" title="A Virtual class for decoders. " alt="" coords="5,31,76,57"/>
-<area shape="rect" id="node2" href="$classAVDecoder.html" title="Decoder using FFmpeg/libav. " alt="" coords="138,5,227,32"/>
-<area shape="rect" id="node4" href="$classDummyDecoder.html" title="A Dummy decoder. " alt="" coords="124,56,241,83"/>
-<area shape="rect" id="node3" href="$classVideoDecoder.html" title="Video decoder using FFmpeg/libav. " alt="" coords="289,5,393,32"/>
+<area shape="rect" id="node1" href="$classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP)." alt="" coords="5,31,93,57"/>
+<area shape="rect" id="node2" href="$classRTSPConnection.html" title="A negotiated RTSP connection." alt="" coords="141,5,265,32"/>
+<area shape="rect" id="node3" href="$classSDPConnection.html" title="Connection is is defined in an SDP file." alt="" coords="145,56,261,83"/>
 </map>

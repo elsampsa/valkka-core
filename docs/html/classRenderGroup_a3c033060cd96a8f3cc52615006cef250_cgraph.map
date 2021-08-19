@@ -1,4 +1,4 @@
 <map id="RenderGroup::addContext" name="RenderGroup::addContext">
-<area shape="rect" id="node2" href="$classRenderGroup.html#a0c0f7baf0581d27e5da078bc5a276bf0" title="Returns iterator at matched render context id. " alt="" coords="228,5,399,32"/>
-<area shape="rect" id="node3" href="$classRenderContext.html#ae3d7df65a8574085cbd3a8356d2d1bba" title="Returns the unique id of this render context. " alt="" coords="240,56,387,83"/>
+<area shape="rect" id="node1" title="Add RenderContext to RenderGroup::render_contexes (with checking)" alt="" coords="5,5,180,32"/>
+<area shape="rect" id="node2" href="$classRenderGroup.html#a0c0f7baf0581d27e5da078bc5a276bf0" title="Returns iterator at matched render context id." alt="" coords="228,5,399,32"/>
 </map>

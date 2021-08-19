@@ -1,3 +1,4 @@
 <map id="FileThread" name="FileThread">
-<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="15,5,78,32"/>
+<area shape="rect" id="node1" title="This class in analogous to LiveThread, but it handles files instead of live streams." alt="" coords="5,80,88,107"/>
+<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system." alt="" coords="15,5,78,32"/>
 </map>

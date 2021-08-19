@@ -1,8 +1,10 @@
 <map id="FrameSink" name="FrameSink">
-<area shape="rect" id="node3" href="$classStreamClientState.html" title="Class to hold per&#45;stream state that we maintain throughout each stream&#39;s lifetime. " alt="" coords="111,95,241,121"/>
-<area shape="rect" id="node4" href="$classSetupFrame.html" title="Setup frame for decoders. " alt="" coords="265,95,359,121"/>
-<area shape="rect" id="node5" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="301,5,360,32"/>
-<area shape="rect" id="node6" href="$classBasicFrame.html" title="Custom payload Frame. " alt="" coords="383,95,475,121"/>
-<area shape="rect" id="node7" href="$structH264Pars.html" title="H264Pars" alt="" coords="389,5,469,32"/>
-<area shape="rect" id="node8" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="500,95,588,121"/>
+<area shape="rect" id="node1" title="Live555 handling of media frames." alt="" coords="271,184,356,211"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,88,121"/>
+<area shape="rect" id="node3" href="$classStreamClientState.html" title="Class to hold per&#45;stream state that we maintain throughout each stream&#39;s lifetime." alt="" coords="113,95,242,121"/>
+<area shape="rect" id="node4" href="$classSetupFrame.html" title="Setup frame." alt="" coords="267,95,360,121"/>
+<area shape="rect" id="node5" href="$classFrame.html" title="Frame: An abstract queueable class." alt="" coords="303,5,361,32"/>
+<area shape="rect" id="node6" href="$classBasicFrame.html" title="Custom payload Frame." alt="" coords="385,95,477,121"/>
+<area shape="rect" id="node7" href="$structH264Pars.html" title=" " alt="" coords="391,5,471,32"/>
+<area shape="rect" id="node8" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="501,95,589,121"/>
 </map>

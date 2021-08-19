@@ -26,7 +26,7 @@
  *  @file    thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.1 
+ *  @version 1.2.2 
  *  
  *  @brief Testing the Thread class using Test*Thread classes.  Compile with "make tests" and run with valgrind
  *

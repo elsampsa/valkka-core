@@ -1,3 +1,4 @@
 <map id="RTSPConnection" name="RTSPConnection">
-<area shape="rect" id="node2" href="$classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP). " alt="" coords="23,5,111,32"/>
+<area shape="rect" id="node1" title="A negotiated RTSP connection." alt="" coords="5,80,129,107"/>
+<area shape="rect" id="node2" href="$classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP)." alt="" coords="23,5,111,32"/>
 </map>

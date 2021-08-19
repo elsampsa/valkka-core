@@ -1,6 +1,7 @@
 <map id="AVDecoder" name="AVDecoder">
-<area shape="rect" id="node2" href="$classDecoder.html" title="A Virtual class for decoders. " alt="" coords="46,184,117,211"/>
-<area shape="rect" id="node3" href="$classBasicFrame.html" title="Custom payload Frame. " alt="" coords="35,95,127,121"/>
-<area shape="rect" id="node4" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="5,5,64,32"/>
-<area shape="rect" id="node5" href="$structH264Pars.html" title="H264Pars" alt="" coords="88,5,168,32"/>
+<area shape="rect" id="node1" title="Decoder using FFmpeg/libav." alt="" coords="38,260,125,287"/>
+<area shape="rect" id="node2" href="$classDecoder.html" title="A Virtual class for decoders." alt="" coords="46,184,117,211"/>
+<area shape="rect" id="node3" href="$classBasicFrame.html" title="Custom payload Frame." alt="" coords="35,95,127,121"/>
+<area shape="rect" id="node4" href="$classFrame.html" title="Frame: An abstract queueable class." alt="" coords="5,5,64,32"/>
+<area shape="rect" id="node5" href="$structH264Pars.html" title=" " alt="" coords="88,5,168,32"/>
 </map>
