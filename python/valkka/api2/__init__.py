@@ -16,9 +16,10 @@ from valkka.api2.logging import *
 setValkkaLogLevel(loglevel_normal) # default for development # informs about frame drops
 # setValkkaLogLevel(loglevel_debug) # default for more serious development
 
-from valkka.api2.chains import BasicFilterchain, BasicFilterchain1, ShmemFilterchain, ShmemFilterchain1, ManagedFilterchain, ViewPort, ValkkaFSLiveFilterchain, ValkkaFSFileFilterchain
+# from valkka.api2.chains import BasicFilterchain, BasicFilterchain1, ShmemFilterchain, ShmemFilterchain1, ManagedFilterchain, ViewPort, ValkkaFSLiveFilterchain, ValkkaFSFileFilterchain
+# => DEPRECATED: doesn't make any sense to keep the filterchains "hidden" in the valkka deb package
 from valkka.api2.threads import LiveThread, USBDeviceThread, FileThread, OpenGLThread, Namespace
-from valkka.api2.multiprocess import ValkkaProcess, ValkkaShmemRGBProcess, safe_select # DEPRECATED! revised versions in valkka.multiprocess.*
+# from valkka.api2.multiprocess import ValkkaProcess, ValkkaShmemRGBProcess, safe_select # DEPRECATED: revised versions in valkka.multiprocess.*
 from valkka.api2.shmem import ShmemClient, ShmemRGBClient, ShmemServer, ShmemRGBServer, FragMP4ShmemClient
 from valkka.api2.valkkafs import ValkkaFS, findBlockDevices, ValkkaFSManager, formatMstimestamp
 from valkka.api2.exceptions import *

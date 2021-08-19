@@ -170,7 +170,7 @@ void getPBO(GLuint& index, GLsizei size, GLubyte*& payload) { // modify pointer 
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0); // unbind ** MANDATORY **
   
   glFinish();
-  glFlush();
+  // glFlush();
   memset(payload, 0, size); // warm up the gpu memory..
 }
 

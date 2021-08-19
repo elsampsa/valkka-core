@@ -1,3 +1,15 @@
+valkka (1.2.1-0ubuntu1-focalppa1) focal; urgency=low
+
+  * python part modified
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Sat, 29 May 2021 19:28:10 +0300
+
+valkka (1.2.1-0ubuntu1-bionicppa1) bionic; urgency=low
+
+  * python part modified
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Sat, 29 May 2021 19:26:14 +0300
+
 valkka (1.2.0-0ubuntu1-focalppa1) focal; urgency=low
 
   * compatible with decoder extension modules

@@ -31,7 +31,7 @@ multiprocess.py : Multiprocessing with a pipe signal scheme
 """
 
 # raise(BaseException("use valkka.multiprocess.* instead"))
-print("\nWARNING: 'valkka.api2.multiprocess' DEPRECATED.  Use 'valkka.multiprocess' instead\n")
+print("\nWARNING: 'valkka.api2.multiprocess' is DEPRECATED.  Use 'valkka.multiprocess' instead\n")
 
 from multiprocessing import Process, Pipe, Event
 import select
