@@ -1,7 +1,9 @@
 <map id="RTSPConnection" name="RTSPConnection">
-<area shape="rect" id="node2" href="$classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP). " alt="" coords="159,201,247,228"/>
+<area shape="rect" id="node1" title="A negotiated RTSP connection." alt="" coords="207,277,331,304"/>
+<area shape="rect" id="node2" href="$classConnection.html" title="A base class that unifies all kinds of connections (RTSP and SDP)." alt="" coords="159,201,247,228"/>
 <area shape="rect" id="node3" href="$structLiveConnectionContext.html" title="Identifies a stream and encapsulates information about the type of connection the user is requesting ..." alt="" coords="124,103,283,130"/>
-<area shape="rect" id="node4" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="153,5,241,32"/>
-<area shape="rect" id="node5" href="$classValkkaRTSPClient.html" title="Handles a live555 RTSP connection. " alt="" coords="307,103,439,130"/>
-<area shape="rect" id="node7" href="$classStreamClientState.html" title="Class to hold per&#45;stream state that we maintain throughout each stream&#39;s lifetime. " alt="" coords="443,5,572,32"/>
+<area shape="rect" id="node4" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="153,5,241,32"/>
+<area shape="rect" id="node5" href="$classValkkaRTSPClient.html" title="Handles a live555 RTSP connection." alt="" coords="307,103,438,130"/>
+<area shape="rect" id="node6" title=" " alt="" coords="327,5,419,32"/>
+<area shape="rect" id="node7" href="$classStreamClientState.html" title="Class to hold per&#45;stream state that we maintain throughout each stream&#39;s lifetime." alt="" coords="443,5,572,32"/>
 </map>

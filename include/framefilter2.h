@@ -28,7 +28,7 @@
  *  @file    framefilter2.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief  More framfilters
  */ 
@@ -70,5 +70,28 @@ protected:
     void go(Frame *frame);
 
 };                                                                                      // <pyapi>
+
+
+/** Dumps AVBitmapFrame(s) into a files
+ * @ingroup filters_tag
+ * 
+ * You can convert the dumped yuv files into png images like this:
+ * 
+ * ffmpeg -pixel_format yuv420p -video_size 1920x1080 -i image_c10_s0_.yuv kokkelis.png
+ * 
+ */
+class DumpAVBitmapFrameFilter : public FrameFilter { // <pyapi>
+
+public:                                                          // <pyapi>
+    DumpAVBitmapFrameFilter(const char *name, FrameFilter *next = NULL); // <pyapi>
+
+protected:
+    int count;
+
+protected:
+    void go(Frame *frame);
+}; // <pyapi>
+
+
 
 #endif

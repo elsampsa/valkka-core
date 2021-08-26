@@ -1,3 +1,4 @@
 <map id="DummyFrameFilter" name="DummyFrameFilter">
-<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="29,5,117,32"/>
+<area shape="rect" id="node1" title="A &quot;hello world&quot; demo class: prints its own name if verbose is set to true." alt="" coords="5,81,140,108"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="29,5,117,32"/>
 </map>

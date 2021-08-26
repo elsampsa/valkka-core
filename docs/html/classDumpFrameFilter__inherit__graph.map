@@ -1,3 +1,4 @@
 <map id="DumpFrameFilter" name="DumpFrameFilter">
-<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="23,5,111,32"/>
+<area shape="rect" id="node1" title="Dumps each received packet to a file: use with care! For debugging purposes only." alt="" coords="5,80,128,107"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="23,5,111,32"/>
 </map>

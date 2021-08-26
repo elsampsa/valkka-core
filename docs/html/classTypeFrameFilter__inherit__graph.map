@@ -1,3 +1,4 @@
 <map id="TypeFrameFilter" name="TypeFrameFilter">
-<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="20,5,108,32"/>
+<area shape="rect" id="node1" title="Passes through frames of certain type only." alt="" coords="5,80,121,107"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="19,5,107,32"/>
 </map>

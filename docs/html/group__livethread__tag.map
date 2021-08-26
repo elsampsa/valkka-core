@@ -1,4 +1,5 @@
 <map id="livethread" name="livethread">
-<area shape="rect" id="node1" href="$group__queues__tag.html" title="Multiprocessing queues/fifos. " alt="" coords="197,5,316,32"/>
-<area shape="rect" id="node3" href="$group__threading__tag.html" title="The Thread class is a prototype for implementing thread&#45;safe multithreading classes. " alt="" coords="210,56,303,83"/>
+<area shape="rect" id="node1" href="$group__queues__tag.html" title="Multiprocessing queues/fifos. The base class is FrameFifo. Special derived classes (LiveFifo,..." alt="" coords="197,5,316,31"/>
+<area shape="rect" id="node2" title="The LiveThread class implements a &quot;producer&quot; thread (see multithreading) that feeds frames into a Fra..." alt="" coords="5,31,84,56"/>
+<area shape="rect" id="node3" href="$group__threading__tag.html" title=" " alt="" coords="205,55,308,80"/>
 </map>

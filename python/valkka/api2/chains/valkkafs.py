@@ -25,7 +25,7 @@ valkkafs.py : Framefilter chains for simultaneous decoding, presenting and readi
 @file    valkkafs.py
 @author  Sampsa Riikonen
 @date    2017
-@version 1.2.0 
+@version 1.2.2 
 
 @brief Framefilter chains for simultaneous decoding, presenting and reading / writing frames to ValkkaFS
 """

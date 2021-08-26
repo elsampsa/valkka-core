@@ -1,3 +1,4 @@
 <map id="file streaming" name="file streaming">
-<area shape="rect" id="node2" href="$group__filters__tag.html" title="Things related to FrameFilters. " alt="" coords="241,7,384,33"/>
+<area shape="rect" id="node1" title="Things related to streaming from/into files." alt="" coords="5,7,105,33"/>
+<area shape="rect" id="node2" href="$group__filters__tag.html" title="Things related to FrameFilters." alt="" coords="241,7,384,33"/>
 </map>

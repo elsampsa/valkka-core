@@ -26,7 +26,7 @@
  *  @file    valkkafs.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief   A simple block file system for streaming media
  */ 
@@ -344,7 +344,7 @@ void ValkkaFS::setArrayCall(PyObject* pyobj) {
     PyGILState_STATE gstate;
     gstate = PyGILState_Ensure();
     */
-    // Py_INCREF(pyobj);
+    Py_INCREF(pyobj);
     
     PyArrayObject *pyarr = (PyArrayObject*)pyobj;
     // long int *data = (long int*)pyarr->data;
@@ -372,7 +372,7 @@ void ValkkaFS::setArrayCall(PyObject* pyobj) {
     data[3]=22;
     */
     
-    // Py_DECREF(pyobj);
+    Py_DECREF(pyobj);
     // PyGILState_Release(gstate);
 }
 

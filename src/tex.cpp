@@ -26,7 +26,7 @@
  *  @file    opengl.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines
  *
@@ -111,7 +111,7 @@ void YUVTEX::loadYUV(const GLubyte* Y, const GLubyte* U, const GLubyte* V) {
   glTexImage2D(GL_TEXTURE_2D, 0, format, bmpars.v_width, bmpars.v_height, 0, format, GL_UNSIGNED_BYTE, V);
   // glBindTexture(GL_TEXTURE_2D, 0); 
   
-  glFinish();
+  //glFinish();
 }
   
 
@@ -175,7 +175,7 @@ void YUVTEX::loadYUVFrame(YUVFrame *yuvframe) {
   glBindTexture(GL_TEXTURE_2D, 0); // unbind
   
   // glFlush();
-  glFinish(); // TODO: debugging
+  // glFinish(); // TODO: debugging // WARNING: this can kill the whole streaming pipeline performance (at least on intel)
 #endif
   
 #ifdef OPENGL_TIMING

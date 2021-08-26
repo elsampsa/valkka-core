@@ -1,3 +1,4 @@
 <map id="SwitchFrameFilter" name="SwitchFrameFilter">
-<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="25,5,113,32"/>
+<area shape="rect" id="node1" title="Passes frame to one of the two terminals." alt="" coords="5,109,133,136"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="25,5,113,32"/>
 </map>

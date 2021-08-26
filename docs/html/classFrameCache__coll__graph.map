@@ -1,3 +1,4 @@
 <map id="FrameCache" name="FrameCache">
-<area shape="rect" id="node2" href="$structFrameCacheContext.html" title="FrameCacheContext" alt="" coords="5,5,148,32"/>
+<area shape="rect" id="node1" title="FrameCache works like FrameFifo, but frames are not pre&#45;reserved." alt="" coords="28,95,125,121"/>
+<area shape="rect" id="node2" href="$structFrameCacheContext.html" title=" " alt="" coords="5,5,148,32"/>
 </map>

@@ -26,7 +26,7 @@
  *  @file    doc.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief Extra doxygen documentation
  *
@@ -820,17 +820,18 @@
 
 \endverbatim
  *    
- * Request time (21, 29)
+ * Request time (21, 29) == (seek_time, end_time)
  *
  * ==>
  *
  * Lower limit: we need that all cameras have stamped a key frame with =< 21.  This way we can seek to t = 21.
+ * 
+ * { all keyframes <= seek_time, at least if max(all keyframes) <= seek_time }
  *
  * if any of the cameras has stamped > 21, needs earlier block 
  * 
  * --> start from block 10 (search: last block of all blocks that have k-max =< 21)
- * 
- * 
+ *  
  * Higher limit: all cameras have stamped >= 29 for any frame
  * 
  * if any of the cameras has stamped < 29, needs later block
@@ -870,43 +871,78 @@ classname(init parameter) {
  * This is how it looks like.  Let's hope you'll get the big picture.  :)
  *
 \verbatim
+
+- cpp threads run & originate python callbacks
+- core.ValkkaFSWriterThread "drives" core.ValkkaFS which emits callbacks
+
 api2.ValkkaFSManager(api2.ValkkaFS) {
     
     1: api2.ValkkaFS {
         core.ValkkaFS
         
-        # functions called from the c++ side:
-        def new_block_cb__(propagate, par:
+        # c++ => python callbacks
+        def new_block_cb__(propagate, par):
+            - launched from cpp core.ValkkaFS.writeBlock (pycall) when a block is finished
             - propagate indicates if further callbacks should be evoked
             - par is an integer (block number) or an error string
+            - calls self.block_cb for callback propagation
+
+        # python => c++ calls
+        def getBlockTable():
+            - updates python side blocktable (numpy array)
+            - calls cpp-side core.ValkkaFS.setArrayCall(self.blocktable_)
+            - returns self.blocktable_
         }
             
     2: core.ValkkaFSReaderThread {
         core.ValkkaFS
-        - writes to core.FileCacherThread.getFrameFilter() [4]
+        - writes to framefilter that is got from core.FileCacherThread.getFrameFilter() [4]
         - frames are requested on per-block basis
+
+        # python => c++ calls
+        pullBlocksPyCall(block_list) => [signal to thread]
+            => pullBlocks
+                - Writes frames to its outgoing framefilter 
+                 (typically connected to FileCacherThread::getFrameFilter())
+                - results in launching core.FileCacherThread.switchCache => pyfunc2
+                  => timeLimitsCallback__
         }
+
     3: core.ValkkaFSWriterThread {
         core.ValkkaFS
         - input framefilter can be requested with getFrameFilter()
         }
+
     4: core.FileCacherThread {
+        - gets frames from core.ValkkaFSReaderThread via input framefilter
+        - caches frames
         - receives seek, play, stop, operations
-    
+        - send batches of frames downstream (to output filter)
         }   
     
-    # functions called from the c++ side:
-    
+    # c++ => python callbacks
     def timeCallback__(mstime: int):
-        - originates from core.FileCacherThread
+        - originates from core.FileCacherThread.run (pyfunc)
         - once per 300 ms
-        
+        - calls:
+            => self.readBlockTableIf()
+                => if necessary, calls self.readBlockTable()
+                    => self.blocktable = api2.ValkkaFS.getBlockTable() [1]
+                        => cpp core.ValkkaFS.setArrayCall(self.blocktable_)
+
+            => self.reqBlocks(mstimestamp)
+                => core.ValkkaFSReaderThread.pullBlocksPyCall(block_list)
+
     def timeLimitsCallback__(tup: tuple):
-        - originates from core.FileCacherThread
+        - originates from core.FileCacherThread.switchCache (pyfunc2)
         - sent when frame cache has been updated
     
     
     # some important methods:
+
+    def setBlockCallback(cb):
+        define how api2.ValkkaFS.new_block_cb__ is continued
+        (by default, no callback chain)
     
     def setOutput(_id, slot, framefilter [**]):
         """Set id => slot mapping.  Set output framefilter
@@ -920,8 +956,9 @@ api2.ValkkaFSManager(api2.ValkkaFS) {
 
     def getInputFrameFilter():
         return ValkkaFSWriterThread.getFrameFilter()
-        
+    
     }
+
 \endverbatim
  * 
  * Frames are transported like this:

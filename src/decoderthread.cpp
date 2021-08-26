@@ -26,7 +26,7 @@
  *  @file    decoderthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2021
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief 
  */ 
@@ -229,7 +229,7 @@ void DecoderThread::run() {
                         #ifdef PROFILE_TIMING
                         dt=(getCurrentMsTimestamp()-decoder->getMsTimestamp());
                         // std::cout << "[PROFILE_TIMING] DecoderThread: " << this->name <<" run: decoder sending frame at " << dt << " ms" << std::endl;
-                        if (dt>=300) {
+                        if (dt>=10) {
                             std::cout << "[PROFILE_TIMING] DecoderThread: " << this->name <<" run: decoder sending frame " << dt << " ms late" << std::endl;
                         }
                         #endif
@@ -275,7 +275,7 @@ void DecoderThread::run() {
                             #ifdef PROFILE_TIMING
                             dt=(getCurrentMsTimestamp()-decoder->getMsTimestamp());
                             // std::cout << "[PROFILE_TIMING] DecoderThread: " << this->name <<" run: decoder sending frame at " << dt << " ms" << std::endl;
-                            if (dt>=300) {
+                            if (dt>=10) {
                                 std::cout << "[PROFILE_TIMING] DecoderThread: " << this->name <<" run: AFTER sending frame " << dt << " ms late" << std::endl;
                                 // during the filterchain run, YUV frame is uploaded to GPU
                             }

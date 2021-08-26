@@ -26,7 +26,7 @@
  *  @file    valkkafs_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief 
  *

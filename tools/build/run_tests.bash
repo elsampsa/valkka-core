@@ -714,5 +714,3 @@ echo 4
 $valgrind ./cachestream_test 4 $LOGLEVEL &>> test.out
 printf "END: cachestream_test 4\n\n" &>> test.out
 fi
-
-

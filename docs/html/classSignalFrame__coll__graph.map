@@ -1,6 +1,11 @@
 <map id="SignalFrame" name="SignalFrame">
-<area shape="rect" id="node2" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="5,95,64,121"/>
-<area shape="rect" id="node3" href="$structAVSignalContext.html" title="Redefinition of characteristic signal contexts (info that goes with the signal) for AVThread thread..." alt="" coords="88,95,211,121"/>
-<area shape="rect" id="node4" href="$structOpenGLSignalContext.html" title="Encapsulates data sent by the signal. " alt="" coords="235,95,387,121"/>
-<area shape="rect" id="node5" href="$structOpenGLSignalPars.html" title="Signal information for OpenGLThread. " alt="" coords="244,5,377,32"/>
+<area shape="rect" id="node1" title="A frame, signaling internal thread commands, states of recorded video, etc." alt="" coords="672,107,767,133"/>
+<area shape="rect" id="node2" href="$classFrame.html" title="Frame: An abstract queueable class." alt="" coords="337,5,396,32"/>
+<area shape="rect" id="node3" href="$structAVSignalContext.html" title="Redefinition of characteristic signal contexts (info that goes with the signal) for AVThread thread." alt="" coords="307,56,427,83"/>
+<area shape="rect" id="node4" href="$structValkkaFSReaderSignalContext.html" title="Encapsulate data sent in the ValkkaFSReaderSignal." alt="" coords="265,107,468,133"/>
+<area shape="rect" id="node5" href="$structValkkaFSReaderSignalPars.html" title="Signal information for ValkkaFSReaderThread." alt="" coords="5,107,188,133"/>
+<area shape="rect" id="node6" href="$structValkkaFSWriterSignalContext.html" title="Encapsulate data sent in the ValkkaFSWriterSignal." alt="" coords="269,157,464,184"/>
+<area shape="rect" id="node7" href="$structValkkaFSWriterSignalPars.html" title="Signal information for ValkkaFSWriterThread." alt="" coords="9,157,184,184"/>
+<area shape="rect" id="node8" href="$structOpenGLSignalContext.html" title="Encapsulates data sent by the signal." alt="" coords="291,208,443,235"/>
+<area shape="rect" id="node9" href="$structOpenGLSignalPars.html" title="Signal information for OpenGLThread." alt="" coords="30,208,163,235"/>
 </map>

@@ -1,3 +1,4 @@
 <map id="RenderGroup::render" name="RenderGroup::render">
-<area shape="rect" id="node2" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. " alt="" coords="196,5,363,32"/>
+<area shape="rect" id="node1" title="Render everything in this group (i.e." alt="" coords="5,5,148,32"/>
+<area shape="rect" id="node2" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. Uses timeval." alt="" coords="196,5,363,32"/>
 </map>

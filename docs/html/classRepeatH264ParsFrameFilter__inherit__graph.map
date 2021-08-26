@@ -1,3 +1,4 @@
 <map id="RepeatH264ParsFrameFilter" name="RepeatH264ParsFrameFilter">
-<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! FrameFilters are used to create &quot;filter chains&quot;. " alt="" coords="55,5,143,32"/>
+<area shape="rect" id="node1" title="For H264, some cameras don&#39;t send sps and pps packets again before every keyframe." alt="" coords="5,80,193,107"/>
+<area shape="rect" id="node2" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="55,5,143,32"/>
 </map>

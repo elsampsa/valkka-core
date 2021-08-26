@@ -1,13 +1,52 @@
 <map id="/home/sampsa/C/valkka/src/frame.cpp" name="/home/sampsa/C/valkka/src/frame.cpp">
-<area shape="rect" id="node2" href="$frame_8h.html" title="Frame classes. " alt="" coords="1675,95,1742,121"/>
-<area shape="rect" id="node48" href="$logging_8h.html" title="Logging utilities. " alt="" coords="3313,319,3387,345"/>
-<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files. " alt="" coords="1749,319,1831,345"/>
-<area shape="rect" id="node42" href="$codec_8h.html" title="Codec definitions (slightly outdated) " alt="" coords="1583,169,1651,196"/>
-<area shape="rect" id="node43" href="$threadsignal_8h_source.html" title="threadsignal.h" alt="" coords="1309,169,1412,196"/>
-<area shape="rect" id="node44" href="$constant_8h.html" title="Constant/default values, version numbers. " alt="" coords="1573,244,1655,271"/>
-<area shape="rect" id="node45" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1675,169,1743,196"/>
-<area shape="rect" id="node46" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines. " alt="" coords="1436,169,1507,196"/>
-<area shape="rect" id="node47" href="$tools_8h.html" title="Auxiliary routines. " alt="" coords="2007,169,2069,196"/>
-<area shape="rect" id="node49" href="$macro_8h.html" title="macro.h" alt="" coords="1767,169,1837,196"/>
-<area shape="rect" id="node50" href="$rawrite_8h.html" title="Write directly to files and devices with POSIX O_DIRECT. " alt="" coords="1861,169,1933,196"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1879,5,2043,47"/>
+<area shape="rect" id="node2" href="$frame_8h.html" title="Frame classes." alt="" coords="1721,95,1787,121"/>
+<area shape="rect" id="node48" href="$logging_8h.html" title="Logging utilities." alt="" coords="3246,319,3321,345"/>
+<area shape="rect" id="node3" href="$common_8h.html" title="List of common header files." alt="" coords="1679,319,1762,345"/>
+<area shape="rect" id="node41" href="$codec_8h.html" title="Codec definitions (slightly outdated)" alt="" coords="1673,169,1741,196"/>
+<area shape="rect" id="node42" href="$metadata_8h.html" title="libValkka pre&#45;reserves all frames, both byte payload and metadata payload. After memory reservation,..." alt="" coords="1563,169,1649,196"/>
+<area shape="rect" id="node43" href="$constant_8h.html" title="Constant/default values, version numbers." alt="" coords="1565,244,1647,271"/>
+<area shape="rect" id="node44" href="$threadsignal_8h_source.html" title=" " alt="" coords="1436,169,1539,196"/>
+<area shape="rect" id="node45" href="$avdep_8h.html" title="List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly fr..." alt="" coords="1765,169,1833,196"/>
+<area shape="rect" id="node46" href="$opengl_8h.html" title="OpenGL calls for reserving PBOs and TEXtures, plus some auxiliary routines." alt="" coords="1341,169,1412,196"/>
+<area shape="rect" id="node47" href="$tools_8h.html" title="Auxiliary routines." alt="" coords="2098,169,2159,196"/>
+<area shape="rect" id="node49" href="$macro_8h.html" title=" " alt="" coords="1858,169,1927,196"/>
+<area shape="rect" id="node50" href="$rawrite_8h.html" title="Write directly to files and devices with POSIX O_DIRECT." alt="" coords="1951,169,2023,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="3327,393,3391,420"/>
+<area shape="rect" id="node5" title=" " alt="" coords="2981,393,3041,420"/>
+<area shape="rect" id="node6" title=" " alt="" coords="3066,393,3127,420"/>
+<area shape="rect" id="node7" title=" " alt="" coords="3151,393,3213,420"/>
+<area shape="rect" id="node8" title=" " alt="" coords="3237,393,3303,420"/>
+<area shape="rect" id="node9" title=" " alt="" coords="5,393,60,420"/>
+<area shape="rect" id="node10" title=" " alt="" coords="3415,393,3487,420"/>
+<area shape="rect" id="node11" title=" " alt="" coords="85,393,151,420"/>
+<area shape="rect" id="node12" title=" " alt="" coords="175,393,242,420"/>
+<area shape="rect" id="node13" title=" " alt="" coords="267,393,329,420"/>
+<area shape="rect" id="node14" title=" " alt="" coords="354,393,423,420"/>
+<area shape="rect" id="node15" title=" " alt="" coords="447,393,506,420"/>
+<area shape="rect" id="node16" title=" " alt="" coords="530,393,605,420"/>
+<area shape="rect" id="node17" title=" " alt="" coords="629,393,711,420"/>
+<area shape="rect" id="node18" title=" " alt="" coords="735,393,794,420"/>
+<area shape="rect" id="node19" title=" " alt="" coords="819,393,865,420"/>
+<area shape="rect" id="node20" title=" " alt="" coords="889,393,928,420"/>
+<area shape="rect" id="node21" title=" " alt="" coords="952,393,1009,420"/>
+<area shape="rect" id="node22" title=" " alt="" coords="1034,393,1095,420"/>
+<area shape="rect" id="node23" title=" " alt="" coords="1119,393,1178,420"/>
+<area shape="rect" id="node24" title=" " alt="" coords="1203,393,1271,420"/>
+<area shape="rect" id="node25" title=" " alt="" coords="1295,393,1357,420"/>
+<area shape="rect" id="node26" title=" " alt="" coords="1381,393,1449,420"/>
+<area shape="rect" id="node27" title=" " alt="" coords="1473,393,1549,420"/>
+<area shape="rect" id="node28" title=" " alt="" coords="1574,393,1633,420"/>
+<area shape="rect" id="node29" title=" " alt="" coords="1657,393,1784,420"/>
+<area shape="rect" id="node30" title=" " alt="" coords="1809,393,1910,420"/>
+<area shape="rect" id="node31" title=" " alt="" coords="1934,393,1995,420"/>
+<area shape="rect" id="node32" title=" " alt="" coords="2020,393,2085,420"/>
+<area shape="rect" id="node33" title=" " alt="" coords="2110,393,2179,420"/>
+<area shape="rect" id="node34" title=" " alt="" coords="2203,393,2262,420"/>
+<area shape="rect" id="node35" title=" " alt="" coords="2286,393,2366,420"/>
+<area shape="rect" id="node36" title=" " alt="" coords="2390,393,2481,420"/>
+<area shape="rect" id="node37" title=" " alt="" coords="2505,393,2600,420"/>
+<area shape="rect" id="node38" title=" " alt="" coords="2625,393,2707,420"/>
+<area shape="rect" id="node39" title=" " alt="" coords="2731,393,2854,420"/>
+<area shape="rect" id="node40" title=" " alt="" coords="2879,393,2957,420"/>
 </map>

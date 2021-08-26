@@ -26,7 +26,7 @@
  *  @file    av_live_thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief Test producer (live thread) consumer (av thread)
  *
@@ -36,6 +36,7 @@
 #include "livethread.h"
 #include "avthread.h"
 #include "framefilter.h"
+#include "framefilter2.h"
 #include "logging.h"
 #include "test_import.h"
 
@@ -238,6 +239,48 @@ void test_6()
     std::cout << name << "stopping threads" << std::endl;
 }
 
+
+void test_7()
+{
+    DumpAVBitmapFrameFilter dumpbm("dumpbm");
+    AVThread avthread("avthread", dumpbm);
+    FifoFrameFilter &in_filter = avthread.getFrameFilter(); // request framefilter from AVThread
+    InfoFrameFilter out_filter("encoded", &in_filter);
+    LiveThread livethread("live");
+
+    const char *name = "@TEST: av_live_thread_test: test 7: ";
+    std::cout << name << "** @@Send frames from live to av thread to a framefilter that dumps YUV frames onto disk**" << std::endl;
+
+    if (!stream_1)
+    {
+        std::cout << name << "ERROR: missing test stream 1: set environment variable VALKKA_TEST_RTSP_1" << std::endl;
+        exit(2);
+    }
+    std::cout << name << "** test rtsp stream 1: " << stream_1 << std::endl;
+
+    avthread.setNumberOfThreads(4);
+
+    std::cout << name << "starting threads" << std::endl;
+    livethread.startCall();
+    avthread.startCall();
+
+    avthread.decodingOnCall();
+
+    std::cout << name << "registering stream" << std::endl;
+    LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &out_filter); // Request livethread to write into filter info
+    livethread.registerStreamCall(ctx);
+
+    std::cout << name << "playing stream !" << std::endl;
+    livethread.playStreamCall(ctx);
+
+    sleep_for(2s);
+    // sleep_for(60s);
+    // sleep_for(604800s); //one week
+
+    std::cout << name << "stopping threads" << std::endl;
+}
+
+
 int main(int argc, char **argcv)
 {
     if (argc < 2)
@@ -291,6 +334,9 @@ int main(int argc, char **argcv)
             break;
         case (6):
             test_6();
+            break;
+        case (7):
+            test_7();
             break;
         default:
             std::cout << "No such test " << argcv[1] << " for " << argcv[0] << std::endl;

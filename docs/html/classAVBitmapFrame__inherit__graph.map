@@ -1,5 +1,6 @@
 <map id="AVBitmapFrame" name="AVBitmapFrame">
-<area shape="rect" id="node4" href="$classAVRGBFrame.html" title="Decoded RGB frame in FFMpeg format. " alt="" coords="11,229,118,256"/>
-<area shape="rect" id="node2" href="$classAVMediaFrame.html" title="Decoded Frame in FFmpeg format. " alt="" coords="9,80,121,107"/>
-<area shape="rect" id="node3" href="$classFrame.html" title="Frame: An abstract queueable class. " alt="" coords="35,5,94,32"/>
+<area shape="rect" id="node1" title="Decoded YUV/RGB frame in FFMpeg format." alt="" coords="5,155,121,181"/>
+<area shape="rect" id="node4" href="$classAVRGBFrame.html" title="Decoded YUV frame in a non&#45;planar format (thus &quot;NP&quot;)" alt="" coords="11,229,115,256"/>
+<area shape="rect" id="node2" href="$classAVMediaFrame.html" title="Decoded Frame in FFmpeg format." alt="" coords="8,80,119,107"/>
+<area shape="rect" id="node3" href="$classFrame.html" title="Frame: An abstract queueable class." alt="" coords="34,5,93,32"/>
 </map>

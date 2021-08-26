@@ -1,4 +1,6 @@
 <map id="Thread::stopCall" name="Thread::stopCall">
-<area shape="rect" id="node2" href="$classThread.html#a20db67a3ec14a198b5444f3214d6155d" title="Send a signal to the thread. " alt="" coords="175,5,310,32"/>
-<area shape="rect" id="node3" href="$classThread.html#a4428ec86c8bc7da14b558f25fb723ce0" title="Sends exit signal to the thread, calls join. This method blocks until thread has exited. Set Thread::has_thread to false. " alt="" coords="172,56,313,83"/>
+<area shape="rect" id="node1" title="API method: stops the thread." alt="" coords="5,31,124,57"/>
+<area shape="rect" id="node2" href="$classThread.html#a006c30f8d492854a15ba92dad2850a4c" title="API method: stops the thread." alt="" coords="172,5,335,32"/>
+<area shape="rect" id="node3" href="$classThread.html#a0ecff37449db3af69888738f73c8fd04" title="API method: waits until the thread is joined." alt="" coords="181,56,325,83"/>
+<area shape="rect" id="node4" href="$classThread.html#a4428ec86c8bc7da14b558f25fb723ce0" title="Sends exit signal to the thread, calls join. This method blocks until thread has exited...." alt="" coords="383,56,524,83"/>
 </map>

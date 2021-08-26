@@ -1,4 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids..." alt="" coords="5,5,53,32"/>
-<area shape="rect" id="node2" href="$classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes, OpenGL reference ids, etc.) " alt="" coords="101,5,177,32"/>
+<area shape="rect" id="node1" href="$classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids,..." alt="" coords="5,5,53,32"/>
+<area shape="rect" id="node2" href="$classYUVTEX.html" title="A class encapsulating information about an OpenGL texture set for a YUV pixmap (sizes,..." alt="" coords="101,5,177,32"/>
 </map>

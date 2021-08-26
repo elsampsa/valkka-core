@@ -26,7 +26,7 @@
  *  @file    frame.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief 
  */ 
@@ -558,6 +558,8 @@ void AVBitmapFrame::reserve(int width, int height) {
         av_frame_free(&av_frame); // re-reserving
     }
     */
+    // <FIX> : "if frame already has been allocated, calling this function will leak memory"
+    // see: https://www.ffmpeg.org/doxygen/3.4/group__lavu__frame.html#ga6b1acbfa82c79bf7fd78d868572f0ceb
     av_frame->format = AV_PIX_FMT_YUV420P;
     av_pixel_format = AV_PIX_FMT_YUV420P;
     av_frame->width = width;
@@ -577,6 +579,8 @@ AVRGBFrame::~AVRGBFrame() {
 
 
 void AVRGBFrame::reserve(int width, int height) {
+    // <FIX> : "if frame already has been allocated, calling this function will leak memory"
+    // see: https://www.ffmpeg.org/doxygen/3.4/group__lavu__frame.html#ga6b1acbfa82c79bf7fd78d868572f0ceb
     av_frame->format = AV_PIX_FMT_RGB24;
     av_pixel_format = AV_PIX_FMT_RGB24;
     av_frame->width = width;

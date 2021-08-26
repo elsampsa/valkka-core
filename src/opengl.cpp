@@ -26,7 +26,7 @@
  *  @file    opengl.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines
  *
@@ -170,7 +170,7 @@ void getPBO(GLuint& index, GLsizei size, GLubyte*& payload) { // modify pointer 
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0); // unbind ** MANDATORY **
   
   glFinish();
-  glFlush();
+  // glFlush();
   memset(payload, 0, size); // warm up the gpu memory..
 }
 

@@ -1,3 +1,4 @@
 <map id="ValkkaFSReaderThread" name="ValkkaFSReaderThread">
-<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system. " alt="" coords="55,5,117,32"/>
+<area shape="rect" id="node1" title="ValkkaFS reader thread." alt="" coords="5,80,165,107"/>
+<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system." alt="" coords="54,5,117,32"/>
 </map>

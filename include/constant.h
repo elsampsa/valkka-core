@@ -28,7 +28,7 @@
  *  @file    constant.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief   Constant/default values, version numbers
  */ 
@@ -48,6 +48,13 @@ https://softwareengineering.stackexchange.com/questions/328775/how-important-is-
 - decoder returns YUV frames that are aligned
 - ..during YUV => RGB interpolation (SwScaleFrameFilter, etc.), we get rid of the alignment (i.e. the extra padding bytes)
 - ..anyway, that must be done at some moment before passing the frames downstream (for analyzers, etc.)
+
+- how to use the alignment parameter?  there is a lot of folklore on this.
+  (should read the ffmpeg source code carefully)
+
+0  == choose automatically
+32 == reasonable padding value (although depends on the CPU)
+1  == ffmpeg itself uses this.  It seems to mean "no aligment"
  
 => KEEP ALIGNMENT = 1
 
@@ -56,7 +63,7 @@ https://softwareengineering.stackexchange.com/questions/328775/how-important-is-
     
 static const int VERSION_MAJOR = 1; // <pyapi>
 static const int VERSION_MINOR = 2; // <pyapi>
-static const int VERSION_PATCH = 0; // <pyapi>
+static const int VERSION_PATCH = 2; // <pyapi>
 
 static const unsigned LIVE_GET_PARAMETER_PING = 50; // ping the camera with GET_PARAMETER_PING every N:th second while the connection is active
 

@@ -2,9 +2,7 @@
 
 ## For the VERY impatient
 
-Looking for an OpenSource video surveillance program with object detection?
-
-Just go [here](https://elsampsa.github.io/valkka-live/).
+Looking for an OpenSource video surveillance program with object detection?  Just go [here](https://elsampsa.github.io/valkka-live/).
 
 ## Synopsis
 
@@ -24,9 +22,8 @@ If you are interested in compiling Valkka yourself or even help us with the core
 
 Most of the people nowadays have a concentration span of milliseconds (because of mobile devices).  Thank you for keep on reading!  :)
 
-Valkka is *not* your browser-based-javacsript-node.js-cloud toy.  We're writing a library for building large ip camera systems in LAN (or virtual-LAN / VPN) environments, capable of doing simultaneously massive live video streaming, surveillance, recording and machine vision.
+Lets take a look at a typical video management system architecture problem.  This goes for desktop / Qt-based programs and for web-based apps as well:
 
-Lets take a look at a typical video management system architecture problem:
 - Stream H264 video from an IP camera using the RTSP protocol
 - Branch that stream, and direct it to (1) filesystem and (2) a decoder
 - From the decoder, branch the decoded YUV bitmap to (3-5):
@@ -50,6 +47,7 @@ Using Valkka, you can instantiate threads, and define how media streams are bran
                   +--> Filesystem          +------> [OpenGLThread] -- > X window system
              
 Some key features of the Valkka library are:
+
 - Python3 API: create process topologies from Python3.
 - Develop sleek graphical interfaces fast with PyQt.
 - The library itself runs purely in C++.  No python Global Interpreter Lock (GIL) problems here.
@@ -69,12 +67,21 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Newest version is 1.2.0
+### Newest version is 1.2.2
 
-- AVThread subclassing etc. rewritten to allow separate hw decoding modules
-- Accelerated decoding as a separate extension module available [here](https://github.com/xiaoxoxin/valkka-nv)
+- Using ``glFinish`` in Intel graphics driver OpenGL completely clogged the frame presentation pipeline resulting in lots of dropped frames.  Removing ``glFinish`` fixed the issue.
+- Reorganized the Python Qt examples
 
 ### Older versions
+
+1.2.1
+
+- valkka.multiprocess.base.AsyncBackMessageProcess.run fixed: a separate event loop is needed in the async multiprocess
+
+1.2.0
+
+- AVThread subclassing etc. rewritten to allow separate hw decoding modules
+- Accelerated decoding as a separate extension module available [here](https://github.com/xiaxoxin2/valkka-nv)
 
 1.0.3
 
@@ -120,51 +127,6 @@ We're currently at alpha
 
 - WSDiscovery now included into libValkka
 
-0.17.0
-- Timestamps now taken from decoder!  This means that "main" and "high" H264 profiles with B-frames work.  This should also eliminate some "stuttering" effects seen sometimes in live video.
-- "Exotic" bitmaps (YUV422 and other) are now transformed to YUV420, so, for example profiles such as "high422" work (however, this is inefficient, so users should prefer YUV420P streams)
-
-0.16.0
-- Yet another memleak at the shmem server side fixed
-- Some issues with the python shmem server side fixed
-
-0.15.0
-- A nasty memory overflow in the shared memory server / client part fixed
-- Added eventfd to the shared mem server / client API.  Now several streams can be multiplexed with select at client side
-- Sharing streams between python processes only implemented
-- Forgot to call sem_unlink for shared mem semaphores, so they started to cumulate at /dev/shm.  That's now fixed
-
-0.14.1
-- Minor changes to valkkafs
-
-0.14.0
-- Muxing part progressing (but not yet functional)
-- python API 2 level updates
-
-0.13.2 Version
-- Extracting SPS & PPS packets from RTSP negotiation was disabled..!
-- Now it's on, so cameras that don't send them explicitly (like Axis) should work
-
-0.13.1 Version
-- Matroska export from ValkkaFS, etc.
-- Lightweight OnVif client
-
-0.12.0 Version
-- Shared memory frame transport now includes more metadata about the frames: slot, timestamp, etc.  Now it also works with python multithreading.
-- Numpy was included to valkkafs in an incorrect way, this might have resulted in mysterious segfaults.  Fixed that.
-- At valkka-examples, fixed the multiprocessing/analyzer example (fork first, then spawn threads)
-
-0.11.0 Version
-- Bug fixes at the live555 bridge by Petri
-- ValkkaFS progressing
-- Currently Ubuntu PPA build fails for i386 & armhf.  This has something to do with the ```off_t``` datatype ?
-
-0.10.0 Version
-- Nasty segmentation fault in OpenGL part fixed: called glDeleteBuffers instread of glDeleteVertexArrays for a VAO !
-- ValkkaFS progressing
-
-0.9.0 Version
-- H264 USB Cameras work
 
 For more, see [CHANGELOG](CHANGELOG.md)
 
@@ -199,7 +161,7 @@ If you have upgraded your python interpreter, you might need to define the versi
 
 ### Compile
 
-This just got a lot easier: the same CMake file is used to compile the library, generate python wrappings and to compile the wrappings (no more python setup scripts)
+The same CMake file is used to compile the library, generate python wrappings and to compile the wrappings (no more python setup scripts)
 
 Valkka uses numerical python (numpy) C API and needs the numpy C headers at the build process.  Be aware of the numpy version and header files being used in your setup.  You can check this with:
 
@@ -207,17 +169,15 @@ Valkka uses numerical python (numpy) C API and needs the numpy C headers at the 
     
 We recommend that you use a "globally" installed numpy (from the debian *python3-numpy* package) instead of a "locally" installed one (installed with pip3 install).  When using your compiled Valkka distribution, the numpy version you're loading at runtime must match the version that was used at the build time.
 
-Next, download live555 and ffmpeg
+First, download ffmpeg source code:
 
     cd ext
-    ./download_live.bash
     ./download_ffmpeg.bash
     cd ..
 
-Next, proceed in building live555, ffmpeg and valkka 
-    
-    make -f debian/rules clean
-    make -f debian/rules build
+Then, just
+
+    ./easy_build.bash
     
 Finally, create a debian package with
 

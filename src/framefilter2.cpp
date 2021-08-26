@@ -26,7 +26,7 @@
  *  @file    framefilter2.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief 
  */ 
@@ -103,4 +103,59 @@ void AlertFrameFilter::run(Frame* frame) {
         (this->next)->run(frame);
     }
 }
+
+DumpAVBitmapFrameFilter::DumpAVBitmapFrameFilter(const char *name, FrameFilter *next) : FrameFilter(name, next), count(0)
+{
+}
+
+void DumpAVBitmapFrameFilter::go(Frame *frame)
+{ // du -h *.bin | grep "s0"
+    // std::cout << "DumpFrameFilter: writing "<< frame->payload.size() << " bytes" << std::endl;
+    // std::cout << "DumpFrameFilter: payload : " << frame->dumpPayload() <<std::endl;
+    // std::ofstream fout(filename, std::ios::out | std::ofstream::binary);
+    /*
+    for(auto it=(frame->payload).begin(); it!=(frame->payload).end(); ++it) {
+        std::cout << ">>" << (int)*it;
+        fout << (char)*it;
+    }
+    */
+    // frame->dumpPayloadToFile(fout);
+    // std::copy((frame->payload).begin(), (frame->payload).end(), std::ostreambuf_iterator<char>(fout));
+
+    if (frame->getFrameClass() != FrameClass::avbitmap)
+    {
+        decoderlogger.log(LogLevel::debug) << "DumpAVBitmapFrameFilter: go: ERROR: frame must be AVBitmapFrame " << *frame << std::endl;
+        return;
+    }
+    AVBitmapFrame *f = static_cast<AVBitmapFrame *>(frame);
+
+    if (f->y_payload == NULL) {
+      std::cout << "DumpAVBitmapFrameFilter: Empty AVBitmapFrame" << std::endl;
+      return;
+    }
+    std::string filename = std::string("image_c") + // std::string(f->bmpars.y_linesize) + std::string("x") + std::string(f->height) +
+                        std::to_string(count) + std::string("_s") +                  // packet count
+                        std::to_string(f->subsession_index) + std::string("_") + // subsession index
+                        // std::to_string(frame->mstimestamp) +                         // timestamp
+                        std::string(".yuv");
+
+    std::ofstream fout(filename, std::ios::out | std::ofstream::binary);
+
+    int i;
+    for(i=0; i<f->bmpars.y_size; i++) {
+        fout << f->y_payload[i];
+    }
+    for(i=0; i<f->bmpars.u_size; i++) {
+        fout << f->u_payload[i];
+    }
+    for(i=0; i<f->bmpars.v_size; i++) {
+        fout << f->v_payload[i];
+    }
+    fout.close();
+    std::cout << "DumpAVBitmapFrameFilter: wrote YUV420P image " << count << " : " << f->bmpars.y_linesize << "x" << f->bmpars.height << std::endl;
+    count++;
+}
+
+
+
 

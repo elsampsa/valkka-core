@@ -26,7 +26,7 @@
  *  @file    openglthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.0 
+ *  @version 1.2.2 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *
@@ -405,7 +405,7 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
     
     #ifdef OPENGL_TIMING
     swaptime=mstime; mstime=getCurrentMsTimestamp();
-    if ( (mstime-swaptime) > 2 ) {
+    if ( (mstime-swaptime) > 0 ) {
         std::cout << "RenderContext: render : render timing       : " << mstime-swaptime << std::endl;
     }
     #endif
@@ -414,7 +414,7 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
     
     #ifdef OPENGL_TIMING
     swaptime=mstime; mstime=getCurrentMsTimestamp();
-    if ( (mstime-swaptime) > 2 ) {
+    if ( (mstime-swaptime) > 0 ) {
         std::cout << "RenderContext: render : bindvars timing     : " << mstime-swaptime << std::endl;
     }
     #endif
@@ -423,7 +423,7 @@ void RenderContext::render(XWindowAttributes x_window_attr) {// Calls bindTextur
     
     #ifdef OPENGL_TIMING
     swaptime=mstime; mstime=getCurrentMsTimestamp();
-    if ( (mstime-swaptime) > 2 ) {
+    if ( (mstime-swaptime) > 0 ) {
         std::cout << "RenderContext: render : bindvertexarr timing: " << mstime-swaptime << std::endl;
     }
     #endif
@@ -704,7 +704,7 @@ void RenderGroup::render() {
     std::cout << "RenderGroup: render: display, window_id, child_id " <<display_id<<" "<<window_id<<" "<<child_id << std::endl;
     #endif
     
-    // glFlush();
+    // glFlush(); // these will kill your performace for many streams
     // glFinish();
     
     #ifdef OPENGL_TIMING
@@ -722,8 +722,8 @@ void RenderGroup::render() {
     
     #ifdef OPENGL_TIMING
     swaptime=mstime; mstime=getCurrentMsTimestamp();
-    if ( (mstime-swaptime) > 2 ) {
-        std::cout << "RenderGroup: render : gxlmakecurrent timing : " << mstime-swaptime << std::endl;
+    if ( (mstime-swaptime) > 0 ) {
+        std::cout << "RenderGroup: render : glxmakecurrent timing : " << mstime-swaptime << std::endl;
     }
     #endif
     
@@ -734,7 +734,7 @@ void RenderGroup::render() {
     #ifdef VALGRIND_GPU_DEBUG
     // std::cout << "VALGRIND_GPU_DEBUG" << std::endl;
     #else
-    glFinish(); // TODO: debugging
+    // glFinish(); // TODO: debugging // will kill your performace for many streams
     glViewport(0, 0, x_window_attr.width, x_window_attr.height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear the screen and the depth buffer
     #endif
@@ -745,7 +745,7 @@ void RenderGroup::render() {
     
     #ifdef OPENGL_TIMING
     swaptime=mstime; mstime=getCurrentMsTimestamp();
-    if ( (mstime-swaptime) > 2 ) {
+    if ( (mstime-swaptime) > 0 ) {
         std::cout << "RenderGroup: render : render timing         : " << mstime-swaptime << std::endl;
     }
     #endif
@@ -766,7 +766,7 @@ void RenderGroup::render() {
     
     #ifdef OPENGL_TIMING
     swaptime=mstime; mstime=getCurrentMsTimestamp();
-    if ( (mstime-swaptime) > 2 ) {
+    if ( (mstime-swaptime) > 0 ) {
         std::cout << "RenderGroup: render : swap buffer timing    : " << mstime-swaptime << std::endl;
     }
     #endif
@@ -1317,6 +1317,8 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
             if (rel_mstimestamp<=-10) {// scrap frames from [-10,-inf)
                 // opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: DISCARDING late frame " << " " << rel_mstimestamp << " " << *f << std::endl;
                 opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: DISCARDING late frame " << " " << rel_mstimestamp << " <" << f->mstimestamp <<"> " << std::endl;
+                //opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: late: " << f->mstimestamp - mstime << std::endl;
+                //opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: mstime_delta, msbuftime " << mstime_delta << " " << msbuftime << std::endl;
             }
             else if (rel_mstimestamp>future_ms_tolerance) { // fifo might get filled up with future frames .. if they're too much in the future, scrap them
                 opengllogger.log(LogLevel::normal) << "OpenGLThread: handleFifo: DISCARDING a frame too far in the future " << rel_mstimestamp << " " << *f << std::endl;
@@ -1346,12 +1348,17 @@ long unsigned OpenGLThread::handleFifo() {// handles the presentation fifo
                         // yuv_frame's pbos have already been uploaded to GPU.  Now they're loaded to the texture
                         // loadTEX uses slots_[], where each vector element is a SlotContext (=set of textures and a shader program)
                         loadYUVFrame(yuvframe->n_slot, yuvframe);
+                        // ..according to reportCallTime, that can take up to 8 milliseconds on intel if glfinish is all over the code
+                        // total fps with two cameras: 40 => 320 ms delay per second..!
                         #ifdef TIMING_VERBOSE
                         reportCallTime(1);
                         #endif
                         render(yuvframe->n_slot); // renders all render groups that depend on this slot.  A slot => RenderGroups (x window) => list of RenderContext => SlotContext (textures)
                         #ifdef TIMING_VERBOSE
                         reportCallTime(2);
+                        // after glfinish has been removed from the code, the intel driver starts performing OK
+                        // here we still have 1 ms delay.  Not sure how to eliminate it
+                        // 5 streams at 20 fps => total fps = 100 => 100 ms delay per second => 10% of frames dropped.. eh.
                         #endif
                     }
                     else {
@@ -1660,14 +1667,14 @@ void OpenGLThread::initGLX() {
     this->root_id =DefaultRootWindow(this->display_id); // get the root window of this display
     
     /* Request a suitable framebuffer configuration - try for a double buffered configuration first */
-    this->doublebuffer_flag=true;
-    
+    this->doublebuffer_flag=true;    
     this->fbConfigs = glXChooseFBConfig(this->display_id,DefaultScreen(this->display_id),glx_attr::doubleBufferAttributes,&numReturned);
     // MEMORY LEAK when running with valgrind, see: http://stackoverflow.com/questions/10065849/memory-leak-using-glxcreatecontext
-    
     this->att=glx_attr::doubleBufferAttributes;
-    // this->fbConfigs = NULL; // force single buffer
     
+    // force single buffer:
+    // this->fbConfigs = NULL; this->doublebuffer_flag=false;
+
     if (this->fbConfigs == NULL) {  /* no double buffered configs available */
         this->fbConfigs = glXChooseFBConfig( this->display_id, DefaultScreen(this->display_id),glx_attr::singleBufferAttributes,&numReturned);
         this->doublebuffer_flag=False;

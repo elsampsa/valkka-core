@@ -1,3 +1,4 @@
 <map id="SharedMemRingBufferRGB" name="SharedMemRingBufferRGB">
-<area shape="rect" id="node2" href="$classSharedMemRingBufferBase.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores. " alt="" coords="5,5,189,32"/>
+<area shape="rect" id="node1" title="SharedMemRingBuffer for AVRGBFrame." alt="" coords="6,80,189,107"/>
+<area shape="rect" id="node2" href="$classSharedMemRingBufferBase.html" title="Interprocess shared memory ring buffer synchronized with posix semaphores." alt="" coords="5,5,189,32"/>
 </map>

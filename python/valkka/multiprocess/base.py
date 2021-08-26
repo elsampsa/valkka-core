@@ -19,7 +19,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 @file    base.py
 @author  Sampsa Riikonen
 @date    2020
-@version 1.2.0 
+@version 1.2.2 
 
 @brief   A simple multiprocessing framework with back- and frontend and pipes communicating between them
 """
@@ -396,6 +396,9 @@ class AsyncBackMessageProcess(MessageProcess):
         if self.sigint == False:
             signal.signal(signal.SIGINT, signal.SIG_IGN) # handle in master process correctly
         self.preRun__()
+        # very important! create a new separate event loop in the forked multiprocess
+        loop_ = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop_)
         asyncio.get_event_loop().run_until_complete(self.async_run__())
         """
         print("reading from", self.back_pipe.read_fd)
