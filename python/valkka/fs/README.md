@@ -31,10 +31,10 @@
         - set continuation to new_block_cb__
           model: func(valkkafs=, timerange_local=, timerange_global=)
 
-    map_(valkkafs, framefilter, slot, _id)
+    map_(valkkafs, framefilter, write_slot, read_slot, _id)
         - call map_ of correct FSGroup
 
-    unmap(slot)
+    unmap(_id)
         - call unmap of correct FSGroup
 
 
@@ -110,15 +110,17 @@
 
 - Methods
 
-    map_(slot=slot, _id=_id, framefilter=framefilter)
+    map_(write_slot=, read_slot=, _id=, framefilter=)
         -> sets slot <-> id mapping for reader & writer threads
+        - incoming frames with slot write_slot are written to disk with id _id
+        - frames with id _id on the disk are mapped to slot read_slot when sent downstream
         - creates a FileStreamContext that can be used with FileCacheThread
-          for id -> framefilter mapping
+          for read_slot -> framefilter mapping
 
-    getFileStreamContext(self, slot)
+    getFileStreamContext(_id)
         - ..get that FileStreamContext
 
-    unmap(slot)
+    unmap(_id)
         - unmaps
 
     readBlockTableIf:
@@ -190,4 +192,3 @@ Testing scheme for this monster:
 
 - Notebooks (for ValkkaFS (a))
 - Stream & see that global timerange is updated correctly
-

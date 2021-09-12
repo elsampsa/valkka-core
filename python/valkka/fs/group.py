@@ -5,6 +5,19 @@ from valkka.fs.multi import ValkkaMultiFS
 from valkka.fs.single import ValkkaSingleFS
 
 
+class SlotMapping:
+    """Slot mapping for certain frame id in ValkkaFS
+
+    write_slot : incoming slot number that's converted into an id when writing to ValkkaFS
+    read_slot  : outgoing slot number that's converted from an id when reading from ValkkaFS
+    file_stream_ctx : used with FileCacheThread to do slot => output framefilter mapping
+    """
+    def __init__(self, write_slot = None, read_slot = None, file_stream_ctx = None):
+        self.write_slot = write_slot
+        self.read_slot = read_slot
+        self.file_stream_ctx = file_stream_ctx
+
+
 class FSGroup:
     """
     :param valkkafs: ValkkaFS api level 2 instance
@@ -63,7 +76,8 @@ class FSGroup:
         self.started = False
         self.valkkafs.setBlockCallback(self.new_block_cb__)
         self.cb = None # a custom callback
-        self.file_stream_ctx_by_slot = {}
+        # self.file_stream_ctx_by_slot = {}
+        self.slot_mapping_by_id = {}
         self.current_blocks = [] # currently cached blocks
         self.timerange = None # global timerange from the blocktable
         # .. tuple timerange.  None means empty blocktable
@@ -73,24 +87,30 @@ class FSGroup:
     def getInputFilter(self):
         return self.writer.getFrameFilter()
 
-    def map_(self, slot = None, _id = None, framefilter = None):
-        assert(slot is not None)
+    def map_(self, write_slot = None, read_slot = None, _id = None, framefilter = None):
+        assert(write_slot is not None)
+        assert(read_slot is not None)
         assert(_id is not None)
         assert(framefilter is not None)
-        self.writer.setSlotIdCall(slot, _id)
-        self.reader.setSlotIdCall(slot, _id)
-        self.file_stream_ctx_by_slot[slot] =\
-            core.FileStreamContext(slot, framefilter)
+        self.writer.setSlotIdCall(write_slot, _id)
+        self.reader.setSlotIdCall(read_slot, _id)
+        #self.file_stream_ctx_by_slot[slot] =\
+        #    core.FileStreamContext(slot, framefilter)
+        self.slot_mapping_by_id[_id] = SlotMapping(
+            write_slot, read_slot, core.FileStreamContext(read_slot, framefilter)
+        )
 
-    def unmap(self, slot):
-        assert(slot in self.file_stream_ctx_by_slot)
-        self.writer.unSetSlotIdCall(slot)     
-        self.reader.unSetSlotIdCall(slot)
-        self.file_stream_ctx_by_slot.pop(slot)
-        
-    def getFileStreamContext(self, slot):
-        assert(slot in self.file_stream_ctx_by_slot)
-        return self.file_stream_ctx_by_slot[slot]
+    def unmap(self, _id):
+        # assert(slot in self.file_stream_ctx_by_slot)
+        assert(_id in self.slot_mapping_by_id)
+        sm = self.slot_mapping_by_id[_id]
+        self.writer.unSetSlotIdCall(sm.write_slot)
+        self.reader.unSetSlotIdCall(sm.read_slot)
+        self.slot_mapping_by_id.pop(_id)
+    
+    def getFileStreamContext(self, _id):
+        assert(_id in self.slot_mapping_by_id)
+        return self.slot_mapping_by_id[_id].file_stream_ctx
 
     def start(self):
         self.reader.startCall()
@@ -219,16 +239,16 @@ def fsgrouptest():
     # .. could connect lots of streams into in_filter
     out_filter = core.InfoFrameFilter("info")
     # 
-    fsgroup.map_(slot=1, _id=1001, framefilter=out_filter)
+    fsgroup.map_(write_slot=1, read_slot=1, _id=1001, framefilter=out_filter)
     # both writer & reader thread map slot 1 to id 1001
     # creates FileStreamContext mapping slot 1 to out_filter
     # that can be used with FileCacheThread
     # let's get it:
-    file_stream_ctx = fsgroup.getFileStreamContext(1)
+    file_stream_ctx = fsgroup.getFileStreamContext(1001)
     # tell cachethread to divert slot 1 to out_filter
     cachethread.registerStreamCall(file_stream_ctx)
     # unmap
-    fsgroup.unmap(1)
+    fsgroup.unmap(1001)
     # 
     fsgroup.stop() # writes to cachethread's filter, so must be stopped first
     cachethread.stopCall()

@@ -145,7 +145,7 @@ class ValkkaFSManager:
 
 
     def map_(self, valkkafs=None, framefilter=None,
-            slot=None, _id=None):
+            write_slot=None, read_slot=None, _id=None):
         """Mapping valkkafs (i.e. file) => framefilter
 
         User needs to make up an id.  It can be identical
@@ -153,17 +153,18 @@ class ValkkaFSManager:
         """
         fsgroup = self.fsgroup_by_valkkafs[valkkafs]
         fsgroup.map_(
-            slot = slot,
+            read_slot = read_slot,
+            write_slot = write_slot,
             _id = _id,
             framefilter = framefilter
         )
-        ctx = fsgroup.getFileStreamContext(slot)
+        ctx = fsgroup.getFileStreamContext(_id)
         self.cacherthread.registerStreamCall(ctx) # slot => framefilter mapping by core.FileCacheThread
         
-    def unmap(self, valkkafs=None, slot=None):
+    def unmap(self, valkkafs=None, _id=None):
         fsgroup = self.fsgroup_by_valkkafs[valkkafs]
-        ctx = fsgroup.getFileStreamContext(slot)
-        fsgroup.unmap(slot)
+        ctx = fsgroup.getFileStreamContext(_id)
+        fsgroup.unmap(_id)
         self.cacherthread.deregisterStreamCall(ctx)
         
     def updateTimeRange__(self):
@@ -437,18 +438,20 @@ def managertest():
     manager.map_(
         valkkafs = valkkafs_1,
         framefilter = out_filter_1,
-        slot = 1,
+        write_slot = 1,
+        read_slot =1,
         _id = 1001)
     # etc..
     manager.map_(
         valkkafs = valkkafs_2,
         framefilter = out_filter_2,
-        slot = 2,
+        write_slot = 2,
+        read_slot = 2,
         _id = 2002)
     # remember that is possible to write 
     # multiple streams into the same ValkkaFS
-    manager.unmap(valkkafs=valkkafs_1, slot=1)
-    manager.unmap(valkkafs=valkkafs_2, slot=2)
+    manager.unmap(valkkafs=valkkafs_1, _id=1001)
+    manager.unmap(valkkafs=valkkafs_2, _id=2002)
 
 
 if __name__ == "__main__":
