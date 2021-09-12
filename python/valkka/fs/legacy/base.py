@@ -1,7 +1,7 @@
 """
-valkkafs.py : api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFSThreads
+base.py : api level 1 => api level 2 encapsulation for ValkkaFS
 
- * Copyright 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2017-2021 Valkka Security Ltd. and Sampsa Riikonen
  *
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  *
@@ -22,12 +22,12 @@ valkkafs.py : api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFS
  *
  */
 
-@file    valkkafs.py
+@file    base.py
 @author  Sampsa Riikonen
-@date    2017
+@date    2021
 @version 1.2.2 
 
-@brief   api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFSThreads
+@brief   api level 1 => api level 2 encapsulation for ValkkaFS
 """
 import time
 import json

@@ -103,10 +103,16 @@ protected:
     std::mutex      mutex;
     long int        col_0;          ///< Current column 0 value (max keyframe timestamp)
     long int        col_1;          ///< Current column 1 value (max anyframe timestamp)
+    long int        col_0_lu;       ///< col_0 at previous blocktable update
+    long int        col_1_lu;       ///< col_1 at previous blocktable update
     std::size_t     current_row;    ///< Row number (block) that's being written
     std::size_t     prev_row;       ///< Previous row number (block)
-    PyObject        *pyfunc;        ///< Python callback that's triggered at block write
+    /** A python callback that's triggered when the blocktable should be read again */
+    PyObject        *pyfunc;
     
+private:
+    void            callPyFunc(std::string msg, bool use_gil=true);
+
 protected:
     const static std::size_t  n_cols = 2;
     
@@ -119,7 +125,7 @@ public:
     std::size_t     getBlockSeek(std::size_t n_block);
     std::size_t     getCurrentBlockSeek();
     
-public: // getters
+public: // getters // <pyapi>
     const std::size_t   getBlockSize() {return this->blocksize;} // <pyapi>
     
 public:                                  // <pyapi>
@@ -147,18 +153,25 @@ public:                                  // <pyapi>
     std::size_t     maxFrameSize();      // <pyapi>
     /** print blocktable */
     void            reportTable(std::size_t from=0, std::size_t to=0, bool show_all=false);       // <pyapi>
+    
+    /** Tell ValkkaFS to update the blocktable, even if the block hasn't finished
+     *  Typically used by an external manager that needs up-to-date information
+     *  about the max timestamp in the block
+     */
+    void            updateTable();      // <pyapi>
+    
     /** Used by a writer class to inform that a new block has been written
      * @param pycall   : Use the provided python callback function or not?  default = true
      * @param use_gil  : Acquire Python GIL or not? should be true, when evoked "autonomously" by this thread and false, when evoked from python.  default = true
      * 
      */
-    void writeBlock(bool pycall=true, bool use_gil=true);   // <pyapi>
+    void writeBlock(bool pycall=true, bool use_gil=true);
     
     /** Used by a writer class to inform that a non-key frame has been written */
-    void markFrame(long int mstimestamp);        // <pyapi>
+    void markFrame(long int mstimestamp);        
 
     /** Used by a writer class to inform that a key frame has been written */
-    void markKeyFrame(long int mstimestamp);     // <pyapi>
+    void markKeyFrame(long int mstimestamp);     
     
     /** Set block number that's being written */
     void setCurrentBlock(std::size_t n_block);      // <pyapi>
@@ -242,6 +255,10 @@ protected:
     void handleSignals();                                       ///< Call ValkkaFSWriterThread::handleSignal for every signal in the signal_fifo
 
 protected:
+    /** Save the current block
+     * GIL must be obtained for calls that originate purely from the cpp side
+     * For calls originating from the python-side, GIL should not be obtained
+     */
     void saveCurrentBlock(bool pycall=true, bool use_gil=true);
     void setSlotId(SlotNumber slot, IdNumber id);
     void unSetSlotId(SlotNumber slot);

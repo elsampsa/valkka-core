@@ -41,7 +41,6 @@ import traceback
 
 is_py3 = (sys.version_info >= (3, 0))
 
-
 loggers = {}
 
 def getLogger(name):
@@ -73,8 +72,6 @@ def setLogger(name, level):
         ch.setFormatter(formatter)
         logger.setLevel(level)
         logger.addHandler(ch)
-
-
 
 
 def import_file(full_name, path):

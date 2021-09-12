@@ -34,7 +34,11 @@
 #include "valkkafs.h"
 #include "numpy_no_import.h"
 
-ValkkaFS::ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks, bool init) : device_file(device_file), block_file(block_file), blocksize(blocksize), n_blocks(n_blocks), col_0(0), col_1(0), current_row(0), prev_row(0), pyfunc(NULL), os(), init(init)
+ValkkaFS::ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks, bool init) : 
+    device_file(device_file), block_file(block_file), blocksize(blocksize), 
+    n_blocks(n_blocks), col_0(0), col_1(0), col_0_lu(0), col_1_lu(0),
+    current_row(0), prev_row(0), 
+    pyfunc(NULL), os(), init(init)
 {
     os.open(this->block_file, std::fstream::binary | std::fstream::out | std::fstream::in);
     
@@ -169,11 +173,80 @@ void ValkkaFS::reportTable(std::size_t from, std::size_t to, bool show_all) {
 }
 
 
+void ValkkaFS::callPyFunc(std::string msg, bool use_gil) {
+    if (!pyfunc) {
+        return;
+    }
+    PyObject *tup = PyTuple_New(2); 
+    // message tuple to the python side: (propagate: bool, value: int/str)
+    // propagate = true ==> this originates purely from cpp
+    // propagate = false ==> call originates from the python side
+    PyGILState_STATE gstate;
+    if (use_gil) {
+        std::cout << "ValkkaFS: writeBlock: obtaining Python GIL" << std::endl;
+        gstate = PyGILState_Ensure();
+        std::cout << "ValkkaFS: writeBlock: obtained Python GIL" << std::endl;
+        PyTuple_SET_ITEM(tup, 0, Py_True);
+    }
+    else {
+        PyTuple_SET_ITEM(tup, 0, Py_False);
+    }
+    
+    if (msg.size()>0) {
+        PyTuple_SET_ITEM(tup, 1, PyUnicode_FromString(msg.c_str()));
+    }
+    else {
+        PyTuple_SET_ITEM(tup, 1, PyLong_FromSsize_t(current_row));
+    }
+    
+    PyObject_CallFunction(pyfunc, "O", tup);
+    /*
+    if (msg.size()>0) {
+        PyObject_CallFunction(pyfunc, "s", msg.c_str());
+    }
+    else {
+        PyObject_CallFunction(pyfunc, "n", current_row);
+    }
+    */
+    if (use_gil) {
+        ///*
+        std::cout << "ValkkaFS: writeBlock: releasing Python GIL" << std::endl;
+        PyGILState_Release(gstate);
+        std::cout << "ValkkaFS: writeBlock: released Python GIL" << std::endl;
+        //*/
+    }
+}
+
+
+void ValkkaFS::updateTable() {
+    // an external entity (a manager) has requested that we
+    // update the blocktable
+    // this call originates from the python side
+    std::unique_lock<std::mutex> lk(this->mutex);
+    std::string msg("");
+    // if col_0 and col_1 are the same as at last query, do nothing
+    // if col_1 or col_1 is zero, do nothing
+    std::cout << "col_0, col_1: " << col_0 << " " << col_1 << " " << col_1-col_0 << std::endl;
+    if ((col_0==0) || (col_1==0)) {
+        return;
+    }
+    else if ((col_0_lu==col_0) && (col_1_lu==col_1)) {
+        return;
+    }
+    else {
+        tab[ind(current_row, 0)] = col_0; // save values to blocktable
+        tab[ind(current_row, 1)] = col_1;
+        
+        col_0_lu=col_0;
+        col_1_lu=col_1;
+    }
+    callPyFunc(std::string("req"), false);
+}
+
 
 void ValkkaFS::writeBlock(bool pycall, bool use_gil) {
     std::unique_lock<std::mutex> lk(this->mutex);
     std::string msg("");
-    
     // valkkafslogger.log(LogLevel::normal) << "current_row = " << current_row << std::endl;
     // valkkafslogger.log(LogLevel::normal) << "prev_row = " << prev_row << std::endl;
     
@@ -190,6 +263,9 @@ void ValkkaFS::writeBlock(bool pycall, bool use_gil) {
     
     tab[ind(current_row, 0)] = col_0; // save values to blocktable
     tab[ind(current_row, 1)] = col_1;
+
+    col_0_lu=col_0;
+    col_1_lu=col_1;
     
     updateDumpTable_(current_row); // save to the blocktable file as well
     
@@ -211,46 +287,8 @@ void ValkkaFS::writeBlock(bool pycall, bool use_gil) {
     if (!pycall) {
         return;
     }
-    
-    if (pyfunc!=NULL) {
-        PyObject *tup = PyTuple_New(2); // message tuple to the python side: (propagate: bool, value: int/str)
-        PyGILState_STATE gstate;
-        if (use_gil) {
-            std::cout << "ValkkaFS: writeBlock: obtaining Python GIL" << std::endl;
-            gstate = PyGILState_Ensure();
-            std::cout << "ValkkaFS: writeBlock: obtained Python GIL" << std::endl;
-            PyTuple_SET_ITEM(tup, 0, Py_True);
-        }
-        else {
-            PyTuple_SET_ITEM(tup, 0, Py_False);
-        }
-        
-        if (msg.size()>0) {
-            PyTuple_SET_ITEM(tup, 1, PyUnicode_FromString(msg.c_str()));
-        }
-        else {
-            PyTuple_SET_ITEM(tup, 1, PyLong_FromSsize_t(current_row));
-        }
-        
-        PyObject_CallFunction(pyfunc, "O", tup);
-        /*
-        if (msg.size()>0) {
-            PyObject_CallFunction(pyfunc, "s", msg.c_str());
-        }
-        else {
-            PyObject_CallFunction(pyfunc, "n", current_row);
-        }
-        */
-        
-        if (use_gil) {
-            ///*
-            std::cout << "ValkkaFS: writeBlock: releasing Python GIL" << std::endl;
-            PyGILState_Release(gstate);
-            std::cout << "ValkkaFS: writeBlock: released Python GIL" << std::endl;
-            //*/
-        }
-    }
-    
+
+    callPyFunc(msg, use_gil);
 }
 
 
@@ -375,8 +413,6 @@ void ValkkaFS::setArrayCall(PyObject* pyobj) {
     Py_DECREF(pyobj);
     // PyGILState_Release(gstate);
 }
-
-
 
 std::size_t ValkkaFS::get_n_blocks() {
     return n_blocks;    

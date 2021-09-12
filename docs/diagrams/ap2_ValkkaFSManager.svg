@@ -292,15 +292,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.2047284"
-     inkscape:cx="893.27207"
-     inkscape:cy="184.79789"
+     inkscape:cx="522.74466"
+     inkscape:cy="398.32405"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="2560"
-     inkscape:window-height="1375"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1051"
+     inkscape:window-x="268"
+     inkscape:window-y="1440"
      inkscape:window-maximized="1"
      inkscape:snap-global="false" />
   <metadata
@@ -320,6 +320,17 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-87)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="68.830269"
+       y="120.38654"
+       id="text291-3"><tspan
+         sodipodi:role="line"
+         id="tspan289-0"
+         x="68.830269"
+         y="120.38654"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">launched at writeBlock and updateTable</tspan></text>
     <path
        style="fill:none;stroke:#00ff00;stroke-width:0.26999974;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
        d="m 136.90054,197.92355 h 4.94265 l 0,48.10163"
@@ -639,7 +650,7 @@
          id="tspan2362"
          x="91.032738"
          y="107.5719"
-         style="fill:#ff0000;stroke-width:0.19571897">api2.ValkkaFS</tspan></text>
+         style="fill:#918a6f;stroke-width:0.19571897">api2.ValkkaFS</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.13150358px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.19571897"
@@ -685,7 +696,12 @@
          x="91.625862"
          y="156.12709"
          style="stroke-width:0.19571897"
-         id="tspan2382">  - setArrayCall()</tspan></text>
+         id="tspan2382">  - setArrayCall()</tspan><tspan
+         sodipodi:role="line"
+         x="91.625862"
+         y="160.04147"
+         style="stroke-width:0.19571897"
+         id="tspan287">  - updateTable()</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.19571897px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker2396)"
        d="M 23.614987,197.72584 H 17.288395 V 142.36816 H 91.823563"
@@ -701,7 +717,9 @@
          id="tspan2460"
          x="92.021271"
          y="115.87554"
-         style="stroke-width:0.19571897;fill:#008000;">new_block_cb__()</tspan></text>
+         style="stroke-width:0.19571897;fill:#008000;"><tspan
+   style="fill:#918a6f"
+   id="tspan263">new_block_cb__(</tspan>)</tspan></text>
     <rect
        style="fill:none;fill-opacity:0.9956522;stroke:#000000;stroke-width:0.26999974;stroke-miterlimit:4;stroke-dasharray:0.26999973, 0.26999973;stroke-dashoffset:0;stroke-opacity:1"
        id="rect2464"
@@ -788,7 +806,7 @@
          id="tspan3260"
          x="242.67325"
          y="103.02467"
-         style="fill:#ff0000;stroke-width:0.19571897">api2.ValkkaFSManager</tspan></text>
+         style="fill:#008000;stroke-width:0.19571897">api2.ValkkaFSManager</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.03060484px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.1894128"
@@ -799,7 +817,7 @@
          id="tspan3264"
          x="143.55133"
          y="200.40373"
-         style="fill:#00ff00;stroke-width:0.1894128">frequent</tspan></text>
+         style="fill:#00ff00;stroke-width:0.1894128">frequent / heartbeat</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.35613322px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.20975833"
@@ -1014,5 +1032,61 @@
          x="187.75203"
          y="270.44449"
          style="stroke-width:0.26458332;fill:#d45500;">7</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="127.49744"
+       y="262.99033"
+       id="text257"><tspan
+         sodipodi:role="line"
+         id="tspan255"
+         x="127.49744"
+         y="262.99033"
+         style="fill:#008000;stroke-width:0.26458332">- current playtime</tspan><tspan
+         sodipodi:role="line"
+         x="127.49744"
+         y="266.5181"
+         style="fill:#008000;stroke-width:0.26458332"
+         id="tspan259">- current  timelimits of cached frames</tspan></text>
+    <rect
+       style="fill:none;stroke-width:0.26458332;stroke:#008080"
+       id="rect261"
+       width="53.576881"
+       height="22.207228"
+       x="125.94449"
+       y="246.83961" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="147.21996"
+       y="164.37781"
+       id="text267"><tspan
+         sodipodi:role="line"
+         id="tspan265"
+         x="147.21996"
+         y="164.37781"
+         style="stroke-width:0.26458332;fill:#918a6f">setBlockCallback(cb)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+       x="220.26309"
+       y="114.44574"
+       id="text267-7"><tspan
+         sodipodi:role="line"
+         id="tspan265-6"
+         x="220.26309"
+         y="114.44574"
+         style="fill:#008000;stroke-width:0.26458332;">setBlockCallback(cb)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="100.01018"
+       y="163.60132"
+       id="text291"><tspan
+         sodipodi:role="line"
+         id="tspan289"
+         x="100.01018"
+         y="163.60132"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">updates blocktable current row</tspan></text>
   </g>
 </svg>
