@@ -72,8 +72,8 @@ livethread.startCall()
 livethread.registerStreamCall(ctx)
 livethread.playStreamCall(ctx)
 
-# stream for 10 secs
-time.sleep(10)
+# stream for N secs
+time.sleep(60)
 
 print("time to exit!")
 manager.unmap(valkkafs = vfs1, _id=1001)

@@ -222,72 +222,73 @@ void ValkkaFS::updateTable() {
     // an external entity (a manager) has requested that we
     // update the blocktable
     // this call originates from the python side
-    std::unique_lock<std::mutex> lk(this->mutex);
-    std::string msg("");
-    // if col_0 and col_1 are the same as at last query, do nothing
-    // if col_1 or col_1 is zero, do nothing
-    std::cout << "col_0, col_1: " << col_0 << " " << col_1 << " " << col_1-col_0 << std::endl;
-    if ((col_0==0) || (col_1==0)) {
-        return;
-    }
-    else if ((col_0_lu==col_0) && (col_1_lu==col_1)) {
-        return;
-    }
-    else {
-        tab[ind(current_row, 0)] = col_0; // save values to blocktable
-        tab[ind(current_row, 1)] = col_1;
-        
-        col_0_lu=col_0;
-        col_1_lu=col_1;
+    {
+        std::unique_lock<std::mutex> lk(this->mutex);
+        // if col_0 and col_1 are the same as at last query, do nothing
+        // if col_1 or col_1 is zero, do nothing
+        std::cout << "ValkkaFS: ext update: col_0, col_1: " << col_0 << " " << col_1 << " " << col_1-col_0 << std::endl;
+        if ((col_0==0) || (col_1==0)) {
+            return;
+        }
+        else if ((col_0_lu==col_0) && (col_1_lu==col_1)) {
+            return;
+        }
+        else {
+            tab[ind(current_row, 0)] = col_0; // save values to blocktable
+            tab[ind(current_row, 1)] = col_1;
+            
+            col_0_lu=col_0;
+            col_1_lu=col_1;
+        }
     }
     callPyFunc(std::string("req"), false);
 }
 
 
 void ValkkaFS::writeBlock(bool pycall, bool use_gil) {
-    std::unique_lock<std::mutex> lk(this->mutex);
     std::string msg("");
-    // valkkafslogger.log(LogLevel::normal) << "current_row = " << current_row << std::endl;
-    // valkkafslogger.log(LogLevel::normal) << "prev_row = " << prev_row << std::endl;
-    
-    if (col_1==0) {
-        valkkafslogger.log(LogLevel::fatal) << "ValkkaFS : writeBlock : no frames in the block.  Congrats, your ValkkaFS is broken" << std::endl;
-        col_1 = tab[ind(prev_row, 1)]; // copy value from previous block
-        msg="frame";
-    }
-    if (col_0==0) {
-        valkkafslogger.log(LogLevel::fatal) << "ValkkaFS : writeBlock : WARNING: no keyframe in block " << current_row << std::endl;
-        col_0 = tab[ind(prev_row, 0)]; // copy value from previous block
-        msg="keyframe";
-    }
-    
-    tab[ind(current_row, 0)] = col_0; // save values to blocktable
-    tab[ind(current_row, 1)] = col_1;
+    {
+        std::unique_lock<std::mutex> lk(this->mutex);
+        // valkkafslogger.log(LogLevel::normal) << "current_row = " << current_row << std::endl;
+        // valkkafslogger.log(LogLevel::normal) << "prev_row = " << prev_row << std::endl;
+        
+        if (col_1==0) {
+            valkkafslogger.log(LogLevel::fatal) << "ValkkaFS : writeBlock : no frames in the block.  Congrats, your ValkkaFS is broken" << std::endl;
+            col_1 = tab[ind(prev_row, 1)]; // copy value from previous block
+            msg="frame";
+        }
+        if (col_0==0) {
+            valkkafslogger.log(LogLevel::fatal) << "ValkkaFS : writeBlock : WARNING: no keyframe in block " << current_row << std::endl;
+            col_0 = tab[ind(prev_row, 0)]; // copy value from previous block
+            msg="keyframe";
+        }
+        
+        tab[ind(current_row, 0)] = col_0; // save values to blocktable
+        tab[ind(current_row, 1)] = col_1;
 
-    col_0_lu=col_0;
-    col_1_lu=col_1;
-    
-    updateDumpTable_(current_row); // save to the blocktable file as well
-    
-    prev_row=current_row;
-    current_row++;
-    if (current_row>=n_blocks) { // wrap
-        current_row=0; 
-    }
-    
-    col_0=0;
-    col_1=0;
-    
-    // set the next block values to zero
-    // clear old values, if any
-    tab[ind(current_row,0)]=0;
-    tab[ind(current_row,1)]=0;
-    updateDumpTable_(current_row); 
-    
+        col_0_lu=col_0;
+        col_1_lu=col_1;
+        
+        updateDumpTable_(current_row); // save to the blocktable file as well
+        
+        prev_row=current_row;
+        current_row++;
+        if (current_row>=n_blocks) { // wrap
+            current_row=0; 
+        }
+        
+        col_0=0;
+        col_1=0;
+        
+        // set the next block values to zero
+        // clear old values, if any
+        tab[ind(current_row,0)]=0;
+        tab[ind(current_row,1)]=0;
+        updateDumpTable_(current_row); 
+    }    
     if (!pycall) {
         return;
     }
-
     callPyFunc(msg, use_gil);
 }
 

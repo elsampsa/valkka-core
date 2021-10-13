@@ -44,11 +44,23 @@ from valkka.fs.base import ValkkaFS
 import datetime
 import traceback
 
+"""Blocktable format:
+
+::
+
+    k-max   max
+
+
+
+"""
+
+
 
 def getTimeRange(blocktable = None):
     """Returns tuple timerange.  If BT empty, returns None
     """
     assert(blocktable is not None)
+    # print(blocktable)
     nonzero = blocktable[:,0] > 0
     if nonzero.sum() < 1: # empty blocktable
         return None
@@ -61,6 +73,8 @@ def getInd(times, blocktable = None):
     This implementation of searching the blocks might seem overly complicated ..
     .. but its not: there are many things to take into account, for example, the fact
     that block numbers are wrapped over device boundaries
+
+    returns correct block indices
     """
     # verbose=True
     verbose=False
@@ -168,7 +182,6 @@ def getInd(times, blocktable = None):
         t0=None
         
     final = inds[order]                 # return sorted indices
-        
     return final.tolist()
     
 
@@ -208,18 +221,18 @@ def getIndNeigh(n=1, time=0, blocktable = None):
     finalinds = finalinds[order]
     # finalinds.sort()
     return finalinds.tolist()
-
+    
 
 class ValkkaMultiFS(ValkkaFS):
     valkkafs_type = 0 # stupid multistream FS
 
     def getTimeRange(self):
-        getTimeRange(self.blocktable)
+        return getTimeRange(self.blocktable)
 
     def getInd(self, times):
-        getInd(times, self.blocktable)
+        return getInd(times, self.blocktable)
 
     def getIndNeigh(self, n=1, time=0):
-        getIndNeigh(n=n, time=time, blocktable = self.blocktable)
+        return getIndNeigh(n=n, time=time, blocktable = self.blocktable)
 
 

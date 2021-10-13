@@ -30,6 +30,7 @@ base.py : api level 1 => api level 2 encapsulation for ValkkaFS.  Base class.
 @brief   api level 1 => api level 2 encapsulation for ValkkaFS.  Base class.
 """
 import time
+import traceback
 import json
 import os
 import glob
@@ -37,8 +38,8 @@ import numpy
 import logging
 from valkka import core
 # from valkka.api2.tools import *
-from valkka.api2.tools import parameterInitCheck
-from valkka.fs.tools import findBlockDevices
+from valkka.api2.tools import parameterInitCheck, getLogger, setLogger
+from valkka.fs.tools import findBlockDevices, formatMstimestamp, formatMstimeTuple
 from valkka.api2.exceptions import ValkkaFSLoadError
 import datetime
 import traceback
@@ -212,6 +213,9 @@ class ValkkaFS:
         self.pre = self.__class__.__name__ + " : "
         # checks kwargs agains parameter_defs, attach ok'd parameters to this
         # object as attributes
+        self.logger = getLogger(self.__class__.__name__)
+        setLogger(self.logger, logging.DEBUG)
+
         parameterInitCheck(ValkkaFS.parameter_defs, kwargs, self)
         
         self.block_cb = None # a custom callback in the callback chain when a new block is ready
@@ -224,13 +228,13 @@ class ValkkaFS:
             if self.partition_uuid in block_device_dic:
                 pass
             else:
-                print("block devices", block_device_dic)
+                self.logger.debug("block devices %s", block_device_dic)
                 raise(AssertionError("could not find block device"))
             self.dumpfile = block_device_dic[self.partition_uuid.lower()][0]
         else:
             assert(isinstance(self.dumpfile, str))
         
-        print("ValkkaFS: dumpfile = %s" % (str(self.dumpfile)))
+        self.logger.debug("ValkkaFS: dumpfile = %s", str(self.dumpfile))
         
         # TODO: use valkkafs_type
         self.core = core.ValkkaFS(self.dumpfile, self.blockfile, self.blocksize, self.n_blocks, False) # dumpfile, blockfile, blocksize, number of blocks, init blocktable
@@ -246,11 +250,15 @@ class ValkkaFS:
             ValkkaFS::setBlockCallback
             ValkkaFS::writeBlock
         """
-        print("ValkkaFS: resuming writing at block", self.current_block)
+        self.logger.debug("ValkkaFS: resuming writing at block %s", self.current_block)
         self.core.setCurrentBlock(self.current_block)
         # # attach an analysis tool
         # self.analyzer = core.ValkkaFSTool(self.core)
-        self.verbose = True
+        # self.verbose = True
+
+
+    def update(self):
+        self.new_block_cb__(True, "init")
 
 
     def is_same(self, **dic):
@@ -258,9 +266,9 @@ class ValkkaFS:
 
         Use parameters that are not modified by the ctor
         """
-        print("partition_uuid:",self.partition_uuid,dic["partition_uuid"])
-        print("blocksize     :",self.blocksize, dic["blocksize"])
-        print("n_blocks      :", self.n_blocks, dic["n_blocks"])
+        self.logger.debug("partition_uuid: %s %s",self.partition_uuid,dic["partition_uuid"])
+        self.logger.debug("blocksize     : %s %s",self.blocksize, dic["blocksize"])
+        self.logger.debug("n_blocks      : %s %s", self.n_blocks, dic["n_blocks"])
 
         return (\
         (self.partition_uuid  == dic["partition_uuid"]) and \
@@ -286,24 +294,26 @@ class ValkkaFS:
         #propagate = tup[0]
         #par = tup[1]
         try:
-            if (self.verbose):
-                print(self.pre, "new_block_cb__:", propagate, par)
+            self.logger.debug("new_block_cb__: propagate: %s par: %s", propagate, par)
             if isinstance(par, int):
                 self.current_block = par
-                print("ValkkaFS: new_block_cb__: block:", par)
+                self.logger.debug("ValkkaFS: new_block_cb__: got block num %s", par)
                 self.writeJson()
-                print("ValkkaFS: new_block_cb__: wrote json")
+                self.logger.debug("ValkkaFS: new_block_cb__: wrote json")
             elif isinstance(par, str):
-                print("ValkkaFS: new_block_cb__: got message:", par)
-                
+                self.logger.debug("ValkkaFS: new_block_cb__: got message: %s", par)
+
+            self.getBlockTable() # update BT values here at the python side
+
             if (self.block_cb is not None) and propagate:
-                print(self.pre, "new_block_cb: subcallback")
+                self.logger.debug("new_block_cb: subcallback")
                 self.block_cb()
                 
-            print(self.pre, "new_block_cb: bye")
+            self.logger.debug("new_block_cb: bye")
                 
         except Exception as e:
-            print("ValkkaFS: failed with '%s'" % (str(e)))
+            self.logger.debug("ValkkaFS: failed with '%s'", e)
+            traceback.print_exc()
         
                 
     def setBlockCallback(self, cb):
@@ -346,30 +356,33 @@ class ValkkaFS:
         # for regular, files, write them through
         # for block devices, just write the stripes
         if (self.dumpfile.find("/dev/")>-1): # this is a dedicated device
-            print("ValkkaFS: striping device")
+            self.logger.debug("ValkkaFS: striping device")
             self.core.clearDevice(False, verbose) # just write long int zeros in the beginning of each block
-            print("ValkkaFS: striped device")
+            self.logger.debug("ValkkaFS: striped device")
         else:
-            print("ValkkaFS: clearing device")
+            self.logger.debug("ValkkaFS: clearing device")
             self.core.clearDevice(True, verbose) # write-through the file
-            print("ValkkaFS: cleared device")
+            self.logger.debug("ValkkaFS: cleared device")
         
         
     def reload_(self):
         self.core.readTable()
     
     
-    def getBlockTable(self):
+    def getBlockTable(self, reread=False):
         """Updates self.blocktable
         """
-        print("ValkkaFS: getBlockTable")
+        self.logger.debug("ValkkaFS: getBlockTable")
         # traceback.print_stack()
-        self.core.updateTable() 
+        if reread:
+            # normally not required since this is call originates
+            # from a callback indicating a new block
+            self.core.updateTable() 
         # self.core.setArrayCall(self.blocktable_) # copy data from cpp to python (this is thread safe)
         self.core.setArrayCall(self.blocktable) # copy data from cpp to python (this is thread safe)
         # self.blocktable[:,:] = self.blocktable_[:,:] # copy the data .. self.blocktable can be accessed without fear of being overwritten during accesss
         # return self.blocktable
-        print("ValkkaFS: getBlockTable: exit")
+        self.logger.debug("ValkkaFS: getBlockTable: exit")
         # return self.blocktable_
     
 

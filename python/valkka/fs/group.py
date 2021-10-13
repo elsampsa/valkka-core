@@ -1,8 +1,10 @@
-import time
+import time, logging, traceback
 from valkka import core # ValkkaFSWriterThread, ValkkaFSReaderThread, FileCacheThread # api level 1
 # from valkka.fs.base import ValkkaFS # api level 2
 from valkka.fs.multi import ValkkaMultiFS
 from valkka.fs.single import ValkkaSingleFS
+from valkka.fs.tools import formatMstimestamp, formatMstimeTuple
+from valkka.api2.tools import getLogger, setLogger
 
 
 class SlotMapping:
@@ -21,10 +23,10 @@ class SlotMapping:
 class FSGroup:
     """
     :param valkkafs: ValkkaFS api level 2 instance
-    :param reader: ValkkaFSReaderThread instance.  Not started.  Output framefilter of
-    this thread should be connected to the correct FileCacheThread
-    :param writer: ValkkaFSWriterThread instance. Not started
 
+    Each FSGroup has a core.FileCacheThread, core.ValkkaFSReaderThread, core.ValkkaFSWriterThread
+
+    The reader dumps into the cacher.  Play, stop, etc. is requested from the cacher.
 
     Several streams (with unique slot numbers) can be diverted into
     the ValkkaFSWriterThread input filter (they all go into the same ValkkaFS / file).
@@ -32,57 +34,74 @@ class FSGroup:
     When reading, all frames come from the same ValkkaFSReaderThread's 
     (from the same ValkkaFS / file ) output filter.
 
-    Slots are mapped to unique id numbers in the ValkkaFS file (as defined
-    by the user)
-
-    API example:
-
-    ::
-
-        fsgroup = FSGroup(
-            valkkafs, 
-            core.ValkkaFSReaderThread("reader", valkkafs.core, cachethread.getFrameFilter()),
-            core.ValkkaFSWriterThread("writer", valkkafs.core)
-            )
-
-        fsgroup.start()
-
-        fsgroup.setSlotId(1, 1001) # slot, id
-        in_filter = fsgroup.getInputFilter() # write incoming frames here
-        out_filter = ... # AVThread's input filter, for example
-        ctx = fsgroup.setOutputFilter(filter = out_filter, slot = 1) # returns FileStreamContext
-        cachethread.registerStreamCall(ctx)
-        ...
-        ...
-        ctx = fsgroup.getFileStreamContext()
-        cachethread.deregisterStreamCall(ctx)
-
-        fsgroup.stop()
-
+    Slots are mapped to unique id numbers in the ValkkaFS file (as defined by the user)
     """
     timetolerance = 2000 # if frames are missing at this distance or further, 
     # request for more blocks
     timediff = 5 # blocktable can be inquired max this frequency (secs)
 
-    def __init__(self, valkkafs = None, 
-        reader: core.ValkkaFSReaderThread = None,
-        writer: core.ValkkaFSWriterThread = None):
+    def __init__(self, valkkafs = None, name="fsgroup"):
         assert(valkkafs is not None)
-        assert(isinstance(reader, core.ValkkaFSReaderThread))
-        assert(isinstance(writer, core.ValkkaFSWriterThread))
+
+        self.logger = getLogger(self.__class__.__name__)
+        setLogger(self.logger, logging.DEBUG)
+
         self.valkkafs = valkkafs
-        self.reader = reader
-        self.writer = writer
+
+        self.cacher = core.FileCacheThread("cacher_" + name)
+        self.reader = core.ValkkaFSReaderThread("reader_" + name, self.valkkafs.core, self.cacher.getFrameFilter())
+        self.writer = core.ValkkaFSWriterThread("writer_" + name, self.valkkafs.core)
+
         self.started = False
+        self.playing = False
+
         self.valkkafs.setBlockCallback(self.new_block_cb__)
-        self.cb = None # a custom callback
-        # self.file_stream_ctx_by_slot = {}
+        self.cacher.setPyCallback(self.timeCallback__)
+        self.cacher.setPyCallback2(self.timeLimitsCallback__)
+
+        self.new_block_cb = None # a custom callback
+        self.time_cb = None
+        self.time_limits_cb = None
+
+        """State
+
+        - is actively updated through callbacks
+        """
+
+        """Current set time as reported by FileCacherThread
+        0 is the default which means not set
+
+        state req: methods play & getCurrentTime needs
+        """
+        self.currentmstime = 0
+
         self.slot_mapping_by_id = {}
-        self.current_blocks = [] # currently cached blocks
-        self.timerange = None # global timerange from the blocktable
-        # .. tuple timerange.  None means empty blocktable
+
+        """Currently cached blocks
+
+        state req: if same blocks are requested again, no need
+        to request them from the filesystem
+        """
+        self.current_blocks = []
+        
+        """global timerange from the blocktable. 
+        
+        None = empty blocktable:
+        """
+        self.timerange = None
+        
+        """currently cached frames.  
+        
+        (0,0) = no cached frames
+        """
+        self.current_timerange = (0,0)
+
         self.checktime = 0 # when BT was requested for the last time
-        self.readBlockTable() # inits timerange & checktime
+        # self.readBlockTable() # inits timerange & checktime # update initiates this with callbacks
+
+
+    def update(self):
+        self.valkkafs.update()
 
     def getInputFilter(self):
         return self.writer.getFrameFilter()
@@ -94,11 +113,11 @@ class FSGroup:
         assert(framefilter is not None)
         self.writer.setSlotIdCall(write_slot, _id)
         self.reader.setSlotIdCall(read_slot, _id)
-        #self.file_stream_ctx_by_slot[slot] =\
-        #    core.FileStreamContext(slot, framefilter)
+        file_stream_ctx = core.FileStreamContext(read_slot, framefilter)
         self.slot_mapping_by_id[_id] = SlotMapping(
-            write_slot, read_slot, core.FileStreamContext(read_slot, framefilter)
+            write_slot, read_slot, file_stream_ctx
         )
+        self.cacher.registerStreamCall(file_stream_ctx)
 
     def unmap(self, _id):
         # assert(slot in self.file_stream_ctx_by_slot)
@@ -106,30 +125,113 @@ class FSGroup:
         sm = self.slot_mapping_by_id[_id]
         self.writer.unSetSlotIdCall(sm.write_slot)
         self.reader.unSetSlotIdCall(sm.read_slot)
+        self.cacher.deregisterStreamCall(sm.file_stream_ctx)
         self.slot_mapping_by_id.pop(_id)
     
-    def getFileStreamContext(self, _id):
-        assert(_id in self.slot_mapping_by_id)
-        return self.slot_mapping_by_id[_id].file_stream_ctx
-
     def start(self):
+        self.cacher.startCall()
         self.reader.startCall()
         self.writer.startCall()
         self.started = True
         
     def stop(self):
         self.reader.stopCall()
+        self.cacher.stopCall()
         self.writer.stopCall()
         self.started = False
 
     def requestStop(self):
         self.reader.requestStopCall()
+        self.cacher.requestStopCall()
         self.writer.requestStopCall()
         self.started = False
 
     def waitStop(self):
         self.reader.waitStopCall()
+        self.cacher.waitStopCall()
         self.writer.waitStopCall()
+
+    # getters
+
+    def getCurrentTime(self):
+        return self.currentmstime
+
+    def getTimerange(self):
+        return self.timerange
+
+    def getCurrentTimerange(self):
+        return self.current_timerange
+
+    # setters
+
+    def clearTime(self):
+        """Reset cacher state
+
+        TODO: what did this do exactly..?
+        """
+        self.cacher.clearCall()
+
+    # play/stop/seek control
+
+    def play(self):
+        if self.currentmstime <= 0:
+            return False
+        self.logger.debug("play")
+        self.cacher.playStreamsCall()
+        self.playing = True
+        return True
+
+
+    def stop(self):
+        if self.playing:
+            # traceback.print_stack()
+            self.logger.debug("stop")
+            self.cacher.stopStreamsCall()
+            self.playing = False
+        
+    
+    """
+    def seek(self, mstimestamp):
+        #Before performing seek, check the blocktable
+        #
+        #- Returns True if the seek could be done, False otherwise
+        #- Requests frames always from ValkkaFSReaderThread (with reqBlocks),
+        #  even if there are already frames at this timestamp
+        assert(isinstance(mstimestamp, int))
+        # self.stop() # seekStreamsCall stops
+        self.readBlockTableIf()
+        if not self.timeOK(mstimestamp):
+            return False
+        # there's stream for that time, so proceed
+        self.logger.info("seek : proceeds with %i", mstimestamp)
+        self.cacher.seekStreamsCall(mstimestamp, True) # note that clear flag is True : clear the seek.
+        ok = self.reqBlocks(mstimestamp)
+        if not ok: self.logger.warning("seek : could not get blocks")
+    """     
+            
+    def seek(self, mstimestamp):
+        """Like seek, but does not request frames if there are already frames in this timerange
+        """
+        # self.readBlockTableIf() # nopes: state update only by callbacks
+        self.logger.debug("seek : current timerange: %s", self.current_timerange)
+        self.logger.debug("seek : current timerange: %s", formatMstimeTuple(self.current_timerange))
+        self.logger.debug("seek : timetolerance: %s", self.timetolerance)
+        if not self.withinRange(mstimestamp):
+            return False
+        if self.withinCached(mstimestamp, self.timetolerance):
+            self.logger.debug("seek : just set target time")
+            self.cacher.seekStreamsCall(mstimestamp, False) 
+            # simply sets the target (note that clear is set to False)
+            return True
+        self.logger.debug("seek : request frames")
+        self.cacher.seekStreamsCall(mstimestamp, True) 
+        # note that clear flag is True : clear the seek.
+        ok = self.reqBlocksIf(mstimestamp)
+        if not ok: self.logger.warning("seek : could not get blocks")
+        return ok
+
+
+    # callback setters
 
     def setBlockCallback(self, cb):
         """Set a callback that is fired when there's a new block/
@@ -137,31 +239,117 @@ class FSGroup:
 
         The callback should accept a single parameter
         """
-        self.cb = cb
+        self.new_block_cb = cb
+
+    def setTimeCallback(self, cb):
+        """Set a callback for cacherthread's "heartbeat"
+
+        The callback should accept two parameter (fsgroup, mstime)
+        """
+        self.time_cb = cb
+
+    def setTimeLimitsCallback(self, cb):
+        """Set callback when cacherthread is filled with new block of frames
+
+        The callback should accept two parameter (fsgroup, tup)
+        """
+        self.time_limits_cb = cb
+
+    # callbacks
 
     def new_block_cb__(self):
         """This is always called at a new block
         """
-        if self.cb is not None:
-            self.cb(self) # emit this FSGroup with the callback
+        self.logger.debug("new_block_cb__")
+        self.readBlockTableIf()
+        if self.new_block_cb is not None:
+            self.logger.debug("new_block_cb__ : subcallback")
+            self.new_block_cb(self) # emit this FSGroup with the callback
 
+    def timeCallback__(self, mstime: int):
+        """This is called from cpp on regular time 
+        intervals from FileCacheThread
+            
+        :param mstime:  play/seek millisecond timestamp
+            
+        Called from cpp side:
+
+        ::
+
+            cachestream.cpp
+                FileCacheThread
+                    run
+                        calls pyfunc (this method)
+        """
+        # return
+        try:
+            """
+            Handle under / overflows:
+            
+            - If the stream goes over global timelimits, stop it
+            - .. same for underflow
+            - If goes under / over currently available blocks, order more
+            
+            - using try / except blocks we can see the error message even when this is called from cpp
+            """
+            if mstime <= 0: # time not set
+                self.logger.debug("timeCallback__ : no time set")
+                # print("timeCallback__ : no time set")
+            else:
+                # request blocks around certain 
+                # millisecond timestamp from all
+                # necessary valkkafs
+                self.reqBlocksIf(mstime)
+                
+            self.currentmstime = mstime
+            if self.time_cb is not None:
+                try:
+                    self.time_cb(self, mstime) # attach fsgroup
+                except Exception as e:
+                    self.logger.warning("timeCallback__ : your callback failed with '%s'", str(e))
+
+        except Exception as e:
+            self.logger.debug("timeCallback__ failed with '%s'" , e)
+            traceback.print_exc()
+
+
+    def timeLimitsCallback__(self, tup):
+        try:
+            self.logger.debug("timeLimitsCallback__ : %s", str(tup))
+            self.logger.debug("timeLimitsCallback__ : %s", formatMstimeTuple(tup))
+            self.current_timerange = tup # currently cached frames
+            if self.time_limits_cb is not None:
+                self.logger.debug("timeLimitsCallback__ : subcallback")
+                self.time_limits_cb(self, tup) # attach fsgroup
+        except Exception as e:
+            self.logger.debug("timeLimitsCallback__ failed with '%s'" , e)
+            traceback.print_exc()
+
+
+    # BT handling
 
     def readBlockTable(self):
         """Create a copy of the blocktable
         """
-        self.valkkafs.getBlockTable() # updates BT
+        # self.valkkafs.getBlockTable() # updates BT
+        # .. nopes: object lower in the hierarchy updates its state
+        # .. and higher level objects just use getters of the lower
+        # .. level object
+        #
         # self.logger.debug("readBlockTable: %s", self.blocktable)
         # self.timerange = self.valkkafs.getTimeRange(self.blocktable)
         self.timerange = self.valkkafs.getTimeRange()
-        # print("FSGroup: readBlocktable: timerange=", self.timerange)
+        # self.logger.debug("readBlockTable: timerange=%s", self.timerange)
+        self.logger.debug("readBlockTable: timerange=%s", formatMstimeTuple(self.timerange))
         self.checktime = time.time()
 
-    
     def readBlockTableIf(self):
         """Create a copy of the blocktable, but only if a certain time has passed
         """
-        if (time.time() - self.checktime) >= self.timediff:
-            self.readBlockTable()
+        self.logger.debug("readBlockTableIf:")
+        #if (time.time() - self.checktime) >= self.timediff:
+        self.logger.debug("readBlockTableIf: updating")
+        self.readBlockTable()
 
 
     def reqBlocksIf(self, mstime):
@@ -182,15 +370,20 @@ class FSGroup:
         #
         if self.timerange is None:
             # blocktable is empty
-            return
-        # (1) check if mstime falls within the current block timerange
-        if (mstime-self.timerange[0]) > self.timetolerance:
+            self.logger.debug("reqBlocksIf: empty blocktable")
             return False
-        if (self.timerange[1]-mstime) > self.timetolerance:
+
+        self.logger.debug("reqBlocksIf: mstime: %s, timerange: %s = %s", mstime, self.timerange,
+            formatMstimeTuple(self.timerange))
+
+        if not self.withinRange(mstime):
+            self.logger.debug("reqBlocksIf: not in range")
             return False
-        # .. we're well inside the timelimits
-        # otherwise:
-        # TODO: check if we're inside the legit time limits
+
+        if self.withinCached(mstime, self.timetolerance):
+            self.logger.debug("reqBlocksIf: already within cached frames")
+            return False
+
         block_list = self.valkkafs.getIndNeigh(
             n=1, 
             time=mstime)
@@ -199,10 +392,11 @@ class FSGroup:
         # (2) if blocks would be different than the ones we have currently,
         # request them
         if block_list == self.current_blocks:
+            self.logger.debug("reqBlocksIf: same blocks")
             return False
         # blocks ok
         self.current_blocks = block_list
-        tmp = self.blocktable[self.current_blocks,:]
+        tmp = self.valkkafs.blocktable[self.current_blocks,:]
         self.current_timerange = (
             tmp[:,0].min(), # max of the first column (key frames) 
             tmp[:,1].max() # min of the second column (any frames)
@@ -215,6 +409,28 @@ class FSGroup:
         # ..send frames from readerthread -> cacherthread
         return True
 
+    # helpers
+
+    def withinRange(self, mstime):
+        """mstimestamp within the range of all avail. frames?
+        """
+        if ((self.timerange == (0,0)) or self.timerange is None):
+            return False
+        if (mstime >= (self.timerange[0])) and\
+            (mstime <= (self.timerange[1])):
+            return True
+        return False
+
+    def withinCached(self, mstime, margin):
+        """mstimestamp within the range of cached frames?
+        """
+        if ((self.current_timerange == (0,0)) or self.current_timerange is None):
+            return False
+        if (mstime >= (self.current_timerange[0] + margin)) and\
+            (mstime <= (self.current_timerange[1] - margin)):
+            return True
+        return False
+
 
 # "in-situ" trivial tests
 def fsgrouptest():
@@ -226,14 +442,7 @@ def fsgrouptest():
         blocksize = 1024*1024,
         n_blocks = 5,
         verbose = True)
-    cachethread = core.FileCacheThread("cacher")
-    # one would set callbacks to cachethread before starting..
-    cachethread.startCall() 
-    fsgroup = FSGroup(
-        valkkafs_1,
-        core.ValkkaFSReaderThread("reader", valkkafs_1.core, cachethread.getFrameFilter()),
-        core.ValkkaFSWriterThread("writer", valkkafs_1.core)
-    )
+    fsgroup = FSGroup(valkkafs_1)
     fsgroup.start()
     in_filter = fsgroup.getInputFilter()
     # .. could connect lots of streams into in_filter
@@ -242,17 +451,9 @@ def fsgrouptest():
     fsgroup.map_(write_slot=1, read_slot=1, _id=1001, framefilter=out_filter)
     # both writer & reader thread map slot 1 to id 1001
     # creates FileStreamContext mapping slot 1 to out_filter
-    # that can be used with FileCacheThread
-    # let's get it:
-    file_stream_ctx = fsgroup.getFileStreamContext(1001)
-    # tell cachethread to divert slot 1 to out_filter
-    cachethread.registerStreamCall(file_stream_ctx)
-    # unmap
+    # that is used internally with FileCacheThread
     fsgroup.unmap(1001)
-    # 
     fsgroup.stop() # writes to cachethread's filter, so must be stopped first
-    cachethread.stopCall()
-
 
 if __name__ == "__main__":
     fsgrouptest()

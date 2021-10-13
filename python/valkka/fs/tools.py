@@ -40,10 +40,26 @@ guid_linux_swap="0657FD6D-A4AB-43C4-84E5-0933C84B4F4F" # GPT partition table
 mbr_linux_swap="82" # MBR partition table
 
 
-
 def formatMstimestamp(mstime):
     t = datetime.datetime.fromtimestamp(mstime/1000)
-    return "%s:%s" % (t.minute, t.second)
+    # return "%s:%s" % (t.minute, t.second)
+    return "{day}.{month} / {hour}:{minute}".format(
+        day = t.day, month = t.month, hour = t.hour, minute = t.minute
+    )
+
+
+def formatMstimeTuple(tup):
+    if tup is None:
+        return "<NONE>"
+    t0 = datetime.datetime.fromtimestamp(tup[0]/1000)
+    t1 = datetime.datetime.fromtimestamp(tup[1]/1000)
+    st = "({day}.{month} / {hour}:{minute} ==> ".format(
+        day = t0.day, month = t0.month, hour = t0.hour, minute = t0.minute
+    )
+    st += "{day}.{month} / {hour}:{minute})".format(
+        day = t1.day, month = t1.month, hour = t1.hour, minute = t1.minute
+    )
+    return st
 
 
 def findBlockDevices():
