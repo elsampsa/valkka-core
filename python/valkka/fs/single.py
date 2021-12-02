@@ -45,11 +45,25 @@ import datetime
 import traceback
 
 
+def dumpArr(arr):
+    st="bt=np.array([\n"
+    for row in arr:
+        st+="["
+        for col in row:
+            st+=str(col)+", "
+        st+="],\n"
+        # [1, 2, 3, 4]
+    st+="])"
+    return st
+
 def getTimeRange(blocktable = None):
     assert(blocktable is not None)
+    # print(dumpArr(blocktable[0:10,:]))
     nonzero = blocktable[:,0] > 0
     if nonzero.sum() < 1: # empty blocktable
-        return ()
+        # return ()
+        return None
+    # print(">",(int(blocktable[nonzero,0].min()), int(blocktable[nonzero,1].max())))
     return (int(blocktable[nonzero,0].min()), int(blocktable[nonzero,1].max()))
     
 
@@ -209,15 +223,15 @@ def getIndNeigh(n=1, time=0, blocktable = None):
 
 
 class ValkkaSingleFS(ValkkaFS):
-    valkkafs_type = 1 # single stream FS
+    """Filesystem for having a single stream per file/device
+    """
+    core_valkkafs_class = core.ValkkaFS2
 
     def getTimeRange(self):
-        getTimeRange(self.blocktable)
+        return getTimeRange(self.blocktable)
 
     def getInd(self, times):
-        getInd(times, self.blocktable)
+        return getInd(times, self.blocktable)
 
     def getIndNeigh(self, n=1, time=0):
-        getIndNeigh(n=n, time=time, blocktable = self.blocktable)
-
-
+        return getIndNeigh(n=n, time=time, blocktable = self.blocktable)

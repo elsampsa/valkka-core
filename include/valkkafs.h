@@ -86,9 +86,14 @@ public:                 // <pyapi>
      * @param   blocksize     size of a block
      * @param   n_blocks      number of blocks
      * @param   init          true = init and dump blocktable to disk.  false = try to read blocktable from disk (default)
+     * 
+     * ValkkaFS is designed for a case when several streams are dumped into the same file/blockdevice.  However, this idea has been abandoned for the 
+     * moment (although cool idea, there are several complications with it) and we have opted to have a single stream per file/blockdevice.
+     * That (more conventional) idea is implemented in ValkkaFS2.  The only different is how the keyframes are marked into the blocktable.
+     * 
      */
     ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks, bool init=false); // <pyapi>
-    ~ValkkaFS();        // <pyapi>
+    virtual ~ValkkaFS();        // <pyapi>
 
 protected:
     std::string     device_file;
@@ -171,7 +176,7 @@ public:                                  // <pyapi>
     void markFrame(long int mstimestamp);        
 
     /** Used by a writer class to inform that a key frame has been written */
-    void markKeyFrame(long int mstimestamp);     
+    virtual void markKeyFrame(long int mstimestamp);     
     
     /** Set block number that's being written */
     void setCurrentBlock(std::size_t n_block);      // <pyapi>
@@ -190,6 +195,23 @@ public:                                  // <pyapi>
      */
     void setArrayCall(PyObject *pyobj);  // <pyapi>
 };                                       // <pyapi>
+
+
+class ValkkaFS2 : public ValkkaFS { // <pyapi>
+
+public:                             // <pyapi>
+    /** Default Constructor
+     * 
+     * Please refer to ValkkaFS : the ctor is identical
+     * 
+     * This version of ValkkaFS is designed for one file having a single stream
+     */
+    ValkkaFS2(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks, bool init=false); // <pyapi>
+    virtual ~ValkkaFS2();            // <pyapi>
+
+    /** Used by a writer class to inform that a key frame has been written */
+    virtual void markKeyFrame(long int mstimestamp);     
+};                                  // <pyapi>
 
 
 /** Analyzer tool for ValkkaFS

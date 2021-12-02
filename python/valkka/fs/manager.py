@@ -49,6 +49,9 @@ class ValkkaFSManager:
             self.fsgroup_by_valkkafs[valkkafs] = fsgroup
             self.timerange_by_valkkafs[valkkafs] = (0,0)
         self.started = False
+        self.prevtime = 0
+        self.state_interval = 1 # refresh state max every N secs
+        self.is_playing = False
 
 
     def __del__(self):
@@ -100,34 +103,52 @@ class ValkkaFSManager:
         self.started = False
 
 
-    def setTimeCallback(self, timecallback: callable):
+    def setTimeCallback(self, func: callable):
         """Continue the callback chain, originating from FileCacheThread::run
         
-        Callback carries current seek/playtime
-        """
-        self.timecallback = timecallback
-        
-        
-    def setTimeLimitsCallback(self, timelimitscallback: callable):
-        """Continue the callback chain, originating from FileCacheThread::switchcache
-
-        Callback carries the timelimits of currently cached frames (as a tuple)
-        """
-        self.timelimitscallback = timelimitscallback
-        
-        
-    def setBlockCallback(self, func):
-        """
-
-        func should comply with this:
+        prototype:
 
         ::
 
             func(
-                    valkkafs = {can be None}
-                    timerange_local = {tuple, can be None}
-                    timerange_global = tuple
-                )
+                mstime = mstime,
+                valkkafs = None/ValkkaFS instance
+            )
+
+        """
+        self.timecallback = func
+        
+        
+    def setTimeLimitsCallback(self, func: callable):
+        """Continue the callback chain, originating from FileCacheThread::switchcache
+
+        Callback carries the timelimits of currently cached frames (as a tuple)
+
+        prototype:
+
+        ::
+
+            func(
+                timerange = tuple timerange of currently cached frames
+                valkkafs = None/ValkkaFS instance
+            )
+
+        """
+        self.timelimitscallback = func
+        
+        
+    def setBlockCallback(self, func: callable):
+        """
+
+        func prototype:
+
+        ::
+
+            func(
+                timerange = tuple of global timelimits
+                valkkafs = None/ValkkaFS instance
+            )
+        
         """
         self.new_block_cb = func
 
@@ -160,24 +181,64 @@ class ValkkaFSManager:
         fsgroup.unmap(_id)
         
 
+    def updateTime__(self):
+        mstime = 0
+        for fsgroup in self.fsgroups:
+            mstime = max(fsgroup.currentmstime, mstime)
+        self.currentmstime = mstime
+        if self.currentmstime > 0:
+            # at least one of the stream has been seeked to avail frames
+            for fsgroup in self.fsgroups:
+                if fsgroup.currentmstime==0:
+                    # so there's a stream that is inactive because frames
+                    # have ran out.  Let's see if we can start it
+                    if fsgroup.withinRange(self.currentmstime):
+                        # yes we can
+                        fsgroup.seek(self.currentmstime)
+                        if self.is_playing:
+                            fsgroup.play()
+
+
     def updateTimeRange__(self):
         """update the global timerange from all blocktables
         """
         timerange = None
         for fsgroup in self.fsgroups:
+            self.logger.debug("updateTimeRange__ : %s", fsgroup)
             self.logger.debug("updateTimeRange__ : fsgroup.timerange: %s", 
                 formatMstimeTuple(fsgroup.timerange))
-            if fsgroup.timerange is None: # empty BT
+            if fsgroup.timerange is None or fsgroup.timerange == (0,0): # empty BT
                 continue
             if timerange is None:
                 timerange = (fsgroup.timerange[0], fsgroup.timerange[1])
                 continue
-            timerange[0] = min(fsgroup.timerange[0], timerange[0])
-            timerange[1] = max(fsgroup.timerange[1], timerange[1])
+            timerange = (
+                min(fsgroup.timerange[0], timerange[0]), 
+                min(fsgroup.timerange[1], timerange[1])
+            )
             self.timerange_by_valkkafs[fsgroup.valkkafs] = fsgroup.timerange
         self.timerange = timerange
-        self.logger.debug("updateTimeRange__ 2: fsgroup.timerange: %s", 
-            formatMstimeTuple(fsgroup.timerange))
+        self.logger.debug("updateTimeRange__ : final timerange: %s", 
+            formatMstimeTuple(self.timerange))
+
+
+    def updateTimeLimits__(self):
+        """update limits of currently cached frames
+        """
+        mintime = 0
+        maxtime = 0
+        for fsgroup in self.fsgroups:
+            current_timerange = fsgroup.getCurrentTimerange()
+            self.logger.debug("updateTimeLimits__: fsgroup current_timerange: %s:%s", fsgroup, current_timerange)
+            if (current_timerange == (0,0)): # not set'ed
+                continue
+            if mintime <=0: mintime = current_timerange[0]
+            if maxtime <=0: maxtime = current_timerange[1]
+            mintime = min(current_timerange[0], mintime)
+            maxtime = max(current_timerange[1], maxtime)
+            self.timerange_by_valkkafs[fsgroup.valkkafs] = current_timerange
+        self.current_timerange = (mintime, maxtime)
+        self.logger.debug("updateTimeLimits__: current_timerange: %s", self.current_timerange)
 
 
     def readBlockTableIf(self, fsgroup):
@@ -212,52 +273,75 @@ class ValkkaFSManager:
         - timelimit of the valkkafs instance in question
         - global timelimit of all valkkafs instances
         """
-        self.logger.debug("new_block_cb__")
-        # self.readBlockTableIf(fsgroup) # nopes .. done earlier in the callback chain
-        self.updateTimeRange__()
+        self.logger.debug("new_block_cb__: %s", fsgroup)
+        """
         if self.new_block_cb is not None:
             self.new_block_cb(
-                valkkafs = fsgroup.valkkafs,
-                timerange_local = fsgroup.timerange,
-                timerange_global = self.timerange
+                timerange = fsgroup.getTimerange(),
+                valkkafs = fsgroup.valkkafs
             )
+        """
+        """instead of just informing the timer, we could
+        send individual information about each ValkkaFS to the widget
+        for example if we'd like to have a timeline per each camera
+        """
+        self.timer()
 
 
     def timeCallback__(self, fsgroup, mstime: int):
         """This originates from the cacherthread of the fsgroup in question.
-        
-        We can check if all the streams are approx. in the same time
-        Create a mean value of all times..?
         """
+        self.logger.debug("timeCallback__: %s", fsgroup)
         self.logger.debug("timeCallback__: %s", mstime)
-        self.currentmstime = mstime
+        """
+        self.currentmstime = mstime # can't do this..!
         if self.timecallback is not None:
-            self.logger.debug("timeCallback__: subcallback")
-            self.timecallback(mstime)
+            self.logger.debug("timeCallback__: subcallback:")
+            self.timecallback(
+                mstime = mstime, 
+                valkkafs = fsgroup.valkkafs
+            )
+        """
+        self.timer()
 
 
     def timeLimitsCallback__(self, fsgroup, tup):
         """Currently cached frames
-        """
-        self.logger.debug("timeLimitsCallback__: %s", tup)
-        mintime = 0
-        maxtime = 0
-        for fsgroup in self.fsgroups:
-            current_timerange = fsgroup.getCurrentTimerange()
-            self.logger.debug("timeLimitsCallback__: fsgroup current_timerange: %s", current_timerange)
-            if current_timerange == (0,0): # not setted
-                continue
-            if mintime <=0: mintime = current_timerange[0]
-            if maxtime <=0: maxtime = current_timerange[1]
-            mintime = min(current_timerange[0], mintime)
-            maxtime = max(current_timerange[1], maxtime)
-            self.timerange_by_valkkafs[fsgroup.valkkafs] = current_timerange
-        self.current_timerange = (mintime, maxtime)
-        self.logger.debug("timeLimitsCallback__: current_timerange: %s", self.current_timerange)
-        if self.timelimitscallback is not None:
-            self.logger.debug("timeLimitsCallback__: subcallback")
-            self.timelimitscallback(self.current_timerange)
 
+        :param fsgroup: FSGroup where this callback is originating
+        :param tup: originates from FileCacherThread => FSGroup
+
+        """
+        self.logger.debug("timeLimitsCallback__: %s:%s", fsgroup,tup)
+        """
+        if self.timelimitscallback is not None:
+            self.logger.debug("timeLimitsCallback__: subcallback: %s", fsgroup)
+            self.timelimitscallback(
+                timerange = fsgroup.getCurrentTimerange
+                valkkafs = fsgroup.valkkafs
+                )
+        """
+        self.timer()
+
+
+    def timer(self):
+        """Manager should take care the case where one of the groups should pick up again playing
+        that has been stopped due to unavailable stream
+        """
+        t = time.time()
+        if ((t - self.prevtime) >= self.state_interval):
+            self.logger.debug("timer: state update")
+            self.prevtime = t
+            self.updateTimeRange__()
+            self.updateTimeLimits__()
+            self.updateTime__()
+            if self.new_block_cb is not None:
+                self.new_block_cb(timerange = self.timerange)
+            if self.timecallback is not None:
+                self.timecallback(mstime = self.currentmstime)
+            if self.timelimitscallback is not None:
+                self.timelimitscallback(timerange = self.current_timerange)
+                    
     # getters
 
     def getCurrentTime(self):
@@ -274,12 +358,14 @@ class ValkkaFSManager:
     def play(self):
         """play all fsgroup(s)
         """
+        self.is_playing=True
         for fsgroup in self.fsgroups:
             fsgroup.play()
 
     def stop(self):
         """stop all fsgroup(s)
         """
+        self.is_playing=False
         for fsgroup in self.fsgroups:
             fsgroup.stop()   
     
@@ -288,7 +374,6 @@ class ValkkaFSManager:
         """
         for fsgroup in self.fsgroups:
             ok = fsgroup.seek(mstimestamp)
-        
 
 
 def managertest():

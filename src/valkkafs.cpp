@@ -425,6 +425,29 @@ std::size_t ValkkaFS::get_n_cols() {
 
 
 
+ValkkaFS2::ValkkaFS2(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks, bool init) : 
+    ValkkaFS(device_file, block_file, blocksize, n_blocks, init) {
+    }
+
+ValkkaFS2::~ValkkaFS2() {}
+
+
+void ValkkaFS2::markKeyFrame(long int mstimestamp) {
+    std::cout << "ValkkaFS2: markKeyFrame" << std::endl;
+    if (col_0 <= 0) {
+        col_0 = mstimestamp;
+    }
+    else {
+        col_0 = std::min(col_0, mstimestamp);
+    }
+    col_1 = std::max(col_1, mstimestamp);
+    valkkafslogger.log(LogLevel::crazy) 
+    // std::cout
+        << "ValkkaFS: markKeyFrame: col_0 =" 
+        << col_0 << std::endl;
+}
+
+
 ValkkaFSTool::ValkkaFSTool(ValkkaFS &valkkafs) : valkkafs(valkkafs), raw_reader(valkkafs.getDevice().c_str()) {
 }
 

@@ -177,7 +177,6 @@ void DecoderThread::run() {
                         // go into seek state .. don't forward frames
                         state = AbstractFileState::seek;
                         avthreadlogger.log(LogLevel::debug) << "DecoderThread: " << name << " setupframe: seek mode " << *f << std::endl;
-                    
                     }
                     else if (setupframe->stream_state == AbstractFileState::play) {
                         state = AbstractFileState::play;

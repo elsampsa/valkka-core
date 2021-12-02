@@ -392,10 +392,20 @@ void FileCacheThread::switchCache() {
         // res = Py_BuildValue("ll", (long int)(1), (long int)(2));
         // res = Py_BuildValue("(ii)", 123, 456); // debug : crassssh
         
-        tup = PyTuple_New(2);
-        PyTuple_SET_ITEM(tup, 0, PyLong_FromLong(play_cache->getMinTime_()));
-        PyTuple_SET_ITEM(tup, 1, PyLong_FromLong(play_cache->getMaxTime_()));
-        
+        // tup = PyTuple_New(2);
+
+        if (play_cache->getMinTime_() > play_cache->getMaxTime_()) {
+            // indication that framecache is empty (please see FrameCache::clear_)
+            // PyTuple_SET_ITEM(tup, 0, PyLong_FromLong(0));
+            // PyTuple_SET_ITEM(tup, 1, PyLong_FromLong(0));
+            tup = Py_None;
+        }
+        else {
+            tup = PyTuple_New(2);
+            PyTuple_SET_ITEM(tup, 0, PyLong_FromLong(play_cache->getMinTime_()));
+            PyTuple_SET_ITEM(tup, 1, PyLong_FromLong(play_cache->getMaxTime_()));
+        }
+            
         /*
         if (!res) {
             std::cout << "FileCacheThread: switchCache: WARNING: could not create tuple" << std::endl;
@@ -528,7 +538,7 @@ void FileCacheThread::seekStreams(long int mstimestamp_, bool clear, bool send_s
         reftime = 0; // reftime should be calculated only from the time instant when the frame is available and is ready to fire
     }
 }
-    
+
 
 void FileCacheThread::clear() {
     reftime = 0;
@@ -536,8 +546,14 @@ void FileCacheThread::clear() {
     next = NULL;
     state = AbstractFileState::stop;
     target_mstimestamp_ = 0;
+    switchCache(); // clear the framecache
+    // inform downstream that the stream has been cleared
+    std::cout << "FileCacheThread::clear:sending setup frame downstream" << std::endl;
+    state_setupframe.mstimestamp = getCurrentMsTimestamp();
+    state_setupframe.sub_type = SetupFrameType::stream_state;
+    state_setupframe.stream_state = AbstractFileState::seek;
+    sendSetupFrames(&state_setupframe);
 }
-
 
 void FileCacheThread::run() {
     std::unique_lock<std::mutex> lk(this->loop_mutex);

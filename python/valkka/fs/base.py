@@ -67,7 +67,7 @@ class ValkkaFS:
             blockfile
         
     """
-    valkkafs_type = -1 # subclass
+    core_valkkafs_class = core.ValkkaFS
 
     @classmethod
     def loadFromDirectory(cls, dirname, verbose=False):
@@ -207,17 +207,23 @@ class ValkkaFS:
     
     parameter_defs.update(filesystem_defs)
     
+    instance_counter = 0 # a class variable
+
     def __init__(self, **kwargs):
         """If partition_uuid defined, the dumpfile is set by ctor to the device defined by partition_uuid
         """
         self.pre = self.__class__.__name__ + " : "
         # checks kwargs agains parameter_defs, attach ok'd parameters to this
         # object as attributes
-        self.logger = getLogger(self.__class__.__name__)
+        logname = self.__class__.__name__
+        parameterInitCheck(ValkkaFS.parameter_defs, kwargs, self)
+
+        self.name = str(self.__class__.instance_counter)
+        self.__class__.instance_counter += 1
+        logname = logname + " " + self.name
+        self.logger = getLogger(logname)
         setLogger(self.logger, logging.DEBUG)
 
-        parameterInitCheck(ValkkaFS.parameter_defs, kwargs, self)
-        
         self.block_cb = None # a custom callback in the callback chain when a new block is ready
         
         block_device_dic = findBlockDevices() 
@@ -236,8 +242,8 @@ class ValkkaFS:
         
         self.logger.debug("ValkkaFS: dumpfile = %s", str(self.dumpfile))
         
-        # TODO: use valkkafs_type
-        self.core = core.ValkkaFS(self.dumpfile, self.blockfile, self.blocksize, self.n_blocks, False) # dumpfile, blockfile, blocksize, number of blocks, init blocktable
+        # self.core = core.ValkkaFS(self.dumpfile, self.blockfile, self.blocksize, self.n_blocks, False) # dumpfile, blockfile, blocksize, number of blocks, init blocktable
+        self.core = self.core_valkkafs_class(self.dumpfile, self.blockfile, self.blocksize, self.n_blocks, False) # dumpfile, blockfile, blocksize, number of blocks, init blocktable
         
         self.blocksize = self.core.getBlockSize() # in the case it was adjusted ..
         
@@ -256,6 +262,14 @@ class ValkkaFS:
         # self.analyzer = core.ValkkaFSTool(self.core)
         # self.verbose = True
 
+    def __str__(self):
+        if self.dumpfile is None:
+            return "<ValkkaFS %s>" % (self.partition_uuid)
+        else:
+            return "<ValkkaFS %s>" % (self.dumpfile)
+
+    def getName(self):
+        return self.name
 
     def update(self):
         self.new_block_cb__(True, "init")
@@ -294,14 +308,14 @@ class ValkkaFS:
         #propagate = tup[0]
         #par = tup[1]
         try:
-            self.logger.debug("new_block_cb__: propagate: %s par: %s", propagate, par)
+            self.logger.debug("new_block_cb__: %s, propagate: %s par: %s", str(self), propagate, par)
             if isinstance(par, int):
                 self.current_block = par
-                self.logger.debug("ValkkaFS: new_block_cb__: got block num %s", par)
+                self.logger.debug("new_block_cb__: got block num %s", par)
                 self.writeJson()
-                self.logger.debug("ValkkaFS: new_block_cb__: wrote json")
+                self.logger.debug("new_block_cb__: wrote json")
             elif isinstance(par, str):
-                self.logger.debug("ValkkaFS: new_block_cb__: got message: %s", par)
+                self.logger.debug("new_block_cb__: got message: %s", par)
 
             self.getBlockTable() # update BT values here at the python side
 
@@ -312,7 +326,7 @@ class ValkkaFS:
             self.logger.debug("new_block_cb: bye")
                 
         except Exception as e:
-            self.logger.debug("ValkkaFS: failed with '%s'", e)
+            self.logger.debug("failed with '%s'", e)
             traceback.print_exc()
         
                 
@@ -408,3 +422,8 @@ class ValkkaFS:
         Remember blocktable wrapping
         """
         raise(BaseException("virtual"))
+
+
+
+
+

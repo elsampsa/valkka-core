@@ -7,7 +7,7 @@ Obj1
         Obj3
 ```
 - Callbacks emanate from the deeper level objects (i.e. Obj3->Obj2->Obj1)
-- At each level, a the callbacks change the state of the object
+- At each level, the callbacks change the state of the object
 - Higher level objects do not change state of the deeper level objects, instead, they just use deeper level object's getters
 - Each object has a method named "update" that calls method "update" of the deeper level object.  This method can be used to trigger a callback
 for the first time (in order to propagate the state update up the tree)
@@ -22,9 +22,13 @@ ValkkaFSManager
         ValkkaFSWriterThread
         FileCacherThread
             - sends callbacks (timeCallback__, timeLimitsCallback__)
+            => propagated up to FSGroup.timeCallback__, timeLimitsCallback__
+                => ValkkaFSManager.timeCallback__, timeLimitsCallback__
         ValkkaMultiFS
             core.ValkkaFS
                 - sends a callback (new_block_cb__)
+                => propagated up to ValkkaMultiFS.new_block_cb__
+                    => ValkkaFSManager.new_block_cb__
 ```
 Manager has an API that can be used to interact with widgets
  
@@ -46,7 +50,7 @@ Manager has an API that can be used to interact with widgets
                              slot-to-id              id-to-slot
 
 - Vars
-    - timerange: global timerange (not currently cached, but global)
+    - timerange: global timerange (not currently cached, but global = based on ValkkFS time limits)
     - currentmstime: current seek/playtime
 
 - API (call after start)
@@ -65,7 +69,7 @@ Manager has an API that can be used to interact with widgets
         - get global timerange as per valkkafs
 
     setTimeCallback
-        - set continuation to timeCallback__.  carries current mstime
+        - set continuation to timeCallback__.  carries current play mstime (originates from core.FileCacherThread)
     
     setTimeLimitsCallback
         - set continuation to timeLimitsCallback__.  
@@ -89,7 +93,7 @@ Manager has an API that can be used to interact with widgets
 - Methods
 
     updateTimeRange__()
-        - check each FSGroup's timerange & collate a global timerange
+        - check each FSGroup's timerange & calculate a global timerange based on the timerange of each FSGroup
         - updates state: self.timerange
 
     readBlockTableIf(fsgroup)
@@ -252,4 +256,101 @@ frames: **********         ********                ***
 
 FileCacherThread should emit a special frame (X) when it observes a long delay between frames
 ```
+
+## Several valkkafs'
+
+- Each ValkkaFS propagating its' callback to it's FSGroup
+- Each FileCacherThread propagating its' callbacks to its' FSGroup
+=> State of corresponding FSGroup changes
+- ..we should not continue cb propagation to manager
+- Manager is queried on regular intervals (say, every 3 secs.) .. it then runs through the FSGroups and queries their states
+- How about FileCacherThread "hearbeat" then..?
+- ..similarly changes FSGroups' state
+
+Consider this:
+- One FSGroup has global timerange: 1000->2000
+- Another one 1500->2200
+=> manager is queried .. every 5 secs. .. it then runs through the global timeranges of all fsgroups => 1000->2200
+
+- user clicks time 1100
+- manager is notified => seek(mstimestamp)
+- run through fsgroups' seek(mstimestamp)
+
+Two schools of thought here:
+
+1. Polling
+
+- All FSGroups have their state continuously updated:
+    - hearbeat time
+    - global time limits
+    - locally cached frames time limits
+- Widget queries from manager for all of these things once per second
+- Only upon that query, manager's state is updated
+
+2. Signalling
+
+- Again, all FSGroups have their state continuously updated
+- Each FSGroup state update is propagated to the manager
+- ..which recalculates its own state continuously
+- ..and propagates its state(s) as a signal to the widget
+
+it could also be, that in the future we want one timeline per camera..
+
+or, even better:
+
+all callbacks end up in the manager into a common endpoint
+that calculates time.. if time is >= second, then manager
+proceeds in calculating all its own states & sends them
+as a signal
+
+TODO: update all callback signatures
+
+-------------
+
+FSGroup.seek : seek time is requested to something outside global timelimits
+call FileCacherThread::clear()
+=> sets reftime = 0 OK
+.. but is that 0 reftime send to python side with pyfunc..?
+.. yes it is: look at FileCacherThread::run
+
+=> TODO: send a reset frame, so that the image is cleared
+
+------------
+
+- click timeline
+- pointer jumps there
+- manager.timer callback is launched
+- ..but that was because something else.. not because of the heartbeat
+- so pointer jumps to the previous place
+- ..should measure the times only from heartbeats..?
+
+=> OK
+
+-----------
+
+5. core
+- tests etc.
+
+4. docs
+- explain valkkafs multi/single
+- explain that multi was not that great idea..
+- update readme files
+
+2. test_studio_5.py
+- check that still works..
+
+1. test_studio_6.py
+- clean up the GUI 
+- by default 100 MB per cam
+- check that writing can be recovered
+
+3. valkka live (and counter?)
+- overwrite manager
+- overwrite playback controller
+- per camera: 
+    - record or not. if changed, formats the file
+    - blocksize & number of blocks.  if they are changed, format the file
+    - if a camera is deleted, remove the file
+    - "format file" button
+- test that works with the latest version
 

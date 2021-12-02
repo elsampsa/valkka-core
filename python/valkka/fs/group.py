@@ -40,10 +40,14 @@ class FSGroup:
     # request for more blocks
     timediff = 5 # blocktable can be inquired max this frequency (secs)
 
-    def __init__(self, valkkafs = None, name="fsgroup"):
+    def __init__(self, valkkafs = None):
         assert(valkkafs is not None)
 
-        self.logger = getLogger(self.__class__.__name__)
+        logname = self.__class__.__name__
+        name = valkkafs.getName()
+        if name != "":
+            logname = logname + " " + name
+        self.logger = getLogger(logname)
         setLogger(self.logger, logging.DEBUG)
 
         self.valkkafs = valkkafs
@@ -99,6 +103,8 @@ class FSGroup:
         self.checktime = 0 # when BT was requested for the last time
         # self.readBlockTable() # inits timerange & checktime # update initiates this with callbacks
 
+    def __str__(self):
+        return "<FSGroup "+self.valkkafs.getName()+">"
 
     def update(self):
         self.valkkafs.update()
@@ -166,9 +172,8 @@ class FSGroup:
 
     def clearTime(self):
         """Reset cacher state
-
-        TODO: what did this do exactly..?
         """
+        self.logger.debug("clearTime")
         self.cacher.clearCall()
 
     # play/stop/seek control
@@ -189,43 +194,39 @@ class FSGroup:
             self.cacher.stopStreamsCall()
             self.playing = False
         
-    
-    """
+        
     def seek(self, mstimestamp):
-        #Before performing seek, check the blocktable
-        #
-        #- Returns True if the seek could be done, False otherwise
-        #- Requests frames always from ValkkaFSReaderThread (with reqBlocks),
-        #  even if there are already frames at this timestamp
-        assert(isinstance(mstimestamp, int))
-        # self.stop() # seekStreamsCall stops
-        self.readBlockTableIf()
-        if not self.timeOK(mstimestamp):
-            return False
-        # there's stream for that time, so proceed
-        self.logger.info("seek : proceeds with %i", mstimestamp)
-        self.cacher.seekStreamsCall(mstimestamp, True) # note that clear flag is True : clear the seek.
-        ok = self.reqBlocks(mstimestamp)
-        if not ok: self.logger.warning("seek : could not get blocks")
-    """     
-            
-    def seek(self, mstimestamp):
-        """Like seek, but does not request frames if there are already frames in this timerange
+        """Does not request frames if there are already frames in this timerange
+
+        This call originates typically from a GUI widget
         """
         # self.readBlockTableIf() # nopes: state update only by callbacks
+        self.logger.debug("seek : target: %s", mstimestamp)
         self.logger.debug("seek : current timerange: %s", self.current_timerange)
         self.logger.debug("seek : current timerange: %s", formatMstimeTuple(self.current_timerange))
+        self.logger.debug("seek : current global timerange: %s", self.timerange)
+        self.logger.debug("seek : current global timerange: %s", formatMstimeTuple(self.timerange))
         self.logger.debug("seek : timetolerance: %s", self.timetolerance)
         if not self.withinRange(mstimestamp):
+            self.logger.debug("seek : not within global range")
+            self.clearTime() # this particular stream will be re'setted
             return False
+
+        # accept the current time .. now it's propagaged by self.timer()
+        self.currentmstime = mstimestamp
+
         if self.withinCached(mstimestamp, self.timetolerance):
             self.logger.debug("seek : just set target time")
             self.cacher.seekStreamsCall(mstimestamp, False) 
             # simply sets the target (note that clear is set to False)
             return True
         self.logger.debug("seek : request frames")
-        self.cacher.seekStreamsCall(mstimestamp, True) 
-        # note that clear flag is True : clear the seek.
+        # self.cacher.seekStreamsCall(mstimestamp, True) 
+        ## note that clear flag is True : clear the seek.
+        ## nopes, we want to go to the frames directly if they are avail
+        self.cacher.seekStreamsCall(mstimestamp, False)
+        ## similaryly, blocks will be requested only if they are
+        ## different from the currently cached ones
         ok = self.reqBlocksIf(mstimestamp)
         if not ok: self.logger.warning("seek : could not get blocks")
         return ok
@@ -260,7 +261,7 @@ class FSGroup:
     def new_block_cb__(self):
         """This is always called at a new block
         """
-        self.logger.debug("new_block_cb__")
+        self.logger.debug("new_block_cb__: ")
         self.readBlockTableIf()
         if self.new_block_cb is not None:
             self.logger.debug("new_block_cb__ : subcallback")
@@ -292,13 +293,24 @@ class FSGroup:
             
             - using try / except blocks we can see the error message even when this is called from cpp
             """
+            self.logger.debug("timeCallback__ : ")
             if mstime <= 0: # time not set
                 self.logger.debug("timeCallback__ : no time set")
                 # print("timeCallback__ : no time set")
+            elif self.timerange is None:
+                # mstime set but there's no timerange
+                self.logger.debug("timeCallback__ : no time range")
+                self.clearTime() # a new callback from cacherthread will follow asap
+                return
+            elif (mstime < self.timerange[0]) or (mstime > self.timerange[1]):
+                self.logger.debug("timeCallback__ : out of timerange")
+                self.clearTime() # a new callback from cacherthread will follow asap
+                return
+            elif mstime == self.currentmstime:
+                self.logger.debug("timeCallback__ : same time")
             else:
                 # request blocks around certain 
-                # millisecond timestamp from all
-                # necessary valkkafs
+                # millisecond timestamp
                 self.reqBlocksIf(mstime)
                 
             self.currentmstime = mstime
@@ -307,6 +319,7 @@ class FSGroup:
                     self.time_cb(self, mstime) # attach fsgroup
                 except Exception as e:
                     self.logger.warning("timeCallback__ : your callback failed with '%s'", str(e))
+                    traceback.print_exc()
 
         except Exception as e:
             self.logger.debug("timeCallback__ failed with '%s'" , e)
@@ -317,10 +330,17 @@ class FSGroup:
         try:
             self.logger.debug("timeLimitsCallback__ : %s", str(tup))
             self.logger.debug("timeLimitsCallback__ : %s", formatMstimeTuple(tup))
-            self.current_timerange = tup # currently cached frames
+            if tup is None:
+                # FileCacherThread is telling us that there are no cached frames
+                # in FSGroup this is indicated with:
+                self.current_timerange=(0,0)
+                self.current_blocks = []
+            else:
+                self.current_timerange = tup # currently cached frames
             if self.time_limits_cb is not None:
                 self.logger.debug("timeLimitsCallback__ : subcallback")
-                self.time_limits_cb(self, tup) # attach fsgroup
+                # self.time_limits_cb(self, tup) # attach fsgroup
+                self.time_limits_cb(self, self.current_timerange)
         except Exception as e:
             self.logger.debug("timeLimitsCallback__ failed with '%s'" , e)
             traceback.print_exc()
@@ -339,7 +359,7 @@ class FSGroup:
         # self.logger.debug("readBlockTable: %s", self.blocktable)
         # self.timerange = self.valkkafs.getTimeRange(self.blocktable)
         self.timerange = self.valkkafs.getTimeRange()
-        # self.logger.debug("readBlockTable: timerange=%s", self.timerange)
+        self.logger.debug("readBlockTable: timerange=%s", self.timerange)
         self.logger.debug("readBlockTable: timerange=%s", formatMstimeTuple(self.timerange))
         self.checktime = time.time()
 
@@ -368,6 +388,10 @@ class FSGroup:
         #   if there are not frames within.. 5 minutes of the requested time
         #   then don't bother requesting blocks (i.e. there's a gap)
         #
+
+        self.logger.debug("reqBlocksIf: current blocks: %s", 
+            self.current_blocks)
+
         if self.timerange is None:
             # blocktable is empty
             self.logger.debug("reqBlocksIf: empty blocktable")
@@ -391,12 +415,18 @@ class FSGroup:
         # block numbers are in time order
         # (2) if blocks would be different than the ones we have currently,
         # request them
+        if len(block_list) < 1:
+            self.logger.debug("reqBlocksIf: got empty list")
+            return False
         if block_list == self.current_blocks:
             self.logger.debug("reqBlocksIf: same blocks")
             return False
         # blocks ok
         self.current_blocks = block_list
         tmp = self.valkkafs.blocktable[self.current_blocks,:]
+        # NOTE: should we actually wait until FileCacheThread confirms 
+        # that self.current_timerange == cache frames..?
+        # instead of setting self.current_timerange here
         self.current_timerange = (
             tmp[:,0].min(), # max of the first column (key frames) 
             tmp[:,1].max() # min of the second column (any frames)

@@ -54,8 +54,6 @@ import traceback
 
 """
 
-
-
 def getTimeRange(blocktable = None):
     """Returns tuple timerange.  If BT empty, returns None
     """
@@ -224,7 +222,9 @@ def getIndNeigh(n=1, time=0, blocktable = None):
     
 
 class ValkkaMultiFS(ValkkaFS):
-    valkkafs_type = 0 # stupid multistream FS
+    """Multiple streams per one file - not that great idea after all
+    """
+    core_valkkafs_class = core.ValkkaFS
 
     def getTimeRange(self):
         return getTimeRange(self.blocktable)
@@ -234,5 +234,4 @@ class ValkkaMultiFS(ValkkaFS):
 
     def getIndNeigh(self, n=1, time=0):
         return getIndNeigh(n=n, time=time, blocktable = self.blocktable)
-
 

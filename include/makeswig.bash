@@ -19,6 +19,7 @@ cat valkka.i.base > valkka_core.i
 
 for header in $headers
 do
-  grep -h "<pyapi>" $header | awk '{if ($1=="class" || $1=="enum" || $1=="struct") {print " "}; print $0}' >> valkka_core.i
+    echo "// "$header >> valkka_core.i
+    grep -h "<pyapi>" $header | awk '{if ($1=="class" || $1=="enum" || $1=="struct") {print " "}; print $0}' >> valkka_core.i
 done
 
