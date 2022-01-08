@@ -163,15 +163,15 @@ class ValkkaFS:
             verbose    = verbose
             )
         
-        fs.reinit() # striped the device
+        fs.reinit() # stripe the device
         return fs
         
         
     @staticmethod
     def checkDirectory(dirname):
         jsonfile  =os.path.join(dirname,"valkkafs.json")
-        assert(os.path.exists(dirname))
-        assert(os.path.exists(jsonfile))
+        assert(os.path.exists(dirname)), "no such directory "+dirname
+        assert(os.path.exists(jsonfile)), "no such jsonfile "+jsonfile
         f=open(jsonfile, "r")
         dic=json.loads(f.read())
         f.close()
@@ -222,7 +222,7 @@ class ValkkaFS:
         self.__class__.instance_counter += 1
         logname = logname + " " + self.name
         self.logger = getLogger(logname)
-        setLogger(self.logger, logging.DEBUG)
+        # setLogger(self.logger, logging.DEBUG) # TODO: unify the verbosity/logging somehow
 
         self.block_cb = None # a custom callback in the callback chain when a new block is ready
         
@@ -261,6 +261,9 @@ class ValkkaFS:
         # # attach an analysis tool
         # self.analyzer = core.ValkkaFSTool(self.core)
         # self.verbose = True
+
+    def setLogLevel(self, level):
+        getLogger(self.logger, level = level)
 
     def __str__(self):
         if self.dumpfile is None:

@@ -6,127 +6,130 @@ Obj1
     Obj2
         Obj3
 ```
-- Callbacks emanate from the deeper level objects (i.e. Obj3->Obj2->Obj1)
-- At each level, the callbacks change the state of the object
+- Callbacks emanate from the c++ level, from deeper level objects (i.e. Obj3->Obj2->Obj1)
+- At each level, the callbacks change the state of the object in that level
 - Higher level objects do not change state of the deeper level objects, instead, they just use deeper level object's getters
-- Each object has a method named "update" that calls method "update" of the deeper level object.  This method can be used to trigger a callback
-for the first time (in order to propagate the state update up the tree)
-
-This way we achieve "HIMO" (hierarchical & minimally interacting objects).
+- Each object has a method named "update" that calls method "update" of the deeper level object.  This method can be used to trigger a callback for the first time (in order to propagate the state update up the tree)
 
 The concrete object tree:
 ```
-ValkkaFSManager
-    FSGroup
-        ValkkaFSReaderThread
-        ValkkaFSWriterThread
-        FileCacherThread
+fs.ValkkaFSManager
+    fs.FSGroup
+        core.ValkkaFSReaderThread
+        core.ValkkaFSWriterThread
+        core.FileCacherThread
             - sends callbacks (timeCallback__, timeLimitsCallback__)
             => propagated up to FSGroup.timeCallback__, timeLimitsCallback__
                 => ValkkaFSManager.timeCallback__, timeLimitsCallback__
-        ValkkaMultiFS
-            core.ValkkaFS
+        fs.ValkkaSingleFS (or fs.ValkkaMultiFS)
+            core.ValkkaFS2 (core.ValkkaFS)
                 - sends a callback (new_block_cb__)
-                => propagated up to ValkkaMultiFS.new_block_cb__
+                => propagated up to ValkkaSingleFS.new_block_cb__
                     => ValkkaFSManager.new_block_cb__
 ```
 Manager has an API that can be used to interact with widgets
  
+*WARNING: the following text might not be up-to-date*
 
 ## ValkkaFSManager
 
-```
 - Given a list of valkka.fs.base.ValkkaFS (a) instances => creates FSGroup (c) for each one
 - A list of FSGroup (c) instances, one per ValkkaFS (a)
-    - Each FSGroup encapsulates a core.ValkkaFSReaderThread, core.ValkkaFSWriterThread
-      and core.FileCacherThread instance
-    - each core.ValkkaFSReaderThread outputs to FileCacherThread's (++) input filter
 
-    Schematically:
+### Vars
+- timerange: global timerange (not currently cached, but global = based on ValkkFS time limits)
+- currentmstime: current seek/playtime
 
-    ::
+### API (call after start)
 
-        core.ValkkaFSWriterThread ---> core.ValkkaFS ---> core.ValkkaFSReaderThread ---> core.FileCacherThread
-                             slot-to-id              id-to-slot
+update() 
 
-- Vars
-    - timerange: global timerange (not currently cached, but global = based on ValkkFS time limits)
-    - currentmstime: current seek/playtime
+- initiate some callbacks from the deeper object in order to populate state
 
-- API (call after start)
+getInputFilter(valkkafs) 
 
-    update()
-        - initiate some callbacks from the deeper object in order to populate state
+- returns input filter for correct ValkkaFSWriterThread as per valkkafs
 
-    getInputFilter(valkkafs)
-        - returns input filter for correct ValkkaFSWriterThread as per valkkafs
+getTimeRange -> tuple (global timerange)
 
-    getTimeRange -> tuple (global timerange)
-        - global (not cached frames) timerange
-        - originates from the blocktables of each FSGroup -> ValkkaFS
-    
-    getTimeRangeByValkkaFS(valkkafs) -> tuple
-        - get global timerange as per valkkafs
+- global (not cached frames) timerange
+- originates from the blocktables of each FSGroup -> ValkkaFS
 
-    setTimeCallback
-        - set continuation to timeCallback__.  carries current play mstime (originates from core.FileCacherThread)
-    
-    setTimeLimitsCallback
-        - set continuation to timeLimitsCallback__.  
-        - timeLimitsCallback__ originates from core.FileCacherThread
-        - carries a tuple of timelimits of currently cached frames
-    
-    setBlockCallback
-        - set continuation to new_block_cb__
-        - originates from core.ValkkaFS
-        - model: func(valkkafs=, timerange_local=, timerange_global=)
+getTimeRangeByValkkaFS(valkkafs) -> tuple
 
-    map_(valkkafs, framefilter, write_slot, read_slot, _id)
-        - calls map_ of correct FSGroup
-        - FSGroup's map_ sets slot-to-id & id-to-slot mappings
-        - framefilter is the output of frames from the cacherthread
+- get global timerange as per valkkafs
 
-    unmap(_id)
-        - call unmap of correct FSGroup
+setTimeCallback
 
+- set continuation to timeCallback__.  carries current play mstime (originates from core.FileCacherThread)
 
-- Methods
+setTimeLimitsCallback
 
-    updateTimeRange__()
-        - check each FSGroup's timerange & calculate a global timerange based on the timerange of each FSGroup
-        - updates state: self.timerange
+- set continuation to timeLimitsCallback__.  
+- timeLimitsCallback__ originates from core.FileCacherThread
+- carries a tuple of timelimits of currently cached frames
 
-    readBlockTableIf(fsgroup)
-        -> calls fsgroup.readBlockTableIf
-        - calculate new timerange
-        DO NOT USE
+setBlockCallback
 
-    readBlockTablesIf
-        -> calls each FSGroup's (c) readBlockTableIf
-        - calculate new timerange
-        DO NOT USE
+- set continuation to new_block_cb__
+- originates from core.ValkkaFS
+- model: func(valkkafs=, timerange_local=, timerange_global=)
 
-    reqBlocksIf
-        -> calls each FSGroup's (c) reqBlocksIf
-        - FSGroup.reqBlocksIf should be smart enough to exit immediately
-        if same blocks are requested again or if out of bounds
-        DO NOT USE
+map_(valkkafs, framefilter, write_slot, read_slot, _id)
 
-    getCurrentTime
-        -returns self.currentmstime
-    
-- Callbacks (connected at ctor)
-    timeCallback__ : "heartbeat" from core.FileCacheThread (b)
-        - update state: self.currentmstime
+- calls map_ of correct FSGroup
+- FSGroup's map_ sets slot-to-id & id-to-slot mappings
+- framefilter is the output of frames from the cacherthread
 
-    timeLimitsCallback__ : from core.FileCacheThread (b)
-        - triggered when the time range of **currently cached frames** has changed
-        - composes limits of cached frames from all FSGroups' limits
-        - updates state: self.current_timerange
+unmap(_id)
 
-    new_block_cb__(fsgroup) : a notification from FSGroup that there are new frames / blocks
-        - carries the FSGroup (c) instance in question
-        - calls self.updateTimeRange__() --> updates state: self.timerange
+- call unmap of correct FSGroup
+
+### Methods
+
+updateTimeRange__()
+
+- check each FSGroup's timerange & calculate a global timerange based on the timerange of each FSGroup
+- updates state: self.timerange
+
+readBlockTableIf(fsgroup)
+
+- calls fsgroup.readBlockTableIf
+- calculate new timerange
+DO NOT USE
+
+readBlockTablesIf
+- calls each FSGroup's (c) readBlockTableIf
+- calculate new timerange
+DO NOT USE
+
+reqBlocksIf
+
+- calls each FSGroup's (c) reqBlocksIf
+- FSGroup.reqBlocksIf should be smart enough to exit immediately
+if same blocks are requested again or if out of bounds
+DO NOT USE
+
+getCurrentTime
+
+- returns self.currentmstime
+
+### Callbacks (connected at ctor)
+
+timeCallback__ : "heartbeat" from core.FileCacheThread (b)
+
+- update state: self.currentmstime
+
+timeLimitsCallback__ : from core.FileCacheThread (b)
+
+- triggered when the time range of **currently cached frames** has changed
+- composes limits of cached frames from all FSGroups' limits
+- updates state: self.current_timerange
+
+new_block_cb__(fsgroup) : a notification from FSGroup that there are new frames / blocks
+
+- carries the FSGroup (c) instance in question
+- calls self.updateTimeRange__() --> updates state: self.timerange
 
 
 ```
@@ -164,9 +167,16 @@ Manager has an API that can be used to interact with widgets
 ## core.FileCacheThread (b)
 ```
 ```
-## FSGroup (c)
+## fs.FSGroup (c)
 ```
 - Encapsulates a core.ValkkaFSReaderThread, core.ValkkaFSWriterThread and core.FileCacherThread instances
+
+Schematically:
+
+::
+
+    core.ValkkaFSWriterThread ---> core.ValkkaFS ---> core.ValkkaFSReaderThread ---> core.FileCacherThread
+                            slot-to-id              id-to-slot
 
 - Vars
     - timerange: global timerange for the ValkkaFS/blocktable

@@ -34,6 +34,8 @@
 #include "valkkafs.h"
 #include "numpy_no_import.h"
 
+// #define GIL_VERBOSE
+
 ValkkaFS::ValkkaFS(const char *device_file, const char *block_file, std::size_t blocksize, std::size_t n_blocks, bool init) : 
     device_file(device_file), block_file(block_file), blocksize(blocksize), 
     n_blocks(n_blocks), col_0(0), col_1(0), col_0_lu(0), col_1_lu(0),
@@ -183,9 +185,13 @@ void ValkkaFS::callPyFunc(std::string msg, bool use_gil) {
     // propagate = false ==> call originates from the python side
     PyGILState_STATE gstate;
     if (use_gil) {
+        #ifdef GIL_VERBOSE
         std::cout << "ValkkaFS: writeBlock: obtaining Python GIL" << std::endl;
+        #endif
         gstate = PyGILState_Ensure();
+        #ifdef GIL_VERBOSE
         std::cout << "ValkkaFS: writeBlock: obtained Python GIL" << std::endl;
+        #endif
         PyTuple_SET_ITEM(tup, 0, Py_True);
     }
     else {
@@ -209,11 +215,13 @@ void ValkkaFS::callPyFunc(std::string msg, bool use_gil) {
     }
     */
     if (use_gil) {
-        ///*
+        #ifdef GIL_VERBOSE
         std::cout << "ValkkaFS: writeBlock: releasing Python GIL" << std::endl;
+        #endif
         PyGILState_Release(gstate);
+        #ifdef GIL_VERBOSE
         std::cout << "ValkkaFS: writeBlock: released Python GIL" << std::endl;
-        //*/
+        #endif
     }
 }
 
@@ -433,7 +441,7 @@ ValkkaFS2::~ValkkaFS2() {}
 
 
 void ValkkaFS2::markKeyFrame(long int mstimestamp) {
-    std::cout << "ValkkaFS2: markKeyFrame" << std::endl;
+    // std::cout << "ValkkaFS2: markKeyFrame" << std::endl;
     if (col_0 <= 0) {
         col_0 = mstimestamp;
     }
@@ -443,7 +451,7 @@ void ValkkaFS2::markKeyFrame(long int mstimestamp) {
     col_1 = std::max(col_1, mstimestamp);
     valkkafslogger.log(LogLevel::crazy) 
     // std::cout
-        << "ValkkaFS: markKeyFrame: col_0 =" 
+        << "ValkkaFS2: markKeyFrame: col_0 =" 
         << col_0 << std::endl;
 }
 

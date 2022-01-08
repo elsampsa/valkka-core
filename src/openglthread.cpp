@@ -1191,7 +1191,7 @@ long unsigned OpenGLThread::insertFifo(Frame* f) {// sorted insert
                 SlotContext *slot_ctx = slots_[setupframe->n_slot]; // shorthand
                     
                 if (setupframe->stream_state == AbstractFileState::seek) {
-                    std::cout << "OpenGLThread:insertFifo:seek frame!" << std::endl;
+                    // std::cout << "OpenGLThread:insertFifo:seek frame!" << std::endl;
                     slot_ctx->loadFlag(true); // can't show present frame (after clicking seek, it's not valid anymore), must wait for a new frame
                     slot_ctx->keepFlag(false); // don't keep on showing the last frame
                 }

@@ -272,10 +272,10 @@ def parameterInitCheck(definitions, parameters, obj, undefined_ok=False):
             if (parameter.__class__ != required_type):
                 raise(
                     AttributeError(
-                        "Wrong type of parameter " +
+                        "Wrong type '" + parameter.__class__.__name__ + "' of parameter " +
                         key +
-                        " : should be " +
-                        required_type.__name__))
+                        " : should be of type '" +
+                        required_type.__name__ + "'"))
             else:
                 setattr(obj, key, parameter)  # parameters2.pop(key)
         else:

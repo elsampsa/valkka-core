@@ -548,7 +548,7 @@ void FileCacheThread::clear() {
     target_mstimestamp_ = 0;
     switchCache(); // clear the framecache
     // inform downstream that the stream has been cleared
-    std::cout << "FileCacheThread::clear:sending setup frame downstream" << std::endl;
+    // std::cout << "FileCacheThread::clear:sending setup frame downstream" << std::endl;
     state_setupframe.mstimestamp = getCurrentMsTimestamp();
     state_setupframe.sub_type = SetupFrameType::stream_state;
     state_setupframe.stream_state = AbstractFileState::seek;

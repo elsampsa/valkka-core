@@ -16,7 +16,7 @@ class ValkkaFSManager:
     """
     def __init__(self, valkkafs_list: list, name = "manager"):
         self.logger = getLogger(self.__class__.__name__)
-        setLogger(self.logger, logging.DEBUG)
+        # setLogger(self.logger, logging.DEBUG) # TODO: unify the verbosity/logging somehow
         self.name = name
         self.fsgroups = []
         self.fsgroup_by_valkkafs = {}
@@ -54,6 +54,12 @@ class ValkkaFSManager:
         self.is_playing = False
 
 
+    def setLogLevel(self, level):
+        getLogger(self.logger, level = level)
+        for fsgroup in self.fsgroups:
+            fsgroup.setLogLevel(level)
+
+
     def __del__(self):
         self.close()
 
@@ -72,6 +78,11 @@ class ValkkaFSManager:
         return fsgroup.getInputFilter()
             
 
+    def iterateFsInput(self):
+        for valkkafs, fsgroup in self.fsgroup_by_valkkafs.items():
+            yield valkkafs, fsgroup.getInputFilter()
+
+
     def getTimeRange(self):
         """API end-point for widgets, etc.
         """
@@ -87,6 +98,7 @@ class ValkkaFSManager:
 
 
     def start(self):
+        self.started = True
         for fsgroup in self.fsgroups:
             fsgroup.start()
         self.update() # initiates the new_block_cb__ from all the way down from ValkkaFS
@@ -94,13 +106,22 @@ class ValkkaFSManager:
         
 
     def close(self):
+        self.requestClose()
+        self.waitClose()
+
+    def requestClose(self):
+        if not self.started:
+            return
+        self.started = False
+        for fsgroup in self.fsgroups:
+            fsgroup.requestStop()
+
+    def waitClose(self):
         if not self.started:
             return
         for fsgroup in self.fsgroups:
-            fsgroup.requestStop()
-        for fsgroup in self.fsgroups:
+            # print(">")
             fsgroup.waitStop()
-        self.started = False
 
 
     def setTimeCallback(self, func: callable):
@@ -156,6 +177,8 @@ class ValkkaFSManager:
     def map_(self, valkkafs=None, framefilter=None,
             write_slot=None, read_slot=None, _id=None):
         """Mapping valkkafs (i.e. file) => output framefilter
+
+        :param framefilter: framefilter for receiving saved stream
 
         (the output comes from cacherthread)
 

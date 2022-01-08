@@ -48,7 +48,7 @@ class FSGroup:
         if name != "":
             logname = logname + " " + name
         self.logger = getLogger(logname)
-        setLogger(self.logger, logging.DEBUG)
+        # setLogger(self.logger, logging.DEBUG) # TODO: unify verbosity/logging somehow
 
         self.valkkafs = valkkafs
 
@@ -103,6 +103,9 @@ class FSGroup:
         self.checktime = 0 # when BT was requested for the last time
         # self.readBlockTable() # inits timerange & checktime # update initiates this with callbacks
 
+    def setLogLevel(self, level):
+        getLogger(self.logger, level = level)
+
     def __str__(self):
         return "<FSGroup "+self.valkkafs.getName()+">"
 
@@ -113,25 +116,37 @@ class FSGroup:
         return self.writer.getFrameFilter()
 
     def map_(self, write_slot = None, read_slot = None, _id = None, framefilter = None):
-        assert(write_slot is not None)
-        assert(read_slot is not None)
+        # assert(write_slot is not None)
+        # assert(read_slot is not None)
         assert(_id is not None)
-        assert(framefilter is not None)
-        self.writer.setSlotIdCall(write_slot, _id)
-        self.reader.setSlotIdCall(read_slot, _id)
-        file_stream_ctx = core.FileStreamContext(read_slot, framefilter)
+        # assert(framefilter is not None)
+        if write_slot is not None:
+            self.writer.setSlotIdCall(write_slot, _id)
+        if read_slot is not None:
+            self.reader.setSlotIdCall(read_slot, _id)
+
+        if read_slot is None or framefilter is None:
+            self.logger.warning("map_: no output for recorded stream")
+            file_stream_ctx = None
+        else:
+            # print("map_: creating file_stream_ctx")
+            file_stream_ctx = core.FileStreamContext(read_slot, framefilter)
+            self.cacher.registerStreamCall(file_stream_ctx)
+
         self.slot_mapping_by_id[_id] = SlotMapping(
             write_slot, read_slot, file_stream_ctx
         )
-        self.cacher.registerStreamCall(file_stream_ctx)
-
+        
     def unmap(self, _id):
         # assert(slot in self.file_stream_ctx_by_slot)
         assert(_id in self.slot_mapping_by_id)
         sm = self.slot_mapping_by_id[_id]
-        self.writer.unSetSlotIdCall(sm.write_slot)
-        self.reader.unSetSlotIdCall(sm.read_slot)
-        self.cacher.deregisterStreamCall(sm.file_stream_ctx)
+        if sm.write_slot is not None:
+            self.writer.unSetSlotIdCall(sm.write_slot)
+        if sm.read_slot is not None:
+            self.reader.unSetSlotIdCall(sm.read_slot)
+        if sm.file_stream_ctx is not None:
+            self.cacher.deregisterStreamCall(sm.file_stream_ctx)
         self.slot_mapping_by_id.pop(_id)
     
     def start(self):
@@ -141,21 +156,29 @@ class FSGroup:
         self.started = True
         
     def stop(self):
+        if not self.started:
+            return
         self.reader.stopCall()
         self.cacher.stopCall()
         self.writer.stopCall()
         self.started = False
 
     def requestStop(self):
+        if not self.started:
+            return
         self.reader.requestStopCall()
         self.cacher.requestStopCall()
         self.writer.requestStopCall()
         self.started = False
 
     def waitStop(self):
+        self.logger.debug("waitStop: reader")
         self.reader.waitStopCall()
+        self.logger.debug("waitStop: cacher")
         self.cacher.waitStopCall()
+        self.logger.debug("waitStop: writer")
         self.writer.waitStopCall()
+        self.logger.debug("waitStop: bye")
 
     # getters
 
