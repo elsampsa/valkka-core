@@ -1,4 +1,6 @@
 <map id="FileCacheThread::seekStreamsCall" name="FileCacheThread::seekStreamsCall">
-<area shape="rect" id="node1" title="Seek." alt="" coords="5,5,235,32"/>
-<area shape="rect" id="node2" href="$classFileCacheThread.html#a14aafb395b9edcf6c69774983010ba0e" title="Removes any reference time. Stops stream." alt="" coords="283,5,440,32"/>
+<area shape="rect" id="node1" title="Seek." alt="" coords="5,35,235,61"/>
+<area shape="rect" id="node2" href="$classFileCacheThread.html#a14aafb395b9edcf6c69774983010ba0e" title="Removes any reference time. Stops stream." alt="" coords="283,35,440,61"/>
+<area shape="rect" id="node3" href="$tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. Uses timeval." alt="" coords="500,5,667,32"/>
+<area shape="rect" id="node4" href="$classFileCacheThread.html#a26a54fc0bda523c0fea2c69f6911cc85" title="Sends SetupFrame s to all active slots." alt="" coords="488,57,679,98"/>
 </map>

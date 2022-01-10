@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">1.2.2</span>
+   &#160;<span id="projectnumber">1.3.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -311,14 +311,14 @@ long int&#160;</td><td class="memItemRight" valign="bottom"><b>walltime</b></td>
 std::deque&lt; <a class="el" href="structFileCacheSignalContext.html">FileCacheSignalContext</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#a8c0f30c52b9b7b1333020a58f99c573e">signal_fifo</a></td></tr>
 <tr class="memdesc:a8c0f30c52b9b7b1333020a58f99c573e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redefinition of signal fifo. <br /></td></tr>
 <tr class="separator:a8c0f30c52b9b7b1333020a58f99c573e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadae42836bc9abc20ea3cd713e7077d0"><td class="memItemLeft" align="right" valign="top"><a id="aadae42836bc9abc20ea3cd713e7077d0"></a>
-std::vector&lt; <a class="el" href="classFrameFilter.html">FrameFilter</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#aadae42836bc9abc20ea3cd713e7077d0">slots_</a></td></tr>
-<tr class="memdesc:aadae42836bc9abc20ea3cd713e7077d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot number =&gt; output framefilter mapping. <br /></td></tr>
-<tr class="separator:aadae42836bc9abc20ea3cd713e7077d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd89047ca32d8aa9b1c0af753f8860e4"><td class="memItemLeft" align="right" valign="top"><a id="abd89047ca32d8aa9b1c0af753f8860e4"></a>
-std::vector&lt; std::vector&lt; <a class="el" href="classSetupFrame.html">SetupFrame</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#abd89047ca32d8aa9b1c0af753f8860e4">setup_frames</a></td></tr>
-<tr class="memdesc:abd89047ca32d8aa9b1c0af753f8860e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot number, subsession_index =&gt; <a class="el" href="classSetupFrame.html" title="Setup frame.">SetupFrame</a> mapping. Book-keeping of SetupFrames. <br /></td></tr>
-<tr class="separator:abd89047ca32d8aa9b1c0af753f8860e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4daf759d33b10959161f0b8dbc0fac6"><td class="memItemLeft" align="right" valign="top"><a id="ad4daf759d33b10959161f0b8dbc0fac6"></a>
+std::vector&lt; <a class="el" href="classFrameFilter.html">FrameFilter</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#ad4daf759d33b10959161f0b8dbc0fac6">slots_</a></td></tr>
+<tr class="memdesc:ad4daf759d33b10959161f0b8dbc0fac6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot number =&gt; output framefilter mapping. <br /></td></tr>
+<tr class="separator:ad4daf759d33b10959161f0b8dbc0fac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9a3b400500f1af2445ec7ee4c4e214f"><td class="memItemLeft" align="right" valign="top"><a id="af9a3b400500f1af2445ec7ee4c4e214f"></a>
+std::vector&lt; std::vector&lt; <a class="el" href="classSetupFrame.html">SetupFrame</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileCacheThread.html#af9a3b400500f1af2445ec7ee4c4e214f">setup_frames</a></td></tr>
+<tr class="memdesc:af9a3b400500f1af2445ec7ee4c4e214f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot number, subsession_index =&gt; <a class="el" href="classSetupFrame.html" title="Setup frame.">SetupFrame</a> mapping. Book-keeping of SetupFrames. <br /></td></tr>
+<tr class="separator:af9a3b400500f1af2445ec7ee4c4e214f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classAbstractFileThread"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classAbstractFileThread')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classAbstractFileThread.html">AbstractFileThread</a></td></tr>
 <tr class="memitem:a0ab2e3ca22c1cabcf1aeb1bc644988ac inherit pro_attribs_classAbstractFileThread"><td class="memItemLeft" align="right" valign="top"><a id="a0ab2e3ca22c1cabcf1aeb1bc644988ac"></a>
 <a class="el" href="classFrameFifo.html">FrameFifo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAbstractFileThread.html#a0ab2e3ca22c1cabcf1aeb1bc644988ac">infifo</a></td></tr>
@@ -425,17 +425,17 @@ static void *&#160;</td><td class="memItemRight" valign="bottom"><b>mainRun_</b>
 <li>Has two FrameCaches: other one is used to stream, while other one is caching the incoming frames</li>
 <li>This framefilter chain is typically driven by another thread (<a class="el" href="classValkkaFSReaderThread.html" title="ValkkaFS reader thread.">ValkkaFSReaderThread</a>)</li>
 </ul>
-<pre class="fragment">* 
+<pre class="fragment">*
 *                                                       +----&gt; FrameCache
 *                                                       |
-*                           +----&gt; SwitchFrameFilter ---+                This part of the framefilter chain is typically 
+*                           +----&gt; SwitchFrameFilter ---+                This part of the framefilter chain is typically
 *                           |                           |                driven by another thread (ValkkaFSReaderThread)
 *                           |                           +----&gt; FrameCache
 *  ---&gt; ForkFrameFilter ----+
 *                           |
 *                           |
 *                           +----&gt; ClassFrameFilter (MarkerFrame) ---&gt; FileCacheThread event loop
-* 
+*
 * </pre> </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab57eb0392990fdfec800fc478c0ee831"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab57eb0392990fdfec800fc478c0ee831">&#9670;&nbsp;</a></span>registerStreamCall()</h2>
@@ -533,8 +533,10 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFileCacheThread_a7b40899c0a5d24788137383aead711d1_cgraph.png" border="0" usemap="#classFileCacheThread_a7b40899c0a5d24788137383aead711d1_cgraph" alt=""/></div>
 <map name="classFileCacheThread_a7b40899c0a5d24788137383aead711d1_cgraph" id="classFileCacheThread_a7b40899c0a5d24788137383aead711d1_cgraph">
-<area shape="rect" title="Seek." alt="" coords="5,5,235,32"/>
-<area shape="rect" href="classFileCacheThread.html#a14aafb395b9edcf6c69774983010ba0e" title="Removes any reference time. Stops stream." alt="" coords="283,5,440,32"/>
+<area shape="rect" title="Seek." alt="" coords="5,35,235,61"/>
+<area shape="rect" href="classFileCacheThread.html#a14aafb395b9edcf6c69774983010ba0e" title="Removes any reference time. Stops stream." alt="" coords="283,35,440,61"/>
+<area shape="rect" href="tools_8h.html#a69a8d8c398f99883b5c1a22173d6b12f" title="Utility function: returns current unix epoch timestamp in milliseconds. Uses timeval." alt="" coords="500,5,667,32"/>
+<area shape="rect" href="classFileCacheThread.html#a26a54fc0bda523c0fea2c69f6911cc85" title="Sends SetupFrame s to all active slots." alt="" coords="488,57,679,98"/>
 </map>
 </div>
 

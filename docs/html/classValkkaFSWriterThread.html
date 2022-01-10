@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">1.2.2</span>
+   &#160;<span id="projectnumber">1.3.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -205,7 +205,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memdesc:a46fd1c7443b4683180e066460dff94df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call <a class="el" href="classValkkaFSWriterThread.html#a68b37c8d4ea5876611e4692b43ca4836" title="Handle an individual signal. Signal can originate from the frame fifo or from the signal_fifo deque.">ValkkaFSWriterThread::handleSignal</a> for every signal in the signal_fifo. <br /></td></tr>
 <tr class="separator:a46fd1c7443b4683180e066460dff94df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46a7ae96bb1fa2e17c15dd6caccb9dac"><td class="memItemLeft" align="right" valign="top"><a id="a46a7ae96bb1fa2e17c15dd6caccb9dac"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>saveCurrentBlock</b> (bool pycall=true, bool use_gil=true)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFSWriterThread.html#a46a7ae96bb1fa2e17c15dd6caccb9dac">saveCurrentBlock</a> (bool pycall=true, bool use_gil=true)</td></tr>
+<tr class="memdesc:a46a7ae96bb1fa2e17c15dd6caccb9dac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the current block GIL must be obtained for calls that originate purely from the cpp side For calls originating from the python-side, GIL should not be obtained. <br /></td></tr>
 <tr class="separator:a46a7ae96bb1fa2e17c15dd6caccb9dac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4430cca5aeb7a5df0b1f1c2af042ec9"><td class="memItemLeft" align="right" valign="top"><a id="ab4430cca5aeb7a5df0b1f1c2af042ec9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setSlotId</b> (SlotNumber slot, IdNumber id)</td></tr>

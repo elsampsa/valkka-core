@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">1.2.2</span>
+   &#160;<span id="projectnumber">1.3.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -68,6 +68,7 @@ $(function() {
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classValkkaFS-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ValkkaFS Class Reference</div>  </div>
@@ -78,6 +79,15 @@ $(function() {
  <a href="classValkkaFS.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="valkkafs_8h_source.html">valkkafs.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for ValkkaFS:</div>
+<div class="dyncontent">
+<div class="center"><img src="classValkkaFS__inherit__graph.png" border="0" usemap="#ValkkaFS_inherit__map" alt="Inheritance graph"/></div>
+<map name="ValkkaFS_inherit__map" id="ValkkaFS_inherit__map">
+<area shape="rect" title="Book&#45;keeping for ValkkaFS." alt="" coords="9,5,87,32"/>
+<area shape="rect" href="classValkkaFS2.html" title=" " alt="" coords="5,80,91,107"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -144,6 +154,10 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#aaedf92e0f4609f6595e2b4368ebe2199">reportTable</a> (std::size_t from=0, std::size_t to=0, bool show_all=false)</td></tr>
 <tr class="memdesc:aaedf92e0f4609f6595e2b4368ebe2199"><td class="mdescLeft">&#160;</td><td class="mdescRight">print blocktable <br /></td></tr>
 <tr class="separator:aaedf92e0f4609f6595e2b4368ebe2199"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7826b2222d79443a4d122c1968149e8"><td class="memItemLeft" align="right" valign="top"><a id="ad7826b2222d79443a4d122c1968149e8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#ad7826b2222d79443a4d122c1968149e8">updateTable</a> (bool disk_write=false)</td></tr>
+<tr class="memdesc:ad7826b2222d79443a4d122c1968149e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell <a class="el" href="classValkkaFS.html" title="Book-keeping for ValkkaFS.">ValkkaFS</a> to update the blocktable, even if the block hasn't finished Typically used by an external manager that needs up-to-date information about the max timestamp in the block. <br /></td></tr>
+<tr class="separator:ad7826b2222d79443a4d122c1968149e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a887f8d5de60aafb5174c2a24f661fe50"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#a887f8d5de60aafb5174c2a24f661fe50">writeBlock</a> (bool pycall=true, bool use_gil=true)</td></tr>
 <tr class="memdesc:a887f8d5de60aafb5174c2a24f661fe50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by a writer class to inform that a new block has been written.  <a href="classValkkaFS.html#a887f8d5de60aafb5174c2a24f661fe50">More...</a><br /></td></tr>
 <tr class="separator:a887f8d5de60aafb5174c2a24f661fe50"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,7 +166,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memdesc:a89ae0e5b23662583156ec41fdd1f0877"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by a writer class to inform that a non-key frame has been written. <br /></td></tr>
 <tr class="separator:a89ae0e5b23662583156ec41fdd1f0877"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58570faf000b9847019bbf7141a97dd8"><td class="memItemLeft" align="right" valign="top"><a id="a58570faf000b9847019bbf7141a97dd8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#a58570faf000b9847019bbf7141a97dd8">markKeyFrame</a> (long int mstimestamp)</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#a58570faf000b9847019bbf7141a97dd8">markKeyFrame</a> (long int mstimestamp)</td></tr>
 <tr class="memdesc:a58570faf000b9847019bbf7141a97dd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by a writer class to inform that a key frame has been written. <br /></td></tr>
 <tr class="separator:a58570faf000b9847019bbf7141a97dd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24a12915ba2e24d6c553b3d08d30b90b"><td class="memItemLeft" align="right" valign="top"><a id="a24a12915ba2e24d6c553b3d08d30b90b"></a>
@@ -214,6 +228,14 @@ long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#a734f409599f4729a62d5896ec6730f84">col_1</a></td></tr>
 <tr class="memdesc:a734f409599f4729a62d5896ec6730f84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current column 1 value (max anyframe timestamp) <br /></td></tr>
 <tr class="separator:a734f409599f4729a62d5896ec6730f84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99cf93dfcf63bccb746bfa155390eba5"><td class="memItemLeft" align="right" valign="top"><a id="a99cf93dfcf63bccb746bfa155390eba5"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#a99cf93dfcf63bccb746bfa155390eba5">col_0_lu</a></td></tr>
+<tr class="memdesc:a99cf93dfcf63bccb746bfa155390eba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">col_0 at previous blocktable update <br /></td></tr>
+<tr class="separator:a99cf93dfcf63bccb746bfa155390eba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d960891c67012481c1cce76d64e8441"><td class="memItemLeft" align="right" valign="top"><a id="a3d960891c67012481c1cce76d64e8441"></a>
+long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#a3d960891c67012481c1cce76d64e8441">col_1_lu</a></td></tr>
+<tr class="memdesc:a3d960891c67012481c1cce76d64e8441"><td class="mdescLeft">&#160;</td><td class="mdescRight">col_1 at previous blocktable update <br /></td></tr>
+<tr class="separator:a3d960891c67012481c1cce76d64e8441"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37e3234bc1c5df3cc1e83bf74d0643c2"><td class="memItemLeft" align="right" valign="top"><a id="a37e3234bc1c5df3cc1e83bf74d0643c2"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#a37e3234bc1c5df3cc1e83bf74d0643c2">current_row</a></td></tr>
 <tr class="memdesc:a37e3234bc1c5df3cc1e83bf74d0643c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Row number (block) that's being written. <br /></td></tr>
@@ -224,7 +246,7 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <tr class="separator:aaeb71897f4882b065e7da5f26c557f61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bfe8505e9396b461afa889da5aae686"><td class="memItemLeft" align="right" valign="top"><a id="a1bfe8505e9396b461afa889da5aae686"></a>
 PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaFS.html#a1bfe8505e9396b461afa889da5aae686">pyfunc</a></td></tr>
-<tr class="memdesc:a1bfe8505e9396b461afa889da5aae686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Python callback that's triggered at block write. <br /></td></tr>
+<tr class="memdesc:a1bfe8505e9396b461afa889da5aae686"><td class="mdescLeft">&#160;</td><td class="mdescRight">A python callback that's triggered when the blocktable should be read again. <br /></td></tr>
 <tr class="separator:a1bfe8505e9396b461afa889da5aae686"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
@@ -232,6 +254,12 @@ Static Protected Attributes</h2></td></tr>
 <tr class="memitem:ad96adbf234332158127fc04d4a548f28"><td class="memItemLeft" align="right" valign="top"><a id="ad96adbf234332158127fc04d4a548f28"></a>
 const static std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_cols</b> = 2</td></tr>
 <tr class="separator:ad96adbf234332158127fc04d4a548f28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a48638e824a470b977f14a542cea231c1"><td class="memItemLeft" align="right" valign="top"><a id="a48638e824a470b977f14a542cea231c1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>callPyFunc</b> (std::string msg, bool use_gil=true)</td></tr>
+<tr class="separator:a48638e824a470b977f14a542cea231c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Book-keeping for <a class="el" href="classValkkaFS.html" title="Book-keeping for ValkkaFS.">ValkkaFS</a>. </p>
@@ -310,10 +338,11 @@ const static std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n
     <tr><td class="paramname">block_file</td><td>where the filesystem (block) information is written. A dump of blocktable </td></tr>
     <tr><td class="paramname">blocksize</td><td>size of a block </td></tr>
     <tr><td class="paramname">n_blocks</td><td>number of blocks </td></tr>
-    <tr><td class="paramname">init</td><td>true = init and dump blocktable to disk. false = try to read blocktable from disk (default) </td></tr>
+    <tr><td class="paramname">init</td><td>true = init and dump blocktable to disk. false = try to read blocktable from disk (default)</td></tr>
   </table>
   </dd>
 </dl>
+<p><a class="el" href="classValkkaFS.html" title="Book-keeping for ValkkaFS.">ValkkaFS</a> is designed for a case when several streams are dumped into the same file/blockdevice. However, this idea has been abandoned for the moment (although cool idea, there are several complications with it) and we have opted to have a single stream per file/blockdevice. That (more conventional) idea is implemented in <a class="el" href="classValkkaFS2.html">ValkkaFS2</a>. The only different is how the keyframes are marked into the blocktable. </p>
 
 </div>
 </div>
@@ -421,9 +450,6 @@ const static std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n
   </table>
   </dd>
 </dl>
-<ul>
-<li></li>
-</ul>
 
 </div>
 </div>
