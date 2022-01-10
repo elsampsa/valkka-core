@@ -71,7 +71,7 @@ We're currently at alpha
 
 - Recording a single-stream per file is now functional (cpp class: ValkkaFS2)
 - Lots of reorganization under valkka.fs namespace: FSGroup, ValkkaFSManager, etc.
-- Corresponding changes done to valkka-examples & valkka-live
+- Corresponding changes done to valkka-examples & valkka-live (phew)
 
 ### Older versions
 
