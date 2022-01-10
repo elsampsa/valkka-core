@@ -28,7 +28,7 @@
  *  @file    valkkafs.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.2 
+ *  @version 1.3.0 
  *  
  *  @brief
  */ 
@@ -163,7 +163,7 @@ public:                                  // <pyapi>
      *  Typically used by an external manager that needs up-to-date information
      *  about the max timestamp in the block
      */
-    void            updateTable();      // <pyapi>
+    void            updateTable(bool disk_write=false);      // <pyapi>
     
     /** Used by a writer class to inform that a new block has been written
      * @param pycall   : Use the provided python callback function or not?  default = true

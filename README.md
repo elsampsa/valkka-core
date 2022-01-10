@@ -67,12 +67,18 @@ Some key features of the Valkka library are:
 
 We're currently at alpha
 
-### Newest version is 1.2.2
+### Newest version is 1.3.0
+
+- Recording a single-stream per file is now functional (cpp class: ValkkaFS2)
+- Lots of reorganization under valkka.fs namespace: FSGroup, ValkkaFSManager, etc.
+- Corresponding changes done to valkka-examples & valkka-live
+
+### Older versions
+
+1.2.2
 
 - Using ``glFinish`` in Intel graphics driver OpenGL completely clogged the frame presentation pipeline resulting in lots of dropped frames.  Removing ``glFinish`` fixed the issue.
 - Reorganized the Python Qt examples
-
-### Older versions
 
 1.2.1
 

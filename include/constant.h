@@ -28,7 +28,7 @@
  *  @file    constant.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.2 
+ *  @version 1.3.0 
  *  
  *  @brief   Constant/default values, version numbers
  */ 
@@ -62,8 +62,8 @@ https://softwareengineering.stackexchange.com/questions/328775/how-important-is-
 */
     
 static const int VERSION_MAJOR = 1; // <pyapi>
-static const int VERSION_MINOR = 2; // <pyapi>
-static const int VERSION_PATCH = 2; // <pyapi>
+static const int VERSION_MINOR = 3; // <pyapi>
+static const int VERSION_PATCH = 0; // <pyapi>
 
 static const unsigned LIVE_GET_PARAMETER_PING = 50; // ping the camera with GET_PARAMETER_PING every N:th second while the connection is active
 

@@ -26,7 +26,7 @@
  *  @file    valkkafs.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.2.2 
+ *  @version 1.3.0 
  *  
  *  @brief   A simple block file system for streaming media
  */ 
@@ -226,7 +226,7 @@ void ValkkaFS::callPyFunc(std::string msg, bool use_gil) {
 }
 
 
-void ValkkaFS::updateTable() {
+void ValkkaFS::updateTable(bool disk_write) {
     // an external entity (a manager) has requested that we
     // update the blocktable
     // this call originates from the python side
@@ -234,7 +234,9 @@ void ValkkaFS::updateTable() {
         std::unique_lock<std::mutex> lk(this->mutex);
         // if col_0 and col_1 are the same as at last query, do nothing
         // if col_1 or col_1 is zero, do nothing
-        std::cout << "ValkkaFS: ext update: col_0, col_1: " << col_0 << " " << col_1 << " " << col_1-col_0 << std::endl;
+        valkkafslogger.log(LogLevel::debug) <<
+            "ValkkaFS: updateTable: col_0, col_1: " 
+            << col_0 << " " << col_1 << " " << col_1-col_0 << std::endl;
         if ((col_0==0) || (col_1==0)) {
             return;
         }
@@ -247,6 +249,10 @@ void ValkkaFS::updateTable() {
             
             col_0_lu=col_0;
             col_1_lu=col_1;
+
+            if (disk_write) {
+                updateDumpTable_(current_row); // save to the blocktable file as well
+            }
         }
     }
     callPyFunc(std::string("req"), false);

@@ -25,7 +25,7 @@ base.py : api level 1 => api level 2 encapsulation for ValkkaFS.  Base class.
 @file    base.py
 @author  Sampsa Riikonen
 @date    2021
-@version 1.2.2 
+@version 1.3.0 
 
 @brief   api level 1 => api level 2 encapsulation for ValkkaFS.  Base class.
 """
@@ -387,7 +387,7 @@ class ValkkaFS:
     
     
     def getBlockTable(self, reread=False):
-        """Updates self.blocktable
+        """Updates self.blocktable & returns it
         """
         self.logger.debug("ValkkaFS: getBlockTable")
         # traceback.print_stack()
@@ -401,6 +401,7 @@ class ValkkaFS:
         # return self.blocktable
         self.logger.debug("ValkkaFS: getBlockTable: exit")
         # return self.blocktable_
+        return self.blocktable
     
 
     def getTimeRange(self):
