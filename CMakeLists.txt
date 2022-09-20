@@ -8,7 +8,7 @@
 
 cmake_minimum_required(VERSION 3.1)
 find_package(PkgConfig REQUIRED)
-# find_package(PythonLibs 2.7 REQUIRED)
+# find_package(GLEW REQUIRED) # glew-finder
 
 project(Valkka)
 
@@ -121,7 +121,7 @@ endif (cachestream_verbose)
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "1") 
 SET(MINOR_VERSION "3") 
-SET(PATCH_VERSION "0") 
+SET(PATCH_VERSION "3") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
 # *** define build type: Debug or Release # now from the command line
@@ -136,12 +136,13 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # [OpenGL dependencies]
-# exec_program(pkg-config ARGS --cflags x11 glew OUTPUT_VARIABLE GL_CFLAGS)
-# exec_program(pkg-config ARGS --libs x11 glew OUTPUT_VARIABLE GL_LIBS)
-pkg_search_module(X11 REQUIRED x11)
 pkg_search_module(GLEW REQUIRED glew)
+## could use these instead:
+#exec_program(pkg-config ARGS --libs x11 glew OUTPUT_VARIABLE GLEW_LIBRARIES)
+#exec_program(pkg-config ARGS --cflags x11 glew OUTPUT_VARIABLE GLEW_INCLUDER_DIRS)
+pkg_search_module(X11 REQUIRED x11)
 pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the latest ffmpeg
-# pkg_search_module(PYTHON REQUIRED python3) # don't use! https://bugs.python.org/issue36721
+## pkg_search_module(PYTHON REQUIRED python3) # don't use! https://bugs.python.org/issue36721
 
 # some cmake bullshit for a change: get python libs and cflags
 exec_program(python3-config ARGS --includes OUTPUT_VARIABLE PYTHON_INCLUDE_DIRS_TMP)
@@ -160,6 +161,9 @@ string(REPLACE "-I" " " PYTHON_INCLUDE_DIRS_TMP ${PYTHON_INCLUDE_DIRS_TMP})
 string(REPLACE " " ";" PYTHON_INCLUDE_DIRS ${PYTHON_INCLUDE_DIRS_TMP})
 
 pkg_search_module(OPENSSL REQUIRED openssl)
+## could use these instead:
+#exec_program(pkg-config ARGS --libs openssl OUTPUT_VARIABLE OPENSSL_LIBRARIES)
+#exec_program(pkg-config ARGS --cflags openssl OUTPUT_VARIABLE OPENSSL_INCLUDER_DIRS)
 
 message("PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
 message("PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")

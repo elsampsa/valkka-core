@@ -27,7 +27,7 @@
  *  @author  Sampsa Riikonen
  *  @author  Markus Kaukonen
  *  @date    2017
- *  @version 1.3.0 
+ *  @version 1.3.3 
  *  
  *  @brief 
  *

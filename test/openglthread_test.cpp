@@ -26,7 +26,7 @@
  *  @file    openglthread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.0 
+ *  @version 1.3.3 
  *  
  *  @brief   start/stop the OpenGLThread etc.
  *

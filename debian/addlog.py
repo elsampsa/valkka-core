@@ -30,14 +30,17 @@ def write(version, distro, comment):
   * {COMMENT}
 
  -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  {DATE}
-
 """.format(
     VERSION = version,
     DISTRO  = distro,
     COMMENT = comment,
     DATE = date)
 
-    print(">>>\n"+st+"\n<<<<")
+    # print(">>>\n"+st+"\n<<<<")
+    sys.stderr.write("add this to your changelog:\n")
+    sys.stderr.write(">>>>>\n")
+    print(st)
+    sys.stderr.write("<<<<<\n")
     # return
     # do_write = True
     do_write = False
@@ -51,10 +54,10 @@ def write(version, distro, comment):
         f.write(dump)
         f.close()
 
-    print("\nWriting 'rundeb.bash' for easy building & uploading\n")
+    sys.stderr.write("\nWriting 'rundeb.bash' for easy building & uploading\n")
     fname = "valkka_{VERSION}-0ubuntu1-{DISTRO}ppa1_source.changes".format(VERSION = version, DISTRO = distro)
     st = """#!/bin/bash
-clear; debuild -S -sa
+clear; debuild -d -S -sa
 DIRTMP=$PWD
 cd ../..
 dput ppa:sampsa-riikonen/valkka %s
@@ -76,8 +79,10 @@ Typical usecase:
 
     addlog.py 0.13.2 bionic new awesome version
     addlog.py 0.13.2 focal
+
 """
-    print(st)
+    # print(st)
+    sys.stderr.write(st)
 
     if len(sys.argv) < 3:
         print("missing parameters")
@@ -86,7 +91,8 @@ Typical usecase:
     version = sys.argv[1]
     distro = sys.argv[2]
     if len(sys.argv) < 4:
-        print("loading previous comment")
+        # print("loading previous comment")
+        sys.stderr.write("loading previous comment")
         comment = None
     else:
         # print(">",sys.argv[3:])
@@ -99,7 +105,7 @@ Typical usecase:
     with open("comment.tmp", "r") as f:
         comment = f.read()
     
-    print("summary: version:", version, "distro:", distro, "comment:", comment)
+    # print("summary: version:", version, "distro:", distro, "comment:", comment)
+    sys.stderr.write("summary: version:"+version+" distro:"+distro+" comment:"+comment+"\n")
     write(version, distro, comment)
-
 

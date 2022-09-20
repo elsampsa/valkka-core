@@ -25,7 +25,7 @@ basic2.py : Some basic classes encapsulating filter chains.  User must define th
 @file    basic.py
 @author  Sampsa Riikonen
 @date    2017
-@version 1.3.0 
+@version 1.3.3 
   
 @brief Some basic classes encapsulating filter chains.  User must define the endpoints of the filterchains
 """

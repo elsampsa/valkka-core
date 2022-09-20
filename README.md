@@ -65,15 +65,25 @@ Some key features of the Valkka library are:
 
 ## Versions and Features
 
-We're currently at alpha
+### Newest version is 1.3.3
 
-### Newest version is 1.3.0
+1.3.3
+
+- Added dependency to glew-utils package which fixes library dependence problems for all recent ubuntu LTS distros
+
+- A consistent docker testing scheme for build and install in [docker/](docker/)
+
+### Older versions
+
+1.3.1
+
+- Removed ``sysctl.h`` depedency from ffmpeg ``config.h``
+
+1.3.0
 
 - Recording a single-stream per file is now functional (cpp class: ValkkaFS2)
 - Lots of reorganization under valkka.fs namespace: FSGroup, ValkkaFSManager, etc.
 - Corresponding changes done to valkka-examples & valkka-live (phew)
-
-### Older versions
 
 1.2.2
 
@@ -160,8 +170,9 @@ and then do:
 ### Dependencies
 
 You need (at least):
-
-    sudo apt-get install git build-essential libc6-dev yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils valgrind pkg-config
+```
+sudo apt-get install python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl build-essential yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils freeglut3-dev
+```
 
 If you have upgraded your python interpreter, you might need to define the version, say ```python3.7-dev```
 

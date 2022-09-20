@@ -25,7 +25,7 @@ single.py : api 2 level encapsulation for ValkkaFS having single stream in singl
 @file    single.py
 @author  Sampsa Riikonen
 @date    2021
-@version 1.3.0 
+@version 1.3.3 
 
 @brief   api 2 level encapsulation for ValkkaFS having single stream in single file
 """

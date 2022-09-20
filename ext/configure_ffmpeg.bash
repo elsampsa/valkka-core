@@ -33,3 +33,6 @@ then
   echo "configure_ffmpeg.bash: Could not configure!"
   exit 1
 fi
+
+## fix config.h so that it doesn't use sysctl
+sed -i -r "s/#define HAVE_SYSCTL 1/#define HAVE_SYSCTL 0/g" config.h

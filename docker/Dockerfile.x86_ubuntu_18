@@ -1,0 +1,33 @@
+FROM ubuntu:18.04
+# ubuntu LSTs: 
+# 22.04 (until abril 2032) jammy
+# 20.04.4 (until abril 2030) focal
+# 18.04 (until abril 2028) bionic
+# 16.04.7 (until abril 2026) xenial
+
+USER root
+
+ENV TZ=Europe/Helsinki
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update
+
+# REQUIRED TO INSTALL VALKKA # keep consistent with CMakeLists.txt : SET(CPACK_DEBIAN_PACKAGE_DEPENDS "...")
+RUN apt-get install -y python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl
+## REQUIRED TO BUILD VALKKA # keep consistent with debian/control & valkka-core main readme
+RUN apt-get install -y build-essential yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils freeglut3-dev
+# needed to add freeglut3-dev --> see: https://github.com/elsampsa/valkka-core/issues/35
+
+WORKDIR /valkka-core
+## So if your build crashes, this dockerimage will never be built & ready
+## --> now way to experiment & fix the issue
+## it's better to keep the code, makefiles & build in a separate bind-mount we can edit live
+## so this part NOT HERE:
+#ADD valkka_tmp /root/valkka_tmp
+#WORKDIR /root/valkka_tmp
+#RUN make -f debian/rules clean
+#RUN make -f debian/rules build
+#WORKDIR  /root/valkka_tmp/build_dir
+#RUN make package
+#RUN dpkg -i Valkka-*.deb
+#RUN python3 -c 'from valkka.core import *'

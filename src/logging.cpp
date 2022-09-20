@@ -26,7 +26,7 @@
  *  @file    logging.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.0 
+ *  @version 1.3.3 
  *  @brief   Logging with various log levels
  */ 
 
