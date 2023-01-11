@@ -26,7 +26,7 @@
  *  @file    framefilter.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.3 
+ *  @version 1.3.4 
  *  
  *  @brief 
  */
@@ -48,6 +48,10 @@ void FrameFilter::run(Frame *frame)
         return;
     } // call next filter .. if there is any
     (this->next)->run(frame);
+}
+
+void FrameFilter::setVoid() {
+    this->next = NULL;
 }
 
 // subclass like this:

@@ -28,7 +28,7 @@
  *  @file    live.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.3 
+ *  @version 1.3.4 
  *  @brief Interface to live555
  * 
  *  Acknowledgements: Ross Finlayson for his advice
@@ -116,14 +116,15 @@ public:
    * @param rtspURL               The URL of the live stream
    * @param framefilter           Start of the frame filter chain.  New frames are being fed here.
    * @param livestatus            This used to inform LiveThread about the state of the stream
+   * @param termplease            LiveThread informs that this ValkkaRTSPClient should exit while still in continueAfterDESCRIBE --> continueAfterSETUP
    * @param verbosityLevel        (optional) Verbosity level
    * @param applicationName       (optional)
    * @param tunnelOverHTTPPortNum (optional)
    */
-  static ValkkaRTSPClient* createNew(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, int verbosityLevel = 0, char const* applicationName = NULL, portNumBits tunnelOverHTTPPortNum = 0);
+  static ValkkaRTSPClient* createNew(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, bool& termplease, int verbosityLevel = 0, char const* applicationName = NULL, portNumBits tunnelOverHTTPPortNum = 0);
   
 protected:
-  ValkkaRTSPClient(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum);
+  ValkkaRTSPClient(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, bool& termplease, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum);
   /** Default virtual destructor */
   virtual ~ValkkaRTSPClient();
   
@@ -131,7 +132,8 @@ public:
   StreamClientState scs;
   FrameFilter& framefilter;     ///< Target frame filter where frames are being fed
   LiveStatus* livestatus;       ///< This points to a variable that is being used by LiveThread to inform about the stream state
-  
+  bool& termplease;             ///< Points to a variable that is being used by LiveThread to inform this client to exit asap if in LiveStatus::pending
+
 public: // some extra parameters and their setters
   bool     request_multicast; ///< Request multicast during rtsp negotiation
   bool     request_tcp;       ///< Request interleaved streaming over tcp

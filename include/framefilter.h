@@ -28,7 +28,7 @@
  *  @file    framefilter.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.3 
+ *  @version 1.3.4 
  *  
  *  @brief   Definition of FrameFilter and derived classes for various purposes
  */
@@ -52,7 +52,7 @@ public: // <pyapi>
    */
     FrameFilter(const char *name, FrameFilter *next = NULL); // don't include into the python api (this class is abstract)
     virtual ~FrameFilter();                                  ///< Virtual destructor // <pyapi>
-
+    
 public:
     std::string name;
 
@@ -67,6 +67,7 @@ public: // API
     /** Calls this->go(Frame* frame) and then calls the this->next->run(Frame* frame) (if this->next != NULL)
    */
     virtual void run(Frame *frame);
+    void setVoid(); ///< nullifies the next framefilter in the chain -> cuts the framefilter chain
 }; // <pyapi>
 
 /** A "hello world" demo class: prints its own name if verbose is set to true.

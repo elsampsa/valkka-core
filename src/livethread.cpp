@@ -26,7 +26,7 @@
  *  @file    livethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.3 
+ *  @version 1.3.4 
  *  
  *  @brief A live555 thread
  *
@@ -255,7 +255,7 @@ void Outbound::handleFrame(Frame* f) {
 
 // RTSPConnection::RTSPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter, long unsigned int msreconnect) : Connection(env, address, slot, framefilter, msreconnect), livestatus(LiveStatus::none) {};
 
-RTSPConnection::RTSPConnection(UsageEnvironment& env, LiveConnectionContext& ctx) : Connection(env, ctx), livestatus(LiveStatus::none) {};
+RTSPConnection::RTSPConnection(UsageEnvironment& env, LiveConnectionContext& ctx) : Connection(env, ctx), livestatus(LiveStatus::none), termplease(false) {};
 
 
 RTSPConnection::~RTSPConnection() {
@@ -277,7 +277,7 @@ void RTSPConnection::playStream() {
         livestatus=LiveStatus::pending;
         frametimer=0;
         livethreadlogger.log(LogLevel::crazy) << "RTSPConnection : playStream" << std::endl;
-        client = ValkkaRTSPClient::createNew(env, ctx.address, *inputfilter, &livestatus);
+        client = ValkkaRTSPClient::createNew(env, ctx.address, *inputfilter, &livestatus, termplease);
         if (ctx.request_multicast)   { client->requestMulticast(); }
         if (ctx.request_tcp)         { client->requestTCP(); }
         if (ctx.recv_buffer_size>0)  { client->setRecvBufferSize(ctx.recv_buffer_size); }
@@ -295,7 +295,8 @@ void RTSPConnection::stopStream() {
     // Here we are a part of the live555 event loop (this is called from periodicTask => handleSignals => stopStream => this method)
     livethreadlogger.log(LogLevel::crazy) << "RTSPConnection : stopStream" << std::endl;
     if (is_playing) {
-        // before the RTSPClient instance destroyed itself (!) it modified the value of livestatus
+        inputfilter->setVoid(); // cut the filterchain: inputfilter doesn't pass anything downstream anymore
+        // before the RTSPClient instance destroyed itself (!) it modified the value of livestatus :)
         if (livestatus==LiveStatus::closed) { // so, we need this to avoid calling Media::close on our RTSPClient instance
             livethreadlogger.log(LogLevel::debug) << "RTSPConnection : stopStream: already shut down" << std::endl;
         }
@@ -309,12 +310,13 @@ void RTSPConnection::stopStream() {
             // TODO: add counter for pending events .. wait for pending events, etc .. ?
             // better idea: allow only one play/stop command per stream per handleSignals interval
             // possible to wait until handleSignals has been called
+            termplease=true; // ValkkaRTSPClient reads this variable when in pending mode & terminates any pending rtsp negotiations that are due
         }
         else {
             ValkkaRTSPClient::shutdownStream(client, 1); // sets LiveStatus to closed
             livethreadlogger.log(LogLevel::debug) << "RTSPConnection : stopStream: shut down" << std::endl;
         }
-    }
+    } // is_playing
     else {
         livethreadlogger.log(LogLevel::debug) << "RTSPConnection : stopStream : stream was not playing" << std::endl;
     }
@@ -763,7 +765,8 @@ RTSPOutbound::~RTSPOutbound() {
 
 
 
-LiveThread::LiveThread(const char* name, FrameFifoContext fifo_ctx) : Thread(name), infifo(name, fifo_ctx), infilter(name, &infifo), exit_requested(false), authDB(NULL), server(NULL) {
+LiveThread::LiveThread(const char* name, FrameFifoContext fifo_ctx) : Thread(name), infifo(name, fifo_ctx), infilter(name, &infifo), exit_requested(false), authDB(NULL), server(NULL)
+{
     scheduler = BasicTaskScheduler::createNew();
     env       = BasicUsageEnvironment::createNew(*scheduler);
     eventLoopWatchVariable = 0;
@@ -868,7 +871,7 @@ void LiveThread::handlePending() {
 }
 
 
-void LiveThread::closePending() { // call only after handlePending
+void LiveThread::closePending() { // call only after handlePending // used only by dtor
     Connection* connection;
     for (auto it=pending.begin(); it!=pending.end(); ++it) {
         connection=*it;
@@ -934,6 +937,7 @@ void LiveThread::handleSignals() {
     }
     
     signal_fifo.clear();
+    this->condition.notify_all(); // for waitReady
 }
 
 
@@ -1273,6 +1277,14 @@ void LiveThread::requestStopCall() {
     this->sendSignal(signal_ctx);
 }
 
+void LiveThread::waitReady() { 
+    // NOTE: signal queue might be empty, but that doesn't mean that the signal had been processed..!
+    // this is specially true for LiveThread's pending connections that are handled in LiveThread's periodicTask
+    std::unique_lock<std::mutex> lk(this->mutex);
+    while (!this->signal_fifo.empty()) {
+        this->condition.wait(lk);
+    }
+}
 
 
 /*

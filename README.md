@@ -65,7 +65,12 @@ Some key features of the Valkka library are:
 
 ## Versions and Features
 
-### Newest version is 1.3.3
+### Newest version is 1.3.4
+
+1.3.4
+
+- Live555 RTSP sessions that might hang now properly closed.  Filterchain is "cut" when a connection is deregistered -> LiveThread doesn't write frames to filterchain that is being garbage collected
+- Added EventFd into the Python API
 
 1.3.3
 

@@ -19,7 +19,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 @file    base.py
 @author  Petri Eränkö
 @date    2019
-@version 1.3.3 
+@version 1.3.4 
 
 @brief   Simple classes for Zeep-based OnVif service clients
 """

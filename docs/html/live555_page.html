@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">1.3.3</span>
+   &#160;<span id="projectnumber">1.3.4</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -72,7 +72,7 @@ $(function() {
 <p>An event can be the arrival of a streaming UDP packet. This triggers a callback that aggregates the packet content to a slice of H264 video, for example. After this, a new event, that waits for the next packet, is registered to the event loop.</p>
 <p>Connecting to an ip camera and starting to stream media, would look (very) roughly like this:</p>
 <hr  />
-<p> [ Event loop "tick" number : execution ]</p>
+<p> [ <a class="el" href="classEvent.html" title="Python-like threading/multiprocessing.Event class.">Event</a> loop "tick" number : execution ]</p>
 <p>001 :</p>
 <p>002 : Send RTSP DESCRIBE command through a TCP socket to the ip camera. Define a callback function ("continueAfterDESCRIBE") that is called once the response is obtained. Wait for TCP socket using select.</p>
 <p>003 :</p>

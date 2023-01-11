@@ -26,7 +26,7 @@
  *  @file    thread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.3 
+ *  @version 1.3.4 
  *  
  *  @brief A class for multithreading, similar to Python's standard library "threading.Thread"
  */ 
@@ -218,7 +218,7 @@ void Thread::waitStopCall() {
 void Thread::sendSignal(SignalContext signal_ctx) {
     std::unique_lock<std::mutex> lk(this->mutex);
     // this->signal=signal;
-    this->signal_fifo.push_back(signal_ctx);  
+    this->signal_fifo.push_back(signal_ctx);
 }
 
 
@@ -231,7 +231,9 @@ void Thread::sendSignalAndWait(SignalContext signal_ctx) {
     }
 }
 
-void Thread::waitReady() {
+void Thread::waitReady() { 
+    // NOTE: signal queue might be empty, but that doesn't mean that the signal had been processed..!
+    // this is specially true for LiveThread's pending connections that are handled in LiveThread's periodicTask
     std::unique_lock<std::mutex> lk(this->mutex);
     while (!this->signal_fifo.empty()) {
         this->condition.wait(lk);
@@ -297,6 +299,7 @@ void TestConsumerThread::run() {
                 if (it->signal==Signal::exit) { loop=false; }
             }
             signal_fifo.clear();
+            this->condition.notify_all();
         }
         
     }

@@ -25,7 +25,7 @@ valkkafs.py : api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFS
 @file    valkkafs.py
 @author  Sampsa Riikonen
 @date    2017
-@version 1.3.3 
+@version 1.3.4 
 
 @brief   api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFSThreads
 """
