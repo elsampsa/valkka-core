@@ -26,7 +26,7 @@
  *  @file    sharedmem.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.3 
+ *  @version 1.3.4 
  *  
  *  @brief   Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  */ 
@@ -48,7 +48,6 @@ EventFd::EventFd() {
 }
 
 EventFd::~EventFd() {
-    //std::cout << "EventFd: closing event fd " << fd << std::endl;
     close(this->fd);
 }
 
@@ -56,8 +55,23 @@ int EventFd::getFd() {
     return fd;
 }
 
+void EventFd::set() {
+    uint64_t u = 1; // one frame
+    ssize_t s;
+    s = write(fd, &u, sizeof(uint64_t));
+    if (s != sizeof(uint64_t)) {
+        handle_error("EventFd: write failed");
+    }
+}
 
-
+void EventFd::clear() {
+    uint64_t u = 1; // one frame
+    ssize_t s;
+    s = read(fd, &u, sizeof(uint64_t));
+    if (s != sizeof(uint64_t)) {
+        handle_error("EventFd: read failed");
+    }    
+}
 
 
 SharedMemSegment::SharedMemSegment(const char* name, std::size_t n_bytes, bool is_server) : name(name), n_bytes(n_bytes), is_server(is_server), client_state(false) {

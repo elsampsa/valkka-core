@@ -26,7 +26,7 @@
  *  @file    shmem_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.3 
+ *  @version 1.3.4 
  *  
  *  @brief 
  *
@@ -329,6 +329,19 @@ void test_7()
     }
 }
 
+void test_8()
+{
+    const char *name = "@TEST: shmem_test: test 8: ";
+    std::cout << name << "** Test EventFd ctor, set, clear and dtor **" << std::endl;
+    
+    EventFd* eventfd = new EventFd();
+    int fd = eventfd->getFd();
+    eventfd->set();
+    eventfd->clear();
+    delete eventfd;
+}
+
+
 int main(int argc, char **argcv)
 {
     if (argc < 2)
@@ -385,7 +398,10 @@ int main(int argc, char **argcv)
             break;
         case (7):
             test_7();
-            break;    
+            break;   
+        case (8):
+            test_8();
+            break;   
         default:
             std::cout << "No such test " << argcv[1] << " for " << argcv[0] << std::endl;
         }

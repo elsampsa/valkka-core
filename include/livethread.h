@@ -28,7 +28,7 @@
  *  @file    livethread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.3 
+ *  @version 1.3.4 
  *  
  *  @brief A live555 thread
  *
@@ -39,6 +39,7 @@
 #include "thread.h"
 #include "framefilter.h"
 #include "framefifo.h"
+#include "event.h"
 
 
 void setLiveOutPacketBuffermaxSize(unsigned i); // <pyapi>
@@ -271,6 +272,7 @@ public:
 private:
   ValkkaRTSPClient* client; ///< ValkkaRTSPClient defines the behaviour (i.e. event registration and callbacks) of the RTSP client (see \ref live_tag)
   LiveStatus livestatus;    ///< Reference of this variable is passed to ValkkaRTSPClient.  We can see outside of the live555 callback chains if RTSPConnection::client has deallocated itself
+  bool termplease;          ///< Ref of this var is passed to ValkkaRTSPClient.  When set to true, ValkkaRTSPClient should terminate itself if not yet playing
   
 public:
   void playStream();      ///< Uses ValkkaRTSPClient instance to initiate the RTSP negotiation
@@ -399,7 +401,7 @@ protected:
   EventTriggerId    event_trigger_id_hello_world;
   EventTriggerId    event_trigger_id_frame_arrived;
   EventTriggerId    event_trigger_id_got_frames;
-  int fc;                                             ///< debugging: incoming frame counter
+  int fc;                                    ///< debugging: incoming frame counter
   
 protected: // rtsp server for live and/or recorded stream
   UserAuthenticationDatabase  *authDB;
@@ -446,7 +448,8 @@ public: // *** C & Python API *** .. these routines go through the condvar/mutex
   // LiveFifo &getFifo();                                            ///< API method: get fifo for sending frames with live555          // <pyapi>
   FifoFrameFilter &getFrameFilter();                                 ///< API method: get filter for sending frames with live555        // <pyapi>
   void setRTSPServer(int portnum=8554);                              ///< API method: activate the RTSP server at port portnum          // <pyapi>
-  
+  virtual void waitReady();                                          ///< API method: wait until all signals and pending connections are resolved  // <pyapi>
+
 public: // live555 events and tasks
   static void helloWorldEvent(void* clientData);   ///< For testing/debugging  
   static void frameArrivedEvent(void* clientData); ///< For debugging

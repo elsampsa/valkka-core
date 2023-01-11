@@ -450,6 +450,13 @@ echo
 
 fi
 
+if true; then
+echo "shmem_test - part 2"
+echo 8
+valgrind ./shmem_test 8 $LOGLEVEL &>> test.out
+printf "END: shmem_test 8\n\n" &>> test.out
+fi
+
 # if false; then
 if true; then
 echo "ringbuffer_test"
@@ -715,6 +722,6 @@ $valgrind ./cachestream_test 4 $LOGLEVEL &>> test.out
 printf "END: cachestream_test 4\n\n" &>> test.out
 fi
 
-grep "ERROR SUMMARY" bin/test.out
-grep "seg" bin/test.out
+grep "ERROR SUMMARY" test.out
+grep "seg" test.out
 

@@ -26,7 +26,7 @@
  *  @file    live.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.3 
+ *  @version 1.3.4 
  *  
  *  @brief Interface to live555
  *
@@ -71,11 +71,13 @@ void usage(UsageEnvironment& env, char const* progName) {
 
 // Implementation of "ValkkaRTSPClient":
 
-ValkkaRTSPClient* ValkkaRTSPClient::createNew(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum) {
-  return new ValkkaRTSPClient(env, rtspURL, framefilter, livestatus, verbosityLevel, applicationName, tunnelOverHTTPPortNum);
+ValkkaRTSPClient* ValkkaRTSPClient::createNew(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, bool& termplease, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum) {
+  return new ValkkaRTSPClient(env, rtspURL, framefilter, livestatus, termplease, verbosityLevel, applicationName, tunnelOverHTTPPortNum);
 }
 
-ValkkaRTSPClient::ValkkaRTSPClient(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum) : RTSPClient(env, rtspURL.c_str(), verbosityLevel, applicationName, tunnelOverHTTPPortNum, -1), framefilter(framefilter), livestatus(livestatus), request_multicast(false), request_tcp(false), recv_buffer_size(0), reordering_time(0) {
+ValkkaRTSPClient::ValkkaRTSPClient(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, bool& termplease, int verbosityLevel, 
+    char const* applicationName, portNumBits tunnelOverHTTPPortNum) : 
+    RTSPClient(env, rtspURL.c_str(), verbosityLevel, applicationName, tunnelOverHTTPPortNum, -1), framefilter(framefilter), livestatus(livestatus), termplease(termplease), request_multicast(false), request_tcp(false), recv_buffer_size(0), reordering_time(0) {
 }
 
 
@@ -85,10 +87,15 @@ ValkkaRTSPClient::~ValkkaRTSPClient() {
 
 void ValkkaRTSPClient::continueAfterDESCRIBE(RTSPClient* rtspClient, int resultCode, char* resultString) {
   LiveStatus* livestatus = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
-  
+  bool termplease = ((ValkkaRTSPClient*)rtspClient)->termplease; // alias
+
   do {
     UsageEnvironment& env = rtspClient->envir(); // alias
     StreamClientState& scs = ((ValkkaRTSPClient*)rtspClient)->scs; // alias
+    
+    if (termplease) { // termination requested
+        break;
+    }
 
     if (resultCode != 0) {
       livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << "Failed to get a SDP description: " << resultString << "\n";
@@ -146,6 +153,7 @@ void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
   StreamClientState& scs   = ((ValkkaRTSPClient*)rtspClient)->scs;
   ValkkaRTSPClient* client = (ValkkaRTSPClient*)rtspClient;
   LiveStatus* livestatus   = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
+  bool termplease = ((ValkkaRTSPClient*)rtspClient)->termplease; // alias
   bool ok_subsession_type = false;
   
   scs.subsession = scs.iter->next();
@@ -498,8 +506,8 @@ FrameSink* FrameSink::createNew(UsageEnvironment& env, StreamClientState& scs, F
   return new FrameSink(env, scs, framefilter, streamId);
 }
 
-FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId) : MediaSink(env), scs(scs), framefilter(framefilter), on(true), nbuf(0), fSubsession(*(scs.subsession))
-
+FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId) : 
+    MediaSink(env), scs(scs), framefilter(framefilter), on(true), nbuf(0), fSubsession(*(scs.subsession))
 {
   // some aliases:
   // MediaSubsession &subsession = *(scs.subsession);

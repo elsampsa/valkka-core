@@ -1,3 +1,13 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classFrameCache.html" title="FrameCache works like FrameFifo, but frames are not pre&#45;reserved." alt="" coords="5,5,103,32"/>
+<area shape="rect" id="node1" href="$classFrame.html" title="Frame: An abstract queueable class." alt="" coords="5,183,64,209"/>
+<area shape="rect" id="node2" href="$classAVMediaFrame.html" title="Decoded Frame in FFmpeg format." alt="" coords="112,5,223,32"/>
+<area shape="rect" id="node5" href="$classBasicFrame.html" title="Custom payload Frame." alt="" coords="121,56,213,83"/>
+<area shape="rect" id="node6" href="$classMarkerFrame.html" title=" " alt="" coords="118,107,217,133"/>
+<area shape="rect" id="node7" href="$classMuxFrame.html" title="A muxed packet (in some container format)" alt="" coords="125,157,209,184"/>
+<area shape="rect" id="node8" href="$classRGBFrame.html" title="Our own RGB24 structure." alt="" coords="123,208,211,235"/>
+<area shape="rect" id="node9" href="$classSetupFrame.html" title="Setup frame." alt="" coords="121,259,214,285"/>
+<area shape="rect" id="node10" href="$classSignalFrame.html" title="A frame, signaling internal thread commands, states of recorded video, etc." alt="" coords="120,309,215,336"/>
+<area shape="rect" id="node11" href="$classYUVFrame.html" title="A GPU YUV frame." alt="" coords="124,360,211,387"/>
+<area shape="rect" id="node3" href="$classAVBitmapFrame.html" title="Decoded YUV/RGB frame in FFMpeg format." alt="" coords="271,5,387,32"/>
+<area shape="rect" id="node4" href="$classAVRGBFrame.html" title="Decoded YUV frame in a non&#45;planar format (thus &quot;NP&quot;)" alt="" coords="435,5,539,32"/>
 </map>

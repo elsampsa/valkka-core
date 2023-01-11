@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">1.3.3</span>
+   &#160;<span id="projectnumber">1.3.4</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -116,9 +116,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setReorderingTime</b>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a64807d6aa0069fff04bad1d10bb567b7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classValkkaRTSPClient.html">ValkkaRTSPClient</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaRTSPClient.html#a64807d6aa0069fff04bad1d10bb567b7">createNew</a> (UsageEnvironment &amp;env, const std::string rtspURL, <a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;<a class="el" href="classValkkaRTSPClient.html#a556d08dc3b6327fd7edbafebceef56ed">framefilter</a>, <a class="el" href="group__live__tag.html#ga267e2aa9269281d26f54d6c0371a8e76">LiveStatus</a> *<a class="el" href="classValkkaRTSPClient.html#a94deddaff32c576d46195159a8503374">livestatus</a>, int verbosityLevel=0, char const *applicationName=NULL, portNumBits tunnelOverHTTPPortNum=0)</td></tr>
-<tr class="memdesc:a64807d6aa0069fff04bad1d10bb567b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classValkkaRTSPClient.html#a64807d6aa0069fff04bad1d10bb567b7">More...</a><br /></td></tr>
-<tr class="separator:a64807d6aa0069fff04bad1d10bb567b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0df9c2f9f81274a5d07f3cba249ebab"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classValkkaRTSPClient.html">ValkkaRTSPClient</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaRTSPClient.html#ae0df9c2f9f81274a5d07f3cba249ebab">createNew</a> (UsageEnvironment &amp;env, const std::string rtspURL, <a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;<a class="el" href="classValkkaRTSPClient.html#a556d08dc3b6327fd7edbafebceef56ed">framefilter</a>, <a class="el" href="group__live__tag.html#ga267e2aa9269281d26f54d6c0371a8e76">LiveStatus</a> *<a class="el" href="classValkkaRTSPClient.html#a94deddaff32c576d46195159a8503374">livestatus</a>, bool &amp;<a class="el" href="classValkkaRTSPClient.html#acce1528d0f29b863495d17a97de93a2c">termplease</a>, int verbosityLevel=0, char const *applicationName=NULL, portNumBits tunnelOverHTTPPortNum=0)</td></tr>
+<tr class="memdesc:ae0df9c2f9f81274a5d07f3cba249ebab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classValkkaRTSPClient.html#ae0df9c2f9f81274a5d07f3cba249ebab">More...</a><br /></td></tr>
+<tr class="separator:ae0df9c2f9f81274a5d07f3cba249ebab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7072812dc29ccdfaf097615759dc34f"><td class="memItemLeft" align="right" valign="top"><a id="ab7072812dc29ccdfaf097615759dc34f"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaRTSPClient.html#ab7072812dc29ccdfaf097615759dc34f">continueAfterDESCRIBE</a> (RTSPClient *rtspClient, int resultCode, char *resultString)</td></tr>
 <tr class="memdesc:ab7072812dc29ccdfaf097615759dc34f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after rtsp DESCRIBE command gets a reply. <br /></td></tr>
@@ -173,6 +173,10 @@ Public Attributes</h2></td></tr>
 <a class="el" href="group__live__tag.html#ga267e2aa9269281d26f54d6c0371a8e76">LiveStatus</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaRTSPClient.html#a94deddaff32c576d46195159a8503374">livestatus</a></td></tr>
 <tr class="memdesc:a94deddaff32c576d46195159a8503374"><td class="mdescLeft">&#160;</td><td class="mdescRight">This points to a variable that is being used by <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread.">LiveThread</a> to inform about the stream state. <br /></td></tr>
 <tr class="separator:a94deddaff32c576d46195159a8503374"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acce1528d0f29b863495d17a97de93a2c"><td class="memItemLeft" align="right" valign="top"><a id="acce1528d0f29b863495d17a97de93a2c"></a>
+bool &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaRTSPClient.html#acce1528d0f29b863495d17a97de93a2c">termplease</a></td></tr>
+<tr class="memdesc:acce1528d0f29b863495d17a97de93a2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points to a variable that is being used by <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread.">LiveThread</a> to inform this client to exit asap if in <a class="el" href="group__live__tag.html#gga267e2aa9269281d26f54d6c0371a8e76a7c6c2e5d48ab37a007cbf70d3ea25fa4" title="Client&#39;s been requested to send the describe command. This might hang for several reasons: camera off...">LiveStatus::pending</a>. <br /></td></tr>
+<tr class="separator:acce1528d0f29b863495d17a97de93a2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a271a38797a2db794f8cef9f508367e88"><td class="memItemLeft" align="right" valign="top"><a id="a271a38797a2db794f8cef9f508367e88"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaRTSPClient.html#a271a38797a2db794f8cef9f508367e88">request_multicast</a></td></tr>
 <tr class="memdesc:a271a38797a2db794f8cef9f508367e88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request multicast during rtsp negotiation. <br /></td></tr>
@@ -192,9 +196,9 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a2c58e8b77c978b735620a1eb2cf28e7c"><td class="memItemLeft" align="right" valign="top"><a id="a2c58e8b77c978b735620a1eb2cf28e7c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ValkkaRTSPClient</b> (UsageEnvironment &amp;env, const std::string rtspURL, <a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;<a class="el" href="classValkkaRTSPClient.html#a556d08dc3b6327fd7edbafebceef56ed">framefilter</a>, <a class="el" href="group__live__tag.html#ga267e2aa9269281d26f54d6c0371a8e76">LiveStatus</a> *<a class="el" href="classValkkaRTSPClient.html#a94deddaff32c576d46195159a8503374">livestatus</a>, int verbosityLevel, char const *applicationName, portNumBits tunnelOverHTTPPortNum)</td></tr>
-<tr class="separator:a2c58e8b77c978b735620a1eb2cf28e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51f9fb22daa36e573636ca06eca69e1b"><td class="memItemLeft" align="right" valign="top"><a id="a51f9fb22daa36e573636ca06eca69e1b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ValkkaRTSPClient</b> (UsageEnvironment &amp;env, const std::string rtspURL, <a class="el" href="classFrameFilter.html">FrameFilter</a> &amp;<a class="el" href="classValkkaRTSPClient.html#a556d08dc3b6327fd7edbafebceef56ed">framefilter</a>, <a class="el" href="group__live__tag.html#ga267e2aa9269281d26f54d6c0371a8e76">LiveStatus</a> *<a class="el" href="classValkkaRTSPClient.html#a94deddaff32c576d46195159a8503374">livestatus</a>, bool &amp;<a class="el" href="classValkkaRTSPClient.html#acce1528d0f29b863495d17a97de93a2c">termplease</a>, int verbosityLevel, char const *applicationName, portNumBits tunnelOverHTTPPortNum)</td></tr>
+<tr class="separator:a51f9fb22daa36e573636ca06eca69e1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6439ccbb92b6414ac1bbaf3e64f5d50b"><td class="memItemLeft" align="right" valign="top"><a id="a6439ccbb92b6414ac1bbaf3e64f5d50b"></a>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classValkkaRTSPClient.html#a6439ccbb92b6414ac1bbaf3e64f5d50b">~ValkkaRTSPClient</a> ()</td></tr>
 <tr class="memdesc:a6439ccbb92b6414ac1bbaf3e64f5d50b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default virtual destructor. <br /></td></tr>
@@ -204,8 +208,8 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <div class="textblock"><p>Handles a live555 RTSP connection. </p>
 <p>To get an idea how this works, see <a class="el" href="live555_page.html">Live555 primer</a> </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a64807d6aa0069fff04bad1d10bb567b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64807d6aa0069fff04bad1d10bb567b7">&#9670;&nbsp;</a></span>createNew()</h2>
+<a id="ae0df9c2f9f81274a5d07f3cba249ebab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0df9c2f9f81274a5d07f3cba249ebab">&#9670;&nbsp;</a></span>createNew()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -236,6 +240,12 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
           <td></td>
           <td class="paramtype"><a class="el" href="group__live__tag.html#ga267e2aa9269281d26f54d6c0371a8e76">LiveStatus</a> *&#160;</td>
           <td class="paramname"><em>livestatus</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &amp;&#160;</td>
+          <td class="paramname"><em>termplease</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -275,6 +285,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
     <tr><td class="paramname">rtspURL</td><td>The URL of the live stream </td></tr>
     <tr><td class="paramname">framefilter</td><td>Start of the frame filter chain. New frames are being fed here. </td></tr>
     <tr><td class="paramname">livestatus</td><td>This used to inform <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread.">LiveThread</a> about the state of the stream </td></tr>
+    <tr><td class="paramname">termplease</td><td><a class="el" href="classLiveThread.html" title="Live555, running in a separate thread.">LiveThread</a> informs that this <a class="el" href="classValkkaRTSPClient.html" title="Handles a live555 RTSP connection.">ValkkaRTSPClient</a> should exit while still in continueAfterDESCRIBE --&gt; continueAfterSETUP </td></tr>
     <tr><td class="paramname">verbosityLevel</td><td>(optional) Verbosity level </td></tr>
     <tr><td class="paramname">applicationName</td><td>(optional) </td></tr>
     <tr><td class="paramname">tunnelOverHTTPPortNum</td><td>(optional) </td></tr>
