@@ -28,7 +28,7 @@
  *  @file    openglthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.4 
+ *  @version 1.3.5 
  *  
  *  @brief The OpenGL thread for presenting frames and related data structures
  *

@@ -1,5 +1,25 @@
 ### Older versions
 
+0.18.1
+
+- Fixed some issues with Ubuntu 20 LTS, for example [this one](https://bugs.python.org/issue36721): not using pkg-config to find python libs anymore
+- Tested with latest live555 version: required a small fix & openssl dependencies
+
+0.18.0
+
+- Extra copy / caching step added to sharedmem client side
+- API level 2 shmem client modified (mysterious crashes due to re-creating RGBMeta cpp type at python side maybe solved)
+- Fragmented mp4 progressing (not yet production level)
+- Migrating ppa support to Ubuntu 18 LTS and 20 LTS only
+
+0.17.5
+
+- Discovery now with both WSDiscovery & arp-scan
+
+0.17.4
+
+- WSDiscovery now included into libValkka
+
 0.17.0
 - Timestamps now taken from decoder!  This means that "main" and "high" H264 profiles with B-frames work.  This should also eliminate some "stuttering" effects seen sometimes in live video.
 - "Exotic" bitmaps (YUV422 and other) are now transformed to YUV420, so, for example profiles such as "high422" work (however, this is inefficient, so users should prefer YUV420P streams)

@@ -18,6 +18,10 @@ addlog.py 0.13.2 xenial new awesome version
 ./rundeb.bash
 ```
 
+For full automation, see ``sendall.bash``
+
+WARNING: remember that ``rundeb.bash`` is always overwritten
+
 ## An example control file:
 
 ```

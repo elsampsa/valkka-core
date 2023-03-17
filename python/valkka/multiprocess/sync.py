@@ -1,61 +1,29 @@
 import traceback
 from multiprocessing import Event
-from valkka import core
-
-# TODO: this file will be available in the future at the valkka.multiprocess namespace
-"""Create a group of Events (EventGroup) and a context manager (SyncIndex) to wait
-in the main python process for operation completion in the multiprocessing backend 
-(i.e. "on the other side" of the fork)
-
-At your main python process' ctor, do this:
-
-::
-
-    def __init__(self, ...):
-        ...
-        self.eg = EventGroup(20)
-        ...
-
-
-In your main python process (aka "multiprocessing frontend"), you can now do this:
-
-::
-
-    with SyncIndex(self.eg) as i:
-        # send some message to the backend, communicating
-        # the index i therein
-        # this section waits until the event corresponding
-        # to i has been set by the backend
-
-
-In the other side of the fork (aka "multiprocessing backend"), do this:
-
-::
-
-    # backend has been given the index i
-    # does the blocking operation, and after that call this:
-    self.eg.set(i)
-
-"""
-
+# from valkka import core # nopes
 
 class NotEnoughEvents(BaseException):
     pass
 
-
 class EventGroup:
+    """Creates a group of multiprocessing events
 
-    def __init__(self, n):
-        self.events = []
-        self.events_index = []
+    :param n: number of events to be instantiated and cached
+    :param event_class: a multiprocessing event class that has ``set`` and ``clear`` methods.
+                        default: python ``multiprocessing.Event``.  Can also be ``EventFd`` from libValkka.
+    
+    """
+    def __init__(self, n = 10, event_class = Event):
+        self.events = [] # list of cached events: immutable
+        self.index = [] # list of indexes of available events: mutable
         for i in range(n):
-            self.events.append(Event())
-            self.events_index.append(i)
+            self.events.append(event_class()) 
+            self.index.append(i) 
 
     def __str__(self):
         st = "<EventGroup: "
         for i in range(len(self.events)):
-            if i in self.events_index:
+            if i in self.index:
                 st += "f"+str(i)+" "
             else:
                 st += "R"+str(i)+" "
@@ -64,144 +32,79 @@ class EventGroup:
 
     def __len__(self):
         return len(self.events)
-
     
     def set(self, i):
+        """Set / trigger an event at index i.  Used typically at multiprocessing backend.
+        """
         self.events[i].set()
+
+    def reserve(self) -> tuple:
+        """Reserve and return an Event instance together with its index: ``index, Event``
+
+        Use typically at process frontend / python main process
+        """
+        try:
+            index = self.index.pop(0)
+        except IndexError as e:
+            raise NotEnoughEvents
+        event = self.events[index]
+        event.clear() # clear event before using it
+        return index, event
+        
+    def release(self, event):
+        """Release an EventFd sync primitive.  
+        Use typically at process frontend / python main process
+
+        :param event: event to be released / returned
+        """
+        try:
+            index = self.events.index(event)
+        except ValueError: # trying to return an event that's not in this EventGroup
+            raise ValueError("event not in this Eventgroup")
+        self.index.append(index)
+
+    def release_ind(self, index: int):
+        """Release an EventFd sync primitive, based on the index.
+        Use typically at process frontend / python main process
+
+        :param index: event's index
+        """
+        self.index.append(index)
+
+    def fromIndex(self, i):
+        """Get an event, based on the event index.
+        Use typically at multiprocessing backend to get the corresponding event as in the frontend.
+        """
+        return self.events[i]
+
+    def asIndex(self, event):
+        """Return index corresponding to an event
+        """
+        return self.events.index(event)
 
 
 class SyncIndex:
+    """A context manager for synchronizing between multiprocessing front- and backend.
 
+    :param event_group: an EventGroup instance
+
+    Wait's and releases an event at context manager exit
+    """
     def __init__(self, event_group: EventGroup):
         self.eg = event_group
-        self.i = None
+        self.event = None
 
     def __enter__(self):
-        try:
-            self.i = self.eg.events_index.pop(0) # reserve an avail event as per index
-        except IndexError:
-            raise(NotEnoughEvents("init your event group with more events"))
-        self.eg.events[self.i].clear() # clear the event before usage
-        return self.i
+        i, self.event = self.eg.reserve()
+        return i
 
     def __exit__(self, type, value, tb):
         if tb:
             print("SyncIndex failed with:")
             traceback.print_tb(tb)
-        self.eg.events[self.i].wait() # wait until the event has been set
-        # ..typically on the multiprocess backend
-        self.eg.events_index.insert(0, self.i) # recycle the event
-
-    """
-    # async part: TODO
-    # for cases when we have async _frontend_
-    # (that case has not yet been considered/implemented)
-    # with async backend, EventGroup & SyncIndex should work as
-    # in the sync backend case
-
-    async def __aenter__(self):
-         return self.__enter__()
-
-    async def __aexit__(self, exc_type, exc, tb):
-        await self.client.quit()
-    """
-
-
-class EventFdGroup:
-    """A group of EventFd synchronization primitives
-
-    You should instantiate an object from this class before spawning any
-    multiprocesses: this way the sync primitives are visible to all of them.
-    A global "singleton" module is a good way to do this (see demo_singleton.py)
-
-    The list if EventFds (self.events) stays constant accross multiprocesses.
-
-    Main process (aka frontend) reserves EventFds from this list and communicates
-    the list index to the multiprocess (aka backend) which then knows which EventFd
-    to pick up from the list.
-
-    Why like this?
-
-    Because we can't send an EventFd object through the intercom pipe between the multiprocessing
-    back- and frontend.  So we just send an index number.
-
-    To summarize:
-
-    - EventFd's are created before forking (so they're visible for everyone)
-    - After fork, only list indices are communicated between the main process and 
-    the multiprocess
-
-    """
-    def __init__(self, n):
-        # created & cached eventfds: stays constant 
-        self.events = []
-        # a list of indexes of available eventfds in self.events
-        self.index = []
-
-        for i in range(n):
-            self.events.append(core.EventFd())
-            #
-            # core.EventFd encapsulates an event file descriptor:
-            #
-            # https://linux.die.net/man/2/eventfd
-            # 
-            # EventFd has method getFd that returns the numerical value of
-            # the file descriptor
-            self.index.append(i)
-
-
-    def __str__(self):
-        st = ""
-        for i, eventfd in enumerate(self.events):
-            if i in self.index:
-                res = ""
-            else:
-                res = "RESERVED"
-            st += str(i) + " " + str(eventfd) + " " + res + "\n"
-        return st
-
-
-    def reserve(self) -> tuple:
-        """Reserver an EventFd sync primitive.  Returns a tuple of
-
-        ::
-
-            (index, EventFd)
-
-        Use at process frontend / python main process
-        """
-        try:
-            index = self.index.pop(0)
-        except IndexError as e:
-            pass
-        else:
-            return index, self.events[index]
-        raise(IndexError("You've run out of EventFds: create some more"))
-
-    def release(self, eventfd: core.EventFd):
-        """Release an EventFd sync primitive
-
-        Use at process frontend / python main process
-        """
-        index = self.events.index(eventfd)
-        self.index.append(index)
-
-    def release_ind(self, index: int):
-        """Release an EventFd sync primitive, based on the index
-
-        Use at process frontend / python main process
-        """
-        self.index.append(index)
-
-    def fromIndex(self, i):
-        """Get an EventFd, based on an index number
-
-        Use at process backend to get corresponding EventFd (as in the frontend)
-        """
-        return self.events[i]
-
-    def asIndex(self, eventfd: core.EventFd):
-        return self.events.index(eventfd)
+        self.event.wait() # wait until the event has been set
+        self.eg.release(self.event) # recycle the event
+    
 
 
 def main1():

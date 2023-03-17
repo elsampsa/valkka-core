@@ -22,6 +22,7 @@ read -r
 mv changelog_tmp changelog
 echo
 echo "RUNNING SCRIPT FOR "$distro
+echo "WARNING: WAIT UNTIL THE PASSWORD IS ASKED!"
 echo
 read -r
 ./rundeb.bash
