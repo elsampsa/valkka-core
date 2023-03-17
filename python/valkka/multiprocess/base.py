@@ -1,6 +1,6 @@
 """base.py : A simple multiprocessing framework with back- and frontend and pipes communicating between them
 
-Copyright 2017-2020 Valkka Security Ltd. and Sampsa Riikonen.
+Copyright 2017-2023 Sampsa Riikonen
 
 Authors: Sampsa Riikonen (sampsa.riikonen@iki.fi)
 
@@ -19,7 +19,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 @file    base.py
 @author  Sampsa Riikonen
 @date    2020
-@version 1.3.4 
+@version 1.3.5 
 
 @brief   A simple multiprocessing framework with back- and frontend and pipes communicating between them
 """
@@ -31,39 +31,46 @@ import sys, signal, os, pickle, math
 import logging
 import asyncio
 
-from valkka.api2.tools import getLogger, setLogger
+# from valkka.api2.tools import getLogger, setLogger
 
-logger = getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def safe_select(l1, l2, l3, timeout = None):
-    """
-    print("safe_select: enter")
-    select.select(l1,l2,l3,0)
-    print("safe_select: return")
-    return True
+    """Like select.select, but ignores EINTR
     """
     try:
         if timeout is None:
             res = select.select(l1, l2, l3) # blocks
         else:
             res = select.select(l1, l2, l3, timeout) # timeout 0 is just a poll
-        # print("safe_select: ping")
     except (OSError, select.error) as e:
         if e.errno != errno.EINTR:
             raise
         else: # EINTR doesn't matter
-            # print("select : giving problems..")
             return [[], [], []]  # dont read socket
     else:
-        # print("select : returning true!")
         return res  # read socket
-    # print("select : ?")
-
 
 
 class MessageObject:
+    """A generic MessageObject for intercommunication between
+    fronend (main python process) and backend (forked multiprocess).
+    
+    Encapsulates a command and parameters
 
+    :param command: the command
+    :param kwargs: kwargs
+
+    Example:
+
+    ::
+
+        msg = MessageObject("a-command", par1=1, par2=2)
+        msg() # returns "a-command"
+        msg["par1"] # returns 1
+
+    """
     def __init__(self, command, **kwargs):
         self.command = command
         self.kwargs = kwargs
@@ -71,52 +78,32 @@ class MessageObject:
     def __str__(self):
         return "<MessageObject: %s: %s>" % (self.command, self.kwargs)
 
+    def __call__(self):
+        return self.command
+
     def __getitem__(self, key):
         return self.kwargs[key]
 
 
 class MessageProcess(Process):
-    """This Process class has been "ripped" from valkka-live (https://github.com/elsampsa/valkka-live) where we initially
-    tested this concept.
+    """Encapsulates:
 
-    The class encapsulated:
+    - Frontend methods (in the current main process)
+    - Backend methods (that run in the background/forked process)
+    - Intercom pipes that communicate (seamlessly) between the multiprocessing front- and backend
+    - All intercom is encapsulated in ``MessageObject`` s
 
-    - Frontend methods (in the current main process).  These write to the intercom pipe self.front_pipe (see below).
-    - Backend methods (that run in the background/forked process).  These write to self.back_pipe (see below).
-    - Intercom pipes that communicate between front- and backend
+    When you send a ``MessageObject`` with command ``myStuff``, the forked multiprocess
+    (aka backend) tries to find and execute the method ``c__myStuff`` in the backend.
 
-    Pipes are named as follows:
-
-
-    ::
-
-        self.front_pipe      : write messages to multiprocess / read messages from multiprocess
-        self.back_pipe       : multiprocess reads / writes messages to frontend
-
-    - Multiprocess expects MessageObject instances from self.back_pipe
-    - MessageObject coming from self.back_pipe is mapped into a backend method
-    
-    - Backend sends MessageObject instances to self.back_pipe => self.front_pipe
-    - These are being read by the rest of the program
+    :param name: name of the multiprocess
     """
-
     timeout = 1.0
-    # **** define here your backend methods
-    # **** 
-
-    def c__ping(self, lis = []):
-        """A demo backend method that corresponds to a MessageObject
-        """
-        print("c__ping:", lis)
-        self.send_out__(MessageObject("pong", lis = [1,2,3]))
-
-    # ****
-
 
     def __init__(self, name = "MessageProcess"):
         self.name = name
         self.pre = self.__class__.__name__ + "." + self.name
-        self.logger = getLogger(self.pre)
+        self.logger = logging.getLogger(self.pre)
         super().__init__()
         self.front_pipe, self.back_pipe = Pipe() # incoming messages & pipe that is read by the main pythn process
         self.front_pipe_internal, self.back_pipe_internal = Pipe() # used internally, for example, to wait results from the backend
@@ -124,24 +111,56 @@ class MessageProcess(Process):
         self.listening = False # are we listening something else than just the intercom pipes?
         self.sigint = True
 
-    def ignoreSIGINT(self):
-        self.sigint = False
+    @classmethod
+    def formatLogger(cls, level = logging.INFO):
+        """A helper to setup logger formatter
+
+        :param level: loglevel.  Default: ``logging.INFO``.
+
+        Use only for initial development
+        """
+        logger = logging.getLogger(cls.__name__)
+        if not logger.hasHandlers():
+            formatter = logging.Formatter("%(name)s - %(levelname)s - %(message)s")
+            ch = logging.StreamHandler()
+            ch.setFormatter(formatter)
+            logger.addHandler(ch)
+        if level is not None:
+            logger.setLevel(level)
+
 
     def __str__(self):
         return "<"+self.pre+">"
 
     def setDebug(self):
-        setLogger(self.logger, logging.DEBUG)
+        self.logger.setLevel(logging.DEBUG)
 
     def preRun__(self):
+        """Multiprocessing backend method: subclass if needed
+        
+        Everything that needs to be done *after the fork* (i.e. in the backend), but *before*
+        the multiprocesses' main listening & execution loop starts running.
+
+        For example: import heavy libraries and instantiate deep neural net detectors
+        """
         pass
 
     def postRun__(self):
+        """Multiprocessing backend method: subclass if needed
+        
+        Everything that needs to be done *after the fork* (i.e. in the backend), and right *after*
+        the multiprocess has exited it's main listening & execution loop, i.e. just before the multiprocess exits
+        and dies.
+
+        For example: clear heavy libraries and instantiate deep neural net detectors
+        """
         pass
 
     # **** backend ****
 
     def run(self):
+        """Multiprocessing backend method: the main listening & execution loop.  Normally you would not subclass this one.
+        """
         if self.sigint == False:
             signal.signal(signal.SIGINT, signal.SIG_IGN) # handle in master process correctly
         self.preRun__()
@@ -157,7 +176,11 @@ class MessageProcess(Process):
 
 
     def readPipes__(self, timeout):
-        """Multiplex all intercom pipes
+        """Multiprocessing backend method: listen simultaneously (i.e. "multiplex") all intercom pipes.
+
+        If you need to listen additionally anything else than the normal intercom pipe, please subclass this one.
+
+        :param timeout: listening i/o timeout in seconds
         """
         rlis = [self.back_pipe]
         r, w, e = safe_select(rlis, [], [], timeout = timeout) # timeout = 0 == this is just a poll
@@ -206,9 +229,9 @@ class MessageProcess(Process):
 
 
     def send_out__(self, obj):
-        """Pickle obj & send to outgoing pipe
+        """Multiprocessing backend method: send an object from the backend to the frontend. 
+        It's recommended to use the ``MessageObject`` class.
         """
-        # print("send_out__", obj)
         self.back_pipe.send(obj)
 
 
@@ -216,34 +239,72 @@ class MessageProcess(Process):
         self.back_pipe_internal.send(obj)
 
 
+    # *** _your_ backend methods ***
+
+    def c__ping(self, lis = []):
+        """A demo multiprocessing backend method: triggered when frontend calls the method ``ping`` and sends a reply to frontend
+        """
+        print("c__ping:", lis)
+        self.send_out__(MessageObject("pong", lis = [1,2,3]))
+
+
     # **** frontend ****
 
-    def getPipe(self):
+    def ignoreSIGINT(self):
+        """Multiprocessing frontend method: call before ``start`` (or ``go``), so that the multiprocess ignores all SIGINT signals
+        """
+        self.sigint = False
+
+    def getPipe(self) -> Pipe:
+        """Multiprocessing frontend method: returns the pipe you can use to listen to messages sent by the multiprocessing backend.
+
+        returns a ``multiprocessing.Pipe`` instance
+        """
         return self.front_pipe
 
     def sendMessageToBack(self, message: MessageObject):
+        """Multiprocessing frontend method: send a ``MessageObject`` to multiprocessing backend
+        """
         self.front_pipe.send(message)
 
     def returnFromBack(self):
         return self.front_pipe_internal.recv()
 
     def go(self):
+        """Multiprocessing frontend method: a synonym to multiprocessing ``start()``
+        """
         self.start()
 
     def requestStop(self):
-        # print("MessageProcess: requestStop")
+        """Multiprocessing frontend method: send a request to the multiprocess (backend) to stop
+        """
         self.sendMessageToBack(None)
         
     def waitStop(self):
+        """Multiprocessing frontend method: alias to multiprocessing ``join()``
+        """
         self.join()
 
     def stop(self):
+        """Multiprocessing frontend method: request backend multiprocess to stop and wait until it has finished
+        """
         self.requestStop()
         self.waitStop()
 
-    # *** your frontend methods ***
+    # *** _your_ frontend methods ***
 
     def sendPing(self, lis):
+        """A demo multiprocessing frontend method: a demo method that sends the following ``MessageObject`` to the multiprocessing backend:
+
+        .. code:: python
+
+            MessageObject(
+                "ping",
+                lis = lis
+            ))
+
+        In the backend this is mapped seamlessly into backend method ``c__ping``
+        """
         self.sendMessageToBack(MessageObject(
             "ping",
             lis = lis
@@ -304,7 +365,9 @@ def to8ByteMessage(obj):
 
 
 class Duplex:
-
+    """Creates a duplex, similar to what you get from multiprocessing.Pipe(), but other side of the
+    duplex is non-blocking (for asyncio backend)
+    """
     def __init__(self, read_fd, write_fd):
         # file descriptors, i.e. numbers:
         self.read_fd = read_fd
@@ -319,6 +382,8 @@ class Duplex:
         return self.reader
 
     def getReadFd(self):
+        """Returns the file descriptor (int), aka "fd" for this pipe
+        """
         return self.read_fd
 
     def getWriteFd(self):
@@ -366,12 +431,12 @@ class Duplex:
 
 
 class AsyncBackMessageProcess(MessageProcess):
-    """Normal frontend, asynchronous backend
+    """A subclass of ``MessageProcess``, but now the backend runs asyncio
+
+    :param name: multiprocess name
     """
-    
     def __init__(self, name = "AsyncMessageProcess"):
         self.name = name
-        # print("AsyncBackMessageProcess")
         self.pre = self.__class__.__name__ + "." + self.name
         self.logger = getLogger(self.pre)
         super().__init__()
@@ -382,17 +447,7 @@ class AsyncBackMessageProcess(MessageProcess):
         self.sigint = True
 
 
-    async def c__ping(self, lis = []):
-        """A demo backend method that corresponds to a MessageObject
-
-        So, here do await, launch several parallel asyncio tasks, etc.
-        """
-        print("c__ping:", lis)
-        await self.send_out__(MessageObject("pong", lis = [1,2,3]))
-
-
     def run(self):
-        # print("AsyncBackMessageProcess>run")
         if self.sigint == False:
             signal.signal(signal.SIGINT, signal.SIG_IGN) # handle in master process correctly
         self.preRun__()
@@ -400,26 +455,32 @@ class AsyncBackMessageProcess(MessageProcess):
         loop_ = asyncio.new_event_loop()
         asyncio.set_event_loop(loop_)
         asyncio.get_event_loop().run_until_complete(self.async_run__())
-        """
-        print("reading from", self.back_pipe.read_fd)
-        back_reader = self.back_pipe.getReadIO()
-        print("getting some")
-        b = back_reader.read(4096)
-        print("got some", b)
-        """
         self.postRun__()
 
 
     async def asyncPre__(self):
-        """This is started before the main pipe reading loop:
+        """Multiprocessing backend coroutine: subclass if needed
         
-        If you want to communicate something to the main running loop,
-        then you must launch it as a task
+        Everything that needs to be done *after the fork* (i.e. in the backend), but *before*
+        the multiprocesses' main asyncio event loop starts running.
+
+        In addition to this, you can still subclass also ``preRun__`` that is executed
+        after the fork but *before* the asyncio event loop
         """
         pass
 
+
     async def asyncPost__(self):
+        """Multiprocessing backend coroutine: subclass if needed
+
+        Everything that needs to be done *after the fork* (i.e. in the backend), immediately 
+        before exiting the main asyncio event loop
+
+        In addition to this, you can still subclass also ``postRun__`` that is executed
+        after exiting the main syncio event loop
+        """
         pass
+
 
     async def async_run__(self):
         # print("hello from async")
@@ -447,7 +508,6 @@ class AsyncBackMessageProcess(MessageProcess):
         self.writer_transport, pro =\
             await loop.connect_write_pipe(asyncio.BaseProtocol, back_writer)
 
-        # print(">>", self.writer_transport)
         try:
             await self.asyncPre__()
         except Exception as e:
@@ -539,7 +599,8 @@ class AsyncBackMessageProcess(MessageProcess):
 
 
     async def send_out__(self, obj):
-        """Pickle obj & send to outgoing pipe
+        """Multiprocessing backend coroutine: pickle obj & send to main python process.
+        It's recommended to use the ``MessageObject`` class.
         """
         #print("send_out__", obj, self.writer_transport)
         msg = to8ByteMessage(obj)
@@ -552,9 +613,109 @@ class AsyncBackMessageProcess(MessageProcess):
         #print("send_out__: exit")
 
 
+    # ***  _your_ backend methods ***
+
+    async def c__ping(self, lis = []):
+        """A demo backend coroutine:  triggered when frontend calls the method ``ping`` and sends a reply to frontend
+
+        So, in this coroutine it's all asyncio, i.e. await'ing and sending tasks.
+        """
+        print("c__ping:", lis)
+        await self.send_out__(MessageObject("pong", lis = [1,2,3]))
+
+
     def sendMessageToBack(self, message: MessageObject):
         # print("writing to", self.front_pipe.write_fd)
         self.front_pipe.send(message)
+
+
+class MainContext:
+    """A convenience class to organize your python main process in the context of multiprocessing
+
+    You should subclass this.  In subclassed ``__init__``, you should always call the
+    superclass constructor:
+
+    ::
+
+        def __init__(self):
+            super().__init__()
+
+    This will have the effect of calling ``startProcesses`` and ``startThreads``
+    (see below).
+
+    Please see tutorial, part II for practical subclassing examples
+    """
+    def __init__(self):
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.started = False
+        self.aux_pipe_read, self.aux_pipe_write = Pipe()  # when using runAsThread
+        self.startProcesses()
+        self.startThreads()
+
+    @classmethod
+    def formatLogger(cls, level = logging.INFO):
+        """A helper to setup logger formatter
+
+        :param level: loglevel.  Default: ``logging.INFO``.
+
+        Use only for initial development
+        """
+        logger = logging.getLogger(cls.__name__)
+        if not logger.hasHandlers():
+            formatter = logging.Formatter("%(name)s - %(levelname)s - %(message)s")
+            ch = logging.StreamHandler()
+            ch.setFormatter(formatter)
+            logger.addHandler(ch)
+        if level is not None:
+            logger.setLevel(level)
+
+    def setDebug(self):
+        self.logger.setLevel(logging.DEBUG)
+
+    def startProcesses(self):
+        """Mandatory. Create, cache and start your ``MessageProcess`` es here.
+        """
+        raise NotImplementedError("virtual method")
+
+    def startThreads(self):
+        """Mandatory. Create, cache and start any python multithreads here if you have them.
+        """
+        raise NotImplementedError("virtual method")
+
+    def close(self):
+        """Mandatory. Terminate all multiprocesses and threads.  Should be
+        called in the ``__call__`` method after exiting the main loop.
+        """
+        raise NotImplementedError("virtual method")
+
+    def __call__(self):
+        """Mandatory.  Your main process loop.
+        """
+        self.loop = True
+        while self.loop:
+            try:
+                time.sleep(1.0)
+                print("alive")
+            except KeyboardInterrupt:
+                print("you pressed CTRL-C: will exit asap")
+                break
+
+    def runAsThread(self):
+        """Run the class as a thread.  Only for testing/debugging purposes
+        """
+        from threading import Thread, Event
+        self.thread = Thread(target=self.__call__)
+        self.logger.critical("starting as thread")
+        self.thread.start()  # goes into background
+
+    def stopThread(self):
+        """If launched with ``runAsThread``, use this method to stop.
+        """
+        self.logger.critical("requesting thread stop")
+        self.aux_pipe_write.send(None)
+        self.thread.join()
+        self.close()
+        self.logger.critical("thread stopped")
 
 
 

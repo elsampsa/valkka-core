@@ -26,7 +26,7 @@
  *  @file    valkkafs.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.4 
+ *  @version 1.3.5 
  *  
  *  @brief   A simple block file system for streaming media
  */ 

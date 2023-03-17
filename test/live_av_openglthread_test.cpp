@@ -26,7 +26,7 @@
  *  @file    live_av_openglthread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.4 
+ *  @version 1.3.5 
  *  
  *  @brief   Test the full pipeline: LiveThread => AVThread => OpenGLThread
  *

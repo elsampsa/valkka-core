@@ -121,7 +121,7 @@ endif (cachestream_verbose)
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "1") 
 SET(MINOR_VERSION "3") 
-SET(PATCH_VERSION "4") 
+SET(PATCH_VERSION "5") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
 # *** define build type: Debug or Release # now from the command line

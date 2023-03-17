@@ -65,7 +65,13 @@ Some key features of the Valkka library are:
 
 ## Versions and Features
 
-### Newest version is 1.3.4
+### Newest version is 1.3.5
+
+1.3.5
+
+- In the python path, restructured valkka.multiprocess namespace package.  Now it is also avail as a [separate package](https://github.com/elsampsa/valkka-multiprocess).
+
+### Older versions
 
 1.3.4
 
@@ -77,8 +83,6 @@ Some key features of the Valkka library are:
 - Added dependency to glew-utils package which fixes library dependence problems for all recent ubuntu LTS distros
 
 - A consistent docker testing scheme for build and install in [docker/](docker/)
-
-### Older versions
 
 1.3.1
 
@@ -127,27 +131,6 @@ Some key features of the Valkka library are:
 - ..and Python GIL now released by default in shmem operations
 - Frag-MP4 streaming implemented
 - "define analyzer" window & qt bitmap python reference leak still persists..
-
-0.18.1
-
-- Fixed some issues with Ubuntu 20 LTS, for example [this one](https://bugs.python.org/issue36721): not using pkg-config to find python libs anymore
-- Tested with latest live555 version: required a small fix & openssl dependencies
-
-0.18.0
-
-- Extra copy / caching step added to sharedmem client side
-- API level 2 shmem client modified (mysterious crashes due to re-creating RGBMeta cpp type at python side maybe solved)
-- Fragmented mp4 progressing (not yet production level)
-- Migrating ppa support to Ubuntu 18 LTS and 20 LTS only
-
-0.17.5
-
-- Discovery now with both WSDiscovery & arp-scan
-
-0.17.4
-
-- WSDiscovery now included into libValkka
-
 
 For more, see [CHANGELOG](CHANGELOG.md)
 

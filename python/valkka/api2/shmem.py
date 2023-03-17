@@ -25,7 +25,7 @@ shmem.py : Encapsulation for Valkka's cpp shared memory client
 @file    shmem.py
 @author  Sampsa Riikonen
 @date    2017
-@version 1.3.4 
+@version 1.3.5 
 
 @brief   Encapsulation for Valkka's cpp shared memory client
 """
