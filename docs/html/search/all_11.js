@@ -91,7 +91,7 @@ var searchData=
   ['stop_682',['stop',['../classFileStream.html#a2d6ae46a63ddc7067184ab66df1276d6',1,'FileStream::stop()'],['../classAbstractFileStream.html#aa8b33d3caa7074b9603439ca4e186f03',1,'AbstractFileStream::stop()']]],
   ['stopcall_683',['stopCall',['../classTestThread.html#a033b7a7cbf00c5f4e6d41c31677aa069',1,'TestThread::stopCall()'],['../classThread.html#a9cde638865dccf06b25f1c766f2610ec',1,'Thread::stopCall()']]],
   ['stopfilestreamcall_684',['stopFileStreamCall',['../classFileThread.html#ac0d120c462141ee5980152f7ea714b87',1,'FileThread']]],
-  ['stopstream_685',['stopStream',['../classConnection.html#a6a9401592f545c1be8de892afefada4b',1,'Connection::stopStream()'],['../classRTSPConnection.html#a838508f8324ea45942d38bed13b2ae3b',1,'RTSPConnection::stopStream()'],['../classSDPConnection.html#a65a59e581954bfaabe3abcdec4a31b11',1,'SDPConnection::stopStream()']]],
+  ['stopstream_685',['stopStream',['../classConnection.html#a659a6b1a9e8a3d77d5cfcba91a5afddd',1,'Connection::stopStream()'],['../classRTSPConnection.html#ad52fb10a8268371ca8a7aae3d8500e27',1,'RTSPConnection::stopStream()'],['../classSDPConnection.html#afa54eb85ac7db22cf303f47c6ec00802',1,'SDPConnection::stopStream()']]],
   ['stopstreamcall_686',['stopStreamCall',['../classLiveThread.html#ac87ccae312c2c5d14b3f0a9eea9dc4e1',1,'LiveThread']]],
   ['stream_687',['Stream',['../classStream.html',1,'Stream'],['../classStream.html#ad35dde8e7e114b7125392384affb1d9f',1,'Stream::Stream()']]],
   ['stream_5fstate_688',['stream_state',['../classSetupFrame.html#aa01551b55cc844e3265fcb92199416ea',1,'SetupFrame']]],

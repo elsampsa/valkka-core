@@ -28,7 +28,7 @@
  *  @file    livethread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.5 
+ *  @version 1.3.6 
  *  
  *  @brief A live555 thread
  *
@@ -217,7 +217,7 @@ public:
   
 public:
   virtual void playStream() =0;   ///< Called from within the live555 event loop
-  virtual void stopStream() =0;   ///< Stops stream and reclaims it resources.  Called from within the live555 event loop
+  virtual void stopStream(bool cut = true) =0;   ///< Stops stream and reclaims it resources.  Called from within the live555 event loop.  cut: cut the downstream filterchain or no
   virtual void reStartStream();   ///< Called from within the live555 event loop
   virtual void reStartStreamIf(); ///< Called from within the live555 event loop
   virtual bool isClosed();        ///< Have the streams resources been reclaimed after stopping it?
@@ -276,7 +276,7 @@ private:
   
 public:
   void playStream();      ///< Uses ValkkaRTSPClient instance to initiate the RTSP negotiation
-  void stopStream();      ///< Uses ValkkaRTSPClient instance to shut down the stream
+  void stopStream(bool cut = true);      ///< Uses ValkkaRTSPClient instance to shut down the stream
   void reStartStreamIf(); ///< Restarts the stream if no frames have been received for a while
   bool isClosed();        ///< Have the streams resources been reclaimed?
   void forceClose();
@@ -300,7 +300,7 @@ private:
   
 public:
   void playStream(); ///< Creates Live555 MediaSessions, MediaSinks, etc. instances and registers them directly to the Live555 event loop
-  void stopStream(); ///< Closes Live555 MediaSessions, MediaSinks, etc.
+  void stopStream(bool cut = true); ///< Closes Live555 MediaSessions, MediaSinks, etc.
 
 };
 

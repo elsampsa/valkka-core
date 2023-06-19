@@ -25,7 +25,7 @@ base.py : api level 1 => api level 2 encapsulation for ValkkaFS.  Base class.
 @file    base.py
 @author  Sampsa Riikonen
 @date    2021
-@version 1.3.5 
+@version 1.3.6 
 
 @brief   api level 1 => api level 2 encapsulation for ValkkaFS.  Base class.
 """

@@ -65,13 +65,17 @@ Some key features of the Valkka library are:
 
 ## Versions and Features
 
-### Newest version is 1.3.5
+### Newest version is 1.3.6
+
+1.3.6
+
+- Nasty bug was induced in 1.3.4 that prevents the correct reconnection of a lost rtsp connection.  Fixed that.
+
+### Older versions
 
 1.3.5
 
 - In the python path, restructured valkka.multiprocess namespace package.  Now it is also avail as a [separate package](https://github.com/elsampsa/valkka-multiprocess).
-
-### Older versions
 
 1.3.4
 
