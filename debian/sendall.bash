@@ -8,6 +8,7 @@ cp changelog .changelog
 ver=$1
 shift
 # exit
+# bionic: 18.04.6 LTS / focal: 20.04.6 LTS / jammy: 22.04.2 LTS
 # distros="bionic focal jammy"
 distros="focal jammy"
 for distro in $distros
