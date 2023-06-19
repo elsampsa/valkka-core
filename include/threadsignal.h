@@ -28,7 +28,7 @@
  *  @file    signal.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.5 
+ *  @version 1.3.6 
  *  
  *  @brief   Signals used by thread classes
  */

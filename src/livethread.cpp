@@ -26,7 +26,7 @@
  *  @file    livethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.5 
+ *  @version 1.3.6 
  *  
  *  @brief A live555 thread
  *
@@ -285,17 +285,19 @@ void RTSPConnection::playStream() {
         livethreadlogger.log(LogLevel::debug) << "RTSPConnection : playStream : name " << client->name() << std::endl;
         client->sendDescribeCommand(ValkkaRTSPClient::continueAfterDESCRIBE);
     }
-    is_playing=true; // in the sense that we have requested a play .. and that the event handlers will try to restart the play infinitely..
+    is_playing=true; // in the sense that we have requested a playing
 }
 
 
-void RTSPConnection::stopStream() {
+void RTSPConnection::stopStream(bool cut) {
     // Medium* medium;
     // HashTable* htable;
     // Here we are a part of the live555 event loop (this is called from periodicTask => handleSignals => stopStream => this method)
     livethreadlogger.log(LogLevel::crazy) << "RTSPConnection : stopStream" << std::endl;
     if (is_playing) {
-        inputfilter->setVoid(); // cut the filterchain: inputfilter doesn't pass anything downstream anymore
+        if (cut) {
+            inputfilter->setVoid(); // cut the filterchain: inputfilter doesn't pass anything downstream anymore
+        }
         // before the RTSPClient instance destroyed itself (!) it modified the value of livestatus :)
         if (livestatus==LiveStatus::closed) { // so, we need this to avoid calling Media::close on our RTSPClient instance
             livethreadlogger.log(LogLevel::debug) << "RTSPConnection : stopStream: already shut down" << std::endl;
@@ -328,9 +330,21 @@ void RTSPConnection::reStartStreamIf() {
     if (ctx.msreconnect<=0) { // don't attempt to reconnect
         return;
     }
-    
-    // std::cout << "RTSPConnection: status: " << int(livestatus) << std::endl;
 
+    #ifdef RECONNECT_VERBOSE
+    std::cout << "RTSPConnection: reStartStreamIf: ";
+    if (livestatus==LiveStatus::pending) {
+        std::cout << "PENDING ";
+    }
+    else if (livestatus==LiveStatus::closed) {
+        std::cout << "CLOSED ";
+    }
+    else if (livestatus==LiveStatus::alive) {
+        std::cout << "ALIVE ";
+    }
+    std::cout << std::endl;
+    #endif
+    
     if (livestatus==LiveStatus::pending or livestatus==LiveStatus::closed) { // stream trying to connect .. waiting for tcp socket most likely
         // std::cout << "RTSPConnection: reStartStreamIf: pending" << std::endl;
         // frametimer=frametimer+Timeout::livethread;
@@ -345,7 +359,10 @@ void RTSPConnection::reStartStreamIf() {
             #endif
             pendingtimer=0;
         }
-        return;
+    }
+
+    if (livestatus==LiveStatus::pending) {
+        return; // no further action until the stream has closed
     }
 
     pendingtimer=0;
@@ -377,7 +394,7 @@ void RTSPConnection::reStartStreamIf() {
         // std::cout << "RTSPConnection: reStartStreamIf: msreconnect" << std::endl;
         // livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: restart at slot " << ctx.slot << std::endl;
         
-        if (livestatus==LiveStatus::alive) {
+        if (livestatus==LiveStatus::alive) { // so, the stream should be playing (as requested by the user), but nothing's coming through
             #ifdef LIVE_SIGNAL_FRAMES
             // inform downstream that this stream is offline
             OfflineSignalContext signal_ctx = OfflineSignalContext();
@@ -386,7 +403,9 @@ void RTSPConnection::reStartStreamIf() {
             livethreadlogger.log(LogLevel::debug) << "RTSPConnection: restartStreamIf: sending signal frame for slot " << ctx.slot << std::endl;
             ctx.framefilter->run(&signalframe);
             #endif
-            stopStream();
+            // do all necessary steps to void/null the stream
+            // close sockets, whatever, but don't cut the filterchain:
+            stopStream(false); 
         }
         if (livestatus==LiveStatus::closed) {
             is_playing=false; // just to get playStream running ..
@@ -508,9 +527,12 @@ else {
 }
 
 
-void SDPConnection :: stopStream() {
+void SDPConnection :: stopStream(bool cut) {
     // Medium* medium;
     livethreadlogger.log(LogLevel::crazy) << "SDPConnection : stopStream" << std::endl;
+    if (cut) {
+        inputfilter->setVoid(); // cut the filterchain: inputfilter doesn't pass anything downstream anymore
+    }
     if (scs!=NULL) {
         scs->close();
         delete scs;

@@ -26,7 +26,7 @@
  *  @file    live_muxshmem_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.3.5 
+ *  @version 1.3.6 
  *  
  *  @brief 
  *

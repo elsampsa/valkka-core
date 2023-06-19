@@ -16,6 +16,7 @@ echo
 echo $distro $ver $@
 echo
 echo "PREPENDING CHANGELOG & CREATING SCRIPT FOR "$distro
+echo "PRESS ENTER"
 echo
 read -r
 ./addlog.py $ver $distro $@ | cat - changelog > changelog_tmp
@@ -23,10 +24,12 @@ mv changelog_tmp changelog
 echo
 echo "RUNNING SCRIPT FOR "$distro
 echo "WARNING: WAIT UNTIL THE PASSWORD IS ASKED!"
+echo "PRESS ENTER"
 echo
 read -r
 ./rundeb.bash
 done
 echo "REMOVING CHANGELOG SAVE .changelog"
+echo "PRESS ENTER"
 read -r
 rm .changelog
