@@ -1,0 +1,34 @@
+name: Build and Package
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-Ubuntu20:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/setup-docker@v1
+
+      - name: Build Docker image
+        run: docker build . -t Ubuntu20 -f docker/Dockerfile.x86_ubuntu_20
+        working-directory: ${{ github.workspace }}
+
+      - name: Run easy_build.bash
+        run: docker run --rm -v "$(pwd):/app" Ubuntu20 ./easy_build.bash
+        working-directory: ${{ github.workspace }}
+
+      - name: Run make package
+        run: docker run --rm -v "$(pwd):/app/build_dir" Ubuntu20 make package
+        working-directory: ${{ github.workspace }}
+
+      - name: Save package.deb artifact
+        run: |
+          VER=$(echo "${{ github.ref }}" | sed -n 's/refs\/tags\///p')
+          docker cp "$(docker ps -ql):build_dir/Valkka-${VER}-Linux.deb" ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
+        working-directory: ${{ github.workspace }}
