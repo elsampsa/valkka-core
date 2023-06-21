@@ -1,5 +1,6 @@
 name: Build and Package
 on:
+  workflow_dispatch:
   push:
     tags:
       - '*'
