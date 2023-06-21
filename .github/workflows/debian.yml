@@ -57,15 +57,20 @@ jobs:
         echo "VER=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
         tail -n1 $GITHUB_ENV
 
-    - uses: actions/download-artifact@master
+    - name: Download Ubuntu20 artifact
+      uses: actions/download-artifact@v3
       with:
         name: Valkka-${{ env.VER }}-Ubuntu20.deb
-        path: ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu20.deb
+        path: ${{ github.workspace }}
 
-    - uses: actions/download-artifact@master
+    - name: Download Ubuntu22 artifact
+      uses: actions/download-artifact@v3
       with:
         name: Valkka-${{ env.VER }}-Ubuntu22.deb
-        path: ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu22.deb
+        path: ${{ github.workspace }}
+
+    - name: List files
+      run: ls -1 ${{ github.workspace }}/*
 
     - name: Create a release
       uses: softprops/action-gh-release@v1
