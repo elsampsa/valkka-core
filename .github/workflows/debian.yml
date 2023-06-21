@@ -13,8 +13,8 @@ jobs:
 
       - name: Set environmental variables
         run: |
-          export VER=$(echo "${{ github.ref }}" | sed -n 's/refs\/tags\///p'); echo "VER="$VER >> $GITHUB_ENV
-          tail $GITHUB_ENV
+          echo VER=$(git describe --abbrev=0) >> $GITHUB_ENV
+          tail -n1 $GITHUB_ENV
 
       - name: Test environmental variables
         run: |
