@@ -11,15 +11,6 @@ jobs:
 
     steps:
 
-      - name: Set environmental variables
-        run: |
-          echo VER=$(git describe --abbrev=0) >> $GITHUB_ENV
-          tail -n1 $GITHUB_ENV
-
-      - name: Test environmental variables
-        run: |
-          echo "VERSION IS: "$VER
-
       - name: Update virtual machine
         run: | 
           sudo apt-get update -y 
@@ -28,6 +19,15 @@ jobs:
 
       - name: Check out code
         uses: actions/checkout@v2
+
+      - name: Set environmental variables
+        run: |
+          echo VER=$(git describe --abbrev=0) >> $GITHUB_ENV
+          tail -n1 $GITHUB_ENV
+
+      - name: Test environmental variables
+        run: |
+          echo "VERSION IS: "$VER
 
       - name: Download external libraries
         run: ./prepare_build.bash
