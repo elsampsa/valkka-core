@@ -7,7 +7,8 @@ on:
 
 jobs:
   build-Ubuntu20:
-    runs-on: ubuntu-latest
+    https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2004-Readme.md
+    runs-on: ubuntu-20.04
 
     steps:
 
@@ -22,7 +23,9 @@ jobs:
 
       - name: Test environmental variables
         run: |
-          echo "VERSION TAG IS: "$VER
+          echo "VERSION TAG IS   : "$VER
+          echo "VERSION FROM env.: "${{ env.VER }}
+          
 
       - name: Update virtual machine
         run: | 
@@ -55,18 +58,18 @@ jobs:
 
       - name: Save deb artifact
         run: |
-          cp build_dir/Valkka-${VER}-Linux.deb ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
-        shell: bash
+          cp build_dir/Valkka-${{ env.VER }}-Linux.deb ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu20.deb
+          ls *.deb
 
+      # https://github.com/actions/upload-artifact/issues/120
       - name: Publish deb artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Valkka-${VER}-Ubuntu20.deb
-          path: ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
+          name: Valkka-${{ env.VER }}-Ubuntu20.deb
+          path: ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu20.deb
 
       - name: Publish latest deb artifact
         uses: actions/upload-artifact@v2
         with:
           name: Valkka-Latest-Ubuntu20.deb
-          path: ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
-
+          path: ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu20.deb
