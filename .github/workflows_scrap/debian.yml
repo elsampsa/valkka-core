@@ -26,14 +26,43 @@ jobs:
           echo "VERSION TAG IS   : "$VER
           echo "VERSION FROM env.: "${{ env.VER }}
           
+
       - name: Update virtual machine
         run: | 
           sudo apt-get update -y 
           sudo apt-get install -y python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl 
           sudo apt-get install -y build-essential yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils freeglut3-dev
 
-      - name: Build and Release
-        uses: ./.github/actions/build-release
-        with:
-          slug: Ubuntu20
+      - name: Check out code
+        uses: actions/checkout@v2
 
+      - name: Download external libraries
+        run: ./prepare_build.bash
+
+      - name: Run easy_build.bash
+        run: ./easy_build.bash
+
+      - name: Run make package
+        run: |
+          cd build_dir
+          make package
+          cd ..
+
+      - name: Save deb artifact
+        run: |
+          cp build_dir/Valkka-${{ env.VER }}-Linux.deb ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu20.deb
+          ls *.deb
+
+      # https://github.com/actions/upload-artifact/issues/120
+      - name: Publish deb artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Valkka-${{ env.VER }}-Ubuntu20.deb
+          path: ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu20.deb
+
+      # https://github.com/softprops/action-gh-release/blob/master/action.yml
+      - name: Create a release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Valkka-${{ env.VER }}-Ubuntu20.deb
+      
