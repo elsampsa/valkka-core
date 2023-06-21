@@ -20,6 +20,9 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
+      - name: Download external libraries
+        run: ./prepare_build.bash
+
       - name: Run easy_build.bash
         run: ./easy_build.bash
 
