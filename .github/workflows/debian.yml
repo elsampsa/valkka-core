@@ -12,7 +12,17 @@ jobs:
     steps:
 
       - name: Check version tag
-        run: echo "VERSION = "${{ github.ref_name }}
+        # god'damn trial and error to find out the f-git tag !
+        # https://docs.github.com/en/actions/learn-github-actions/variables
+        run: |
+          echo "VERSION1 = "${VER}
+          echo "VERSION2 = "$GITHUB_REF
+          echo "VER=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+          tail -n1 $GITHUB_ENV
+
+      - name: Test environmental variables
+        run: |
+          echo "VERSION TAG IS: "$VER
 
       - name: Update virtual machine
         run: | 
@@ -45,18 +55,18 @@ jobs:
 
       - name: Save deb artifact
         run: |
-          cp build_dir/Valkka-${{ github.ref_name }}-Linux.deb ${{ github.workspace }}/Valkka-${{ github.ref_name }}-Ubuntu20.deb
+          cp build_dir/Valkka-${VER}-Linux.deb ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
         shell: bash
 
       - name: Publish deb artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Valkka-${{ github.ref_name }}-Ubuntu20.deb
-          path: ${{ github.workspace }}/Valkka-${{ github.ref_name }}-Ubuntu20.deb
+          name: Valkka-${VER}-Ubuntu20.deb
+          path: ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
 
       - name: Publish latest deb artifact
         uses: actions/upload-artifact@v2
         with:
           name: Valkka-Latest-Ubuntu20.deb
-          path: ${{ github.workspace }}/Valkka-${{ github.ref_name }}-Ubuntu20.deb
+          path: ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
 
