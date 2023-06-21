@@ -3,7 +3,7 @@ on:
   # workflow_dispatch:
   push:
     tags:
-      - '*'
+      - '*.*.*'
 
 jobs:
   build-Ubuntu20:
@@ -68,8 +68,8 @@ jobs:
           name: Valkka-${{ env.VER }}-Ubuntu20.deb
           path: ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu20.deb
 
-      - name: Publish latest deb artifact
-        uses: actions/upload-artifact@v2
+      - name: Create a release
+        uses: softprops/action-gh-release@v1
         with:
-          name: Valkka-Latest-Ubuntu20.deb
-          path: ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu20.deb
+          files: Valkka-${{ env.VER }}-Ubuntu20.deb
+      
