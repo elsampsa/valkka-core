@@ -1,0 +1,53 @@
+name: "Builds libValkka"
+description: "Builds libValkka"
+inputs:
+   slug:
+     required: true
+     description: "slug for deb file: Valkka-$VER-slug.deb, say, slug=Ubuntu20"
+
+runs:
+  using: "composite"
+  steps:
+
+  - name: Check version tag
+    # god'damn trial and error to find out the f-git tag !
+    # https://docs.github.com/en/actions/learn-github-actions/variables
+    run: |
+      echo "VERSION2 = "$GITHUB_REF
+      echo "VER=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      tail -n1 $GITHUB_ENV
+
+  - name: Test environmental variables
+    run: |
+      echo "VERSION TAG IS   : "$VER
+      echo "VERSION FROM env.: "${{ env.VER }}
+
+  - name: Download external libraries
+    shell: bash
+    run: ./prepare_build.bash
+
+  - name: Run easy_build.bash
+    shell: bash
+    run: ./easy_build.bash
+
+  - name: Run make package
+    shell: bash
+    run: |
+      cd build_dir
+      make package
+      cd ..
+
+  - name: Save deb artifact
+    shell: bash
+    run: |
+      cp build_dir/Valkka-${{ env.VER }}-Linux.deb ${{ github.workspace }}/Valkka-${{ env.VER }}-${{ inputs.slug }}.deb
+      ls *.deb
+
+  # https://github.com/actions/upload-artifact/issues/120
+  - name: Publish deb artifact
+    uses: actions/upload-artifact@v2
+    with:
+      name: Valkka-${{ env.VER }}-${{ inputs.slug }}.deb
+      path: ${{ github.workspace }}/Valkka-${{ env.VER }}-${{ inputs.slug }}.deb
+
+  

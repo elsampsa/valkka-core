@@ -1,0 +1,31 @@
+name: "Builds libValkka - FAKE / DEBUG VERSION"
+description: "Builds libValkka"
+inputs:
+   slug:
+     required: true
+     description: "slug for deb file: Valkka-$VER-slug.deb, say, slug=Ubuntu20"
+
+runs:
+  using: "composite"
+  steps:
+
+  - name: Check version tag
+    # god'damn trial and error to find out the f-git tag !
+    # https://docs.github.com/en/actions/learn-github-actions/variables
+    run: |
+      echo "VERSION2 = "$GITHUB_REF
+      echo "VER=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      tail -n1 $GITHUB_ENV
+
+  - name: Create FAKE artifact
+    shell: bash
+    run: |
+      echo "nada" > ${{ github.workspace }}/Valkka-${{ env.VER }}-${{ inputs.slug }}.deb
+      ls *.deb
+
+  # https://github.com/actions/upload-artifact/issues/120
+  - name: Publish deb artifact
+    uses: actions/upload-artifact@v2
+    with:
+      name: Valkka-${{ env.VER }}-${{ inputs.slug }}.deb
+      path: ${{ github.workspace }}/Valkka-${{ env.VER }}-${{ inputs.slug }}.deb
