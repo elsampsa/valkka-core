@@ -11,6 +11,15 @@ jobs:
 
     steps:
 
+      - name: Set environmental variables
+        run: |
+          export VER=$(echo "${{ github.ref }}" | sed -n 's/refs\/tags\///p'); echo "VER="$VER >> $GITHUB_ENV
+          tail $GITHUB_ENV
+
+      - name: Test environmental variables
+        run: |
+          echo "VERSION IS: "$VER
+
       - name: Update virtual machine
         run: | 
           sudo apt-get update -y 
@@ -34,11 +43,18 @@ jobs:
 
       - name: Save deb artifact
         run: |
-          VER=$(echo "${{ github.ref }}" | sed -n 's/refs\/tags\///p')
           cp build_dir/Valkka-${VER}-Linux.deb ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
+        shell: bash
 
       - name: Publish deb artifact
         uses: actions/upload-artifact@v2
         with:
           name: Valkka-${VER}-Ubuntu20.deb
           path: ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
+
+      - name: Publish latest deb artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Valkka-Latest-Ubuntu20.deb
+          path: ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
+
