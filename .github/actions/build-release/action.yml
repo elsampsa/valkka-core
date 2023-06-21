@@ -9,9 +9,6 @@ runs:
   using: "composite"
   steps:
 
-  - name: Check out code
-    uses: actions/checkout@v2
-
   - name: Download external libraries
     run: ./prepare_build.bash
 
