@@ -70,6 +70,6 @@ jobs:
     - name: Create a release
       uses: softprops/action-gh-release@v1
       with:
-        files: 
-          - Valkka-${{ env.VER }}-Ubuntu20.deb
-          - Valkka-${{ env.VER }}-Ubuntu22.deb
+        files: |
+          Valkka-${{ env.VER }}-Ubuntu20.deb
+          Valkka-${{ env.VER }}-Ubuntu22.deb
