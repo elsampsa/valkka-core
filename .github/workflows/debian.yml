@@ -60,16 +60,16 @@ jobs:
     - uses: actions/download-artifact@master
       with:
         name: Valkka-${{ env.VER }}-Ubuntu20.deb
-        path: Valkka-${{ env.VER }}-Ubuntu20.deb
+        path: ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu20.deb
 
     - uses: actions/download-artifact@master
       with:
         name: Valkka-${{ env.VER }}-Ubuntu22.deb
-        path: Valkka-${{ env.VER }}-Ubuntu22.deb
+        path: ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu22.deb
 
     - name: Create a release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          Valkka-${{ env.VER }}-Ubuntu20.deb
-          Valkka-${{ env.VER }}-Ubuntu22.deb
+          ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu20.deb
+          ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu22.deb
