@@ -10,6 +10,7 @@ runs:
   steps:
 
   - name: Check version tag
+    shell: bash
     # god'damn trial and error to find out the f-git tag !
     # https://docs.github.com/en/actions/learn-github-actions/variables
     run: |
