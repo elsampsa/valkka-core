@@ -11,6 +11,9 @@ jobs:
 
     steps:
 
+      - name: Check version tag
+        run: echo "VERSION = "${{ github.ref_name }}
+
       - name: Update virtual machine
         run: | 
           sudo apt-get update -y 
@@ -20,14 +23,13 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Set environmental variables
-        run: |
-          echo VER=$(git describe --abbrev=0) >> $GITHUB_ENV
-          tail -n1 $GITHUB_ENV
-
-      - name: Test environmental variables
-        run: |
-          echo "VERSION IS: "$VER
+      #- name: Set environmental variables
+      #  run: |
+      #    echo VER=$(git describe --abbrev=0) >> $GITHUB_ENV
+      #    tail -n1 $GITHUB_ENV
+      #- name: Test environmental variables
+      #  run: |
+      #    echo "VERSION IS: "$VER
 
       - name: Download external libraries
         run: ./prepare_build.bash
@@ -43,18 +45,18 @@ jobs:
 
       - name: Save deb artifact
         run: |
-          cp build_dir/Valkka-${VER}-Linux.deb ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
+          cp build_dir/Valkka-${{ github.ref_name }}-Linux.deb ${{ github.workspace }}/Valkka-${{ github.ref_name }}-Ubuntu20.deb
         shell: bash
 
       - name: Publish deb artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Valkka-${VER}-Ubuntu20.deb
-          path: ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
+          name: Valkka-${{ github.ref_name }}-Ubuntu20.deb
+          path: ${{ github.workspace }}/Valkka-${{ github.ref_name }}-Ubuntu20.deb
 
       - name: Publish latest deb artifact
         uses: actions/upload-artifact@v2
         with:
           name: Valkka-Latest-Ubuntu20.deb
-          path: ${{ github.workspace }}/Valkka-${VER}-Ubuntu20.deb
+          path: ${{ github.workspace }}/Valkka-${{ github.ref_name }}-Ubuntu20.deb
 
