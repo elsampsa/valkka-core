@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build and Release
-        uses: ./.github/actions/build-fake
+        uses: ./.github/actions/build
         with:
           slug: Ubuntu20
 
@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build and Release
-        uses: ./.github/actions/build-fake
+        uses: ./.github/actions/build
         with:
           slug: Ubuntu22
 
