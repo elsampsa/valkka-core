@@ -52,4 +52,8 @@ runs:
       name: Valkka-${{ env.VER }}-${{ inputs.slug }}.deb
       path: ${{ github.workspace }}/Valkka-${{ env.VER }}-${{ inputs.slug }}.deb
 
-  
+  - name: Publish Release.txt
+    uses: actions/upload-artifact@v2
+    with:
+      name: Release.txt
+      path: ${{ github.workspace }}/Release.txt

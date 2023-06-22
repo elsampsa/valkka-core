@@ -27,7 +27,6 @@ jobs:
           slug: Ubuntu20
 
   build-Ubuntu22:
-    # https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2004-Readme.md
     runs-on: ubuntu-22.04
 
     steps:
@@ -69,6 +68,12 @@ jobs:
         name: Valkka-${{ env.VER }}-Ubuntu22.deb
         path: ${{ github.workspace }}
 
+    - name: Download Release.txt
+      uses: actions/download-artifact@v3
+      with:
+        name: Release.txt
+        path: ${{ github.workspace }}
+
     - name: List files
       run: ls -1 ${{ github.workspace }}/*
 
@@ -78,3 +83,5 @@ jobs:
         files: |
           ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu20.deb
           ${{ github.workspace }}/Valkka-${{ env.VER }}-Ubuntu22.deb
+          ${{ github.workspace }}/Release.txt
+  
