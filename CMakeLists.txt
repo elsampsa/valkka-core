@@ -310,7 +310,7 @@ set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test"
 "filethread_test" "filethread_test0" "livethread_rtsp_test" "switch_test" "framefilter_test" 
 "cache_test" "usbthread_test" "valkkafs_test" "valkkafswriter_test" "cachestream_test" 
 "cachestream_decode_test" "rawrite_test" "movement_test" "rgbframefifo_test" "ringbuffer_test" 
-"fdwritethread_test" "mux_test" "shmem_test" "live_muxshmem_test")
+"fdwritethread_test" "mux_test" "shmem_test" "live_muxshmem_test" "live_av_framefilter_test")
 
 add_custom_target(tests) # Note: without 'ALL'
 foreach( testname ${TESTNAMES} )

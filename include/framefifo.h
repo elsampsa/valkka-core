@@ -40,6 +40,17 @@
 
 /** Describes the stack structure and fifo behaviour for a FrameFifo
  * 
+ * libValkka pre-reserves memory for all incoming data, decoded frames, etc.
+ * say, we reserve 50 BasicFrame objects into a stack for the incoming H264 frames from the camera.
+ * Once that H264 is successively decoded, then it is recycled and used again.
+ * Depending on your number of cameras, you might need more.  On the other hand
+ * requiring a lots of pre-reserved frames eventually means that you are not able
+ * to decode fast enought (and return the frames back to the stack)
+ * 
+ * There is a stack of frames in LiveThread (that's receiving raw H264)
+ * but also in AVThread instances: LiveThread uses frames from it's stack to save
+ * the H264 data.  AVThread then uses a frame from it's own stack to create a copy of that H264, etc.
+ * 
  * @ingroup queues_tag
  */
 struct FrameFifoContext {                                                                                                                                       // <pyapi>

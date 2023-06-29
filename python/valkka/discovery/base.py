@@ -162,6 +162,10 @@ def runARPScan(exclude_list = []):
         print("arp-scan failed.  You need extra rights to run it, try: 'sudo chmod u+s /usr/sbin/arp-scan'")
         return []
     stdout, stderr = p.communicate()
+    if p.returncode > 0:
+        print("arp-scan failed.  You need extra rights to run it, try: 'sudo chmod u+s /usr/sbin/arp-scan'")
+        return []
+
     lis = []
     
     # parse the output of arp-scan
@@ -179,6 +183,10 @@ def runARPScan(exclude_list = []):
                 if ip not in exclude_list:
                     lis.append(ip)
     
+    if len(lis) < 1:
+        print("arp-scan: did not find anything")
+        return []
+
     coros = [probe(ip, 554) for ip in lis]
 
     loop = asyncio.new_event_loop()
