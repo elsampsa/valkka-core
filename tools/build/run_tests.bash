@@ -172,6 +172,12 @@ printf "END: framefilter_test 5\n\n" &>> test.out
 
 fi
 
+if true; then
+echo "live_av_framefilter_test"
+echo 1
+valgrind ./live_av_framefilter_test 1 $LOGLEVEL &>> test.out
+printf "END: live_av_framefilter_test 1\n\n" &>> test.out
+fi
 
 # if false; then
 if true; then

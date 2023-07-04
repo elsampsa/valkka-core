@@ -44,6 +44,8 @@
 #include "Python.h"
 
 
+// #define USE_SHMEM_CACHE 1 // Don't expose shmem segments directly as numpy arrays, but an intermediate copy instead
+
 /** A file descriptor for running select and poll with shmem ring buffers 
  */
 class EventFd {     // <pyapi>
@@ -249,8 +251,8 @@ protected: // posix semaphores and mmap'd files
     int fd;                        ///< A file descriptor for poll and select
 
 public:
-    std::vector<SharedMemSegment*> shmems; ///< Shared memory segments
-    uint8_t** cache; ///< Shmem segments are copied into the cache
+    std::vector<SharedMemSegment*> shmems; ///< Shared memory segments - can be exposed as numpy arrays
+    uint8_t** cache; ///< One can expose a cache instead as numpy arrays - but this requires an additional copy step - enable with flag USE_SHMEM_CACHE
 
 protected: // internal methods - not for the api user
     void  setFlag();       ///< Server: call this to indicate a ring-buffer overflow 

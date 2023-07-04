@@ -34,6 +34,7 @@
  */ 
 
 #include "framefilter.h"
+#include "tools.h"
 #include "Python.h"
 
 
@@ -93,5 +94,28 @@ protected:
 }; // <pyapi>
 
 
+/** Counts fps and prints the fps value on the terminal every N seconds 
+ * @ingroup filters_tag
+ * 
+ * 
+ */
+class FPSCountFrameFilter : public FrameFilter { // <pyapi>
+
+public: // <pyapi>
+    FPSCountFrameFilter(const char *name, const long int msinterval, FrameFilter *next = NULL); // <pyapi>
+
+private:
+    int count;
+    long int prevtime;
+    long int msinterval;
+
+public:
+    static std::mutex print_mutex; // Declaration of the static mutex
+
+protected:
+    void go(Frame *frame);
+}; // <pyapi>
+
+std::mutex FPSCountFrameFilter::print_mutex;
 
 #endif

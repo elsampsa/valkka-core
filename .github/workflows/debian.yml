@@ -21,7 +21,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Build and Release
+      - name: Build
         uses: ./.github/actions/build
         with:
           slug: Ubuntu20
@@ -40,7 +40,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Build and Release
+      - name: Build
         uses: ./.github/actions/build
         with:
           slug: Ubuntu22

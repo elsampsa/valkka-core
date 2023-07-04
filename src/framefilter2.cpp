@@ -157,5 +157,24 @@ void DumpAVBitmapFrameFilter::go(Frame *frame)
 }
 
 
+FPSCountFrameFilter::FPSCountFrameFilter(const char *name, const long int msinterval, FrameFilter *next)
+    : FrameFilter(name, next), msinterval(msinterval), prevtime(0), count(0) {}
 
-
+void FPSCountFrameFilter::go(Frame *frame) {
+    long int curtime = getCurrentMsTimestamp();
+    count++;
+    if (prevtime <=0) { // first frame
+        prevtime = curtime;
+        return;
+    }
+    long int dt = curtime - prevtime;
+    // std::cout << dt << " / " << msinterval << std::endl;
+    if (dt >= msinterval) { // time to print info!
+        {
+            std::lock_guard<std::mutex> lock(this->print_mutex);
+            std::cout << "FPSCount " << name << " : " << float(count)*1000./dt << std::endl;
+        }
+        count = 0;
+        prevtime = curtime;
+    }
+}
