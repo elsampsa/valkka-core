@@ -53,6 +53,8 @@ const char *stream_sdp = std::getenv("VALKKA_TEST_SDP");
 void test_1()
 {
     // (LiveThread:livethread) --> {FrameFilter:info} --> {FifoFrameFilter:in_filter} -->> (AVThread:avthread) --> {SwScaleFrameFilter:sw_scale} --> {InfoFrameFilter:scaled}
+    // BriefInfoFrameFilter info("info");
+    // FPSCountFrameFilter fps("cam 1", 1000, &info); // print fps every 1 sec
     FPSCountFrameFilter fps("cam 1", 1000); // print fps every 1 sec
     AVThread avthread("avthread", fps);
     FifoFrameFilter &av_filter = avthread.getFrameFilter(); // request framefilter from AVThread
