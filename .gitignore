@@ -85,3 +85,4 @@ vfs*/
 valkka.code-workspace
 docker/qemu-arm-static
 *.log
+TODO.md

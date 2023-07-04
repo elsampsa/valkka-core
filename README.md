@@ -65,13 +65,17 @@ Some key features of the Valkka library are:
 
 ## Versions and Features
 
-### Newest version is 1.3.6
+### Newest version is 1.4.0
+
+- Added a new (thread-safe) framefilter that counts and dumps the fps to terminal: nice for testing achieved fps for larger systems
+- In sharedmem.cpp: no more additional memcopies into the cache, but shmem segments are (again) exposed directly as numpy array (exposing shmem directly seemed to produce a segfault, but it was a fluke in the end)
+- Fixed a small bug in python part valkka.discovery: if no cams were found in wsdiscovery case, there was an uncaught exception in the arp-scan stage
+
+### Older versions
 
 1.3.6
 
 - Nasty bug was induced in 1.3.4 that prevents the correct reconnection of a lost rtsp connection.  Fixed that.
-
-### Older versions
 
 1.3.5
 

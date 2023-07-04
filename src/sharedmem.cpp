@@ -336,10 +336,12 @@ SharedMemRingBufferBase::SharedMemRingBufferBase(const char* name, int n_cells,
         clearFlag();
     }
     else{
+        #ifdef USE_SHMEM_CACHE
         this->cache = new uint8_t*[n_cells];
         for(i=0; i<n_cells; i++){
             this->cache[i] = new uint8_t[n_bytes];
         }
+        #endif
     }
 }
 
@@ -359,11 +361,13 @@ SharedMemRingBufferBase::~SharedMemRingBufferBase() {
         sem_unlink(flagsema_name.c_str());
     }
     else {
+        #ifdef USE_SHMEM_CACHE
         int i;
         for(i=0; i<n_cells; i++) {
             delete[] this->cache[i];
         }
         delete[] this->cache;
+        #endif
     }
     /* // noooooo!
     if (fd > 0) {
@@ -546,15 +550,18 @@ PyObject *SharedMemRingBufferBase::getBufferListPy() {
     int i = 0;
     for (auto it = shmems.begin(); it != shmems.end(); ++it) {
         dims[0] = (*it)->n_bytes;
-        // pa = PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)((*it)->payload));
-        ///*
-        // std::cout << name << " cache " << i << " adr at pylist " << long(cache[i]) << std::endl;
+        #ifdef USE_SHMEM_CACHE
+        // (b): expose memory segments from cache instead:
         pa = PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)(
                 this->cache[i]
             )); // use cache instead
         //*/
+        #else
+        // (a) expose shared memory directly as a numpy array
+        pa = PyArray_SimpleNewFromData(1, dims, NPY_UBYTE, (char*)((*it)->payload));
+        #endif
         // PyList_Append(plis, pa); // keep reference of pa
-        PyList_SetItem(plis, i, pa); // transfer ownership of pa
+        PyList_SetItem(plis, i, pa); // transfer ownership of pa: correct
         i++;
     }
     return plis;
@@ -630,6 +637,8 @@ bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {
     shmems[index]->copyMetaTo(meta_); // copy metadata from the shmem segment's internal memory into variable referenced by the meta_ pointer.  Subclassing takes care of the correct typecast.
     // return index;
     // std::cout << "size " << shmems[index]->getSize() << std::endl;
+    #ifdef USE_SHMEM_CACHE
+    // (b): if cache is the one exposed as numpy array, copy data therein first
     memcpy(cache[index], shmems[index]->payload, shmems[index]->getSize());
     // std::cout << name << " cache adr " << long(cache[0]) << std::endl;
     /*
@@ -639,8 +648,10 @@ bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {
     }
     std::cout << std::endl;
     */
+    #else
+    // (a): do nothing, if shmem is exposed as numpy array
+    #endif
     clearEventFd();
-
     return true;
 }
 
