@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">1.3.6</span>
+   &#160;<span id="projectnumber">1.4.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -157,7 +157,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a2b65de6cd1dffc2936458a09d6a225e5">clientPullThread</a> (int &amp;index_out, void *meta)</td></tr>
 <tr class="memdesc:a2b65de6cd1dffc2936458a09d6a225e5 inherit pub_methods_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">multithreading version: releases GIL <br /></td></tr>
 <tr class="separator:a2b65de6cd1dffc2936458a09d6a225e5 inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f6e04c2678433c9fd2a43b08dad5356 inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a5f6e04c2678433c9fd2a43b08dad5356">getBufferListPy</a> ()</td></tr>
+<tr class="memitem:a5f6e04c2678433c9fd2a43b08dad5356 inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a5f6e04c2678433c9fd2a43b08dad5356"></a>
+PyObject *&#160;</td><td class="memItemRight" valign="bottom"><b>getBufferListPy</b> ()</td></tr>
 <tr class="separator:a5f6e04c2678433c9fd2a43b08dad5356 inherit pub_methods_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6157c433d80defe239d1d54a9bac99c inherit pub_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="ad6157c433d80defe239d1d54a9bac99c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#ad6157c433d80defe239d1d54a9bac99c">clientUseFd</a> (<a class="el" href="classEventFd.html">EventFd</a> &amp;event_fd)</td></tr>
@@ -224,11 +225,11 @@ Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_attribs_classSharedMemRingBufferBase"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classSharedMemRingBufferBase')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classSharedMemRingBufferBase.html">SharedMemRingBufferBase</a></td></tr>
 <tr class="memitem:abef5d3e2819bd91b8540915d3b01ac87 inherit pub_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="abef5d3e2819bd91b8540915d3b01ac87"></a>
 std::vector&lt; <a class="el" href="classSharedMemSegment.html">SharedMemSegment</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#abef5d3e2819bd91b8540915d3b01ac87">shmems</a></td></tr>
-<tr class="memdesc:abef5d3e2819bd91b8540915d3b01ac87 inherit pub_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared memory segments. <br /></td></tr>
+<tr class="memdesc:abef5d3e2819bd91b8540915d3b01ac87 inherit pub_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared memory segments - can be exposed as numpy arrays. <br /></td></tr>
 <tr class="separator:abef5d3e2819bd91b8540915d3b01ac87 inherit pub_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2247c9358b75d06569564569c92ca4d5 inherit pub_attribs_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a2247c9358b75d06569564569c92ca4d5"></a>
 uint8_t **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSharedMemRingBufferBase.html#a2247c9358b75d06569564569c92ca4d5">cache</a></td></tr>
-<tr class="memdesc:a2247c9358b75d06569564569c92ca4d5 inherit pub_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shmem segments are copied into the cache. <br /></td></tr>
+<tr class="memdesc:a2247c9358b75d06569564569c92ca4d5 inherit pub_attribs_classSharedMemRingBufferBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">One can expose a cache instead as numpy arrays - but this requires an additional copy step - enable with flag USE_SHMEM_CACHE. <br /></td></tr>
 <tr class="separator:a2247c9358b75d06569564569c92ca4d5 inherit pub_attribs_classSharedMemRingBufferBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classSharedMemRingBufferBase"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classSharedMemRingBufferBase')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classSharedMemRingBufferBase.html">SharedMemRingBufferBase</a></td></tr>
 <tr class="memitem:a605448004d9694030d05c68b87cacba2 inherit pro_methods_classSharedMemRingBufferBase"><td class="memItemLeft" align="right" valign="top"><a id="a605448004d9694030d05c68b87cacba2"></a>

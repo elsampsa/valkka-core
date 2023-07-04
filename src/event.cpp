@@ -26,7 +26,7 @@
  *  @file    event.cpp
  *  @author  Sampsa Riikonen
  *  @date    2021
- *  @version 1.3.6 
+ *  @version 1.4.0 
  *  
  *  @brief 
  */ 

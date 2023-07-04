@@ -1,3 +1,15 @@
+valkka (1.4.0-0ubuntu1-jammyppa1) jammy; urgency=low
+
+  * shmem cache rollback, added fps count framefilter
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Tue, 04 Jul 2023 21:58:56 +0300
+
+valkka (1.4.0-0ubuntu1-focalppa1) focal; urgency=low
+
+  * shmem cache rollback, added fps count framefilter
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Tue, 04 Jul 2023 21:57:23 +0300
+
 valkka (1.3.6-0ubuntu1-jammyppa1) jammy; urgency=low
 
   * rtsp reconnection bug fixed

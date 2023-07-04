@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">1.3.6</span>
+   &#160;<span id="projectnumber">1.4.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -124,6 +124,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stru
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Describes the stack structure and fifo behaviour for a <a class="el" href="classFrameFifo.html" title="A thread-safe combination of a fifo (first-in-first-out) queue and an associated stack.">FrameFifo</a>. </p>
+<p>libValkka pre-reserves memory for all incoming data, decoded frames, etc. say, we reserve 50 <a class="el" href="classBasicFrame.html" title="Custom payload Frame.">BasicFrame</a> objects into a stack for the incoming H264 frames from the camera. Once that H264 is successively decoded, then it is recycled and used again. Depending on your number of cameras, you might need more. On the other hand requiring a lots of pre-reserved frames eventually means that you are not able to decode fast enought (and return the frames back to the stack)</p>
+<p>There is a stack of frames in <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread.">LiveThread</a> (that's receiving raw H264) but also in <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders.">AVThread</a> instances: <a class="el" href="classLiveThread.html" title="Live555, running in a separate thread.">LiveThread</a> uses frames from it's stack to save the H264 data. <a class="el" href="classAVThread.html" title="A thread consuming frames and feeding them to various encoders.">AVThread</a> then uses a frame from it's own stack to create a copy of that H264, etc. </p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="framefifo_8h_source.html">framefifo.h</a></li>
 </ul>

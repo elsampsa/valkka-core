@@ -6,10 +6,6 @@
 
 Finally, run semiautomated tests
 
-*At master branch*
-
-merge from dev
-
 Edit README.md --> log latest version
 
 Edit Release.txt --> log latest version
@@ -24,6 +20,10 @@ New PPA packages:
 cd debian
 ./sendall.bash major.minor.patch description
 ```
+
+*At master branch*
+
+merge from dev
 
 New git tag (launches the CI pipeline)
 ```

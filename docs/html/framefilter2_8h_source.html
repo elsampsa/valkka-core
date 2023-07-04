@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">1.3.6</span>
+   &#160;<span id="projectnumber">1.4.0</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -98,49 +98,71 @@ $(function() {
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="framefilter_8h.html">framefilter.h</a>&quot;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;Python.h&quot;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="tools_8h.html">tools.h</a>&quot;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &quot;Python.h&quot;</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classAlertFrameFilter.html">   60</a></span>&#160;<span class="keyword">class </span><a class="code" href="classAlertFrameFilter.html">AlertFrameFilter</a> : <span class="keyword">public</span> <a class="code" href="classFrameFilter.html">FrameFilter</a> {                                           <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">public</span>:                                                                                 <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <a class="code" href="classAlertFrameFilter.html">AlertFrameFilter</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, PyObject* pycallback, <a class="code" href="classFrameFilter.html">FrameFilter</a> *<a class="code" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a> = NULL); <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classAlertFrameFilter.html">AlertFrameFilter</a>();                                                        <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    PyObject* pycallback;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classAlertFrameFilter.html#a5975bbe6fcbe19b2a77184274ad8485c">run</a>(<a class="code" href="classFrame.html">Frame</a>* frame);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classAlertFrameFilter.html#aab5a2295773c7f9e32dacbde9deb96f6">go</a>(<a class="code" href="classFrame.html">Frame</a> *frame);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;};                                                                                      <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classAlertFrameFilter.html">   61</a></span>&#160;<span class="keyword">class </span><a class="code" href="classAlertFrameFilter.html">AlertFrameFilter</a> : <span class="keyword">public</span> <a class="code" href="classFrameFilter.html">FrameFilter</a> {                                           <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">public</span>:                                                                                 <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <a class="code" href="classAlertFrameFilter.html">AlertFrameFilter</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, PyObject* pycallback, <a class="code" href="classFrameFilter.html">FrameFilter</a> *<a class="code" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a> = NULL); <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classAlertFrameFilter.html">AlertFrameFilter</a>();                                                        <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    PyObject* pycallback;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classAlertFrameFilter.html#a5975bbe6fcbe19b2a77184274ad8485c">run</a>(<a class="code" href="classFrame.html">Frame</a>* frame);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classAlertFrameFilter.html#aab5a2295773c7f9e32dacbde9deb96f6">go</a>(<a class="code" href="classFrame.html">Frame</a> *frame);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;};                                                                                      <span class="comment">// &lt;pyapi&gt;</span></div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classDumpAVBitmapFrameFilter.html">   83</a></span>&#160;<span class="keyword">class </span><a class="code" href="classDumpAVBitmapFrameFilter.html">DumpAVBitmapFrameFilter</a> : <span class="keyword">public</span> <a class="code" href="classFrameFilter.html">FrameFilter</a> { <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">public</span>:                                                          <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <a class="code" href="classDumpAVBitmapFrameFilter.html">DumpAVBitmapFrameFilter</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="classFrameFilter.html">FrameFilter</a> *<a class="code" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a> = NULL); <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">int</span> count;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classDumpAVBitmapFrameFilter.html#a07f6b86bfae99fca3ffb3e119913a83d">go</a>(<a class="code" href="classFrame.html">Frame</a> *frame);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}; <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classDumpAVBitmapFrameFilter.html">   84</a></span>&#160;<span class="keyword">class </span><a class="code" href="classDumpAVBitmapFrameFilter.html">DumpAVBitmapFrameFilter</a> : <span class="keyword">public</span> <a class="code" href="classFrameFilter.html">FrameFilter</a> { <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">public</span>:                                                          <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <a class="code" href="classDumpAVBitmapFrameFilter.html">DumpAVBitmapFrameFilter</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="classFrameFilter.html">FrameFilter</a> *<a class="code" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a> = NULL); <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordtype">int</span> count;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classDumpAVBitmapFrameFilter.html#a07f6b86bfae99fca3ffb3e119913a83d">go</a>(<a class="code" href="classFrame.html">Frame</a> *frame);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;}; <span class="comment">// &lt;pyapi&gt;</span></div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="classFPSCountFrameFilter.html">  102</a></span>&#160;<span class="keyword">class </span><a class="code" href="classFPSCountFrameFilter.html">FPSCountFrameFilter</a> : <span class="keyword">public</span> <a class="code" href="classFrameFilter.html">FrameFilter</a> { <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="keyword">public</span>: <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <a class="code" href="classFPSCountFrameFilter.html">FPSCountFrameFilter</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> msinterval, <a class="code" href="classFrameFilter.html">FrameFilter</a> *<a class="code" href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">next</a> = NULL); <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">int</span> count;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">int</span> prevtime;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">int</span> msinterval;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keyword">static</span> std::mutex print_mutex; <span class="comment">// Declaration of the static mutex</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classFPSCountFrameFilter.html#a6d360783af420d64784f99d3f8010d68">go</a>(<a class="code" href="classFrame.html">Frame</a> *frame);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;}; <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;std::mutex FPSCountFrameFilter::print_mutex;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclassFPSCountFrameFilter_html"><div class="ttname"><a href="classFPSCountFrameFilter.html">FPSCountFrameFilter</a></div><div class="ttdoc">Counts fps and prints the fps value on the terminal every N seconds.</div><div class="ttdef"><b>Definition:</b> framefilter2.h:102</div></div>
 <div class="ttc" id="aclassFrameFilter_html"><div class="ttname"><a href="classFrameFilter.html">FrameFilter</a></div><div class="ttdoc">The mother class of all frame filters!   FrameFilters are used to create &quot;filter chains&quot;.</div><div class="ttdef"><b>Definition:</b> framefilter.h:44</div></div>
 <div class="ttc" id="aclassFrame_html"><div class="ttname"><a href="classFrame.html">Frame</a></div><div class="ttdoc">Frame: An abstract queueable class.</div><div class="ttdef"><b>Definition:</b> frame.h:111</div></div>
+<div class="ttc" id="aclassFPSCountFrameFilter_html_a6d360783af420d64784f99d3f8010d68"><div class="ttname"><a href="classFPSCountFrameFilter.html#a6d360783af420d64784f99d3f8010d68">FPSCountFrameFilter::go</a></div><div class="ttdeci">void go(Frame *frame)</div><div class="ttdoc">Does the actual filtering/modification to the Frame. Define in subclass.</div><div class="ttdef"><b>Definition:</b> framefilter2.cpp:163</div></div>
 <div class="ttc" id="aclassFrameFilter_html_a992da6bcdb61db69511f222dbe33e818"><div class="ttname"><a href="classFrameFilter.html#a992da6bcdb61db69511f222dbe33e818">FrameFilter::next</a></div><div class="ttdeci">FrameFilter * next</div><div class="ttdoc">The next frame filter in the chain to be applied.</div><div class="ttdef"><b>Definition:</b> framefilter.h:60</div></div>
 <div class="ttc" id="aframefilter_8h_html"><div class="ttname"><a href="framefilter_8h.html">framefilter.h</a></div><div class="ttdoc">Definition of FrameFilter and derived classes for various purposes.</div></div>
 <div class="ttc" id="aclassDumpAVBitmapFrameFilter_html_a07f6b86bfae99fca3ffb3e119913a83d"><div class="ttname"><a href="classDumpAVBitmapFrameFilter.html#a07f6b86bfae99fca3ffb3e119913a83d">DumpAVBitmapFrameFilter::go</a></div><div class="ttdeci">void go(Frame *frame)</div><div class="ttdoc">Does the actual filtering/modification to the Frame. Define in subclass.</div><div class="ttdef"><b>Definition:</b> framefilter2.cpp:111</div></div>
 <div class="ttc" id="aclassAlertFrameFilter_html_a5975bbe6fcbe19b2a77184274ad8485c"><div class="ttname"><a href="classAlertFrameFilter.html#a5975bbe6fcbe19b2a77184274ad8485c">AlertFrameFilter::run</a></div><div class="ttdeci">void run(Frame *frame)</div><div class="ttdoc">Calls this-&gt;go(Frame* frame) and then calls the this-&gt;next-&gt;run(Frame* frame) (if this-&gt;next !...</div><div class="ttdef"><b>Definition:</b> framefilter2.cpp:58</div></div>
-<div class="ttc" id="aclassAlertFrameFilter_html"><div class="ttname"><a href="classAlertFrameFilter.html">AlertFrameFilter</a></div><div class="ttdoc">LiveThread sends a special frame if a camera is detected offline.</div><div class="ttdef"><b>Definition:</b> framefilter2.h:60</div></div>
+<div class="ttc" id="aclassAlertFrameFilter_html"><div class="ttname"><a href="classAlertFrameFilter.html">AlertFrameFilter</a></div><div class="ttdoc">LiveThread sends a special frame if a camera is detected offline.</div><div class="ttdef"><b>Definition:</b> framefilter2.h:61</div></div>
 <div class="ttc" id="aclassAlertFrameFilter_html_aab5a2295773c7f9e32dacbde9deb96f6"><div class="ttname"><a href="classAlertFrameFilter.html#aab5a2295773c7f9e32dacbde9deb96f6">AlertFrameFilter::go</a></div><div class="ttdeci">void go(Frame *frame)</div><div class="ttdoc">Does the actual filtering/modification to the Frame. Define in subclass.</div><div class="ttdef"><b>Definition:</b> framefilter2.cpp:55</div></div>
-<div class="ttc" id="aclassDumpAVBitmapFrameFilter_html"><div class="ttname"><a href="classDumpAVBitmapFrameFilter.html">DumpAVBitmapFrameFilter</a></div><div class="ttdoc">Dumps AVBitmapFrame(s) into a files.</div><div class="ttdef"><b>Definition:</b> framefilter2.h:83</div></div>
+<div class="ttc" id="atools_8h_html"><div class="ttname"><a href="tools_8h.html">tools.h</a></div><div class="ttdoc">Auxiliary routines.</div></div>
+<div class="ttc" id="aclassDumpAVBitmapFrameFilter_html"><div class="ttname"><a href="classDumpAVBitmapFrameFilter.html">DumpAVBitmapFrameFilter</a></div><div class="ttdoc">Dumps AVBitmapFrame(s) into a files.</div><div class="ttdef"><b>Definition:</b> framefilter2.h:84</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
