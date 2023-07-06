@@ -1,5 +1,5 @@
 /*
- * decoders.cpp : FFmpeg decoders
+ * hwdecoder.cpp :
  * 
  * Copyright 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
  * 
@@ -8,116 +8,79 @@
  * This file is part of the Valkka library.
  * 
  * Valkka is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
+ * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  *
  */
 
 /** 
- *  @file    decoder.cpp
+ *  @file    hwdecoder.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.4.0 
- *  @brief   FFmpeg decoders
- */
+ *  @version 0.1
+ *  
+ *  @brief 
+ */ 
 
-#include "decoder.h"
-#include "logging.h"
+#include "hwdecoder.h"
 
-// https://stackoverflow.com/questions/14914462/ffmpeg-memory-leak
-// #define AV_REALLOC
+// https://ffmpeg.org/doxygen/trunk/vaapi_transcode_8c-example.html#a66
+// we need this..?
+// https://gist.github.com/kajott/d1b29c613be30893c855621edd1f212e
 
-// #define DECODE_VERBOSE
-
-Decoder::Decoder() : has_frame(false) {
-} ;
-
-Decoder::~Decoder(){};
-
-long int Decoder::getMsTimestamp()
+AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, int n_threads) : 
+    av_codec_id(av_codec_id), n_threads(n_threads)
 {
-    return in_frame.mstimestamp;
-}
-
-void Decoder::input(Frame *f)
-{
-    if (f->getFrameClass() != FrameClass::basic)
-    {
-        decoderlogger.log(LogLevel::normal) << "Decoder: input: can only accept BasicFrame" << std::endl;
+    // http://ffmpeg.org/doxygen/3.4/hwcontext_8c.html
+    // TODO: AVBufferRef *hw_device_ctx
+    int ret = av_hwdevice_ctx_create(&hw_device_ctx, AV_HWDEVICE_TYPE_VAAPI, NULL, NULL, 0);
+    // TODO: raise some error that can be caught by the decoder thread so that it can
+    // default to the sw decoder
+    if (ret < 0) {
+        // fprintf(stderr, "Failed to create a VAAPI device. Error code: %s\n", av_err2str(ret));
+        std::cerr << "Failed to create HW device" << std::endl;
+        active = false;
     }
-    else
-    {
-        in_frame.copyFrom(f);
-    }
-}
-
-bool Decoder::hasFrame()
-{
-    return has_frame;
-}
-
-void Decoder::releaseOutput()
-{
-    // by default, does nada
-};
-
-bool Decoder::isOk() 
-{
-    return true;
-}
-
-
-
-Frame *DummyDecoder::output()
-{
-    return &out_frame;
-}
-
-void DummyDecoder::flush(){};
-
-bool DummyDecoder::pull()
-{
-    out_frame = in_frame;
-    has_frame = true;
-    return true;
-}
-
-AVDecoder::AVDecoder(AVCodecID av_codec_id, int n_threads) : Decoder(), av_codec_id(av_codec_id), n_threads(n_threads)
-{
     int retcode;
-
     has_frame = false;
-
     // av_packet       =av_packet_alloc(); // oops.. not part of the public API (defined in avcodec.c instead of avcodec.h)
     av_packet = new AVPacket();
     av_init_packet(av_packet);
     // av_frame        =av_frame_alloc();
-
     // std::cout << "AVDecoder : AV_CODEC_ID=" << av_codec_id << " AV_CODEC_ID_H264=" << AV_CODEC_ID_H264 << " AV_CODEC_ID_INDEO3=" << AV_CODEC_ID_INDEO3 <<std::endl;
-
     av_codec = avcodec_find_decoder(av_codec_id);
-    if (!av_codec)
-    {
-        std::perror("AVDecoder: FATAL: could not find av_codec");
+    if (!av_codec) {
+        std::perror("AVHwDecoder: FATAL: could not find av_codec");
         exit(2);
     }
     av_codec_context = avcodec_alloc_context3(av_codec);
+
+    if (active) {
+        av_codec_context->hw_device_ctx = av_buffer_ref(hw_device_ctx);
+        if (!av_codec_context->hw_device_ctx) {
+            fprintf(stderr, "A hardware device reference create failed.\n");
+            active=false;
+        }
+    }
+    else {
+        av_codec_context->get_format = get_vaapi_format;
+    }
 
     ///*
     av_codec_context->thread_count = this->n_threads;
     if (this->n_threads > 1)
     {
-        std::cout << "AVDecoder: using multithreading with : " << this->n_threads << std::endl;
-        decoderlogger.log(LogLevel::debug) << "AVDecoder: using multithreading with " << this->n_threads << std::endl;
+        std::cout << "AVHwDecoder: using multithreading with : " << this->n_threads << std::endl;
+        decoderlogger.log(LogLevel::debug) << "AVHwDecoder: using multithreading with " << this->n_threads << std::endl;
         // av_codec_context->thread_type = FF_THREAD_SLICE; // decode different parts of the frame in parallel // FF_THREAD_FRAME = decode several frames in parallel
         // woops .. I get "data partition not implemented" for this version of ffmpeg (3.4)
         av_codec_context->thread_type = FF_THREAD_FRAME; // now frames come in bursts .. think about this
@@ -145,29 +108,35 @@ AVDecoder::AVDecoder(AVCodecID av_codec_id, int n_threads) : Decoder(), av_codec
 
 }
 
-AVDecoder::~AVDecoder()
+AVHwDecoder::~AVHwDecoder() 
 {
+    if (active) {
+        av_buffer_unref(&hw_device_ctx);
+    }
     // https://stackoverflow.com/questions/14914462/ffmpeg-memory-leak
     av_free_packet(av_packet);
-
     // av_frame_free(&av_frame);
     // av_free(av_frame); // needs this as well?
-
     avcodec_close(av_codec_context);
     avcodec_free_context(&av_codec_context);
-
     delete av_packet;
 }
 
-void AVDecoder::flush()
+
+void AVHwDecoder::flush()
 {
     avcodec_flush_buffers(av_codec_context);
 }
 
 
+bool AVHwDecoder::isOk() {
+    return active;
+}
 
-VideoDecoder::VideoDecoder(AVCodecID av_codec_id, int n_threads) : 
-AVDecoder(av_codec_id, n_threads), width(0), height(0), 
+
+
+HwVideoDecoder::HwVideoDecoder(AVCodecID av_codec_id, int n_threads) : 
+AVHwDecoder(av_codec_id, n_threads), width(0), height(0), 
     current_pixel_format(AV_PIX_FMT_YUV420P), sws_ctx(NULL) {
     /*
     // decoder slow down simulation
@@ -190,7 +159,7 @@ AVDecoder(av_codec_id, n_threads), width(0), height(0),
 };
 
 
-VideoDecoder::~VideoDecoder(){
+HwVideoDecoder::~HwVideoDecoder(){
     if (sws_ctx != NULL)
     {
         sws_freeContext(sws_ctx);
@@ -201,13 +170,13 @@ VideoDecoder::~VideoDecoder(){
 };
 
 
-Frame *VideoDecoder::output()
+Frame *HwVideoDecoder::output()
 {
     return &out_frame;
 };
 
 
-bool VideoDecoder::pull()
+bool HwVideoDecoder::pull()
 {
     int retcode;
     int got_frame;
@@ -233,8 +202,8 @@ bool VideoDecoder::pull()
 
     
 #ifdef DECODE_VERBOSE
-    std::cout << "VideoDecoder: pull: size    =" << av_packet->size << std::endl;
-    std::cout << "VideoDecoder: pull: payload =[" << in_frame.dumpPayload() << "]" << std::endl;
+    std::cout << "HwVideoDecoder: pull: size    =" << av_packet->size << std::endl;
+    std::cout << "HwVideoDecoder: pull: payload =[" << in_frame.dumpPayload() << "]" << std::endl;
 #endif
 
 #ifdef DECODE_TIMING
@@ -270,14 +239,14 @@ bool VideoDecoder::pull()
 
     if (retcode < 0)
     {
-        decoderlogger.log(LogLevel::crazy) << "VideoDecoder: decoder error " << retcode << std::endl;
+        decoderlogger.log(LogLevel::crazy) << "HwVideoDecoder: decoder error " << retcode << std::endl;
         return false;
     }
 
     if (av_ref_frame->width < 1 or av_ref_frame->height < 1)
     { // crap
 #ifdef DECODE_VERBOSE
-        std::cout << "VideoDecoder: pull: corrupt frame " << std::endl;
+        std::cout << "HwVideoDecoder: pull: corrupt frame " << std::endl;
 #endif
         return false;
     }
@@ -320,7 +289,7 @@ bool VideoDecoder::pull()
                 SWS_FAST_BILINEAR,
                 NULL, NULL, NULL);
             decoderlogger.log(LogLevel::normal) 
-                << "VideoDecoder: WARNING: scaling your strange YUV format to YUV420P. " 
+                << "HwVideoDecoder: WARNING: scaling your strange YUV format to YUV420P. " 
                 << "This will be inefficient!"
                 << std::endl;
 
@@ -407,24 +376,24 @@ bool VideoDecoder::pull()
     mstime = getCurrentMsTimestamp() - mstime;
     if (mstime > 40)
     {
-        std::cout << "VideoDecoder: pull: decoding took " << mstime << "milliseconds" << std::endl;
+        std::cout << "HwVideoDecoder: pull: decoding took " << mstime << "milliseconds" << std::endl;
     }
 #endif
 
     /*
   // debugging: let's simulate slow decoding
   int delay=dis(gen)+40;
-  std::cout << "VideoDecoder: pull: delay=" << delay << std::endl;
+  std::cout << "HwVideoDecoder: pull: delay=" << delay << std::endl;
   std::this_thread::sleep_for(std::chrono::milliseconds(delay));
   */
 
 #ifdef DECODE_VERBOSE
-    std::cout << "VideoDecoder: pull: retcode, got_frame, AVBitmapFrame : " << retcode << " " << got_frame << " " << out_frame << std::endl;
+    std::cout << "HwVideoDecoder: pull: retcode, got_frame, AVBitmapFrame : " << retcode << " " << got_frame << " " << out_frame << std::endl;
 #endif
 
 #ifdef DECODE_VERBOSE
-    std::cout << "VideoDecoder: decoded: " << retcode << " bytes => " << out_frame << std::endl;
-    std::cout << "VideoDecoder: payload: " << out_frame.dumpPayload() << std::endl;
+    std::cout << "HwVideoDecoder: decoded: " << retcode << " bytes => " << out_frame << std::endl;
+    std::cout << "HwVideoDecoder: payload: " << out_frame.dumpPayload() << std::endl;
 #endif
 
     has_frame = true;
