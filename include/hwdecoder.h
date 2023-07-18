@@ -42,13 +42,11 @@ static enum AVPixelFormat get_vaapi_format(AVCodecContext *ctx,
                                            const enum AVPixelFormat *pix_fmts)
 {
     const enum AVPixelFormat *p;
- 
     for (p = pix_fmts; *p != AV_PIX_FMT_NONE; p++) {
         if (*p == AV_PIX_FMT_VAAPI)
             return *p;
     }
- 
-    fprintf(stderr, "Unable to decode this file using VA-API.\n");
+    avthreadlogger.log(LogLevel::fatal) << "get_vaapi_format: Unable to decode this stream using VA-API" << std::endl;
     return AV_PIX_FMT_NONE;
 }
 
@@ -72,7 +70,7 @@ class AVHwDecoder : public Decoder
 {
 
 public:
-    AVHwDecoder(AVCodecID av_codec_id, int n_threads = 1); ///< Default constructor
+    AVHwDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_threads = 1); ///< Default constructor
     virtual ~AVHwDecoder();                                ///< Default destructor
 
 protected:
@@ -97,7 +95,7 @@ class HwVideoDecoder : public AVHwDecoder
 {
 
 public:
-    HwVideoDecoder(AVCodecID av_codec_id, int n_threads = 1); ///< Default constructor
+    HwVideoDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_threads = 1); ///< Default constructor
     virtual ~HwVideoDecoder();                                ///< Default destructor
 
 protected:
@@ -115,6 +113,17 @@ public:
 
 };
 
+
+// as per: https://www.mail-archive.com/ffmpeg-user@ffmpeg.org/msg30274.html
+#ifdef av_err2str
+#undef av_err2str
+#include <string>
+av_always_inline std::string av_err2string(int errnum) {
+    char str[AV_ERROR_MAX_STRING_SIZE];
+    return av_make_error_string(str, AV_ERROR_MAX_STRING_SIZE, errnum);
+}
+#define av_err2str(err) av_err2string(err).c_str()
+#endif  // av_err2str
 
 
 #endif

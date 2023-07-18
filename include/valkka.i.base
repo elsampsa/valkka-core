@@ -31,6 +31,7 @@
 #include "muxer.h"
 #include "framefilter2.h"
 #include "decoderthread.h"
+#include "vaapithread.h"
 
 #include <Python.h>
 

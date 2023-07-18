@@ -164,6 +164,7 @@ void DecoderThread::run() {
                         decoders[subsession_index]=this->chooseVideoDecoder(setupframe->codec_id);
                     } // VIDEO
                     else { // UNKNOW MEDIA TYPE
+                        avthreadlogger.log(LogLevel::fatal) << "DecoderThread: "<< this->name <<" : run : unknown media type " << std::endl;
                         decoders[subsession_index]=new DummyDecoder();
                     }
                 } // SETUP STREAM INIT

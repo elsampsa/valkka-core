@@ -47,12 +47,10 @@ Decoder* VAAPIThread::chooseAudioDecoder(AVCodecID codec_id) {
 }
 
 Decoder* VAAPIThread::chooseVideoDecoder(AVCodecID codec_id) {
-    //TODO: try to get NVDecoder, if it's not possible, default
-    //to AVDecoder
+    avthreadlogger.log(LogLevel::debug) << "VAAPIThread: "<< this->name <<" : chooseVideoDecoder " << std::endl;
     switch (codec_id) { // switch: video codecs
         case AV_CODEC_ID_H264:
-            return new HwVideoDecoder(AV_CODEC_ID_H264);
-            break;
+            return new HwVideoDecoder(AV_CODEC_ID_H264, AV_HWDEVICE_TYPE_VAAPI, n_threads = this->n_threads); // DecoderThread class will use the isOk() method to see if it needs
         default:
             return NULL;
             break;        
@@ -65,5 +63,6 @@ Decoder* VAAPIThread::fallbackAudioDecoder(AVCodecID codec_id) {
 
 
 Decoder* VAAPIThread::fallbackVideoDecoder(AVCodecID codec_id) {
+    avthreadlogger.log(LogLevel::fatal) << "VAAPIThread: "<< this->name <<" : using fallback video decoder " << std::endl;
     return DecoderThread::chooseVideoDecoder(codec_id);
 }

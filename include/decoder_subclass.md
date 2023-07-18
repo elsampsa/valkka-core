@@ -19,6 +19,7 @@ AVDecoder : Decoder
 HWAVDecoder : Decoder
     # like AVDecoder, but creates a hw context as well
 
+
 VideoDecoder : AVDecoder
     # video using libav
     # video specific contexes, etc.
@@ -26,6 +27,10 @@ VideoDecoder : AVDecoder
     virtual Frame *output()
     virtual bool pull()
     # AVPacket's etc. filled with in_frame
+
+
+HWVideoDecoder : HWAVDecoder
+    
 
 
 VAAPIDecoder : AVDecoder

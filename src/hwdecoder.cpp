@@ -37,18 +37,15 @@
 // we need this..?
 // https://gist.github.com/kajott/d1b29c613be30893c855621edd1f212e
 
-AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, int n_threads) : 
-    av_codec_id(av_codec_id), n_threads(n_threads)
+AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_threads) : 
+    av_codec_id(av_codec_id), n_threads(n_threads), active(true)
 {
     // http://ffmpeg.org/doxygen/3.4/hwcontext_8c.html
     // TODO: AVBufferRef *hw_device_ctx
-    int ret = av_hwdevice_ctx_create(&hw_device_ctx, AV_HWDEVICE_TYPE_VAAPI, NULL, NULL, 0);
-    // TODO: raise some error that can be caught by the decoder thread so that it can
-    // default to the sw decoder
+    int ret = av_hwdevice_ctx_create(&hw_device_ctx, hwtype, NULL, NULL, 0);
     if (ret < 0) {
-        // fprintf(stderr, "Failed to create a VAAPI device. Error code: %s\n", av_err2str(ret));
-        std::cerr << "Failed to create HW device" << std::endl;
-        active = false;
+        avthreadlogger.log(LogLevel::fatal) << "AVHwDecoder: failed to create a hw device. Error: " << av_err2str(ret) << std::endl;
+        active=false;
     }
     int retcode;
     has_frame = false;
@@ -67,7 +64,7 @@ AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, int n_threads) :
     if (active) {
         av_codec_context->hw_device_ctx = av_buffer_ref(hw_device_ctx);
         if (!av_codec_context->hw_device_ctx) {
-            fprintf(stderr, "A hardware device reference create failed.\n");
+            avthreadlogger.log(LogLevel::fatal) << "AVHwDecoder: a hardware device reference create failed " << std::endl;
             active=false;
         }
     }
@@ -79,7 +76,6 @@ AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, int n_threads) :
     av_codec_context->thread_count = this->n_threads;
     if (this->n_threads > 1)
     {
-        std::cout << "AVHwDecoder: using multithreading with : " << this->n_threads << std::endl;
         decoderlogger.log(LogLevel::debug) << "AVHwDecoder: using multithreading with " << this->n_threads << std::endl;
         // av_codec_context->thread_type = FF_THREAD_SLICE; // decode different parts of the frame in parallel // FF_THREAD_FRAME = decode several frames in parallel
         // woops .. I get "data partition not implemented" for this version of ffmpeg (3.4)
@@ -135,8 +131,8 @@ bool AVHwDecoder::isOk() {
 
 
 
-HwVideoDecoder::HwVideoDecoder(AVCodecID av_codec_id, int n_threads) : 
-AVHwDecoder(av_codec_id, n_threads), width(0), height(0), 
+HwVideoDecoder::HwVideoDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_threads) : 
+AVHwDecoder(av_codec_id, hwtype, n_threads), width(0), height(0), 
     current_pixel_format(AV_PIX_FMT_YUV420P), sws_ctx(NULL) {
     /*
     // decoder slow down simulation
