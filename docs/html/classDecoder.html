@@ -81,10 +81,12 @@ Inheritance diagram for Decoder:</div>
 <div class="dyncontent">
 <div class="center"><img src="classDecoder__inherit__graph.png" border="0" usemap="#Decoder_inherit__map" alt="Inheritance graph"/></div>
 <map name="Decoder_inherit__map" id="Decoder_inherit__map">
-<area shape="rect" title="A Virtual class for decoders." alt="" coords="85,5,155,32"/>
-<area shape="rect" href="classAVDecoder.html" title="Decoder using FFmpeg/libav." alt="" coords="14,80,101,107"/>
-<area shape="rect" href="classDummyDecoder.html" title="A Dummy decoder." alt="" coords="125,80,243,107"/>
+<area shape="rect" title="A Virtual class for decoders." alt="" coords="155,5,226,32"/>
+<area shape="rect" href="classAVDecoder.html" title="Decoder using FFmpeg/libav." alt="" coords="22,80,109,107"/>
+<area shape="rect" href="classAVHwDecoder.html" title="Video decoder using FFmpeg/libav with VAAPI." alt="" coords="137,80,244,107"/>
+<area shape="rect" href="classDummyDecoder.html" title="A Dummy decoder." alt="" coords="268,80,385,107"/>
 <area shape="rect" href="classVideoDecoder.html" title="Video decoder using FFmpeg/libav." alt="" coords="5,155,109,181"/>
+<area shape="rect" href="classHwVideoDecoder.html" title=" " alt="" coords="134,155,258,181"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -151,7 +153,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_frame</b></td></t
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A Virtual class for decoders. </p>
-<p>Inspects <a class="el" href="classFrame.html" title="Frame: An abstract queueable class.">Frame</a> in_frame, does something, and writes to <a class="el" href="classFrame.html" title="Frame: An abstract queueable class.">Frame</a> out_frame </p>
+<p>Inspects <a class="el" href="classFrame.html" title="Frame: An abstract queueable class.">Frame</a> in_frame, does something, and writes to <a class="el" href="classFrame.html" title="Frame: An abstract queueable class.">Frame</a> out_frame out_frame class depends on the kind of <a class="el" href="classDecoder.html" title="A Virtual class for decoders.">Decoder</a>, so that is defined in the subclasses </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a417b8965750f0a9ea1c841b636d52004"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a417b8965750f0a9ea1c841b636d52004">&#9670;&nbsp;</a></span>output()</h2>
@@ -179,13 +181,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_frame</b></td></t
 <p>&lt; Return in_frame timestamp </p>
 <p>Return a reference to the internal storage of the decoder where the decoded frame is. The exact frametype depends on the <a class="el" href="classDecoder.html" title="A Virtual class for decoders.">Decoder</a> class (and decoder library) </p>
 
-<p>Implemented in <a class="el" href="classVideoDecoder.html#a6212c0d05de36a17fa3283c0e1d3c026">VideoDecoder</a>, and <a class="el" href="classDummyDecoder.html#a5065cfc016067398966f1d1c0faa46f8">DummyDecoder</a>.</p>
+<p>Implemented in <a class="el" href="classVideoDecoder.html#a6212c0d05de36a17fa3283c0e1d3c026">VideoDecoder</a>, <a class="el" href="classHwVideoDecoder.html#a28acf966f4bf5a843ea28082567388d8">HwVideoDecoder</a>, and <a class="el" href="classDummyDecoder.html#a5065cfc016067398966f1d1c0faa46f8">DummyDecoder</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/sampsa/C/valkka/include/<a class="el" href="decoder_8h_source.html">decoder.h</a></li>
-<li>/home/sampsa/C/valkka/src/decoder.cpp</li>
+<li>/home/sampsa/C/valkka/src/<a class="el" href="decoder_8cpp.html">decoder.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -59,9 +59,9 @@ BasicFrame aframe     =BasicFrame(); // audio frame
 
 void init_frames() {
     
-    // AVThread does not really care about the slot number
+    // VAAPIThread does not really care about the slot number
     // LiveThread is requested to send the frames with a certain slot number to a certain filter .. and that filter receives always frames with the same slot number
-    // There should always be an AVThread per slot
+    // There should always be an VAAPIThread per slot
     
     setupframe.sub_type=SetupFrameType::stream_init;
     setupframe.n_slot=1;
@@ -96,14 +96,14 @@ void init_frames() {
 void test_1() {
     // *****
     // filtergraph:
-    // -->> [AVThread:avthread] --> {FrameFilter:out_filter}
+    // -->> [VAAPIThread:avthread] --> {FrameFilter:out_filter}
     // ****
     InfoFrameFilter out_filter("out");
     VAAPIThread avthread("avthread",out_filter);
     FifoFrameFilter &in_filter = avthread.getFrameFilter();
 
     const char* name = "@TEST: vaapi_avthread_test: test 1: ";
-    std::cout << name <<"** @@Send a setup frame to AVThread **" << std::endl;
+    std::cout << name <<"** @@Send a setup frame to VAAPIThread **" << std::endl;
     
     std::cout << name << "starting av thread" << std::endl;
     avthread.startCall();
@@ -126,14 +126,14 @@ void test_1() {
 
 void test_2() {
     // filtergraph:
-    // -->> [AVThread:avthread] --> {FrameFilter:out_filter}
+    // -->> [VAAPIThread:avthread] --> {FrameFilter:out_filter}
     // ****
     InfoFrameFilter out_filter("out");
     VAAPIThread avthread("avthread",out_filter);
     FifoFrameFilter &in_filter = avthread.getFrameFilter();
 
     const char* name = "@TEST: vaapi_avthread_test: test 2: ";
-    std::cout << name <<"** @@Send a setup frame and two void video frames to AVThread **" << std::endl;
+    std::cout << name <<"** @@Send a setup frame and two void video frames to VAAPIThread **" << std::endl;
     
     std::cout << name << "starting av thread" << std::endl;
     avthread.startCall();
@@ -156,13 +156,13 @@ void test_2() {
 
 
 void test_3() {
-    // -->> [AVThread:avthread] --> {FrameFilter:out_filter}
+    // -->> [VAAPIThread:avthread] --> {FrameFilter:out_filter}
     InfoFrameFilter out_filter("out");
     VAAPIThread avthread("avthread",out_filter);
     FifoFrameFilter &in_filter = avthread.getFrameFilter();
 
     const char* name = "@TEST: vaapi_avthread_test: test 3: ";
-    std::cout << name <<"** @@Send a void video frame to AVThread (no setup frame) **" << std::endl;
+    std::cout << name <<"** @@Send a void video frame to VAAPIThread (no setup frame) **" << std::endl;
     
     std::cout << name << "starting av thread" << std::endl;
     avthread.startCall();
@@ -181,13 +181,13 @@ void test_3() {
 
 
 void test_4() {
-    // -->> [AVThread:avthread] --> {FrameFilter:out_filter}
+    // -->> [VAAPIThread:avthread] --> {FrameFilter:out_filter}
     InfoFrameFilter out_filter("out");
     VAAPIThread avthread("avthread",out_filter);
     FifoFrameFilter &in_filter = avthread.getFrameFilter();
 
     const char* name = "@TEST: vaapi_avthread_test: test 4: ";
-    std::cout << name <<"** @@Send two consecutive setup frames to AVThread (i.e. reinit) **" << std::endl;
+    std::cout << name <<"** @@Send two consecutive setup frames to VAAPIThread (i.e. reinit) **" << std::endl;
     
     std::cout << name << "starting av thread" << std::endl;
     avthread.startCall();
@@ -208,14 +208,14 @@ void test_4() {
 
 
 void test_5() {
-    // -->> [AVThread:avthread] --> {FrameFilter:out_filter}
+    // -->> [VAAPIThread:avthread] --> {FrameFilter:out_filter}
     InfoFrameFilter out_filter("out");
     VAAPIThread avthread("avthread",out_filter);
     FifoFrameFilter &in_filter = avthread.getFrameFilter();
     VAAPIThread avthread2("avthread2",out_filter);
 
     const char* name = "@TEST: vaapi_avthread_test: test 5: ";
-    std::cout << name <<"** @@Start two AVThreads **" << std::endl;
+    std::cout << name <<"** @@Start two VAAPIThreads **" << std::endl;
     
     std::cout << name << "starting av thread" << std::endl;
     
@@ -239,13 +239,13 @@ void test_5() {
 
 
 void test_6() {
-    // -->> [AVThread:avthread] --> {FrameFilter:out_filter}
+    // -->> [VAAPIThread:avthread] --> {FrameFilter:out_filter}
     InfoFrameFilter out_filter("out");
     VAAPIThread avthread("avthread",out_filter);
     FifoFrameFilter &in_filter = avthread.getFrameFilter();
 
     const char* name = "@TEST: vaapi_avthread_test: test 6: ";
-    std::cout << name <<"** @@Send setup, video and audio frames to AVThread **" << std::endl;
+    std::cout << name <<"** @@Send setup, video and audio frames to VAAPIThread **" << std::endl;
     
     std::cout << name << "starting av thread" << std::endl;
     avthread.startCall();
@@ -265,10 +265,10 @@ void test_6() {
 }
 
 void test_7() {
-    // (LiveThread:livethread) --> {FrameFilter:info} --> {FifoFrameFilter:in_filter} -->> (AVThread:avthread) --> {SwScaleFrameFilter:sw_scale} --> {InfoFrameFilter:scaled}
+    // (LiveThread:livethread) --> {FrameFilter:info} --> {FifoFrameFilter:in_filter} -->> (VAAPIThread:avthread) --> {SwScaleFrameFilter:sw_scale} --> {InfoFrameFilter:scaled}
     InfoFrameFilter out_filter("out");
     VAAPIThread avthread("avthread",out_filter);
-    // AVThread avthread("avthread",out_filter);
+    // VAAPIThread avthread("avthread",out_filter);
     FifoFrameFilter &in_filter = avthread.getFrameFilter();
     LiveThread livethread("live");
 

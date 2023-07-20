@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['frames_1794',['Frames',['../Caching.html',1,'']]],
-  ['frames_20from_20python_1795',['frames from python',['../Sharing.html',1,'']]]
+  ['decoder_20and_20decoderthread_20scheme_1823',['Decoder and DecoderThread scheme',['../decenc_scheme.html',1,'']]],
+  ['decoder_5fsubclass_1824',['decoder_subclass',['../md__home_sampsa_C_valkka_include_decoder_subclass.html',1,'']]]
 ];

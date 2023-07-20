@@ -1,6 +1,8 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classDecoder.html" title="A Virtual class for decoders." alt="" coords="5,31,76,57"/>
+<area shape="rect" id="node1" href="$classDecoder.html" title="A Virtual class for decoders." alt="" coords="5,56,76,83"/>
 <area shape="rect" id="node2" href="$classAVDecoder.html" title="Decoder using FFmpeg/libav." alt="" coords="139,5,226,32"/>
-<area shape="rect" id="node4" href="$classDummyDecoder.html" title="A Dummy decoder." alt="" coords="124,56,241,83"/>
-<area shape="rect" id="node3" href="$classVideoDecoder.html" title="Video decoder using FFmpeg/libav." alt="" coords="289,5,393,32"/>
+<area shape="rect" id="node4" href="$classAVHwDecoder.html" title="Video decoder using FFmpeg/libav with VAAPI." alt="" coords="129,56,236,83"/>
+<area shape="rect" id="node6" href="$classDummyDecoder.html" title="A Dummy decoder." alt="" coords="124,107,241,133"/>
+<area shape="rect" id="node3" href="$classVideoDecoder.html" title="Video decoder using FFmpeg/libav." alt="" coords="299,5,403,32"/>
+<area shape="rect" id="node5" href="$classHwVideoDecoder.html" title=" " alt="" coords="289,56,413,83"/>
 </map>

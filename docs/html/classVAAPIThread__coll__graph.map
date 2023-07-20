@@ -1,0 +1,11 @@
+<map id="VAAPIThread" name="VAAPIThread">
+<area shape="rect" id="node1" title=" " alt="" coords="840,125,940,152"/>
+<area shape="rect" id="node2" href="$classDecoderThread.html" title=" " alt="" coords="680,125,791,152"/>
+<area shape="rect" id="node3" href="$classThread.html" title="A class for multithreading with a signaling system." alt="" coords="443,5,506,32"/>
+<area shape="rect" id="node4" href="$classFifoFrameFilter.html" title="Passes frames to a FrameFifo." alt="" coords="419,169,530,196"/>
+<area shape="rect" id="node5" href="$classFrameFilter.html" title="The mother class of all frame filters! &#160;&#160;FrameFilters are used to create &quot;filter chains&quot;." alt="" coords="203,125,291,152"/>
+<area shape="rect" id="node8" href="$classTimestampFrameFilter2.html" title="Corrects erroneous timestamps (while preserving timestamp distances)." alt="" coords="395,56,555,83"/>
+<area shape="rect" id="node9" href="$classBlockingFifoFrameFilter.html" title="Passes frames to a multiprocessing fifo." alt="" coords="395,220,555,247"/>
+<area shape="rect" id="node6" href="$classFrameFifo.html" title="A thread&#45;safe combination of a fifo (first&#45;in&#45;first&#45;out) queue and an associated stack." alt="" coords="206,255,287,281"/>
+<area shape="rect" id="node7" href="$structFrameFifoContext.html" title="Describes the stack structure and fifo behaviour for a FrameFifo." alt="" coords="5,255,132,281"/>
+</map>

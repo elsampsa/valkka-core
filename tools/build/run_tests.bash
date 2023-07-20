@@ -728,6 +728,27 @@ $valgrind ./cachestream_test 4 $LOGLEVEL &>> test.out
 printf "END: cachestream_test 4\n\n" &>> test.out
 fi
 
+## hardware acceleration tests
+
+if true; then
+echo "vaapi_avthread_test"
+valgrind="valgrind" # enable valgrind
+# valgrind="" # disable valgrind
+
+echo 1
+$valgrind ./vaapi_avthread_test 1 $LOGLEVEL &>> test.out
+printf "END: vaapi_avthread_test 1\n\n" &>> test.out
+
+echo 6
+$valgrind ./vaapi_avthread_test 6 $LOGLEVEL &>> test.out
+printf "END: vaapi_avthread_test 6\n\n" &>> test.out
+
+echo 7
+$valgrind ./vaapi_avthread_test 7 $LOGLEVEL &>> test.out
+printf "END: vaapi_avthread_test 7\n\n" &>> test.out
+
+fi
+
 grep "ERROR SUMMARY" test.out
 grep "seg" test.out
 

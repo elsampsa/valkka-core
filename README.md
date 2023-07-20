@@ -167,7 +167,7 @@ and then do:
 
 You need (at least):
 ```
-sudo apt-get install python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl build-essential yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils freeglut3-dev
+sudo apt-get install python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl build-essential yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils freeglut3-dev i965-va-driver libva-dev intel-gpu-tools
 ```
 
 If you have upgraded your python interpreter, you might need to define the version, say ```python3.7-dev```
