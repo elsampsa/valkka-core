@@ -318,6 +318,9 @@ void DecoderThread::run() {
                             //hmm.. maybe should crash the whole program here..?
                         }
                     } // DECODER GONE SOUR
+                    else {
+                        // avthreadlogger.log(LogLevel::normal) << "DecoderThread: decoder still ok" << std::endl;
+                    }
 
                 } // IS DECODING
                 else { // not decoding ..

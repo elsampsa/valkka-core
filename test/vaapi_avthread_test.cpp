@@ -268,7 +268,7 @@ void test_7() {
     // (LiveThread:livethread) --> {FrameFilter:info} --> {FifoFrameFilter:in_filter} -->> (VAAPIThread:avthread) --> {SwScaleFrameFilter:sw_scale} --> {InfoFrameFilter:scaled}
     InfoFrameFilter out_filter("out");
     VAAPIThread avthread("avthread",out_filter);
-    // VAAPIThread avthread("avthread",out_filter);
+    // AVThread avthread("avthread",out_filter);
     FifoFrameFilter &in_filter = avthread.getFrameFilter();
     LiveThread livethread("live");
 
@@ -296,7 +296,7 @@ void test_7() {
     std::cout << name << "playing stream !" << std::endl;
     livethread.playStreamCall(ctx);
 
-    sleep_for(5s);
+    sleep_for(2s);
     // sleep_for(604800s); //one week
 
     std::cout << name << "stopping threads" << std::endl;

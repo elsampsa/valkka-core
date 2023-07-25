@@ -560,6 +560,11 @@ void AVBitmapFrame::reserve(int width, int height) {
     */
     // <FIX> : "if frame already has been allocated, calling this function will leak memory"
     // see: https://www.ffmpeg.org/doxygen/3.4/group__lavu__frame.html#ga6b1acbfa82c79bf7fd78d868572f0ceb
+    if (av_frame != NULL) {
+        av_frame_free(&av_frame);
+        av_free(av_frame); // needs this as well?
+        av_frame = av_frame_alloc();
+    }
     av_frame->format = AV_PIX_FMT_YUV420P;
     av_pixel_format = AV_PIX_FMT_YUV420P;
     av_frame->width = width;

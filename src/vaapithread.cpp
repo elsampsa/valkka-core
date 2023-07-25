@@ -47,10 +47,11 @@ Decoder* VAAPIThread::chooseAudioDecoder(AVCodecID codec_id) {
 }
 
 Decoder* VAAPIThread::chooseVideoDecoder(AVCodecID codec_id) {
-    avthreadlogger.log(LogLevel::debug) << "VAAPIThread: "<< this->name <<" : chooseVideoDecoder " << std::endl;
+    avthreadlogger.log(LogLevel::normal) << "VAAPIThread: "<< this->name <<" : chooseVideoDecoder " << std::endl;
     switch (codec_id) { // switch: video codecs
         case AV_CODEC_ID_H264:
-            return new HwVideoDecoder(AV_CODEC_ID_H264, AV_HWDEVICE_TYPE_VAAPI, n_threads = this->n_threads); // DecoderThread class will use the isOk() method to see if it needs
+            return new HwVideoDecoder(AV_CODEC_ID_H264, AV_HWDEVICE_TYPE_VAAPI, n_threads = this->n_threads); 
+            // DecoderThread class will use the isOk() method to see if it needs
         default:
             return NULL;
             break;        

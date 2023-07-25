@@ -248,17 +248,18 @@ bool VideoDecoder::pull()
 #endif
 */
 
-    AVFrame *av_ref_frame;
+    AVFrame *av_ref_frame; // final frame: no need to transform pixel format
     AVFrame *out_av_frame = out_frame.av_frame; // shorthand ref
 
     if (current_pixel_format == AV_PIX_FMT_YUV420P) {
         retcode = avcodec_decode_video2(av_codec_context, out_frame.av_frame, &got_frame, av_packet);
-        av_ref_frame = out_frame.av_frame;
+        av_ref_frame = out_frame.av_frame; // that's it!
     }
     else {
         // std::cout << "PIX_FMT" << std::endl;
         retcode = avcodec_decode_video2(av_codec_context, aux_av_frame, &got_frame, av_packet);
-        av_ref_frame = aux_av_frame;
+        av_ref_frame = aux_av_frame; 
+        // we need to go through pix transformation
     }
 
     if (av_codec_context->framerate.num > 0) {
@@ -293,7 +294,8 @@ bool VideoDecoder::pull()
     }
 
     if (new_pixel_format != current_pixel_format) 
-    {
+    { 
+        // pixel format has been changed! (could be on-the-fly)
         if (sws_ctx != NULL)
         {
             sws_freeContext(sws_ctx);

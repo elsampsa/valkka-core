@@ -38,6 +38,32 @@ extern "C" {
 #include <libavutil/hwcontext.h>
 }
 
+static enum AVPixelFormat find_fmt_by_hw_type(const enum AVHWDeviceType type)
+{
+    enum AVPixelFormat fmt;
+    switch (type) {
+        case AV_HWDEVICE_TYPE_VAAPI:
+            fmt = AV_PIX_FMT_VAAPI;
+            break;
+        case AV_HWDEVICE_TYPE_DXVA2:
+            fmt = AV_PIX_FMT_DXVA2_VLD;
+            break;
+        case AV_HWDEVICE_TYPE_D3D11VA:
+            fmt = AV_PIX_FMT_D3D11;
+            break;
+        case AV_HWDEVICE_TYPE_VDPAU:
+            fmt = AV_PIX_FMT_VDPAU;
+            break;
+        case AV_HWDEVICE_TYPE_VIDEOTOOLBOX:
+            fmt = AV_PIX_FMT_VIDEOTOOLBOX;
+            break;
+        default:
+            fmt = AV_PIX_FMT_NONE;
+            break;
+    }
+    return fmt;
+}
+
 static enum AVPixelFormat get_vaapi_format(AVCodecContext *ctx,
                                            const enum AVPixelFormat *pix_fmts)
 {
@@ -83,6 +109,8 @@ public:
     AVCodecContext *av_codec_context; ///< FFmpeg internal data structure
     AVCodec *av_codec;                ///< FFmpeg internal data structure
     AVBufferRef* hw_device_ctx;       ///< FFmpeg/libav hardware context
+    AVFrame *hw_frame;
+    AVPixelFormat hw_pix_format;
 
 public:
     // needs virtual void output, virtual void pull

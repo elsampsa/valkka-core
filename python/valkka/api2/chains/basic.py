@@ -76,7 +76,8 @@ class BasicFilterchain:
         # Reordering buffer time for Live555 packets in MILLIseconds # 0 means
         # default
         "reordering_mstime": (int, 0),
-        "n_threads": (int, 1)
+        "n_threads": (int, 1),
+        "vaapi": (bool, False)
     }
 
     def __init__(self, **kwargs):
@@ -118,10 +119,16 @@ class BasicFilterchain:
         self.framefifo_ctx.n_signal = self.n_signal
         self.framefifo_ctx.flush_when_full = self.flush_when_full
 
-        self.avthread = core.AVThread(
-            "avthread_" + self.idst,
-            self.gl_in_filter,
-            self.framefifo_ctx)
+        if self.vaapi:
+            self.avthread = core.VAAPIThread(
+                "vaapithread_" + self.idst,
+                self.gl_in_filter,
+                self.framefifo_ctx)
+        else:
+            self.avthread = core.AVThread(
+                "avthread_" + self.idst,
+                self.gl_in_filter,
+                self.framefifo_ctx)
         
         if self.affinity > -1 and self.n_threads > 1:
             print("WARNING: can't use affinity with multiple threads")
