@@ -61,6 +61,13 @@ For installing libValkka .deb into a bare OS with the absolute minimum dependenc
 ```
 ./test.bash [TAG]
 ```
+It also runs some minimal tests in the end.
+
+You can also run:
+```
+./test.bash [TAG]
+```
+which does the same *and* finally give you an interactive shell to play around with.
 
 ## 6. Grand build & test
 

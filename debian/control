@@ -7,6 +7,6 @@ Homepage: http://www.iki.fi/sampsa.riikonen
 
 Package: valkka
 Architecture: any
-Depends: python3, mesa-utils, glew-utils, python3-numpy, v4l-utils, python3-pip, openssl, i965-va-driver, intel-gpu-tools
+Depends: python3, mesa-utils, glew-utils, python3-numpy, v4l-utils, python3-pip, openssl, i965-va-driver, intel-gpu-tools, vainfo
 Description: Valkka
  OpenSource Video Management for Linux
