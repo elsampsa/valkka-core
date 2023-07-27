@@ -50,6 +50,20 @@ from valkka.core.valkka_core import *
 # from valkka.core.valkka_core import VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH
 # __version__=str(VERSION_MAJOR)+"."+str(VERSION_MINOR)+"."+str(VERSION_PATCH)
 
+
+"""Setup environmental variables used by various libraries
+"""
+
+import os
+# VAAPI hw acceleration to the opensource version:
+os.environ["LIBVA_DRIVER_NAME"] = "i965"
+# os.system("vainfo") # seems to work
+#
+# OpenGL: disable vsync for intel:
+os.environ["vblank_mode"]="0"
+# OpenGL: disable vsync for nvidia proprietary drivers:
+os.environ["__GL_SYNC_TO_VBLANK"]="0"
+
 from .valkka_core import * # import everything to valkka.core namespace
 __version__=str(VERSION_MAJOR)+"."+str(VERSION_MINOR)+"."+str(VERSION_PATCH)
 

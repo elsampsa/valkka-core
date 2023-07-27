@@ -38,6 +38,15 @@
 // https://gist.github.com/kajott/d1b29c613be30893c855621edd1f212e
 // this is it:
 // https://ffmpeg.org/doxygen/3.4/hw_decode_8c-example.html
+// WARNING:
+// must use export LIBVA_DRIVER_NAME=i965
+// otherwise valgrind reports a memleak!
+// .. but even so, the memory usage seems to accumulate
+// check this:
+// https://ffmpeg.org/pipermail/ffmpeg-user/2017-May/036232.html
+// https://github.com/mpv-player/mpv/issues/4383  
+// ffmpeg 3.4 is from 2017-10-15
+
 
 AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_threads) : av_codec_id(av_codec_id), n_threads(n_threads), active(true)
 {
@@ -46,7 +55,7 @@ AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_thr
     int ret = av_hwdevice_ctx_create(&hw_device_ctx, hwtype, NULL, NULL, 0);
     if (ret < 0)
     {
-        avthreadlogger.log(LogLevel::fatal) << "AVHwDecoder: failed to create a hw device. Error: " << av_err2str(ret) << std::endl;
+        decoderlogger.log(LogLevel::fatal) << "AVHwDecoder: failed to create a hw device. Error: " << av_err2str(ret) << std::endl;
         active = false;
     }
     int retcode;
@@ -66,24 +75,24 @@ AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_thr
 
     // if (false) { //debug: skip hw context etc. creation
     if (active) {
-        avthreadlogger.log(LogLevel::normal) << "AVHwDecoder: attaching hardware context" << std::endl;
+        decoderlogger.log(LogLevel::normal) << "AVHwDecoder: attaching hardware context" << std::endl;
         av_codec_context->hw_device_ctx = av_buffer_ref(hw_device_ctx);
         av_codec_context->get_format = get_vaapi_format;
         hw_pix_format = find_fmt_by_hw_type(hwtype);
         if (!av_codec_context->hw_device_ctx)
         {
-            avthreadlogger.log(LogLevel::fatal) << "AVHwDecoder: a hardware device reference create failed " << std::endl;
+            decoderlogger.log(LogLevel::fatal) << "AVHwDecoder: a hardware device reference create failed " << std::endl;
             active = false;
         }
         else
         {
-            /*
+            /* DO NOT USE THIS!
             // final step: link AVFrame hardware frame context
             // to hardware context
             hw_frame->hw_frames_ctx =
                 av_hwframe_ctx_alloc(av_codec_context->hw_device_ctx);
             if (!hw_frame->hw_frames_ctx) {
-                avthreadlogger.log(LogLevel::fatal) << "AVHwDecoder: linking hardware frames to hardware device failed " << std::endl;
+                decoderlogger.log(LogLevel::fatal) << "AVHwDecoder: linking hardware frames to hardware device failed " << std::endl;
                 active=false;
             }
             */
@@ -138,6 +147,8 @@ AVHwDecoder::~AVHwDecoder()
     avcodec_close(av_codec_context);
     avcodec_free_context(&av_codec_context);
     delete av_packet;
+    av_frame_free(&hw_frame);
+    av_free(hw_frame); // need this?
 }
 
 void AVHwDecoder::flush()
@@ -149,48 +160,6 @@ bool AVHwDecoder::isOk()
 {
     return active;
 }
-
-// TODO:
-
-// this one!
-// https://ffmpeg.org/doxygen/3.4/hw_decode_8c-example.html
-
-// https://ffmpeg.org/doxygen/3.4/hwcontext_8h.html#abf1b1664b8239d953ae2cac8b643815a
-/*
-
-int av_hwframe_transfer_data 	( 	AVFrame *  	dst,
-        const AVFrame *  	src,
-        int  	flags
-    )
-
-Copy data to or from a hw surface.
-At least one of dst/src must have an AVHWFramesContext attached.
-
-AVBufferRef* AVFrame::hw_frames_ctx
-For hwaccel-format frames, this should be a reference to the AVHWFramesContext describing the frame
-
-https://ffmpeg.org/doxygen/3.4/structAVHWFramesContext.html#details
-
-This struct describes a set or pool of "hardware" frames (i.e. those with data not located in normal system memory).
-All the frames in the pool are assumed to be allocated in the same way and interchangeable.
-
-This struct is reference-counted with the AVBuffer mechanism and tied to a given AVHWDeviceContext instance.
-The av_hwframe_ctx_alloc() constructor yields a reference, whose data field points to the actual AVHWFramesContext struct.
-
-AVBufferRef* av_hwframe_ctx_alloc 	( 	AVBufferRef *  	device_ctx	)
-
-
-av_hwdevice_ctx_create(&hw_device_ctx, hwtype, NULL, NULL, 0);
-hw_frame_ctx = av_hwframe_ctx_alloc(hw_device_ctx);
-AVFrame* hw_frame
-hw_frame->hw_frames_ctx = hw_frame_ctx
-
-or
-
-hw_frame->hw_frames_ctx = av_hwframe_ctx_alloc(hw_device_ctx)
-
-.. so now AVFrame* hw_frame has hwframe context attached
-*/
 
 HwVideoDecoder::HwVideoDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_threads) : 
     AVHwDecoder(av_codec_id, hwtype, n_threads), width(0), height(0),
@@ -222,16 +191,8 @@ bool HwVideoDecoder::pull()
 
     has_frame = false;
 
-    /* // some debugging .. (filter just sps, pps and keyframes)
-    if (in_frame.h264_pars.slice_type != H264SliceType::pps and in_frame.h264_pars.slice_type != H264SliceType::sps and in_frame.h264_pars.slice_type != H264SliceType::i) {
-        return false;
-    }
-  */
-
     av_packet->data = in_frame.payload.data(); // pointer to payload
     av_packet->size = in_frame.payload.size();
-
-    // std::cout << "num:" << av_codec_context->framerate.num << std::endl;
 
     if (av_codec_context->framerate.num > 0)
     {
@@ -248,12 +209,11 @@ bool HwVideoDecoder::pull()
     long int mstime = getCurrentMsTimestamp();
 #endif
 
-    std::cout << "send_packet" << std::endl;
     retcode = avcodec_send_packet(av_codec_context, av_packet);
     if (retcode < 0)
     {
         // fprintf(stderr, "Error during decoding (0)\n");
-        std::cout << "Error during decoding (0): " << retcode << " -- > " << av_err2str(retcode) << std::endl;
+        // std::cout << "Error during decoding (0): " << retcode << " -- > " << av_err2str(retcode) << std::endl;
         // this simply means that the packet is unexpected, i.e. a live stream that starts without
         // SPS and PPS packets, but that will eventually be corrected
         // active=false;
@@ -262,22 +222,19 @@ bool HwVideoDecoder::pull()
     retcode = avcodec_receive_frame(av_codec_context, hw_frame);
     if (retcode < 0)
     {
-        fprintf(stderr, "Error during decoding (1)\n");
+        decoderlogger.log(LogLevel::fatal) << "Error during decoding" << std::endl;
         active = false;
         return false;
     }
 
-    // retcode = avcodec_decode_video2(av_codec_context,
-    //     hw_frame, &got_frame, av_packet);
-
     if (hw_frame->format == hw_pix_format)
     {
         /* retrieve data from GPU to CPU */
-        std::cout << "correct hw pix fmt found" << std::endl;
+        // std::cout << "correct hw pix fmt found" << std::endl;
     }
     else
     {
-        std::cout << "unexpected hw pix fmt" << std::endl;
+        decoderlogger.log(LogLevel::fatal) << "unexpected hw pix fmt" << std::endl;
         active = false;
         return false;
     }
@@ -285,50 +242,48 @@ bool HwVideoDecoder::pull()
     AVFrame *av_ref_frame;                      // source data: should go through pix tf or not
     AVFrame *out_av_frame = out_frame.av_frame; // shorthand ref: final outgoing frame
 
+    #ifdef DECODE_VERBOSE
     std::cout << "current pix fmt " << current_pixel_format << std::endl;
-
     std::cout << "HW COPY" << std::endl;
+    #endif
 
     if (current_pixel_format == AV_PIX_FMT_YUV420P)
     {
         // so, imagining that a hw device would give us directly yuv420p.. will never happend!
         // but let's follow the same "logic" as before. :)
-        retcode = av_hwframe_transfer_data(
-            out_av_frame,            // AVFrame* dst
-            hw_frame,                // AVFrame * src
-            0);                      // that typically spits out AV_PIX_FMT_NV12
         av_ref_frame = out_av_frame; // that's it!
     }
     else
     {   // NOTE: should not and will never end here upon arrival of the first frame
-        std::cout << "transferring to aux_av_frame" << std::endl;
-        retcode = av_hwframe_transfer_data(
-            aux_av_frame, // AVFrame* dst
-            hw_frame,     // AVFrame * src
-            0);           // that typically spits out AV_PIX_FMT_NV12
         av_ref_frame = aux_av_frame;
         // we need to go through pix transformation
     }
 
+    retcode = av_hwframe_transfer_data(
+        av_ref_frame,            // AVFrame* dst
+        hw_frame,                // AVFrame * src
+        0);                      // that typically spits out AV_PIX_FMT_NV12
+
+    #ifdef DECODE_VERBOSE
     std::cout << "format       : " << av_ref_frame->format << std::endl;
     std::cout << "dims         : " << av_ref_frame->width << "x" << av_ref_frame->height << std::endl;
     std::cout << "linesizes    : " << av_ref_frame->linesize[0] << " " << av_ref_frame->linesize[1] << " " << av_ref_frame->linesize[2] << " " 
         << std::endl;
-    std::cout << "hw_linesizes : " << hw_frame->linesize[0] << " " << hw_frame->linesize[1] << " " << hw_frame->linesize[2] << " " 
-        << std::endl;
-
+    #endif
 
     // std::cout << "vaapi:" << hw_pix_format << ", nv12:" << AV_PIX_FMT_NV12 << ", 420p:" << AV_PIX_FMT_YUV420P << std::endl;
     // vaapi:53, nv12:25, 420p:0
 
     if (retcode < 0)
     {
-        fprintf(stderr, "Error transferring data to CPU\n");
+        decoderlogger.log(LogLevel::fatal) << "Error transferring data to CPU" << std::endl;
         active = false;
         return false;
     }
 
+    #ifdef DECODE_VERBOSE
     std::cout << "HW COPY END" << std::endl;
+    #endif
 
     if (av_codec_context->framerate.num > 0)
     {
@@ -343,7 +298,6 @@ bool HwVideoDecoder::pull()
 #ifdef DECODE_VERBOSE
         std::cout << "HwVideoDecoder: pull: corrupt frame " << std::endl;
 #endif
-        std::cout << "HwVideoDecoder: pull: corrupt frame " << std::endl;
         return false;
     }
 
@@ -391,8 +345,8 @@ bool HwVideoDecoder::pull()
                 // SWS_FAST_BILINEAR,
                 // SWS_BICUBIC,
                 NULL, NULL, NULL);
-            decoderlogger.log(LogLevel::normal)
-                << "HwVideoDecoder: WARNING: pix re-fmt from " << current_pixel_format <<" to "<< new_pixel_format << std::endl;
+            decoderlogger.log(LogLevel::debug)
+                << "HwVideoDecoder: pix re-fmt from " << current_pixel_format <<" to "<< new_pixel_format << std::endl;
             // the frame was decoded directly to out_frame.av_frame, assuming it was YUV420P
             // so an extra step is needed (only once):
             /*
@@ -414,10 +368,15 @@ bool HwVideoDecoder::pull()
                     32                       //align
                     );
             */
+            #ifdef DECODE_VERBOSE
             std::cout << "sws_getContext: " << av_ref_frame->width << "x" << av_ref_frame->height << std::endl;
             std::cout << "sws_getContext: aux_frame: " << aux_av_frame->width << "x" << aux_av_frame->height << std::endl;
+            #endif
             out_frame.reserve(av_ref_frame->width, av_ref_frame->height); // out_av_frame -> out_frame.av_frame
-            return false;
+            av_frame_free(&aux_av_frame);
+            av_free(aux_av_frame); // need this?
+            aux_av_frame = av_frame_alloc();
+            return false; // lose the current frame
         }
     } // PIX FMT CHANGE
 
@@ -433,8 +392,6 @@ bool HwVideoDecoder::pull()
         const int  	dstStride[]
         )
         */
-        std::cout << "sws_scale!" << std::endl;
-
         int xs = aux_av_frame->width;
         /* // no aligment! see constant.h
         int mod = xs%32;
@@ -447,8 +404,10 @@ bool HwVideoDecoder::pull()
         out_av_frame->linesize[1]=xs/2;
         out_av_frame->linesize[2]=xs/2;
 
+        #ifdef DECODE_VERBOSE
         std::cout << "sws_scale linesizes : " << out_av_frame->linesize[0] << " " << out_av_frame->linesize[1] << " " << out_av_frame->linesize[2] << " " 
         << std::endl;
+        #endif
 
         height = sws_scale(
             sws_ctx,
@@ -460,7 +419,6 @@ bool HwVideoDecoder::pull()
             out_av_frame->linesize);                    // dstStride[] // must provide!
 
         // for h=720; w=1280; strides should look like this: 1280,640,640
-        // but it looks like: 1280,1280,0
     }
 
     if (height != out_av_frame->height || width != out_av_frame->width)
@@ -469,10 +427,14 @@ bool HwVideoDecoder::pull()
         out_frame.updateAux();                          // uses av_frame and out_frame.av_pixel_format
         height = out_av_frame->height;
         width = out_av_frame->width;
+        #ifdef DECODE_VERBOSE
         std::cout << "AUX UPDATE" << std::endl;
+        #endif
     }
     out_frame.update();
+    #ifdef DECODE_VERBOSE
     std::cout << "UPDATE" << std::endl;
+    #endif
     out_frame.copyMetaFrom(&in_frame); // after this, the AVBitmapFrame instance is ready to go..
     // std::cout << "mstimestamps: " << out_frame.mstimestamp << " " << pts << std::endl;
     if (pts > 0)

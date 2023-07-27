@@ -37,6 +37,8 @@
 #include "frame.h"
 #include <random>
 
+// #define DECODE_VERBOSE
+
 // AVThread has std::vector<Decoder*> decoders
 // decoders[1]->output() returns reference to Decoder::out_frame
 // (VideoDecoder*)(..) returns reference to VideoDecoder::out_frame, right? (Decoder::out_frame) is hidden

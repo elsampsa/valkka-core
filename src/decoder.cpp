@@ -36,8 +36,6 @@
 // https://stackoverflow.com/questions/14914462/ffmpeg-memory-leak
 // #define AV_REALLOC
 
-// #define DECODE_VERBOSE
-
 Decoder::Decoder() : has_frame(false) {
 } ;
 

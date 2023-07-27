@@ -1235,18 +1235,15 @@ TODO
 */
 
 /** @page decenc_scheme Decoder and DecoderThread scheme
- * 
+* Definitions:
+*
+* A Decoder class decodes a frame
+*
+* A DecoderThread class uses a Decoder and takes care of queueing the frames, mutexes, synchronization, etc.
+*
+* Decoder subclassing as currently practised:
+*
 \verbatim
-
-Definitions:
-
-A Decoder class decodes a frame
-
-A DecoderThread class uses a Decoder and takes care of queueing the frames, mutexes, synchronization, etc.
-
-Details
-
-Decoder subclassing as currently practised:
 
 Decoder (virtual)
     BasicFrame input_frame
@@ -1278,12 +1275,51 @@ Decoder (virtual)
             Takes as an input, the libav AVHWDeviceType
             Identical (a copy-paste) to VideoDecoder
 
+\endverbatim
+*
+* NOTE: if all the contexes, etc. were _not_ created at ctor but in another method (say, "init"), we could create saner subclass structure.
+* --> then the DecoderThread::chooseVideoDecoder should call that "init" method just after "new".
+* 
+ * 
+ * About Decoder::pull internals
+ * 
+\verbatim
 
-NOTE: if all the contexes, etc. were _not_ created at ctor but in another method (say, "init"), we could create saner subclass structure.
---> then the DecoderThread::chooseVideoDecoder should call that "init" method just after "new".
+- We'd like to fill the actual target frame data structures (out_frame.av_frame) directly during
+  decoding, i.e. without any intermediate copies/transforms
+- However, we only know if the pix format is the desired AV_PIX_FMT_YUV420P after-the-fact, i.e. after decoding
 
-DecoderThread classes use the Decoder classes and run the queues, semaphores, etc.
+We use this scheme in Decoder::pull:
 
+1. Assume initially current_pixel_format == AV_PIX_FMT_YUV420P
+
+2. If current_pixel_format == AV_PIX_FMT_YUV420P, encode data directly to out_frame.av_frame 
+   Otherwise encode data into auxiliary frame (aux_av_frame) [from which it will eventually be transformed into out_frame.av_frame]
+
+3. Observe the pixel format (new_pixel_format) returned by the encoder
+
+4. If not AV_PIX_FMT_YUV420P, then setup infra for performing pixel format transformation from
+   new_pixel_format --> AV_PIX_FMT_YUV420P and replace current_pixel_format := new_pixel_format
+   Also copy data that was (erroneosly) placed to out_frame.av_frame, into aux_av_frame
+   or
+   just return from function (we lose the current frame)
+
+Step (4) in a more generalized form:
+
+4. If pix fmt has changed (i.e. new_pixel_format != current_pixel_format), (re)setup infra for
+   transforming new_pixel_format --> AV_PIX_FMT_YUV420P and replace current_pixel_format := new_pixel_format
+   return from function (we lose the current frame)
+
+5. If transformation infra is in place, then sws_scale from current_pixel_format into AV_PIX_FMT_YUV420P
+
+6. For next frame, go to (2)
+
+\endverbatim
+*
+*
+* DecoderThread classes use the Decoder classes and run the queues, semaphores, etc.
+*
+\verbatim
 DecoderThread
 
     virtual Decoder* chooseVideoDecoder(AVCodecID codec_id);
@@ -1301,5 +1337,4 @@ DecoderThread
 
 
 \endverbatim
- * 
 */

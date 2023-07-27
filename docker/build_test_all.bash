@@ -1,5 +1,6 @@
 # all="x86_ubuntu_18 x86_ubuntu_20 x86_ubuntu_22 armv8_ubuntu_18"
-all="x86_ubuntu_18 x86_ubuntu_20 x86_ubuntu_22"
+# all="x86_ubuntu_18 x86_ubuntu_20 x86_ubuntu_22"
+all="x86_ubuntu_20 x86_ubuntu_22"
 echo " " > build_test.log
 for tag in $all
 do

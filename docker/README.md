@@ -11,10 +11,10 @@ Prepare your emulation environment for armv8 with (of course, only if you have t
 
 ## 2. Tags
 ```
-x86_ubuntu_18
+x86_ubuntu_18       # not maintained
+armv8_ubuntu_18     # not maintained
 x86_ubuntu_20
 x86_ubuntu_22
-armv8_ubuntu_18
 ```
 
 ## 3. Create image
