@@ -55,8 +55,12 @@ from valkka.core.valkka_core import *
 """
 
 import os
+
 # VAAPI hw acceleration to the opensource version:
-os.environ["LIBVA_DRIVER_NAME"] = "i965"
+va_driver = os.environ.get("VALKKA_LIBVA_DRIVER_NAME", "i965")
+if va_driver != "i965":
+    print("WARNING: using VAAPI driver", va_driver, "however i965 recommended")
+os.environ["LIBVA_DRIVER_NAME"] = va_driver
 # os.system("vainfo") # seems to work
 #
 # OpenGL: disable vsync for intel:
@@ -66,5 +70,4 @@ os.environ["__GL_SYNC_TO_VBLANK"]="0"
 
 from .valkka_core import * # import everything to valkka.core namespace
 __version__=str(VERSION_MAJOR)+"."+str(VERSION_MINOR)+"."+str(VERSION_PATCH)
-
 
