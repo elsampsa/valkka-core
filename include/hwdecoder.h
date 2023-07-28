@@ -28,7 +28,7 @@
  *  @file    AVHwDecoder.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 1.5.0 
  *  
  *  @brief
  */ 

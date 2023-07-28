@@ -21,7 +21,7 @@ cd debian
 ./sendall.bash major.minor.patch description
 ```
 
-commit dev branch, push, accept manually at we UI 
+commit dev branch, push, accept manually at the UI 
 
 do the "after_merge" script
 

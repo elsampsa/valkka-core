@@ -26,7 +26,7 @@
  *  @file    vaapi_avthread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2023
- *  @version 1.4.0 
+ *  @version 1.5.0 
  *  
  *  @brief Test classes VAAPIThread
  *
@@ -297,8 +297,9 @@ void test_7() {
     livethread.playStreamCall(ctx);
 
     // sleep_for(2s);
+    sleep_for(5s);
     // sleep_for(10s);
-    sleep_for(604800s); //one week
+    // sleep_for(604800s); //one week
 
     std::cout << name << "stopping threads" << std::endl;
     livethread.stopCall();

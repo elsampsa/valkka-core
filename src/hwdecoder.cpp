@@ -26,7 +26,7 @@
  *  @file    hwdecoder.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 0.1
+ *  @version 1.5.0 
  *
  *  @brief
  */
@@ -75,7 +75,7 @@ AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_thr
 
     // if (false) { //debug: skip hw context etc. creation
     if (active) {
-        decoderlogger.log(LogLevel::normal) << "AVHwDecoder: attaching hardware context" << std::endl;
+        decoderlogger.log(LogLevel::debug) << "AVHwDecoder: attaching hardware context" << std::endl;
         av_codec_context->hw_device_ctx = av_buffer_ref(hw_device_ctx);
         av_codec_context->get_format = get_vaapi_format;
         hw_pix_format = find_fmt_by_hw_type(hwtype);
