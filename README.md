@@ -65,13 +65,17 @@ Some key features of the Valkka library are:
 
 ## Versions and Features
 
-### Newest version is 1.4.0
+### Newest version is 1.5.0
+
+- Added VAAPI acceleration as practised in the ffmpeg/libav library infrastructure
+
+### Older versions
+
+1.4.0
 
 - Added a new (thread-safe) framefilter that counts and dumps the fps to terminal: nice for testing achieved fps for larger systems
 - In sharedmem.cpp: no more additional memcopies into the cache, but shmem segments are (again) exposed directly as numpy array (exposing shmem directly seemed to produce a segfault, but it was a fluke in the end)
 - Fixed a small bug in python part valkka.discovery: if no cams were found in wsdiscovery case, there was an uncaught exception in the arp-scan stage
-
-### Older versions
 
 1.3.6
 
@@ -167,7 +171,7 @@ and then do:
 
 You need (at least):
 ```
-sudo apt-get install python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl build-essential yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils freeglut3-dev
+sudo apt-get install python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl build-essential yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils freeglut3-dev i965-va-driver libva-dev intel-gpu-tools
 ```
 
 If you have upgraded your python interpreter, you might need to define the version, say ```python3.7-dev```

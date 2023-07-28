@@ -28,7 +28,7 @@
  *  @file    sharedmem.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.4.0 
+ *  @version 1.5.0 
  *  
  *  @brief Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  */ 

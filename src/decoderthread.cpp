@@ -26,7 +26,7 @@
  *  @file    decoderthread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2021
- *  @version 1.4.0 
+ *  @version 1.5.0 
  *  
  *  @brief 
  */ 
@@ -164,6 +164,7 @@ void DecoderThread::run() {
                         decoders[subsession_index]=this->chooseVideoDecoder(setupframe->codec_id);
                     } // VIDEO
                     else { // UNKNOW MEDIA TYPE
+                        avthreadlogger.log(LogLevel::fatal) << "DecoderThread: "<< this->name <<" : run : unknown media type " << std::endl;
                         decoders[subsession_index]=new DummyDecoder();
                     }
                 } // SETUP STREAM INIT
@@ -317,6 +318,9 @@ void DecoderThread::run() {
                             //hmm.. maybe should crash the whole program here..?
                         }
                     } // DECODER GONE SOUR
+                    else {
+                        // avthreadlogger.log(LogLevel::normal) << "DecoderThread: decoder still ok" << std::endl;
+                    }
 
                 } // IS DECODING
                 else { // not decoding ..

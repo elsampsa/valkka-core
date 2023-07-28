@@ -1,0 +1,5 @@
+<map id="HwVideoDecoder" name="HwVideoDecoder">
+<area shape="rect" id="node1" title=" " alt="" coords="5,155,129,181"/>
+<area shape="rect" id="node2" href="$classAVHwDecoder.html" title="Video decoder using FFmpeg/libav with VAAPI." alt="" coords="14,80,121,107"/>
+<area shape="rect" id="node3" href="$classDecoder.html" title="A Virtual class for decoders." alt="" coords="32,5,103,32"/>
+</map>

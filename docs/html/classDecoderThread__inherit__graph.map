@@ -1,5 +1,6 @@
 <map id="DecoderThread" name="DecoderThread">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,116,107"/>
-<area shape="rect" id="node3" href="$classAVThread.html" title="A thread consuming frames and feeding them to various encoders." alt="" coords="21,155,100,181"/>
-<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system." alt="" coords="29,5,92,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="45,80,156,107"/>
+<area shape="rect" id="node3" href="$classAVThread.html" title="A thread consuming frames and feeding them to various encoders." alt="" coords="5,155,84,181"/>
+<area shape="rect" id="node4" href="$classVAAPIThread.html" title=" " alt="" coords="108,155,208,181"/>
+<area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system." alt="" coords="69,5,132,32"/>
 </map>

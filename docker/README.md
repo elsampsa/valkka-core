@@ -11,10 +11,10 @@ Prepare your emulation environment for armv8 with (of course, only if you have t
 
 ## 2. Tags
 ```
-x86_ubuntu_18
+x86_ubuntu_18       # not maintained
+armv8_ubuntu_18     # not maintained
 x86_ubuntu_20
 x86_ubuntu_22
-armv8_ubuntu_18
 ```
 
 ## 3. Create image
@@ -61,6 +61,13 @@ For installing libValkka .deb into a bare OS with the absolute minimum dependenc
 ```
 ./test.bash [TAG]
 ```
+It also runs some minimal tests in the end.
+
+You can also run:
+```
+./test.bash [TAG]
+```
+which does the same *and* finally give you an interactive shell to play around with.
 
 ## 6. Grand build & test
 

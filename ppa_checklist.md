@@ -21,29 +21,45 @@ cd debian
 ./sendall.bash major.minor.patch description
 ```
 
-*At master branch*
+commit dev branch, push, accept manually at the UI 
 
-merge from dev
+do the "after_merge" script
+
+checkout master
+
+*At master branch*
 
 New git tag (launches the CI pipeline)
 ```
 ./git_tag.bash
 ```
 
-checkout to dev branch & rebase to master
+*Back to dev*
 
-continue at valkka-examples:
+(run easy_build.bash again since ext libs were erased by debian ppa run)
+
+## continue at valkka-examples:
+
+*At dev branch*
+
+```
+./setver.bash MAJOR MINOR PATCH
+```
+
+commit dev branch, push, accept manually at we UI 
+
+do the "after_merge" script
+
+checkout master
 
 *At master branch*
 
-merge from dev
-
+New git tag
 ```
-./setver.bash
 ./git_tag.bash
 ```
 
-checkout to dev branch & rebase to master
+*Back to dev*
 
 ## Bonus stuff
 

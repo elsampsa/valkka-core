@@ -25,7 +25,7 @@ __init__.py : Valkka python bindings module constructor
 @file    __init__.py
 @author  Sampsa Riikonen
 @date    2017
-@version 1.4.0 
+@version 1.5.0 
   
 @brief Valkka python bindings module constructor
 
@@ -50,7 +50,24 @@ from valkka.core.valkka_core import *
 # from valkka.core.valkka_core import VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH
 # __version__=str(VERSION_MAJOR)+"."+str(VERSION_MINOR)+"."+str(VERSION_PATCH)
 
+
+"""Setup environmental variables used by various libraries
+"""
+
+import os
+
+# VAAPI hw acceleration to the opensource version:
+va_driver = os.environ.get("VALKKA_LIBVA_DRIVER_NAME", "i965")
+if va_driver != "i965":
+    print("WARNING: using VAAPI driver", va_driver, "however i965 recommended")
+os.environ["LIBVA_DRIVER_NAME"] = va_driver
+# os.system("vainfo") # seems to work
+#
+# OpenGL: disable vsync for intel:
+os.environ["vblank_mode"]="0"
+# OpenGL: disable vsync for nvidia proprietary drivers:
+os.environ["__GL_SYNC_TO_VBLANK"]="0"
+
 from .valkka_core import * # import everything to valkka.core namespace
 __version__=str(VERSION_MAJOR)+"."+str(VERSION_MINOR)+"."+str(VERSION_PATCH)
-
 

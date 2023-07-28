@@ -1,0 +1,11 @@
+<map id="HwVideoDecoder" name="HwVideoDecoder">
+<area shape="rect" id="node1" title=" " alt="" coords="53,336,177,363"/>
+<area shape="rect" id="node2" href="$classAVHwDecoder.html" title="Video decoder using FFmpeg/libav with VAAPI." alt="" coords="10,260,117,287"/>
+<area shape="rect" id="node3" href="$classDecoder.html" title="A Virtual class for decoders." alt="" coords="16,184,87,211"/>
+<area shape="rect" id="node4" href="$classBasicFrame.html" title="Custom payload Frame." alt="" coords="5,95,97,121"/>
+<area shape="rect" id="node5" href="$classFrame.html" title="Frame: An abstract queueable class." alt="" coords="127,5,186,32"/>
+<area shape="rect" id="node8" href="$classAVMediaFrame.html" title="Decoded Frame in FFmpeg format." alt="" coords="237,95,348,121"/>
+<area shape="rect" id="node6" href="$structH264Pars.html" title=" " alt="" coords="11,5,91,32"/>
+<area shape="rect" id="node7" href="$classAVBitmapFrame.html" title="Decoded YUV/RGB frame in FFMpeg format." alt="" coords="111,184,227,211"/>
+<area shape="rect" id="node9" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes." alt="" coords="122,95,213,121"/>
+</map>

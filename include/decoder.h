@@ -28,7 +28,7 @@
  *  @file    decoder.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.4.0 
+ *  @version 1.5.0 
  *  
  *  @brief FFmpeg decoders
  * 
@@ -36,6 +36,8 @@
 
 #include "frame.h"
 #include <random>
+
+// #define DECODE_VERBOSE
 
 // AVThread has std::vector<Decoder*> decoders
 // decoders[1]->output() returns reference to Decoder::out_frame
@@ -51,7 +53,8 @@
 /** A Virtual class for decoders
  * 
  * Inspects Frame in_frame, does something, and writes to Frame out_frame
- * 
+ * out_frame class depends on the kind of Decoder, so that is defined
+ * in the subclasses
  * 
  * @ingroup decoding_tag
  */

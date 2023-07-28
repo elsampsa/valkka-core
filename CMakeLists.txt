@@ -120,7 +120,7 @@ endif (cachestream_verbose)
 # ****************************************************************
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "1") 
-SET(MINOR_VERSION "4") 
+SET(MINOR_VERSION "5") 
 SET(PATCH_VERSION "0") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
@@ -143,6 +143,9 @@ pkg_search_module(GLEW REQUIRED glew)
 pkg_search_module(X11 REQUIRED x11)
 pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the latest ffmpeg
 ## pkg_search_module(PYTHON REQUIRED python3) # don't use! https://bugs.python.org/issue36721
+pkg_search_module(VA REQUIRED libva)
+pkg_search_module(VADRM REQUIRED libva-drm)
+pkg_search_module(VAX11 REQUIRED libva-x11)
 
 # some cmake bullshit for a change: get python libs and cflags
 exec_program(python3-config ARGS --includes OUTPUT_VARIABLE PYTHON_INCLUDE_DIRS_TMP)
@@ -222,9 +225,12 @@ set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${VERSION_STRING} SOVER
 
 # [add dependencies]
 target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS} ${NUMPY_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${VA_INCLUDE_DIRS} ${VADRM_INCLUDE_DIRS} ${VAX11_INCLUDE_DIRS})
+
 # # target_link_libraries(${PROJECT_NAME} ${GL_LIBS})
 target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES} ${GLEW_LIBRARIES} ${ALSA_LIBRARIES} ${PYTHON_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} "pthread")
+target_link_libraries(${PROJECT_NAME} ${VA_LIBRARIES} ${VADRM_LIBRARIES} ${VAX11_LIBRARIES})
 
 # [add openssl dependencies]
 target_link_libraries(${PROJECT_NAME} ${OPENSSL_LIBRARIES})
@@ -310,7 +316,9 @@ set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test"
 "filethread_test" "filethread_test0" "livethread_rtsp_test" "switch_test" "framefilter_test" 
 "cache_test" "usbthread_test" "valkkafs_test" "valkkafswriter_test" "cachestream_test" 
 "cachestream_decode_test" "rawrite_test" "movement_test" "rgbframefifo_test" "ringbuffer_test" 
-"fdwritethread_test" "mux_test" "shmem_test" "live_muxshmem_test" "live_av_framefilter_test")
+"fdwritethread_test" "mux_test" "shmem_test" "live_muxshmem_test" "live_av_framefilter_test"
+"vaapi_avthread_test"
+)
 
 add_custom_target(tests) # Note: without 'ALL'
 foreach( testname ${TESTNAMES} )
@@ -354,7 +362,7 @@ SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MY_ARCH})
 # The dependencies: keep these consistent with debian/control
 # SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libpython3.5(>= 3.5.2), libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0), python3-numpy") # ubuntu 16
 # NEW: Avoid version numbers, use "utils" packages to imply a dependency, for example, to libglew (without hardcoding the version number into the package name)
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, mesa-utils, glew-utils, python3-numpy, v4l-utils, python3-pip, openssl")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, mesa-utils, glew-utils, python3-numpy, v4l-utils, python3-pip, openssl, i965-va-driver, intel-gpu-tools, vainfo")
 
 #
 # objdump -p libValkka.so

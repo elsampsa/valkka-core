@@ -10,9 +10,13 @@ release="3.4"
 # basic="--disable-gpl --disable-audiotoolbox --disable-cuda --disable-cuda-sdk --disable-cuvid --disable-nvenc --disable-vaapi --disable-vdpau --enable-static --enable-shared --disable-pthreads"
 # # a side note here: we don't want ffmpeg to use threads.  Valkka will reserve one thread per stream - that's enough (the idea is to have massive number of streams - not massive number of threads per stream)
 
-# # NEW: allow multithreading decoder.  It's up to the user to control single vs. multithreading
-basic="--disable-gpl --disable-audiotoolbox --disable-cuda --disable-cuda-sdk --disable-cuvid --disable-nvenc --disable-vaapi --disable-vdpau --enable-static --enable-shared"
- 
+# # allow multithreading decoder.  It's up to the user to control single vs. multithreading
+basic="--disable-gpl --disable-audiotoolbox --enable-static --enable-shared"
+
+# # NEW: let's add some libav hw accelerators.. this has been long due! # https://trac.ffmpeg.org/wiki/HWAccelIntro
+# # VAAPI: using requires "i965-va-driver", compilation requires "libva-dev", for monitoring "intel-gpu-tools" --> intel_gpu_top
+hw_decoders="--enable-vaapi --disable-cuda --disable-cuda-sdk --disable-cuvid --disable-nvenc --disable-vdpau"
+
 # # BUG: with this, alsa does not get disabled !
 ext_libs="--disable-alsa --disable-appkit --disable-avfoundation --disable-avisynth --disable-bzlib --disable-coreimage --disable-chromaprint --disable-frei0r --disable-gcrypt --disable-gmp --disable-gnutls --disable-iconv --disable-jack --disable-jni --disable-ladspa --disable-libass --disable-libbluray --disable-libbs2b --disable-libcaca --disable-libcelt --disable-libcdio --disable-libdc1394 --disable-libfdk-aac --disable-libflite --disable-libfontconfig --disable-libfreetype --disable-libfribidi --disable-libgme --disable-libgsm --disable-libiec61883 --disable-libilbc --disable-libkvazaar --disable-libmodplug --disable-libmp3lame --disable-libopencore-amrnb --disable-libopencore-amrwb --disable-libopencv --disable-libopenh264 --disable-libopenjpeg --disable-libopenmpt --disable-libopus --disable-libpulse --disable-librsvg --disable-librubberband --disable-librtmp --disable-libshine --disable-libsmbclient --disable-libsnappy --disable-libsoxr --disable-libspeex --disable-libssh --disable-libtesseract --disable-libtheora --disable-libtwolame --disable-libv4l2 --disable-libvidstab --disable-libvmaf --disable-libvo-amrwbenc --disable-libvorbis --disable-libvpx --disable-libwavpack --disable-libwebp --disable-libx264 --disable-libx265 --disable-libxavs --disable-libxcb --disable-libxcb-shm --disable-libxcb-xfixes --disable-libxcb-shape --disable-libxvid --disable-libxml2 --disable-libzimg --disable-libzmq --disable-libzvbi --disable-lzma --disable-decklink --disable-libndi_newtek --disable-mediacodec --disable-libmysofa --disable-openal --disable-opencl --disable-opengl --disable-openssl --disable-sndio --disable-schannel --disable-sdl2 --disable-securetransport --disable-xlib --disable-zlib"
 
@@ -27,7 +31,7 @@ extras="--disable-v4l2_m2m"
 
 # # works ok with: basic, ext_libs, ext_libs2, extras
 
-cd ffmpeg; ./configure $everything $basic $ext_libs $ext_libs2 $encoders $extras
+cd ffmpeg; ./configure $everything $basic $ext_libs $ext_libs2 $encoders $extras $hw_decoders
 if [ $? -ne 0 ]
 then
   echo "configure_ffmpeg.bash: Could not configure!"
