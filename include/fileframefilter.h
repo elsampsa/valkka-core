@@ -29,7 +29,7 @@
  *  @file    file.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.0 
+ *  @version 1.5.1 
  *  
  *  @brief   File input to matroska files
  */ 

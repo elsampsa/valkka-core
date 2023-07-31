@@ -1,3 +1,4 @@
-1.5.0
+1.5.1
 
-- Added VAAPI acceleration as practised in the ffmpeg/libav library infrastructure
+- Fixed github pipeline for autobuilds
+- A warning when trying to load libValkka with XDG_SESSION_TYPE != x11 (as Qt might not work)

@@ -29,7 +29,7 @@
  *  @file    liveserver.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.0 
+ *  @version 1.5.1 
  *  
  *  @brief   Live555 interface for server side: streaming to udp sockets directly or by using an on-demand rtsp server
  */ 
