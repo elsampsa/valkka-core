@@ -25,7 +25,7 @@ __init__.py : Valkka python bindings module constructor
 @file    __init__.py
 @author  Sampsa Riikonen
 @date    2017
-@version 1.5.0 
+@version 1.5.1 
   
 @brief Valkka python bindings module constructor
 
@@ -59,7 +59,7 @@ import os
 # VAAPI hw acceleration to the opensource version:
 va_driver = os.environ.get("VALKKA_LIBVA_DRIVER_NAME", "i965")
 if va_driver != "i965":
-    print("WARNING: using VAAPI driver", va_driver, "however i965 recommended")
+    print("\nWARNING: libValkka: using VAAPI driver", va_driver, "however i965 recommended\n")
 os.environ["LIBVA_DRIVER_NAME"] = va_driver
 # os.system("vainfo") # seems to work
 #
@@ -68,6 +68,16 @@ os.environ["vblank_mode"]="0"
 # OpenGL: disable vsync for nvidia proprietary drivers:
 os.environ["__GL_SYNC_TO_VBLANK"]="0"
 
+# check that we are in a desktop environment - if not, print a warning!
+if "XDG_SESSION_TYPE" in os.environ:
+    if os.environ["XDG_SESSION_TYPE"] == "x11":
+        pass # all good!
+    else:
+        print("\nWARNING: libValkka: env variable XDG_SESSION_TYPE is '"+os.environ["XDG_SESSION_TYPE"]+"' instead of the preferred 'x11'")
+        print("This means that you are most likely not in a desktop session and anything related to Qt might not work\n")
+else:
+    print("\nWARNING: libValkka: the env variable XDG_SESSION_TYPE is missing")
+    print("Qt desktop infrastructure might not work\n")
+
 from .valkka_core import * # import everything to valkka.core namespace
 __version__=str(VERSION_MAJOR)+"."+str(VERSION_MINOR)+"."+str(VERSION_PATCH)
-

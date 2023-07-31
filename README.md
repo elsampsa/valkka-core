@@ -65,11 +65,16 @@ Some key features of the Valkka library are:
 
 ## Versions and Features
 
-### Newest version is 1.5.0
+### Newest version is 1.5.1
 
-- Added VAAPI acceleration as practised in the ffmpeg/libav library infrastructure
+- Fixed github pipeline for autobuilds
+- A warning when trying to load libValkka with XDG_SESSION_TYPE != x11 (as Qt might not work)
 
 ### Older versions
+
+1.5.0
+
+- Added VAAPI acceleration as practised in the ffmpeg/libav library infrastructure
 
 1.4.0
 

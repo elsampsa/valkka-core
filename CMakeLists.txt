@@ -121,7 +121,7 @@ endif (cachestream_verbose)
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "1") 
 SET(MINOR_VERSION "5") 
-SET(PATCH_VERSION "0") 
+SET(PATCH_VERSION "1") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
 # *** define build type: Debug or Release # now from the command line
@@ -359,7 +359,10 @@ SET(CPACK_PACKAGE_VERSION "${VERSION_STRING}")
 
 SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MY_ARCH})
 
-# The dependencies: keep these consistent with debian/control
+# Dependencies for running (not building) libValkka: keep these consistent with:
+# - debian/control
+# - docker/Dockerfile(s)
+#
 # SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libpython3.5(>= 3.5.2), libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0), python3-numpy") # ubuntu 16
 # NEW: Avoid version numbers, use "utils" packages to imply a dependency, for example, to libglew (without hardcoding the version number into the package name)
 SET(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, mesa-utils, glew-utils, python3-numpy, v4l-utils, python3-pip, openssl, i965-va-driver, intel-gpu-tools, vainfo")
