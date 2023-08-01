@@ -159,11 +159,11 @@ def runARPScan(exclude_list = []):
     try:
         p = Popen(lis, stderr = PIPE, stdout = PIPE)
     except FileNotFoundError:
-        print("arp-scan failed.  You need extra rights to run it, try: 'sudo chmod u+s /usr/sbin/arp-scan'")
+        print("arp-scan failed.  Install with 'sudo apt-get install arp-scan'.  You also need extra rights to run it: 'sudo chmod u+s /usr/sbin/arp-scan'")
         return []
     stdout, stderr = p.communicate()
     if p.returncode > 0:
-        print("arp-scan failed.  You need extra rights to run it, try: 'sudo chmod u+s /usr/sbin/arp-scan'")
+        print("arp-scan failed.  You need extra rights to run it: 'sudo chmod u+s /usr/sbin/arp-scan'")
         return []
 
     lis = []
