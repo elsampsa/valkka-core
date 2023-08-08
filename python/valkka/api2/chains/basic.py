@@ -120,6 +120,7 @@ class BasicFilterchain:
         self.framefifo_ctx.flush_when_full = self.flush_when_full
 
         if self.vaapi:
+            print("USING VAAPIThread")
             self.avthread = core.VAAPIThread(
                 "vaapithread_" + self.idst,
                 self.gl_in_filter,

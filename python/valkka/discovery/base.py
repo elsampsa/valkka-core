@@ -23,9 +23,9 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 @brief   Discovery module for onvif cameras, using wsdiscovery and brute-force scan
 """
-import sys
+import sys, time
 import signal
-import os, errno
+import os, errno, select
 import inspect
 import asyncio
 import re
@@ -257,7 +257,7 @@ def dummy_handler(signum, frame):
     pass
 
 
-def runARPScan(exclude_list = [], exclude_interfaces = [], max_time_per_interface=10) -> list:
+def runARPScan(exclude_list = [], exclude_interfaces = [], max_time_per_interface=10, verbose=False) -> list:
     """brute-force port 554 & 8554 scan & RTSP OPTIONS test ping in parallel
 
     Returns a list of ip addresses
@@ -266,12 +266,18 @@ def runARPScan(exclude_list = [], exclude_interfaces = [], max_time_per_interfac
     :param exclude_interfaces: interfaces to be excluded from the scan
     :param max_time_per_interface: (int) how many secs to be spent max in each interface (default: 10)
 
+    quicktest:
+
+    ::
+
+        python3 -c "from valkka.discovery import runARPScan; print(runARPScan(verbose=False))"
+
     """
     # verbose = True
-    verbose = False
+    # verbose = False
     reg = re.compile("^(\d*\.\d*.\d*.\d*)") # match ipv4 address
     lis = []
-    signal.signal(signal.SIGALRM, alarm_handler)
+    # signal.signal(signal.SIGALRM, alarm_handler) # only works in main thread and this might run in a multithread
     for name, subnets in getInterfaces().items():
         if name in exclude_interfaces:
             continue
@@ -301,13 +307,25 @@ def runARPScan(exclude_list = [], exclude_interfaces = [], max_time_per_interfac
             # as per: https://stackoverflow.com/questions/12419198/python-subprocess-readlines-hangs
             # the ONLY way to read process output on-the-fly
             master_fd, slave_fd = pty.openpty()
-            signal.alarm(max_time_per_interface) # in secs
+            # signal.alarm(max_time_per_interface) # in secs
             proc = Popen(comst.split(), stdin=slave_fd, stdout=slave_fd, stderr=STDOUT, close_fds=True)
             os.close(slave_fd)
+            timecount = 0
             try:
                 while 1:
+                    if timecount > max_time_per_interface:
+                        print(f"WARNING: arp-scan '{comst}' took more than {max_time_per_interface} secs - aborting")
+                        break        
+                    t0 = time.time()
                     try:
-                        data = os.read(master_fd, 512)
+                        r, w, e = select.select([ master_fd ], [], [], 1)
+                        dt = time.time() - t0
+                        timecount += dt
+                        if verbose: print("timecount>", timecount)
+                        if master_fd in r:
+                            data = os.read(master_fd, 512)
+                        else:
+                            continue
                     except OSError as e:
                         if e.errno != errno.EIO:
                             raise
@@ -318,8 +336,6 @@ def runARPScan(exclude_list = [], exclude_interfaces = [], max_time_per_interfac
                         # if verbose: print('>' + repr(data))
                         if verbose: print('>', data.decode("utf-8"))
                         stdout += data.decode("utf-8")
-            except Alarm:
-                print(f"WARNING: arp-scan '{comst}' took more than {max_time_per_interface} secs - aborting")
             finally:
                 os.close(master_fd)
                 if proc.poll() is None:
@@ -327,7 +343,7 @@ def runARPScan(exclude_list = [], exclude_interfaces = [], max_time_per_interfac
                 proc.wait()
             # cancel the alarm:
             # print("cancel alarm")
-            signal.alarm(0)
+            # signal.alarm(0)
 
             for line in stdout.split("\n"):
                 l = line.split()
@@ -371,6 +387,11 @@ def runARPScan(exclude_list = [], exclude_interfaces = [], max_time_per_interfac
 
     loop.close()
     return ips
+
+
+def runARPScanParallel(exclude_list = [], exclude_interfaces = [], max_time_per_interface=10, verbose=False) -> list:
+    pass
+    # TODO!    
 
 
 if __name__ == "__main__":
