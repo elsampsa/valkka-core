@@ -65,12 +65,17 @@ Some key features of the Valkka library are:
 
 ## Versions and Features
 
-### Newest version is 1.5.1
+### Newest version is 1.5.2
+
+- Better arp-scan discovery
+- Only one decoding thread per decoder when using vaapi
+
+### Older versions
+
+1.5.1
 
 - Fixed github pipeline for autobuilds
 - A warning when trying to load libValkka with XDG_SESSION_TYPE != x11 (as Qt might not work)
-
-### Older versions
 
 1.5.0
 

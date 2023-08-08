@@ -25,7 +25,7 @@ multi.py : api 2 level encapsulation for ValkkaFS having multiple streams in sin
 @file    multi.py
 @author  Sampsa Riikonen
 @date    2021
-@version 1.5.1 
+@version 1.5.2 
 
 @brief   api 2 level encapsulation for ValkkaFS having multiple streams in single file
 """
