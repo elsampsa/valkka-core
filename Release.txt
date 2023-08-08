@@ -1,4 +1,4 @@
-1.5.1
+1.5.2
 
-- Fixed github pipeline for autobuilds
-- A warning when trying to load libValkka with XDG_SESSION_TYPE != x11 (as Qt might not work)
+- Better arp-scan discovery
+- Only one decoding thread per decoder when using vaapi

@@ -13,7 +13,7 @@ RUN apt-get update -y && apt-get upgrade -y
 
 # REQUIRED TO INSTALL VALKKA 
 # keep consistent with CMakeLists.txt : SET(CPACK_DEBIAN_PACKAGE_DEPENDS "...")
-RUN apt-get install -y python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl i965-va-driver intel-gpu-tools vainfo
+RUN apt-get install -y python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl i965-va-driver intel-gpu-tools vainfo arp-scan
 ## REQUIRED TO BUILD VALKKA 
 # keep consistent with:
 # - debian/control 

@@ -19,7 +19,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 @file    base.py
 @author  Sampsa Riikonen
 @date    2020
-@version 1.5.1 
+@version 1.5.2 
 
 @brief   A simple multiprocessing framework with back- and frontend and pipes communicating between them
 """

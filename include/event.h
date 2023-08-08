@@ -28,7 +28,7 @@
  *  @file    event.h
  *  @author  Sampsa Riikonen
  *  @date    2023
- *  @version 1.5.1 
+ *  @version 1.5.2 
  *  
  *  @brief
  */ 

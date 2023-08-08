@@ -26,7 +26,7 @@
  *  @file    hwdecoder.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.1 
+ *  @version 1.5.2 
  *
  *  @brief
  */
@@ -104,7 +104,13 @@ AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_thr
     }
 
     ///*
-    av_codec_context->thread_count = this->n_threads;
+    // av_codec_context->thread_count = this->n_threads;
+    if (this->n_threads > 1)
+    {
+        decoderlogger.log(LogLevel::normal) << "AVHwDecoder: NOTE: not using multithreading with hw decoder" << std::endl;
+    }
+    av_codec_context->thread_type = FF_THREAD_FRAME;
+    /*
     if (this->n_threads > 1)
     {
         decoderlogger.log(LogLevel::debug) << "AVHwDecoder: using multithreading with " << this->n_threads << std::endl;
@@ -116,6 +122,7 @@ AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_thr
     {
         av_codec_context->thread_type = FF_THREAD_FRAME;
     }
+    */
     //*/
 
     // av_codec_context->refcounted_frames = 1; // monitored the times av_buffer_alloc was called .. makes no different really
@@ -222,7 +229,7 @@ bool HwVideoDecoder::pull()
     retcode = avcodec_receive_frame(av_codec_context, hw_frame);
     if (retcode < 0)
     {
-        decoderlogger.log(LogLevel::fatal) << "Error during decoding" << std::endl;
+        decoderlogger.log(LogLevel::fatal) << "HwVideoDecoder: Error during decoding" << std::endl;
         active = false;
         return false;
     }

@@ -25,7 +25,7 @@ basic.py : Some basic classes encapsulating filter chains
 @file    basic.py
 @author  Sampsa Riikonen
 @date    2017
-@version 1.5.1 
+@version 1.5.2 
 
 @brief Some basic classes encapsulating filter chains
 """
@@ -120,6 +120,7 @@ class BasicFilterchain:
         self.framefifo_ctx.flush_when_full = self.flush_when_full
 
         if self.vaapi:
+            print("USING VAAPIThread")
             self.avthread = core.VAAPIThread(
                 "vaapithread_" + self.idst,
                 self.gl_in_filter,

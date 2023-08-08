@@ -13,7 +13,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update
 
 # REQUIRED TO INSTALL VALKKA # keep consistent with CMakeLists.txt : SET(CPACK_DEBIAN_PACKAGE_DEPENDS "...")
-RUN apt-get install -y python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl i965-va-driver intel-gpu-tools vainfo
+RUN apt-get install -y python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl i965-va-driver intel-gpu-tools vainfo arp-scan
 ## REQUIRED TO BUILD VALKKA # keep consistent with debian/control & valkka-core main readme
 RUN apt-get install -y build-essential yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils freeglut3-dev i965-va-driver libva-dev
 # needed to add freeglut3-dev --> see: https://github.com/elsampsa/valkka-core/issues/35
