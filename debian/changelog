@@ -1,3 +1,15 @@
+valkka (1.5.2-0ubuntu1-jammyppa1) jammy; urgency=low
+
+  * better arp-scan and vaapi
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Tue, 08 Aug 2023 19:13:34 +0300
+
+valkka (1.5.2-0ubuntu1-focalppa1) focal; urgency=low
+
+  * better arp-scan and vaapi
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Tue, 08 Aug 2023 19:12:30 +0300
+
 valkka (1.5.1-0ubuntu1-jammyppa1) jammy; urgency=low
 
   * added if not in x11 environment
