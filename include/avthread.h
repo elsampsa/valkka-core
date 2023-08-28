@@ -28,7 +28,7 @@
  *  @file    avthread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.2 
+ *  @version 1.5.3 
  *  
  *  @brief FFmpeg decoding thread
  *

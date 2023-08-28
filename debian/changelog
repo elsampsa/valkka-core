@@ -1,3 +1,15 @@
+valkka (1.5.3-0ubuntu1-jammyppa1) jammy; urgency=low
+
+  * valkka.multiprocess bugs eliminated
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Mon, 28 Aug 2023 21:36:18 +0300
+
+valkka (1.5.3-0ubuntu1-focalppa1) focal; urgency=low
+
+  * valkka.multiprocess bugs eliminated
+
+ -- Sampsa Riikonen <sampsa.riikonen@iki.fi>  Mon, 28 Aug 2023 21:35:05 +0300
+
 valkka (1.5.2-0ubuntu1-jammyppa1) jammy; urgency=low
 
   * better arp-scan and vaapi
