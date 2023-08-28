@@ -48,7 +48,13 @@ class EventGroup:
         except IndexError as e:
             raise NotEnoughEvents
         event = self.events[index]
-        event.clear() # clear event before using it
+        # event.clear() # clear event before using it
+        """..woops: simply calling clear before calling set
+        on an EventFd will crash the program with
+        "Resource temporarily unavailable"
+        """
+        event.set()
+        event.clear()
         return index, event
         
     def release(self, event):

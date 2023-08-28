@@ -65,12 +65,17 @@ Some key features of the Valkka library are:
 
 ## Versions and Features
 
-### Newest version is 1.5.2
+### Newest version is 1.5.3
+
+- Eliminated some small & annoying bugs in the python part valkka.multiprocess
+
+### Older versions
+
+1.5.2
 
 - Better arp-scan discovery
 - Only one decoding thread per decoder when using vaapi
 
-### Older versions
 
 1.5.1
 
