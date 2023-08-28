@@ -115,9 +115,10 @@ class MessageProcess(Process):
     def formatLogger(cls, level = logging.INFO):
         """A helper to setup logger formatter
 
-        :param level: loglevel.  Default: ``logging.INFO``.
+        Sets loglevel to the automatically created logger ``self.logger`` 
+        (that has the name ``classname.name``)
 
-        Use only for initial development
+        :param level: loglevel.  Default: ``logging.INFO``.
         """
         logger = logging.getLogger(cls.__name__)
         if not logger.hasHandlers():
@@ -376,6 +377,9 @@ class Duplex:
         self.reader = os.fdopen(read_fd, "br", buffering = 0)
         self.writer = os.fdopen(write_fd, "bw", buffering = 0)
     
+    def fileno(self):
+        return self.read_fd
+
     def getReadIO(self):
         """_io.FileIO object
         """
@@ -438,7 +442,7 @@ class AsyncBackMessageProcess(MessageProcess):
     def __init__(self, name = "AsyncMessageProcess"):
         self.name = name
         self.pre = self.__class__.__name__ + "." + self.name
-        self.logger = getLogger(self.pre)
+        self.logger = logging.getLogger(self.pre)
         super().__init__()
         # self.front_pipe, self.back_pipe = getPipes(True, False) # blocking frontend, non-blocking backend (for asynchronous backend)
         self.front_pipe, self.back_pipe = getPipes(True, True) # both blocking: for testing # seems to make no difference (asyncio sets the pipes to non-blocking mode)
@@ -446,6 +450,22 @@ class AsyncBackMessageProcess(MessageProcess):
         self.listening = False # are we listening something else than just the intercom pipes?
         self.sigint = True
 
+    def getPipe(self) -> Duplex:
+        """Returns a Duplex object, instead of multiprocessing.Pipe object.
+
+        Duplex.fileno() returns the read file dtor number
+        """
+        return self.front_pipe
+
+    def getReadFd(self):
+        """Returns read file dtor number for the frontend Duplex object
+        """
+        return self.front_pipe.getReadFd()
+
+    def getWriteFd(self):
+        """Returns write file dtor number for the frontend Duplex object
+        """
+        return self.front_pipe.getWriteFd()
 
     def run(self):
         if self.sigint == False:
@@ -638,12 +658,21 @@ class MainContext:
     ::
 
         def __init__(self):
+            # do custom initializations
+            # call superclass ctor in the last line of your
+            # custom init
             super().__init__()
 
     This will have the effect of calling ``startProcesses`` and ``startThreads``
     (see below).
 
+    Remember to call the superclass constructor always in the last line of your customized ``__init__``
+
     Please see tutorial, part II for practical subclassing examples
+
+    ``MainContext`` has a logger ``self.logger`` with the name
+    ``classname``.
+
     """
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
@@ -656,9 +685,10 @@ class MainContext:
     def formatLogger(cls, level = logging.INFO):
         """A helper to setup logger formatter
 
-        :param level: loglevel.  Default: ``logging.INFO``.
+        Sets loglevel to the automatically created logger ``self.logger`` 
+        (that has the name ``classname``)
 
-        Use only for initial development
+        :param level: loglevel.  Default: ``logging.INFO``.
         """
         logger = logging.getLogger(cls.__name__)
         if not logger.hasHandlers():
