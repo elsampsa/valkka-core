@@ -2,6 +2,8 @@
 
 *Test libValkka builds for multiple architectures using docker at your linux host.*
 
+**NOT for building official docker images**
+
 ## 1. Prepare for arm
 
 Prepare your emulation environment for armv8 with (of course, only if you have to):
@@ -12,9 +14,9 @@ Prepare your emulation environment for armv8 with (of course, only if you have t
 ## 2. Tags
 ```
 x86_ubuntu_18       # not maintained
-armv8_ubuntu_18     # not maintained
 x86_ubuntu_20
 x86_ubuntu_22
+armv8_ubuntu_22
 ```
 
 ## 3. Create image
@@ -65,7 +67,7 @@ It also runs some minimal tests in the end.
 
 You can also run:
 ```
-./test.bash [TAG]
+./test_it.bash [TAG]
 ```
 which does the same *and* finally give you an interactive shell to play around with.
 

@@ -19,6 +19,22 @@ option(live555_root "live555_root" "")
 SET(FFMPEG_ROOT ${ffmpeg_root})
 SET(LIVE555_ROOT ${live555_root})
 
+# compilation / linking switches
+option(vaapi "vaapi" ON)
+if    (vaapi)
+  message("VAAPI ENABLED")
+else (vaapi)
+    add_definitions("-DNO_VAAPI")
+    message("VAAPI DISABLED")
+endif (vaapi)
+
+option(build_tests "build_tests" ON)
+if    (build_tests)
+  message("BUILDING TESTS")
+else (build_tests)
+    message("NOT BUILDING TESTS")
+endif (build_tests)
+
 # debug/verbosity switches: generate with "tools/cmake/gen_opts.py"
 option(valgrind_gpu_debug "valgrind_gpu_debug" OFF)
 if    (valgrind_gpu_debug)
@@ -121,7 +137,7 @@ endif (cachestream_verbose)
 # WARNING: the following three lines are modified by the "setver.bash" script
 SET(MAJOR_VERSION "1") 
 SET(MINOR_VERSION "5") 
-SET(PATCH_VERSION "3") 
+SET(PATCH_VERSION "4") 
 set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
 # *** define build type: Debug or Release # now from the command line
@@ -143,9 +159,11 @@ pkg_search_module(GLEW REQUIRED glew)
 pkg_search_module(X11 REQUIRED x11)
 pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the latest ffmpeg
 ## pkg_search_module(PYTHON REQUIRED python3) # don't use! https://bugs.python.org/issue36721
-pkg_search_module(VA REQUIRED libva)
-pkg_search_module(VADRM REQUIRED libva-drm)
-pkg_search_module(VAX11 REQUIRED libva-x11)
+if (vaapi)
+    pkg_search_module(VA REQUIRED libva)
+    pkg_search_module(VADRM REQUIRED libva-drm)
+    pkg_search_module(VAX11 REQUIRED libva-x11)
+endif (vaapi)
 
 # some cmake bullshit for a change: get python libs and cflags
 exec_program(python3-config ARGS --includes OUTPUT_VARIABLE PYTHON_INCLUDE_DIRS_TMP)
@@ -193,10 +211,17 @@ add_definitions(-DNUMPY_VERSION="${NUMPY_VERSION}")
 # pip3 install pyqt5 imutils
 # 
 
+if (vaapi)
+    execute_process(
+    COMMAND ./makeswig.bash -vaapi
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/include
+    )
+else (vaapi)
 execute_process(
-  COMMAND ./makeswig.bash
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/include
-)
+    COMMAND ./makeswig.bash
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/include
+    )
+endif (vaapi)
 
 execute_process(
   COMMAND swig -python -c++ -I/usr/include -o ${CMAKE_SOURCE_DIR}/python/valkka/core/valkka_core_wrap.cpp -outdir ${CMAKE_SOURCE_DIR}/python/valkka/core ${CMAKE_SOURCE_DIR}/include/valkka_core.i
@@ -317,31 +342,43 @@ set(TESTNAMES "frame_test" "framefifo_test" "thread_test" "livethread_test"
 "cache_test" "usbthread_test" "valkkafs_test" "valkkafswriter_test" "cachestream_test" 
 "cachestream_decode_test" "rawrite_test" "movement_test" "rgbframefifo_test" "ringbuffer_test" 
 "fdwritethread_test" "mux_test" "shmem_test" "live_muxshmem_test" "live_av_framefilter_test"
-"vaapi_avthread_test"
 )
+if (vaapi)
+    list(APPEND TESTNAMES "vaapi_avthread_test")
+endif (vaapi)
 
-add_custom_target(tests) # Note: without 'ALL'
-foreach( testname ${TESTNAMES} )
-  add_executable(${testname} "test/${testname}.cpp") # Note: without 'ALL'
-  target_include_directories(${testname} PUBLIC "include")
-  target_include_directories(${testname} PUBLIC "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include")
-  target_include_directories(${testname} PUBLIC "${FFMPEG_ROOT}")
+if (build_tests)
+    add_custom_target(tests) # Note: without 'ALL'
+    foreach( testname ${TESTNAMES} )
+    add_executable(${testname} "test/${testname}.cpp") # Note: without 'ALL'
 
-  target_include_directories(${testname} PUBLIC ${PYTHON_INCLUDE_DIRS})
-  target_include_directories(${testname} PUBLIC ${NUMPY_INCLUDE_DIR})
-  target_link_libraries(${testname} ${PYTHON_LIBRARIES})
-  
-  target_link_libraries(${testname} "Valkka.so")
-  target_link_libraries(${testname} "-L${CMAKE_CURRENT_BINARY_DIR}/lib")
-  # target_link_libraries(${testname} "-Wl,--unresolved-symbols=ignore-all") # even when all external libraries from ffmpeg have been dropped some stupid symbols persist, "vaUnmapBuffer", etc.
-  # .. but then it will bust when using the python bindings
-  # .. all that crap comes from libavdevice
-  
-  target_link_libraries(${testname} ${OPENSSL_LIBRARIES})
+    # thanks chatgpt!
+    get_target_property(target_binary_dir ${testname} RUNTIME_OUTPUT_DIRECTORY)
+    set(binary_path "${target_binary_dir}/${testname}")
+    if(EXISTS ${binary_path})
+        # message("Removing existing binary: ${binary_path}")
+        file(REMOVE ${binary_path})
+    endif()
 
-  add_dependencies(tests ${testname}) # tests depends on the executable
-  add_dependencies(${testname} ${PROJECT_NAME}) # test depends on libValkka
-endforeach( testname ${TESTNAMES} )
+    target_include_directories(${testname} PUBLIC "include")
+    target_include_directories(${testname} PUBLIC "${LIVE555_ROOT}/liveMedia/include" "${LIVE555_ROOT}/groupsock/include" "${LIVE555_ROOT}/BasicUsageEnvironment/include" "${LIVE555_ROOT}/UsageEnvironment/include")
+    target_include_directories(${testname} PUBLIC "${FFMPEG_ROOT}")
+
+    target_include_directories(${testname} PUBLIC ${PYTHON_INCLUDE_DIRS})
+    target_include_directories(${testname} PUBLIC ${NUMPY_INCLUDE_DIR})
+    target_link_libraries(${testname} ${PYTHON_LIBRARIES})
+    
+    target_link_libraries(${testname} "Valkka.so")
+    target_link_libraries(${testname} "-L${CMAKE_CURRENT_BINARY_DIR}/lib")
+    # target_link_libraries(${testname} "-Wl,--unresolved-symbols=ignore-all") # even when all external libraries from ffmpeg have been dropped some stupid symbols persist, "vaUnmapBuffer", etc.
+    # .. but then it will bust when using the python bindings
+    # .. all that crap comes from libavdevice
+    target_link_libraries(${testname} ${OPENSSL_LIBRARIES})
+
+    add_dependencies(tests ${testname}) # tests depends on the executable
+    add_dependencies(${testname} ${PROJECT_NAME}) # test depends on libValkka
+    endforeach( testname ${TESTNAMES} )
+endif (build_tests)
 
 # *** packaging ***
 # SET(CPACK_SET_DESTDIR "on") # don't use
@@ -365,7 +402,15 @@ SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MY_ARCH})
 #
 # SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libpython3.5(>= 3.5.2), libgcc1(>= 1:6.0.1), libc6(>= 2.23), libgl1-mesa-glx(>= 12.0.6), libx11-6(>= 2:1.6.3), libstdc++6(>= 5.4.0), libc6(>= 2.23), libglew1.13(>= 1.13.0), python3-numpy") # ubuntu 16
 # NEW: Avoid version numbers, use "utils" packages to imply a dependency, for example, to libglew (without hardcoding the version number into the package name)
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, mesa-utils, glew-utils, python3-numpy, v4l-utils, python3-pip, openssl, i965-va-driver, intel-gpu-tools, vainfo, arp-scan")
+
+SET(DEPS "python3, mesa-utils, glew-utils, python3-numpy, v4l-utils, python3-pip, openssl, arp-scan")
+SET(VAAPI_DEPS "i965-va-driver, intel-gpu-tools, vainfo")
+
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${DEPS}")
+if (vaapi)
+    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}, ${VAAPI_DEPS}")
+endif (vaapi)
+# message("DEPS: ${CPACK_DEBIAN_PACKAGE_DEPENDS}")
 
 #
 # objdump -p libValkka.so

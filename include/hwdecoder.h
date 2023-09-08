@@ -28,7 +28,7 @@
  *  @file    AVHwDecoder.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.3 
+ *  @version 1.5.4 
  *  
  *  @brief
  */ 
@@ -134,6 +134,7 @@ protected:
     AVPixelFormat current_pixel_format;
     SwsContext *sws_ctx;
     float secs_per_frame;
+    int error_count;
 
 public:
     virtual Frame *output(); ///< Return a reference to the internal storage of the decoder where the decoded frame is

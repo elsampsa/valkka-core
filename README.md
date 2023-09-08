@@ -4,6 +4,10 @@
 
 Looking for an OpenSource video surveillance program with object detection?  Just go [here](https://elsampsa.github.io/valkka-live/).
 
+## Main Page
+
+LibValkka main page and documentation is in [here](https://elsampsa.github.io/valkka-examples/).  Please start from there.
+
 ## Synopsis
 
 The goal of this project is to provide a library for creating open source video surveillance, management and analysis systems (VMAs) in Linux environment.  The idea is create VMA systems with graphical user interfaces (GUIs) using the combination of python3 and Qt (i.e. PyQt).
@@ -65,11 +69,17 @@ Some key features of the Valkka library are:
 
 ## Versions and Features
 
-### Newest version is 1.5.3
+### Newest version is 1.5.4
 
-- Eliminated some small & annoying bugs in the python part valkka.multiprocess
+- VAAPI decoding doesn't switch to software decoding even if there were an error in VAAPI decoding
+- Github pipeline for automated docker-image building
+- Using "easy_build.bash" with arm architecture should work as the build system now skips VAAPI dependencies on arm
 
 ### Older versions
+
+1.5.3
+
+- Eliminated some small & annoying bugs in the python part valkka.multiprocess
 
 1.5.2
 
@@ -180,6 +190,8 @@ and then do:
     sudo apt-get update
     sudo apt-get install valkka
 
+For more detailed instructions, please visit [here](https://elsampsa.github.io/valkka-examples/)
+
 ## Compile yourself
 
 ### Dependencies
@@ -188,6 +200,7 @@ You need (at least):
 ```
 sudo apt-get install python3 mesa-utils glew-utils python3-numpy v4l-utils python3-pip openssl build-essential yasm cmake pkg-config swig libglew-dev mesa-common-dev python3-dev python3-numpy libasound2-dev libssl-dev coreutils freeglut3-dev i965-va-driver libva-dev intel-gpu-tools
 ```
+If you are in an architecture (arm) that doesn't support VAAPI, do not include the vaapi dependencies (``i965-va-driver libva-dev intel-gpu-tools``) in the above command
 
 If you have upgraded your python interpreter, you might need to define the version, say ```python3.7-dev```
 
@@ -269,8 +282,11 @@ Dark Photon
 
 GClements
 
+[XactAI](http://www.xactai.com/) for sponsorship
+
 ## Copyright
-Copyright (c) 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
+Copyright (c) 2017-2022 Valkka Security Ltd. and Sampsa Riikonen
+Copyright (c) 2023 Sampsa Riikonen
 
 ## Open Source Licenses
 

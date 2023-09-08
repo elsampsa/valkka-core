@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Valkka
-   &#160;<span id="projectnumber">1.5.3</span>
+   &#160;<span id="projectnumber">1.5.4</span>
    </div>
    <div id="projectbrief">OpenSource Video Management</div>
   </td>
@@ -97,37 +97,42 @@ $(function() {
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="decoderthread_8h.html">decoderthread.h</a>&quot;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;hwdecoder.h&quot;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classVAAPIThread.html">   39</a></span>&#160;<span class="keyword">class </span><a class="code" href="classVAAPIThread.html">VAAPIThread</a> : <span class="keyword">public</span> <a class="code" href="classDecoderThread.html">DecoderThread</a> { <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">public</span>: <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment"></span>    <a class="code" href="classVAAPIThread.html#add95886595546543e54788bf3d666b7a">VAAPIThread</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, <a class="code" href="classFrameFilter.html">FrameFilter</a>&amp; <a class="code" href="classDecoderThread.html#a09b611c0d37fc93182af72a0e0eea316">outfilter</a>, <a class="code" href="structFrameFifoContext.html">FrameFifoContext</a> fifo_ctx=<a class="code" href="structFrameFifoContext.html">FrameFifoContext</a>());   <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classVAAPIThread.html#a07a1916ca7bebe93342d97505e2b7784">~VAAPIThread</a>(); </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classDecoder.html">Decoder</a>* chooseAudioDecoder(AVCodecID codec_id);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classDecoder.html">Decoder</a>* <a class="code" href="classVAAPIThread.html#acf3f4236eee68e8ae2b7ef28f5d9164f">chooseVideoDecoder</a>(AVCodecID codec_id);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classDecoder.html">Decoder</a>* fallbackAudioDecoder(AVCodecID codec_id);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classDecoder.html">Decoder</a>* <a class="code" href="classVAAPIThread.html#a38300a82e993f2405f723f13ec1d9bcd">fallbackVideoDecoder</a>(AVCodecID codec_id);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}; <span class="comment">// &lt;pyapi&gt;</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#ifdef NO_VAAPI</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">// empty file</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="decoderthread_8h.html">decoderthread.h</a>&quot;</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#include &quot;hwdecoder.h&quot;</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classVAAPIThread.html">   43</a></span>&#160;<span class="keyword">class </span><a class="code" href="classVAAPIThread.html">VAAPIThread</a> : <span class="keyword">public</span> <a class="code" href="classDecoderThread.html">DecoderThread</a> { <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">public</span>: <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment"></span>    <a class="code" href="classVAAPIThread.html#add95886595546543e54788bf3d666b7a">VAAPIThread</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">name</a>, <a class="code" href="classFrameFilter.html">FrameFilter</a>&amp; <a class="code" href="classDecoderThread.html#a09b611c0d37fc93182af72a0e0eea316">outfilter</a>, <a class="code" href="structFrameFifoContext.html">FrameFifoContext</a> fifo_ctx=<a class="code" href="structFrameFifoContext.html">FrameFifoContext</a>());   <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classVAAPIThread.html#a07a1916ca7bebe93342d97505e2b7784">~VAAPIThread</a>(); </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classDecoder.html">Decoder</a>* chooseAudioDecoder(AVCodecID codec_id);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classDecoder.html">Decoder</a>* <a class="code" href="classVAAPIThread.html#acf3f4236eee68e8ae2b7ef28f5d9164f">chooseVideoDecoder</a>(AVCodecID codec_id);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classDecoder.html">Decoder</a>* fallbackAudioDecoder(AVCodecID codec_id);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classDecoder.html">Decoder</a>* <a class="code" href="classVAAPIThread.html#a38300a82e993f2405f723f13ec1d9bcd">fallbackVideoDecoder</a>(AVCodecID codec_id);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}; <span class="comment">// &lt;pyapi&gt;</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassFrameFilter_html"><div class="ttname"><a href="classFrameFilter.html">FrameFilter</a></div><div class="ttdoc">The mother class of all frame filters!   FrameFilters are used to create &quot;filter chains&quot;.</div><div class="ttdef"><b>Definition:</b> framefilter.h:44</div></div>
 <div class="ttc" id="adecoderthread_8h_html"><div class="ttname"><a href="decoderthread_8h.html">decoderthread.h</a></div></div>
-<div class="ttc" id="aclassVAAPIThread_html_add95886595546543e54788bf3d666b7a"><div class="ttname"><a href="classVAAPIThread.html#add95886595546543e54788bf3d666b7a">VAAPIThread::VAAPIThread</a></div><div class="ttdeci">VAAPIThread(const char *name, FrameFilter &amp;outfilter, FrameFifoContext fifo_ctx=FrameFifoContext())</div><div class="ttdoc">Default constructor.</div><div class="ttdef"><b>Definition:</b> vaapithread.cpp:37</div></div>
-<div class="ttc" id="aclassVAAPIThread_html_a38300a82e993f2405f723f13ec1d9bcd"><div class="ttname"><a href="classVAAPIThread.html#a38300a82e993f2405f723f13ec1d9bcd">VAAPIThread::fallbackVideoDecoder</a></div><div class="ttdeci">virtual Decoder * fallbackVideoDecoder(AVCodecID codec_id)</div><div class="ttdoc">If the the video decoder obtained from chooseVideoDecoder fails for some reason, provide a fallback v...</div><div class="ttdef"><b>Definition:</b> vaapithread.cpp:66</div></div>
-<div class="ttc" id="aclassVAAPIThread_html"><div class="ttname"><a href="classVAAPIThread.html">VAAPIThread</a></div><div class="ttdef"><b>Definition:</b> vaapithread.h:39</div></div>
+<div class="ttc" id="aclassVAAPIThread_html_add95886595546543e54788bf3d666b7a"><div class="ttname"><a href="classVAAPIThread.html#add95886595546543e54788bf3d666b7a">VAAPIThread::VAAPIThread</a></div><div class="ttdeci">VAAPIThread(const char *name, FrameFilter &amp;outfilter, FrameFifoContext fifo_ctx=FrameFifoContext())</div><div class="ttdoc">Default constructor.</div><div class="ttdef"><b>Definition:</b> vaapithread.cpp:40</div></div>
+<div class="ttc" id="aclassVAAPIThread_html_a38300a82e993f2405f723f13ec1d9bcd"><div class="ttname"><a href="classVAAPIThread.html#a38300a82e993f2405f723f13ec1d9bcd">VAAPIThread::fallbackVideoDecoder</a></div><div class="ttdeci">virtual Decoder * fallbackVideoDecoder(AVCodecID codec_id)</div><div class="ttdoc">If the the video decoder obtained from chooseVideoDecoder fails for some reason, provide a fallback v...</div><div class="ttdef"><b>Definition:</b> vaapithread.cpp:69</div></div>
+<div class="ttc" id="aclassVAAPIThread_html"><div class="ttname"><a href="classVAAPIThread.html">VAAPIThread</a></div><div class="ttdef"><b>Definition:</b> vaapithread.h:43</div></div>
 <div class="ttc" id="aclassDecoder_html"><div class="ttname"><a href="classDecoder.html">Decoder</a></div><div class="ttdoc">A Virtual class for decoders.</div><div class="ttdef"><b>Definition:</b> decoder.h:61</div></div>
-<div class="ttc" id="aclassVAAPIThread_html_acf3f4236eee68e8ae2b7ef28f5d9164f"><div class="ttname"><a href="classVAAPIThread.html#acf3f4236eee68e8ae2b7ef28f5d9164f">VAAPIThread::chooseVideoDecoder</a></div><div class="ttdeci">virtual Decoder * chooseVideoDecoder(AVCodecID codec_id)</div><div class="ttdoc">Chooses a video decoder.</div><div class="ttdef"><b>Definition:</b> vaapithread.cpp:49</div></div>
+<div class="ttc" id="aclassVAAPIThread_html_acf3f4236eee68e8ae2b7ef28f5d9164f"><div class="ttname"><a href="classVAAPIThread.html#acf3f4236eee68e8ae2b7ef28f5d9164f">VAAPIThread::chooseVideoDecoder</a></div><div class="ttdeci">virtual Decoder * chooseVideoDecoder(AVCodecID codec_id)</div><div class="ttdoc">Chooses a video decoder.</div><div class="ttdef"><b>Definition:</b> vaapithread.cpp:52</div></div>
 <div class="ttc" id="aclassThread_html_a2e64f4b9dab400b7b06f2c73da4e465a"><div class="ttname"><a href="classThread.html#a2e64f4b9dab400b7b06f2c73da4e465a">Thread::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">Name of the thread.</div><div class="ttdef"><b>Definition:</b> thread.h:116</div></div>
 <div class="ttc" id="aclassDecoderThread_html_a09b611c0d37fc93182af72a0e0eea316"><div class="ttname"><a href="classDecoderThread.html#a09b611c0d37fc93182af72a0e0eea316">DecoderThread::outfilter</a></div><div class="ttdeci">FrameFilter &amp; outfilter</div><div class="ttdoc">Outgoing, decoded frames are written here.</div><div class="ttdef"><b>Definition:</b> decoderthread.h:63</div></div>
 <div class="ttc" id="aclassDecoderThread_html"><div class="ttname"><a href="classDecoderThread.html">DecoderThread</a></div><div class="ttdef"><b>Definition:</b> decoderthread.h:43</div></div>
-<div class="ttc" id="aclassVAAPIThread_html_a07a1916ca7bebe93342d97505e2b7784"><div class="ttname"><a href="classVAAPIThread.html#a07a1916ca7bebe93342d97505e2b7784">VAAPIThread::~VAAPIThread</a></div><div class="ttdeci">virtual ~VAAPIThread()</div><div class="ttdoc">Default destructor. Calls AVThread::stopCall // &lt;pyapi&gt;</div><div class="ttdef"><b>Definition:</b> vaapithread.cpp:42</div></div>
+<div class="ttc" id="aclassVAAPIThread_html_a07a1916ca7bebe93342d97505e2b7784"><div class="ttname"><a href="classVAAPIThread.html#a07a1916ca7bebe93342d97505e2b7784">VAAPIThread::~VAAPIThread</a></div><div class="ttdeci">virtual ~VAAPIThread()</div><div class="ttdoc">Default destructor. Calls AVThread::stopCall // &lt;pyapi&gt;</div><div class="ttdef"><b>Definition:</b> vaapithread.cpp:45</div></div>
 <div class="ttc" id="astructFrameFifoContext_html"><div class="ttname"><a href="structFrameFifoContext.html">FrameFifoContext</a></div><div class="ttdoc">Describes the stack structure and fifo behaviour for a FrameFifo.</div><div class="ttdef"><b>Definition:</b> framefifo.h:56</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

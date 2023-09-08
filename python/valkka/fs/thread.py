@@ -25,7 +25,7 @@ thread.py : api level 1 => api level 2 encapsulation for ValkkaFSThreads
 @file    base.py
 @author  Sampsa Riikonen
 @date    2021
-@version 1.5.3 
+@version 1.5.4 
 
 @brief   api level 1 => api level 2 encapsulation for ValkkaFSThreads
 """

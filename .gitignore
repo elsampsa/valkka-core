@@ -87,3 +87,5 @@ docker/qemu-arm-static
 *.log
 TODO.md
 ext/ffmpeg.txt
+docker_tmp/
+
