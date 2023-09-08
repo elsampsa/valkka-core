@@ -26,7 +26,7 @@
  *  @file    vaapi_avthread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2023
- *  @version 1.5.3 
+ *  @version 1.5.4 
  *  
  *  @brief Test classes VAAPIThread
  *

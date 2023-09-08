@@ -26,7 +26,7 @@
  *  @file    hwdecoder.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.3 
+ *  @version 1.5.4 
  *
  *  @brief
  */
@@ -170,7 +170,7 @@ bool AVHwDecoder::isOk()
 
 HwVideoDecoder::HwVideoDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_threads) : 
     AVHwDecoder(av_codec_id, hwtype, n_threads), width(0), height(0),
-    current_pixel_format(AV_PIX_FMT_YUV420P), sws_ctx(NULL) {
+    current_pixel_format(AV_PIX_FMT_YUV420P), sws_ctx(NULL), error_count(0) {
         aux_av_frame = av_frame_alloc();
     }
                                 
@@ -229,8 +229,13 @@ bool HwVideoDecoder::pull()
     retcode = avcodec_receive_frame(av_codec_context, hw_frame);
     if (retcode < 0)
     {
-        decoderlogger.log(LogLevel::fatal) << "HwVideoDecoder: Error during decoding" << std::endl;
-        active = false;
+        decoderlogger.log(LogLevel::debug) << "HwVideoDecoder: Error during decoding" << std::endl;
+        // NOTE: one initial error doesn't mean that vaapi etc. wouldn't work at all
+        error_count++;
+        if (error_count >= 2) {
+            active = false;
+            decoderlogger.log(LogLevel::fatal) << "HwVideoDecoder: 2+ errors during decoding" << std::endl;
+        }
         return false;
     }
 

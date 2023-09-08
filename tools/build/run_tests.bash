@@ -731,26 +731,35 @@ fi
 ## hardware acceleration tests
 
 if true; then
-echo "vaapi_avthread_test"
-valgrind="valgrind" # enable valgrind
-# valgrind="" # disable valgrind
 
-# must use opensource/mesa implementation, otherwise will get a nasty memleak!
-export LIBVA_DRIVER_NAME=i965
+    if [ -e "vaapi_avthread_test" ]; then
 
-echo "ERROR SUMMARY: VAAPI TESTS START" >> test.out
-echo 1
-$valgrind ./vaapi_avthread_test 1 $LOGLEVEL &>> test.out
-printf "END: vaapi_avthread_test 1\n\n" &>> test.out
+        echo "vaapi_avthread_test"
+        valgrind="valgrind" # enable valgrind
+        # valgrind="" # disable valgrind
 
-echo 6
-$valgrind ./vaapi_avthread_test 6 $LOGLEVEL &>> test.out
-printf "END: vaapi_avthread_test 6\n\n" &>> test.out
+        # must use opensource/mesa implementation, otherwise will get a nasty memleak!
+        export LIBVA_DRIVER_NAME=i965
 
-echo 7
-$valgrind ./vaapi_avthread_test 7 $LOGLEVEL &>> test.out
-printf "END: vaapi_avthread_test 7\n\n" &>> test.out
-echo "ERROR SUMMARY: VAAPI TESTS FINALIZED" >> test.out
+        echo "ERROR SUMMARY: VAAPI TESTS START" >> test.out
+        echo 1
+        $valgrind ./vaapi_avthread_test 1 $LOGLEVEL &>> test.out
+        printf "END: vaapi_avthread_test 1\n\n" &>> test.out
+
+        echo 6
+        $valgrind ./vaapi_avthread_test 6 $LOGLEVEL &>> test.out
+        printf "END: vaapi_avthread_test 6\n\n" &>> test.out
+
+        echo 7
+        $valgrind ./vaapi_avthread_test 7 $LOGLEVEL &>> test.out
+        printf "END: vaapi_avthread_test 7\n\n" &>> test.out
+        echo "ERROR SUMMARY: VAAPI TESTS FINALIZED" >> test.out
+
+    else
+
+        echo "ERROR SUMMARY: VAAPI TESTS NOT COMPILED"
+
+    fi
 
 fi
 

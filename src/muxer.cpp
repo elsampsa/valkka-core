@@ -26,7 +26,7 @@
  *  @file    muxer.cpp
  *  @author  Sampsa Riikonen
  *  @date    2019
- *  @version 1.5.3 
+ *  @version 1.5.4 
  *  
  *  @brief 
  */ 

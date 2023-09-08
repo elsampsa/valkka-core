@@ -28,10 +28,14 @@
  *  @file    vaapithread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.3 
+ *  @version 1.5.4 
  *  
  *  @brief
  */ 
+
+#ifdef NO_VAAPI
+// empty file
+#else
 
 #include "decoderthread.h"
 #include "hwdecoder.h"
@@ -57,5 +61,6 @@ protected:
 
 }; // <pyapi>
 
+#endif
 
 #endif

@@ -26,13 +26,16 @@
  *  @file    vaapithread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.3 
+ *  @version 1.5.4 
  *  
  *  @brief 
  */ 
 
 #include "vaapithread.h"
 
+#ifdef NO_VAAPI
+// empty file
+#else
 
 VAAPIThread::VAAPIThread(const char* name, FrameFilter& outfilter, FrameFifoContext fifo_ctx) 
     : DecoderThread(name, outfilter, fifo_ctx)
@@ -67,3 +70,5 @@ Decoder* VAAPIThread::fallbackVideoDecoder(AVCodecID codec_id) {
     avthreadlogger.log(LogLevel::fatal) << "VAAPIThread: "<< this->name <<" : using fallback video decoder " << std::endl;
     return DecoderThread::chooseVideoDecoder(codec_id);
 }
+
+#endif

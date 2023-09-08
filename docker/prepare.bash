@@ -4,6 +4,7 @@ sudo apt-get update
 sudo apt-get install -y qemu binfmt-support qemu-user-static
 sudo update-binfmts --enable qemu-arm
 sudo update-binfmts --display qemu-arm 
+cp /usr/bin/qemu-arm-static .
 # https://www.stereolabs.com/docs/docker/building-arm-container-on-x86/
 ## this is everything needed..?
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes

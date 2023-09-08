@@ -4,6 +4,8 @@ if [ $# -lt 2 ]; then
   echo "2: comment"
   exit
 fi
+# create file "control" dynamically, based on the host architecture
+./control.sh
 cp changelog .changelog
 ver=$1
 shift
@@ -34,3 +36,4 @@ echo "REMOVING CHANGELOG SAVE .changelog"
 echo "PRESS ENTER"
 read -r
 rm .changelog
+rm control

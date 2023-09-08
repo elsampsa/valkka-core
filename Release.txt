@@ -1,3 +1,6 @@
-1.5.3
+1.5.4
 
-- Eliminated some small & annoying bugs in the python part valkka.multiprocess
+- VAAPI decoding doesn't switch to software decoding even if there were an error in VAAPI decoding
+- Github pipeline for automated docker-image building
+- Using "easy_build.bash" with arm architecture should work as the build system now skips VAAPI dependencies on arm
+

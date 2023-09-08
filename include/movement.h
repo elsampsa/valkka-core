@@ -28,7 +28,7 @@
  *  @file    movement.h
  *  @author  Petri Eranko
  *  @date    2019
- *  @version 1.5.3 
+ *  @version 1.5.4 
  *  
  *  @brief   Framefilter implementing a movement detector
  */ 

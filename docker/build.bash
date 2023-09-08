@@ -12,5 +12,4 @@ cd build_dir && \
 make package && \
 dpkg -i Valkka-*.deb || \
 apt-get -fy install && \
-vainfo && \
 python3 -c 'from valkka.core import *; print(\"VALKKA_IMPORT_TEST AT BUILD\", LiveThread(\"test\"))'"
