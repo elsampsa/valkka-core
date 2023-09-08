@@ -1,0 +1,44 @@
+name: Test Docker
+on:
+  workflow_dispatch:
+  
+jobs:
+  docker-create:
+    runs-on: ubuntu-latest
+    needs: [release]
+    steps:
+
+    - name: Update virtual machine
+      run: | 
+        sudo apt-get update -y
+        sudo apt-get install -y curl docker
+
+    - name: Fetch Dockerfile
+      shell: bash
+      run: |
+        curl https://raw.githubusercontent.com/elsampsa/valkka-core/master/Dockerfile -o Dockerfile
+      working-directory: ${{ github.workspace }}
+
+    - name: Fetch .deb package
+      shell: bash
+      run: |
+        URL="https://github.com/elsampsa/valkka-core/releases/download/1.5.3/Valkka-1.5.3-Ubuntu22.deb"
+        curl -L $URL -o Valkka.deb
+      working-directory: ${{ github.workspace }}
+
+    - name: Build Docker image
+      shell: bash
+      run: docker build -t valkka:1.5.3 .
+      working-directory: ${{ github.workspace }}
+
+    - name: Log in to Docker Hub
+      shell: bash
+      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Push Docker image to Docker Hub
+      shell: bash
+      run: |
+        docker tag valkka:1.5.3 ${{ secrets.DOCKERHUB_USERNAME }}/valkka:1.5.3
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/valkka:1.5.3
+        docker tag valkka:1.5.3 ${{ secrets.DOCKERHUB_USERNAME }}/valkka:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/valkka:latest
