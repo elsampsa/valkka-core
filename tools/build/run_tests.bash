@@ -5,7 +5,10 @@
 # Enable/disable test sections by un/commenting the if true/if false lines
 # Some of the sections need special, manual intervention (see the "NOTICE" texts)
 #
-# Do the following on the output file:
+# Filtering the output file:
+#
+# grep -e "definitely lost" -e "indirectly lost" -e "ERROR SUMMARY" test.out
+# grep -e "definitely lost" -e "indirectly lost" -e "ERROR SUMMARY" -e "@@" bin/test.out
 #
 # grep "ERROR SUMMARY" bin/test.out
 # grep -i "invalid" bin/test.out | grep "=="
@@ -531,7 +534,7 @@ echo
 
 echo 2
 valgrind ./live_muxshmem_test 2 $LOGLEVEL &>> test.out
-printf "END: live_av_shmem_test 1\n\n" &>> test.out
+printf "END: live_muxshmem_test 2\n\n" &>> test.out
 
 fi
 
@@ -763,6 +766,6 @@ if true; then
 
 fi
 
-grep "ERROR SUMMARY" test.out
+grep -e "definitely lost" -e "indirectly lost" -e "ERROR SUMMARY" test.out
+# grep "ERROR SUMMARY" test.out
 grep "seg" test.out
-

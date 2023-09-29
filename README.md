@@ -69,13 +69,19 @@ Some key features of the Valkka library are:
 
 ## Versions and Features
 
-### Newest version is 1.5.4
+### Newest version is 1.6.1
+
+- Separated valkka.onvif and valkka.discovery into a [separate python package](https://github.com/elsampsa/valkka-onvif)
+- VAAPI decoding doesn't switch ever again to software decoding even if there were errors
+- Some rtsp connections were left "hanging" on some occasions of rtsp play and and stop were called almost simultaneously (caught with valgrind)
+
+### Older versions
+
+1.5.4
 
 - VAAPI decoding doesn't switch to software decoding even if there were an error in VAAPI decoding
 - Github pipeline for automated docker-image building
 - Using "easy_build.bash" with arm architecture should work as the build system now skips VAAPI dependencies on arm
-
-### Older versions
 
 1.5.3
 

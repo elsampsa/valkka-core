@@ -26,7 +26,7 @@
  *  @file    livethread.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.4 
+ *  @version 1.6.1 
  *  
  *  @brief A live555 thread
  *
@@ -425,7 +425,7 @@ void RTSPConnection::forceClose() {
 
 //SDPConnection::SDPConnection(UsageEnvironment& env, const std::string address, SlotNumber slot, FrameFilter& framefilter) : Connection(env, address, slot, framefilter, 0) {};
 
-SDPConnection::SDPConnection(UsageEnvironment& env, LiveConnectionContext& ctx) : Connection(env, ctx) {};
+SDPConnection::SDPConnection(UsageEnvironment& env, LiveConnectionContext& ctx) : Connection(env, ctx), passthrough(true) {};
 
 
 SDPConnection :: ~SDPConnection() {
@@ -488,7 +488,7 @@ void SDPConnection :: playStream() {
             // subsession->sink = DummySink::createNew(*env, *subsession, filename);
             env << "SDPConnection: Creating data sink for subsession \"" << *scs->subsession << "\" \n";
             // subsession->sink= FrameSink::createNew(env, *subsession, inputfilter, cc, ctx.address.c_str());
-            scs->subsession->sink= FrameSink::createNew(env, *scs, *inputfilter, ctx.address.c_str());
+            scs->subsession->sink= FrameSink::createNew(env, *scs, *inputfilter, passthrough, ctx.address.c_str());
             if (scs->subsession->sink == NULL)
             {
                 env << "SDPConnection: Failed to create a data sink for the \"" << *scs->subsession << "\" subsession: " << env.getResultMsg() << "\n";
@@ -1047,7 +1047,7 @@ int LiveThread::safeGetOutboundSlot(SlotNumber slot, Outbound*& outbound) { // -
         return -1;
     }
     if (!out_) {
-        livethreadlogger.log(LogLevel::debug) << "LiveThread: safeGetOutboundSlot : nothing at slot " << slot << std::endl;
+        livethreadlogger.log(LogLevel::crazy) << "LiveThread: safeGetOutboundSlot : nothing at slot " << slot << std::endl;
         outbound=NULL;
         return 0;
     }
@@ -1115,6 +1115,7 @@ void LiveThread::deregisterStream(LiveConnectionContext &connection_ctx) {
         case 1: // slot is reserved
             livethreadlogger.log(LogLevel::debug) << "LiveThread: deregisterStream : de-registering " << connection_ctx.slot << std::endl;
             if (connection->is_playing) {
+                livethreadlogger.log(LogLevel::debug) << "LiveThread: deregisterStream : stopping " << connection_ctx.slot << std::endl;
                 connection->stopStream();
             }
             if (!connection->isClosed()) { // didn't close correctly .. queue for stopping
@@ -1122,6 +1123,7 @@ void LiveThread::deregisterStream(LiveConnectionContext &connection_ctx) {
                 pending.push_back(connection);
             }
             else {
+                livethreadlogger.log(LogLevel::debug) << "LiveThread: deregisterStream : deleting " << connection_ctx.slot << std::endl;
                 delete connection;
             }
             this->slots_[connection_ctx.slot]=NULL; // case 1

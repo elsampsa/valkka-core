@@ -26,7 +26,7 @@
  *  @file    hwdecoder.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.4 
+ *  @version 1.6.1 
  *
  *  @brief
  */
@@ -230,12 +230,16 @@ bool HwVideoDecoder::pull()
     if (retcode < 0)
     {
         decoderlogger.log(LogLevel::debug) << "HwVideoDecoder: Error during decoding" << std::endl;
+        /*
         // NOTE: one initial error doesn't mean that vaapi etc. wouldn't work at all
         error_count++;
         if (error_count >= 2) {
             active = false;
             decoderlogger.log(LogLevel::fatal) << "HwVideoDecoder: 2+ errors during decoding" << std::endl;
         }
+        // vaapi decoder seems to give random number of errors as time passes by - probably some stupid
+        // decoding errors - doesn't mean that the decoder wouldn't work
+        */
         return false;
     }
 

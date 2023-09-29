@@ -29,7 +29,7 @@
  *  @author  Sampsa Riikonen
  *  @author  Markus Kaukonen
  *  @date    2017
- *  @version 1.5.4 
+ *  @version 1.6.1 
  *  
  *  @brief OpenGL shaders for YUV to RGB interpolation
  *  

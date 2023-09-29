@@ -26,7 +26,7 @@
  *  @file    live.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.4 
+ *  @version 1.6.1 
  *  
  *  @brief Interface to live555
  *
@@ -71,13 +71,17 @@ void usage(UsageEnvironment& env, char const* progName) {
 
 // Implementation of "ValkkaRTSPClient":
 
-ValkkaRTSPClient* ValkkaRTSPClient::createNew(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, bool& termplease, int verbosityLevel, char const* applicationName, portNumBits tunnelOverHTTPPortNum) {
-  return new ValkkaRTSPClient(env, rtspURL, framefilter, livestatus, termplease, verbosityLevel, applicationName, tunnelOverHTTPPortNum);
+ValkkaRTSPClient* ValkkaRTSPClient::createNew(UsageEnvironment& env, const std::string rtspURL, 
+    FrameFilter& framefilter, LiveStatus* livestatus, bool& termplease, int verbosityLevel, 
+    char const* applicationName, portNumBits tunnelOverHTTPPortNum) {
+  return new ValkkaRTSPClient(env, rtspURL, framefilter, livestatus, 
+  termplease, verbosityLevel, applicationName, tunnelOverHTTPPortNum);
 }
 
 ValkkaRTSPClient::ValkkaRTSPClient(UsageEnvironment& env, const std::string rtspURL, FrameFilter& framefilter, LiveStatus* livestatus, bool& termplease, int verbosityLevel, 
     char const* applicationName, portNumBits tunnelOverHTTPPortNum) : 
-    RTSPClient(env, rtspURL.c_str(), verbosityLevel, applicationName, tunnelOverHTTPPortNum, -1), framefilter(framefilter), livestatus(livestatus), termplease(termplease), request_multicast(false), request_tcp(false), recv_buffer_size(0), reordering_time(0) {
+    RTSPClient(env, rtspURL.c_str(), verbosityLevel, applicationName, tunnelOverHTTPPortNum, -1), framefilter(framefilter), livestatus(livestatus), termplease(termplease), 
+    request_multicast(false), request_tcp(false), recv_buffer_size(0), reordering_time(0), passthrough(true) {
 }
 
 
@@ -87,7 +91,7 @@ ValkkaRTSPClient::~ValkkaRTSPClient() {
 
 void ValkkaRTSPClient::continueAfterDESCRIBE(RTSPClient* rtspClient, int resultCode, char* resultString) {
   LiveStatus* livestatus = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
-  bool termplease = ((ValkkaRTSPClient*)rtspClient)->termplease; // alias
+  bool& termplease = ((ValkkaRTSPClient*)rtspClient)->termplease; // alias
 
   do {
     UsageEnvironment& env = rtspClient->envir(); // alias
@@ -153,7 +157,7 @@ void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
   StreamClientState& scs   = ((ValkkaRTSPClient*)rtspClient)->scs;
   ValkkaRTSPClient* client = (ValkkaRTSPClient*)rtspClient;
   LiveStatus* livestatus   = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
-  bool termplease = ((ValkkaRTSPClient*)rtspClient)->termplease; // alias
+  bool& termplease = ((ValkkaRTSPClient*)rtspClient)->termplease; // alias
   bool ok_subsession_type = false;
   
   scs.subsession = scs.iter->next();
@@ -231,7 +235,10 @@ void ValkkaRTSPClient::setupNextSubsession(RTSPClient* rtspClient) {
 
 void ValkkaRTSPClient::continueAfterSETUP(RTSPClient* rtspClient, int resultCode, char* resultString) {
   LiveStatus* livestatus = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
-  
+  bool& passthrough = ((ValkkaRTSPClient*)rtspClient)->passthrough;
+
+  // std::cout << "PASSTHROUGH " << passthrough << std::endl;
+
   do {
     UsageEnvironment& env    = rtspClient->envir(); // alias
     StreamClientState& scs   = ((ValkkaRTSPClient*)rtspClient)->scs; // alias
@@ -259,7 +266,7 @@ void ValkkaRTSPClient::continueAfterSETUP(RTSPClient* rtspClient, int resultCode
     // after we've sent a RTSP "PLAY" command.)
 
     // scs.subsession->sink = FrameSink::createNew(env, *scs.subsession, framefilter, scs.subsession_index, rtspClient->url());
-    scs.subsession->sink = FrameSink::createNew(env, scs, framefilter, rtspClient->url());
+    scs.subsession->sink = FrameSink::createNew(env, scs, framefilter, passthrough, rtspClient->url());
       // perhaps use your own custom "MediaSink" subclass instead
     if (scs.subsession->sink == NULL) {
       livelogger.log(LogLevel::normal) << "ValkkaRTSPClient: " << *rtspClient << "Failed to create a data sink for the \"" << *scs.subsession
@@ -288,6 +295,7 @@ void ValkkaRTSPClient::continueAfterPLAY(RTSPClient* rtspClient, int resultCode,
   LiveStatus* livestatus = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
   UsageEnvironment& env = rtspClient->envir(); // alias
   StreamClientState& scs = ((ValkkaRTSPClient*)rtspClient)->scs; // alias
+  bool& termplease = ((ValkkaRTSPClient*)rtspClient)->termplease; // alias
 
   do {
 
@@ -317,7 +325,7 @@ void ValkkaRTSPClient::continueAfterPLAY(RTSPClient* rtspClient, int resultCode,
   } while (0);
   delete[] resultString;
 
-  if (!success) {
+  if (!success or termplease) {
     // An unrecoverable error occurred with this stream.
     shutdownStream(rtspClient);
   }
@@ -401,7 +409,11 @@ void ValkkaRTSPClient::shutdownStream(RTSPClient* rtspClient, int exitCode) {
   UsageEnvironment& env  =rtspClient->envir(); // alias
   StreamClientState& scs =((ValkkaRTSPClient*)rtspClient)->scs; // alias
   LiveStatus* livestatus = ((ValkkaRTSPClient*)rtspClient)->livestatus; // alias
-  
+  bool& passthrough = ((ValkkaRTSPClient*)rtspClient)->passthrough; // alias
+  passthrough = false; // informs framesink not to forward any frames (as the filterchain might have been destructed)
+
+  // std::cout << "PASSTHROUGH C " << passthrough << std::endl;
+
   livelogger.log(LogLevel::debug) << "ValkkaRTSPClient: shutdownStream :" <<std::endl;
   
   // First, check whether any subsessions have still to be closed:
@@ -501,17 +513,19 @@ FrameSink* FrameSink::createNew(UsageEnvironment& env, MediaSubsession& subsessi
 FrameSink::FrameSink(UsageEnvironment& env, MediaSubsession& subsession, FrameFilter& framefilter, int subsession_index, char const* streamId) : MediaSink(env), fSubsession(subsession), framefilter(framefilter), subsession_index(subsession_index), on(true), nbuf(0) 
 */
 
-FrameSink* FrameSink::createNew(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId) {
-  return new FrameSink(env, scs, framefilter, streamId);
+FrameSink* FrameSink::createNew(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, bool& passthrough, char const* streamId) {
+  return new FrameSink(env, scs, framefilter, passthrough, streamId);
 }
 
-FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId) : 
-    MediaSink(env), scs(scs), framefilter(framefilter), on(true), nbuf(0), fSubsession(*(scs.subsession))
+FrameSink::FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, bool& passthrough, char const* streamId) : 
+    MediaSink(env), scs(scs), framefilter(framefilter), passthrough(passthrough), on(true), nbuf(0), fSubsession(*(scs.subsession))
 {
   // some aliases:
   // MediaSubsession &subsession = *(scs.subsession);
   int subsession_index        = scs.subsession_index;
   
+  // std::cout << "PASSTHROUGH A " << passthrough << std::endl;
+
   fStreamId = strDup(streamId);
   // fReceiveBuffer = new u_int8_t[DUMMY_SINK_RECEIVE_BUFFER_SIZE];
   
@@ -612,6 +626,14 @@ void FrameSink::afterGettingFrame(unsigned frameSize, unsigned numTruncatedBytes
   envir() << "\n";
 #endif
   
+  // std::cout << "PASSTHROUGH B " << passthrough << std::endl;
+  if (!passthrough) {
+    // live555 event loop can sometimes take some time in
+    // deleting this object .. and meanwhile, the dtors of other
+    // objects downstream might have removed the framefilter
+    return;
+  }
+
   unsigned target_size=frameSize+numTruncatedBytes;
   // mstimestamp=presentationTime.tv_sec*1000+presentationTime.tv_usec/1000;
   // std::cout << "afterGettingFrame: mstimestamp=" << mstimestamp <<std::endl;

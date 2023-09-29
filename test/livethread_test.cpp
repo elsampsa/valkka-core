@@ -26,7 +26,7 @@
  *  @file    live_thread_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.4 
+ *  @version 1.6.1 
  *  
  *  @brief Testing the LiveThread class
  *  
@@ -231,6 +231,7 @@ void test_5()
     livethread.startCall();
     sleep_for(2s);
 
+    ///*
     LiveConnectionContext ctx = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter1);
     livethread.registerStreamCall(ctx);
     sleep_for(1s);
@@ -241,7 +242,7 @@ void test_5()
 
     std::cout << "\n\n***STOP***\n";
     livethread.stopStreamCall(ctx);
-    sleep_for(1s);
+    sleep_for(5s);
 
     std::cout << "\n\n***STOP (AGAIN)***\n";
     livethread.stopStreamCall(ctx); // already stopped
@@ -250,6 +251,9 @@ void test_5()
     std::cout << "\n\n***PLAY (AGAIN)***\n";
     livethread.playStreamCall(ctx); // play again
     sleep_for(1s);
+
+    //livethread.stopCall(); // there was a crasssh here: framefilter was written although it was destructed
+    //return;
 
     std::cout << "\n\n***WRONG SLOT***\n";
     LiveConnectionContext ctx2 = LiveConnectionContext(LiveConnectionType::rtsp, std::string(stream_1), 2, &dummyfilter2);
@@ -262,9 +266,21 @@ void test_5()
     livethread.playStreamCall(ctx3);     // play immediately
     sleep_for(2s);
 
+    std::cout << "\nstopping all" << std::endl;
+
+    /*
+    livethread.stopStreamCall(ctx);
+    livethread.stopStreamCall(ctx2);
+    livethread.stopStreamCall(ctx3);
+    sleep_for(3s);
+    */
     std::cout << "\n\nstopping live thread" << std::endl;
 
     livethread.stopCall();
+    sleep_for(3s);
+
+    std::cout << "\nbye!" << std::endl;
+
 }
 
 void test_6()
