@@ -19,7 +19,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 @file    base.py
 @author  Sampsa Riikonen
 @date    2020
-@version 1.5.4 
+@version 1.6.1 
 
 @brief   A simple multiprocessing framework with back- and frontend and pipes communicating between them
 """
@@ -30,6 +30,7 @@ import time
 import sys, signal, os, pickle, math
 import logging
 import asyncio
+import traceback
 
 # from valkka.api2.tools import getLogger, setLogger
 
@@ -97,6 +98,8 @@ class MessageProcess(Process):
     (aka backend) tries to find and execute the method ``c__myStuff`` in the backend.
 
     :param name: name of the multiprocess
+
+    NOTE: when subclassing ``__init__``, remember to call therein ``super().__init__()``
     """
     timeout = 1.0
 
@@ -434,10 +437,56 @@ class Duplex:
         self.writer.close()
 
 
+def exclog(f):
+    """Decorator for coroutines: turns exceptions into logging events
+    """
+    async def wrapper(*args, **kwargs):
+        self_ = args[0]
+        try:
+            return await f(*args, **kwargs)
+        except asyncio.CancelledError as e:  # propagate task cancel
+            raise (e)
+        except Exception as e:  # any other exception should be reported, and BaseException raised so that the program stops
+            # raise(BaseException) # enable this if you wan't exceptions raised.  Good for first-stage debugging # DEBUGGING
+            self_.logger.critical("asyncio call failed with '%s'", e)
+            #self_.logger.critical("------------------------------>")
+            self_.logger.critical(traceback.format_exc())
+            #self_.logger.critical("<------------------------------")
+    wrapper.__name__ = f.__name__
+    wrapper.__doc__ = f.__doc__
+    return wrapper
+
+
+def exclogmsg(f):
+    """Decorator for coroutines: turns exceptions into logging events
+    Sends also an error message to outgoing pipe
+    """
+    async def wrapper(*args, **kwargs):
+        self_ = args[0]
+        slot = kwargs["slot"]
+        try:
+            return await f(*args, **kwargs)
+        except asyncio.CancelledError as e:  # propagate task cancel
+            raise (e)
+        except Exception as e:  # any other exception should be reported, and BaseException raised so that the program stops
+            # raise(BaseException) # enable this if you wan't exceptions raised.  Good for first-stage debugging # DEBUGGING
+            self_.logger.critical("asyncio call failed with '%s'", e)
+            await self_.send_out__(MessageObject("error", slot=slot, error=str(e)))
+            #self_.logger.critical("------------------------------>")
+            self_.logger.critical(traceback.format_exc())
+            #self_.logger.critical("<------------------------------")
+    wrapper.__name__ = f.__name__
+    wrapper.__doc__ = f.__doc__
+    return wrapper
+
+
+
 class AsyncBackMessageProcess(MessageProcess):
     """A subclass of ``MessageProcess``, but now the backend runs asyncio
 
     :param name: multiprocess name
+
+    NOTE: when subclassing ``__init__``, remember to call therein ``super().__init__()``
     """
     def __init__(self, name = "AsyncMessageProcess"):
         self.name = name

@@ -25,7 +25,7 @@ tools.py : tools for valkka.fs
 @file    tools.py
 @author  Sampsa Riikonen
 @date    2021
-@version 1.5.4 
+@version 1.6.1 
 
 @brief   tools for valkka.fs
 """

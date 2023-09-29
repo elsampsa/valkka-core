@@ -26,7 +26,7 @@
  *  @file    live_av_framefilter_test.cpp
  *  @author  Sampsa Riikonen
  *  @date    2023
- *  @version 1.5.4 
+ *  @version 1.6.1 
  *  
  *  @brief   Test some framefilters with the complete decoding pipeline
  *

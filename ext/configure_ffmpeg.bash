@@ -14,6 +14,7 @@ release="3.4"
 # # a side note here: we don't want ffmpeg to use threads.  Valkka will reserve one thread per stream - that's enough (the idea is to have massive number of streams - not massive number of threads per stream)
 
 # # allow multithreading decoder.  It's up to the user to control single vs. multithreading
+# # Q: how to ignore tests!?
 basic="--disable-gpl --disable-audiotoolbox --enable-static --enable-shared"
 
 # # BUG: with this, alsa does not get disabled !

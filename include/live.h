@@ -28,7 +28,7 @@
  *  @file    live.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.4 
+ *  @version 1.6.1 
  *  @brief Interface to live555
  * 
  *  Acknowledgements: Ross Finlayson for his advice
@@ -129,6 +129,9 @@ protected:
   virtual ~ValkkaRTSPClient();
   
 public:
+  bool  passthrough;             ///< control media sink passthrough to framefilter
+
+public:
   StreamClientState scs;
   FrameFilter& framefilter;     ///< Target frame filter where frames are being fed
   LiveStatus* livestatus;       ///< This points to a variable that is being used by LiveThread to inform about the stream state
@@ -179,10 +182,14 @@ public:
    * @param streamId     (optional) identifies the stream itself
    * 
    */
-  static FrameSink* createNew(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId = NULL);
+  static FrameSink* createNew(UsageEnvironment& env, 
+    StreamClientState& scs, FrameFilter& framefilter, bool& passthrough,
+    char const* streamId = NULL);
 
 private:
-  FrameSink(UsageEnvironment& env, StreamClientState& scs, FrameFilter& framefilter, char const* streamId);
+  FrameSink(UsageEnvironment& env, 
+    StreamClientState& scs, FrameFilter& framefilter, bool& passthrough,
+   char const* streamId);
   /** Default virtual destructor */
   virtual ~FrameSink();
 
@@ -207,6 +214,7 @@ private:
   SetupFrame        setupframe;  ///< This frame is used to send subsession information
   BasicFrame        basicframe;  ///< Data is being copied into this frame
   int               subsession_index;
+  bool&             passthrough; ///< pass frame to framefilter or not
 
 public: // getters & setters
   uint8_t* getReceiveBuffer() {return fReceiveBuffer;}

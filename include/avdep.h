@@ -29,7 +29,7 @@
  *  @file    avdep.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.4 
+ *  @version 1.6.1 
  *  
  *  @brief List of common ffmpeg/libav header files. Definition of some functions to call FFmpeg API directly from Valkka
  * 

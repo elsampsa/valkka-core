@@ -28,7 +28,7 @@
  *  @file    livethread.h
  *  @author  Sampsa Riikonen
  *  @date    2017
- *  @version 1.5.4 
+ *  @version 1.6.1 
  *  
  *  @brief A live555 thread
  *
@@ -297,6 +297,7 @@ public:
 
 private:
   StreamClientState *scs;
+  bool passthrough;
   
 public:
   void playStream(); ///< Creates Live555 MediaSessions, MediaSinks, etc. instances and registers them directly to the Live555 event loop
