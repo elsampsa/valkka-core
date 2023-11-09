@@ -38,6 +38,7 @@ extern "C" {
 #include <libavutil/hwcontext.h>
 }
 
+
 static enum AVPixelFormat find_fmt_by_hw_type(const enum AVHWDeviceType type)
 {
     enum AVPixelFormat fmt;
@@ -67,12 +68,41 @@ static enum AVPixelFormat find_fmt_by_hw_type(const enum AVHWDeviceType type)
 static enum AVPixelFormat get_vaapi_format(AVCodecContext *ctx,
                                            const enum AVPixelFormat *pix_fmts)
 {
+    // AVCodecContext uses this function:
+    // it gives it a list of AVPixelFormat s
+    // and then this function returns the most relevant one
     const enum AVPixelFormat *p;
+    // https://ffmpeg.org/doxygen/3.4/pixfmt_8h.html
     for (p = pix_fmts; *p != AV_PIX_FMT_NONE; p++) {
-        if (*p == AV_PIX_FMT_VAAPI)
-            return *p;
+        // std::cout << "hwdecoder.h : trying pix fmt : " << *p << std::endl;
+        switch (*p) {
+            case AV_PIX_FMT_VAAPI_MOCO:
+                //std::cout << "MOCO" << std::endl;
+                break;
+            case AV_PIX_FMT_VAAPI_IDCT:
+                //std::cout << "IDCT" << std::endl;
+                break;
+            /*
+            case AV_PIX_FMT_VAAPI_VLD:
+                // std::cout << "VLD" << std::endl;
+                return *p;
+                // break;
+            */
+            case AV_PIX_FMT_YUVJ420P:
+                // ok: sometimes the vaapi hw decoder
+                // requests this one - what does it mean?
+                // std::cout << "420P" << std::endl;
+                // if we return this, then the decoder won't work .. eh
+                // return *p;
+                break;
+            case AV_PIX_FMT_VAAPI: // same as VLD
+                // std::cout << "OK!" << std::endl;
+                return *p;
+        } // switch
     }
-    avthreadlogger.log(LogLevel::fatal) << "get_vaapi_format: Unable to decode this stream using VA-API" << std::endl;
+    avthreadlogger.log(LogLevel::fatal) << "hwdecoder.h : get_vaapi_format : Unable to decode this stream using VA-API" << std::endl;
+    // TODO: why vaapi can't find correct pix fmt.  Could copy all that crap from ffmpeg.c, but it's pretty complicated
+    // offers pix fmts 12, 53 ..
     return AV_PIX_FMT_NONE;
 }
 

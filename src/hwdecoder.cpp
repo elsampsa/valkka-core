@@ -48,6 +48,7 @@
 // ffmpeg 3.4 is from 2017-10-15
 
 
+
 AVHwDecoder::AVHwDecoder(AVCodecID av_codec_id, AVHWDeviceType hwtype, int n_threads) : av_codec_id(av_codec_id), n_threads(n_threads), active(true)
 {
     // http://ffmpeg.org/doxygen/3.4/hwcontext_8c.html
@@ -227,6 +228,7 @@ bool HwVideoDecoder::pull()
         return false;
     }
     retcode = avcodec_receive_frame(av_codec_context, hw_frame);
+    // std::cout << "HwVideoDecoder: retcode: " << retcode << std::endl;
     if (retcode < 0)
     {
         decoderlogger.log(LogLevel::debug) << "HwVideoDecoder: Error during decoding" << std::endl;
@@ -250,7 +252,7 @@ bool HwVideoDecoder::pull()
     }
     else
     {
-        decoderlogger.log(LogLevel::fatal) << "unexpected hw pix fmt" << std::endl;
+        decoderlogger.log(LogLevel::fatal) << "hwdecoder.cpp : unexpected hw pix fmt" << std::endl;
         active = false;
         return false;
     }

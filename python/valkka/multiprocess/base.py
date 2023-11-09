@@ -489,10 +489,10 @@ class AsyncBackMessageProcess(MessageProcess):
     NOTE: when subclassing ``__init__``, remember to call therein ``super().__init__()``
     """
     def __init__(self, name = "AsyncMessageProcess"):
-        self.name = name
-        self.pre = self.__class__.__name__ + "." + self.name
-        self.logger = logging.getLogger(self.pre)
-        super().__init__()
+        # self.name = name
+        #self.pre = self.__class__.__name__ + "." + self.name
+        #self.logger = logging.getLogger(self.pre)
+        super().__init__(name = name) # -> this takes care of the logger and self.name
         # self.front_pipe, self.back_pipe = getPipes(True, False) # blocking frontend, non-blocking backend (for asynchronous backend)
         self.front_pipe, self.back_pipe = getPipes(True, True) # both blocking: for testing # seems to make no difference (asyncio sets the pipes to non-blocking mode)
         self.loop = True

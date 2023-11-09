@@ -28,7 +28,8 @@ sed -i -r "s/VERSION_MAJOR(.*);/VERSION_MAJOR = $1;/g" include/constant.h
 sed -i -r "s/VERSION_MINOR(.*);/VERSION_MINOR = $2;/g" include/constant.h
 sed -i -r "s/VERSION_PATCH(.*);/VERSION_PATCH = $3;/g" include/constant.h
 
-fs="git_tag.bash git_rm_tag.bash"
+export version_file=$(find -name "version.py")
+fs="git_tag.bash git_rm_tag.bash "$version_file
 for f in $fs
 do
   # mod version numbers in git_tag.bash

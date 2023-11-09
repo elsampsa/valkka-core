@@ -296,8 +296,8 @@ void test_7() {
     std::cout << name << "playing stream !" << std::endl;
     livethread.playStreamCall(ctx);
 
-    // sleep_for(2s);
-    sleep_for(5s);
+    sleep_for(2s);
+    // sleep_for(5s);
     // sleep_for(10s);
     // sleep_for(604800s); //one week
 
