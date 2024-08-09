@@ -1,7 +1,8 @@
 /*
  * doc.h : Dummy header file for doxygen documentation
  * 
- * Copyright 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2024 Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
@@ -69,7 +70,8 @@
  * 
  * License
  * -------
- * Copyright 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2024 Sampsa Riikonen
  * 
  * This file is part of the Valkka library.
  * 

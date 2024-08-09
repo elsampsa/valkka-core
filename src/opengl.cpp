@@ -1,7 +1,8 @@
 /*
  * opengl.cpp : X11, GLX, OpenGL calls for initialization and texture dumping, plus some auxiliary routines
  * 
- * Copyright 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2024 Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

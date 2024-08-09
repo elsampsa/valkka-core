@@ -1,7 +1,8 @@
 """
 port.py : Port classes for managed filterchains (see "managed.py").  "Ports" are terminals of the filterchains that require resources (say, decoding or connection to a certain x screen)
 
- * Copyright 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2024 Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

@@ -3,7 +3,8 @@
 /*
  * sharedmem.h : Posix shared memory segment server/client management, shared memory ring buffer synchronized using posix semaphores.
  * 
- * Copyright 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2024 Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

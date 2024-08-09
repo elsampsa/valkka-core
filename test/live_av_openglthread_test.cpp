@@ -1,7 +1,8 @@
 /*
  * live_av_openglthread_test.cpp : Test the full pipeline: LiveThread => AVThread => OpenGLThread
  * 
- * Copyright 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2024 Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

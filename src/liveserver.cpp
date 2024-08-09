@@ -1,7 +1,8 @@
 /*
  * server.cpp : Live555 interface for server side: streaming to udp sockets directly or by using an on-demand rtsp server
  * 
- * Copyright 2017-2020 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2024 Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

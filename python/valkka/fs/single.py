@@ -1,7 +1,8 @@
 """
 single.py : api 2 level encapsulation for ValkkaFS having single stream in single file
 
- * Copyright 2017-2021 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
+ * Copyright 2024 Sampsa Riikonen
  *
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  *
