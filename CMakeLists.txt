@@ -152,10 +152,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # [OpenGL dependencies]
-pkg_search_module(GLEW REQUIRED glew)
+# pkg_search_module(GLEW REQUIRED glew)
 ## could use these instead:
-#exec_program(pkg-config ARGS --libs x11 glew OUTPUT_VARIABLE GLEW_LIBRARIES)
-#exec_program(pkg-config ARGS --cflags x11 glew OUTPUT_VARIABLE GLEW_INCLUDER_DIRS)
+exec_program(pkg-config ARGS --libs x11 glew OUTPUT_VARIABLE GLEW_LIBRARIES)
+exec_program(pkg-config ARGS --cflags x11 glew OUTPUT_VARIABLE GLEW_INCLUDER_DIRS)
 pkg_search_module(X11 REQUIRED x11)
 pkg_search_module(ALSA REQUIRED alsa) # can't remove alsa dependency from the latest ffmpeg
 ## pkg_search_module(PYTHON REQUIRED python3) # don't use! https://bugs.python.org/issue36721

@@ -245,6 +245,7 @@ class ShmemRGBClient:
         PyTuple_SetItem(tup, 5, PyLong_FromLong(meta.mstimestamp));
         """
         tup = self.core.clientPullPy()
+        # print(">>", tup)
         index = tup[0]
         if index < 0:
             return None, None

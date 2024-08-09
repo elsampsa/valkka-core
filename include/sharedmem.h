@@ -45,6 +45,11 @@
 
 
 // #define USE_SHMEM_CACHE 1 // Don't expose shmem segments directly as numpy arrays, but an intermediate copy instead
+// #define SAFE_TEXT
+
+#ifdef SAFE_TEST
+static std::mutex test_mutex;
+#endif
 
 /** A file descriptor for running select and poll with shmem ring buffers 
  */
@@ -438,7 +443,8 @@ void CLASSNAME::serverInit() {\
   }\
   /* std::cout << "got shmem" << std::endl; */\
   r = ftruncate(fd, n_bytes);\
-  r_= ftruncate(fd_,n_bytes);\
+  /* r_= ftruncate(fd_,n_bytes); // BUG!*/\
+  r_= ftruncate(fd_, sizeof(TYPENAME));\
   if (r != 0 or r_ !=0) {\
     perror("valkka_core: sharedmem.cpp: SharedMemSegment::serverInit: ftruncate failed");\
     exit(2);\
@@ -499,9 +505,12 @@ void CLASSNAME::serverClose() { \
   } \
 } \
 
-
 #define client_close(CLASSNAME, TYPENAME) \
 void CLASSNAME::clientClose() { \
+if (munmap(ptr, n_bytes)!=0 or munmap(ptr_, sizeof(TYPENAME)!=0)) { \
+    perror("valkka_core: sharedmem.cpp: CLASSNAME::clientClose: munmap failed"); \
+    exit(2); \
+  } \
 } \
 
 

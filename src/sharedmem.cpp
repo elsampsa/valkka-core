@@ -39,7 +39,6 @@
 // #define shmem_verbose
 
 
-
 EventFd::EventFd() {
     this->fd = eventfd(0, EFD_NONBLOCK); // https://linux.die.net/man/2/eventfd
     if (fd == -1) {
@@ -98,9 +97,11 @@ void SharedMemSegment::init() {
 
 void SharedMemSegment::close_() { 
     if (is_server) {
+        // std::cout << "close server shmem segment " << name << std::endl;
         serverClose();
     }
     else {
+        // std::cout << "close client shmem segment " << name << std::endl;
         clientClose();
     }
 }
@@ -139,80 +140,6 @@ server_close(SimpleSharedMemSegment, std::size_t);
 client_close(SimpleSharedMemSegment, std::size_t);
 copy_meta_from(SimpleSharedMemSegment, std::size_t);
 copy_meta_to(SimpleSharedMemSegment, std::size_t);
-
-
-/*
-void SimpleSharedMemSegment::serverInit() {
-  int fd, fd_, r, r_;
- 
-  shm_unlink(payload_name.c_str()); // just in case..
-  shm_unlink(meta_name.c_str());
- 
-  fd = shm_open(payload_name.c_str(), O_CREAT | O_EXCL | O_TRUNC | O_RDWR, 0600); // use r/w
-  fd_= shm_open(meta_name.c_str(),    O_CREAT | O_EXCL | O_TRUNC | O_RDWR, 0600); // use r/w
- 
-  if (fd == -1 or fd_==-1) {
-    perror("valkka_core: sharedmem.cpp: SharedMemSegment::serverInit: shm_open failed");
-    exit(2);
-  }
- 
-  // std::cout << "got shmem" << std::endl;
- 
-  r = ftruncate(fd, n_bytes);
-  r_= ftruncate(fd_,n_bytes);
-  if (r != 0 or r_ !=0) {
-    perror("valkka_core: sharedmem.cpp: SharedMemSegment::serverInit: ftruncate failed");
-    exit(2);
-  }
- 
-  ptr = mmap(0, n_bytes,             PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-  ptr_= mmap(0, sizeof(std::size_t), PROT_READ | PROT_WRITE, MAP_SHARED, fd_, 0);
- 
-  if (ptr == MAP_FAILED or ptr_ == MAP_FAILED) {
-    perror("valkka_core: sharedmem.cpp: SharedMemSegment::serverInit: mmap failed");
-    exit(2);
-  }
- 
-  payload = (uint8_t*) ptr;
-  meta    = (std::size_t*) ptr_;
- 
-  close(fd);
-  close(fd_);
-};
-
-
-bool SimpleSharedMemSegment::clientInit() { 
-  int fd, fd_;
-  
-  fd = shm_open(payload_name.c_str(), O_RDONLY, 0400);
-  fd_= shm_open(meta_name.c_str(), O_RDONLY, 0400);
-  
-  if (fd == -1 or fd_==-1) {
-    // perror("valkka_core: sharedmem.cpp: SharedMemSegment::clientInit: shm_open failed");
-    // exit(2);
-    return false;
-  }
-  
-  // std::cout << "got shmem" << std::endl;
-  ptr  =mmap(0, n_bytes, PROT_READ, MAP_SHARED, fd,  0);
-  ptr_ =mmap(0, sizeof(std::size_t), PROT_READ, MAP_SHARED, fd_, 0);
-  
-  if (ptr == MAP_FAILED or ptr_ == MAP_FAILED) {
-    std::cout << "valkka_core: sharedmem.cpp: SharedMemSegment::clientInit: mmap failed" << std::endl;
-    // perror("valkka_core: sharedmem.cpp: SharedMemSegment::clientInit: mmap failed");
-    // exit(2);
-    return false;
-  }
-  
-  payload = (uint8_t*) ptr;
-  meta    = (std::size_t*) ptr_;
-  
-  close(fd);
-  close(fd_);
-  
-  return true;
-};
-*/
 
 
 std::size_t SimpleSharedMemSegment::getSize() {
@@ -277,9 +204,16 @@ void RGB24SharedMemSegment::put(std::vector<uint8_t> &inp_payload, void* meta_) 
 }
 
 void RGB24SharedMemSegment::put(uint8_t* buf, void* meta_) {
-    *meta = *((RGB24Meta*)(meta_));
+    *meta = *((RGB24Meta*)(meta_)); // this copies metadata to this sharedmem segment
     meta->size = std::min(std::size_t(meta->width*meta->height*3), n_bytes);
+    // check that serialization worked by de-serializing:
+    /*
+    std::cout << ">>>put : "
+        << " size, w, h, slot: " << meta->size << " " << meta->width << " " << meta->height << " " << meta->slot 
+        << std::endl;
+    */
     memcpy(payload, buf, meta->size);
+    // memcpy(payload, buf, 1); // debug/test
 }
 
 
@@ -462,7 +396,7 @@ bool  SharedMemRingBufferBase::flagIsSet() {     //Client: call this to see if t
         return false;
     }
 }
-  
+
 
 void  SharedMemRingBufferBase::clearFlag() {    //Client: call this after handling the ring-buffer overflow
   int i;
@@ -519,20 +453,26 @@ void SharedMemRingBufferBase::serverPush(std::vector<uint8_t> &inp_payload, void
         
     if (getValue()>=n_cells) { // so, semaphore will overflow
         zero();
-        std::cout << "RingBuffer: ServerPush: zeroed, value now="<<getValue()<<std::endl;
+        std::cout << "RingBuffer " << name << " ServerPush: zeroed, value now="<<getValue()<<std::endl;
         index=-1;
         setFlag();
-        std::cout << "RingBuffer: ServerPush: OVERFLOW "<<std::endl;
+        std::cout << "RingBuffer " << name << " ServerPush: OVERFLOW "<<std::endl;
     }
     
     ++index;
     if (index>=n_cells) {
         index=0;
     }
-    shmems[index]->put(inp_payload, meta); // SharedMemSegment takes care of the correct typecast from void*
-    // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
-
-    // std::cout << "sema pointer:" << long(sema) << std::endl;
+    #ifdef SAFE_TEST
+    {
+        std::unique_lock<std::mutex> lock(test_mutex);
+    #endif
+        shmems[index]->put(inp_payload, meta); // SharedMemSegment takes care of the correct typecast from void*
+        // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
+        // std::cout << "sema pointer:" << long(sema) << std::endl;
+    #ifdef SAFE_TEST
+    }
+    #endif
     i=sem_post(sema);
     setEventFd();
 }
@@ -629,12 +569,20 @@ bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {
     if (index>=n_cells) {
         index=0;
     }
-    // TODO: read data here // what if read/write at the same moment at same cell..?  is locking a better idea ..? nope .. no locking needed!   This is process-safe by architecture..
+    // TODO: read data here // what if read/write at the same moment at same cell..?  
+    // is locking a better idea ..? nope .. no locking needed!   This is process-safe by architecture..
     // std::cout << "RingBuffer: clientPull: read index "<<index<<std::endl;
     
     index_out = index;
     // size_out  = shmems[index]->getSize();
-    shmems[index]->copyMetaTo(meta_); // copy metadata from the shmem segment's internal memory into variable referenced by the meta_ pointer.  Subclassing takes care of the correct typecast.
+    #ifdef SAFE_TEST
+    {
+        std::unique_lock<std::mutex> lock(test_mutex);
+    #endif
+        shmems[index]->copyMetaTo(meta_); // copy metadata from the shmem segment's internal memory into variable referenced by the meta_ pointer.  Subclassing takes care of the correct typecast.
+    #ifdef SAFE_TEST
+    }
+    #endif
     // return index;
     // std::cout << "size " << shmems[index]->getSize() << std::endl;
     #ifdef USE_SHMEM_CACHE
@@ -651,7 +599,7 @@ bool SharedMemRingBufferBase::clientPull(int &index_out, void *meta_) {
     #else
     // (a): do nothing, if shmem is exposed as numpy array
     #endif
-    clearEventFd();
+    clearEventFd(); // clears eventfd only if semaphore value is 0
     return true;
 }
 
@@ -715,16 +663,23 @@ bool SharedMemRingBuffer::serverPushPy(PyObject *po) {
     int i;  
     if (getValue()>=n_cells) { // so, semaphore will overflow
         zero();
-        std::cout << "RingBuffer: ServerPush: zeroed, value now="<<getValue()<<std::endl;
+        std::cout << "RingBuffer " << name << " ServerPush: zeroed, value now="<<getValue()<<std::endl;
         index=-1;
         setFlag();
-        std::cout << "RingBuffer: ServerPush: OVERFLOW "<<std::endl;
+        std::cout << "RingBuffer " << name << " ServerPush: OVERFLOW "<<std::endl;
     }
     ++index;
     if (index>=n_cells) {
         index=0;
     }
-    shmems[index]->put(buf, (void*)(&size)); // SharedMemSegment takes care of the correct typecast from void*
+    #ifdef SAFE_TEST
+    {
+        std::unique_lock<std::mutex> lock(test_mutex);
+    #endif
+        shmems[index]->put(buf, (void*)(&size)); // SharedMemSegment takes care of the correct typecast from void*
+    #ifdef SAFE_TEST
+    }
+    #endif
     // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
     // std::cout << "sema pointer:" << long(sema) << std::endl;
     i=sem_post(sema);
@@ -771,26 +726,34 @@ SharedMemRingBufferRGB::~SharedMemRingBufferRGB() {
 
 
 void SharedMemRingBufferRGB::serverPushAVRGBFrame(AVRGBFrame *f) {
-  int i;
+    int i;
+        
+    if (getValue()>=n_cells) { // so, semaphore will overflow
+        zero();
+        std::cout << "RingBuffer " << name << " ServerPush: zeroed, value now="<<getValue()<<std::endl;
+        index=-1;
+        setFlag();
+        std::cout << "RingBuffer " << name << " ServerPush: OVERFLOW "<<std::endl;
+    }
     
-  if (getValue()>=n_cells) { // so, semaphore will overflow
-    zero();
-    std::cout << "RingBuffer: ServerPush: zeroed, value now="<<getValue()<<std::endl;
-    index=-1;
-    setFlag();
-    std::cout << "RingBuffer: ServerPush: OVERFLOW "<<std::endl;
-  }
-  
-  ++index;
-  if (index >= n_cells) {
-    index=0;
-  }
-  ( (RGB24SharedMemSegment*)(shmems[index]) )->putAVRGBFrame(f);
-  //std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
-  
-  i=sem_post(sema);
-  setEventFd();
-  //setEventFd(); // test: double-write ok
+    ++index;
+    if (index >= n_cells) {
+        index=0;
+    }
+
+    #ifdef SAFE_TEST
+    {
+        std::unique_lock<std::mutex> lock(test_mutex);
+    #endif
+        ( (RGB24SharedMemSegment*)(shmems[index]) )->putAVRGBFrame(f);
+    #ifdef SAFE_TEST
+    }
+    #endif
+    //std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
+    
+    i=sem_post(sema);
+    setEventFd();
+    //setEventFd(); // test: double-write ok
 }
 
 
@@ -812,15 +775,15 @@ bool SharedMemRingBufferRGB::serverPushPyRGB(PyObject *po, SlotNumber slot, long
     meta_.height = dims[0];  // slowest index (y) is the first
     meta_.slot = slot;
     meta_.mstimestamp = mstimestamp;
-    
+
     uint8_t* buf = (uint8_t*)PyArray_BYTES(pa);
 
     if (getValue()>=n_cells) { // so, semaphore will overflow
         zero();
-        std::cout << "RingBuffer: ServerPush: zeroed, value now="<<getValue()<<std::endl;
+        std::cout << "RingBuffer " << name << " ServerPush: zeroed, value now="<<getValue()<<std::endl;
         index=-1;
         setFlag();
-        std::cout << "RingBuffer: ServerPush: OVERFLOW "<<std::endl;
+        std::cout << "RingBuffer " << name << " ServerPush: OVERFLOW "<<std::endl;
     }
     
     ++index;
@@ -828,9 +791,20 @@ bool SharedMemRingBufferRGB::serverPushPyRGB(PyObject *po, SlotNumber slot, long
         index=0;
     }
 
-    // std::cout << name << " push: meta_.size = " << meta_.size << std::endl;
-
-    ( (RGB24SharedMemSegment*)(shmems[index]) )->put(buf, (void*)&meta_);
+    /*
+    std::cout << ">>>pushpyrgb: i, size, w, h, slot: " << index << " "
+        << meta_.size << " " << meta_.width << " " << meta_.height << " " << meta_.slot 
+        << std::endl;
+    */
+    
+    #ifdef SAFE_TEST
+    {
+        std::unique_lock<std::mutex> lock(test_mutex);
+    #endif
+        ( (RGB24SharedMemSegment*)(shmems[index]) )->put(buf, (void*)&meta_);
+    #ifdef SAFE_TEST
+    }
+    #endif
     // std::cout << "RingBuffer: ServerPush: wrote to index "<<index<<std::endl;
     
     Py_DECREF(po);
@@ -876,6 +850,14 @@ PyObject* SharedMemRingBufferRGB::clientPullPy() {
     //std::cout << ">>clientPull end" << std::endl;
     Py_END_ALLOW_THREADS
     //std::cout << ">>end allow threads" << std::endl;
+
+    /*
+    std::cout << ">>>pull: index, size, width, height " << index_out << " " << meta.size
+        << " " << meta.width
+        << " " << meta.height
+        << std::endl;
+    */
+
     if (!ok) {
         index_out = -1;
         PyTuple_SetItem(tup, 0, PyLong_FromLong((long)index_out));
@@ -890,76 +872,6 @@ PyObject* SharedMemRingBufferRGB::clientPullPy() {
     }
     return tup;
 }
-
-
-
-/*
-PyObject* SharedMemRingBufferRGB::clientPullPy() {
-    int i;
-    
-    if (mstimeout==0) {
-        while ((i = sem_wait(sema)) == -1 && errno == EINTR)
-        continue; // Restart if interrupted by handler
-    }
-    else {
-        if (clock_gettime(CLOCK_REALTIME, &ts) == -1)
-        {
-            perror("SharedMemRingBuffer: clientPullPy: clock_gettime failed");
-            exit(2);
-        }
-        // void set_normalized_timespec(struct timespec *ts, time_t sec, s64 nsec)
-        // std::cout << "SharedMemoryRingBuffer: clientPull: using "<< mstimeout <<" ms timeout" << std::endl;
-        // std::cout << "SharedMemoryRingBuffer: clientPull: time0 " << ts.tv_sec << " " << ts.tv_nsec << std::endl;
-        normalize_timespec(&ts, ts.tv_sec, ts.tv_nsec + (int64_t(mstimeout)*1000000));
-        
-        // i=sem_timedwait(sema, &ts);
-        while ((i = sem_timedwait(sema, &ts)) == -1 && errno == EINTR)
-        continue; // Restart if interrupted by handler
-    }
-    PyObject *tup;
-    
-    // Check what happened
-    if (i == -1)
-    {
-        if (errno == ETIMEDOUT) {
-            // printf("sem_timedwait() timed out\n");
-            tup = Py_None;
-            return tup;
-        }
-        else 
-        {
-            perror("SharedMemRingBuffer: clientPull: sem_timedwait failed");
-            exit(2);
-        } 
-    }
-        
-    if (flagIsSet()) {
-        index = -1;
-        clearFlag();
-    }
-    ++index;
-    if (index >= n_cells) {
-        index = 0;
-    }
-    // TODO: read data here // what if read/write at the same moment at same cell..?  is locking a better idea ..? nope .. no locking needed!   This is process-safe by architecture..
-    // std::cout << "RingBuffer: clientPull: read index "<<index<<std::endl;
-    
-    // index_out = index;
-    // size_out = shmems[index]->getSize();
-    // return index;
-    RGB24Meta *meta = ( (RGB24SharedMemSegment*)shmems[index] )->meta;
-    
-    // (index, size, width, height, slot, timestamp)
-    tup = PyTuple_New(6);
-    PyTuple_SET_ITEM(tup, 0, PyLong_FromLong((long)index));
-    PyTuple_SET_ITEM(tup, 1, PyLong_FromSsize_t(meta->size));
-    PyTuple_SET_ITEM(tup, 2, PyLong_FromLong((long)meta->width));
-    PyTuple_SET_ITEM(tup, 3, PyLong_FromLong((long)meta->height));
-    PyTuple_SET_ITEM(tup, 4, PyLong_FromUnsignedLong((unsigned long)(meta->slot))); // unsigned short
-    PyTuple_SET_ITEM(tup, 5, PyLong_FromLong(meta->mstimestamp));
-    return tup;
-}
-*/
 
 
 

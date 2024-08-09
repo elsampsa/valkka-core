@@ -707,7 +707,7 @@ void FrameSink::sendParameterSets() {
   for(i=0;i<num;i++) {
     if (pars[i].sPropLength>0) {
       livelogger.log(LogLevel::crazy) << "Sending parameter set " << i << " " << pars[i].sPropLength << "\n";
-      memcpy(fReceiveBuffer, pars[i].sPropBytes, pars[i].sPropLength);
+      memcpy(fReceiveBuffer, pars[i].sPropBytes, pars[i].sPropLength); // TODO: check for overflows!
       afterGettingFrame(pars[i].sPropLength, 0, frametime, 0);
     }
   }
