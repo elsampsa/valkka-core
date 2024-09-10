@@ -1,8 +1,7 @@
 /*
  * filethread_test0.cpp : Test output with filethread.  No frame visualization with OpenGL
  * 
- * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
- * Copyright 2024 Sampsa Riikonen
+ * (c) Copyright 2017-2024 Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

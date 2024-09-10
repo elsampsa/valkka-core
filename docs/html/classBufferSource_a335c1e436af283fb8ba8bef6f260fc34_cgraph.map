@@ -1,5 +1,0 @@
-<map id="BufferSource::BufferSource" name="BufferSource::BufferSource">
-<area shape="rect" id="node2" href="$classFrameFifo.html#a09f514fe06c5e737cd74691f8b5d9d52" title="Like FrameFifo::recycle_ but with mutex protection. " alt="" coords="236,5,367,32"/>
-<area shape="rect" id="node3" href="$classFrameFifo.html#a5cd4bd7b55780c158d7ee8beeb99cfc2" title="Return Frame f back into the stack. Update target_size if necessary. " alt="" coords="415,5,553,32"/>
-<area shape="rect" id="node4" href="$classFrame.html#ab104eb93ef2212c4c2112f91d340ba50" title="Reset the internal data. " alt="" coords="601,5,697,32"/>
-</map>

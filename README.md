@@ -1,9 +1,5 @@
 # Valkka - OpenSource Video Surveillance and Management for Linux
 
-## For the VERY impatient
-
-Looking for an OpenSource video surveillance program with object detection?  Just go [here](https://elsampsa.github.io/valkka-live/).
-
 ## Main Page
 
 LibValkka main page and documentation is in [here](https://elsampsa.github.io/valkka-examples/).  Please start from there.
@@ -261,38 +257,24 @@ In your build directory, refer to the bash script *run_tests.bash*.  Its self-ex
 
 Before running *run_tests.bash" you should edit and run the *set_test_streams.bash* that sets up your test cameras.
 
-
 ## Resources
 
-1. Discussion threads:
-
-  - [GLX / OpenGL Rendering](https://www.opengl.org/discussion_boards/showthread.php/200394-glxSwapBuffers-and-glxMakeCurrent-when-streaming-to-multiple-X-windowses)
-
-2. Doxygen generated [documentation](https://elsampsa.github.io/valkka-core/)
-3. The examples [repository](https://github.com/elsampsa/valkka-examples)
+1. Doxygen generated [documentation](https://elsampsa.github.io/valkka-core/)
+2. The examples [repository](https://github.com/elsampsa/valkka-examples)
 
 ## Authors
-Sampsa Riikonen (core programming, opengl shader programming, python programming)
 
-Petri Eranko (financing, testing)
-
-Marco Eranko (testing)
-
-Markus Kaukonen (opengl shader programming, testing)
+Sampsa Riikonen
 
 ## Acknowledgements
 
 Ross Finlayson
 
-Dark Photon
-
-GClements
-
 [XactAI](http://www.xactai.com/) for sponsorship
 
 ## Copyright
-Copyright (c) 2017-2022 Valkka Security Ltd. and Sampsa Riikonen
-Copyright (c) 2023 Sampsa Riikonen
+
+Copyright (c) 2017-2024 Sampsa Riikonen
 
 ## Open Source Licenses
 
@@ -302,6 +284,6 @@ Copyright (c) 2023 Sampsa Riikonen
 
 
 ## License
+
 GNU Lesser General Public License v3 or later.
 
-(if you need something else, please contact us)

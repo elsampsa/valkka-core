@@ -1,5 +1,5 @@
 <map id="the frame class" name="the frame class">
 <area shape="rect" id="node1" title="Things related to Frame." alt="" coords="5,31,117,56"/>
-<area shape="rect" id="node2" href="$group__shmem__tag.html" title="Posix shared memory and semaphores. Using shared memory, multiprocesses, especially python processes,..." alt="" coords="248,5,313,31"/>
+<area shape="rect" id="node2" href="$group__shmem__tag.html" title="Posix shared memory and semaphores." alt="" coords="248,5,313,31"/>
 <area shape="rect" id="node3" href="$group__openglthread__tag.html" title="Things related to OpenGL." alt="" coords="251,55,311,80"/>
 </map>

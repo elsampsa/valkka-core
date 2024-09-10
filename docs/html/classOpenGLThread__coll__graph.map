@@ -2,8 +2,8 @@
 <area shape="rect" id="node1" title="This class does a lot of things:" alt="" coords="431,288,541,315"/>
 <area shape="rect" id="node2" href="$classThread.html" title="A class for multithreading with a signaling system." alt="" coords="5,199,68,225"/>
 <area shape="rect" id="node3" href="$classYUVFrame.html" title="A GPU YUV frame." alt="" coords="73,109,160,136"/>
-<area shape="rect" id="node4" href="$classFrame.html" title="Frame: An abstract queueable class." alt="" coords="63,5,122,32"/>
-<area shape="rect" id="node5" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes." alt="" coords="181,5,271,32"/>
+<area shape="rect" id="node4" href="$classFrame.html" title="Frame: An abstract queueable class." alt="" coords="67,5,126,32"/>
+<area shape="rect" id="node5" href="$structBitmapPars.html" title="For AVBitmapFrames, linesizes are the widths + padding bytes." alt="" coords="183,5,274,32"/>
 <area shape="rect" id="node15" href="$classTEX.html" title="A class encapsulating information about an OpenGL texture set (sizes, OpenGL reference ids,..." alt="" coords="237,109,285,136"/>
 <area shape="rect" id="node6" href="$classRGBShader.html" title=" " alt="" coords="440,199,532,225"/>
 <area shape="rect" id="node7" href="$classShader.html" title="A general purpose shader class." alt="" coords="471,109,533,136"/>

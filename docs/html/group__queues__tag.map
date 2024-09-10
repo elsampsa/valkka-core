@@ -1,6 +1,6 @@
 <map id="queues and fifos" name="queues and fifos">
 <area shape="rect" id="node1" href="$group__openglthread__tag.html" title="Things related to OpenGL." alt="" coords="367,18,427,43"/>
-<area shape="rect" id="node2" title="Multiprocessing queues/fifos. The base class is FrameFifo. Special derived classes (LiveFifo,..." alt="" coords="5,93,124,118"/>
+<area shape="rect" id="node2" title="Multiprocessing queues/fifos." alt="" coords="5,93,124,118"/>
 <area shape="rect" id="node3" href="$group__filters__tag.html" title="Things related to FrameFilters." alt="" coords="325,93,468,118"/>
 <area shape="rect" id="node4" href="$group__livethread__tag.html" title="The LiveThread class implements a &quot;producer&quot; thread (see multithreading) that feeds frames into a Fra..." alt="" coords="357,142,436,167"/>
 </map>

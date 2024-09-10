@@ -1,8 +1,7 @@
 /*
  * openglthread.cpp : The OpenGL thread for presenting frames and related data structures
  * 
- * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
- * Copyright 2024 Sampsa Riikonen
+ * (c) Copyright 2017-2024 Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

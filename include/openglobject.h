@@ -3,8 +3,7 @@
 /*
  * openglobject.h : OpenGL objects, i.e. stuff that can be drawn on the OpenGL canvas on top the textures (boxes, etc.)
  * 
- * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
- * Copyright 2024 Sampsa Riikonen
+ * (c) Copyright 2017-2024 Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

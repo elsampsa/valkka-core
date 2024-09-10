@@ -1,8 +1,7 @@
 """
 base.py : api level 1 => api level 2 encapsulation for ValkkaFS and ValkkaFSThreads
 
- * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
- * Copyright 2024 Sampsa Riikonen
+ * (c) Copyright 2017-2024 Sampsa Riikonen
  *
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  *

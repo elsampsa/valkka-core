@@ -4,8 +4,7 @@
 /*
  * avfilethread.h : A Thread handling files and sending frames to fifo
  * 
- * Copyright 2017-2023 Valkka Security Ltd. and Sampsa Riikonen
- * Copyright 2024 Sampsa Riikonen
+ * (c) Copyright 2017-2024 Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 

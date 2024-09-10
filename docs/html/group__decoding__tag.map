@@ -1,4 +1,4 @@
 <map id="decoding" name="decoding">
-<area shape="rect" id="node1" title="DecoderBase is the base class for various decoders. AVThread is a Thread subclass that consumes frame..." alt="" coords="5,7,80,33"/>
+<area shape="rect" id="node1" title="DecoderBase is the base class for various decoders." alt="" coords="5,7,80,33"/>
 <area shape="rect" id="node2" href="$group__threading__tag.html" title=" " alt="" coords="185,7,288,33"/>
 </map>
