@@ -57,19 +57,19 @@ jobs:
         tail -n1 $GITHUB_ENV
 
     - name: Download Ubuntu20 artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: Valkka-${{ env.VER }}-Ubuntu20.deb
         path: ${{ github.workspace }}
 
     - name: Download Ubuntu22 artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: Valkka-${{ env.VER }}-Ubuntu22.deb
         path: ${{ github.workspace }}
 
     - name: Download Release.txt
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: Release.txt
         path: ${{ github.workspace }}
